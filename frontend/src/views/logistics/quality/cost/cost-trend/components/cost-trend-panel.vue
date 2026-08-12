@@ -35,9 +35,9 @@
           <template v-else-if="column.key === 'costCategory'">
             {{ resolveCategoryLabel(record as QualityCostTrend) }}
           </template>
-          <template v-else-if="column.key === 'costCurrency'">
+          <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as QualityCostTrend).costCurrency"
+              :value="(record as QualityCostTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
@@ -123,7 +123,7 @@ const props = defineProps<{
   /** 成本类别 */
   costCategory?: string
   /** 成本币种 */
-  costCurrency?: string
+  currencyCode?: string
 }>()
 
 const loading = defineModel<boolean>('loading', { default: false })
@@ -187,12 +187,11 @@ const columns = computed<TableColumnsType>(() => {
       ellipsis: true,
     },
     {
-      title: t(`${localePrefix}.costCurrency`),
-      dataIndex: 'costCurrency',
-      key: 'costCurrency',
+      title: t(`${localePrefix}.currencyCode`),
+      dataIndex: 'currencyCode',
+      key: 'currencyCode',
       width: 90,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -238,7 +237,7 @@ const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key))
  * @returns {string} key
  */
 function getRowKey(record: QualityCostTrend): string {
-  return `${record.plantCode}|${record.costCategory}|${record.costCurrency}`
+  return `${record.plantCode}|${record.costCategory}|${record.currencyCode}`
 }
 
 /**
@@ -353,7 +352,7 @@ function buildQuery() {
   return {
     plantCode: plant,
     costCategory: props.costCategory?.trim() || undefined,
-    costCurrency: props.costCurrency?.trim() || undefined,
+    currencyCode: props.currencyCode?.trim() || undefined,
     trendFilter: props.trendFilter || undefined,
     pageIndex: pageIndex.value,
     pageSize: pageSize.value,

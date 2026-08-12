@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionOrderI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.productionorder._self
             new TranslationSeedItem("entity.productionorder._self", "zh-HK", "生产工单信息_hk", "实体名称"),
 
-            // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionorder.plantcode
-            new TranslationSeedItem("entity.productionorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-
             // entity.productionorder.prodordertype
             new TranslationSeedItem("entity.productionorder.prodordertype", "en-US", "工单类别_us", "工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）"),
             // entity.productionorder.prodordertype
@@ -125,6 +116,15 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
             // entity.productionorder.materialcode
             new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
+
+            // entity.productionorder.materialdescription
+            new TranslationSeedItem("entity.productionorder.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            // entity.productionorder.materialdescription
+            new TranslationSeedItem("entity.productionorder.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            // entity.productionorder.materialdescription
+            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            // entity.productionorder.materialdescription
+            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
 
             // entity.productionorder.prodorderqty
             new TranslationSeedItem("entity.productionorder.prodorderqty", "en-US", "工单数量_us", "工单数量"),
@@ -181,13 +181,13 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
 
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心_jp", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心_jp", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "zh-CN", "工作中心", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "zh-CN", "工作中心", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心_hk", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心_hk", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
 
             // entity.productionorder.prodbatch
             new TranslationSeedItem("entity.productionorder.prodbatch", "en-US", "生产批次_us", "生产批次"),
@@ -198,14 +198,14 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.productionorder.prodbatch
             new TranslationSeedItem("entity.productionorder.prodbatch", "zh-HK", "生产批次_hk", "生产批次"),
 
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "en-US", "序列号_us", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "ja-JP", "序列号_jp", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "zh-CN", "序列号", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "zh-HK", "序列号_hk", "序列号"),
+            // entity.productionorder.serialcode
+            new TranslationSeedItem("entity.productionorder.serialcode", "en-US", "序列号_us", "序列号"),
+            // entity.productionorder.serialcode
+            new TranslationSeedItem("entity.productionorder.serialcode", "ja-JP", "序列号_jp", "序列号"),
+            // entity.productionorder.serialcode
+            new TranslationSeedItem("entity.productionorder.serialcode", "zh-CN", "序列号", "序列号"),
+            // entity.productionorder.serialcode
+            new TranslationSeedItem("entity.productionorder.serialcode", "zh-HK", "序列号_hk", "序列号"),
 
             // entity.productionorder.routingcode
             new TranslationSeedItem("entity.productionorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码"),

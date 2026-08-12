@@ -125,7 +125,11 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 d.TenantCode == tenantCode
                 && d.CompanyCode == company.CompanyCode
                 && d.DeptCode == "D0820");
-            var (form, fi, fu) = await UpsertLeaveFormAsync(formRepository, tenantCode, company.CompanyCode);
+            var (form, fi, fu) = await UpsertLeaveFormAsync(
+                formRepository,
+                tenantCode,
+                company.CompanyCode,
+                company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -137,6 +141,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -146,6 +151,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -162,6 +168,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -178,6 +185,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -197,6 +205,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 scheme,
                 instanceCodeDraft,
                 "演示：请假草稿",
@@ -210,6 +219,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 scheme,
                 instanceCodeRunning,
                 "演示：年假审批中",
@@ -226,6 +236,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 scheme,
                 instanceCodeDone,
                 "演示：病假已通过",
@@ -394,7 +405,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
     private static async Task<(TaktFlowForm Form, int InsertCount, int UpdateCount)> UpsertLeaveFormAsync(
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
-        string companyCode)
+        string companyCode,
+        string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
             f.TenantCode == tenantCode && f.CompanyCode == companyCode && f.FormCode == FormCode);
@@ -417,7 +429,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedTableName = "takt_human_resource_attendance_leave",
                 RelatedFormField = relatedField,
                 SortOrder = 10,
-                FormStatus = 1
+                FormStatus = 1,
+                CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
             return (form, 1, 0);
@@ -444,6 +457,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktFlowForm form,
         string processContent)
     {
@@ -471,7 +485,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 DeploymentId = "leave-v1-seed",
                 FormId = form.Id,
                 FormCode = form.FormCode,
-                SortOrder = 10
+                SortOrder = 10,
+                CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);
             return (scheme, 1, 0);
@@ -499,6 +514,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktApprovalSeedRepository<TaktLeave> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktEmployee employee,
         TaktDept? dept,
         TaktUser initiator,
@@ -535,7 +551,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 ApprovalStatus = approvalStatus,
                 InitiatorId = initiator.Id,
                 InitiatedAt = DateTime.Now,
-                FlowInstanceId = flowInstanceId
+                FlowInstanceId = flowInstanceId,
+                CultureCode = cultureCode
             };
             leave = await repository.CreateAsync(leave);
             return (leave, 1, 0);
@@ -562,6 +579,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowInstance> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktFlowScheme scheme,
         string instanceCode,
         string processTitle,
@@ -600,7 +618,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 FrmData = frmData,
                 FormId = scheme.FormId,
                 FormCode = scheme.FormCode,
-                ProcessContentSnapshot = scheme.ProcessContent
+                ProcessContentSnapshot = scheme.ProcessContent,
+                CultureCode = cultureCode
             };
             if (status == TaktFlowInstanceStatus.Completed && endTime.HasValue)
             {
@@ -674,7 +693,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionUserName = starter.Nickname ?? starter.Username,
             TransitionTime = startTime,
             TransitionComment = "发起",
-            ActionType = TaktFlowActionType.Start
+            ActionType = TaktFlowActionType.Start,
+            CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
         {
@@ -686,7 +706,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             AssigneeUserId = manager.Id,
             AssigneeUserName = manager.Nickname ?? manager.Username,
             TaskStatus = TaktFlowTaskStatus.Pending,
-            SignType = TaktFlowSignType.Any
+            SignType = TaktFlowSignType.Any,
+            CultureCode = instance.CultureCode
         });
         return (2, 0);
     }
@@ -720,7 +741,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionUserName = starter.Nickname ?? starter.Username,
             TransitionTime = startTime,
             TransitionComment = "发起",
-            ActionType = TaktFlowActionType.Start
+            ActionType = TaktFlowActionType.Start,
+            CultureCode = instance.CultureCode
         });
         await transitionRepository.CreateAsync(new TaktFlowTransition
         {
@@ -735,7 +757,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionUserName = manager.Nickname ?? manager.Username,
             TransitionTime = managerDone,
             TransitionComment = "同意",
-            ActionType = TaktFlowActionType.Approve
+            ActionType = TaktFlowActionType.Approve,
+            CultureCode = instance.CultureCode
         });
         await transitionRepository.CreateAsync(new TaktFlowTransition
         {
@@ -750,7 +773,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionUserName = hrUser.Nickname ?? hrUser.Username,
             TransitionTime = hrDone,
             TransitionComment = "同意",
-            ActionType = TaktFlowActionType.Approve
+            ActionType = TaktFlowActionType.Approve,
+            CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
         {
@@ -764,7 +788,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaskStatus = TaktFlowTaskStatus.Completed,
             SignType = TaktFlowSignType.Any,
             CompletedAt = managerDone,
-            Comment = "同意"
+            Comment = "同意",
+            CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
         {
@@ -778,7 +803,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TaskStatus = TaktFlowTaskStatus.Completed,
             SignType = TaktFlowSignType.Any,
             CompletedAt = hrDone,
-            Comment = "同意"
+            Comment = "同意",
+            CultureCode = instance.CultureCode
         });
         return (5, 0);
     }

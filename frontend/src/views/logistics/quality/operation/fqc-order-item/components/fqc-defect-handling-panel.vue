@@ -824,10 +824,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:operation:fqc:order:delete',
         onClick: (record: FqcDefectHandling) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

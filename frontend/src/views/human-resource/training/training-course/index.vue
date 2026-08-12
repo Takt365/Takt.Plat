@@ -245,10 +245,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.trainingcourse.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.trainingcourse.relatedplant') })"
           show-count
           :maxlength="4"
@@ -431,7 +431,7 @@ const advancedQueryForm = ref({
   assessmentMethod: '',
   passingScore: undefined as number | undefined,
   trainingCourseStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -451,12 +451,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'assessmentMethod', label: t('entity.trainingcourse.assessmentmethod') },
   { key: 'passingScore', label: t('entity.trainingcourse.passingscore') },
   { key: 'trainingCourseStatus', label: t('entity.trainingcourse.status') },
-  { key: 'relatedPlant', label: t('entity.trainingcourse.relatedplant') },
+  { key: 'plantCode', label: t('entity.trainingcourse.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -474,7 +473,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -516,7 +514,7 @@ function buildListQuery(overrides?: Partial<TrainingCourseQuery>): TrainingCours
   if (form.trainingCourseStatus !== undefined && form.trainingCourseStatus !== null) {
     query.trainingCourseStatus = form.trainingCourseStatus
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -529,12 +527,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -657,12 +649,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.trainingcourse.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTrainingCourseField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getTrainingCourseField(record, 'plantCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -694,7 +686,6 @@ const getTrainingCourseId = (record: any): string => record?.[entityIdName] ?? '
  * @param field 字段名
  */
 const getTrainingCourseField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -776,7 +767,7 @@ function handleReset() {
   assessmentMethod: '',
   passingScore: undefined as number | undefined,
   trainingCourseStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -987,7 +978,7 @@ function handleAdvancedQueryReset() {
   assessmentMethod: '',
   passingScore: undefined as number | undefined,
   trainingCourseStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

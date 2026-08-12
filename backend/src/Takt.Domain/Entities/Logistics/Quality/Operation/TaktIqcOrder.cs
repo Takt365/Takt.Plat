@@ -23,15 +23,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 [SugarIndex("ix_takt_logistics_quality_iqc_order_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_iqc_order_source_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceCode), OrderByType.Asc, false)]
 public class TaktIqcOrder : TaktCompanyEntityBase
-{    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
+{
     /// <summary>
     /// 来源单号（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
-    [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;
     /// <summary>
     /// 检验日期
@@ -41,12 +37,12 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     /// <summary>
     /// IQC检验单编码（唯一索引，根据来源单号自动生成）
     /// </summary>
-    [SugarColumn(ColumnName = "iqc_order_code", ColumnDescription = "IQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "iqc_order_code", ColumnDescription = "IQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string IqcOrderCode { get; set; } = string.Empty;
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
     /// <summary>
     /// 进货总数
@@ -86,7 +82,7 @@ public class TaktIqcOrder : TaktCompanyEntityBase
     /// <summary>
     /// 判定说明
     /// </summary>
-    [SugarColumn(ColumnName = "judge_description", ColumnDescription = "判定说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    [SugarColumn(ColumnName = "judge_description", ColumnDescription = "判定说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? JudgeDescription { get; set; }
     /// <summary>
     /// 判定状态（0=待判定，1=合格，2=不合格，3=让步接收，4=退货）

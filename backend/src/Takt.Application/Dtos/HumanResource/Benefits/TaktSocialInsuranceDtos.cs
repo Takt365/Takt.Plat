@@ -35,82 +35,6 @@ public class TaktSocialInsuranceDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SocialInsuranceId { get; set; }
 
-    /// <summary>
-    /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? BenefitItemId { get; set; }
-
-    /// <summary>
-    /// 关联福利项目 名称（填充字段）
-    /// </summary>
-    public string? BenefitItemName { get; set; }
-
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 缴纳期间（如 2026-06）
-    /// </summary>
-    public string PayPeriod { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 社保缴纳基数（元）
-    /// </summary>
-    public decimal SocialSecurityBase { get; set; }
-
-    /// <summary>
-    /// 养老保险（元）
-    /// </summary>
-    public decimal PensionAmount { get; set; }
-
-    /// <summary>
-    /// 医疗保险（元）
-    /// </summary>
-    public decimal MedicalAmount { get; set; }
-
-    /// <summary>
-    /// 失业保险（元）
-    /// </summary>
-    public decimal UnemploymentAmount { get; set; }
-
-    /// <summary>
-    /// 工伤保险（元）
-    /// </summary>
-    public decimal InjuryAmount { get; set; }
-
-    /// <summary>
-    /// 生育保险（元）
-    /// </summary>
-    public decimal MaternityAmount { get; set; }
-
-    /// <summary>
-    /// 公积金缴纳基数（元）
-    /// </summary>
-    public decimal HousingFundBase { get; set; }
-
-    /// <summary>
-    /// 公积金（元）
-    /// </summary>
-    public decimal HousingFundAmount { get; set; }
-
-    /// <summary>
-    /// 缴纳合计（元）
-    /// </summary>
-    public decimal TotalAmount { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
@@ -138,6 +62,11 @@ public class TaktSocialInsuranceQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
@@ -209,7 +138,7 @@ public class TaktSocialInsuranceQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
@@ -257,9 +186,10 @@ public class TaktSocialInsuranceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
@@ -334,7 +264,7 @@ public class TaktSocialInsuranceCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
@@ -417,6 +347,11 @@ public class TaktSocialInsuranceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -486,7 +421,7 @@ public class TaktSocialInsuranceTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
@@ -521,9 +456,10 @@ public class TaktSocialInsuranceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联福利项目 ID（通常对应 hr_benefit_type 为社保/公积金的 TaktBenefitItem）
@@ -595,7 +531,7 @@ public class TaktSocialInsuranceImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）
@@ -705,7 +641,7 @@ public class TaktSocialInsuranceExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 缴纳状态（字典 hr_social_insurance_pay_status：0=待缴纳 1=已缴纳 2=已补缴）

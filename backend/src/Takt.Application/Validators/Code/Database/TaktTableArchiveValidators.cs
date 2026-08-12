@@ -51,6 +51,10 @@ public class TaktTableArchiveCreateValidator : AbstractValidator<TaktTableArchiv
             .InclusiveBetween(1, 3).WithMessage("归档键类型须为 1/2/3");
         RuleFor(x => x.RetainHotYears)
             .Equal(1).WithMessage("热库保留年数固定为 1");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -139,6 +143,10 @@ public class TaktTableArchiveImportValidator : AbstractValidator<TaktTableArchiv
         RuleFor(x => x.RetainHotYears)
             .Equal(1).WithMessage("热库保留年数固定为 1")
             .When(x => x.RetainHotYears.HasValue);
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符")
+            .When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
+
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

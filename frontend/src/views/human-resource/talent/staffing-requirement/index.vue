@@ -109,11 +109,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('reqNo')">
-      <a-form-item :label="t('entity.talentstaffingrequirement.reqno')">
+      <div v-show="isFieldVisible('reqCode')">
+      <a-form-item :label="t('entity.talentstaffingrequirement.reqCode')">
         <a-input
-          v-model:value="advancedQueryForm.reqNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentstaffingrequirement.reqno') })"
+          v-model:value="advancedQueryForm.reqCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentstaffingrequirement.reqCode') })"
           show-count
           :maxlength="30"
           allow-clear
@@ -517,7 +517,7 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',
@@ -547,7 +547,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'reqNo', label: t('entity.talentstaffingrequirement.reqno') },
+  { key: 'reqCode', label: t('entity.talentstaffingrequirement.reqCode') },
   { key: 'deptId', label: t('entity.talentstaffingrequirement.deptid') },
   { key: 'postId', label: t('entity.talentstaffingrequirement.postid') },
   { key: 'jobGrade', label: t('entity.talentstaffingrequirement.jobgrade') },
@@ -573,8 +573,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -589,8 +588,6 @@ const entityIdName = 'talentStaffingRequirementId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -614,7 +611,7 @@ function buildListQuery(overrides?: Partial<TalentStaffingRequirementQuery>): Ta
       query[key] = v as never
     }
   }
-  assignTrimmed('reqNo', form.reqNo)
+  assignTrimmed('reqCode', form.reqCode)
   assignTrimmed('deptId', form.deptId)
   assignTrimmed('postId', form.postId)
   assignTrimmed('jobGrade', form.jobGrade)
@@ -653,12 +650,6 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -672,13 +663,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTalentStaffingRequirementField(record, 'talentStaffingRequirementId') ?? ''
   },
   {
-    title: t('entity.talentstaffingrequirement.reqno'),
-    dataIndex: 'reqNo',
-    key: 'reqNo',
+    title: t('entity.talentstaffingrequirement.reqCode'),
+    dataIndex: 'reqCode',
+    key: 'reqCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentStaffingRequirementField(record, 'reqNo') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentStaffingRequirementField(record, 'reqCode') ?? ''
   },
   {
     title: t('entity.talentstaffingrequirement.deptid'),
@@ -855,7 +846,6 @@ const getTalentStaffingRequirementId = (record: any): string => record?.[entityI
  */
 const getTalentStaffingRequirementField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -924,7 +914,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',
@@ -1121,7 +1111,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',

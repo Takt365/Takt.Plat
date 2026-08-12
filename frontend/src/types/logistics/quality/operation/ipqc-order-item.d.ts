@@ -49,19 +49,19 @@ export interface IpqcOrderItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -106,7 +106,7 @@ export interface IpqcOrderItem extends CompanyDtoBase {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明
@@ -164,6 +164,11 @@ export interface IpqcOrderItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * IPQC检验单 ID（关联 TaktIpqcOrder.Id，选项 TaktIpqcOrders/options）
    */
   ipqcOrderId?: string;
@@ -179,19 +184,19 @@ export interface IpqcOrderItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -236,7 +241,7 @@ export interface IpqcOrderItemQuery extends TaktPagedQuery {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明
@@ -308,9 +313,17 @@ export interface IpqcOrderItemCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * IPQC检验单 ID（关联 TaktIpqcOrder.Id，选项 TaktIpqcOrders/options）
@@ -328,19 +341,19 @@ export interface IpqcOrderItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -385,7 +398,7 @@ export interface IpqcOrderItemCreate {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明
@@ -500,6 +513,11 @@ export interface IpqcOrderItemTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * IPQC检验单 ID（关联 TaktIpqcOrder.Id，选项 TaktIpqcOrders/options）
    */
   ipqcOrderId?: string;
@@ -515,19 +533,19 @@ export interface IpqcOrderItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -572,7 +590,7 @@ export interface IpqcOrderItemTemplate {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明
@@ -634,9 +652,17 @@ export interface IpqcOrderItemImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * IPQC检验单 ID（关联 TaktIpqcOrder.Id，选项 TaktIpqcOrders/options）
@@ -654,19 +680,19 @@ export interface IpqcOrderItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -711,7 +737,7 @@ export interface IpqcOrderItemImport {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明
@@ -788,19 +814,19 @@ export interface IpqcOrderItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 批次号
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 生产数量
@@ -845,7 +871,7 @@ export interface IpqcOrderItemExport {
   /**
    * 抽检序列号
    */
-  sampleSerialNo?: string;
+  sampleSerialCode?: string;
 
   /**
    * 检验说明

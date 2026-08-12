@@ -15,6 +15,7 @@ export default {
     title: 'BOM成本分析',
     periodRange: '核算期间',
     selectPlantRequired: '请选择工厂代码',
+    selectMaterialTypeRequired: '请选择物料类型',
     selectPeriodRequired: '请选择核算期间',
     queryFailed: 'BOM成本分析查询失败',
     exportSuccess: 'BOM成本分析导出成功',
@@ -22,6 +23,11 @@ export default {
     filter: {
       all: '全部',
       changed: '仅涨跌',
+    },
+    sort: {
+      productCode: '产品编码（全表）',
+      trend: '涨跌优先（全表）',
+      varianceDesc: '差额绝对值降序（全表）',
     },
     columns: {
       trend: '涨跌',

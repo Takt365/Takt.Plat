@@ -21,8 +21,8 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarTable("takt_logistics_quality_customer_satisfaction_survey", "客户满意度调查表")]
 [SugarIndex("ix_customer_satisfaction_survey_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_customer_satisfaction_survey_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(CustomerSatisfactionSurveyCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(CustomerSatisfactionSurveyCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_customer_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_overall_satisfaction", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OverallSatisfaction), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_satisfaction_survey_survey_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SurveyDate), OrderByType.Asc, false)]
@@ -31,7 +31,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     /// <summary>
     /// 调查表编码（组合唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
     /// <summary>
     /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
@@ -47,7 +47,7 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? CustomerCode { get; set; }
     /// <summary>
     /// 调查日期
@@ -150,11 +150,6 @@ public class TaktCustomerSatisfactionSurvey : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "survey_status", ColumnDescription = "调查状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int SurveyStatus { get; set; } = 0;
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamEquipmentService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产班组设备组应用服务实现
 // 
@@ -96,13 +96,13 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
     {
         EnsureThreeLayerContext();
         var list = await _productionTeamEquipmentRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TeamEquipmentStatus == 1 && x.IsObsolete == 0,
-            x => x.PlantCode ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.TeamEquipStatus == 1 && x.IsObsolete == 0,
+            x => x.TeamCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.TeamCode,
+            DictLabel = e.TeamCode,
         }).ToList();
     }
 
@@ -115,30 +115,30 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
     {
         var entity = dto.Adapt<TaktProductionTeamEquipment>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
             _productionTeamEquipmentRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ProductionTeamId == entity.ProductionTeamId
-                && x.ProductionEquipmentId == entity.ProductionEquipmentId);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique)
+                && x.ProdTeamId == entity.ProdTeamId
+                && x.ProdEquipId == entity.ProdEquipId);
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique)
         {
-            throw new TaktBusinessException("生产班组设备组的PlantCode、ProductionTeamId、ProductionEquipmentId已存在");
+            throw new TaktBusinessException("生产班组设备组的PlantCode、ProdTeamId、ProdEquipId已存在");
         }
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _productionTeamEquipmentRepository,
-            x => x.ProductionTeamId == entity.ProductionTeamId
+            x => x.ProdTeamId == entity.ProdTeamId
                 && x.LineNumber == entity.LineNumber
-                && x.ProductionEquipmentCode == entity.ProductionEquipmentCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique)
+                && x.ProdEquipCode == entity.ProdEquipCode);
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique)
         {
-            throw new TaktBusinessException("生产班组设备组的ProductionTeamId、LineNumber、ProductionEquipmentCode已存在");
+            throw new TaktBusinessException("生产班组设备组的ProdTeamId、LineNumber、ProdEquipCode已存在");
         }
         if (entity.LineNumber <= 0)
         {
             var maxLine = await _productionTeamEquipmentRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProductionTeamId == entity.ProductionTeamId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProdTeamId == entity.ProdTeamId,
                 x => x.LineNumber);
-            var businessCode = entity.ProductionTeamId.ToString();
+            var businessCode = entity.ProdTeamId.ToString();
             entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
         }
         entity = await _productionTeamEquipmentRepository.CreateAsync(entity);
@@ -159,25 +159,25 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
             throw new TaktBusinessException("生产班组设备组不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
             _productionTeamEquipmentRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ProductionTeamId == entity.ProductionTeamId
-                && x.ProductionEquipmentId == entity.ProductionEquipmentId,
+                && x.ProdTeamId == entity.ProdTeamId
+                && x.ProdEquipId == entity.ProdEquipId,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique)
         {
-            throw new TaktBusinessException("生产班组设备组的PlantCode、ProductionTeamId、ProductionEquipmentId已存在");
+            throw new TaktBusinessException("生产班组设备组的PlantCode、ProdTeamId、ProdEquipId已存在");
         }
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
             _productionTeamEquipmentRepository,
-            x => x.ProductionTeamId == entity.ProductionTeamId
+            x => x.ProdTeamId == entity.ProdTeamId
                 && x.LineNumber == entity.LineNumber
-                && x.ProductionEquipmentCode == entity.ProductionEquipmentCode,
+                && x.ProdEquipCode == entity.ProdEquipCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique)
         {
-            throw new TaktBusinessException("生产班组设备组的ProductionTeamId、LineNumber、ProductionEquipmentCode已存在");
+            throw new TaktBusinessException("生产班组设备组的ProdTeamId、LineNumber、ProdEquipCode已存在");
         }
         await _productionTeamEquipmentRepository.UpdateAsync(entity);
         return await GetProductionTeamEquipmentByIdAsync(id) ?? throw new TaktBusinessException("生产班组设备组不存在");
@@ -237,7 +237,7 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
         {
             throw new TaktBusinessException("生产班组设备组不存在");
         }
-        entity.TeamEquipmentStatus = dto.TeamEquipmentStatus;
+        entity.TeamEquipStatus = dto.TeamEquipStatus;
         await _productionTeamEquipmentRepository.UpdateAsync(entity);
         return await GetProductionTeamEquipmentByIdAsync(dto.ProductionTeamEquipmentId) ?? throw new TaktBusinessException("生产班组设备组不存在");
     }
@@ -299,35 +299,35 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
             try
             {
                 var entity = rows[i].Adapt<TaktProductionTeamEquipment>();
-                var importKey = $"{entity.PlantCode}|{entity.ProductionTeamId}|{entity.ProductionEquipmentId}";
+                var importKey = $"{entity.PlantCode}|{entity.ProdTeamId}|{entity.ProdEquipId}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProductionTeamId、ProductionEquipmentId）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProdTeamId、ProdEquipId）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique = await _uniqueValidator.IsUniqueAsync(
                     _productionTeamEquipmentRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.ProductionTeamId == entity.ProductionTeamId
-                        && x.ProductionEquipmentId == entity.ProductionEquipmentId);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_unique)
+                        && x.ProdTeamId == entity.ProdTeamId
+                        && x.ProdEquipId == entity.ProdEquipId);
+                if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_unique)
                 {
-                    throw new TaktBusinessException("生产班组设备组的PlantCode、ProductionTeamId、ProductionEquipmentId已存在");
+                    throw new TaktBusinessException("生产班组设备组的PlantCode、ProdTeamId、ProdEquipId已存在");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _productionTeamEquipmentRepository,
-                    x => x.ProductionTeamId == entity.ProductionTeamId
+                    x => x.ProdTeamId == entity.ProdTeamId
                         && x.LineNumber == entity.LineNumber
-                        && x.ProductionEquipmentCode == entity.ProductionEquipmentCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_production_team_equipment_line_unique)
+                        && x.ProdEquipCode == entity.ProdEquipCode);
+                if (!isUnique_ix_takt_logistics_manufacturing_mps_production_team_equipment_line_unique)
                 {
-                    throw new TaktBusinessException("生产班组设备组的ProductionTeamId、LineNumber、ProductionEquipmentCode已存在");
+                    throw new TaktBusinessException("生产班组设备组的ProdTeamId、LineNumber、ProdEquipCode已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
                     var maxLine = await _productionTeamEquipmentRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProductionTeamId == entity.ProductionTeamId,
+                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProdTeamId == entity.ProdTeamId,
                         x => x.LineNumber);
-                    var businessCode = entity.ProductionTeamId.ToString();
+                    var businessCode = entity.ProdTeamId.ToString();
                     entity.LineNumber = _lineNumberGenerator.GenerateNext(businessCode, maxLine);
                 }
                 await _productionTeamEquipmentRepository.CreateAsync(entity);
@@ -394,13 +394,14 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.ProductionTeamId).Contains(keywords)
+                || SqlFunc.ToString(x.ProdTeamId).Contains(keywords)
                 || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.ProductionEquipmentId).Contains(keywords)
-                || (x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.TeamEquipmentStatus).Contains(keywords)
+                || SqlFunc.ToString(x.ProdEquipId).Contains(keywords)
+                || (x.ProdEquipCode != null && x.ProdEquipCode.Contains(keywords))
+                || SqlFunc.ToString(x.EquipQuantity).Contains(keywords)
+                || SqlFunc.ToString(x.TeamEquipStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -412,9 +413,9 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (queryDto?.ProductionTeamId.HasValue == true)
+        if (queryDto?.ProdTeamId.HasValue == true)
         {
-            exp = exp.And(x => x.ProductionTeamId == queryDto.ProductionTeamId);
+            exp = exp.And(x => x.ProdTeamId == queryDto.ProdTeamId);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.TeamCode))
@@ -427,24 +428,29 @@ public class TaktProductionTeamEquipmentService : TaktServiceBase, ITaktProducti
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
-        if (queryDto?.ProductionEquipmentId.HasValue == true)
+        if (queryDto?.ProdEquipId.HasValue == true)
         {
-            exp = exp.And(x => x.ProductionEquipmentId == queryDto.ProductionEquipmentId);
+            exp = exp.And(x => x.ProdEquipId == queryDto.ProdEquipId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionEquipmentCode))
+        if (!string.IsNullOrEmpty(queryDto?.ProdEquipCode))
         {
-            exp = exp.And(x => x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(queryDto.ProductionEquipmentCode));
+            exp = exp.And(x => x.ProdEquipCode != null && x.ProdEquipCode.Contains(queryDto.ProdEquipCode));
         }
 
-        if (queryDto?.EquipmentQuantity.HasValue == true)
+        if (queryDto?.EquipQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentQuantity == queryDto.EquipmentQuantity);
+            exp = exp.And(x => x.EquipQuantity == queryDto.EquipQuantity);
         }
 
-        if (queryDto?.TeamEquipmentStatus.HasValue == true)
+        if (queryDto?.TeamEquipStatus.HasValue == true)
         {
-            exp = exp.And(x => x.TeamEquipmentStatus == queryDto.TeamEquipmentStatus);
+            exp = exp.And(x => x.TeamEquipStatus == queryDto.TeamEquipStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

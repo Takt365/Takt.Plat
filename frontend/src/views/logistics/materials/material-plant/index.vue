@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getMaterialPlantId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,86 +74,86 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'materialStatus'">
           <a-switch
-            :checked="getMaterialPlantField(record, 'materialStatus') === 1"
+            :checked="getMaterialPlantDictValue(record, 'materialStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleMaterialStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'industrySector'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'industrySector')"
+            :value="getMaterialPlantDictValue(record, 'industrySector')"
             dict-type="logistics_industry_sector"
           />
         </template>
         <template v-else-if="column.key === 'materialType'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'materialType')"
+            :value="getMaterialPlantDictValue(record, 'materialType')"
             dict-type="logistics_material_type"
           />
         </template>
         <template v-else-if="column.key === 'baseUnit'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'baseUnit')"
+            :value="getMaterialPlantDictValue(record, 'baseUnit')"
             dict-type="logistics_unit_of_measure_code"
           />
         </template>
         <template v-else-if="column.key === 'purchaseType'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'purchaseType')"
+            :value="getMaterialPlantDictValue(record, 'purchaseType')"
             dict-type="logistics_procurement_type"
           />
         </template>
         <template v-else-if="column.key === 'specialProcurement'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'specialProcurement')"
+            :value="getMaterialPlantDictValue(record, 'specialProcurement')"
             dict-type="logistics_special_procurement_type"
           />
         </template>
         <template v-else-if="column.key === 'isBulk'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'isBulk')"
+            :value="getMaterialPlantDictValue(record, 'isBulk')"
             dict-type="logistics_bulk_material_type"
           />
         </template>
-        <template v-else-if="column.key === 'currency'">
+        <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'currency')"
+            :value="getMaterialPlantDictValue(record, 'currencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
         <template v-else-if="column.key === 'priceControl'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'priceControl')"
+            :value="getMaterialPlantDictValue(record, 'priceControl')"
             dict-type="logistics_price_control_type"
           />
         </template>
         <template v-else-if="column.key === 'priceUnit'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'priceUnit')"
+            :value="getMaterialPlantDictValue(record, 'priceUnit')"
             dict-type="logistics_price_unit_param"
           />
         </template>
         <template v-else-if="column.key === 'valuation'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'valuation')"
+            :value="getMaterialPlantDictValue(record, 'valuation')"
             dict-type="logistics_valuation_class_category"
           />
         </template>
         <template v-else-if="column.key === 'isInspection'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'isInspection')"
+            :value="getMaterialPlantDictValue(record, 'isInspection')"
             dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'isBatch'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'isBatch')"
+            :value="getMaterialPlantDictValue(record, 'isBatch')"
             dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'isEndOfLife'">
           <TaktDictTag
-            :value="getMaterialPlantField(record, 'isEndOfLife')"
+            :value="getMaterialPlantDictValue(record, 'isEndOfLife')"
             dict-type="logistics_material_eol_status"
           />
         </template>
@@ -198,74 +199,61 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.materialplant.plantcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.plantcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.materialplant.materialcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialcode') })"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.materialplant.materialname')">
-        <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialname') })"
-          show-count
-          :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialSpecification')">
-      <a-form-item :label="t('entity.materialplant.materialspecification')">
-        <a-input
-          v-model:value="advancedQueryForm.materialSpecification"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialspecification') })"
-          show-count
-          :maxlength="80"
+          api-url="TaktGeneralMaterials/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialDescription')">
-      <a-form-item :label="t('entity.materialplant.materialdescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.materialDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.materialplant.materialdescription') })"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('materialSpecification')">
+      <a-form-item :label="pi.queryLabel('materialSpecification')">
+        <a-input
+          v-model:value="advancedQueryForm.materialSpecification"
+          :placeholder="pi.queryPh('materialSpecification', 'required')"
+          show-count
+          :maxlength="70"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('industrySector')">
-      <a-form-item :label="t('entity.materialplant.industrysector')">
+      <a-form-item :label="pi.queryLabel('industrySector')">
         <TaktSelect
           v-model:value="advancedQueryForm.industrySector"
           dict-type="logistics_industry_sector"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.industrysector') })"
+          :placeholder="pi.queryPh('industrySector', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialHierarchy')">
-      <a-form-item :label="t('entity.materialplant.materialhierarchy')">
+      <a-form-item :label="pi.queryLabel('materialHierarchy')">
         <a-input
           v-model:value="advancedQueryForm.materialHierarchy"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialhierarchy') })"
+          :placeholder="pi.queryPh('materialHierarchy', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -273,203 +261,185 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialGroup')">
-      <a-form-item :label="t('entity.materialplant.materialgroup')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialGroup')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialGroup"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.materialgroup') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktMaterialGroups/options"
+          :placeholder="pi.queryPh('materialGroup', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialType')">
-      <a-form-item :label="t('entity.materialplant.materialtype')">
+      <a-form-item :label="pi.queryLabel('materialType')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialType"
           dict-type="logistics_material_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialtype') })"
+          :placeholder="pi.queryPh('materialType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('baseUnit')">
-      <a-form-item :label="t('entity.materialplant.baseunit')">
+      <a-form-item :label="pi.queryLabel('baseUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
           dict-type="logistics_unit_of_measure_code"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.baseunit') })"
+          :placeholder="pi.queryPh('baseUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseGroup')">
-      <a-form-item :label="t('entity.materialplant.purchasegroup')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('purchaseGroup')">
+        <TaktSelect
           v-model:value="advancedQueryForm.purchaseGroup"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasegroup') })"
-          show-count
-          :maxlength="3"
+          api-url="TaktPurchaseGroups/options"
+          :placeholder="pi.queryPh('purchaseGroup', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseType')">
-      <a-form-item :label="t('entity.materialplant.purchasetype')">
+      <a-form-item :label="pi.queryLabel('purchaseType')">
         <TaktSelect
           v-model:value="advancedQueryForm.purchaseType"
           dict-type="logistics_procurement_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.purchasetype') })"
+          :placeholder="pi.queryPh('purchaseType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('specialProcurement')">
-      <a-form-item :label="t('entity.materialplant.specialprocurement')">
+      <a-form-item :label="pi.queryLabel('specialProcurement')">
         <TaktSelect
           v-model:value="advancedQueryForm.specialProcurement"
           dict-type="logistics_special_procurement_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.specialprocurement') })"
+          :placeholder="pi.queryPh('specialProcurement', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBulk')">
-      <a-form-item :label="t('entity.materialplant.isbulk')">
+      <a-form-item :label="pi.queryLabel('isBulk')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBulk"
           dict-type="logistics_bulk_material_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbulk') })"
+          :placeholder="pi.queryPh('isBulk', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('minOrderQuantity')">
-      <a-form-item :label="t('entity.materialplant.minorderquantity')">
+      <a-form-item :label="pi.queryLabel('minOrderQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.minOrderQuantity"
-          :min="0"
-          :precision="0"
-          :step="1"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.minorderquantity') })"
+          :placeholder="pi.queryPh('minOrderQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('roundingValue')">
-      <a-form-item :label="t('entity.materialplant.roundingvalue')">
+      <a-form-item :label="pi.queryLabel('roundingValue')">
         <a-input-number
           v-model:value="advancedQueryForm.roundingValue"
-          :min="0"
-          :precision="0"
-          :step="1"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.roundingvalue') })"
+          :placeholder="pi.queryPh('roundingValue', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('plannedDeliveryTimeDays')">
-      <a-form-item :label="t('entity.materialplant.planneddeliverytimedays')">
+      <a-form-item :label="pi.queryLabel('plannedDeliveryTimeDays')">
         <a-input-number
           v-model:value="advancedQueryForm.plannedDeliveryTimeDays"
-          :min="0"
-          :precision="0"
-          :step="1"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.planneddeliverytimedays') })"
+          :placeholder="pi.queryPh('plannedDeliveryTimeDays', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('inHouseProductionDays')">
-      <a-form-item :label="t('entity.materialplant.inhouseproductiondays')">
+      <a-form-item :label="pi.queryLabel('inHouseProductionDays')">
         <a-input-number
           v-model:value="advancedQueryForm.inHouseProductionDays"
-          :min="0"
-          :precision="1"
-          :step="0.5"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.inhouseproductiondays') })"
+          :placeholder="pi.queryPh('inHouseProductionDays', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('manufacturer')">
-      <a-form-item :label="t('entity.materialplant.manufacturer')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('manufacturer')">
+        <TaktSelect
           v-model:value="advancedQueryForm.manufacturer"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.manufacturer') })"
-          show-count
-          :maxlength="200"
+          api-url="TaktSuppliers/options"
+          :placeholder="pi.queryPh('manufacturer', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('manufacturerMaterialCode')">
-      <a-form-item :label="t('entity.materialplant.manufacturermaterialcode')">
+      <a-form-item :label="pi.queryLabel('manufacturerMaterialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.manufacturerMaterialCode"
           api-url="TaktManufacturerMaterials/options"
-          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.manufacturermaterialcode') })"
+          :placeholder="pi.queryPh('manufacturerMaterialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('currency')">
-      <a-form-item :label="t('entity.materialplant.currency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.currency"
+          v-model:value="advancedQueryForm.currencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.currency') })"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceControl')">
-      <a-form-item :label="t('entity.materialplant.pricecontrol')">
+      <a-form-item :label="pi.queryLabel('priceControl')">
         <TaktSelect
           v-model:value="advancedQueryForm.priceControl"
           dict-type="logistics_price_control_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.pricecontrol') })"
+          :placeholder="pi.queryPh('priceControl', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('priceUnit')">
-      <a-form-item :label="t('entity.materialplant.priceunit')">
+      <a-form-item :label="pi.queryLabel('priceUnit')">
         <TaktSelect
           v-model:value="advancedQueryForm.priceUnit"
           dict-type="logistics_price_unit_param"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.priceunit') })"
+          :placeholder="pi.queryPh('priceUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('valuation')">
-      <a-form-item :label="t('entity.materialplant.valuation')">
+      <a-form-item :label="pi.queryLabel('valuation')">
         <TaktSelect
           v-model:value="advancedQueryForm.valuation"
           dict-type="logistics_valuation_class_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.valuation') })"
+          :placeholder="pi.queryPh('valuation', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('movingPrice')">
-      <a-form-item :label="t('entity.materialplant.movingprice')">
+      <a-form-item :label="pi.queryLabel('movingPrice')">
         <a-input-number
           v-model:value="advancedQueryForm.movingPrice"
-          :precision="4"
-          :step="0.0001"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.movingprice') })"
+          :placeholder="pi.queryPh('movingPrice', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('differenceCode')">
-      <a-form-item :label="t('entity.materialplant.differencecode')">
+      <a-form-item :label="pi.queryLabel('differenceCode')">
         <a-input
           v-model:value="advancedQueryForm.differenceCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.differencecode') })"
+          :placeholder="pi.queryPh('differenceCode', 'required')"
           show-count
           :maxlength="6"
           allow-clear
@@ -477,105 +447,99 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('profitCenter')">
-      <a-form-item :label="t('entity.materialplant.profitcenter')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('profitCenter')">
+        <TaktSelect
           v-model:value="advancedQueryForm.profitCenter"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.profitcenter') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktProfitCenters/options"
+          :placeholder="pi.queryPh('profitCenter', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currentStock')">
-      <a-form-item :label="t('entity.materialplant.currentstock')">
+      <a-form-item :label="pi.queryLabel('currentStock')">
         <a-input-number
           v-model:value="advancedQueryForm.currentStock"
-          :precision="4"
-          :step="0.0001"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.currentstock') })"
+          :placeholder="pi.queryPh('currentStock', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('productionLocation')">
-      <a-form-item :label="t('entity.materialplant.productionlocation')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('productionLocation')">
+        <TaktSelect
           v-model:value="advancedQueryForm.productionLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.productionlocation') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktWarehouses/options"
+          :placeholder="pi.queryPh('productionLocation', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchasingLocation')">
-      <a-form-item :label="t('entity.materialplant.purchasinglocation')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('purchasingLocation')">
+        <TaktSelect
           v-model:value="advancedQueryForm.purchasingLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.purchasinglocation') })"
-          show-count
-          :maxlength="4"
+          api-url="TaktWarehouses/options"
+          :placeholder="pi.queryPh('purchasingLocation', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('storageLocation')">
-      <a-form-item :label="t('entity.materialplant.storagelocation')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('storageLocation')">
+        <TaktSelect
           v-model:value="advancedQueryForm.storageLocation"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialplant.storagelocation') })"
-          show-count
-          :maxlength="40"
+          api-url="TaktStorageLocations/options"
+          :placeholder="pi.queryPh('storageLocation', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isInspection')">
-      <a-form-item :label="t('entity.materialplant.isinspection')">
+      <a-form-item :label="pi.queryLabel('isInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.isInspection"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isinspection') })"
+          :placeholder="pi.queryPh('isInspection', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isBatch')">
-      <a-form-item :label="t('entity.materialplant.isbatch')">
+      <a-form-item :label="pi.queryLabel('isBatch')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBatch"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isbatch') })"
+          :placeholder="pi.queryPh('isBatch', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isEndOfLife')">
-      <a-form-item :label="t('entity.materialplant.isendoflife')">
+      <a-form-item :label="pi.queryLabel('isEndOfLife')">
         <TaktSelect
           v-model:value="advancedQueryForm.isEndOfLife"
           dict-type="logistics_material_eol_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.isendoflife') })"
+          :placeholder="pi.queryPh('isEndOfLife', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialStatus')">
-      <a-form-item :label="t('entity.materialplant.materialstatus')">
+      <a-form-item :label="pi.queryLabel('materialStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialStatus"
           dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.materialplant.materialstatus') })"
+          :placeholder="pi.queryPh('materialStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -583,10 +547,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -608,7 +572,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -622,10 +586,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -639,7 +603,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.materialplant._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -647,7 +611,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.materialplant._self"
+        :entity-i18n-key="MATERIALPLANT_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -693,13 +657,25 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useMaterialPlantI18n,
+  MATERIALPLANT_LIST_FIELDS,
+  MATERIALPLANT_QUERY_STRING_FIELDS,
+  MATERIALPLANT_QUERY_FIELDS,
+  MATERIALPLANT_SELF_I18N_KEY,
+} from './composables/use-material-plant-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaterialPlantI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type MaterialPlantRowRecord = MaterialPlant | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktMaterialPlant')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.materialplant._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -715,9 +691,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<MaterialPlant | null>(null)
+const selectedRow = ref<MaterialPlantRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<MaterialPlant[]>([])
+const selectedRows = ref<MaterialPlantRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -734,90 +710,115 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 当前自然月起止（与后端 GetCurrentMonthRangeBounds 对齐）
+ * @returns {{ start: string, end: string }}
+ */
+function getCurrentMonthQueryBounds() {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = now.getMonth()
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const lastDay = new Date(y, m + 1, 0).getDate()
+  const ym = `${y}-${pad(m + 1)}`
+  return {
+    start: `${ym}-01 00:00:00`,
+    end: `${ym}-${pad(lastDay)} 23:59:59`,
+  }
+}
+
+/**
+ * 是否存在除默认当前月日期外的查询条件（有参则不强制当月）
+ * @param form 高级查询表单
+ * @param kw 关键字
+ * @returns {boolean}
+ */
+function hasListQueryFiltersBesidesDefaultScope(
+  form: Record<string, unknown>,
+  kw: string,
+): boolean {
+  if ((kw ?? '').trim().length > 0) {
+    return true
+  }
+  for (const key of MATERIALPLANT_QUERY_STRING_FIELDS) {
+    if (key === 'createdAtStart' || key === 'createdAtEnd') {
+      continue
+    }
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.specialProcurement !== undefined && form.specialProcurement !== null) {
+    return true
+  }
+  if (form.isBulk !== undefined && form.isBulk !== null) {
+    return true
+  }
+  if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
+    return true
+  }
+  if (form.roundingValue !== undefined && form.roundingValue !== null) {
+    return true
+  }
+  if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
+    return true
+  }
+  if (form.inHouseProductionDays !== undefined && form.inHouseProductionDays !== null) {
+    return true
+  }
+  if (form.priceUnit !== undefined && form.priceUnit !== null) {
+    return true
+  }
+  if (form.movingPrice !== undefined && form.movingPrice !== null) {
+    return true
+  }
+  if (form.currentStock !== undefined && form.currentStock !== null) {
+    return true
+  }
+  if (form.isInspection !== undefined && form.isInspection !== null) {
+    return true
+  }
+  if (form.isBatch !== undefined && form.isBatch !== null) {
+    return true
+  }
+  if (form.materialStatus !== undefined && form.materialStatus !== null) {
+    return true
+  }
+  return false
+}
+/**
+ * 创建空的高级查询表单（无参默认当前月或当前期间）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MATERIALPLANT_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MATERIALPLANT_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  const month = getCurrentMonthQueryBounds()
+  return {
+    ...form,
+    specialProcurement: undefined as number | undefined,
+    isBulk: undefined as number | undefined,
+    minOrderQuantity: undefined as number | undefined,
+    roundingValue: undefined as number | undefined,
+    plannedDeliveryTimeDays: undefined as number | undefined,
+    inHouseProductionDays: undefined as number | undefined,
+    priceUnit: undefined as number | undefined,
+    movingPrice: undefined as number | undefined,
+    currentStock: undefined as number | undefined,
+    isInspection: undefined as number | undefined,
+    isBatch: undefined as number | undefined,
+    materialStatus: undefined as number | undefined,    createdAtStart: month.start,
+    createdAtEnd: month.end,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  plantCode: '',
-  materialCode: '',
-  materialName: '',
-  materialSpecification: '',
-  materialDescription: '',
-  industrySector: '',
-  materialHierarchy: '',
-  materialGroup: '',
-  materialType: '',
-  baseUnit: '',
-  purchaseGroup: '',
-  purchaseType: '',
-  specialProcurement: undefined as number | undefined,
-  isBulk: undefined as number | undefined,
-  minOrderQuantity: undefined as number | undefined,
-  roundingValue: undefined as number | undefined,
-  plannedDeliveryTimeDays: undefined as number | undefined,
-  inHouseProductionDays: undefined as number | undefined,
-  manufacturer: '',
-  manufacturerMaterialCode: '',
-  currency: '',
-  priceControl: '',
-  priceUnit: undefined as number | undefined,
-  valuation: '',
-  movingPrice: undefined as number | undefined,
-  differenceCode: '',
-  profitCenter: '',
-  currentStock: undefined as number | undefined,
-  productionLocation: '',
-  purchasingLocation: '',
-  storageLocation: '',
-  isInspection: undefined as number | undefined,
-  isBatch: undefined as number | undefined,
-  isEndOfLife: '',
-  materialStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.materialplant.plantcode') },
-  { key: 'materialCode', label: t('entity.materialplant.materialcode') },
-  { key: 'materialName', label: t('entity.materialplant.materialname') },
-  { key: 'materialSpecification', label: t('entity.materialplant.materialspecification') },
-  { key: 'materialDescription', label: t('entity.materialplant.materialdescription') },
-  { key: 'industrySector', label: t('entity.materialplant.industrysector') },
-  { key: 'materialHierarchy', label: t('entity.materialplant.materialhierarchy') },
-  { key: 'materialGroup', label: t('entity.materialplant.materialgroup') },
-  { key: 'materialType', label: t('entity.materialplant.materialtype') },
-  { key: 'baseUnit', label: t('entity.materialplant.baseunit') },
-  { key: 'purchaseGroup', label: t('entity.materialplant.purchasegroup') },
-  { key: 'purchaseType', label: t('entity.materialplant.purchasetype') },
-  { key: 'specialProcurement', label: t('entity.materialplant.specialprocurement') },
-  { key: 'isBulk', label: t('entity.materialplant.isbulk') },
-  { key: 'minOrderQuantity', label: t('entity.materialplant.minorderquantity') },
-  { key: 'roundingValue', label: t('entity.materialplant.roundingvalue') },
-  { key: 'plannedDeliveryTimeDays', label: t('entity.materialplant.planneddeliverytimedays') },
-  { key: 'inHouseProductionDays', label: t('entity.materialplant.inhouseproductiondays') },
-  { key: 'manufacturer', label: t('entity.materialplant.manufacturer') },
-  { key: 'manufacturerMaterialCode', label: t('entity.materialplant.manufacturermaterialcode') },
-  { key: 'currency', label: t('entity.materialplant.currency') },
-  { key: 'priceControl', label: t('entity.materialplant.pricecontrol') },
-  { key: 'priceUnit', label: t('entity.materialplant.priceunit') },
-  { key: 'valuation', label: t('entity.materialplant.valuation') },
-  { key: 'movingPrice', label: t('entity.materialplant.movingprice') },
-  { key: 'differenceCode', label: t('entity.materialplant.differencecode') },
-  { key: 'profitCenter', label: t('entity.materialplant.profitcenter') },
-  { key: 'currentStock', label: t('entity.materialplant.currentstock') },
-  { key: 'productionLocation', label: t('entity.materialplant.productionlocation') },
-  { key: 'purchasingLocation', label: t('entity.materialplant.purchasinglocation') },
-  { key: 'storageLocation', label: t('entity.materialplant.storagelocation') },
-  { key: 'isInspection', label: t('entity.materialplant.isinspection') },
-  { key: 'isBatch', label: t('entity.materialplant.isbatch') },
-  { key: 'isEndOfLife', label: t('entity.materialplant.isendoflife') },
-  { key: 'materialStatus', label: t('entity.materialplant.materialstatus') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  MATERIALPLANT_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -836,9 +837,8 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参默认当前月或当前期间）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MaterialPlantQuery} 查询 DTO
  */
@@ -859,18 +859,9 @@ function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQ
       query[key] = v as never
     }
   }
-  assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
-  assignTrimmed('materialSpecification', form.materialSpecification)
-  assignTrimmed('materialDescription', form.materialDescription)
-  assignTrimmed('industrySector', form.industrySector)
-  assignTrimmed('materialHierarchy', form.materialHierarchy)
-  assignTrimmed('materialGroup', form.materialGroup)
-  assignTrimmed('materialType', form.materialType)
-  assignTrimmed('baseUnit', form.baseUnit)
-  assignTrimmed('purchaseGroup', form.purchaseGroup)
-  assignTrimmed('purchaseType', form.purchaseType)
+  for (const key of MATERIALPLANT_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.specialProcurement !== undefined && form.specialProcurement !== null) {
     query.specialProcurement = form.specialProcurement
   }
@@ -878,50 +869,45 @@ function buildListQuery(overrides?: Partial<MaterialPlantQuery>): MaterialPlantQ
     query.isBulk = form.isBulk
   }
   if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
-    query.minOrderQuantity = Math.trunc(form.minOrderQuantity)
+    query.minOrderQuantity = form.minOrderQuantity
   }
   if (form.roundingValue !== undefined && form.roundingValue !== null) {
-    query.roundingValue = Math.trunc(form.roundingValue)
+    query.roundingValue = form.roundingValue
   }
   if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
-    query.plannedDeliveryTimeDays = Math.trunc(form.plannedDeliveryTimeDays)
+    query.plannedDeliveryTimeDays = form.plannedDeliveryTimeDays
   }
   if (form.inHouseProductionDays !== undefined && form.inHouseProductionDays !== null) {
-    query.inHouseProductionDays = Math.round(form.inHouseProductionDays * 10) / 10
+    query.inHouseProductionDays = form.inHouseProductionDays
   }
-  assignTrimmed('manufacturer', form.manufacturer)
-  assignTrimmed('manufacturerMaterialCode', form.manufacturerMaterialCode)
-  assignTrimmed('currency', form.currency)
-  assignTrimmed('priceControl', form.priceControl)
   if (form.priceUnit !== undefined && form.priceUnit !== null) {
     query.priceUnit = form.priceUnit
   }
-  assignTrimmed('valuation', form.valuation)
   if (form.movingPrice !== undefined && form.movingPrice !== null) {
-    query.movingPrice = Math.round(form.movingPrice * 10000) / 10000
+    query.movingPrice = form.movingPrice
   }
-  assignTrimmed('differenceCode', form.differenceCode)
-  assignTrimmed('profitCenter', form.profitCenter)
   if (form.currentStock !== undefined && form.currentStock !== null) {
-    query.currentStock = Math.round(form.currentStock * 10000) / 10000
+    query.currentStock = form.currentStock
   }
-  assignTrimmed('productionLocation', form.productionLocation)
-  assignTrimmed('purchasingLocation', form.purchasingLocation)
-  assignTrimmed('storageLocation', form.storageLocation)
   if (form.isInspection !== undefined && form.isInspection !== null) {
     query.isInspection = form.isInspection
   }
   if (form.isBatch !== undefined && form.isBatch !== null) {
     query.isBatch = form.isBatch
   }
-  assignTrimmed('isEndOfLife', form.isEndOfLife)
   if (form.materialStatus !== undefined && form.materialStatus !== null) {
     query.materialStatus = form.materialStatus
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  // 无参默认当前月；有其它条件且未填日期 → 不限制月份
+  if (!hasListQueryFiltersBesidesDefaultScope(form, kw)) {
+    const startVal = String(form.createdAtStart ?? '').trim()
+    const endVal = String(form.createdAtEnd ?? '').trim()
+    if (!startVal && !endVal) {
+      const month = getCurrentMonthQueryBounds()
+      query.createdAtStart = month.start as never
+      query.createdAtEnd = month.end as never
+    }
+  }
   return query
 }
 /** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
@@ -931,325 +917,32 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildMaterialPlantListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'materialPlantId',
-    key: 'materialPlantId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialPlantId') ?? ''
-  },
-  {
-    title: t('entity.materialplant.plantcode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'plantCode') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialcode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialCode') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialName') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialspecification'),
-    dataIndex: 'materialSpecification',
-    key: 'materialSpecification',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialSpecification') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialdescription'),
-    dataIndex: 'materialDescription',
-    key: 'materialDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialDescription') ?? ''
-  },
-  {
-    title: t('entity.materialplant.industrysector'),
-    dataIndex: 'industrySector',
-    key: 'industrySector',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.materialhierarchy'),
-    dataIndex: 'materialHierarchy',
-    key: 'materialHierarchy',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialHierarchy') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialgroup'),
-    dataIndex: 'materialGroup',
-    key: 'materialGroup',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'materialGroup') ?? ''
-  },
-  {
-    title: t('entity.materialplant.materialtype'),
-    dataIndex: 'materialType',
-    key: 'materialType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.baseunit'),
-    dataIndex: 'baseUnit',
-    key: 'baseUnit',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.purchasegroup'),
-    dataIndex: 'purchaseGroup',
-    key: 'purchaseGroup',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchaseGroup') ?? ''
-  },
-  {
-    title: t('entity.materialplant.purchasetype'),
-    dataIndex: 'purchaseType',
-    key: 'purchaseType',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.specialprocurement'),
-    dataIndex: 'specialProcurement',
-    key: 'specialProcurement',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.isbulk'),
-    dataIndex: 'isBulk',
-    key: 'isBulk',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.minorderquantity'),
-    dataIndex: 'minOrderQuantity',
-    key: 'minOrderQuantity',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'minOrderQuantity') ?? ''
-  },
-  {
-    title: t('entity.materialplant.roundingvalue'),
-    dataIndex: 'roundingValue',
-    key: 'roundingValue',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'roundingValue') ?? ''
-  },
-  {
-    title: t('entity.materialplant.planneddeliverytimedays'),
-    dataIndex: 'plannedDeliveryTimeDays',
-    key: 'plannedDeliveryTimeDays',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'plannedDeliveryTimeDays') ?? ''
-  },
-  {
-    title: t('entity.materialplant.inhouseproductiondays'),
-    dataIndex: 'inHouseProductionDays',
-    key: 'inHouseProductionDays',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'inHouseProductionDays') ?? ''
-  },
-  {
-    title: t('entity.materialplant.manufacturer'),
-    dataIndex: 'manufacturer',
-    key: 'manufacturer',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturer') ?? ''
-  },
-  {
-    title: t('entity.materialplant.manufacturermaterialcode'),
-    dataIndex: 'manufacturerMaterialCode',
-    key: 'manufacturerMaterialCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'manufacturerMaterialCode') ?? ''
-  },
-  {
-    title: t('entity.materialplant.currency'),
-    dataIndex: 'currency',
-    key: 'currency',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.pricecontrol'),
-    dataIndex: 'priceControl',
-    key: 'priceControl',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.priceunit'),
-    dataIndex: 'priceUnit',
-    key: 'priceUnit',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.valuation'),
-    dataIndex: 'valuation',
-    key: 'valuation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.movingprice'),
-    dataIndex: 'movingPrice',
-    key: 'movingPrice',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'movingPrice') ?? ''
-  },
-  {
-    title: t('entity.materialplant.differencecode'),
-    dataIndex: 'differenceCode',
-    key: 'differenceCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'differenceCode') ?? ''
-  },
-  {
-    title: t('entity.materialplant.profitcenter'),
-    dataIndex: 'profitCenter',
-    key: 'profitCenter',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'profitCenter') ?? ''
-  },
-  {
-    title: t('entity.materialplant.currentstock'),
-    dataIndex: 'currentStock',
-    key: 'currentStock',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'currentStock') ?? ''
-  },
-  {
-    title: t('entity.materialplant.productionlocation'),
-    dataIndex: 'productionLocation',
-    key: 'productionLocation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'productionLocation') ?? ''
-  },
-  {
-    title: t('entity.materialplant.purchasinglocation'),
-    dataIndex: 'purchasingLocation',
-    key: 'purchasingLocation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'purchasingLocation') ?? ''
-  },
-  {
-    title: t('entity.materialplant.storagelocation'),
-    dataIndex: 'storageLocation',
-    key: 'storageLocation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialPlantField(record, 'storageLocation') ?? ''
-  },
-  {
-    title: t('entity.materialplant.isinspection'),
-    dataIndex: 'isInspection',
-    key: 'isInspection',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.isbatch'),
-    dataIndex: 'isBatch',
-    key: 'isBatch',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.isendoflife'),
-    dataIndex: 'isEndOfLife',
-    key: 'isEndOfLife',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.materialplant.materialstatus'),
-    dataIndex: 'materialStatus',
-    key: 'materialStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildMaterialPlantListColumn('materialPlantId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...MATERIALPLANT_LIST_FIELDS.map((key) => buildMaterialPlantListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -1258,7 +951,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:materials:material:plant:update',
-        onClick: (record: MaterialPlant) => handleEdit(record)
+        onClick: (record: MaterialPlantRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -1266,44 +959,61 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:materials:material:plant:delete',
-        onClick: (record: MaterialPlant) => handleDeleteOne(record)
+        onClick: (record: MaterialPlantRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getMaterialPlantId = (record: any): string => record?.[entityIdName] ?? ''
+const getMaterialPlantId = (record: MaterialPlantRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getMaterialPlantField = (record: any, field: string): any => record?.[field]
+const getMaterialPlantDictValue = (
+  record: MaterialPlantRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
 
+/** 将行字段/字典值转为有限 number */
+const toMaterialPlantNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaterialPlant[]) => {
+  onChange: (keys: (string | number)[], rows: MaterialPlantRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: MaterialPlant, selected: boolean) => {
+  onSelect: (record: MaterialPlantRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getMaterialPlantId(selectedRow.value) === getMaterialPlantId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: MaterialPlant[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: MaterialPlantRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: MaterialPlant) => ({
+const onClickRow = (record: MaterialPlantRowRecord) => ({
   onClick: () => {
     const key = getMaterialPlantId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -1349,71 +1059,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  plantCode: '',
-  materialCode: '',
-  materialName: '',
-  materialSpecification: '',
-  materialDescription: '',
-  industrySector: '',
-  materialHierarchy: '',
-  materialGroup: '',
-  materialType: '',
-  baseUnit: '',
-  purchaseGroup: '',
-  purchaseType: '',
-  specialProcurement: undefined as number | undefined,
-  isBulk: undefined as number | undefined,
-  minOrderQuantity: undefined as number | undefined,
-  roundingValue: undefined as number | undefined,
-  plannedDeliveryTimeDays: undefined as number | undefined,
-  inHouseProductionDays: undefined as number | undefined,
-  manufacturer: '',
-  manufacturerMaterialCode: '',
-  currency: '',
-  priceControl: '',
-  priceUnit: undefined as number | undefined,
-  valuation: '',
-  movingPrice: undefined as number | undefined,
-  differenceCode: '',
-  profitCenter: '',
-  currentStock: undefined as number | undefined,
-  productionLocation: '',
-  purchasingLocation: '',
-  storageLocation: '',
-  isInspection: undefined as number | undefined,
-  isBatch: undefined as number | undefined,
-  isEndOfLife: '',
-  materialStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.materialplant._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: MaterialPlant) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.materialplant._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: MaterialPlantRowRecord) {
+  const id = getMaterialPlantId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getMaterialPlantById(id)
+    formData.value = detail ?? ({ ...record } as Partial<MaterialPlant>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.materialplant._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1431,10 +1113,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateMaterialPlant(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.materialplant._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createMaterialPlant(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.materialplant._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1507,24 +1189,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.materialplant._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[MaterialPlant] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.materialplant._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: MaterialPlant) {
+async function handleDeleteOne(record: MaterialPlantRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.materialplant._self'), name: t('common.tip.this.target', { target: t('entity.materialplant._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteMaterialPlantById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.materialplant._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1532,18 +1214,18 @@ async function handleDeleteOne(record: MaterialPlant) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.materialplant._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.materialplant._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteMaterialPlantBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.materialplant._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1553,9 +1235,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleMaterialStatusChange(record: MaterialPlant, checked: boolean) {
+async function handleMaterialStatusChange(record: MaterialPlantRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getMaterialPlantField(record, 'materialStatus')
+  const oldVal = toMaterialPlantNumber(getMaterialPlantDictValue(record, 'materialStatus'))
   const id = getMaterialPlantId(record)
   const row = dataSource.value.find((item) => getMaterialPlantId(item) === id)
   if (row) {
@@ -1585,47 +1267,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  plantCode: '',
-  materialCode: '',
-  materialName: '',
-  materialSpecification: '',
-  materialDescription: '',
-  industrySector: '',
-  materialHierarchy: '',
-  materialGroup: '',
-  materialType: '',
-  baseUnit: '',
-  purchaseGroup: '',
-  purchaseType: '',
-  specialProcurement: undefined as number | undefined,
-  isBulk: undefined as number | undefined,
-  minOrderQuantity: undefined as number | undefined,
-  roundingValue: undefined as number | undefined,
-  plannedDeliveryTimeDays: undefined as number | undefined,
-  inHouseProductionDays: undefined as number | undefined,
-  manufacturer: '',
-  manufacturerMaterialCode: '',
-  currency: '',
-  priceControl: '',
-  priceUnit: undefined as number | undefined,
-  valuation: '',
-  movingPrice: undefined as number | undefined,
-  differenceCode: '',
-  profitCenter: '',
-  currentStock: undefined as number | undefined,
-  productionLocation: '',
-  purchasingLocation: '',
-  storageLocation: '',
-  isInspection: undefined as number | undefined,
-  isBatch: undefined as number | undefined,
-  isEndOfLife: '',
-  materialStatus: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

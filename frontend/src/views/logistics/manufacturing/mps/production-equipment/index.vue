@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getProductionEquipmentId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -71,17 +72,17 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'productionEquipmentStatus'">
+        <template v-if="column.key === 'prodEquipStatus'">
           <a-switch
-            :checked="getProductionEquipmentDictValue(record, 'productionEquipmentStatus') === 1"
+            :checked="getProductionEquipmentDictValue(record, 'prodEquipStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
-            @change="(checked: unknown) => handleProductionEquipmentStatusChange(record, Boolean(checked))"
+            @change="(checked: unknown) => handleProdEquipStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'equipmentCategory'">
+        <template v-else-if="column.key === 'equipCategory'">
           <TaktDictTag
-            :value="getProductionEquipmentDictValue(record, 'equipmentCategory')"
-            dict-type="logistics_equipment_category"
+            :value="getProductionEquipmentDictValue(record, 'equipCategory')"
+            dict-type="logistics_equip_category"
           />
         </template>
         <template v-else-if="column.key === 'ejectionType'">
@@ -165,34 +166,34 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCategory')">
-      <a-form-item :label="pi.queryLabel('equipmentCategory')">
+      <div v-show="isFieldVisible('equipCategory')">
+      <a-form-item :label="pi.queryLabel('equipCategory')">
         <TaktSelect
-          v-model:value="advancedQueryForm.equipmentCategory"
-          dict-type="logistics_equipment_category"
-          :placeholder="pi.queryPh('equipmentCategory', 'select')"
+          v-model:value="advancedQueryForm.equipCategory"
+          dict-type="logistics_equip_category"
+          :placeholder="pi.queryPh('equipCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionEquipmentCode')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentCode')">
+      <div v-show="isFieldVisible('prodEquipCode')">
+      <a-form-item :label="pi.queryLabel('prodEquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.productionEquipmentCode"
-          :placeholder="pi.queryPh('productionEquipmentCode', 'required')"
+          v-model:value="advancedQueryForm.prodEquipCode"
+          :placeholder="pi.queryPh('prodEquipCode', 'required')"
+          show-count
+          :maxlength="18"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('prodEquipName')">
+      <a-form-item :label="pi.queryLabel('prodEquipName')">
+        <a-input
+          v-model:value="advancedQueryForm.prodEquipName"
+          :placeholder="pi.queryPh('prodEquipName', 'required')"
           show-count
           :maxlength="40"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productionEquipmentName')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentName')">
-        <a-input
-          v-model:value="advancedQueryForm.productionEquipmentName"
-          :placeholder="pi.queryPh('productionEquipmentName', 'required')"
-          show-count
-          :maxlength="200"
           allow-clear
         />
       </a-form-item>
@@ -203,16 +204,16 @@
           v-model:value="advancedQueryForm.manufacturer"
           :placeholder="pi.queryPh('manufacturer', 'required')"
           show-count
-          :maxlength="200"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentBrand')">
-      <a-form-item :label="pi.queryLabel('equipmentBrand')">
+      <div v-show="isFieldVisible('equipBrand')">
+      <a-form-item :label="pi.queryLabel('equipBrand')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentBrand"
-          :placeholder="pi.queryPh('equipmentBrand', 'required')"
+          v-model:value="advancedQueryForm.equipBrand"
+          :placeholder="pi.queryPh('equipBrand', 'required')"
           show-count
           :maxlength="40"
           allow-clear
@@ -230,33 +231,53 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('modelNo')">
-      <a-form-item :label="pi.queryLabel('modelNo')">
+      <div v-show="isFieldVisible('modelCode')">
+      <a-form-item :label="pi.queryLabel('modelCode')">
         <a-input
-          v-model:value="advancedQueryForm.modelNo"
-          :placeholder="pi.queryPh('modelNo', 'required')"
+          v-model:value="advancedQueryForm.modelCode"
+          :placeholder="pi.queryPh('modelCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'required')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentSpecification')">
-      <a-form-item :label="pi.queryLabel('equipmentSpecification')">
+      <div v-show="isFieldVisible('manufacturingDateStart')">
+      <a-form-item :label="pi.queryLabel('manufacturingDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.manufacturingDateStart"
+          :placeholder="pi.queryPh('manufacturingDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('manufacturingDateEnd')">
+      <a-form-item :label="pi.queryLabel('manufacturingDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.manufacturingDateEnd"
+          :placeholder="pi.queryPh('manufacturingDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('equipSpecification')">
+      <a-form-item :label="pi.queryLabel('equipSpecification')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentSpecification"
-          :placeholder="pi.queryPh('equipmentSpecification', 'required')"
+          v-model:value="advancedQueryForm.equipSpecification"
+          :placeholder="pi.queryPh('equipSpecification', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -308,11 +329,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('stdEquipmentHourlyCapacity')">
-      <a-form-item :label="pi.queryLabel('stdEquipmentHourlyCapacity')">
+      <div v-show="isFieldVisible('stdEquipHourlyCapacity')">
+      <a-form-item :label="pi.queryLabel('stdEquipHourlyCapacity')">
         <a-input-number
-          v-model:value="advancedQueryForm.stdEquipmentHourlyCapacity"
-          :placeholder="pi.queryPh('stdEquipmentHourlyCapacity', 'required')"
+          v-model:value="advancedQueryForm.stdEquipHourlyCapacity"
+          :placeholder="pi.queryPh('stdEquipHourlyCapacity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -734,22 +755,93 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentAdministrator')">
-      <a-form-item :label="pi.queryLabel('equipmentAdministrator')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.equipmentAdministrator"
-          api-url="TaktEmployees/options"
-          :placeholder="pi.queryPh('equipmentAdministrator', 'select')"
+      <div v-show="isFieldVisible('commissioningDateStart')">
+      <a-form-item :label="pi.queryLabel('commissioningDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.commissioningDateStart"
+          :placeholder="pi.queryPh('commissioningDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('commissioningDateEnd')">
+      <a-form-item :label="pi.queryLabel('commissioningDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.commissioningDateEnd"
+          :placeholder="pi.queryPh('commissioningDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('decommissioningDateStart')">
+      <a-form-item :label="pi.queryLabel('decommissioningDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.decommissioningDateStart"
+          :placeholder="pi.queryPh('decommissioningDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('decommissioningDateEnd')">
+      <a-form-item :label="pi.queryLabel('decommissioningDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.decommissioningDateEnd"
+          :placeholder="pi.queryPh('decommissioningDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scrapDateStart')">
+      <a-form-item :label="pi.queryLabel('scrapDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scrapDateStart"
+          :placeholder="pi.queryPh('scrapDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('scrapDateEnd')">
+      <a-form-item :label="pi.queryLabel('scrapDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.scrapDateEnd"
+          :placeholder="pi.queryPh('scrapDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('storageLocation')">
+      <a-form-item :label="pi.queryLabel('storageLocation')">
+        <a-input
+          v-model:value="advancedQueryForm.storageLocation"
+          :placeholder="pi.queryPh('storageLocation', 'required')"
+          show-count
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionEquipmentStatus')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentStatus')">
+      <div v-show="isFieldVisible('equipAdministrator')">
+      <a-form-item :label="pi.queryLabel('equipAdministrator')">
         <TaktSelect
-          v-model:value="advancedQueryForm.productionEquipmentStatus"
+          v-model:value="advancedQueryForm.equipAdministrator"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('equipAdministrator', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('prodEquipStatus')">
+      <a-form-item :label="pi.queryLabel('prodEquipStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.prodEquipStatus"
           dict-type="sys_normal_disable"
-          :placeholder="pi.queryPh('productionEquipmentStatus', 'select')"
+          :placeholder="pi.queryPh('prodEquipStatus', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -940,13 +1032,13 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    equipmentCategory: undefined as number | undefined,
+    equipCategory: undefined as number | undefined,
     stdCycleTimeSeconds: undefined as number | undefined,
     stdMinutesPerUnit: undefined as number | undefined,
     stdMinutesPerCycle: undefined as number | undefined,
     theoreticalSpm: undefined as number | undefined,
     theoreticalCycleTimeSeconds: undefined as number | undefined,
-    stdEquipmentHourlyCapacity: undefined as number | undefined,
+    stdEquipHourlyCapacity: undefined as number | undefined,
     availabilityRate: undefined as number | undefined,
     performanceRate: undefined as number | undefined,
     setupMinutes: undefined as number | undefined,
@@ -983,7 +1075,7 @@ function createEmptyAdvancedQueryForm() {
     equipmentRunStatus: undefined as number | undefined,
     maintenanceIntervalHours: undefined as number | undefined,
     cumulativeRunHours: undefined as number | undefined,
-    productionEquipmentStatus: undefined as number | undefined,
+    prodEquipStatus: undefined as number | undefined,
   }
 }
 /** 高级查询表单模型 */
@@ -1010,7 +1102,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -1036,8 +1127,8 @@ function buildListQuery(overrides?: Partial<ProductionEquipmentQuery>): Producti
   for (const key of PRODUCTIONEQUIPMENT_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.equipmentCategory !== undefined && form.equipmentCategory !== null) {
-    query.equipmentCategory = form.equipmentCategory
+  if (form.equipCategory !== undefined && form.equipCategory !== null) {
+    query.equipCategory = form.equipCategory
   }
   if (form.stdCycleTimeSeconds !== undefined && form.stdCycleTimeSeconds !== null) {
     query.stdCycleTimeSeconds = form.stdCycleTimeSeconds
@@ -1054,8 +1145,8 @@ function buildListQuery(overrides?: Partial<ProductionEquipmentQuery>): Producti
   if (form.theoreticalCycleTimeSeconds !== undefined && form.theoreticalCycleTimeSeconds !== null) {
     query.theoreticalCycleTimeSeconds = form.theoreticalCycleTimeSeconds
   }
-  if (form.stdEquipmentHourlyCapacity !== undefined && form.stdEquipmentHourlyCapacity !== null) {
-    query.stdEquipmentHourlyCapacity = form.stdEquipmentHourlyCapacity
+  if (form.stdEquipHourlyCapacity !== undefined && form.stdEquipHourlyCapacity !== null) {
+    query.stdEquipHourlyCapacity = form.stdEquipHourlyCapacity
   }
   if (form.availabilityRate !== undefined && form.availabilityRate !== null) {
     query.availabilityRate = form.availabilityRate
@@ -1165,8 +1256,8 @@ function buildListQuery(overrides?: Partial<ProductionEquipmentQuery>): Producti
   if (form.cumulativeRunHours !== undefined && form.cumulativeRunHours !== null) {
     query.cumulativeRunHours = form.cumulativeRunHours
   }
-  if (form.productionEquipmentStatus !== undefined && form.productionEquipmentStatus !== null) {
-    query.productionEquipmentStatus = form.productionEquipmentStatus
+  if (form.prodEquipStatus !== undefined && form.prodEquipStatus !== null) {
+    query.prodEquipStatus = form.prodEquipStatus
   }
   return query
 }
@@ -1176,7 +1267,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -1252,8 +1342,6 @@ const toProductionEquipmentNumber = (value: string | number | undefined | null):
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1498,21 +1586,21 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleProductionEquipmentStatusChange(record: ProductionEquipmentRowRecord, checked: boolean) {
+async function handleProdEquipStatusChange(record: ProductionEquipmentRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = toProductionEquipmentNumber(getProductionEquipmentDictValue(record, 'productionEquipmentStatus'))
+  const oldVal = toProductionEquipmentNumber(getProductionEquipmentDictValue(record, 'prodEquipStatus'))
   const id = getProductionEquipmentId(record)
   const row = dataSource.value.find((item) => getProductionEquipmentId(item) === id)
   if (row) {
-    row.productionEquipmentStatus = newVal
+    row.prodEquipStatus = newVal
   }
   try {
-    await updateProductionEquipmentStatus({ productionEquipmentId: id, productionEquipmentStatus: newVal })
+    await updateProductionEquipmentStatus({ productionEquipmentId: id, prodEquipStatus: newVal })
     message.success(t('common.feedback.updated'))
     
   } catch (error: unknown) {
     if (row) {
-      row.productionEquipmentStatus = oldVal
+      row.prodEquipStatus = oldVal
     }
     message.error(t('common.feedback.failed'))
   }

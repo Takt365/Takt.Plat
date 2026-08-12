@@ -26,22 +26,17 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_aps_production_order_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktProductionOrder : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "ZDTA")]
+    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "ZDTA")]
     public string ProdOrderType { get; set; } = "ZDTA";
 
     /// <summary>
     /// 工单号
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -49,6 +44,12 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -87,9 +88,9 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public int Priority { get; set; } = 3;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? WorkCenter { get; set; }
 
     /// <summary>
@@ -101,13 +102,13 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     /// <summary>
     /// 序列号
     /// </summary>
-    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? SerialNo { get; set; }
+    [SugarColumn(ColumnName = "serial_code", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SerialCode { get; set; }
 
     /// <summary>
     /// 工艺路线编码
     /// </summary>
-    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = true)]
     public string? RoutingCode { get; set; }
 
     /// <summary>

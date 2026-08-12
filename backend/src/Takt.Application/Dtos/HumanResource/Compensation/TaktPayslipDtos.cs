@@ -35,91 +35,6 @@ public class TaktPayslipDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PayslipId { get; set; }
 
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 发薪期间（如 2026-06）
-    /// </summary>
-    public string PayPeriod { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 基本工资（元）
-    /// </summary>
-    public decimal BaseSalary { get; set; }
-
-    /// <summary>
-    /// 岗位工资（元）
-    /// </summary>
-    public decimal PositionSalary { get; set; }
-
-    /// <summary>
-    /// 绩效/奖金（元）
-    /// </summary>
-    public decimal BonusAmount { get; set; }
-
-    /// <summary>
-    /// 加班费（元）
-    /// </summary>
-    public decimal OvertimePay { get; set; }
-
-    /// <summary>
-    /// 津贴合计（元）
-    /// </summary>
-    public decimal AllowanceTotal { get; set; }
-
-    /// <summary>
-    /// 应发合计（元）
-    /// </summary>
-    public decimal GrossAmount { get; set; }
-
-    /// <summary>
-    /// 社保扣款（元）
-    /// </summary>
-    public decimal SocialSecurityDeduction { get; set; }
-
-    /// <summary>
-    /// 公积金扣款（元）
-    /// </summary>
-    public decimal HousingFundDeduction { get; set; }
-
-    /// <summary>
-    /// 个税扣款（元）
-    /// </summary>
-    public decimal TaxDeduction { get; set; }
-
-    /// <summary>
-    /// 其他扣款（元）
-    /// </summary>
-    public decimal OtherDeduction { get; set; }
-
-    /// <summary>
-    /// 实发金额（元）
-    /// </summary>
-    public decimal NetAmount { get; set; }
-
-    /// <summary>
-    /// 关联计算公式方案编码（核算时按 TaktSalaryFormula.set_code 加载步骤并执行）
-    /// </summary>
-    public string? FormulaSetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 发放日期
-    /// </summary>
-    public DateTime? IssueDate { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
@@ -147,6 +62,11 @@ public class TaktPayslipQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工 ID
@@ -237,7 +157,7 @@ public class TaktPayslipQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
@@ -285,9 +205,10 @@ public class TaktPayslipCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -376,7 +297,7 @@ public class TaktPayslipCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
@@ -459,6 +380,11 @@ public class TaktPayslipTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -542,7 +468,7 @@ public class TaktPayslipTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
@@ -577,9 +503,10 @@ public class TaktPayslipImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -665,7 +592,7 @@ public class TaktPayslipImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）
@@ -789,7 +716,7 @@ public class TaktPayslipExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status：0=待发放 1=已发放 2=已确认）

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步多媒体应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
     }
 
     /// <summary>
-    /// 获取SOP工步多媒体列表（分页）
+    /// 获取SOP工步多媒体列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopStepMediaDto>> GetSopStepMediaListAsync(TaktSopStepMediaQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopStepMediaDto>.Create(
+                new List<TaktSopStepMediaDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopStepMediaRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -105,8 +113,8 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.FileUrl ?? e.Id.ToString(),
+            DictValue = e.FileUrl,
+            DictLabel = e.FileUrl,
         }).ToList();
     }
 
@@ -263,7 +271,15 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopStepMediaAsync(TaktSopStepMediaQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopStepMediaQueryDto());
+        var queryDto = query ?? new TaktSopStepMediaQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopStepMediaExportDto>(),
+                sheetName ?? "SOP工步多媒体数据",
+                fileName ?? "SOP工步多媒体导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopStepMediaRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -315,66 +331,143 @@ public class TaktSopStepMediaService : TaktServiceBase, ITaktSopStepMediaService
     {
         var exp = Expressionable.Create<TaktSopStepMedia>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.StepId).Contains(keywords)
-                || SqlFunc.ToString(x.MediaType).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.FileUrl != null && x.FileUrl.Contains(keywords))
                 || (x.FileExt != null && x.FileExt.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.StepId.HasValue == true)
         {
-            exp = exp.And(x => x.StepId == queryDto.StepId);
+            var stepId = queryDto.StepId;
+            exp = exp.And(x => x.StepId == stepId);
         }
 
         if (queryDto?.MediaType.HasValue == true)
         {
-            exp = exp.And(x => x.MediaType == queryDto.MediaType);
+            var mediaType = queryDto.MediaType;
+            exp = exp.And(x => x.MediaType == mediaType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FileUrl))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileUrl))
         {
-            exp = exp.And(x => x.FileUrl != null && x.FileUrl.Contains(queryDto.FileUrl));
+            var fileUrl = queryDto.FileUrl;
+            exp = exp.And(x => x.FileUrl != null && x.FileUrl.Contains(fileUrl));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FileExt))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileExt))
         {
-            exp = exp.And(x => x.FileExt != null && x.FileExt.Contains(queryDto.FileExt));
+            var fileExt = queryDto.FileExt;
+            exp = exp.And(x => x.FileExt != null && x.FileExt.Contains(fileExt));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopStepMediaQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.StepId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MediaType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FileUrl))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FileExt))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

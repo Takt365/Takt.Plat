@@ -27,352 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('periodCode')"
-                name="periodCode"
-              >
-                <a-input
-                  v-model:value="formState.periodCode"
-                  :placeholder="pi.ph('periodCode')"
-                  show-count
-                  :maxlength="6"
-                  allow-clear
-                  :disabled="!!formData?.purchaseSalesInventoryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.purchaseSalesInventoryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
-              >
-                <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('valuation')"
-                name="valuation"
-              >
-                <TaktSelect
-                  v-model:value="formState.valuation"
-                  dict-type="logistics_valuation_class_category"
-                  :placeholder="pi.ph('valuation')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('unitCode')"
-                name="unitCode"
-              >
-                <a-input
-                  v-model:value="formState.unitCode"
-                  :placeholder="pi.ph('unitCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.purchaseSalesInventoryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('openingQty')"
-                name="openingQty"
-              >
-                <a-input-number
-                  v-model:value="formState.openingQty"
-                  :placeholder="pi.ph('openingQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('openingAmount')"
-                name="openingAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.openingAmount"
-                  :placeholder="pi.ph('openingAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseQty')"
-                name="purchaseQty"
-              >
-                <a-input-number
-                  v-model:value="formState.purchaseQty"
-                  :placeholder="pi.ph('purchaseQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseAmount')"
-                name="purchaseAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.purchaseAmount"
-                  :placeholder="pi.ph('purchaseAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionQty')"
-                name="productionQty"
-              >
-                <a-input-number
-                  v-model:value="formState.productionQty"
-                  :placeholder="pi.ph('productionQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionAmount')"
-                name="productionAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.productionAmount"
-                  :placeholder="pi.ph('productionAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('issueQty')"
-                name="issueQty"
-              >
-                <a-input-number
-                  v-model:value="formState.issueQty"
-                  :placeholder="pi.ph('issueQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('issueCostAmount')"
-                name="issueCostAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.issueCostAmount"
-                  :placeholder="pi.ph('issueCostAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesRevenueAmount')"
-                name="salesRevenueAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.salesRevenueAmount"
-                  :placeholder="pi.ph('salesRevenueAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('adjustQty')"
-                name="adjustQty"
-              >
-                <a-input-number
-                  v-model:value="formState.adjustQty"
-                  :placeholder="pi.ph('adjustQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('adjustAmount')"
-                name="adjustAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.adjustAmount"
-                  :placeholder="pi.ph('adjustAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('closingQty')"
-                name="closingQty"
-              >
-                <a-input-number
-                  v-model:value="formState.closingQty"
-                  :placeholder="pi.ph('closingQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('closingAmount')"
-                name="closingAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.closingAmount"
-                  :placeholder="pi.ph('closingAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('closingUnitCost')"
-                name="closingUnitCost"
-              >
-                <a-input-number
-                  v-model:value="formState.closingUnitCost"
-                  :placeholder="pi.ph('closingUnitCost')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('currencyCode')"
-                name="currencyCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currencyCode')"
-                  :disabled="!!formData?.purchaseSalesInventoryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('psiStatus')"
-                name="psiStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.psiStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="pi.ph('psiStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -460,15 +126,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -540,10 +209,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  relatedPlant: [
+  plantCode: [
     {
       required: true,
-      message: pi.ph('relatedPlant'),
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],
@@ -561,10 +230,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  materialName: [
+  materialDescription: [
     {
       required: true,
-      message: pi.ph('materialName'),
+      message: pi.ph('materialDescription'),
       trigger: 'blur'
     }
   ],

@@ -31,11 +31,6 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 public class TaktInventoryImpairmentProvision : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 期间（资产负债表日所属会计期间；业务存当月首日，表示年月，如 2026-07-01 → 2026年7月）
     /// </summary>
     [SugarColumn(ColumnName = "period_date", ColumnDescription = "会计期间", ColumnDataType = "datetime", IsNullable = false)]
@@ -46,10 +41,10 @@ public class TaktInventoryImpairmentProvision : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? MaterialName { get; set; }
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? MaterialDescription { get; set; }
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>
@@ -133,8 +128,8 @@ public class TaktInventoryImpairmentProvision : TaktCompanyEntityBase
     /// <summary>
     /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [SugarColumn(ColumnName = "currency", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
-    public string Currency { get; set; } = "CNY";
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "币种", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
     /// </summary>

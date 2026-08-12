@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-07-29
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售预测应用服务实现
 // 
@@ -119,14 +119,14 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
     public async Task<TaktSalesForecastDto> CreateSalesForecastAsync(TaktSalesForecastCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesForecast>();
-        var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique = await _uniqueValidator.IsUniqueAsync(
             _salesForecastRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.SalesForecastCode == entity.SalesForecastCode
-                && x.PlanDate == entity.PlanDate);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique)
+                && x.ReceiveVersionNo == entity.ReceiveVersionNo);
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique)
         {
-            throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、PlanDate已存在");
+            throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、ReceiveVersionNo已存在");
         }
         entity = await _salesForecastRepository.CreateAsync(entity);
                 await SaveSalesForecastChildrenAsync(entity, dto);
@@ -147,15 +147,15 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             throw new TaktBusinessException("销售预测不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique = await _uniqueValidator.IsUniqueAsync(
             _salesForecastRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.SalesForecastCode == entity.SalesForecastCode
-                && x.PlanDate == entity.PlanDate,
+                && x.ReceiveVersionNo == entity.ReceiveVersionNo,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique)
         {
-            throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、PlanDate已存在");
+            throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、ReceiveVersionNo已存在");
         }
         await _salesForecastRepository.UpdateAsync(entity);
                 await SaveSalesForecastChildrenAsync(entity, dto);
@@ -253,19 +253,19 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             try
             {
                 var entity = rows[i].Adapt<TaktSalesForecast>();
-                var importKey = $"{entity.PlantCode}|{entity.SalesForecastCode}|{entity.PlanDate}";
+                var importKey = $"{entity.PlantCode}|{entity.SalesForecastCode}|{entity.ReceiveVersionNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、SalesForecastCode、PlanDate）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、SalesForecastCode、ReceiveVersionNo）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique = await _uniqueValidator.IsUniqueAsync(
                     _salesForecastRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.SalesForecastCode == entity.SalesForecastCode
-                        && x.PlanDate == entity.PlanDate);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_unique)
+                        && x.ReceiveVersionNo == entity.ReceiveVersionNo);
+                if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_unique)
                 {
-                    throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、PlanDate已存在");
+                    throw new TaktBusinessException("销售预测的PlantCode、SalesForecastCode、ReceiveVersionNo已存在");
                 }
                 await _salesForecastRepository.CreateAsync(entity);
                 success += 1;
@@ -403,17 +403,6 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
                         throw new TaktBusinessException("销售预测明细不属于当前主表（SalesForecastItemId={childDto.SalesForecastItemId}）");
                     }
                     submittedIds.Add(childDto.SalesForecastItemId);
-                    var isUniqueUpdate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                        _salesForecastItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesForecastId == x.SalesForecastId
-                && x.LineNumber == x.LineNumber
-                && x.MaterialCode == x.MaterialCode,
-                        childDto.SalesForecastItemId);
-                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
-                    {
-                        throw new TaktBusinessException("销售预测明细的CompanyCode、SalesForecastId、LineNumber、MaterialCode已存在");
-                    }
                     childDto.Adapt(target);
                     target.Id = childDto.SalesForecastItemId;
                     target.SalesForecastId = entity.Id;
@@ -422,16 +411,6 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
                 }
                 else
                 {
-                    var isUniqueCreate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
-                        _salesForecastItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesForecastId == x.SalesForecastId
-                && x.LineNumber == x.LineNumber
-                && x.MaterialCode == x.MaterialCode);
-                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
-                    {
-                        throw new TaktBusinessException("销售预测明细的CompanyCode、SalesForecastId、LineNumber、MaterialCode已存在");
-                    }
                     var child = childDto.Adapt<TaktSalesForecastItem>();
                     child.Id = 0;
                     child.SalesForecastId = entity.Id;
@@ -485,6 +464,12 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.SalesForecastCode != null && x.SalesForecastCode.Contains(keywords))
+                || (x.SalesProduct != null && x.SalesProduct.Contains(keywords))
+                || (x.ProductCategoryCode != null && x.ProductCategoryCode.Contains(keywords))
+                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
+                || (x.ModelCode != null && x.ModelCode.Contains(keywords))
+                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || SqlFunc.ToString(x.PlannerId).Contains(keywords)
@@ -496,11 +481,10 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
                 || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedStatus).Contains(keywords)
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlanDate).Contains(keywords)
-                || SqlFunc.ToString(x.PlanPeriodStart).Contains(keywords)
-                || SqlFunc.ToString(x.PlanPeriodEnd).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -513,6 +497,36 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
         if (!string.IsNullOrEmpty(queryDto?.SalesForecastCode))
         {
             exp = exp.And(x => x.SalesForecastCode != null && x.SalesForecastCode.Contains(queryDto.SalesForecastCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.SalesProduct))
+        {
+            exp = exp.And(x => x.SalesProduct != null && x.SalesProduct.Contains(queryDto.SalesProduct));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ProductCategoryCode))
+        {
+            exp = exp.And(x => x.ProductCategoryCode != null && x.ProductCategoryCode.Contains(queryDto.ProductCategoryCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ProfitCenterCode))
+        {
+            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(queryDto.ProfitCenterCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.ModelCode))
+        {
+            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        {
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
+        {
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
@@ -570,6 +584,11 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             exp = exp.And(x => x.PlanDescription != null && x.PlanDescription.Contains(queryDto.PlanDescription));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -590,24 +609,19 @@ public class TaktSalesForecastService : TaktServiceBase, ITaktSalesForecastServi
             exp = exp.And(x => x.PlanDate <= queryDto.PlanDateEnd);
         }
 
-        if (queryDto?.PlanPeriodStartStart.HasValue == true)
+        if (queryDto?.ReceiveDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodStart >= queryDto.PlanPeriodStartStart);
+            exp = exp.And(x => x.ReceiveDate >= queryDto.ReceiveDateStart);
         }
 
-        if (queryDto?.PlanPeriodStartEnd.HasValue == true)
+        if (queryDto?.ReceiveDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodStart <= queryDto.PlanPeriodStartEnd);
+            exp = exp.And(x => x.ReceiveDate <= queryDto.ReceiveDateEnd);
         }
 
-        if (queryDto?.PlanPeriodEndStart.HasValue == true)
+        if (queryDto?.ReceiveVersionNo.HasValue == true)
         {
-            exp = exp.And(x => x.PlanPeriodEnd >= queryDto.PlanPeriodEndStart);
-        }
-
-        if (queryDto?.PlanPeriodEndEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanPeriodEnd <= queryDto.PlanPeriodEndEnd);
+            exp = exp.And(x => x.ReceiveVersionNo == queryDto.ReceiveVersionNo);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

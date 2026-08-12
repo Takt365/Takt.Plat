@@ -168,11 +168,11 @@ function toAxiosError(error: unknown): AxiosError | null {
 }
 
 /**
- * 解析会话过期提示（缺省 common.tip.session.expired）
+ * 解析会话过期提示（缺省 layouts.page.session.expired）
  * @param message 业务或 HTTP 附带文案
  */
 function resolveSessionExpiredMessage(message?: string): string {
-  return message?.trim() || translateLocaleMessage('common.tip.session.expired');
+  return message?.trim() || translateLocaleMessage('layouts.page.session.expired');
 }
 
 /**

@@ -129,7 +129,7 @@
           v-model:value="advancedQueryForm.purchaseOrderCode"
           :placeholder="pi.queryPh('purchaseOrderCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -173,13 +173,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
-        <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -288,6 +287,15 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('purchaseAmount')">
+      <a-form-item :label="pi.queryLabel('purchaseAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.purchaseAmount"
+          :placeholder="pi.queryPh('purchaseAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('deliveryStatus')">
       <a-form-item :label="pi.queryLabel('deliveryStatus')">
         <TaktSelect
@@ -327,6 +335,16 @@
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -521,7 +539,67 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PURCHASEORDERITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.requestLineNumber !== undefined && form.requestLineNumber !== null) {
+    return true
+  }
+  if (form.orderQuantity !== undefined && form.orderQuantity !== null) {
+    return true
+  }
+  if (form.receivedQuantity !== undefined && form.receivedQuantity !== null) {
+    return true
+  }
+  if (form.purchasePerUnit !== undefined && form.purchasePerUnit !== null) {
+    return true
+  }
+  if (form.purchaseUnitPrice !== undefined && form.purchaseUnitPrice !== null) {
+    return true
+  }
+  if (form.discountRate !== undefined && form.discountRate !== null) {
+    return true
+  }
+  if (form.discountAmount !== undefined && form.discountAmount !== null) {
+    return true
+  }
+  if (form.taxIncludedAmount !== undefined && form.taxIncludedAmount !== null) {
+    return true
+  }
+  if (form.untaxedAmount !== undefined && form.untaxedAmount !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.purchaseAmount !== undefined && form.purchaseAmount !== null) {
+    return true
+  }
+  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -542,9 +620,9 @@ function createEmptyAdvancedQueryForm() {
     taxIncludedAmount: undefined as number | undefined,
     untaxedAmount: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
+    purchaseAmount: undefined as number | undefined,
     deliveryStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -674,14 +752,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchaseOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PurchaseOrderItem }) =>
-      String(getPurchaseOrderItemField(record, 'materialName') ?? ''),
+      String(getPurchaseOrderItemField(record, 'materialDescription') ?? ''),
   },
   {
     title: pi.label('materialSpecification'),
@@ -794,6 +872,16 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchaseOrderItemField(record, 'taxAmount') ?? ''),
   },
   {
+    title: pi.label('purchaseAmount'),
+    dataIndex: 'purchaseAmount',
+    key: 'purchaseAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchaseOrderItem }) =>
+      String(getPurchaseOrderItemField(record, 'purchaseAmount') ?? ''),
+  },
+  {
     title: pi.label('deliveryStatus'),
     dataIndex: 'deliveryStatus',
     key: 'deliveryStatus',
@@ -830,10 +918,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:purchase:order:delete',
         onClick: (record: PurchaseOrderItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -942,7 +1028,7 @@ function onClickRow(record: PurchaseOrderItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PurchaseOrderItemQuery} 查询 DTO
  */
@@ -999,6 +1085,9 @@ function buildListQuery(overrides?: Partial<PurchaseOrderItemQuery>): PurchaseOr
   }
   if (form.taxAmount !== undefined && form.taxAmount !== null) {
     query.taxAmount = form.taxAmount
+  }
+  if (form.purchaseAmount !== undefined && form.purchaseAmount !== null) {
+    query.purchaseAmount = form.purchaseAmount
   }
   if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
     query.deliveryStatus = form.deliveryStatus
@@ -1236,6 +1325,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPurchaseOrderItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

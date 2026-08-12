@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopExecStep 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopExecStep 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public long SopExecStepId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
@@ -47,7 +47,7 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public string? ExecName { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -73,12 +73,12 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -89,7 +89,7 @@ public class TaktSopExecStepDto : TaktCompanyDtoBase
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 
@@ -122,13 +122,23 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -159,12 +169,12 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public DateTime? EndedAtEnd { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -180,7 +190,7 @@ public class TaktSopExecStepQueryDto : TaktPagedQuery
     public DateTime? ConfirmedAtEnd { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -225,18 +235,23 @@ public class TaktSopExecStepCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -257,12 +272,12 @@ public class TaktSopExecStepCreateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -273,7 +288,7 @@ public class TaktSopExecStepCreateDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 
@@ -329,13 +344,23 @@ public class TaktSopExecStepTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -356,12 +381,12 @@ public class TaktSopExecStepTemplateDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -372,7 +397,7 @@ public class TaktSopExecStepTemplateDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -404,18 +429,23 @@ public class TaktSopExecStepImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -436,12 +466,12 @@ public class TaktSopExecStepImportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -452,7 +482,7 @@ public class TaktSopExecStepImportDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? BlockNextStep { get; set; }
 
@@ -490,13 +520,18 @@ public class TaktSopExecStepExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -517,12 +552,12 @@ public class TaktSopExecStepExportDto
     public DateTime? EndedAt { get; set; }
 
     /// <summary>
-    /// 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+    /// 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
     /// </summary>
     public int? StepResult { get; set; }
 
     /// <summary>
-    /// 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConfirmedBy { get; set; }
@@ -533,7 +568,7 @@ public class TaktSopExecStepExportDto
     public DateTime? ConfirmedAt { get; set; }
 
     /// <summary>
-    /// 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+    /// 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int BlockNextStep { get; set; } = 0;
 

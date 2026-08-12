@@ -4,7 +4,7 @@
 // 文件名称：TaktSalesForecastItem.cs
 // 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt销售预测明细实体，MDS 独立需求行（成品/销售物料）
+// 功能描述：Takt销售预测明细（仅财年×月计划数据：001/002/增减与转单金额）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,13 +16,14 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Mds;
 
 /// <summary>
-/// Takt销售预测明细实体
+/// Takt销售预测明细（一行 = 主表物料在某财年某月的 001/002 计划量；产品/类别/利润中心/机种/物料在主表）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_mds_sales_forecast_item", "销售预测明细表")]
 [SugarIndex("ix_sales_plan_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sales_plan_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_item_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesForecastId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesForecastId), OrderByType.Asc, nameof(FiscalYear), OrderByType.Asc, nameof(PlanMonth), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_item_plan_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SalesForecastCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mds_sales_forecast_item_fiscal_year", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FiscalYear), OrderByType.Asc, false)]
 public class TaktSalesForecastItem : TaktCompanyEntityBase
 {
     /// <summary>
@@ -35,62 +36,44 @@ public class TaktSalesForecastItem : TaktCompanyEntityBase
     /// <summary>
     /// 销售预测编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_plan_code", ColumnDescription = "销售预测编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    [SugarColumn(ColumnName = "sales_plan_code", ColumnDescription = "销售预测编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string MaterialCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "fiscal_year", ColumnDescription = "财年", ColumnDataType = "nvarchar", Length = 6, IsNullable = false)]
+    public string FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "plan_month", ColumnDescription = "计划月份", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int PlanMonth { get; set; } = 1;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? MaterialSpecification { get; set; }
+    [SugarColumn(ColumnName = "plan_quantity_001", ColumnDescription = "计划数量版本001", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    public decimal PlanQuantity001 { get; set; } = 0;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? ModelCode { get; set; }
+    [SugarColumn(ColumnName = "plan_quantity_002", ColumnDescription = "计划数量版本002", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    public decimal PlanQuantity002 { get; set; } = 0;
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? ModelName { get; set; }
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    [SugarColumn(ColumnName = "plan_unit", ColumnDescription = "计划单位", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "PC")]
-    public string PlanUnit { get; set; } = "PC";
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    [SugarColumn(ColumnName = "plan_quantity", ColumnDescription = "计划数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal PlanQuantity { get; set; } = 0;
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    [SugarColumn(ColumnName = "planned_delivery_date", ColumnDescription = "计划交货日期", ColumnDataType = "datetime", IsNullable = true)]
-    public DateTime? PlannedDeliveryDate { get; set; }
+    [SugarColumn(ColumnName = "plan_quantity_delta", ColumnDescription = "计划增减", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    public decimal PlanQuantityDelta { get; set; } = 0;
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -115,5 +98,4 @@ public class TaktSalesForecastItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "is_obsolete", ColumnDescription = "是否作废", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsObsolete { get; set; } = 0;
-
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Sales
 // 文件名称：TaktSalesPricesController.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售价格控制器
 // 

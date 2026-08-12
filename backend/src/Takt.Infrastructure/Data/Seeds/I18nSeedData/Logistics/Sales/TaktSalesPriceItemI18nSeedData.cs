@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,14 +171,14 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.salespriceitem.scalevalue
             new TranslationSeedItem("entity.salespriceitem.scalevalue", "zh-HK", "等级值_hk", "等级值"),
 
-            // entity.salespriceitem.scalecurrency
-            new TranslationSeedItem("entity.salespriceitem.scalecurrency", "en-US", "等级货币_us", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.salespriceitem.scalecurrency
-            new TranslationSeedItem("entity.salespriceitem.scalecurrency", "ja-JP", "等级货币_jp", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.salespriceitem.scalecurrency
-            new TranslationSeedItem("entity.salespriceitem.scalecurrency", "zh-CN", "等级货币", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.salespriceitem.scalecurrency
-            new TranslationSeedItem("entity.salespriceitem.scalecurrency", "zh-HK", "等级货币_hk", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.salespriceitem.scalecurrencycode
+            new TranslationSeedItem("entity.salespriceitem.scalecurrencycode", "en-US", "等级货币_us", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.salespriceitem.scalecurrencycode
+            new TranslationSeedItem("entity.salespriceitem.scalecurrencycode", "ja-JP", "等级货币_jp", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.salespriceitem.scalecurrencycode
+            new TranslationSeedItem("entity.salespriceitem.scalecurrencycode", "zh-CN", "等级货币", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.salespriceitem.scalecurrencycode
+            new TranslationSeedItem("entity.salespriceitem.scalecurrencycode", "zh-HK", "等级货币_hk", "等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
 
             // entity.salespriceitem.calculationtype
             new TranslationSeedItem("entity.salespriceitem.calculationtype", "en-US", "计算类型_us", "计算类型（字典 logistics_calculation_type；默认 A=百分数）"),
@@ -225,14 +225,14 @@ public class TaktSalesPriceItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.salespriceitem.taxamount
             new TranslationSeedItem("entity.salespriceitem.taxamount", "zh-HK", "税费_hk", "税费（冗余；含税−未税，打印用）"),
 
-            // entity.salespriceitem.conditioncurrency
-            new TranslationSeedItem("entity.salespriceitem.conditioncurrency", "en-US", "条件货币_us", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
-            // entity.salespriceitem.conditioncurrency
-            new TranslationSeedItem("entity.salespriceitem.conditioncurrency", "ja-JP", "条件货币_jp", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
-            // entity.salespriceitem.conditioncurrency
-            new TranslationSeedItem("entity.salespriceitem.conditioncurrency", "zh-CN", "条件货币", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
-            // entity.salespriceitem.conditioncurrency
-            new TranslationSeedItem("entity.salespriceitem.conditioncurrency", "zh-HK", "条件货币_hk", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
+            // entity.salespriceitem.conditioncurrencycode
+            new TranslationSeedItem("entity.salespriceitem.conditioncurrencycode", "en-US", "条件货币_us", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
+            // entity.salespriceitem.conditioncurrencycode
+            new TranslationSeedItem("entity.salespriceitem.conditioncurrencycode", "ja-JP", "条件货币_jp", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
+            // entity.salespriceitem.conditioncurrencycode
+            new TranslationSeedItem("entity.salespriceitem.conditioncurrencycode", "zh-CN", "条件货币", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
+            // entity.salespriceitem.conditioncurrencycode
+            new TranslationSeedItem("entity.salespriceitem.conditioncurrencycode", "zh-HK", "条件货币_hk", "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）"),
 
             // entity.salespriceitem.priceunit
             new TranslationSeedItem("entity.salespriceitem.priceunit", "en-US", "定价单位_us", "定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）"),

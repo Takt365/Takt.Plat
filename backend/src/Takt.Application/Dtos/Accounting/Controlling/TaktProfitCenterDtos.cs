@@ -35,63 +35,6 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProfitCenterId { get; set; }
 
-    /// <summary>
-    /// 利润中心编码（4位，租户+公司内唯一）
-    /// </summary>
-    public string ProfitCenterCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 利润中心名称
-    /// </summary>
-    public string ProfitCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 父级 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentId { get; set; }
-
-    /// <summary>
-    /// 负责人用户 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ManagerId { get; set; }
-
-    /// <summary>
-    /// 负责人姓名
-    /// </summary>
-    public string? ManagerName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 所属部门 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DeptId { get; set; }
-
-    /// <summary>
-    /// 所属部门名称
-    /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 利润中心层级
-    /// </summary>
-    public int ProfitCenterLevel { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -139,6 +82,11 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 利润中心编码（4位，租户+公司内唯一）
@@ -206,7 +154,7 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -259,9 +207,10 @@ public class TaktProfitCenterCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 利润中心编码（4位，租户+公司内唯一）
@@ -322,7 +271,7 @@ public class TaktProfitCenterCreateDto
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -427,6 +376,11 @@ public class TaktProfitCenterTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 利润中心编码（4位，租户+公司内唯一）
     /// </summary>
     public string? ProfitCenterCode { get; set; } = string.Empty;
@@ -482,7 +436,7 @@ public class TaktProfitCenterTemplateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -515,9 +469,10 @@ public class TaktProfitCenterImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 利润中心编码（4位，租户+公司内唯一）
@@ -575,7 +530,7 @@ public class TaktProfitCenterImportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -669,7 +624,7 @@ public class TaktProfitCenterExportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

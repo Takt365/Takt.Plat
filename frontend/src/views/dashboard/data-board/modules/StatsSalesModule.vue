@@ -60,8 +60,7 @@ const metricItems = computed(() => [
     value: salesStats.value.yoy,
     suffix: '%',
     precision: 1,
-  },
-])
+  }])
 
 /**
  * 加载本月销售统计（销售发票 invoice-stat）

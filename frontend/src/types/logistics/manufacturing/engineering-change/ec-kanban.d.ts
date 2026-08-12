@@ -19,7 +19,7 @@ export interface EcKanbanDeptStage {
 
 export interface EcKanban extends CompanyDtoBase {
   ecId: string;
-  ecNo: string;
+  ecCode: string;
   ecTitle: string;
   changeStatus: number;
   ecStatus: number;
@@ -37,7 +37,7 @@ export interface EcKanban extends CompanyDtoBase {
 }
 
 export interface EcKanbanQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   changeStatus?: number;
   ecStatus?: number;
   /** 当前卡点部门 */

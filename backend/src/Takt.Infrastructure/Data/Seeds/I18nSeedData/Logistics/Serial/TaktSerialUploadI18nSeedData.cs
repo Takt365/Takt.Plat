@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialUploadI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialUpload 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktSerialUploadI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialupload._self
             new TranslationSeedItem("entity.serialupload._self", "zh-HK", "序列号上传信息_hk", "实体名称"),
 
-            // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialupload.plantcode
-            new TranslationSeedItem("entity.serialupload.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.serialupload.outbounddate
             new TranslationSeedItem("entity.serialupload.outbounddate", "en-US", "出库日期_us", "出库日期"),
             // entity.serialupload.outbounddate
@@ -108,23 +99,23 @@ public class TaktSerialUploadI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialupload.outbounddate
             new TranslationSeedItem("entity.serialupload.outbounddate", "zh-HK", "出库日期_hk", "出库日期"),
 
-            // entity.serialupload.shippinginvoiceno
-            new TranslationSeedItem("entity.serialupload.shippinginvoiceno", "en-US", "发货单号_us", "发货单号（固定 9 位）"),
-            // entity.serialupload.shippinginvoiceno
-            new TranslationSeedItem("entity.serialupload.shippinginvoiceno", "ja-JP", "发货单号_jp", "发货单号（固定 9 位）"),
-            // entity.serialupload.shippinginvoiceno
-            new TranslationSeedItem("entity.serialupload.shippinginvoiceno", "zh-CN", "发货单号", "发货单号（固定 9 位）"),
-            // entity.serialupload.shippinginvoiceno
-            new TranslationSeedItem("entity.serialupload.shippinginvoiceno", "zh-HK", "发货单号_hk", "发货单号（固定 9 位）"),
+            // entity.serialupload.shippinginvoicecode
+            new TranslationSeedItem("entity.serialupload.shippinginvoicecode", "en-US", "发货单号_us", "发货单号（固定 9 位）"),
+            // entity.serialupload.shippinginvoicecode
+            new TranslationSeedItem("entity.serialupload.shippinginvoicecode", "ja-JP", "发货单号_jp", "发货单号（固定 9 位）"),
+            // entity.serialupload.shippinginvoicecode
+            new TranslationSeedItem("entity.serialupload.shippinginvoicecode", "zh-CN", "发货单号", "发货单号（固定 9 位）"),
+            // entity.serialupload.shippinginvoicecode
+            new TranslationSeedItem("entity.serialupload.shippinginvoicecode", "zh-HK", "发货单号_hk", "发货单号（固定 9 位）"),
 
-            // entity.serialupload.sequenceno
-            new TranslationSeedItem("entity.serialupload.sequenceno", "en-US", "序号_us", "序号（同一工厂+发货单号内唯一）"),
-            // entity.serialupload.sequenceno
-            new TranslationSeedItem("entity.serialupload.sequenceno", "ja-JP", "序号_jp", "序号（同一工厂+发货单号内唯一）"),
-            // entity.serialupload.sequenceno
-            new TranslationSeedItem("entity.serialupload.sequenceno", "zh-CN", "序号", "序号（同一工厂+发货单号内唯一）"),
-            // entity.serialupload.sequenceno
-            new TranslationSeedItem("entity.serialupload.sequenceno", "zh-HK", "序号_hk", "序号（同一工厂+发货单号内唯一）"),
+            // entity.serialupload.sequencecode
+            new TranslationSeedItem("entity.serialupload.sequencecode", "en-US", "序号_us", "序号（同一工厂+发货单号内唯一）"),
+            // entity.serialupload.sequencecode
+            new TranslationSeedItem("entity.serialupload.sequencecode", "ja-JP", "序号_jp", "序号（同一工厂+发货单号内唯一）"),
+            // entity.serialupload.sequencecode
+            new TranslationSeedItem("entity.serialupload.sequencecode", "zh-CN", "序号", "序号（同一工厂+发货单号内唯一）"),
+            // entity.serialupload.sequencecode
+            new TranslationSeedItem("entity.serialupload.sequencecode", "zh-HK", "序号_hk", "序号（同一工厂+发货单号内唯一）"),
 
             // entity.serialupload.materialcode
             new TranslationSeedItem("entity.serialupload.materialcode", "en-US", "产品物料_us", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）"),
@@ -144,14 +135,14 @@ public class TaktSerialUploadI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialupload.totalquantity
             new TranslationSeedItem("entity.serialupload.totalquantity", "zh-HK", "合计数量_hk", "合计数量"),
 
-            // entity.serialupload.serialno
-            new TranslationSeedItem("entity.serialupload.serialno", "en-US", "序列号_us", "序列号（固定 7 位）"),
-            // entity.serialupload.serialno
-            new TranslationSeedItem("entity.serialupload.serialno", "ja-JP", "序列号_jp", "序列号（固定 7 位）"),
-            // entity.serialupload.serialno
-            new TranslationSeedItem("entity.serialupload.serialno", "zh-CN", "序列号", "序列号（固定 7 位）"),
-            // entity.serialupload.serialno
-            new TranslationSeedItem("entity.serialupload.serialno", "zh-HK", "序列号_hk", "序列号（固定 7 位）"),
+            // entity.serialupload.serialcode
+            new TranslationSeedItem("entity.serialupload.serialcode", "en-US", "序列号_us", "序列号（固定 7 位）"),
+            // entity.serialupload.serialcode
+            new TranslationSeedItem("entity.serialupload.serialcode", "ja-JP", "序列号_jp", "序列号（固定 7 位）"),
+            // entity.serialupload.serialcode
+            new TranslationSeedItem("entity.serialupload.serialcode", "zh-CN", "序列号", "序列号（固定 7 位）"),
+            // entity.serialupload.serialcode
+            new TranslationSeedItem("entity.serialupload.serialcode", "zh-HK", "序列号_hk", "序列号（固定 7 位）"),
 
             // entity.serialupload.packingquantity
             new TranslationSeedItem("entity.serialupload.packingquantity", "en-US", "装箱数量_us", "装箱数量"),

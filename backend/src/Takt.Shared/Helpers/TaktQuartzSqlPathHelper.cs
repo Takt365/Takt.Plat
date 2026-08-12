@@ -18,7 +18,7 @@ namespace Takt.Shared.Helpers;
 public static class TaktQuartzSqlPathHelper
 {
     /// <summary>
-    /// 是否为合法相对 wwwroot 的 .sql 路径（不含空白/换行/绝对路径/..；如 Quartz/sap_sync_ma.sql）
+    /// 是否为合法相对 wwwroot 的 .sql 路径（不含空白/换行/绝对路径/..；如 Quartz/sync_mat.sql）
     /// </summary>
     /// <param name="sqlScript">SqlScript 字段值</param>
     /// <returns>格式合法则为 true</returns>

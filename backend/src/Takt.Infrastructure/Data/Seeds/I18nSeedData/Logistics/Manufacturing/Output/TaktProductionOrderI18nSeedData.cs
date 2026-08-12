@@ -118,13 +118,13 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.prodordercode", "zh-HK", "工单号_hk", "工单号"),
 
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "en-US", "物料编码_us", "物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）"),
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "ja-JP", "物料编码_jp", "物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）"),
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "zh-CN", "物料编码", "物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）"),
             // entity.productionorder.materialcode
-            new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）"),
+            new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）"),
 
             // entity.productionorder.prodorderqty
             new TranslationSeedItem("entity.productionorder.prodorderqty", "en-US", "工单数量_us", "工单数量"),
@@ -198,14 +198,14 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.productionorder.prodbatch
             new TranslationSeedItem("entity.productionorder.prodbatch", "zh-HK", "生产批次_hk", "生产批次"),
 
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "en-US", "序列号_us", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "ja-JP", "序列号_jp", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "zh-CN", "序列号", "序列号"),
-            // entity.productionorder.serialno
-            new TranslationSeedItem("entity.productionorder.serialno", "zh-HK", "序列号_hk", "序列号"),
+            // entity.productionorder.serialCode
+            new TranslationSeedItem("entity.productionorder.serialCode", "en-US", "序列号_us", "序列号"),
+            // entity.productionorder.serialCode
+            new TranslationSeedItem("entity.productionorder.serialCode", "ja-JP", "序列号_jp", "序列号"),
+            // entity.productionorder.serialCode
+            new TranslationSeedItem("entity.productionorder.serialCode", "zh-CN", "序列号", "序列号"),
+            // entity.productionorder.serialCode
+            new TranslationSeedItem("entity.productionorder.serialCode", "zh-HK", "序列号_hk", "序列号"),
 
             // entity.productionorder.routingcode
             new TranslationSeedItem("entity.productionorder.routingcode", "en-US", "工艺路线编码_us", "工艺路线编码"),

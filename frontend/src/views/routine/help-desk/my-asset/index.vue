@@ -72,8 +72,7 @@ const columns = computed<TableColumnsType>(() => [
   { title: t('entity.ticket.assetcode'), dataIndex: 'assetCode', key: 'assetCode', width: 140, ellipsis: true },
   { title: t('entity.asset.name'), dataIndex: 'assetName', key: 'assetName', width: 180, ellipsis: true },
   { title: t('routine.help-desk.my-asset.page.ticket.count'), dataIndex: 'ticketCount', key: 'ticketCount', width: 120 },
-  { title: t('routine.help-desk.my-asset.page.last.ticket.at'), dataIndex: 'lastTicketAt', key: 'lastTicketAt', width: 180, ellipsis: true },
-])
+  { title: t('routine.help-desk.my-asset.page.last.ticket.at'), dataIndex: 'lastTicketAt', key: 'lastTicketAt', width: 180, ellipsis: true }])
 /** row-key */
 const getAssetRowKey = (record: TicketMyAsset): string => record.assetCode ?? ''
 /**

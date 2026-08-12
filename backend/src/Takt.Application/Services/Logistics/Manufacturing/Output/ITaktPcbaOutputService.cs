@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：ITaktPcbaOutputService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报应用服务接口
 // 
@@ -94,17 +94,5 @@ public interface ITaktPcbaOutputService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportPcbaOutputAsync(TaktPcbaOutputQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 按物料编码获取 PCBA 日报默认明细预览（一行一工作中心）
-    /// </summary>
-    /// <param name="materialCode">物料编码</param>
-    /// <param name="plantCode">工厂代码</param>
-    /// <param name="prodDate">生产日期</param>
-    /// <returns>默认明细预览列表</returns>
-    Task<List<TaktPcbaOutputDefaultDetailDto>> GetPcbaOutputDefaultDetailsByMaterialAsync(
-        string materialCode,
-        string plantCode,
-        DateTime prodDate);
 
 }

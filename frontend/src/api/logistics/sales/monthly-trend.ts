@@ -16,8 +16,24 @@ import type {
   SalesMonthlyTrendResult,
 } from '@/types/logistics/sales/monthly-trend';
 
-/** API 路由前缀 */
+/** API 路由前缀（对应 TaktSalesMonthlyTrendsController） */
 const SALES_MONTHLY_TREND_API_BASE = 'TaktSalesMonthlyTrends';
+
+/**
+ * 推移查询栏：销售订单本表工厂去重选项 URL（供 TaktSelect api-url）
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesMonthlyTrendPlantOptionsUrl(): string {
+  return `${SALES_MONTHLY_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 推移查询栏：按工厂去重客户选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesMonthlyTrendCustomerOptionsUrl(): string {
+  return `${SALES_MONTHLY_TREND_API_BASE}/customer-options`;
+}
 
 /**
  * 月销售推移分析

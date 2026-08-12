@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOperationService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS工序排程应用服务实现
 // 
@@ -96,13 +96,13 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
     {
         EnsureThreeLayerContext();
         var list = await _apsOperationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OperationStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OperationStatus == 1 && x.IsObsolete == 0,
             x => x.ProcessName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProcessName ?? e.Id.ToString(),
+            DictValue = e.ApsOrderCode,
+            DictLabel = e.ProcessName ?? e.ApsOrderCode,
         }).ToList();
     }
 
@@ -373,6 +373,7 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
                 || SqlFunc.ToString(x.PlannedDurationMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.ChangeoverMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.OperationStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -436,6 +437,11 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
             exp = exp.And(x => x.OperationStatus == queryDto.OperationStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -475,6 +481,12 @@ public class TaktApsOperationService : TaktServiceBase, ITaktApsOperationService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

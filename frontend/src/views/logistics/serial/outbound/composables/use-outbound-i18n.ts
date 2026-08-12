@@ -21,8 +21,8 @@ export const SERIALOUTBOUND_SELF_I18N_KEY = buildEntitySelfI18nKey(SERIALOUTBOUN
 /** 列表业务列（不含主键） */
 export const SERIALOUTBOUND_LIST_FIELDS = [
   'plantCode',
-  'outboundNo',
-  'shippingInvoiceNo',
+  'outboundCode',
+  'shippingInvoiceCode',
   'outboundDate',
   'destination',
   'destinationPort',
@@ -38,8 +38,8 @@ export const SERIALOUTBOUND_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   plantCode: 'select',
-  outboundNo: 'required',
-  shippingInvoiceNo: 'required',
+  outboundCode: 'required',
+  shippingInvoiceCode: 'required',
   outboundDate: 'select',
   destination: 'select',
   destinationPort: 'select',
@@ -57,8 +57,8 @@ export type SerialOutboundField = keyof typeof SERIALOUTBOUND_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALOUTBOUND_QUERY_STRING_FIELDS = [
   'plantCode',
-  'outboundNo',
-  'shippingInvoiceNo',
+  'outboundCode',
+  'shippingInvoiceCode',
   'outboundDateStart',
   'outboundDateEnd',
   'destination',

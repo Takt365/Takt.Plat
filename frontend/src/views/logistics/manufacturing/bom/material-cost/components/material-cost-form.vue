@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost/components -->
 <!-- 文件名称：material-cost-form.vue -->
-<!-- 功能描述：BOM 物料成本汇总表弹窗表单（明细独立维护于右侧 panel，按业务键关联）；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：BOM 物料成本汇总表维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form material-cost-form flex flex-col min-h-0 overflow-visible"
+    class="takt-generated-form"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -27,6 +27,134 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  :disabled="!!formData?.bomMaterialCostId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('modelCode')"
+                name="modelCode"
+              >
+                <a-input
+                  v-model:value="formState.modelCode"
+                  :placeholder="pi.ph('modelCode')"
+                  show-count
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.bomMaterialCostId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('modelMonthlyAverageCost')"
+                name="modelMonthlyAverageCost"
+              >
+                <a-input-number
+                  v-model:value="formState.modelMonthlyAverageCost"
+                  :placeholder="pi.ph('modelMonthlyAverageCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('materialType')"
+                name="materialType"
+              >
+                <TaktSelect
+                  v-model:value="formState.materialType"
+                  dict-type="logistics_material_type"
+                  :placeholder="pi.ph('materialType')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('productCode')"
+                name="productCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.productCode"
+                  dict-type="logistics_material_type"
+                  :placeholder="pi.ph('productCode')"
+                  :disabled="!!formData?.bomMaterialCostId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('productDescription')"
+                name="productDescription"
+              >
+                <a-textarea
+                  v-model:value="formState.productDescription"
+                  :placeholder="pi.ph('productDescription')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('productMonthlyCost')"
+                name="productMonthlyCost"
+              >
+                <a-input-number
+                  v-model:value="formState.productMonthlyCost"
+                  :placeholder="pi.ph('productMonthlyCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.bomMaterialCostId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costingPeriod')"
+                name="costingPeriod"
+              >
+                <a-date-picker
+                  v-model:value="formState.costingPeriod"
+                  :placeholder="pi.ph('costingPeriod')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('costingDate')"
+                name="costingDate"
+              >
+                <a-date-picker
+                  v-model:value="formState.costingDate"
+                  :placeholder="pi.ph('costingDate')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
           </a-row>
         </div>
       </a-tab-pane>
@@ -67,12 +195,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -124,68 +252,62 @@
         </div>
       </a-tab-pane>
     </a-tabs>
-    <a-alert
-      type="info"
-      show-icon
-      class="mt-3"
-      :message="t('logistics.manufacturing.bom.material-cost.page.modalmasterhint')"
-    />
   </a-form>
 </template>
 
 <script setup lang="ts">
 /**
- * BOM 物料成本主表抬头表单（明细在右侧 panel）
+ * BOM 物料成本汇总表维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/manufacturing/bom/material-cost/components
  */
-import type { Rule } from 'ant-design-vue/es/form'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import type { BomMaterialCostCreate } from '@/types/logistics/manufacturing/bom/material-cost'
-import { useDictDataStore } from '@/stores/foundation/dict-data'
-import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
+import type { Rule } from 'ant-design-vue/es/form'
 import { useBomMaterialCostI18n } from '../composables/use-material-cost-i18n'
 
 /** 实体字段 i18n */
 const pi = useBomMaterialCostI18n()
+import type { BomMaterialCostCreate } from '@/types/logistics/manufacturing/bom/material-cost'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
+import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
+
 /** i18n 翻译函数 */
 const { t } = useI18n()
-/** Pinia：租户/公司上下文 */
-const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
-/** Pinia：字典缓存 */
-const dictDataStore = useDictDataStore()
 
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode','companyCode','companyDefaultCulture','plantCode','modelCode','modelMonthlyAverageCost','productCode','productDescription','productMonthlyCost','currencyCode','costingPeriod','costingDate','extField','remark']
+/** Pinia：租户上下文 */
+const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
-
-/** 表单内容区高度 class */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 
-/** 父级传入的编辑 DTO */
+
+/** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<BomMaterialCostCreate & { bomMaterialCostId?: string }> | null
-  /** 父级提交 loading */
+  /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
 
@@ -194,36 +316,38 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
 })
 
-/** a-form 实例 */
+/** a-form 实例 ref */
 const formRef = ref()
-/** 表单模型 */
+/** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 字段默认值 */
+/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  currencyCode: 'CNY',
-  modelMonthlyAverageCost: 0,
-  productMonthlyCost: 0,
+  materialType: "ROH",
+  productCode: "ROH",
+  currencyCode: "CNY"
 }
 
-/**
- * 写入表单默认值
- * @param target 目标对象
- */
+/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
 function applyFormDefaults(target: Record<string, unknown>) {
   Object.assign(target, FORM_FIELD_DEFAULTS)
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
 onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
+/** 编辑态灌入 formData；新增态恢复默认值（须含 bomMaterialCostId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
     if (val?.bomMaterialCostId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
-      delete (next as { items?: unknown }).items
+
       applyScopeDefaults(next)
       Object.assign(formState, next)
       formRef.value?.clearValidate()
@@ -237,9 +361,10 @@ watch(
       formRef.value?.clearValidate()
     }
   },
-  { immediate: true },
+  { immediate: true }
 )
 
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
@@ -249,45 +374,122 @@ watch(
   },
 )
 
-/** 校验规则 */
+/** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [{ required: true, message: pi.ph('plantCode'), trigger: 'change' }],
-  modelCode: [{ required: true, message: pi.ph('modelCode'), trigger: 'blur' }],
-  productCode: [{ required: true, message: pi.ph('productCode'), trigger: 'blur' }],
-  productDescription: [{ required: true, message: pi.ph('productDescription'), trigger: 'blur' }],
-  currencyCode: [{ required: true, message: pi.ph('currencyCode'), trigger: 'change' }],
-  costingDate: [{ required: true, message: pi.ph('costingDate'), trigger: 'change' }],
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
+  modelCode: [
+    {
+      required: true,
+      message: pi.ph('modelCode'),
+      trigger: 'blur'
+    }
+  ],
+  modelMonthlyAverageCost: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('modelMonthlyAverageCost'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('modelMonthlyAverageCost'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  materialType: [
+    {
+      required: true,
+      message: pi.ph('materialType'),
+      trigger: 'change'
+    }
+  ],
+  productCode: [
+    {
+      required: true,
+      message: pi.ph('productCode'),
+      trigger: 'change'
+    }
+  ],
+  productDescription: [
+    {
+      required: true,
+      message: pi.ph('productDescription'),
+      trigger: 'blur'
+    }
+  ],
+  productMonthlyCost: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('productMonthlyCost'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('productMonthlyCost'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  currencyCode: [
+    {
+      required: true,
+      message: pi.ph('currencyCode'),
+      trigger: 'change'
+    }
+  ],
+  costingPeriod: [
+    {
+      required: true,
+      message: pi.ph('costingPeriod'),
+      trigger: 'change'
+    }
+  ],
+  costingDate: [
+    {
+      required: true,
+      message: pi.ph('costingDate'),
+      trigger: 'change'
+    }
+  ],
 }))
 
-/** 校验表单 */
+/** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
 async function validate() {
   await formRef.value?.validate()
   return formState
 }
 
-/** 映射为 Create/Update DTO（不含 items，明细由右侧 panel 维护） */
+/** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
-  const payload = { ...formState } as Record<string, unknown>
-  for (const key of ['modelMonthlyAverageCost', 'productMonthlyCost'] as const) {
-    if (key in payload) {
-      const raw = payload[key]
-      payload[key] = typeof raw === 'number' ? raw : Number(raw)
-    }
+  const payload = { ...formState }
+  if ('modelMonthlyAverageCost' in payload) {
+    const rawmodelMonthlyAverageCost = payload.modelMonthlyAverageCost
+    payload.modelMonthlyAverageCost = typeof rawmodelMonthlyAverageCost === 'number' ? rawmodelMonthlyAverageCost : Number(rawmodelMonthlyAverageCost)
   }
-  delete payload.items
-  delete payload.sortOrder
+  if ('productMonthlyCost' in payload) {
+    const rawproductMonthlyCost = payload.productMonthlyCost
+    payload.productMonthlyCost = typeof rawproductMonthlyCost === 'number' ? rawproductMonthlyCost : Number(rawproductMonthlyCost)
+  }
+  if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }
 
-/** 重置表单 */
+/** 重置表单与子表行（弹窗未 destroy 时父级 nextTick 也会调用） */
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
     Object.assign(formState, props.formData)
-    delete (formState as { items?: unknown }).items
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.bomMaterialCostId)
+
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
@@ -297,9 +499,10 @@ defineExpose({ validate, getValues, resetFields })
 
 <style scoped lang="css">
 :deep(.ant-tabs-content-holder) {
-  min-height: 40vh;
+  min-height: 50vh;
 }
+
 :deep(.ant-tabs-tabpane) {
-  min-height: 40vh;
+  min-height: 50vh;
 }
 </style>

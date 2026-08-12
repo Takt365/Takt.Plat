@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票明细应用服务实现
 // 
@@ -30,6 +30,7 @@ namespace Takt.Application.Services.Logistics.Procurement;
 public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvoiceItemService
 {
     private readonly ITaktCompanyRepository<TaktPurchaseInvoiceItem> _purchaseInvoiceItemRepository;
+    private readonly ITaktCompanyRepository<TaktPurchaseInvoice> _purchaseInvoiceRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -37,12 +38,14 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
     /// 构造函数
     /// </summary>
     /// <param name="purchaseInvoiceItemRepository">采购发票明细仓储</param>
+    /// <param name="purchaseInvoiceRepository">采购发票仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPurchaseInvoiceItemService(
         ITaktCompanyRepository<TaktPurchaseInvoiceItem> purchaseInvoiceItemRepository,
+        ITaktCompanyRepository<TaktPurchaseInvoice> purchaseInvoiceRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -50,17 +53,26 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
         : base(userContext, localizationService)
     {
         _purchaseInvoiceItemRepository = purchaseInvoiceItemRepository;
+        _purchaseInvoiceRepository = purchaseInvoiceRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取采购发票明细列表（分页）
+    /// 获取采购发票明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchaseInvoiceItemDto>> GetPurchaseInvoiceItemListAsync(TaktPurchaseInvoiceItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchaseInvoiceItemDto>.Create(
+                new List<TaktPurchaseInvoiceItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchaseInvoiceItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,12 +109,12 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
         EnsureThreeLayerContext();
         var list = await _purchaseInvoiceItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
-            x => x.MaterialName ?? string.Empty,
+            x => x.PurchaseInvoiceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.PurchaseInvoiceCode,
-            DictLabel = e.MaterialName ?? e.PurchaseInvoiceCode,
+            DictLabel = e.PurchaseInvoiceCode,
         }).ToList();
     }
 
@@ -115,6 +127,7 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
     {
         var entity = dto.Adapt<TaktPurchaseInvoiceItem>();
         entity.IsObsolete = 0;
+        await StampPurchaseInvoiceItemPurchaseInvoiceAsync(entity, dto);
         var isUnique_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseInvoiceItemRepository,
             x => x.PurchaseInvoiceId == entity.PurchaseInvoiceId
@@ -149,6 +162,7 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
             throw new TaktBusinessException("采购发票明细不存在");
         }
         dto.Adapt(entity);
+        await StampPurchaseInvoiceItemPurchaseInvoiceAsync(entity, dto);
         var isUnique_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseInvoiceItemRepository,
             x => x.PurchaseInvoiceId == entity.PurchaseInvoiceId
@@ -261,6 +275,8 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
             try
             {
                 var entity = rows[i].Adapt<TaktPurchaseInvoiceItem>();
+                var importDto = rows[i].Adapt<TaktPurchaseInvoiceItemCreateDto>();
+                await StampPurchaseInvoiceItemPurchaseInvoiceAsync(entity, importDto);
                 var importKey = $"{entity.PurchaseInvoiceId}|{entity.LineNumber}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -303,7 +319,15 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchaseInvoiceItemAsync(TaktPurchaseInvoiceItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchaseInvoiceItemQueryDto());
+        var queryDto = query ?? new TaktPurchaseInvoiceItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchaseInvoiceItemExportDto>(),
+                sheetName ?? "采购发票明细数据",
+                fileName ?? "采购发票明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchaseInvoiceItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -319,6 +343,29 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
             fileName ?? "采购发票明细导出.xlsx");
     }
 
+    // ========================================
+    // 主表外键同步（ManyToOne）
+    // ========================================
+
+    /// <summary>
+    /// 同步采购发票明细主表外键（ManyToOne → 采购发票）
+    /// </summary>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
+    /// <returns>任务</returns>
+    private async Task StampPurchaseInvoiceItemPurchaseInvoiceAsync(TaktPurchaseInvoiceItem entity, TaktPurchaseInvoiceItemCreateDto dto)
+    {
+        if (dto.PurchaseInvoiceId <= 0)
+        {
+            return;
+        }
+        var master = await _purchaseInvoiceRepository.GetByIdAsync(dto.PurchaseInvoiceId);
+        if (master == null)
+        {
+            throw new TaktBusinessException("采购发票不存在");
+        }
+        entity.PurchaseInvoiceId = master.Id;
+    }
     // ========================================
     // 查询表达式
     // ========================================
@@ -341,132 +388,474 @@ public class TaktPurchaseInvoiceItemService : TaktServiceBase, ITaktPurchaseInvo
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.PurchaseInvoiceId).Contains(keywords)
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.PurchaseOrderLineNumber).Contains(keywords)
+                || (x.AccountAssignmentSeq != null && x.AccountAssignmentSeq.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
-                || (x.PurchaseUnit != null && x.PurchaseUnit.Contains(keywords))
-                || SqlFunc.ToString(x.InvoiceQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.InvoiceUnitPrice).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxIncludedAmount).Contains(keywords)
-                || SqlFunc.ToString(x.UntaxedAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
+                || (x.ValuationArea != null && x.ValuationArea.Contains(keywords))
+                || (x.DebitCreditIndicator != null && x.DebitCreditIndicator.Contains(keywords))
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
+                || (x.OrderUnit != null && x.OrderUnit.Contains(keywords))
+                || (x.PoPriceUnit != null && x.PoPriceUnit.Contains(keywords))
+                || (x.BaseUnit != null && x.BaseUnit.Contains(keywords))
+                || (x.ValuationClass != null && x.ValuationClass.Contains(keywords))
+                || (x.UpdatePoHistoryFlag != null && x.UpdatePoHistoryFlag.Contains(keywords))
+                || (x.SubsequentDebitCredit != null && x.SubsequentDebitCredit.Contains(keywords))
+                || (x.BlockReasonPrice != null && x.BlockReasonPrice.Contains(keywords))
+                || (x.BlockReasonQuantity != null && x.BlockReasonQuantity.Contains(keywords))
+                || (x.BlockReasonQuality != null && x.BlockReasonQuality.Contains(keywords))
+                || (x.BlockReasonEnhanced != null && x.BlockReasonEnhanced.Contains(keywords))
+                || (x.ValueString != null && x.ValueString.Contains(keywords))
+                || (x.ReferenceCode != null && x.ReferenceCode.Contains(keywords))
+                || (x.ConditionType != null && x.ConditionType.Contains(keywords))
+                || (x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(keywords))
+                || (x.ReferenceDocumentYear != null && x.ReferenceDocumentYear.Contains(keywords))
+                || (x.StockManagedMaterialCode != null && x.StockManagedMaterialCode.Contains(keywords))
+                || (x.ItemText != null && x.ItemText.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
         if (queryDto?.PurchaseInvoiceId.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseInvoiceId == queryDto.PurchaseInvoiceId);
+            var purchaseInvoiceId = queryDto.PurchaseInvoiceId;
+            exp = exp.And(x => x.PurchaseInvoiceId == purchaseInvoiceId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseInvoiceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(queryDto.PurchaseInvoiceCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInvoiceCode))
+        {
+            var purchaseInvoiceCode = queryDto.PurchaseInvoiceCode;
+            exp = exp.And(x => x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(purchaseInvoiceCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            var lineNumber = queryDto.LineNumber;
+            exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseOrderCode))
         {
-            exp = exp.And(x => x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(queryDto.PurchaseOrderCode));
+            var purchaseOrderCode = queryDto.PurchaseOrderCode;
+            exp = exp.And(x => x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(purchaseOrderCode));
         }
 
-        if (queryDto?.PurchaseOrderLineNumber.HasValue == true)
+        if (queryDto?.PurchaseOrderItem.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseOrderLineNumber == queryDto.PurchaseOrderLineNumber);
+            var purchaseOrderItem = queryDto.PurchaseOrderItem;
+            exp = exp.And(x => x.PurchaseOrderItem == purchaseOrderItem);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountAssignmentSeq))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var accountAssignmentSeq = queryDto.AccountAssignmentSeq;
+            exp = exp.And(x => x.AccountAssignmentSeq != null && x.AccountAssignmentSeq.Contains(accountAssignmentSeq));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ValuationArea))
         {
-            exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
+            var valuationArea = queryDto.ValuationArea;
+            exp = exp.And(x => x.ValuationArea != null && x.ValuationArea.Contains(valuationArea));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseUnit))
+        if (queryDto?.Amount.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseUnit != null && x.PurchaseUnit.Contains(queryDto.PurchaseUnit));
+            var amount = queryDto.Amount;
+            exp = exp.And(x => x.Amount == amount);
         }
 
-        if (queryDto?.InvoiceQuantity.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.DebitCreditIndicator))
         {
-            exp = exp.And(x => x.InvoiceQuantity == queryDto.InvoiceQuantity);
+            var debitCreditIndicator = queryDto.DebitCreditIndicator;
+            exp = exp.And(x => x.DebitCreditIndicator != null && x.DebitCreditIndicator.Contains(debitCreditIndicator));
         }
 
-        if (queryDto?.InvoiceUnitPrice.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
         {
-            exp = exp.And(x => x.InvoiceUnitPrice == queryDto.InvoiceUnitPrice);
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
         }
 
-        if (queryDto?.DiscountRate.HasValue == true)
+        if (queryDto?.Quantity.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountRate == queryDto.DiscountRate);
+            var quantity = queryDto.Quantity;
+            exp = exp.And(x => x.Quantity == quantity);
         }
 
-        if (queryDto?.DiscountAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.OrderUnit))
         {
-            exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+            var orderUnit = queryDto.OrderUnit;
+            exp = exp.And(x => x.OrderUnit != null && x.OrderUnit.Contains(orderUnit));
         }
 
-        if (queryDto?.TaxIncludedAmount.HasValue == true)
+        if (queryDto?.PoPriceQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TaxIncludedAmount == queryDto.TaxIncludedAmount);
+            var poPriceQuantity = queryDto.PoPriceQuantity;
+            exp = exp.And(x => x.PoPriceQuantity == poPriceQuantity);
         }
 
-        if (queryDto?.UntaxedAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.PoPriceUnit))
         {
-            exp = exp.And(x => x.UntaxedAmount == queryDto.UntaxedAmount);
+            var poPriceUnit = queryDto.PoPriceUnit;
+            exp = exp.And(x => x.PoPriceUnit != null && x.PoPriceUnit.Contains(poPriceUnit));
         }
 
-        if (queryDto?.TaxAmount.HasValue == true)
+        if (queryDto?.ValuatedStockQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            var valuatedStockQuantity = queryDto.ValuatedStockQuantity;
+            exp = exp.And(x => x.ValuatedStockQuantity == valuatedStockQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (queryDto?.PreviousPeriodStock.HasValue == true)
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var previousPeriodStock = queryDto.PreviousPeriodStock;
+            exp = exp.And(x => x.PreviousPeriodStock == previousPeriodStock);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BaseUnit))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var baseUnit = queryDto.BaseUnit;
+            exp = exp.And(x => x.BaseUnit != null && x.BaseUnit.Contains(baseUnit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ValuationClass))
+        {
+            var valuationClass = queryDto.ValuationClass;
+            exp = exp.And(x => x.ValuationClass != null && x.ValuationClass.Contains(valuationClass));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.UpdatePoHistoryFlag))
+        {
+            var updatePoHistoryFlag = queryDto.UpdatePoHistoryFlag;
+            exp = exp.And(x => x.UpdatePoHistoryFlag != null && x.UpdatePoHistoryFlag.Contains(updatePoHistoryFlag));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubsequentDebitCredit))
+        {
+            var subsequentDebitCredit = queryDto.SubsequentDebitCredit;
+            exp = exp.And(x => x.SubsequentDebitCredit != null && x.SubsequentDebitCredit.Contains(subsequentDebitCredit));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BlockReasonPrice))
+        {
+            var blockReasonPrice = queryDto.BlockReasonPrice;
+            exp = exp.And(x => x.BlockReasonPrice != null && x.BlockReasonPrice.Contains(blockReasonPrice));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BlockReasonQuantity))
+        {
+            var blockReasonQuantity = queryDto.BlockReasonQuantity;
+            exp = exp.And(x => x.BlockReasonQuantity != null && x.BlockReasonQuantity.Contains(blockReasonQuantity));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BlockReasonQuality))
+        {
+            var blockReasonQuality = queryDto.BlockReasonQuality;
+            exp = exp.And(x => x.BlockReasonQuality != null && x.BlockReasonQuality.Contains(blockReasonQuality));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BlockReasonEnhanced))
+        {
+            var blockReasonEnhanced = queryDto.BlockReasonEnhanced;
+            exp = exp.And(x => x.BlockReasonEnhanced != null && x.BlockReasonEnhanced.Contains(blockReasonEnhanced));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ValueString))
+        {
+            var valueString = queryDto.ValueString;
+            exp = exp.And(x => x.ValueString != null && x.ValueString.Contains(valueString));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceCode))
+        {
+            var referenceCode = queryDto.ReferenceCode;
+            exp = exp.And(x => x.ReferenceCode != null && x.ReferenceCode.Contains(referenceCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ConditionType))
+        {
+            var conditionType = queryDto.ConditionType;
+            exp = exp.And(x => x.ConditionType != null && x.ConditionType.Contains(conditionType));
+        }
+
+        if (queryDto?.TotalValuatedStockValue.HasValue == true)
+        {
+            var totalValuatedStockValue = queryDto.TotalValuatedStockValue;
+            exp = exp.And(x => x.TotalValuatedStockValue == totalValuatedStockValue);
+        }
+
+        if (queryDto?.PreviousPeriodValue.HasValue == true)
+        {
+            var previousPeriodValue = queryDto.PreviousPeriodValue;
+            exp = exp.And(x => x.PreviousPeriodValue == previousPeriodValue);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceDocumentCode))
+        {
+            var referenceDocumentCode = queryDto.ReferenceDocumentCode;
+            exp = exp.And(x => x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(referenceDocumentCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceDocumentYear))
+        {
+            var referenceDocumentYear = queryDto.ReferenceDocumentYear;
+            exp = exp.And(x => x.ReferenceDocumentYear != null && x.ReferenceDocumentYear.Contains(referenceDocumentYear));
+        }
+
+        if (queryDto?.ReferenceDocumentItem.HasValue == true)
+        {
+            var referenceDocumentItem = queryDto.ReferenceDocumentItem;
+            exp = exp.And(x => x.ReferenceDocumentItem == referenceDocumentItem);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.StockManagedMaterialCode))
+        {
+            var stockManagedMaterialCode = queryDto.StockManagedMaterialCode;
+            exp = exp.And(x => x.StockManagedMaterialCode != null && x.StockManagedMaterialCode.Contains(stockManagedMaterialCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ItemText))
+        {
+            var itemText = queryDto.ItemText;
+            exp = exp.And(x => x.ItemText != null && x.ItemText.Contains(itemText));
+        }
+
+        if (queryDto?.MaterialDocumentItem.HasValue == true)
+        {
+            var materialDocumentItem = queryDto.MaterialDocumentItem;
+            exp = exp.And(x => x.MaterialDocumentItem == materialDocumentItem);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchaseInvoiceItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (queryDto.PurchaseInvoiceId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInvoiceCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.PurchaseOrderItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountAssignmentSeq))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ValuationArea))
+        {
+            return true;
+        }
+        if (queryDto.Amount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DebitCreditIndicator))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
+        {
+            return true;
+        }
+        if (queryDto.Quantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OrderUnit))
+        {
+            return true;
+        }
+        if (queryDto.PoPriceQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PoPriceUnit))
+        {
+            return true;
+        }
+        if (queryDto.ValuatedStockQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PreviousPeriodStock.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BaseUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ValuationClass))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.UpdatePoHistoryFlag))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubsequentDebitCredit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BlockReasonPrice))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BlockReasonQuantity))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BlockReasonQuality))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BlockReasonEnhanced))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ValueString))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ConditionType))
+        {
+            return true;
+        }
+        if (queryDto.TotalValuatedStockValue.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PreviousPeriodValue.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceDocumentCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceDocumentYear))
+        {
+            return true;
+        }
+        if (queryDto.ReferenceDocumentItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StockManagedMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ItemText))
+        {
+            return true;
+        }
+        if (queryDto.MaterialDocumentItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialPlantDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialPlant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialPlant 生成，请按需审阅）
 // 
@@ -35,30 +35,21 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialPlantId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -71,22 +62,22 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
     public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string PurchaseGroup { get; set; } = string.Empty;
 
@@ -108,12 +99,12 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     /// <summary>
     /// 最小起订量（基本单位数量，整数）
     /// </summary>
-    public int MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 舍入值（基本单位数量，用于数量舍入，整数）
     /// </summary>
-    public int RoundingValue { get; set; }
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
     /// 计划交货时间（天数，整数）
@@ -121,24 +112,24 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
-    public decimal InHouseProductionDays { get; set; } = 0;
+    public decimal InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string Currency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -156,7 +147,7 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal MovingPrice { get; set; }
 
@@ -166,27 +157,27 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
     public string StorageLocation { get; set; } = string.Empty;
 
@@ -201,7 +192,7 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public int IsBatch { get; set; } = 0;
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string IsEndOfLife { get; set; } = string.Empty;
 
@@ -209,6 +200,7 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int MaterialStatus { get; set; } = 0;
+
 }
 
 // ========================================
@@ -232,29 +224,29 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -267,22 +259,22 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
     public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -317,24 +309,24 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
     public decimal? InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -352,7 +344,7 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal? MovingPrice { get; set; }
 
@@ -362,27 +354,27 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal? CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
     public string? StorageLocation { get; set; } = string.Empty;
 
@@ -397,7 +389,7 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public int? IsBatch { get; set; }
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? IsEndOfLife { get; set; } = string.Empty;
 
@@ -447,37 +439,31 @@ public class TaktMaterialPlantCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -491,27 +477,27 @@ public class TaktMaterialPlantCreateDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
-    [Required(ErrorMessage = "物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）不能为空")]
+    [Required(ErrorMessage = "物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）不能为空")]
     public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
-    [Required(ErrorMessage = "物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）不能为空")]
+    [Required(ErrorMessage = "物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）不能为空")]
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
-    [Required(ErrorMessage = "采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）不能为空")]
+    [Required(ErrorMessage = "采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）不能为空")]
     public string PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
@@ -533,12 +519,12 @@ public class TaktMaterialPlantCreateDto
     /// <summary>
     /// 最小起订量（基本单位数量，整数）
     /// </summary>
-    public int MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 舍入值（基本单位数量，用于数量舍入，整数）
     /// </summary>
-    public int RoundingValue { get; set; }
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
     /// 计划交货时间（天数，整数）
@@ -546,25 +532,25 @@ public class TaktMaterialPlantCreateDto
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
-    public decimal InHouseProductionDays { get; set; } = 0;
+    public decimal InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）不能为空")]
-    public string Currency { get; set; } = string.Empty;
+    [Required(ErrorMessage = "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）不能为空")]
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -584,7 +570,7 @@ public class TaktMaterialPlantCreateDto
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal MovingPrice { get; set; }
 
@@ -594,32 +580,32 @@ public class TaktMaterialPlantCreateDto
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
-    [Required(ErrorMessage = "利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）不能为空")]
+    [Required(ErrorMessage = "利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）不能为空")]
     public string ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
-    [Required(ErrorMessage = "生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）不能为空")]
+    [Required(ErrorMessage = "生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）不能为空")]
     public string ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
-    [Required(ErrorMessage = "采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）不能为空")]
+    [Required(ErrorMessage = "采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）不能为空")]
     public string PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
-    [Required(ErrorMessage = "库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）不能为空")]
+    [Required(ErrorMessage = "库位（选项 TaktStorageLocations/options；DictValue=LocationCode）不能为空")]
     public string StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
@@ -633,15 +619,17 @@ public class TaktMaterialPlantCreateDto
     public int IsBatch { get; set; } = 0;
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
-    [Required(ErrorMessage = "停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）不能为空")]
+    [Required(ErrorMessage = "停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）不能为空")]
     public string IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int MaterialStatus { get; set; } = 0;    /// <summary>
+    public int MaterialStatus { get; set; } = 0;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -717,29 +705,29 @@ public class TaktMaterialPlantTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -752,22 +740,22 @@ public class TaktMaterialPlantTemplateDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
     public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -802,24 +790,24 @@ public class TaktMaterialPlantTemplateDto
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
     public decimal? InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -837,7 +825,7 @@ public class TaktMaterialPlantTemplateDto
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal? MovingPrice { get; set; }
 
@@ -847,27 +835,27 @@ public class TaktMaterialPlantTemplateDto
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal? CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
     public string? StorageLocation { get; set; } = string.Empty;
 
@@ -882,14 +870,16 @@ public class TaktMaterialPlantTemplateDto
     public int? IsBatch { get; set; }
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }    /// <summary>
+    public int? MaterialStatus { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -917,34 +907,29 @@ public class TaktMaterialPlantImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -957,22 +942,22 @@ public class TaktMaterialPlantImportDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
     public string? MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string? MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
@@ -1007,24 +992,24 @@ public class TaktMaterialPlantImportDto
     public int? PlannedDeliveryTimeDays { get; set; }
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
     public decimal? InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -1042,7 +1027,7 @@ public class TaktMaterialPlantImportDto
     public string? Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal? MovingPrice { get; set; }
 
@@ -1052,27 +1037,27 @@ public class TaktMaterialPlantImportDto
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string? ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal? CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string? PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
     public string? StorageLocation { get; set; } = string.Empty;
 
@@ -1087,14 +1072,16 @@ public class TaktMaterialPlantImportDto
     public int? IsBatch { get; set; }
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string? IsEndOfLife { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    public int? MaterialStatus { get; set; }    /// <summary>
+    public int? MaterialStatus { get; set; }
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -1128,29 +1115,24 @@ public class TaktMaterialPlantExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
-    /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料规格
-    /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料描述
+    /// 物料描述（回填：随物料）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格（回填：随物料）
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）
@@ -1163,22 +1145,22 @@ public class TaktMaterialPlantExportDto
     public string? MaterialHierarchy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料组（关联 TaktMaterialGroup.MaterialGroupCode，选项 TaktMaterialGroups/options，DictValue=MaterialGroupCode）
+    /// 物料组（选项 TaktMaterialGroups/options；DictValue=MaterialGroupCode）
     /// </summary>
     public string MaterialGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type，DictValue=ROH/HALB 等；默认 ROH）
+    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
     /// </summary>
     public string MaterialType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 基本单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string PurchaseGroup { get; set; } = string.Empty;
 
@@ -1200,12 +1182,12 @@ public class TaktMaterialPlantExportDto
     /// <summary>
     /// 最小起订量（基本单位数量，整数）
     /// </summary>
-    public int MinOrderQuantity { get; set; }
+    public int MinOrderQuantity { get; set; } = 0;
 
     /// <summary>
     /// 舍入值（基本单位数量，用于数量舍入，整数）
     /// </summary>
-    public int RoundingValue { get; set; }
+    public int RoundingValue { get; set; } = 0;
 
     /// <summary>
     /// 计划交货时间（天数，整数）
@@ -1213,24 +1195,24 @@ public class TaktMaterialPlantExportDto
     public int PlannedDeliveryTimeDays { get; set; } = 0;
 
     /// <summary>
-    /// 自制生产天数（内部生产所需天数，支持 1 位小数如 0.5、2.5）
+    /// 自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）
     /// </summary>
-    public decimal InHouseProductionDays { get; set; } = 0;
+    public decimal InHouseProductionDays { get; set; }
 
     /// <summary>
-    /// 制造商
+    /// 制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 制造商物料编码（关联 TaktManufacturerMaterial.ManufacturerMaterialCode，选项 TaktManufacturerMaterials/options）
+    /// 制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）
     /// </summary>
     public string? ManufacturerMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string Currency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）
@@ -1248,7 +1230,7 @@ public class TaktMaterialPlantExportDto
     public string Valuation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动价格（4 位小数）
+    /// 移动价格（decimal，4 位小数）
     /// </summary>
     public decimal MovingPrice { get; set; }
 
@@ -1258,27 +1240,27 @@ public class TaktMaterialPlantExportDto
     public string? DifferenceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options，DictValue=ProfitCenterCode）
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
     /// </summary>
     public string ProfitCenter { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前库存（基本单位数量，4 位小数）
+    /// 当前库存（基本单位数量，decimal，4 位小数）
     /// </summary>
     public decimal CurrentStock { get; set; }
 
     /// <summary>
-    /// 生产仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 生产仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string ProductionLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购仓储（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+    /// 采购仓储（选项 TaktWarehouses/options；DictValue=WarehouseCode）
     /// </summary>
     public string PurchasingLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options，DictValue=LocationCode）
+    /// 库位（选项 TaktStorageLocations/options；DictValue=LocationCode）
     /// </summary>
     public string StorageLocation { get; set; } = string.Empty;
 
@@ -1293,7 +1275,7 @@ public class TaktMaterialPlantExportDto
     public int IsBatch { get; set; } = 0;
 
     /// <summary>
-    /// 停产状态（字典 logistics_material_eol_status，DictValue=01/Z0 等；默认 Z0=计划物料）
+    /// 停产状态（字典 logistics_material_eol_status；DictValue=01/Z0 等；默认 Z0=计划物料）
     /// </summary>
     public string IsEndOfLife { get; set; } = string.Empty;
 

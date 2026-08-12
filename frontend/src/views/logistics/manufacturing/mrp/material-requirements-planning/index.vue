@@ -659,7 +659,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -908,8 +907,6 @@ const getMaterialRequirementsPlanningId = (record: MaterialRequirementsPlanningR
  * @param field 字段名
  */
 const getMaterialRequirementsPlanningField = (record: any, field: string): any => record?.[field]
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

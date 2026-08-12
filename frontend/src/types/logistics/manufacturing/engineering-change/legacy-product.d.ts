@@ -12,11 +12,11 @@
 import type { CompanyDtoBase, TaktPagedQuery } from '@/types/common';
 
 export interface EcLegacyProduct extends CompanyDtoBase {
-  ecDetailId: string; ecNo: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecOldText?: string; ecOldUsage?: number; ecNewItem?: string; oldProductHandling?: string; isEndOfLine?: string;
+  ecDetailId: string; ecCode: string; lineNumber: number; ecModel: string; ecOldItem?: string; ecOldText?: string; ecOldUsage?: number; ecNewItem?: string; oldProductHandling?: string; isEndOfLine?: string;
 }
 
 export interface EcLegacyProductQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   ecModel?: string;
   ecOldItem?: string;
 }

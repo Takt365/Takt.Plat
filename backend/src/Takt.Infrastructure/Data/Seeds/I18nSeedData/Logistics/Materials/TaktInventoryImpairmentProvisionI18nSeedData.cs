@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktInventoryImpairmentProvisionI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInventoryImpairmentProvision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktInventoryImpairmentProvisionI18nSeedData : ITaktSeedDataCoordin
             // entity.inventoryimpairmentprovision._self
             new TranslationSeedItem("entity.inventoryimpairmentprovision._self", "zh-HK", "存货跌价准备信息_hk", "实体名称"),
 
-            // entity.inventoryimpairmentprovision.plantcode
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.inventoryimpairmentprovision.plantcode
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.inventoryimpairmentprovision.plantcode
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.inventoryimpairmentprovision.plantcode
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.inventoryimpairmentprovision.perioddate
             new TranslationSeedItem("entity.inventoryimpairmentprovision.perioddate", "en-US", "会计期间_us", "期间（资产负债表日所属会计期间；业务存当月首日，表示年月，如 2026-07-01 → 2026年7月）"),
             // entity.inventoryimpairmentprovision.perioddate
@@ -117,14 +108,14 @@ public class TaktInventoryImpairmentProvisionI18nSeedData : ITaktSeedDataCoordin
             // entity.inventoryimpairmentprovision.materialcode
             new TranslationSeedItem("entity.inventoryimpairmentprovision.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
-            // entity.inventoryimpairmentprovision.materialname
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialname", "en-US", "物料名称_us", "物料名称（冗余展示）"),
-            // entity.inventoryimpairmentprovision.materialname
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialname", "ja-JP", "物料名称_jp", "物料名称（冗余展示）"),
-            // entity.inventoryimpairmentprovision.materialname
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialname", "zh-CN", "物料名称", "物料名称（冗余展示）"),
-            // entity.inventoryimpairmentprovision.materialname
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialname", "zh-HK", "物料名称_hk", "物料名称（冗余展示）"),
+            // entity.inventoryimpairmentprovision.materialdescription
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialdescription", "en-US", "物料描述_us", "物料描述（冗余展示）"),
+            // entity.inventoryimpairmentprovision.materialdescription
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余展示）"),
+            // entity.inventoryimpairmentprovision.materialdescription
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialdescription", "zh-CN", "物料描述", "物料描述（冗余展示）"),
+            // entity.inventoryimpairmentprovision.materialdescription
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余展示）"),
 
             // entity.inventoryimpairmentprovision.valuation
             new TranslationSeedItem("entity.inventoryimpairmentprovision.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),
@@ -270,14 +261,14 @@ public class TaktInventoryImpairmentProvisionI18nSeedData : ITaktSeedDataCoordin
             // entity.inventoryimpairmentprovision.carryingamount
             new TranslationSeedItem("entity.inventoryimpairmentprovision.carryingamount", "zh-HK", "账面价值_hk", "账面价值（Carrying amount = 存货成本 − 期末跌价准备；报表列示金额，应 ≤ 可变现净值当成本更高时取孰低）"),
 
-            // entity.inventoryimpairmentprovision.currency
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.currency", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.inventoryimpairmentprovision.currency
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.currency", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.inventoryimpairmentprovision.currency
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.currency", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.inventoryimpairmentprovision.currency
-            new TranslationSeedItem("entity.inventoryimpairmentprovision.currency", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.inventoryimpairmentprovision.currencycode
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.inventoryimpairmentprovision.currencycode
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.inventoryimpairmentprovision.currencycode
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.inventoryimpairmentprovision.currencycode
+            new TranslationSeedItem("entity.inventoryimpairmentprovision.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
 
             // entity.inventoryimpairmentprovision.impairmentreason
             new TranslationSeedItem("entity.inventoryimpairmentprovision.impairmentreason", "en-US", "跌价原因_us", "跌价原因说明（业务备注：滞销、毁损、市价下跌等）"),

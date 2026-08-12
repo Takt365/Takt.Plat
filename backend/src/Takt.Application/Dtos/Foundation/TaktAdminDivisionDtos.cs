@@ -77,11 +77,6 @@ public class TaktAdminDivisionDto : TaktTenantDtoBase
     public string? PostalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
@@ -139,6 +134,11 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -179,11 +179,6 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
@@ -286,6 +281,11 @@ public class TaktAdminDivisionCreateDto
     [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）不能为空")]
     public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
@@ -402,6 +402,11 @@ public class TaktAdminDivisionTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -432,11 +437,6 @@ public class TaktAdminDivisionTemplateDto
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
@@ -480,6 +480,11 @@ public class TaktAdminDivisionImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -510,11 +515,6 @@ public class TaktAdminDivisionImportDto
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
@@ -604,11 +604,6 @@ public class TaktAdminDivisionExportDto
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）

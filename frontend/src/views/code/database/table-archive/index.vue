@@ -619,8 +619,7 @@ const previewColumns = computed<TableColumnsType>(() => [
   { title: pi.label('tableName'), dataIndex: 'tableName', key: 'tableName', ellipsis: true },
   { title: pi.label('tableName'), dataIndex: 'archiveTableName', key: 'archiveTableName', ellipsis: true },
   { title: t('code.database.table-archive.page.archive.year'), dataIndex: 'archiveYear', key: 'archiveYear', width: 90 },
-  { title: t('code.database.table-archive.page.archive.preview'), dataIndex: 'sourceRowCount', key: 'sourceRowCount', width: 120 },
-])
+  { title: t('code.database.table-archive.page.archive.preview'), dataIndex: 'sourceRowCount', key: 'sourceRowCount', width: 120 }])
 
 function buildListQuery(overrides?: Partial<TableArchiveQuery>): TableArchiveQuery {
   const form = advancedQueryForm.value
@@ -716,10 +715,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiTableLine,
         permission: 'code:database:table:archive:create',
         onClick: (record: TableArchiveRowRecord) => openEnsureYearsModal(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 function getTableArchiveId(record: TableArchiveRowRecord): string {
   const id = (record as Record<string, unknown>)?.[entityIdName]

@@ -130,11 +130,6 @@ public class TaktAsset : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "monthly_depreciation", ColumnDescription = "每月折旧金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
     public decimal MonthlyDepreciation { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 资产状态（字典 accounting_asset_status：0=未使用，1=使用中，2=报废，3=处置，4=实物不存在）
     /// </summary>
     [SugarColumn(ColumnName = "asset_status", ColumnDescription = "资产状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]

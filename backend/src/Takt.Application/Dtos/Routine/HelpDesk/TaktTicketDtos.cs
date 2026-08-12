@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Ticket 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicket 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.HelpDesk;
 // ========================================
 
 /// <summary>
-/// Takt工单实体
+/// 服务台工单实体
 /// 对应前端 TaktTicketDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -38,7 +38,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    public string TicketNo { get; set; } = string.Empty;
+    public string TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -51,37 +51,37 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int TicketSource { get; set; } = 0;
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubmitterId { get; set; }
@@ -92,7 +92,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -103,24 +103,24 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 关联知识名称（填充字段）
+    /// 关联知识 名称（填充字段）
     /// </summary>
     public string? KnowledgeName { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
 
     /// <summary>
-    /// 父工单名称（填充字段）
+    /// 父工单 名称（填充字段）
     /// </summary>
     public string? ParentTicketName { get; set; }
 
@@ -150,13 +150,13 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 名称（填充字段）
+    /// IT 设备保修扩展 名称（填充字段）
     /// </summary>
     public string? ItAssetName { get; set; }
 
@@ -166,17 +166,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产名称（填充字段，来自 TaktAsset）
-    /// </summary>
-    public string? AssetName { get; set; }
-
-    /// <summary>
-    /// 工单回复列表（详情填充）
-    /// </summary>
-    public List<TaktTicketReplyDto>? Replies { get; set; }
-
-    /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -187,13 +177,13 @@ public class TaktTicketDto : TaktCompanyDtoBase
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -202,6 +192,7 @@ public class TaktTicketDto : TaktCompanyDtoBase
     /// （子表：TaktTicket）
     /// </summary>
     public List<TaktTicketDto>? ChildTickets { get; set; }
+
 }
 
 // ========================================
@@ -225,9 +216,19 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    public string? TicketNo { get; set; } = string.Empty;
+    public string? TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -240,37 +241,37 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int? TicketSource { get; set; }
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubmitterId { get; set; }
@@ -281,7 +282,7 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -292,13 +293,13 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
@@ -354,7 +355,7 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public DateTime? ClosedAtEnd { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
@@ -365,7 +366,7 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -376,13 +377,13 @@ public class TaktTicketQueryDto : TaktPagedQuery
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int? TicketStatus { get; set; }
 
@@ -427,15 +428,20 @@ public class TaktTicketCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工单编码（唯一）
     /// </summary>
     [Required(ErrorMessage = "工单编码（唯一）不能为空")]
-    public string TicketNo { get; set; } = string.Empty;
+    public string TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -449,37 +455,37 @@ public class TaktTicketCreateDto
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int TicketSource { get; set; } = 0;
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubmitterId { get; set; }
@@ -490,7 +496,7 @@ public class TaktTicketCreateDto
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -501,13 +507,13 @@ public class TaktTicketCreateDto
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
@@ -538,7 +544,7 @@ public class TaktTicketCreateDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
@@ -549,7 +555,7 @@ public class TaktTicketCreateDto
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -560,13 +566,13 @@ public class TaktTicketCreateDto
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 
@@ -605,6 +611,11 @@ public class TaktTicketUpdateDto : TaktTicketCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TicketId { get; set; }
 
+    /// <summary>
+    /// 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+    /// </summary>
+    public new List<TaktTicketUpdateDto>? ChildTickets { get; set; }
+
 }
 
 // ========================================
@@ -625,9 +636,9 @@ public class TaktTicketStatusDto
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
-    [Required(ErrorMessage = "工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）不能为空")]
+    [Required(ErrorMessage = "工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）不能为空")]
     public int TicketStatus { get; set; } = 0;
 }
 
@@ -651,9 +662,19 @@ public class TaktTicketTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    public string? TicketNo { get; set; } = string.Empty;
+    public string? TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -666,37 +687,37 @@ public class TaktTicketTemplateDto
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int? TicketSource { get; set; }
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubmitterId { get; set; }
@@ -707,7 +728,7 @@ public class TaktTicketTemplateDto
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -718,13 +739,13 @@ public class TaktTicketTemplateDto
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
@@ -755,7 +776,7 @@ public class TaktTicketTemplateDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
@@ -766,7 +787,7 @@ public class TaktTicketTemplateDto
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -777,13 +798,13 @@ public class TaktTicketTemplateDto
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int? TicketStatus { get; set; }
 
@@ -820,14 +841,19 @@ public class TaktTicketImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    public string? TicketNo { get; set; } = string.Empty;
+    public string? TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -840,37 +866,37 @@ public class TaktTicketImportDto
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Urgency { get; set; }
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int? Impact { get; set; }
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int? TicketSource { get; set; }
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SubmitterId { get; set; }
@@ -881,7 +907,7 @@ public class TaktTicketImportDto
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -892,13 +918,13 @@ public class TaktTicketImportDto
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
@@ -929,7 +955,7 @@ public class TaktTicketImportDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
@@ -940,7 +966,7 @@ public class TaktTicketImportDto
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -951,13 +977,13 @@ public class TaktTicketImportDto
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int? TicketStatus { get; set; }
 
@@ -1002,7 +1028,7 @@ public class TaktTicketExportDto
     /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    public string TicketNo { get; set; } = string.Empty;
+    public string TicketCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单标题
@@ -1015,37 +1041,37 @@ public class TaktTicketExportDto
     public string? TicketContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 优先级（字典 sys_priority_level_category）
+    /// 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
     /// </summary>
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 紧急度（字典 sys_urgency_level_category）
+    /// 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Urgency { get; set; } = 0;
 
     /// <summary>
-    /// 影响范围（字典 sys_impact_level_category）
+    /// 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
     /// </summary>
     public int Impact { get; set; } = 0;
 
     /// <summary>
-    /// 分类编码（如 incident/request 等）
+    /// 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+    /// 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
     /// </summary>
     public int TicketSource { get; set; } = 0;
 
     /// <summary>
-    /// 提交人ID（序列化为string以避免Javascript精度问题）
+    /// 提交人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SubmitterId { get; set; }
@@ -1056,7 +1082,7 @@ public class TaktTicketExportDto
     public string? SubmitterName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 处理人ID（序列化为string以避免Javascript精度问题）
+    /// 处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -1067,13 +1093,13 @@ public class TaktTicketExportDto
     public string? AssigneeName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+    /// 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? KnowledgeId { get; set; }
 
     /// <summary>
-    /// 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+    /// 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentTicketId { get; set; }
@@ -1104,7 +1130,7 @@ public class TaktTicketExportDto
     public DateTime? ClosedAt { get; set; }
 
     /// <summary>
-    /// 关联 IT 设备保修扩展 ID
+    /// IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ItAssetId { get; set; }
@@ -1115,7 +1141,7 @@ public class TaktTicketExportDto
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请部门ID
+    /// 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApplicantDeptId { get; set; }
@@ -1126,13 +1152,13 @@ public class TaktTicketExportDto
     public string? ApplicantDeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 申请人（实际申请人；代理人代提时填被代理人）
+    /// 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApplicantBy { get; set; }
 
     /// <summary>
-    /// 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+    /// 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
     /// </summary>
     public int TicketStatus { get; set; } = 0;
 

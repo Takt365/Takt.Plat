@@ -34,6 +34,8 @@ export const PURCHASEORDER_LIST_FIELDS = [
   'totalAmount',
   'discountAmount',
   'currencyCode',
+  'exchangeRate',
+  'taxCode',
   'taxRate',
   'taxAmount',
   'actualAmount',
@@ -66,6 +68,8 @@ export const PURCHASEORDER_PLACEHOLDER = {
   totalAmount: 'select',
   discountAmount: 'select',
   currencyCode: 'select',
+  exchangeRate: 'select',
+  taxCode: 'optional',
   taxRate: 'select',
   taxAmount: 'select',
   actualAmount: 'select',
@@ -77,6 +81,7 @@ export const PURCHASEORDER_PLACEHOLDER = {
   deliveryAddress: 'optional',
   orderStatus: 'select',
   deliveryStatus: 'select',
+  cultureCode: 'select',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -100,16 +105,18 @@ export const PURCHASEORDER_QUERY_STRING_FIELDS = [
   'actualArrivalDateEnd',
   'purchaseGroup',
   'currencyCode',
+  'taxCode',
   'deliveryAddress',
   'createdAtStart',
   'createdAtEnd',
+  'cultureCode',
   'extField',
   'remark',
 ] as const satisfies readonly (keyof PurchaseOrderQuery)[]
 
 export type PurchaseOrderQueryField =
   | (typeof PURCHASEORDER_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'receivedQuantity' | 'receivedAmount' | 'paidAmount' | 'paymentMethod' | 'deliveryMethod' | 'orderStatus' | 'deliveryStatus'
+  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'exchangeRate' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'receivedQuantity' | 'receivedAmount' | 'paidAmount' | 'paymentMethod' | 'deliveryMethod' | 'orderStatus' | 'deliveryStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEORDER_QUERY_FIELDS: readonly PurchaseOrderQueryField[] = [
@@ -117,6 +124,7 @@ export const PURCHASEORDER_QUERY_FIELDS: readonly PurchaseOrderQueryField[] = [
   'totalQuantity',
   'totalAmount',
   'discountAmount',
+  'exchangeRate',
   'taxRate',
   'taxAmount',
   'actualAmount',

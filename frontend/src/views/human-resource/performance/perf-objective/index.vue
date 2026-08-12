@@ -258,10 +258,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.perfobjective.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.perfobjective.relatedplant') })"
           show-count
           :maxlength="4"
@@ -531,7 +531,7 @@ const advancedQueryForm = ref({
   dueDateEnd: '',
   achievementNotes: '',
   objectiveStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -562,7 +562,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'dueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.perfobjective.duedate')) },
   { key: 'achievementNotes', label: t('entity.perfobjective.achievementnotes') },
   { key: 'objectiveStatus', label: t('entity.perfobjective.objectivestatus') },
-  { key: 'relatedPlant', label: t('entity.perfobjective.relatedplant') },
+  { key: 'plantCode', label: t('entity.perfobjective.relatedplant') },
   { key: 'approvalStatus', label: t('entity.perfobjective.approvalstatus') },
   { key: 'initiatorId', label: t('entity.perfobjective.initiatorid') },
   { key: 'initiatedAtStart', label: t('entity.perfobjective.initiatedatstart') },
@@ -574,8 +574,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -590,8 +589,6 @@ const entityIdName = 'perfObjectiveId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -640,7 +637,7 @@ function buildListQuery(overrides?: Partial<PerfObjectiveQuery>): PerfObjectiveQ
   if (form.objectiveStatus !== undefined && form.objectiveStatus !== null) {
     query.objectiveStatus = form.objectiveStatus
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   if (form.approvalStatus !== undefined && form.approvalStatus !== null) {
     query.approvalStatus = form.approvalStatus
   }
@@ -662,12 +659,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -800,12 +791,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.perfobjective.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPerfObjectiveField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getPerfObjectiveField(record, 'plantCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -837,7 +828,6 @@ const getPerfObjectiveId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getPerfObjectiveField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -922,7 +912,7 @@ function handleReset() {
   dueDateEnd: '',
   achievementNotes: '',
   objectiveStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',
@@ -1120,7 +1110,7 @@ function handleAdvancedQueryReset() {
   dueDateEnd: '',
   achievementNotes: '',
   objectiveStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
   initiatedAtStart: '',

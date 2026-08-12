@@ -44,7 +44,7 @@ export function buildBomExportBaseName(
  * 带 .xlsx 的完整导出文件名
  * @param {string} standardName 标准名
  * @param {ReadonlyArray<string | undefined | null>} selectedParts 选中信息
- * @returns {string} 如「DTA 机种成本推移表_202MK7.xlsx」
+ * @returns {string} 如「DTA BOM通用组件成本推移表_202MK7.xlsx」
  */
 export function buildBomExportFileName(
   standardName: string,

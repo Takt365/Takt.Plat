@@ -97,12 +97,12 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
         EnsureThreeLayerContext();
         var list = await _purchaseSalesInventoryRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.PsiStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -116,13 +116,13 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
         var entity = dto.Adapt<TaktPurchaseSalesInventory>();
         var isUnique_ix_takt_accounting_financial_psi_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseSalesInventoryRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.MaterialCode == entity.MaterialCode
                 && x.Valuation == entity.Valuation);
         if (!isUnique_ix_takt_accounting_financial_psi_unique)
         {
-            throw new TaktBusinessException("进销存的RelatedPlant、PeriodCode、MaterialCode、Valuation已存在");
+            throw new TaktBusinessException("进销存的PlantCode、PeriodCode、MaterialCode、Valuation已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -152,14 +152,14 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
         dto.Adapt(entity);
         var isUnique_ix_takt_accounting_financial_psi_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseSalesInventoryRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.MaterialCode == entity.MaterialCode
                 && x.Valuation == entity.Valuation,
             id);
         if (!isUnique_ix_takt_accounting_financial_psi_unique)
         {
-            throw new TaktBusinessException("进销存的RelatedPlant、PeriodCode、MaterialCode、Valuation已存在");
+            throw new TaktBusinessException("进销存的PlantCode、PeriodCode、MaterialCode、Valuation已存在");
         }
         ApplyPurchaseSalesInventoryCasMeasurement(entity);
         await _purchaseSalesInventoryRepository.UpdateAsync(entity);
@@ -271,20 +271,20 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
             try
             {
                 var entity = rows[i].Adapt<TaktPurchaseSalesInventory>();
-                var importKey = $"{entity.RelatedPlant}|{entity.PeriodCode}|{entity.MaterialCode}|{entity.Valuation}";
+                var importKey = $"{entity.PlantCode}|{entity.PeriodCode}|{entity.MaterialCode}|{entity.Valuation}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、PeriodCode、MaterialCode、Valuation）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PeriodCode、MaterialCode、Valuation）");
                 }
                 var isUnique_ix_takt_accounting_financial_psi_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchaseSalesInventoryRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.PeriodCode == entity.PeriodCode
                         && x.MaterialCode == entity.MaterialCode
                         && x.Valuation == entity.Valuation);
                 if (!isUnique_ix_takt_accounting_financial_psi_unique)
                 {
-                    throw new TaktBusinessException("进销存的RelatedPlant、PeriodCode、MaterialCode、Valuation已存在");
+                    throw new TaktBusinessException("进销存的PlantCode、PeriodCode、MaterialCode、Valuation已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -346,10 +346,10 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PeriodCode != null && x.PeriodCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.Valuation != null && x.Valuation.Contains(keywords))
                 || (x.UnitCode != null && x.UnitCode.Contains(keywords))
                 || SqlFunc.ToString(x.OpeningQty).Contains(keywords)
@@ -369,15 +369,16 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.PsiStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PeriodCode))
@@ -390,9 +391,9 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Valuation))
@@ -488,6 +489,11 @@ public class TaktPurchaseSalesInventoryService : TaktServiceBase, ITaktPurchaseS
         if (queryDto?.PsiStatus.HasValue == true)
         {
             exp = exp.And(x => x.PsiStatus == queryDto.PsiStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

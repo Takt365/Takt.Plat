@@ -205,11 +205,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('defaultLang')">
-      <a-form-item :label="t('entity.sopdoc.defaultlang')">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="t('entity.sopdoc.culturecode')">
         <a-input
-          v-model:value="advancedQueryForm.defaultLang"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.defaultlang') })"
+          v-model:value="advancedQueryForm.cultureCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.culturecode') })"
           show-count
           :maxlength="10"
           allow-clear
@@ -481,7 +481,7 @@ const advancedQueryForm = ref({
   routingItemId: '',
   workstationId: '',
   currentRevisionId: '',
-  defaultLang: '',
+  cultureCode: '',
   sopStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
@@ -504,7 +504,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'routingItemId', label: t('entity.sopdoc.routingitemid') },
   { key: 'workstationId', label: t('entity.sopdoc.workstationid') },
   { key: 'currentRevisionId', label: t('entity.sopdoc.currentrevisionid') },
-  { key: 'defaultLang', label: t('entity.sopdoc.defaultlang') },
+  { key: 'cultureCode', label: t('entity.sopdoc.culturecode') },
   { key: 'sopStatus', label: t('entity.sopdoc.sopstatus') },
   { key: 'approvalStatus', label: t('entity.sopdoc.approvalstatus') },
   { key: 'initiatorId', label: t('entity.sopdoc.initiatorid') },
@@ -517,8 +517,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -567,7 +566,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 展开行预览：sopRevision 列 */
 const sopRevisionExpandColumns = computed(() => [
 
@@ -582,7 +580,6 @@ function getSopRevisionRows(record: SopDoc): SopRevision[] {
 function hasSopRevisionRows(record: SopDoc): boolean {
   return getSopRevisionRows(record).length > 0
 }
-
 
 /** 加载主表详情并回填当前页 dataSource */
 async function loadSopDocDetail(record: SopDoc): Promise<SopDoc | null> {
@@ -696,13 +693,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopDocField(record, 'currentRevisionId') ?? ''
   },
   {
-    title: t('entity.sopdoc.defaultlang'),
-    dataIndex: 'defaultLang',
-    key: 'defaultLang',
+    title: t('entity.sopdoc.culturecode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopDocField(record, 'defaultLang') ?? ''
+    customRender: ({ record }: { record: any }) => getSopDocField(record, 'cultureCode') ?? ''
   },
   {
     title: t('entity.sopdoc.sopstatus'),
@@ -760,7 +757,6 @@ const getSopDocId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getSopDocField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -836,7 +832,7 @@ function handleReset() {
   routingItemId: '',
   workstationId: '',
   currentRevisionId: '',
-  defaultLang: '',
+  cultureCode: '',
   sopStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',
@@ -1056,7 +1052,7 @@ function handleAdvancedQueryReset() {
   routingItemId: '',
   workstationId: '',
   currentRevisionId: '',
-  defaultLang: '',
+  cultureCode: '',
   sopStatus: undefined as number | undefined,
   approvalStatus: undefined as number | undefined,
   initiatorId: '',

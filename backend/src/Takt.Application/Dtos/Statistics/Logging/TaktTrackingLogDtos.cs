@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktTrackingLogDtos.cs
-// 创建时间：2026-06-25
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TrackingLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTrackingLog 生成，请按需审阅）
 // 
@@ -149,6 +149,16 @@ public class TaktTrackingLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
@@ -285,10 +295,15 @@ public class TaktTrackingLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
@@ -384,7 +399,7 @@ public class TaktTrackingLogCreateDto
     /// <summary>
     /// 用户代理（User-Agent）
     /// </summary>
-    [Required(ErrorMessage = "用户代理不能为空")]
+    [Required(ErrorMessage = "用户代理（User-Agent）不能为空")]
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
@@ -554,36 +569,36 @@ public class TaktTrackingLogExportDto
 }
 
 // ========================================
-// Long Task 客户端批量上报 DTO
+// Long Task 客户端上报 DTO（非实体 CRUD）
 // ========================================
 
 /// <summary>
-/// Long Task 单条上报 DTO（客户端 PerformanceObserver）
+/// Long Task 单条上报 DTO
 /// </summary>
 public class TaktTrackingLogTrackDto
 {
     /// <summary>
     /// 事件类型（默认 longtask）
     /// </summary>
-    public string EventTrackingType { get; set; } = "longtask";
+    public string EventTrackingType { get; set; } = string.Empty;
 
     /// <summary>
     /// 事件分类（默认 performance）
     /// </summary>
-    public string EventTrackingCategory { get; set; } = "performance";
+    public string EventTrackingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 事件发生时间（客户端 UTC）
+    /// 客户端事件时间
     /// </summary>
     public DateTime EventTime { get; set; }
 
     /// <summary>
-    /// 长任务阻塞时长（毫秒）
+    /// 阻塞时长（毫秒）
     /// </summary>
     public int DurationMs { get; set; }
 
     /// <summary>
-    /// PerformanceEntry.startTime（毫秒）
+    /// Performance 开始毫秒
     /// </summary>
     public decimal PerformanceStartMs { get; set; }
 
@@ -593,9 +608,9 @@ public class TaktTrackingLogTrackDto
     public string EntryName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 追踪级别（1=warn 2=error）
+    /// 追踪级别（0~2）
     /// </summary>
-    public int TrackingLevel { get; set; } = 1;
+    public int TrackingLevel { get; set; }
 
     /// <summary>
     /// SPA 路由路径
@@ -610,30 +625,30 @@ public class TaktTrackingLogTrackDto
     /// <summary>
     /// TaskAttribution.containerType
     /// </summary>
-    public string ContainerType { get; set; } = string.Empty;
+    public string? ContainerType { get; set; }
 
     /// <summary>
     /// TaskAttribution.containerName
     /// </summary>
-    public string ContainerName { get; set; } = string.Empty;
+    public string? ContainerName { get; set; }
 
     /// <summary>
     /// TaskAttribution.containerSrc
     /// </summary>
-    public string ContainerSrc { get; set; } = string.Empty;
+    public string? ContainerSrc { get; set; }
 
     /// <summary>
     /// TaskAttribution.containerId
     /// </summary>
-    public string ContainerId { get; set; } = string.Empty;
+    public string? ContainerId { get; set; }
 
     /// <summary>
-    /// 完整 attribution JSON 数组
+    /// 归因 JSON（空则落库为 []）
     /// </summary>
     public string? AttributionJson { get; set; }
 
     /// <summary>
-    /// 用户代理（User-Agent）
+    /// 用户代理
     /// </summary>
     public string UserAgent { get; set; } = string.Empty;
 }
@@ -644,7 +659,7 @@ public class TaktTrackingLogTrackDto
 public class TaktTrackingLogBatchTrackDto
 {
     /// <summary>
-    /// 上报条目（单次最多 50 条）
+    /// 上报条目（单次上限由验证器约束）
     /// </summary>
     public List<TaktTrackingLogTrackDto> Items { get; set; } = new();
 }

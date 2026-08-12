@@ -175,11 +175,23 @@ alwaysApply: false
 
 ---
 
-## 六、生成后人工必做
+## 六、列表无查询条件则空表（大数据防卡，流水线强制）
+
+| 层 | 行为 |
+|----|------|
+| **后端** `generate-services-from-dtos` | `HasAnyListQueryFilter`：无 KeyWords/字段/日期范围等业务条件时，`GetXxxListAsync` / `ExportXxxAsync` 返回空结果；**有条件时**走 `QueryExpression` 正常过滤 + 分页（❌ 不是解锁全表） |
+| **前端** `generate-vue-common` | `hasAnyListQueryFilter`：无参/重置时静默空表、不请求；有参才拉数并按条件过滤 |
+| **QueryExpression** | 字符串条件须局部变量捕获后再 `Contains`（避免 SqlSugar 丢条件）；KeyWords **禁止**对 `CreatedAt` 等日期 `ToString().Contains` |
+
+主子表子面板：主表外键计入后端条件；子表仍须选中主表行后加载（既有 `hasMasterSelection`）。
+
+重生服务/Vue 后：手工改过的 QueryExpression / 列表页须对照本节复核。
+
+## 七、生成后人工必做
 
 ```
 - [ ] dotnet build 通过
-- [ ] QueryExpression / 业务过滤（服务私有方法）
+- [ ] QueryExpression / 无参空列表 + 有参过滤是否正确
 - [ ] 菜单 Permission 与控制器 TaktPermission、前端 v-permission 一致（`16-permission-i18n`）
 - [ ] Mapster / 特殊字段映射（密码 hash、导航属性）
 - [ ] 树表 / 排除实体：按 13-vue-view、14-vue-form 手工补全或增强
@@ -189,7 +201,7 @@ alwaysApply: false
 
 ---
 
-## 七、命令示例
+## 八、命令示例
 
 ```bash
 node scripts/generate-all.cjs --Holiday
@@ -201,7 +213,7 @@ node scripts/generate-vue-all-from-api.cjs --CostCenter
 
 ---
 
-## 八、Agent 约束
+## 九、Agent 约束
 
 - **动 `scripts/` 或用户要求删脚本**：必须先读本规则 §四 + **Read** `generate-all.cjs` → `PIPELINE`；核对用 **Grep 工具**，**禁止 PowerShell 查找/替换**
 - **`scripts/` 仅 `.cjs`**：禁止新增/执行 `.ps1` 等（见 `00-project` §6.1）

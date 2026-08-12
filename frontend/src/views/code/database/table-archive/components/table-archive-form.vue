@@ -357,9 +357,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 
 /**
@@ -559,7 +563,7 @@ function getValues(): TableArchiveCreate | TableArchiveUpdate {
     archiveStatus: Number(formState.archiveStatus ?? 1),
     tenantCode: tenantStore.tenantCode,
     companyCode: tenantStore.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
   }
   if (typeof formState.extField === 'string') {
     payload.extField = formState.extField.trim() || undefined

@@ -22,6 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_ec_source_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_source_detail_ecid", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcId), OrderByType.Asc, false)]
+[SugarIndex("ix_ec_source_detail_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSourceEcDetail : TaktCompanyEntityBase
 {
     /// <summary>
@@ -46,8 +47,8 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     /// <summary>
     /// 旧物料号
     /// </summary>
-    [SugarColumn(ColumnName = "source_legacy_part_no", ColumnDescription = "旧物料号", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceLegacyPartNo { get; set; }
+    [SugarColumn(ColumnName = "source_legacy_part_code", ColumnDescription = "旧物料号", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceLegacyPartCode { get; set; }
 
     /// <summary>
     /// 旧物料
@@ -70,8 +71,8 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     /// <summary>
     /// 新物料
     /// </summary>
-    [SugarColumn(ColumnName = "source_replacement_part_no", ColumnDescription = "新物料", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceReplacementPartNo { get; set; }
+    [SugarColumn(ColumnName = "source_replacement_part_code", ColumnDescription = "新物料", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceReplacementPartCode { get; set; }
 
     /// <summary>
     /// 新物料
@@ -94,8 +95,8 @@ public class TaktSourceEcDetail : TaktCompanyEntityBase
     /// <summary>
     /// BOM番号
     /// </summary>
-    [SugarColumn(ColumnName = "source_bom_no", ColumnDescription = "BOM番号", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceBomNo { get; set; }
+    [SugarColumn(ColumnName = "source_bom_code", ColumnDescription = "BOM番号", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceBomCode { get; set; }
 
     /// <summary>
     /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）

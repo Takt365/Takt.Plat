@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getPcbaOutputDetailId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -122,13 +123,23 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('prodOrderCode')">
       <a-form-item :label="pi.queryLabel('prodOrderCode')">
         <a-input
           v-model:value="advancedQueryForm.prodOrderCode"
           :placeholder="pi.queryPh('prodOrderCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="12"
           allow-clear
         />
       </a-form-item>
@@ -153,22 +164,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('teamCode')">
+      <a-form-item :label="pi.queryLabel('teamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.teamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('teamCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionEquipmentCode')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentCode')">
+      <div v-show="isFieldVisible('prodEquipCode')">
+      <a-form-item :label="pi.queryLabel('prodEquipCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.productionEquipmentCode"
+          v-model:value="advancedQueryForm.prodEquipCode"
           api-url="TaktProductionEquipments/options"
-          :placeholder="pi.queryPh('productionEquipmentCode', 'select')"
+          :placeholder="pi.queryPh('prodEquipCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -239,10 +250,11 @@
       </div>
       <div v-show="isFieldVisible('pcbBoardType')">
       <a-form-item :label="pi.queryLabel('pcbBoardType')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.pcbBoardType"
-          dict-type="logistics_pcba_function_category"
-          :placeholder="pi.queryPh('pcbBoardType', 'select')"
+          :placeholder="pi.queryPh('pcbBoardType', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -294,11 +306,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'required')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="80"
           allow-clear
@@ -325,10 +337,11 @@
       </div>
       <div v-show="isFieldVisible('downtimeReason')">
       <a-form-item :label="pi.queryLabel('downtimeReason')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.downtimeReason"
-          dict-type="logistics_stop_reason_category"
-          :placeholder="pi.queryPh('downtimeReason', 'select')"
+          :placeholder="pi.queryPh('downtimeReason', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -408,10 +421,11 @@
       </div>
       <div v-show="isFieldVisible('unachievedReason')">
       <a-form-item :label="pi.queryLabel('unachievedReason')">
-        <TaktSelect
+        <a-input
           v-model:value="advancedQueryForm.unachievedReason"
-          dict-type="logistics_nonachievement_reason_category"
-          :placeholder="pi.queryPh('unachievedReason', 'select')"
+          :placeholder="pi.queryPh('unachievedReason', 'required')"
+          show-count
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -676,7 +690,100 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PCBAOUTPUTDETAIL_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.directLabor !== undefined && form.directLabor !== null) {
+    return true
+  }
+  if (form.indirectLabor !== undefined && form.indirectLabor !== null) {
+    return true
+  }
+  if (form.shiftNo !== undefined && form.shiftNo !== null) {
+    return true
+  }
+  if (form.stdMinutes !== undefined && form.stdMinutes !== null) {
+    return true
+  }
+  if (form.stdLaborCapacity !== undefined && form.stdLaborCapacity !== null) {
+    return true
+  }
+  if (form.stdShorts !== undefined && form.stdShorts !== null) {
+    return true
+  }
+  if (form.stdEquipmentCapacity !== undefined && form.stdEquipmentCapacity !== null) {
+    return true
+  }
+  if (form.batchQty !== undefined && form.batchQty !== null) {
+    return true
+  }
+  if (form.dailyCompletedQty !== undefined && form.dailyCompletedQty !== null) {
+    return true
+  }
+  if (form.totalCompletedQty !== undefined && form.totalCompletedQty !== null) {
+    return true
+  }
+  if (form.completedStatus !== undefined && form.completedStatus !== null) {
+    return true
+  }
+  if (form.defectCount !== undefined && form.defectCount !== null) {
+    return true
+  }
+  if (form.downtimeMinutes !== undefined && form.downtimeMinutes !== null) {
+    return true
+  }
+  if (form.inputMinutes !== undefined && form.inputMinutes !== null) {
+    return true
+  }
+  if (form.actualMinutes !== undefined && form.actualMinutes !== null) {
+    return true
+  }
+  if (form.repairMinutes !== undefined && form.repairMinutes !== null) {
+    return true
+  }
+  if (form.switchCount !== undefined && form.switchCount !== null) {
+    return true
+  }
+  if (form.switchTime !== undefined && form.switchTime !== null) {
+    return true
+  }
+  if (form.stopTime !== undefined && form.stopTime !== null) {
+    return true
+  }
+  if (form.totalMinutes !== undefined && form.totalMinutes !== null) {
+    return true
+  }
+  if (form.confirmMinutes !== undefined && form.confirmMinutes !== null) {
+    return true
+  }
+  if (form.mixedProd !== undefined && form.mixedProd !== null) {
+    return true
+  }
+  if (form.achievementRate !== undefined && form.achievementRate !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -710,8 +817,7 @@ function createEmptyAdvancedQueryForm() {
     confirmMinutes: undefined as number | undefined,
     mixedProd: undefined as number | undefined,
     achievementRate: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -821,24 +927,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaOutputDetailField(record, 'timePeriod') ?? ''),
   },
   {
-    title: pi.label('prodTeam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
+    title: pi.label('teamCode'),
+    dataIndex: 'teamCode',
+    key: 'teamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaOutputDetail }) =>
-      String(getPcbaOutputDetailField(record, 'prodTeam') ?? ''),
+      String(getPcbaOutputDetailField(record, 'teamCode') ?? ''),
   },
   {
-    title: pi.label('productionEquipmentCode'),
-    dataIndex: 'productionEquipmentCode',
-    key: 'productionEquipmentCode',
+    title: pi.label('prodEquipCode'),
+    dataIndex: 'prodEquipCode',
+    key: 'prodEquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaOutputDetail }) =>
-      String(getPcbaOutputDetailField(record, 'productionEquipmentCode') ?? ''),
+      String(getPcbaOutputDetailField(record, 'prodEquipCode') ?? ''),
   },
   {
     title: pi.label('directLabor'),
@@ -971,14 +1077,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaOutputDetailField(record, 'completedStatus') ?? ''),
   },
   {
-    title: pi.label('serialNo'),
-    dataIndex: 'serialNo',
-    key: 'serialNo',
+    title: pi.label('serialCode'),
+    dataIndex: 'serialCode',
+    key: 'serialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaOutputDetail }) =>
-      String(getPcbaOutputDetailField(record, 'serialNo') ?? ''),
+      String(getPcbaOutputDetailField(record, 'serialCode') ?? ''),
   },
   {
     title: pi.label('defectCount'),
@@ -1167,10 +1273,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:output:pcba:delete',
         onClick: (record: PcbaOutputDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -1279,7 +1383,7 @@ function onClickRow(record: PcbaOutputDetail) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PcbaOutputDetailQuery} 查询 DTO
  */
@@ -1609,6 +1713,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPcbaOutputDetail(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

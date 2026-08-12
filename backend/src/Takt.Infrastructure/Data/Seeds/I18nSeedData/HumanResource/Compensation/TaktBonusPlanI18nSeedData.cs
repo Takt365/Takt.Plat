@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktBonusPlanI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBonusPlan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -161,15 +161,6 @@ public class TaktBonusPlanI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bonusplan.description", "zh-CN", "方案说明", "方案说明"),
             // entity.bonusplan.description
             new TranslationSeedItem("entity.bonusplan.description", "zh-HK", "方案说明_hk", "方案说明"),
-
-            // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.bonusplan.relatedplant
-            new TranslationSeedItem("entity.bonusplan.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.bonusplan.planstatus
             new TranslationSeedItem("entity.bonusplan.planstatus", "en-US", "状态_us", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),

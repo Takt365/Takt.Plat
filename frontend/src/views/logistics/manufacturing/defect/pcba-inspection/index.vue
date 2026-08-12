@@ -179,11 +179,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -455,7 +455,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -572,13 +571,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'modelCode') ?? ''
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getPcbaInspectionField(record, 'batchCode') ?? ''
   },
   {
     title: pi.label('materialCode'),
@@ -636,8 +635,6 @@ const getPcbaInspectionDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -703,7 +700,7 @@ function handleReset() {
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
   modelCode: '',
-  batchNo: '',
+  batchCode: '',
   materialCode: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -909,7 +906,7 @@ function handleAdvancedQueryReset() {
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
   modelCode: '',
-  batchNo: '',
+  batchCode: '',
   materialCode: '',
   createdAtStart: '',
   createdAtEnd: '',

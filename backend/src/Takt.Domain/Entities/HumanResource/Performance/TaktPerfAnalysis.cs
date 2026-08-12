@@ -92,11 +92,6 @@ public class TaktPerfAnalysis : TaktApprovalEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MentorId { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 业务状态（字典 hr_perf_improvement_status；0=待审批 1=进行中 2=已完成 3=已关闭）
     /// </summary>
     [SugarColumn(ColumnName = "improvement_status", ColumnDescription = "业务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 [SugarIndex("ix_takt_logistics_sales_price_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSalesPrice : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价记录号（唯一索引；长度 20）
@@ -48,14 +43,20 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string CustomerCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 销售组（选项 TaktSalesGroups/options；DictValue=SalesGroupCode）
@@ -103,7 +104,7 @@ public class TaktSalesPrice : TaktCompanyEntityBase
     /// <summary>
     /// 来源销售报价编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "来源销售报价编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "来源销售报价编码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? SalesQuotationCode { get; set; }
 
     /// <summary>

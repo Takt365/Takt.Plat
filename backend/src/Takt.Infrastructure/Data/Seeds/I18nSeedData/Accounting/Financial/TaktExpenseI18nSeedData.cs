@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpense 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -251,15 +251,6 @@ public class TaktExpenseI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.expense.attachments", "zh-CN", "附件", "附件 JSON"),
             // entity.expense.attachments
             new TranslationSeedItem("entity.expense.attachments", "zh-HK", "附件_hk", "附件 JSON"),
-
-            // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.expense.relatedplant
-            new TranslationSeedItem("entity.expense.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.expense.status
             new TranslationSeedItem("entity.expense.status", "en-US", "费用单状态_us", "费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）"),

@@ -15,6 +15,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Takt.Infrastructure.Extensions;
 using Takt.Shared.Enums;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
@@ -103,7 +104,7 @@ public class TaktCsrfProtectionMiddleware
         var path = context.Request.Path.Value ?? string.Empty;
         if (path.StartsWith("/connect", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/hubs", StringComparison.OrdinalIgnoreCase)
-            || path.Equals("/health", StringComparison.OrdinalIgnoreCase)
+            || TaktObservabilityCollectionExtensions.IsObservabilityProbePath(context.Request.Path)
             || path.StartsWith("/scalar", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/api/security/csrf-token", StringComparison.OrdinalIgnoreCase)
             || IsAnonymousSessionAuthPath(path))

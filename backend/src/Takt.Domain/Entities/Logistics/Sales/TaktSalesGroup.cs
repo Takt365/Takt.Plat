@@ -26,11 +26,6 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktSalesGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 销售组编码（3）
     /// </summary>
     [SugarColumn(ColumnName = "sales_group_code", ColumnDescription = "销售组编码", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]

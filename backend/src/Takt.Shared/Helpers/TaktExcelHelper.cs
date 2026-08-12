@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat 
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktExcelHelper.cs
@@ -42,6 +42,11 @@ public static class TaktExcelHelper
     /// 时间戳格式：年月日时分秒（_yyyyMMddHHmmss），模板下载与导出统一使用
     /// </summary>
     private const string TimestampFormat = "yyyyMMddHHmmss";
+
+    /// <summary>
+    /// Excel 标准列宽（与 Excel 新建工作簿默认列宽一致；导出固定使用，❌ 禁止按内容 AutoFit）
+    /// </summary>
+    public const double ExcelStandardColumnWidth = 8.43d;
 
     private const string ImportRowLimitExceededKey = TaktValidationI18nKeys.DataImportRowLimitExceeded;
     private const string ImportSheetLimitExceededKey = TaktValidationI18nKeys.DataImportSheetLimitExceeded;
@@ -368,14 +373,30 @@ public static class TaktExcelHelper
             }
             worksheet.Cells[2, 1].LoadFromArrays(dataArray);
         }
-        if (worksheet.Dimension != null)
-        {
-            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-        }
+        ApplyFixedStandardColumnWidths(worksheet, columnKeys.Count);
         var actualFileName = GenerateTimestampFileName(fileName ?? sheetName);
         var content = await package.GetAsByteArrayAsync();
         TaktLogger.Information("[TaktExcelHelper] 导出动态报表成功，Sheet: {SheetName}, 文件名: {FileName}, 行数: {RowCount}", sheetName, actualFileName, rows.Count);
         return (actualFileName, content);
+    }
+
+    /// <summary>
+    /// 导出列一律固定为 Excel 标准列宽（不按单元格内容 AutoFit）
+    /// </summary>
+    /// <param name="worksheet">工作表</param>
+    /// <param name="columnCount">列数（≥1）</param>
+    private static void ApplyFixedStandardColumnWidths(ExcelWorksheet worksheet, int columnCount)
+    {
+        ArgumentNullException.ThrowIfNull(worksheet);
+        if (columnCount <= 0)
+        {
+            return;
+        }
+        worksheet.DefaultColWidth = ExcelStandardColumnWidth;
+        for (var i = 1; i <= columnCount; i++)
+        {
+            worksheet.Column(i).Width = ExcelStandardColumnWidth;
+        }
     }
 
     /// <summary>
@@ -731,17 +752,8 @@ public static class TaktExcelHelper
             }
         }
 
-        // 自动调整列宽
-        if (worksheet.Dimension != null)
-        {
-            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-        }
-
-        // 自动调整列宽
-        if (worksheet.Dimension != null)
-        {
-            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-        }
+        // 模板列宽：固定 Excel 标准列宽（不按内容 AutoFit）
+        ApplyFixedStandardColumnWidths(worksheet, properties.Count);
 
         var content = await package.GetAsByteArrayAsync();
         // 无本地化上下文时的技术兜底；业务文件名由应用层传入。
@@ -833,9 +845,8 @@ public static class TaktExcelHelper
                 column.Style.Numberformat.Format = "#,##0.00";
         }
 
-        // 优化：自动调整列宽
-        if (worksheet.Dimension != null)
-            worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+        // 列宽：固定 Excel 标准列宽（不按内容 AutoFit）
+        ApplyFixedStandardColumnWidths(worksheet, properties.Count);
 
         // 冻结首行
         worksheet.View.FreezePanes(2, 1);

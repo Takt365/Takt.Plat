@@ -10,7 +10,7 @@
 <template>
   <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.scheduledbatch')"><a-input v-model:value="formState.scheduledBatch" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.productionbatch')"><a-input v-model:value="formState.productionBatch" /></a-form-item></a-col>
@@ -27,7 +27,7 @@ import type { EcBatch, EcBatchUpdate } from '@/types/logistics/manufacturing/eng
 const props = defineProps<{ formData?: EcBatch | null; loading?: boolean }>();
 const { t } = useI18n();
 const formRef = ref();
-const formState = reactive<EcBatchUpdate & { ecNo?: string; ecModel?: string }>({
+const formState = reactive<EcBatchUpdate & { ecCode?: string; ecModel?: string }>({
   ecDetailId: '',
   scheduledBatch: '',
   productionBatch: '',
@@ -37,7 +37,7 @@ watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
-    ecNo: val.ecNo,
+    ecCode: val.ecCode,
     ecModel: val.ecModel,
     scheduledBatch: val.scheduledBatch ?? '',
     productionBatch: val.productionBatch ?? '',
@@ -48,11 +48,11 @@ watch(() => props.formData, (val) => {
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcBatchUpdate {
-  const { ecNo, ecModel, ...rest } = formState;
+  const { ecCode, ecModel, ...rest } = formState;
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', scheduledBatch: '', productionBatch: '', ecNo: '', ecModel: '' });
+  Object.assign(formState, { ecDetailId: '', scheduledBatch: '', productionBatch: '', ecCode: '', ecModel: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

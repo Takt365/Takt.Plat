@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialDescriptionService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-05
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料描述应用服务实现
 // 
@@ -30,27 +30,23 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDescriptionService
 {
     private readonly ITaktTenantRepository<TaktMaterialDescription> _materialDescriptionRepository;
-    private readonly ITaktTenantRepository<TaktMaterial> _materialRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="materialDescriptionRepository">物料描述仓储</param>
-    /// <param name="materialRepository">全局物料仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktMaterialDescriptionService(
         ITaktTenantRepository<TaktMaterialDescription> materialDescriptionRepository,
-        ITaktTenantRepository<TaktMaterial> materialRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _materialDescriptionRepository = materialDescriptionRepository;
-        _materialRepository = materialRepository;
         _uniqueValidator = uniqueValidator;
     }
 
@@ -113,14 +109,13 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
     public async Task<TaktMaterialDescriptionDto> CreateMaterialDescriptionAsync(TaktMaterialDescriptionCreateDto dto)
     {
         var entity = dto.Adapt<TaktMaterialDescription>();
-        await StampMaterialDescriptionMaterialAsync(entity, dto);
         var isUnique_ix_takt_logistics_materials_material_description_unique = await _uniqueValidator.IsUniqueAsync(
             _materialDescriptionRepository,
-            x => x.MaterialId == entity.MaterialId
+            x => x.MaterialCode == entity.MaterialCode
                 && x.CultureCode == entity.CultureCode);
         if (!isUnique_ix_takt_logistics_materials_material_description_unique)
         {
-            throw new TaktBusinessException("物料描述的MaterialId、CultureCode已存在");
+            throw new TaktBusinessException("物料描述的MaterialCode、CultureCode已存在");
         }
         entity = await _materialDescriptionRepository.CreateAsync(entity);
         return await GetMaterialDescriptionByIdAsync(entity.Id) ?? entity.Adapt<TaktMaterialDescriptionDto>();
@@ -140,15 +135,14 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
             throw new TaktBusinessException("物料描述不存在");
         }
         dto.Adapt(entity);
-        await StampMaterialDescriptionMaterialAsync(entity, dto);
         var isUnique_ix_takt_logistics_materials_material_description_unique = await _uniqueValidator.IsUniqueAsync(
             _materialDescriptionRepository,
-            x => x.MaterialId == entity.MaterialId
+            x => x.MaterialCode == entity.MaterialCode
                 && x.CultureCode == entity.CultureCode,
             id);
         if (!isUnique_ix_takt_logistics_materials_material_description_unique)
         {
-            throw new TaktBusinessException("物料描述的MaterialId、CultureCode已存在");
+            throw new TaktBusinessException("物料描述的MaterialCode、CultureCode已存在");
         }
         await _materialDescriptionRepository.UpdateAsync(entity);
         return await GetMaterialDescriptionByIdAsync(id) ?? throw new TaktBusinessException("物料描述不存在");
@@ -222,20 +216,18 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
             try
             {
                 var entity = rows[i].Adapt<TaktMaterialDescription>();
-                var importDto = rows[i].Adapt<TaktMaterialDescriptionCreateDto>();
-                await StampMaterialDescriptionMaterialAsync(entity, importDto);
-                var importKey = $"{entity.MaterialId}|{entity.CultureCode}";
+                var importKey = $"{entity.MaterialCode}|{entity.CultureCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（MaterialId、CultureCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（MaterialCode、CultureCode）");
                 }
                 var isUnique_ix_takt_logistics_materials_material_description_unique = await _uniqueValidator.IsUniqueAsync(
                     _materialDescriptionRepository,
-                    x => x.MaterialId == entity.MaterialId
+                    x => x.MaterialCode == entity.MaterialCode
                         && x.CultureCode == entity.CultureCode);
                 if (!isUnique_ix_takt_logistics_materials_material_description_unique)
                 {
-                    throw new TaktBusinessException("物料描述的MaterialId、CultureCode已存在");
+                    throw new TaktBusinessException("物料描述的MaterialCode、CultureCode已存在");
                 }
                 await _materialDescriptionRepository.CreateAsync(entity);
                 success += 1;
@@ -275,29 +267,6 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
     }
 
     // ========================================
-    // 主表外键同步（ManyToOne）
-    // ========================================
-
-    /// <summary>
-    /// 同步物料描述主表外键（ManyToOne → 全局物料）
-    /// </summary>
-    /// <param name="entity">当前实体</param>
-    /// <param name="dto">创建 DTO</param>
-    /// <returns>任务</returns>
-    private async Task StampMaterialDescriptionMaterialAsync(TaktMaterialDescription entity, TaktMaterialDescriptionCreateDto dto)
-    {
-        if (dto.MaterialId <= 0)
-        {
-            return;
-        }
-        var master = await _materialRepository.GetByIdAsync(dto.MaterialId);
-        if (master == null)
-        {
-            throw new TaktBusinessException("全局物料不存在");
-        }
-        entity.MaterialId = master.Id;
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -314,8 +283,11 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                SqlFunc.ToString(x.MaterialId).Contains(keywords)
-                || (x.Description != null && x.Description.Contains(keywords))
+                (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
+                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
+                || (x.MaterialModel != null && x.MaterialModel.Contains(keywords))
+                || (x.MaterialLongDescription != null && x.MaterialLongDescription.Contains(keywords))
                 || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
@@ -323,14 +295,29 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
             );
         }
 
-        if (queryDto?.MaterialId.HasValue == true)
+        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialId == queryDto.MaterialId);
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Description))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.Description != null && x.Description.Contains(queryDto.Description));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
+        {
+            exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialModel))
+        {
+            exp = exp.And(x => x.MaterialModel != null && x.MaterialModel.Contains(queryDto.MaterialModel));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.MaterialLongDescription))
+        {
+            exp = exp.And(x => x.MaterialLongDescription != null && x.MaterialLongDescription.Contains(queryDto.MaterialLongDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CultureCode))
@@ -348,16 +335,92 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
         }
 
-        if (queryDto?.CreatedAtStart.HasValue == true)
+        var rangeStart = queryDto?.CreatedAtStart;
+        var rangeEnd = queryDto?.CreatedAtEnd;
+        if (!rangeStart.HasValue && !rangeEnd.HasValue && !HasFiltersBesidesDefaultListScope(queryDto))
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var monthBounds = GetCurrentMonthRangeBounds();
+            rangeStart = monthBounds.Start;
+            rangeEnd = monthBounds.End;
         }
 
-        if (queryDto?.CreatedAtEnd.HasValue == true)
+        if (rangeStart.HasValue)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            exp = exp.And(x => x.CreatedAt >= rangeStart.Value);
         }
+
+        if (rangeEnd.HasValue)
+        {
+            exp = exp.And(x => x.CreatedAt <= rangeEnd.Value);
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 当前自然月起止（含月末最后一刻），用于列表无参默认过滤、避免全表扫描
+    /// </summary>
+    /// <returns>起、止</returns>
+    private static (DateTime Start, DateTime End) GetCurrentMonthRangeBounds()
+    {
+        var today = DateTime.Today;
+        var start = new DateTime(today.Year, today.Month, 1);
+        var end = start.AddMonths(1).AddTicks(-1);
+        return (start, end);
+    }
+    /// <summary>
+    /// 是否存在除默认当前月/当前期间外的查询条件（有参则不强制默认范围）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有其它条件为 true</returns>
+    private static bool HasFiltersBesidesDefaultListScope(TaktMaterialDescriptionQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialSpecification))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialModel))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialLongDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        return false;
     }
 }

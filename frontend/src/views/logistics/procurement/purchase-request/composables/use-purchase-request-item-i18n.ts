@@ -26,7 +26,7 @@ export const PURCHASEREQUESTITEM_LIST_FIELDS = [
   'lineNumber',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'requestUnit',
   'requestQuantity',
@@ -47,7 +47,7 @@ export const PURCHASEREQUESTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'lineNumber',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'requestUnit',
   'requestQuantity',
@@ -82,7 +82,7 @@ export const PURCHASEREQUESTITEM_PLACEHOLDER = {
   lineNumber: 'select',
   allocationCategory: 'select',
   materialCode: 'optional',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   requestUnit: 'select',
   requestQuantity: 'select',
@@ -93,6 +93,7 @@ export const PURCHASEREQUESTITEM_PLACEHOLDER = {
   untaxedAmount: 'select',
   taxAmount: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -104,7 +105,7 @@ export const PURCHASEREQUESTITEM_QUERY_STRING_FIELDS = [
   'purchasePlanItemId',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'requestUnit',
   'createdAtStart',

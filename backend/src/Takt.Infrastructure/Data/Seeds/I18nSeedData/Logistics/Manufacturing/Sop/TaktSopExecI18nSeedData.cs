@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopExec 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.sopexec._self
             new TranslationSeedItem("entity.sopexec._self", "zh-HK", "SOP 工位执行追溯信息_hk", "实体名称"),
 
-            // entity.sopexec.plantcode
-            new TranslationSeedItem("entity.sopexec.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopexec.plantcode
-            new TranslationSeedItem("entity.sopexec.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopexec.plantcode
-            new TranslationSeedItem("entity.sopexec.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopexec.plantcode
-            new TranslationSeedItem("entity.sopexec.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.sopexec.productionorderid
             new TranslationSeedItem("entity.sopexec.productionorderid", "en-US", "生产工单ID_us", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
             // entity.sopexec.productionorderid
@@ -108,14 +99,14 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.sopexec.productionorderid
             new TranslationSeedItem("entity.sopexec.productionorderid", "zh-HK", "生产工单ID_hk", "生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）"),
 
-            // entity.sopexec.workorderno
-            new TranslationSeedItem("entity.sopexec.workorderno", "en-US", "工单号_us", "MES 工单号（冗余，便于追溯查询）"),
-            // entity.sopexec.workorderno
-            new TranslationSeedItem("entity.sopexec.workorderno", "ja-JP", "工单号_jp", "MES 工单号（冗余，便于追溯查询）"),
-            // entity.sopexec.workorderno
-            new TranslationSeedItem("entity.sopexec.workorderno", "zh-CN", "工单号", "MES 工单号（冗余，便于追溯查询）"),
-            // entity.sopexec.workorderno
-            new TranslationSeedItem("entity.sopexec.workorderno", "zh-HK", "工单号_hk", "MES 工单号（冗余，便于追溯查询）"),
+            // entity.sopexec.workordercode
+            new TranslationSeedItem("entity.sopexec.workordercode", "en-US", "工单号_us", "MES 工单号（冗余，便于追溯查询）"),
+            // entity.sopexec.workordercode
+            new TranslationSeedItem("entity.sopexec.workordercode", "ja-JP", "工单号_jp", "MES 工单号（冗余，便于追溯查询）"),
+            // entity.sopexec.workordercode
+            new TranslationSeedItem("entity.sopexec.workordercode", "zh-CN", "工单号", "MES 工单号（冗余，便于追溯查询）"),
+            // entity.sopexec.workordercode
+            new TranslationSeedItem("entity.sopexec.workordercode", "zh-HK", "工单号_hk", "MES 工单号（冗余，便于追溯查询）"),
 
             // entity.sopexec.serialnumber
             new TranslationSeedItem("entity.sopexec.serialnumber", "en-US", "产品序列号_us", "产品序列号 SN"),
@@ -197,15 +188,6 @@ public class TaktSopExecI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopexec.revision", "zh-CN", "版本号快照", "版本号快照"),
             // entity.sopexec.revision
             new TranslationSeedItem("entity.sopexec.revision", "zh-HK", "版本号快照_hk", "版本号快照"),
-
-            // entity.sopexec.contentlang
-            new TranslationSeedItem("entity.sopexec.contentlang", "en-US", "使用语言_us", "使用语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopexec.contentlang
-            new TranslationSeedItem("entity.sopexec.contentlang", "ja-JP", "使用语言_jp", "使用语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopexec.contentlang
-            new TranslationSeedItem("entity.sopexec.contentlang", "zh-CN", "使用语言", "使用语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopexec.contentlang
-            new TranslationSeedItem("entity.sopexec.contentlang", "zh-HK", "使用语言_hk", "使用语言（选项 TaktCultures/options；DictValue=CultureCode）"),
 
             // entity.sopexec.startedat
             new TranslationSeedItem("entity.sopexec.startedat", "en-US", "开始时间_us", "开始时间"),

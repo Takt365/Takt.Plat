@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：culture.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -19,7 +19,6 @@ import type {
   Culture,
   CultureCreate,
   CultureSort,
-  CultureStatus,
   CultureUpdate
 } from '@/types/foundation/culture';
 
@@ -107,19 +106,6 @@ export function deleteCultureBatch(ids: string[]): Promise<void> {
     url: `${CULTURE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新区域状态
- * @param {CultureStatus} dto 状态 DTO（TaktCommonStatus 枚举）
- * @returns {Promise<Culture>} 区域DTO
- */
-export function updateCultureStatus(dto: CultureStatus): Promise<Culture> {
-  return request<Culture>({
-    url: `${CULTURE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

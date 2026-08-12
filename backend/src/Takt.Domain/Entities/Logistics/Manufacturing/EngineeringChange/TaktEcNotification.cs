@@ -23,24 +23,19 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_notification", "工程变更通知单表")]
 [SugarIndex("ix_ec_notification_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_notification_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_notification_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_notification_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_notification_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
 public class TaktEcNotification : TaktApprovalEntityBase
 {
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_notification_no", ColumnDescription = "通知单号", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcNotificationNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_notification_code", ColumnDescription = "通知单号", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -52,8 +47,8 @@ public class TaktEcNotification : TaktApprovalEntityBase
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）

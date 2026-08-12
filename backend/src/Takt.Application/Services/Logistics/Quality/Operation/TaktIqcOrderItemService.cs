@@ -102,12 +102,12 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         EnsureThreeLayerContext();
         var list = await _iqcOrderItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.JudgeStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -497,8 +497,8 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
                 || (x.IqcOrderCode != null && x.IqcOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseQuantity).Contains(keywords)
                 || (x.StandardCode != null && x.StandardCode.Contains(keywords))
                 || (x.SamplingSchemeCode != null && x.SamplingSchemeCode.Contains(keywords))
@@ -507,10 +507,11 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
                 || SqlFunc.ToString(x.QualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.UnqualifiedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionReturnQuantity).Contains(keywords)
-                || (x.SampleSerialNo != null && x.SampleSerialNo.Contains(keywords))
+                || (x.SampleSerialCode != null && x.SampleSerialCode.Contains(keywords))
                 || (x.InspectionDescription != null && x.InspectionDescription.Contains(keywords))
                 || (x.InspectorBy != null && x.InspectorBy.Contains(keywords))
                 || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
@@ -538,14 +539,14 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (queryDto?.PurchaseQuantity.HasValue == true)
@@ -588,9 +589,9 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
             exp = exp.And(x => x.InspectionReturnQuantity == queryDto.InspectionReturnQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SampleSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.SampleSerialCode))
         {
-            exp = exp.And(x => x.SampleSerialNo != null && x.SampleSerialNo.Contains(queryDto.SampleSerialNo));
+            exp = exp.And(x => x.SampleSerialCode != null && x.SampleSerialCode.Contains(queryDto.SampleSerialCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.InspectionDescription))
@@ -606,6 +607,11 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         if (queryDto?.JudgeStatus.HasValue == true)
         {
             exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -637,6 +643,12 @@ public class TaktIqcOrderItemService : TaktServiceBase, ITaktIqcOrderItemService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

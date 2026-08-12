@@ -143,10 +143,10 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 取有效单价（汇总口径仅生产相关=X 且 F：移动平均价，保留 5 位小数；否则返回 0）
+    /// 取有效单价（汇总口径仅生产相关=X 且 F：移动平均价原值，保留 5 位小数；与 ResolvePriceUnit 配对后得每基本计量单位价；否则返回 0）
     /// </summary>
     /// <param name="row">成本行</param>
-    /// <returns>单价</returns>
+    /// <returns>移动平均价（未除以价格单位）</returns>
     public static decimal ResolveEffectiveUnitPrice(TaktBomMaterialCostItem row)
     {
         ArgumentNullException.ThrowIfNull(row);
@@ -155,6 +155,22 @@ public static class TaktBomMaterialCostItemLineCostHelper
             return 0m;
         }
         return RoundCost(row.MovingAveragePrice);
+    }
+
+    /// <summary>
+    /// 取每基本计量单位单价（生产相关=X 且 F：移动平均价÷移动价格单位，保留 5 位小数；否则 0）
+    /// </summary>
+    /// <param name="row">成本行</param>
+    /// <returns>单位单价</returns>
+    public static decimal ResolvePerBaseUnitPrice(TaktBomMaterialCostItem row)
+    {
+        ArgumentNullException.ThrowIfNull(row);
+        if (!CountsTowardBomMaterialCostItem(row))
+        {
+            return 0m;
+        }
+        var priceUnit = ResolveMovingPriceUnit(row);
+        return RoundCost(row.MovingAveragePrice / priceUnit);
     }
 
     /// <summary>
@@ -195,7 +211,7 @@ public static class TaktBomMaterialCostItemLineCostHelper
         {
             return string.Empty;
         }
-        return row.MovingPriceCurrency ?? string.Empty;
+        return row.MovingPriceCurrencyCode ?? string.Empty;
     }
 
     /// <summary>
@@ -210,9 +226,9 @@ public static class TaktBomMaterialCostItemLineCostHelper
             "|",
             row.PlantCode?.Trim() ?? string.Empty,
             row.ProductCode?.Trim() ?? string.Empty,
-            row.SequenceNo?.Trim() ?? string.Empty,
+            row.SequenceCode?.Trim() ?? string.Empty,
             row.BomLevel?.Trim() ?? string.Empty,
-            row.BomItemNo?.Trim() ?? string.Empty,
+            row.BomItemCode?.Trim() ?? string.Empty,
             row.ComponentCode?.Trim() ?? string.Empty,
             row.ComponentQuantity.ToString("0.##########", System.Globalization.CultureInfo.InvariantCulture),
             row.BatchIndicator?.Trim() ?? string.Empty,
@@ -417,15 +433,15 @@ public static class TaktBomMaterialCostItemLineCostHelper
     /// <summary>
     /// 序号排序键（0010→10；非数字用 int.MaxValue 靠后）
     /// </summary>
-    /// <param name="sequenceNo">序号</param>
+    /// <param name="sequenceCode">序号</param>
     /// <returns>数值键</returns>
-    public static int ParseSequenceSortKey(string? sequenceNo)
+    public static int ParseSequenceSortKey(string? sequenceCode)
     {
-        if (string.IsNullOrWhiteSpace(sequenceNo))
+        if (string.IsNullOrWhiteSpace(sequenceCode))
         {
             return int.MaxValue;
         }
-        var trimmed = sequenceNo.Trim();
+        var trimmed = sequenceCode.Trim();
         return int.TryParse(trimmed, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out var n)
             ? n
             : int.MaxValue;
@@ -492,21 +508,21 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 产品成本明细展开序：ProductCode → SequenceNo → BomLevel（深度再数字，如 1…6 后 .1、..2）
+    /// 产品成本明细展开序：ProductCode → SequenceCode → BomLevel（深度再数字，如 1…6 后 .1、..2）
     /// </summary>
     /// <param name="productCodeA">产品 A</param>
-    /// <param name="sequenceNoA">序号 A</param>
+    /// <param name="sequenceCodeA">序号 A</param>
     /// <param name="bomLevelA">层级 A</param>
     /// <param name="productCodeB">产品 B</param>
-    /// <param name="sequenceNoB">序号 B</param>
+    /// <param name="sequenceCodeB">序号 B</param>
     /// <param name="bomLevelB">层级 B</param>
     /// <returns>比较结果</returns>
     public static int CompareBomExplosionOrder(
         string? productCodeA,
-        string? sequenceNoA,
+        string? sequenceCodeA,
         string? bomLevelA,
         string? productCodeB,
-        string? sequenceNoB,
+        string? sequenceCodeB,
         string? bomLevelB)
     {
         var productCmp = string.Compare(
@@ -517,14 +533,14 @@ public static class TaktBomMaterialCostItemLineCostHelper
         {
             return productCmp;
         }
-        var seqCmp = ParseSequenceSortKey(sequenceNoA).CompareTo(ParseSequenceSortKey(sequenceNoB));
+        var seqCmp = ParseSequenceSortKey(sequenceCodeA).CompareTo(ParseSequenceSortKey(sequenceCodeB));
         if (seqCmp != 0)
         {
             return seqCmp;
         }
         var seqTextCmp = string.Compare(
-            sequenceNoA?.Trim() ?? string.Empty,
-            sequenceNoB?.Trim() ?? string.Empty,
+            sequenceCodeA?.Trim() ?? string.Empty,
+            sequenceCodeB?.Trim() ?? string.Empty,
             StringComparison.Ordinal);
         if (seqTextCmp != 0)
         {
@@ -594,5 +610,39 @@ public static class TaktBomMaterialCostItemLineCostHelper
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// 从工厂物料解析产品物料类型（同工厂 + 物料编码匹配；未匹配返回空）
+    /// </summary>
+    /// <param name="materialPlants">工厂物料行</param>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="productCode">产品编码</param>
+    /// <returns>物料类型；未匹配为空</returns>
+    public static string ResolveMaterialTypeFromPlant(
+        IReadOnlyList<TaktMaterialPlant> materialPlants,
+        string plantCode,
+        string productCode)
+    {
+        ArgumentNullException.ThrowIfNull(materialPlants);
+        if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(productCode))
+        {
+            return string.Empty;
+        }
+        var plant = plantCode.Trim();
+        var product = productCode.Trim();
+        foreach (var row in materialPlants)
+        {
+            if (!string.Equals(row.PlantCode, plant, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+            if (!ProductCodeMatches(row.MaterialCode, product))
+            {
+                continue;
+            }
+            return row.MaterialType?.Trim() ?? string.Empty;
+        }
+        return string.Empty;
     }
 }

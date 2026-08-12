@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IpqcOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIpqcOrder 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktIpqcOrderDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 
@@ -139,12 +135,17 @@ public class TaktIpqcOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -264,9 +265,9 @@ public class TaktIpqcOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -275,9 +276,9 @@ public class TaktIpqcOrderCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
-    [Required(ErrorMessage = "来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）不能为空")]
+    [Required(ErrorMessage = "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）不能为空")]
     public string SourceCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -351,7 +352,7 @@ public class TaktIpqcOrderCreateDto
     /// <summary>
     /// IPQC检验单明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktIpqcOrderItemUpdateDto>? Items { get; set; }
+    public List<TaktIpqcOrderItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -382,6 +383,11 @@ public class TaktIpqcOrderUpdateDto : TaktIpqcOrderCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderId { get; set; }
+
+    /// <summary>
+    /// IPQC检验单明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktIpqcOrderItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -429,12 +435,17 @@ public class TaktIpqcOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -536,9 +547,9 @@ public class TaktIpqcOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -546,7 +557,7 @@ public class TaktIpqcOrderImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     public string? SourceCode { get; set; } = string.Empty;
 
@@ -659,7 +670,7 @@ public class TaktIpqcOrderExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源单号（选项 TaktProductionOrders/options，DictValue=ProdOrderCode）
+    /// 来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
     public string SourceCode { get; set; } = string.Empty;
 

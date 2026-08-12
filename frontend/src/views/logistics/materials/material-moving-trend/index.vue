@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：物料月移动价格推移 / 物料-机种-价格推移（BOM 产品机种组 + 月单价转置） -->
+<!-- 功能描述：物料月移动价格推移（物料×月份转置；机种推移见 model-moving-trend） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,25 +12,13 @@
     <material-moving-trend-query-form
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
+      v-model:material-type="materialType"
       v-model:valuation="valuation"
       v-model:material-code="materialCode"
       :loading="panelLoading"
       @search="handleSearch"
       @reset="handleReset"
     />
-    <a-tabs
-      v-model:activeKey="activeTab"
-      class="material-moving-trend-tabs mb-1 shrink-0"
-    >
-      <a-tab-pane
-        key="price"
-        :tab="t(`${localePrefix}.tabs.price`)"
-      />
-      <a-tab-pane
-        key="model"
-        :tab="t(`${localePrefix}.tabs.model`)"
-      />
-    </a-tabs>
     <TaktToolsBar
       :show-create="false"
       :show-update="false"
@@ -56,9 +44,10 @@
       v-model:has-rows="hasRows"
       class="min-h-0 flex-1"
       :trend-filter="trendFilter"
-      :active-tab="activeTab"
+      active-tab="price"
       :plant-code="plantCode"
       :period-range="periodRange"
+      :material-type="materialType"
       :valuation="valuation"
       :material-code="materialCode"
     />
@@ -67,7 +56,7 @@
 
 <script setup lang="ts">
 /**
- * 物料月移动价格推移 / 物料-机种-价格推移
+ * 物料月移动价格推移（仅物料价格 Tab；机种见独立菜单）
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -77,33 +66,29 @@ import {
   RiArrowUpDownLine,
   RiArrowUpLine,
   RiListCheck,
-  RiTrophyLine,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import MaterialMovingTrendPanel from './components/material-moving-trend-panel.vue'
 import MaterialMovingTrendQueryForm from './components/material-moving-trend-query-form.vue'
 
-/** 评估类别默认：原材料（字典 logistics_valuation_class_category / Z300） */
-const DEFAULT_VALUATION = 'Z300'
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.materials.material-moving-trend.page'
 const { t } = useI18n()
 const tenantStore = useTenantStore()
 
-/** 当前 Tab：price=物料价格推移；model=物料-机种-价格推移 */
-const activeTab = ref<'price' | 'model'>('price')
 /** 工厂 */
 const plantCode = ref<string | undefined>()
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(3))
+/** 产品物料类型（必选） */
+const materialType = ref<string | undefined>()
 /** 评估类别 */
-const valuation = ref<string | undefined>(DEFAULT_VALUATION)
-/** 物料编码关键字 */
-const materialCode = ref('')
-/** 涨跌筛选：price 默认空=全部；model 默认 leading=领涨领跌各 50 */
+const valuation = ref<string | undefined>()
+/** 物料编码（可空） */
+const materialCode = ref<string | undefined>()
+/** 涨跌筛选：默认空=全部 */
 const trendFilter = ref('')
 /** 明细面板 loading */
 const panelLoading = ref(false)
@@ -111,52 +96,36 @@ const panelLoading = ref(false)
 const exportLoading = ref(false)
 /** 是否有数据行 */
 const hasRows = ref(false)
-/** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => {
-  const actions: ToolBarAction[] = []
-  if (activeTab.value === 'model') {
-    actions.push({
-      key: 'trend-leading',
-      icon: RiTrophyLine,
-      tooltip: t(`${localePrefix}.filter.leading`),
-      active: trendFilter.value === 'leading' || trendFilter.value === '',
-      onClick: () => setTrendFilter('leading'),
-    })
-  }
-  actions.push(
-    {
-      key: 'trend-all',
-      icon: RiListCheck,
-      tooltip: t(`${localePrefix}.filter.all`),
-      active: activeTab.value === 'model'
-        ? trendFilter.value === 'all'
-        : trendFilter.value === '',
-      onClick: () => setTrendFilter(activeTab.value === 'model' ? 'all' : ''),
-    },
-    {
-      key: 'trend-changed',
-      icon: RiArrowUpDownLine,
-      tooltip: t(`${localePrefix}.filter.changed`),
-      active: trendFilter.value === 'changed',
-      onClick: () => setTrendFilter('changed'),
-    },
-    {
-      key: 'trend-up',
-      icon: RiArrowUpLine,
-      tooltip: t(`${localePrefix}.trend.up`),
-      active: trendFilter.value === 'up',
-      onClick: () => setTrendFilter('up'),
-    },
-    {
-      key: 'trend-down',
-      icon: RiArrowDownLine,
-      tooltip: t(`${localePrefix}.trend.down`),
-      active: trendFilter.value === 'down',
-      onClick: () => setTrendFilter('down'),
-    },
-  )
-  return actions
-})
+/** 右侧涨跌筛选 */
+const trendFilterActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'trend-all',
+    icon: RiListCheck,
+    tooltip: t(`${localePrefix}.filter.all`),
+    active: trendFilter.value === '',
+    onClick: () => setTrendFilter(''),
+  },
+  {
+    key: 'trend-changed',
+    icon: RiArrowUpDownLine,
+    tooltip: t(`${localePrefix}.filter.changed`),
+    active: trendFilter.value === 'changed',
+    onClick: () => setTrendFilter('changed'),
+  },
+  {
+    key: 'trend-up',
+    icon: RiArrowUpLine,
+    tooltip: t(`${localePrefix}.trend.up`),
+    active: trendFilter.value === 'up',
+    onClick: () => setTrendFilter('up'),
+  },
+  {
+    key: 'trend-down',
+    icon: RiArrowDownLine,
+    tooltip: t(`${localePrefix}.trend.down`),
+    active: trendFilter.value === 'down',
+    onClick: () => setTrendFilter('down'),
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -168,6 +137,14 @@ const panelRef = ref<{
 function handleSearch() {
   if (!plantCode.value?.trim()) {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
+    return
+  }
+  if (!materialType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
+    return
+  }
+  if (!valuation.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectValuationRequired`))
     return
   }
   if (!periodRange.value?.[0]) {
@@ -185,47 +162,26 @@ function setTrendFilter(value: string) {
   trendFilter.value = value
 }
 
-/**
- * 按当前 Tab 归一化默认涨跌筛选
- * @param {string} tab 当前 Tab
- */
-function applyDefaultTrendFilterForTab(tab: 'price' | 'model') {
-  if (tab === 'model') {
-    if (trendFilter.value === '' || trendFilter.value === 'all') {
-      trendFilter.value = 'leading'
-    }
-    return
-  }
-  if (trendFilter.value === 'leading') {
-    trendFilter.value = ''
-  }
-}
-
 /** 刷新 */
 function handleRefresh() {
   void panelRef.value?.reload?.()
 }
 
-/** 默认核算年月 */
-function applyDefaultPeriodRange() {
-  periodRange.value = buildDefaultCostingPeriodRange(3)
-}
-
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
+/** 清空工厂级联与结果 */
+function clearPlantCascade() {
+  plantCode.value = undefined
+  materialType.value = undefined
+  valuation.value = undefined
+  materialCode.value = undefined
+  hasRows.value = false
+  panelRef.value?.clear?.()
 }
 
 /** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
+function handleReset() {
+  clearPlantCascade()
   periodRange.value = buildDefaultCostingPeriodRange(3)
-  valuation.value = DEFAULT_VALUATION
-  materialCode.value = ''
-  trendFilter.value = activeTab.value === 'model' ? 'leading' : ''
-  hasRows.value = false
-  panelRef.value?.clear?.()
+  trendFilter.value = ''
 }
 
 /** 导出 */
@@ -246,27 +202,16 @@ async function handleExport() {
   }
 }
 
-watch(activeTab, (tab) => {
-  applyDefaultTrendFilterForTab(tab)
-})
-
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    clearPlantCascade()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
-  applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
+  periodRange.value = buildDefaultCostingPeriodRange(3)
   void getTaktDefaultPageSize()
 })
 </script>
-
-<style scoped>
-:deep(.material-moving-trend-tabs .ant-tabs-nav) {
-  margin-bottom: 0;
-}
-</style>

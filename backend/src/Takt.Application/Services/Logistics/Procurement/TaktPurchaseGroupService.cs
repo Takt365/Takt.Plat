@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购组主数据应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     }
 
     /// <summary>
-    /// 获取采购组主数据列表（分页）
+    /// 获取采购组主数据列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchaseGroupDto>> GetPurchaseGroupListAsync(TaktPurchaseGroupQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchaseGroupDto>.Create(
+                new List<TaktPurchaseGroupDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchaseGroupRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -119,10 +127,11 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
         entity.IsBuiltIn = 0;
         var isUnique_ix_takt_logistics_procurement_purchase_group_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseGroupRepository,
-            x => x.PurchaseGroupCode == entity.PurchaseGroupCode);
+            x => x.PlantCode == entity.PlantCode
+                && x.PurchaseGroupCode == entity.PurchaseGroupCode);
         if (!isUnique_ix_takt_logistics_procurement_purchase_group_unique)
         {
-            throw new TaktBusinessException("采购组主数据的PurchaseGroupCode已存在");
+            throw new TaktBusinessException("采购组主数据的PlantCode、PurchaseGroupCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -153,11 +162,12 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
         entity.IsBuiltIn = originalIsBuiltIn;
         var isUnique_ix_takt_logistics_procurement_purchase_group_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseGroupRepository,
-            x => x.PurchaseGroupCode == entity.PurchaseGroupCode,
+            x => x.PlantCode == entity.PlantCode
+                && x.PurchaseGroupCode == entity.PurchaseGroupCode,
             id);
         if (!isUnique_ix_takt_logistics_procurement_purchase_group_unique)
         {
-            throw new TaktBusinessException("采购组主数据的PurchaseGroupCode已存在");
+            throw new TaktBusinessException("采购组主数据的PlantCode、PurchaseGroupCode已存在");
         }
         await _purchaseGroupRepository.UpdateAsync(entity);
         return await GetPurchaseGroupByIdAsync(id) ?? throw new TaktBusinessException("采购组主数据不存在");
@@ -213,7 +223,7 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
-    public async Task<TaktPurchaseGroupDto> UpdateGroupStatusAsync(TaktGroupStatusDto dto)
+    public async Task<TaktPurchaseGroupDto> UpdatePurchaseGroupStatusAsync(TaktPurchaseGroupStatusDto dto)
     {
         var entity = await _purchaseGroupRepository.GetByIdAsync(dto.PurchaseGroupId);
         if (entity == null)
@@ -283,17 +293,18 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
             {
                 var entity = rows[i].Adapt<TaktPurchaseGroup>();
                 entity.IsBuiltIn = 0;
-                var importKey = $"{entity.PurchaseGroupCode}";
+                var importKey = $"{entity.PlantCode}|{entity.PurchaseGroupCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PurchaseGroupCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchaseGroupCode）");
                 }
                 var isUnique_ix_takt_logistics_procurement_purchase_group_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchaseGroupRepository,
-                    x => x.PurchaseGroupCode == entity.PurchaseGroupCode);
+                    x => x.PlantCode == entity.PlantCode
+                        && x.PurchaseGroupCode == entity.PurchaseGroupCode);
                 if (!isUnique_ix_takt_logistics_procurement_purchase_group_unique)
                 {
-                    throw new TaktBusinessException("采购组主数据的PurchaseGroupCode已存在");
+                    throw new TaktBusinessException("采购组主数据的PlantCode、PurchaseGroupCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -323,7 +334,15 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchaseGroupAsync(TaktPurchaseGroupQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchaseGroupQueryDto());
+        var queryDto = query ?? new TaktPurchaseGroupQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchaseGroupExportDto>(),
+                sheetName ?? "采购组主数据数据",
+                fileName ?? "采购组主数据导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchaseGroupRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -352,96 +371,181 @@ public class TaktPurchaseGroupService : TaktServiceBase, ITaktPurchaseGroupServi
     {
         var exp = Expressionable.Create<TaktPurchaseGroup>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(keywords))
                 || (x.PurchaseGroupName != null && x.PurchaseGroupName.Contains(keywords))
                 || (x.PurchaseGroupDescription != null && x.PurchaseGroupDescription.Contains(keywords))
-                || SqlFunc.ToString(x.ResponsibleUserId).Contains(keywords)
                 || (x.ContactPhone != null && x.ContactPhone.Contains(keywords))
                 || (x.ContactEmail != null && x.ContactEmail.Contains(keywords))
-                || SqlFunc.ToString(x.GroupStatus).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseGroupCode))
         {
-            exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(queryDto.PurchaseGroupCode));
+            var purchaseGroupCode = queryDto.PurchaseGroupCode;
+            exp = exp.And(x => x.PurchaseGroupCode != null && x.PurchaseGroupCode.Contains(purchaseGroupCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseGroupName))
         {
-            exp = exp.And(x => x.PurchaseGroupName != null && x.PurchaseGroupName.Contains(queryDto.PurchaseGroupName));
+            var purchaseGroupName = queryDto.PurchaseGroupName;
+            exp = exp.And(x => x.PurchaseGroupName != null && x.PurchaseGroupName.Contains(purchaseGroupName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroupDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseGroupDescription))
         {
-            exp = exp.And(x => x.PurchaseGroupDescription != null && x.PurchaseGroupDescription.Contains(queryDto.PurchaseGroupDescription));
+            var purchaseGroupDescription = queryDto.PurchaseGroupDescription;
+            exp = exp.And(x => x.PurchaseGroupDescription != null && x.PurchaseGroupDescription.Contains(purchaseGroupDescription));
         }
 
         if (queryDto?.ResponsibleUserId.HasValue == true)
         {
-            exp = exp.And(x => x.ResponsibleUserId == queryDto.ResponsibleUserId);
+            var responsibleUserId = queryDto.ResponsibleUserId;
+            exp = exp.And(x => x.ResponsibleUserId == responsibleUserId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
-            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(queryDto.ContactPhone));
+            var contactPhone = queryDto.ContactPhone;
+            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactEmail))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactEmail))
         {
-            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(queryDto.ContactEmail));
-        }
-
-        if (queryDto?.GroupStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.GroupStatus == queryDto.GroupStatus);
+            var contactEmail = queryDto.ContactEmail;
+            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(contactEmail));
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            var isBuiltIn = queryDto.IsBuiltIn;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (queryDto?.GroupStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var groupStatus = queryDto.GroupStatus;
+            exp = exp.And(x => x.GroupStatus == groupStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchaseGroupQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroupCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroupName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroupDescription))
+        {
+            return true;
+        }
+        if (queryDto.ResponsibleUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactEmail))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GroupStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

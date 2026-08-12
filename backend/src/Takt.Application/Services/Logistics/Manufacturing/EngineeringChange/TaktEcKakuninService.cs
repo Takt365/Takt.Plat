@@ -58,7 +58,7 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         return TaktPagedResult<TaktEcKakuninDto>.Create(
             data.Adapt<List<TaktEcKakuninDto>>(),
@@ -138,14 +138,14 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcModel))
         {
@@ -163,6 +163,12 @@ public class TaktEcKakuninService : TaktServiceBase, ITaktEcKakuninService
         {
             exp = exp.And(x => x.IsNewCheck == queryDto.IsNewCheck);
         }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         return exp.ToExpression();
     }
 }

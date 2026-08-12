@@ -662,7 +662,7 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                 || SqlFunc.ToString(x.MaintenanceNotificationId).Contains(keywords)
                 || (x.NotificationCode != null && x.NotificationCode.Contains(keywords))
                 || SqlFunc.ToString(x.EquipmentId).Contains(keywords)
-                || (x.EquipmentCode != null && x.EquipmentCode.Contains(keywords))
+                || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
                 || SqlFunc.ToString(x.MaintenanceCategory).Contains(keywords)
                 || SqlFunc.ToString(x.MaintenanceType).Contains(keywords)
@@ -690,6 +690,7 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
                 || (x.MaintenanceDocuments != null && x.MaintenanceDocuments.Contains(keywords))
                 || (x.AcceptedSummary != null && x.AcceptedSummary.Contains(keywords))
                 || SqlFunc.ToString(x.IsHistoryArchived).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -729,9 +730,9 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
             exp = exp.And(x => x.EquipmentId == queryDto.EquipmentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentCode))
+        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipmentCode != null && x.EquipmentCode.Contains(queryDto.EquipmentCode));
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EquipmentName))
@@ -867,6 +868,12 @@ public class TaktMaintenanceWorkOrderService : TaktServiceBase, ITaktMaintenance
         if (queryDto?.IsHistoryArchived.HasValue == true)
         {
             exp = exp.And(x => x.IsHistoryArchived == queryDto.IsHistoryArchived);
+        }
+
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

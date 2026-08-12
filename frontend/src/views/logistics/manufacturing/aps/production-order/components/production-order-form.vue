@@ -27,312 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.productionOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderType')"
-                name="prodOrderType"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodOrderType"
-                  dict-type="logistics_prod_order_type"
-                  :placeholder="pi.ph('prodOrderType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.prodOrderCode"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.productionOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.productionOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderQty')"
-                name="prodOrderQty"
-              >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="pi.ph('prodOrderQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('producedQty')"
-                name="producedQty"
-              >
-                <a-input-number
-                  v-model:value="formState.producedQty"
-                  :placeholder="pi.ph('producedQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('unitOfMeasure')"
-                name="unitOfMeasure"
-              >
-                <TaktSelect
-                  v-model:value="formState.unitOfMeasure"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('unitOfMeasure')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('actualStartDate')"
-                name="actualStartDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualStartDate"
-                  :placeholder="pi.ph('actualStartDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('actualEndDate')"
-                name="actualEndDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualEndDate"
-                  :placeholder="pi.ph('actualEndDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('priority')"
-                name="priority"
-              >
-                <TaktSelect
-                  v-model:value="formState.priority"
-                  dict-type="sys_priority_level_category"
-                  :placeholder="pi.ph('priority')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('workCenter')"
-                name="workCenter"
-              >
-                <TaktSelect
-                  v-model:value="formState.workCenter"
-                  api-url="TaktWorkCenters/options"
-                  :placeholder="pi.ph('workCenter')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('prodBatch')"
-                name="prodBatch"
-              >
-                <a-input
-                  v-model:value="formState.prodBatch"
-                  :placeholder="pi.ph('prodBatch')"
-                  show-count
-                  :maxlength="80"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('serialNo')"
-                name="serialNo"
-              >
-                <a-input
-                  v-model:value="formState.serialNo"
-                  :placeholder="pi.ph('serialNo')"
-                  show-count
-                  :maxlength="80"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('routingCode')"
-                name="routingCode"
-              >
-                <a-input
-                  v-model:value="formState.routingCode"
-                  :placeholder="pi.ph('routingCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.productionOrderId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plannedOrderId')"
-                name="plannedOrderId"
-              >
-                <TaktSelect
-                  v-model:value="formState.plannedOrderId"
-                  api-url="TaktPlannedOrders/options"
-                  :placeholder="pi.ph('plannedOrderId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('apsOrderId')"
-                name="apsOrderId"
-              >
-                <TaktSelect
-                  v-model:value="formState.apsOrderId"
-                  api-url="TaktApsOrders/options"
-                  :placeholder="pi.ph('apsOrderId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plannedStartTime')"
-                name="plannedStartTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedStartTime"
-                  :placeholder="pi.ph('plannedStartTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plannedEndTime')"
-                name="plannedEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.plannedEndTime"
-                  :placeholder="pi.ph('plannedEndTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('orderStatus')"
-                name="orderStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.orderStatus"
-                  dict-type="logistics_prod_status"
-                  :placeholder="pi.ph('orderStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -420,15 +126,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

@@ -518,7 +518,7 @@ const tableColumnList = ref<TableColumnItem[]>([])
 const dictTypeOptions = ref<TaktSelectOption[]>([])
 
 /** 审计字段 / 基类通用字段 / 实例字段：在字段网格中隐藏 */
-/** 可选显隐的审计/通用列（在字段网格中隐藏）；ext_field_json、remark 必须显示，不在此集合中 */
+/** 可选显隐的审计/通用列（在字段网格中隐藏）；ext_field、remark 必须显示，不在此集合中 */
 const AUDIT_DB_COLUMNS = new Set([
   'id',
   'tenant_code',

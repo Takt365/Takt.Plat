@@ -221,11 +221,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('assyDebitNoteNo')">
-      <a-form-item :label="t('entity.qualityissueassyrework.assydebitnoteno')">
+      <div v-show="isFieldVisible('assyDebitNoteCode')">
+      <a-form-item :label="t('entity.qualityissueassyrework.assydebitnoteCode')">
         <a-textarea
-          v-model:value="advancedQueryForm.assyDebitNoteNo"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityissueassyrework.assydebitnoteno') })"
+          v-model:value="advancedQueryForm.assyDebitNoteCode"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityissueassyrework.assydebitnoteCode') })"
           :rows="2"
           allow-clear
         />
@@ -427,7 +427,7 @@ const advancedQueryForm = ref({
   assyReworkNote: '',
   assyScrapCost: undefined as number | undefined,
   assyCustomerName: '',
-  assyDebitNoteNo: '',
+  assyDebitNoteCode: '',
   assyOtherExpenses2: undefined as number | undefined,
   assyNote: '',
   assyRecorder: '',
@@ -452,15 +452,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'assyReworkNote', label: t('entity.qualityissueassyrework.assyreworknote') },
   { key: 'assyScrapCost', label: t('entity.qualityissueassyrework.assyscrapcost') },
   { key: 'assyCustomerName', label: t('entity.qualityissueassyrework.assycustomername') },
-  { key: 'assyDebitNoteNo', label: t('entity.qualityissueassyrework.assydebitnoteno') },
+  { key: 'assyDebitNoteCode', label: t('entity.qualityissueassyrework.assydebitnoteCode') },
   { key: 'assyOtherExpenses2', label: t('entity.qualityissueassyrework.assyotherexpenses2') },
   { key: 'assyNote', label: t('entity.qualityissueassyrework.assynote') },
   { key: 'assyRecorder', label: t('entity.qualityissueassyrework.assyrecorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -494,7 +493,7 @@ function handleAdvancedQueryReset() {
   assyReworkNote: '',
   assyScrapCost: undefined as number | undefined,
   assyCustomerName: '',
-  assyDebitNoteNo: '',
+  assyDebitNoteCode: '',
   assyOtherExpenses2: undefined as number | undefined,
   assyNote: '',
   assyRecorder: '',
@@ -643,10 +642,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:issue:delete',
         onClick: (record: QualityIssueAssyRework) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -736,7 +733,7 @@ function buildListQuery(overrides?: Partial<QualityIssueAssyReworkQuery>): Quali
     query.assyScrapCost = form.assyScrapCost
   }
   assignTrimmed('assyCustomerName', form.assyCustomerName)
-  assignTrimmed('assyDebitNoteNo', form.assyDebitNoteNo)
+  assignTrimmed('assyDebitNoteCode', form.assyDebitNoteCode)
   if (form.assyOtherExpenses2 !== undefined && form.assyOtherExpenses2 !== null) {
     query.assyOtherExpenses2 = form.assyOtherExpenses2
   }

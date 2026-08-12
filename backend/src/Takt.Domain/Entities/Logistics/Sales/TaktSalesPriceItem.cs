@@ -83,8 +83,8 @@ public class TaktSalesPriceItem : TaktCompanyEntityBase
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [SugarColumn(ColumnName = "scale_currency", ColumnDescription = "等级货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
-    public string? ScaleCurrency { get; set; }
+    [SugarColumn(ColumnName = "scale_currency_code", ColumnDescription = "等级货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = true)]
+    public string? ScaleCurrencyCode { get; set; }
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -118,8 +118,8 @@ public class TaktSalesPriceItem : TaktCompanyEntityBase
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    [SugarColumn(ColumnName = "condition_currency", ColumnDescription = "条件货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
-    public string ConditionCurrency { get; set; } = "CNY";
+    [SugarColumn(ColumnName = "condition_currency_code", ColumnDescription = "条件货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
+    public string ConditionCurrencyCode { get; set; } = "CNY";
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）

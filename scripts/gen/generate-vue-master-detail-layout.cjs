@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：scripts
 // 文件名称：generate-vue-master-detail-layout.cjs
-// 功能描述：主子表 Vue 布局：列表 TaktMasterDetailTableLr + 弹窗上主下从 TaktEditableTable
+// 功能描述：主子表 Vue 布局：列表 TaktMasterDetailTableLr + 弹窗上主下从 TaktEditableTable；查询栏关键字=栏宽−查询/重置（TaktQueryBar flex）
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // ========================================
 
@@ -409,7 +409,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -420,8 +420,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 ` : '';
@@ -1565,7 +1565,7 @@ ${defaults}
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         ${child.masterFkField}: masterId,
       }
 ${parts.submitMapExtra}
@@ -1576,7 +1576,7 @@ ${parts.submitMapExtra}
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       ${child.masterFkField}: masterId,
     })),`;
   }).join('\n');

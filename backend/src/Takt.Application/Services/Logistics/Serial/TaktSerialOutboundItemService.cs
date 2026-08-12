@@ -101,12 +101,12 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         EnsureThreeLayerContext();
         var list = await _serialOutboundItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.OutboundNo ?? string.Empty,
+            x => x.OutboundCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.OutboundNo ?? e.Id.ToString(),
+            DictLabel = e.OutboundCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -120,12 +120,12 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         var entity = dto.Adapt<TaktSerialOutboundItem>();
         entity.IsObsolete = 0;
         await StampSerialOutboundItemSerialOutboundAsync(entity, dto);
-        var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique = await _uniqueValidator.IsUniqueAsync(
             _serialOutboundItemRepository,
-            x => x.OutboundSerialNo == entity.OutboundSerialNo);
-        if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
+            x => x.OutboundSerialCode == entity.OutboundSerialCode);
+        if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique)
         {
-            throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
+            throw new TaktBusinessException("序列号出库明细的OutboundSerialCode已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -154,13 +154,13 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         }
         dto.Adapt(entity);
         await StampSerialOutboundItemSerialOutboundAsync(entity, dto);
-        var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique = await _uniqueValidator.IsUniqueAsync(
             _serialOutboundItemRepository,
-            x => x.OutboundSerialNo == entity.OutboundSerialNo,
+            x => x.OutboundSerialCode == entity.OutboundSerialCode,
             id);
-        if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
+        if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique)
         {
-            throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
+            throw new TaktBusinessException("序列号出库明细的OutboundSerialCode已存在");
         }
         await _serialOutboundItemRepository.UpdateAsync(entity);
         return await GetSerialOutboundItemByIdAsync(id) ?? throw new TaktBusinessException("序列号出库明细不存在");
@@ -267,17 +267,17 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
                 var entity = rows[i].Adapt<TaktSerialOutboundItem>();
                 var importDto = rows[i].Adapt<TaktSerialOutboundItemCreateDto>();
                 await StampSerialOutboundItemSerialOutboundAsync(entity, importDto);
-                var importKey = $"{entity.OutboundSerialNo}";
+                var importKey = $"{entity.OutboundSerialCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（OutboundSerialNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（OutboundSerialCode）");
                 }
-                var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _serialOutboundItemRepository,
-                    x => x.OutboundSerialNo == entity.OutboundSerialNo);
-                if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique)
+                    x => x.OutboundSerialCode == entity.OutboundSerialCode);
+                if (!isUnique_ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique)
                 {
-                    throw new TaktBusinessException("序列号出库明细的OutboundSerialNo已存在");
+                    throw new TaktBusinessException("序列号出库明细的OutboundSerialCode已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -374,12 +374,13 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.OutboundId).Contains(keywords)
-                || (x.OutboundNo != null && x.OutboundNo.Contains(keywords))
+                || (x.OutboundCode != null && x.OutboundCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.OutboundSerialNo != null && x.OutboundSerialNo.Contains(keywords))
+                || (x.OutboundSerialCode != null && x.OutboundSerialCode.Contains(keywords))
                 || SqlFunc.ToString(x.ReferenceInboundId).Contains(keywords)
-                || (x.ReferenceInboundNo != null && x.ReferenceInboundNo.Contains(keywords))
+                || (x.ReferenceInboundCode != null && x.ReferenceInboundCode.Contains(keywords))
                 || SqlFunc.ToString(x.ReferenceInboundLineNumber).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -391,9 +392,9 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             exp = exp.And(x => x.OutboundId == queryDto.OutboundId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.OutboundCode))
         {
-            exp = exp.And(x => x.OutboundNo != null && x.OutboundNo.Contains(queryDto.OutboundNo));
+            exp = exp.And(x => x.OutboundCode != null && x.OutboundCode.Contains(queryDto.OutboundCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -401,9 +402,9 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.OutboundSerialCode))
         {
-            exp = exp.And(x => x.OutboundSerialNo != null && x.OutboundSerialNo.Contains(queryDto.OutboundSerialNo));
+            exp = exp.And(x => x.OutboundSerialCode != null && x.OutboundSerialCode.Contains(queryDto.OutboundSerialCode));
         }
 
         if (queryDto?.ReferenceInboundId.HasValue == true)
@@ -411,14 +412,19 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
             exp = exp.And(x => x.ReferenceInboundId == queryDto.ReferenceInboundId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReferenceInboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.ReferenceInboundCode))
         {
-            exp = exp.And(x => x.ReferenceInboundNo != null && x.ReferenceInboundNo.Contains(queryDto.ReferenceInboundNo));
+            exp = exp.And(x => x.ReferenceInboundCode != null && x.ReferenceInboundCode.Contains(queryDto.ReferenceInboundCode));
         }
 
         if (queryDto?.ReferenceInboundLineNumber.HasValue == true)
         {
             exp = exp.And(x => x.ReferenceInboundLineNumber == queryDto.ReferenceInboundLineNumber);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -440,6 +446,12 @@ public class TaktSerialOutboundItemService : TaktServiceBase, ITaktSerialOutboun
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

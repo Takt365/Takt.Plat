@@ -25,25 +25,20 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarTable("takt_logistics_serial_summary", "序列号汇总表")]
 [SugarIndex("ix_serial_summary_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_summary_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_summary_inbound_serial_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(InboundSerialNo), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_serial_summary_product_inbound_serial", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductInboundSerialNo), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_summary_inbound_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundNo), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_summary_outbound_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundNo), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_serial_summary_inbound_serial_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(InboundSerialCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_summary_product_inbound_serial", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductInboundSerialCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_serial_summary_inbound_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundCode), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_serial_summary_outbound_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_summary_material", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_summary_inbound_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundDate), OrderByType.Asc, false)]
 public class TaktSerialSummary : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号
     /// </summary>
-    [SugarColumn(ColumnName = "inbound_no", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string InboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "inbound_code", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -60,8 +55,8 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     /// <summary>
     /// 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "inbound_serial_no", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string InboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "inbound_serial_code", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string InboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库数量
@@ -72,20 +67,20 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     /// <summary>
     /// 产品入库序列号（原始扫描号码）
     /// </summary>
-    [SugarColumn(ColumnName = "product_inbound_serial_no", ColumnDescription = "产品入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string ProductInboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "product_inbound_serial_code", ColumnDescription = "产品入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string ProductInboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出库单号（未出库时为空）
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string OutboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "outbound_code", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "")]
+    public string OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发货单号（未出库时为空）
     /// </summary>
-    [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "shipping_invoice_code", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装车日期（未装车时为空）
@@ -114,8 +109,8 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     /// <summary>
     /// 出库序列号（计算后的业务序号；未出库时为空）
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_serial_no", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
-    public string OutboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "outbound_serial_code", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
+    public string OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出库数量
@@ -126,6 +121,6 @@ public class TaktSerialSummary : TaktCompanyEntityBase
     /// <summary>
     /// 产品出库序列号（原始扫描号码；未出库时为空）
     /// </summary>
-    [SugarColumn(ColumnName = "product_outbound_serial_no", ColumnDescription = "产品出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
-    public string ProductOutboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "product_outbound_serial_code", ColumnDescription = "产品出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
+    public string ProductOutboundSerialCode { get; set; } = string.Empty;
 }

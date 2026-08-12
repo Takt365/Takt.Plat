@@ -355,7 +355,6 @@ public class TaktExchangeRateService : TaktServiceBase, ITaktExchangeRateService
         {
             exp = exp.And(x => x.ExchangeRateStatus == queryDto.ExchangeRateStatus);
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -395,6 +394,12 @@ public class TaktExchangeRateService : TaktServiceBase, ITaktExchangeRateService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

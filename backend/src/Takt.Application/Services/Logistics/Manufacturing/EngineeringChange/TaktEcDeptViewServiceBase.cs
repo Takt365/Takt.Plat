@@ -76,7 +76,7 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var detailIds = details.Select(x => x.Id).ToList();
         var execMap = await _ecExecPersistence.LoadMapByDetailIdsAsync(detailIds, DeptCode);
@@ -170,7 +170,7 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
                 var detail = await ResolveDetailForImportAsync(row);
                 if (detail == null)
                 {
-                    throw new TaktBusinessException("未找到设变明细，请填写 EcDetailId 或 EcNo+LineNumber");
+                    throw new TaktBusinessException("未找到设变明细，请填写 EcDetailId 或 EcCode+LineNumber");
                 }
                 if (!importSeenKeys.Add(detail.Id))
                 {
@@ -250,12 +250,12 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
             }
             return null;
         }
-        if (string.IsNullOrWhiteSpace(row.EcNo) || !row.LineNumber.HasValue)
+        if (string.IsNullOrWhiteSpace(row.EcCode) || !row.LineNumber.HasValue)
         {
             return null;
         }
         return await _ecDetailRepository.FirstAsync(x =>
-            x.EcNo == row.EcNo
+            x.EcCode == row.EcCode
             && x.LineNumber == row.LineNumber.Value);
     }
 
@@ -271,14 +271,14 @@ public abstract class TaktEcDeptViewServiceBase : TaktServiceBase
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNo))
+        if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto.EcModel))
         {

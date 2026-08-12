@@ -112,13 +112,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('scaleCurrency')"
-                name="scaleCurrency"
+                :label="pi.label('scaleCurrencyCode')"
+                name="scaleCurrencyCode"
               >
                 <TaktSelect
-                  v-model:value="formState.scaleCurrency"
+                  v-model:value="formState.scaleCurrencyCode"
                   dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('scaleCurrency')"
+                  :placeholder="pi.ph('scaleCurrencyCode')"
+                  :disabled="!!formData?.purchasePriceItemId"
                 />
               </a-form-item>
             </a-col>
@@ -182,13 +183,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('conditionCurrency')"
-                name="conditionCurrency"
+                :label="pi.label('taxAmount')"
+                name="taxAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.taxAmount"
+                  :placeholder="pi.ph('taxAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('conditionCurrencyCode')"
+                name="conditionCurrencyCode"
               >
                 <TaktSelect
-                  v-model:value="formState.conditionCurrency"
+                  v-model:value="formState.conditionCurrencyCode"
                   dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('conditionCurrency')"
+                  :placeholder="pi.ph('conditionCurrencyCode')"
+                  :disabled="!!formData?.purchasePriceItemId"
                 />
               </a-form-item>
             </a-col>
@@ -264,6 +278,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('scaleQuantities')"
@@ -278,16 +302,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('scaleValues')"
@@ -333,9 +347,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrency","calculationType","price","untaxedPrice","taxIncludedPrice","conditionCurrency","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","scaleQuantities","scaleValues"]
-
-
+const formFields = ["purchasePriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrencyCode","calculationType","price","untaxedPrice","taxIncludedPrice","taxAmount","conditionCurrencyCode","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","scaleQuantities","scaleValues"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -361,9 +373,9 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   priceType: "PB00",
   scaleType: "A",
   scaleBasis: "C",
-  scaleCurrency: "CNY",
+  scaleCurrencyCode: "CNY",
   calculationType: "A",
-  conditionCurrency: "CNY",
+  conditionCurrencyCode: "CNY",
   priceUnit: 1000
 }
 
@@ -496,10 +508,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  conditionCurrency: [
+  taxAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('taxAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  conditionCurrencyCode: [
     {
       required: true,
-      message: pi.ph('conditionCurrency'),
+      message: pi.ph('conditionCurrencyCode'),
       trigger: 'change'
     }
   ],
@@ -609,6 +634,10 @@ function getValues(): Record<string, any> {
   if ('taxIncludedPrice' in payload) {
     const rawtaxIncludedPrice = payload.taxIncludedPrice
     payload.taxIncludedPrice = typeof rawtaxIncludedPrice === 'number' ? rawtaxIncludedPrice : Number(rawtaxIncludedPrice)
+  }
+  if ('taxAmount' in payload) {
+    const rawtaxAmount = payload.taxAmount
+    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
   }
   if ('priceUnit' in payload) {
     const rawpriceUnit = payload.priceUnit

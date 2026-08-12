@@ -120,6 +120,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
     public async Task<TaktPurchaseRequestDto> CreatePurchaseRequestAsync(TaktPurchaseRequestCreateDto dto)
     {
         var entity = dto.Adapt<TaktPurchaseRequest>();
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseRequestRepository,
             x => x.PlantCode == entity.PlantCode
@@ -148,6 +149,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             throw new TaktBusinessException("采购申请不存在");
         }
         dto.Adapt(entity);
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_procurement_purchase_request_pr_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseRequestRepository,
             x => x.PlantCode == entity.PlantCode
@@ -254,6 +256,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
             try
             {
                 var entity = rows[i].Adapt<TaktPurchaseRequest>();
+                entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
                 var importKey = $"{entity.PlantCode}|{entity.PurchaseRequestCode}|{entity.RequestDate}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -508,6 +511,7 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
                 || (x.RequestReason != null && x.RequestReason.Contains(keywords))
                 || SqlFunc.ToString(x.RequestStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.RequestDate).Contains(keywords)
@@ -634,6 +638,11 @@ public class TaktPurchaseRequestService : TaktServiceBase, ITaktPurchaseRequestS
         if (queryDto?.ConvertedStatus.HasValue == true)
         {
             exp = exp.And(x => x.ConvertedStatus == queryDto.ConvertedStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoryDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceHistory 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceHistory 生成，请按需审阅）
 // 
@@ -65,7 +65,7 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -133,6 +133,11 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
+
+    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -173,11 +178,6 @@ public class TaktMaintenanceHistoryDto : TaktCompanyDtoBase
     public DateTime ArchivedAt { get; set; }
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
-
-    /// <summary>
     /// 设备（主表）
     /// （主表：TaktEquipment）
     /// </summary>
@@ -212,6 +212,16 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 来源维护工单ID（一工单一条履历，序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -231,7 +241,7 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -314,6 +324,11 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     public int? MaintenanceResult { get; set; }
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
+
+    /// <summary>
     /// 下次维护日期（范围查询-开始）
     /// </summary>
     public DateTime? NextMaintenanceDateStart { get; set; }
@@ -369,11 +384,6 @@ public class TaktMaintenanceHistoryQueryDto : TaktPagedQuery
     public DateTime? ArchivedAtEnd { get; set; }
 
     /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int? MaintenanceStatus { get; set; }
-
-    /// <summary>
     /// 创建时间（范围查询-开始）
     /// </summary>
     public DateTime? CreatedAtStart { get; set; }
@@ -414,10 +424,15 @@ public class TaktMaintenanceHistoryCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 来源维护工单ID（一工单一条履历，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -440,7 +455,7 @@ public class TaktMaintenanceHistoryCreateDto
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
     [Required(ErrorMessage = "设备编码（冗余字段,便于查询）不能为空")]
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -508,6 +523,11 @@ public class TaktMaintenanceHistoryCreateDto
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
+
+    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -546,11 +566,6 @@ public class TaktMaintenanceHistoryCreateDto
     /// 归档时间
     /// </summary>
     public DateTime ArchivedAt { get; set; }
-
-    /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -628,6 +643,16 @@ public class TaktMaintenanceHistoryTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 来源维护工单ID（一工单一条履历，序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -647,7 +672,7 @@ public class TaktMaintenanceHistoryTemplateDto
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -715,6 +740,11 @@ public class TaktMaintenanceHistoryTemplateDto
     public int? MaintenanceResult { get; set; }
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
+
+    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -753,11 +783,6 @@ public class TaktMaintenanceHistoryTemplateDto
     /// 归档时间
     /// </summary>
     public DateTime? ArchivedAt { get; set; }
-
-    /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int? MaintenanceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -787,10 +812,15 @@ public class TaktMaintenanceHistoryImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 来源维护工单ID（一工单一条履历，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -811,7 +841,7 @@ public class TaktMaintenanceHistoryImportDto
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -879,6 +909,11 @@ public class TaktMaintenanceHistoryImportDto
     public int? MaintenanceResult { get; set; }
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int? MaintenanceStatus { get; set; }
+
+    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -917,11 +952,6 @@ public class TaktMaintenanceHistoryImportDto
     /// 归档时间
     /// </summary>
     public DateTime? ArchivedAt { get; set; }
-
-    /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int? MaintenanceStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -976,7 +1006,7 @@ public class TaktMaintenanceHistoryExportDto
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）
@@ -1044,6 +1074,11 @@ public class TaktMaintenanceHistoryExportDto
     public int MaintenanceResult { get; set; } = 0;
 
     /// <summary>
+    /// 履历状态（固定为 2=已完成，归档写入）
+    /// </summary>
+    public int MaintenanceStatus { get; set; } = 0;
+
+    /// <summary>
     /// 下次维护日期
     /// </summary>
     public DateTime? NextMaintenanceDate { get; set; }
@@ -1082,11 +1117,6 @@ public class TaktMaintenanceHistoryExportDto
     /// 归档时间
     /// </summary>
     public DateTime ArchivedAt { get; set; }
-
-    /// <summary>
-    /// 履历状态（固定为 2=已完成，归档写入）
-    /// </summary>
-    public int MaintenanceStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

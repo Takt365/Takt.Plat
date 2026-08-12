@@ -27,395 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialRequirementsPlanningId')"
-                name="materialRequirementsPlanningId"
-              >
-                <a-input
-                  v-model:value="formState.materialRequirementsPlanningId"
-                  :placeholder="pi.ph('materialRequirementsPlanningId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialRequirementsPlanningCode')"
-                name="materialRequirementsPlanningCode"
-              >
-                <a-input
-                  v-model:value="formState.materialRequirementsPlanningCode"
-                  :placeholder="pi.ph('materialRequirementsPlanningCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.apsScheduleId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleCode')"
-                name="scheduleCode"
-              >
-                <a-input
-                  v-model:value="formState.scheduleCode"
-                  :placeholder="pi.ph('scheduleCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleName')"
-                name="scheduleName"
-              >
-                <a-input
-                  v-model:value="formState.scheduleName"
-                  :placeholder="pi.ph('scheduleName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleType')"
-                name="scheduleType"
-              >
-                <a-input-number
-                  v-model:value="formState.scheduleType"
-                  :placeholder="pi.ph('scheduleType')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planDate')"
-                name="planDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.planDate"
-                  :placeholder="pi.ph('planDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planStartTime')"
-                name="planStartTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.planStartTime"
-                  :placeholder="pi.ph('planStartTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planEndTime')"
-                name="planEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.planEndTime"
-                  :placeholder="pi.ph('planEndTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planCycle')"
-                name="planCycle"
-              >
-                <a-input-number
-                  v-model:value="formState.planCycle"
-                  :placeholder="pi.ph('planCycle')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('workshopCode')"
-                name="workshopCode"
-              >
-                <a-input
-                  v-model:value="formState.workshopCode"
-                  :placeholder="pi.ph('workshopCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('workshopName')"
-                name="workshopName"
-              >
-                <a-input
-                  v-model:value="formState.workshopName"
-                  :placeholder="pi.ph('workshopName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionLineCode')"
-                name="productionLineCode"
-              >
-                <a-input
-                  v-model:value="formState.productionLineCode"
-                  :placeholder="pi.ph('productionLineCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.apsScheduleId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionLineName')"
-                name="productionLineName"
-              >
-                <a-input
-                  v-model:value="formState.productionLineName"
-                  :placeholder="pi.ph('productionLineName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleStrategy')"
-                name="scheduleStrategy"
-              >
-                <a-input-number
-                  v-model:value="formState.scheduleStrategy"
-                  :placeholder="pi.ph('scheduleStrategy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleAlgorithm')"
-                name="scheduleAlgorithm"
-              >
-                <a-input-number
-                  v-model:value="formState.scheduleAlgorithm"
-                  :placeholder="pi.ph('scheduleAlgorithm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('optimizationObjective')"
-                name="optimizationObjective"
-              >
-                <a-input-number
-                  v-model:value="formState.optimizationObjective"
-                  :placeholder="pi.ph('optimizationObjective')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scheduleStatus')"
-                name="scheduleStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.scheduleStatus"
-                  :placeholder="pi.ph('scheduleStatus')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannerId')"
-                name="plannerId"
-              >
-                <TaktSelect
-                  v-model:value="formState.plannerId"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('plannerId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannerName')"
-                name="plannerName"
-              >
-                <a-input
-                  v-model:value="formState.plannerName"
-                  :placeholder="pi.ph('plannerName')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('publishTime')"
-                name="publishTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.publishTime"
-                  :placeholder="pi.ph('publishTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('publishUserId')"
-                name="publishUserId"
-              >
-                <TaktSelect
-                  v-model:value="formState.publishUserId"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('publishUserId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('publishUserName')"
-                name="publishUserName"
-              >
-                <a-input
-                  v-model:value="formState.publishUserName"
-                  :placeholder="pi.ph('publishUserName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('scheduleDescription')"
-                name="scheduleDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.scheduleDescription"
-                  :placeholder="pi.ph('scheduleDescription')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -522,7 +145,7 @@
       <template #cell-productCode="{ record }">
         <TaktSelect
           v-model:value="record.productCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="apsScheduleItemPi.queryPh('productCode', 'select')"
@@ -595,17 +218,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","materialRequirementsPlanningId","materialRequirementsPlanningCode","plantCode","scheduleCode","scheduleName","scheduleType","planDate","planStartTime","planEndTime","planCycle","workshopCode","workshopName","productionLineCode","productionLineName","scheduleStrategy","scheduleAlgorithm","optimizationObjective","scheduleStatus","plannerId","plannerName","publishTime","publishUserId","publishUserName","scheduleDescription","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","materialRequirementsPlanningId","materialRequirementsPlanningCode","plantCode","scheduleCode","scheduleName","scheduleType","planDate","planStartTime","planEndTime","planCycle","workshopCode","workshopName","productionLineCode","productionLineName","scheduleStrategy","scheduleAlgorithm","optimizationObjective","scheduleStatus","plannerId","plannerName","publishTime","publishUserId","publishUserName","scheduleDescription","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -684,10 +310,12 @@ const apsScheduleItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'workCenterName',
-    title: apsScheduleItemPi.label('workCenterName'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: apsScheduleItemPi.ph('workCenterName'),
+    key: 'workCenterDescription',
+    title: apsScheduleItemPi.label('workCenterDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: apsScheduleItemPi.ph('workCenterDescription'),
+    width: 180,
   },
   {
     key: 'processCode',
@@ -768,8 +396,7 @@ const apsScheduleItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     key: 'isObsolete',
     title: apsScheduleItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ApsScheduleCreate & { apsScheduleId?: string }> | null | undefined) {
@@ -787,7 +414,7 @@ function createDefaultApsScheduleItemRow(): Record<string, unknown> {
     productCode: '',
     productName: '',
     workCenterCode: '',
-    workCenterName: '',
+    workCenterDescription: '',
     processCode: '',
     processName: '',
     processSequence: 0,
@@ -816,7 +443,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         apsScheduleId: masterId,
       }
       if (isUpdate && isPersistedApsScheduleItemRow(row)) {
@@ -849,7 +476,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 apsScheduleId 才视为编辑） */
 watch(

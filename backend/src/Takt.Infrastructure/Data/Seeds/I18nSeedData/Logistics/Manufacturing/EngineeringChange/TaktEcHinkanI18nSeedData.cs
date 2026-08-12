@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcHinkanI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcHinkan 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcHinkanI18nSeedData : ITaktSeedDataCoordinator
             // entity.echinkan.ecndetailid
             new TranslationSeedItem("entity.echinkan.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcHinkan 导航）"),
 
-            // entity.echinkan.ecno
-            new TranslationSeedItem("entity.echinkan.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.echinkan.ecno
-            new TranslationSeedItem("entity.echinkan.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.echinkan.ecno
-            new TranslationSeedItem("entity.echinkan.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.echinkan.ecno
-            new TranslationSeedItem("entity.echinkan.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.echinkan.eccode
+            new TranslationSeedItem("entity.echinkan.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.echinkan.eccode
+            new TranslationSeedItem("entity.echinkan.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.echinkan.eccode
+            new TranslationSeedItem("entity.echinkan.eccode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.echinkan.eccode
+            new TranslationSeedItem("entity.echinkan.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.echinkan.linenumber
             new TranslationSeedItem("entity.echinkan.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -171,14 +171,14 @@ public class TaktEcHinkanI18nSeedData : ITaktSeedDataCoordinator
             // entity.echinkan.inspectionbatch
             new TranslationSeedItem("entity.echinkan.inspectionbatch", "zh-HK", "检验批次_hk", "检验批次"),
 
-            // entity.echinkan.samplingno
-            new TranslationSeedItem("entity.echinkan.samplingno", "en-US", "抽样号码_us", "抽样号码"),
-            // entity.echinkan.samplingno
-            new TranslationSeedItem("entity.echinkan.samplingno", "ja-JP", "抽样号码_jp", "抽样号码"),
-            // entity.echinkan.samplingno
-            new TranslationSeedItem("entity.echinkan.samplingno", "zh-CN", "抽样号码", "抽样号码"),
-            // entity.echinkan.samplingno
-            new TranslationSeedItem("entity.echinkan.samplingno", "zh-HK", "抽样号码_hk", "抽样号码"),
+            // entity.echinkan.samplingcode
+            new TranslationSeedItem("entity.echinkan.samplingcode", "en-US", "抽样号码_us", "抽样号码"),
+            // entity.echinkan.samplingcode
+            new TranslationSeedItem("entity.echinkan.samplingcode", "ja-JP", "抽样号码_jp", "抽样号码"),
+            // entity.echinkan.samplingcode
+            new TranslationSeedItem("entity.echinkan.samplingcode", "zh-CN", "抽样号码", "抽样号码"),
+            // entity.echinkan.samplingcode
+            new TranslationSeedItem("entity.echinkan.samplingcode", "zh-HK", "抽样号码_hk", "抽样号码"),
 
             // entity.echinkan.isobsolete
             new TranslationSeedItem("entity.echinkan.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Talent
 // 文件名称：TaktTalentOfferI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktTalentOffer 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktTalentOfferI18nSeedData : ITaktSeedDataCoordinator
             // entity.talentoffer.jobpostingid
             new TranslationSeedItem("entity.talentoffer.jobpostingid", "zh-HK", "职位发布ID_hk", "职位发布（选项 TaktTalentJobPostings/options；DictValue=Id）"),
 
-            // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "en-US", "录用编码_us", "录用编码（租户+公司内业务编码）"),
-            // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "ja-JP", "录用编码_jp", "录用编码（租户+公司内业务编码）"),
-            // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "zh-CN", "录用编码", "录用编码（租户+公司内业务编码）"),
-            // entity.talentoffer.offerno
-            new TranslationSeedItem("entity.talentoffer.offerno", "zh-HK", "录用编码_hk", "录用编码（租户+公司内业务编码）"),
+            // entity.talentoffer.offercode
+            new TranslationSeedItem("entity.talentoffer.offercode", "en-US", "录用编码_us", "录用编码（租户+公司内业务编码）"),
+            // entity.talentoffer.offercode
+            new TranslationSeedItem("entity.talentoffer.offercode", "ja-JP", "录用编码_jp", "录用编码（租户+公司内业务编码）"),
+            // entity.talentoffer.offercode
+            new TranslationSeedItem("entity.talentoffer.offercode", "zh-CN", "录用编码", "录用编码（租户+公司内业务编码）"),
+            // entity.talentoffer.offercode
+            new TranslationSeedItem("entity.talentoffer.offercode", "zh-HK", "录用编码_hk", "录用编码（租户+公司内业务编码）"),
 
             // entity.talentoffer.hiredate
             new TranslationSeedItem("entity.talentoffer.hiredate", "en-US", "录用日期_us", "录用日期（确认录用/发 offer）"),

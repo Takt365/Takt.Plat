@@ -432,9 +432,10 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.CostCenterLevel).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.CostCenterStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
@@ -488,9 +489,9 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
             exp = exp.And(x => x.CostCenterLevel == queryDto.CostCenterLevel);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -501,6 +502,11 @@ public class TaktCostCenterService : TaktServiceBase, ITaktCostCenterService
         if (queryDto?.CostCenterStatus.HasValue == true)
         {
             exp = exp.And(x => x.CostCenterStatus == queryDto.CostCenterStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

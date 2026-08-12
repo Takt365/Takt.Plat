@@ -57,7 +57,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","productCode","sequenceNo","productDescription","bomLevel","bomItemNo","componentCode","componentDescription","componentQuantity","batchIndicator","productionRelated","purchaseType","specialProcurementType","profitCenterCode","movingAveragePrice","movingPriceUnit","movingPriceCurrency","purchaseOrganization","purchaseGroup","supplierCode","netPurchasePrice","purchasePriceUnit","purchaseCurrency","costingDate"]
+const formFields = ["plantCode","productCode","sequenceCode","productDescription","bomLevel","bomItemCode","componentCode","componentDescription","componentQuantity","batchIndicator","productionRelated","purchaseType","specialProcurementType","profitCenterCode","movingAveragePrice","movingPriceUnit","movingPriceCurrencyCode","purchaseOrganization","purchaseGroup","supplierCode","netPurchasePrice","purchasePriceUnit","purchaseCurrencyCode","costingDate"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -77,8 +77,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  movingPriceCurrency: "CNY",
-  purchaseCurrency: "CNY"
+  movingPriceCurrencyCode: "CNY",
+  purchaseCurrencyCode: "CNY"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -132,10 +132,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  sequenceNo: [
+  sequenceCode: [
     {
       required: true,
-      message: pi.ph('sequenceNo'),
+      message: pi.ph('sequenceCode'),
       trigger: 'blur'
     }
   ],
@@ -153,10 +153,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  bomItemNo: [
+  bomItemCode: [
     {
       required: true,
-      message: pi.ph('bomItemNo'),
+      message: pi.ph('bomItemCode'),
       trigger: 'blur'
     }
   ],
@@ -227,10 +227,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  movingPriceCurrency: [
+  movingPriceCurrencyCode: [
     {
       required: true,
-      message: pi.ph('movingPriceCurrency'),
+      message: pi.ph('movingPriceCurrencyCode'),
       trigger: 'change'
     }
   ],
@@ -281,10 +281,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  purchaseCurrency: [
+  purchaseCurrencyCode: [
     {
       required: true,
-      message: pi.ph('purchaseCurrency'),
+      message: pi.ph('purchaseCurrencyCode'),
       trigger: 'change'
     }
   ],

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoicesController.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票控制器
 // 
@@ -173,26 +173,6 @@ public class TaktPurchaseInvoicesController : TaktControllerBase
         {
             await _purchaseInvoiceService.DeletePurchaseInvoiceBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新采购发票状态
-    /// </summary>
-    /// <param name="dto">状态 DTO</param>
-    /// <returns>采购发票DTO</returns>
-    [TaktPermission("logistics:procurement:purchase:invoice:update", "更新采购发票状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdatePurchaseInvoiceStatusAsync([FromBody] TaktPurchaseInvoiceStatusDto dto)
-    {
-        try
-        {
-            var result = await _purchaseInvoiceService.UpdatePurchaseInvoiceStatusAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

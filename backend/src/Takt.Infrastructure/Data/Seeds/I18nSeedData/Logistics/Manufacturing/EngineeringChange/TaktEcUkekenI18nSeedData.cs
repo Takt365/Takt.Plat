@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcUkekenI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcUkeken 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcUkekenI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecukeken.ecndetailid
             new TranslationSeedItem("entity.ecukeken.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcUkeken 导航）"),
 
-            // entity.ecukeken.ecno
-            new TranslationSeedItem("entity.ecukeken.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.ecukeken.ecno
-            new TranslationSeedItem("entity.ecukeken.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.ecukeken.ecno
-            new TranslationSeedItem("entity.ecukeken.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.ecukeken.ecno
-            new TranslationSeedItem("entity.ecukeken.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.ecukeken.eccode
+            new TranslationSeedItem("entity.ecukeken.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.ecukeken.eccode
+            new TranslationSeedItem("entity.ecukeken.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.ecukeken.eccode
+            new TranslationSeedItem("entity.ecukeken.eccode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.ecukeken.eccode
+            new TranslationSeedItem("entity.ecukeken.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.ecukeken.linenumber
             new TranslationSeedItem("entity.ecukeken.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -144,14 +144,14 @@ public class TaktEcUkekenI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecukeken.execcontent
             new TranslationSeedItem("entity.ecukeken.execcontent", "zh-HK", "执行内容_hk", "执行内容（各部门通用）"),
 
-            // entity.ecukeken.iqcorderno
-            new TranslationSeedItem("entity.ecukeken.iqcorderno", "en-US", "受检单号_us", "受检单号"),
-            // entity.ecukeken.iqcorderno
-            new TranslationSeedItem("entity.ecukeken.iqcorderno", "ja-JP", "受检单号_jp", "受检单号"),
-            // entity.ecukeken.iqcorderno
-            new TranslationSeedItem("entity.ecukeken.iqcorderno", "zh-CN", "受检单号", "受检单号"),
-            // entity.ecukeken.iqcorderno
-            new TranslationSeedItem("entity.ecukeken.iqcorderno", "zh-HK", "受检单号_hk", "受检单号"),
+            // entity.ecukeken.iqcordercode
+            new TranslationSeedItem("entity.ecukeken.iqcordercode", "en-US", "受检单号_us", "受检单号"),
+            // entity.ecukeken.iqcordercode
+            new TranslationSeedItem("entity.ecukeken.iqcordercode", "ja-JP", "受检单号_jp", "受检单号"),
+            // entity.ecukeken.iqcordercode
+            new TranslationSeedItem("entity.ecukeken.iqcordercode", "zh-CN", "受检单号", "受检单号"),
+            // entity.ecukeken.iqcordercode
+            new TranslationSeedItem("entity.ecukeken.iqcordercode", "zh-HK", "受检单号_hk", "受检单号"),
 
             // entity.ecukeken.inspectiondate
             new TranslationSeedItem("entity.ecukeken.inspectiondate", "en-US", "检验日期_us", "检验日期"),

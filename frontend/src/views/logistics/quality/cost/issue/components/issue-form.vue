@@ -27,217 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.qualityIssueId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualityIssueCode')"
-                name="qualityIssueCode"
-              >
-                <a-input
-                  v-model:value="formState.qualityIssueCode"
-                  :placeholder="pi.ph('qualityIssueCode')"
-                  show-count
-                  :maxlength="30"
-                  allow-clear
-                  :disabled="!!formData?.qualityIssueId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('issueDate')"
-                name="issueDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.issueDate"
-                  :placeholder="pi.ph('issueDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('model')"
-                name="model"
-              >
-                <a-input
-                  v-model:value="formState.model"
-                  :placeholder="pi.ph('model')"
-                  show-count
-                  :maxlength="255"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('lot')"
-                name="lot"
-              >
-                <a-input
-                  v-model:value="formState.lot"
-                  :placeholder="pi.ph('lot')"
-                  show-count
-                  :maxlength="30"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualityProblemsResponse')"
-                name="qualityProblemsResponse"
-              >
-                <a-input
-                  v-model:value="formState.qualityProblemsResponse"
-                  :placeholder="pi.ph('qualityProblemsResponse')"
-                  show-count
-                  :maxlength="255"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('reworkDueToDefects')"
-                name="reworkDueToDefects"
-              >
-                <a-input
-                  v-model:value="formState.reworkDueToDefects"
-                  :placeholder="pi.ph('reworkDueToDefects')"
-                  show-count
-                  :maxlength="255"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('needRework')"
-                name="needRework"
-              >
-                <a-input
-                  v-model:value="formState.needRework"
-                  :placeholder="pi.ph('needRework')"
-                  show-count
-                  :maxlength="1"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('totalTimeMinutes')"
-                name="totalTimeMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.totalTimeMinutes"
-                  :placeholder="pi.ph('totalTimeMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('totalCost')"
-                name="totalCost"
-              >
-                <a-input-number
-                  v-model:value="formState.totalCost"
-                  :placeholder="pi.ph('totalCost')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('costCurrency')"
-                name="costCurrency"
-              >
-                <a-input
-                  v-model:value="formState.costCurrency"
-                  :placeholder="pi.ph('costCurrency')"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -351,8 +152,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -360,8 +161,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","qualityIssueCode","issueDate","model","lot","qualityProblemsResponse","reworkDueToDefects","needRework","totalTimeMinutes","totalCost","costCurrency","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","qualityIssueCode","issueDate","model","lot","qualityProblemsResponse","reworkDueToDefects","needRework","totalTimeMinutes","totalCost","currencyCode","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -476,8 +276,7 @@ const qualityIssueMeetingFormColumns = computed<TaktEditableTableColumn[]>(() =>
     key: 'isObsolete',
     title: qualityIssueMeetingPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<QualityIssueCreate & { qualityIssueId?: string }> | null | undefined) {
@@ -516,7 +315,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         qualityIssueId: masterId,
       }
       if (isUpdate && isPersistedQualityIssueMeetingRow(row)) {
@@ -549,7 +348,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityIssueId 才视为编辑） */
 watch(
@@ -650,10 +448,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  costCurrency: [
+  currencyCode: [
     {
       required: true,
-      message: pi.ph('costCurrency'),
+      message: pi.ph('currencyCode'),
       trigger: 'blur'
     }
   ],

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktStandardOperationRateDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StandardOperationRate 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStandardOperationRate 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktStandardOperationRateDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StandardOperationRateId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）
@@ -93,7 +89,12 @@ public class TaktStandardOperationRateQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -178,14 +179,14 @@ public class TaktStandardOperationRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -295,7 +296,12 @@ public class TaktStandardOperationRateTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -357,12 +363,12 @@ public class TaktStandardOperationRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -430,7 +436,7 @@ public class TaktStandardOperationRateExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 

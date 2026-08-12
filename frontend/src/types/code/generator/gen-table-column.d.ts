@@ -164,6 +164,11 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
    */
   genTableId?: string;
@@ -306,6 +311,11 @@ export interface GenTableColumnCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
@@ -476,6 +486,11 @@ export interface GenTableColumnTemplate {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
    */
   genTableId?: string;
@@ -558,6 +573,11 @@ export interface GenTableColumnImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）

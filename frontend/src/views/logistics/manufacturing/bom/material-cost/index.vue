@@ -2,159 +2,374 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：工厂/机种/核算单月查询；左机种→中产品→右明细三栏（不拆实体）；合计/重算/导入/导出 -->
+<!-- 功能描述：BOM 物料成本汇总页（CRUD + 成本合计/重算/回填机种；合计走 Analyses API） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="material-cost-lcr-page flex h-full min-h-0 flex-col p-4">
-    <!-- 工厂 / 机种 / 核算单月（无高级查询） -->
-    <material-cost-query-form
-      v-model:plant-code="queryForm.plantCode"
-      v-model:model-code="queryForm.modelCode"
-      v-model:costing-month="costingMonth"
+  <div class="p-4">
+    <!-- 查询栏 -->
+    <TaktQueryBar
+      v-model="queryKeyword"
+      :placeholder="searchPlaceholder"
       :loading="loading"
       @search="handleSearch"
       @reset="handleReset"
     />
+
+    <!-- 工具栏 -->
     <TaktToolsBar
-      :show-create="false"
-      :show-update="false"
-      :show-delete="false"
-      :show-import="false"
-      :show-export="false"
+      create-permission="logistics:manufacturing:bom:material:cost:create"
+      update-permission="logistics:manufacturing:bom:material:cost:update"
+      delete-permission="logistics:manufacturing:bom:material:cost:delete"
+      import-permission="logistics:manufacturing:bom:material:cost:import"
+      export-permission="logistics:manufacturing:bom:material:cost:export"
+      :left-actions="costToolbarLeftActions"
+      :show-create="true"
+      :show-update="true"
+      :show-delete="true"
+      :show-import="true"
+      :show-export="true"
       :show-expand="false"
-      :show-advanced-query="false"
+      :show-advanced-query="true"
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
+      :create-disabled="false"
+      :create-loading="loading"
+      :update-disabled="updateDisabled"
+      :update-loading="loading"
+      :delete-disabled="deleteDisabled"
+      :delete-loading="loading"
       :refresh-loading="loading"
+      @create="handleCreate"
+      @update="handleUpdate"
+      @delete="handleDelete"
+      @import="handleImport"
+      @export="handleExport"
+      @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    >
-      <template #left>
-        <a-space>
-          <a-button
-            v-permission="'logistics:manufacturing:bom:material:cost:update'"
-            class="takt-button-query"
-            :loading="recalculatePending"
-            @click="openRecalculateModal(false)"
-          >
-            {{ t('logistics.manufacturing.bom.material-cost.page.costSum') }}
-          </a-button>
-          <a-button
-            v-permission="'logistics:manufacturing:bom:material:cost:update'"
-            class="takt-button-reset"
-            :loading="recalculatePending"
-            @click="openRecalculateModal(true)"
-          >
-            {{ t('logistics.manufacturing.bom.material-cost.page.costRecalculate') }}
-          </a-button>
-          <a-button
-            v-permission="'logistics:manufacturing:bom:material:cost:import'"
-            class="takt-button-import"
-            @click="handleImport"
-          >
-            <template #icon>
-              <RiImportLine class="takt-remix-icon" />
-            </template>
-            {{ t('common.page.button.import') }}
-          </a-button>
-          <a-button
-            v-permission="'logistics:manufacturing:bom:material:cost:export'"
-            class="takt-button-export"
-            :loading="loading"
-            @click="handleExport"
-          >
-            <template #icon>
-              <RiExportLine class="takt-remix-icon" />
-            </template>
-            {{ t('common.page.button.export') }}
-          </a-button>
-          <a-button
-            v-permission="'logistics:manufacturing:bom:material:cost:list'"
-            class="takt-button-query"
-            @click="openZeroPriceModal"
-          >
-            {{ t('logistics.manufacturing.bom.material-cost.page.zeroPrice.button') }}
-          </a-button>
-        </a-space>
-      </template>
-    </TaktToolsBar>
-    <!-- 左机种 / 中产品 / 右明细：等宽三栏，均为 TaktSingleTable + 外置分页 -->
-    <div class="flex min-h-0 flex-1 flex-row overflow-hidden">
-      <div class="flex h-full min-h-0 w-1/3 min-w-0 shrink-0 flex-col border-r border-border pr-3">
-        <div
-          ref="leftTableWrapRef"
-          class="min-h-0 flex-1 overflow-hidden"
-        >
-          <TaktSingleTable
-            class="h-full min-h-0"
-            entity-scope="company"
-            table-mode="single"
-            :stripe="true"
-            :columns="columns"
-            :data-source="dataSource"
-            :loading="loading"
-            :row-key="getModelGroupKey"
-            :row-selection="rowSelection"
-            :custom-row="onMasterClickRow"
-            id-column-key="groupKey"
-            :visible-column-keys="visibleColumnKeys"
-            :pagination="false"
-            :scroll="{ y: leftTableScrollY }"
-            @change="handleTableChange"
-            @resize-column="handleResizeColumn"
-          >
-            <template #bodyCell="{ column, record }">
-              <template v-if="column.key === 'currencyCode'">
-                <TaktDictTag
-                  :value="getBomMaterialCostDictValue(record, 'currencyCode')"
-                  dict-type="accounting_currency_code"
-                />
-              </template>
-            </template>
-          </TaktSingleTable>
-        </div>
-        <TaktPagination
-          v-model:current="currentPage"
-          v-model:page-size="pageSize"
-          :total="total"
-          :disabled="loading"
-          @change="handleMasterPaginationChange"
-        />
-      </div>
-      <BomMaterialCostProductPanel
-        ref="bomMaterialCostProductPanelRef"
-        class="h-full min-h-0 w-2/3 min-w-0 flex-1"
-      />
-    </div>
+    />
 
-    <!-- 计算/重置成本：选择核算月与处理记录数 -->
+    <!-- 表格 -->
+    <TaktSingleTable
+      entity-scope="company"
+      :columns="columns"
+      :visible-column-keys="visibleColumnKeys"
+      :id-column-key="'bomMaterialCostId'"
+      table-mode="single"
+      :data-source="dataSource"
+      :loading="loading"
+      :stripe="true"
+      :virtual="true"
+      :row-key="getBomMaterialCostId"
+      :row-selection="rowSelection"
+      :custom-row="onClickRow"
+
+      @change="handleTableChange"
+      @resize-column="handleResizeColumn"
+    >
+      <!-- 字典/开关列渲染 -->
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'materialType'">
+          <TaktDictTag
+            :value="getBomMaterialCostDictValue(record, 'materialType')"
+            dict-type="logistics_material_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'productCode'">
+          <TaktDictTag
+            :value="getBomMaterialCostDictValue(record, 'productCode')"
+            dict-type="logistics_material_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'currencyCode'">
+          <TaktDictTag
+            :value="getBomMaterialCostDictValue(record, 'currencyCode')"
+            dict-type="accounting_currency_code"
+          />
+        </template>
+      </template>
+
+    </TaktSingleTable>
+
+    <!-- 分页（服务端分页，外置 TaktPagination） -->
+    <TaktPagination
+      v-model:current="currentPage"
+      v-model:page-size="pageSize"
+      :total="total"
+      @change="handlePaginationChange"
+      @show-size-change="handlePaginationSizeChange"
+    />
+
+    <!-- 新增/编辑对话框 -->
+    <TaktModal
+      v-model:open="formVisible"
+      :title="formTitle"
+      width="50%"
+      wrap-class-name="takt-form-modal-resizable"
+      :confirm-loading="formLoading"
+      @ok="handleFormSubmit"
+      @cancel="handleFormCancel"
+    >
+      <BomMaterialCostForm
+        :key="formData?.bomMaterialCostId ?? 'create'"
+        ref="formRef"
+        :form-data="formData"
+        :loading="formLoading"
+      />
+    </TaktModal>
+    <!-- 高级查询抽屉 -->
+    <TaktQueryDrawer
+      v-model:open="advancedQueryVisible"
+      v-model:visible-field-keys="visibleQueryFieldKeys"
+      :fields="queryFieldsMeta"
+      :storage-key="'takt-query-fields-logistics-manufacturing-bom-material-cost'"
+      :form-model="advancedQueryForm"
+      @submit="handleAdvancedQuerySubmit"
+      @reset="handleAdvancedQueryReset"
+    >
+      <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('modelCode')">
+      <a-form-item :label="pi.queryLabel('modelCode')">
+        <a-input
+          v-model:value="advancedQueryForm.modelCode"
+          :placeholder="pi.queryPh('modelCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('modelMonthlyAverageCost')">
+      <a-form-item :label="pi.queryLabel('modelMonthlyAverageCost')">
+        <a-input-number
+          v-model:value="advancedQueryForm.modelMonthlyAverageCost"
+          :placeholder="pi.queryPh('modelMonthlyAverageCost', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialType')">
+      <a-form-item :label="pi.queryLabel('materialType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.materialType"
+          dict-type="logistics_material_type"
+          :placeholder="pi.queryPh('materialType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productCode')">
+      <a-form-item :label="pi.queryLabel('productCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.productCode"
+          dict-type="logistics_material_type"
+          :placeholder="pi.queryPh('productCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productDescription')">
+      <a-form-item :label="pi.queryLabel('productDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.productDescription"
+          :placeholder="pi.queryPh('productDescription', 'optional')"
+          :rows="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productMonthlyCost')">
+      <a-form-item :label="pi.queryLabel('productMonthlyCost')">
+        <a-input-number
+          v-model:value="advancedQueryForm.productMonthlyCost"
+          :placeholder="pi.queryPh('productMonthlyCost', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.currencyCode"
+          dict-type="accounting_currency_code"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costingPeriod')">
+      <a-form-item :label="pi.queryLabel('costingPeriod')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.costingPeriod"
+          :placeholder="pi.queryPh('costingPeriod', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costingDateStart')">
+      <a-form-item :label="pi.queryLabel('costingDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.costingDateStart"
+          :placeholder="pi.queryPh('costingDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('costingDateEnd')">
+      <a-form-item :label="pi.queryLabel('costingDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.costingDateEnd"
+          :placeholder="pi.queryPh('costingDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtStart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtStart"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('createdAtEnd')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.createdAtEnd"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
+          value-format="YYYY-MM-DD HH:mm:ss"
+            show-time
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('extField')">
+      <a-form-item
+        name="extField"
+        class="takt-form-item-ext-field"
+        :label-col="{ style: { width: 'auto', maxWidth: 'none', flex: '0 0 auto' } }"
+        :wrapper-col="{ style: { flex: '1 1 0', minWidth: 0 } }"
+      >
+        <template #label>
+          <span class="takt-form-ext-field-label">
+            <a-tooltip
+              :title="t('common.page.entity.extfieldhint')"
+              placement="top"
+            >
+              <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
+            </a-tooltip>
+            <span>{{ pi.queryLabel('extField') }}</span>
+          </span>
+        </template>
+        <a-textarea
+          v-model:value="advancedQueryForm.extField"
+          :placeholder="t('common.page.form.placeholder.extfield')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
+        <a-textarea
+          v-model:value="advancedQueryForm.remark"
+          :placeholder="pi.queryPh('remark', 'optional')"
+            :rows="4"
+            show-count
+            :maxlength="400"
+            allow-clear
+        />
+      </a-form-item>
+      </div>
+      </template>
+    </TaktQueryDrawer>
+
+    <!-- 导入对话框 -->
+    <TaktModal
+      v-model:open="importVisible"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
+      :width="600"
+      :footer="null"
+      :cancel-text="t('common.page.button.close')"
+      @cancel="handleImportCancel"
+    >
+      <TaktImportFile
+        v-if="importVisible"
+        :entity-i18n-key="BOMMATERIALCOST_SELF_I18N_KEY"
+        file-type="xlsx"
+        :sheet-name="excelNames.sheet"
+        :template-file-name="excelNames.fileBase"
+        :download-template="handleDownloadTemplate"
+        :import-file="handleImportFile"
+        :max-size="10"
+        :max-rows="1000"
+        @success="handleImportSuccess"
+      />
+    </TaktModal>
+    <!-- 列设置抽屉 -->
+    <TaktColumnDrawer
+      v-model:open="columnSettingVisible"
+      :columns="columns"
+      :checked-keys="visibleColumnKeys"
+      :id-column-key="'bomMaterialCostId'"
+      :action-column-key="'action'"
+      entity-scope="company"
+      table-mode="single"
+      @update:checked-keys="handleColumnKeysChange"
+      @reset="handleColumnSettingReset"
+    />
+
+    <!-- 成本合计 / 重算 / 回填机种价格 -->
     <TaktModal
       v-model:open="recalculateModalVisible"
-      :title="recalculateModalForce
-        ? t('logistics.manufacturing.bom.material-cost.page.costRecalculate')
-        : t('logistics.manufacturing.bom.material-cost.page.costSum')"
-      :width="480"
+      :title="recalculateModalTitle"
+      :confirm-loading="recalculatePending || refreshModelFieldsPending"
       :use-viewport-size="false"
-      :confirm-loading="recalculatePending"
-      :ok-text="t('common.page.button.ok')"
-      :cancel-text="t('common.page.button.cancel')"
+      width="480px"
       @ok="handleRecalculateModalOk"
     >
-      <a-form layout="vertical" class="pt-1">
+      <a-form layout="vertical">
         <a-form-item
-          :label="t('entity.bommaterialcost.plantcode')"
+          v-if="recalculateModalMode === 'refreshModelFields'"
+          :label="pi.label('plantCode')"
           required
         >
-          <TaktSelect
+          <a-input
             v-model:value="recalculateForm.plantCode"
-            api-url="TaktPlants/options"
-            class="w-full"
-            allow-clear
             :placeholder="t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired')"
+            allow-clear
           />
         </a-form-item>
         <a-form-item
@@ -164,229 +379,89 @@
           <a-date-picker
             v-model:value="recalculateForm.costingMonth"
             picker="month"
-            format="YYYY-MM"
             value-format="YYYY-MM"
             class="w-full"
             :placeholder="t('logistics.manufacturing.bom.material-cost.page.costingMonthPlaceholder')"
           />
         </a-form-item>
         <a-form-item
+          v-if="recalculateModalMode === 'sum' || recalculateModalMode === 'recalculate'"
           :label="t('logistics.manufacturing.bom.material-cost.page.processRecordCount')"
           :extra="t('logistics.manufacturing.bom.material-cost.page.processRecordCountHint')"
         >
           <a-input-number
             v-model:value="recalculateForm.processRecordCount"
+            class="w-full"
             :min="0"
             :precision="0"
-            class="w-full"
           />
         </a-form-item>
       </a-form>
     </TaktModal>
-
-    <!-- 导入对话框（导入明细源数据，Sync 后刷新汇总） -->
-    <TaktModal
-      v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t(BOMMATERIALCOSTITEM_SELF_I18N_KEY) })"
-      :width="600"
-      :footer="null"
-      :cancel-text="t('common.page.button.close')"
-      @cancel="handleImportCancel"
-    >
-      <TaktImportFile
-        v-if="importVisible"
-        :entity-i18n-key="BOMMATERIALCOSTITEM_SELF_I18N_KEY"
-        file-type="xlsx"
-        :sheet-name="itemExcelNames.sheet"
-        :template-file-name="itemExcelNames.fileBase"
-        :download-template="handleDownloadTemplate"
-        :import-file="handleImportFile"
-        :max-size="10"
-        :max-rows="1000"
-        @success="handleImportSuccess"
-      />
-    </TaktModal>
-    <!-- 零价格：先选工厂 / 机种 / 核算月 -->
-    <TaktModal
-      v-model:open="zeroPriceMonthModalVisible"
-      :title="t('logistics.manufacturing.bom.material-cost.page.zeroPrice.monthTitle')"
-      :width="480"
-      :use-viewport-size="false"
-      :ok-text="t('common.page.button.ok')"
-      :cancel-text="t('common.page.button.cancel')"
-      @ok="handleZeroPriceMonthOk"
-    >
-      <a-form layout="vertical" class="pt-1">
-        <a-form-item
-          :label="t('entity.bommaterialcost.plantcode')"
-          required
-        >
-          <TaktSelect
-            v-model:value="zeroPricePlantCode"
-            api-url="TaktPlants/options"
-            class="w-full"
-            allow-clear
-            :placeholder="t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired')"
-            @change="handleZeroPricePlantChange"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('entity.bommaterialcost.modelcode')"
-          required
-        >
-          <TaktSelect
-            :key="zeroPriceModelSelectKey"
-            v-model:value="zeroPriceModelCode"
-            api-url="TaktBomMaterialCosts/model-options"
-            :api-params="zeroPriceModelApiParams"
-            class="w-full"
-            allow-clear
-            :disabled="!zeroPricePlantCode"
-            :placeholder="t('logistics.manufacturing.bom.material-cost.page.selectModelRequired')"
-          />
-        </a-form-item>
-        <a-form-item
-          :label="t('logistics.manufacturing.bom.material-cost.page.costingMonth')"
-          required
-        >
-          <a-date-picker
-            v-model:value="zeroPriceCostingMonth"
-            picker="month"
-            format="YYYY-MM"
-            value-format="YYYY-MM"
-            class="w-full"
-            :placeholder="t('logistics.manufacturing.bom.material-cost.page.costingMonthPlaceholder')"
-          />
-        </a-form-item>
-      </a-form>
-    </TaktModal>
-
-    <material-cost-zero-price-modal
-      v-model:open="zeroPriceModalVisible"
-      :plant-code="zeroPricePlantCode"
-      :model-code="zeroPriceModelCode"
-      :costing-month="zeroPriceCostingMonth"
-    />
-
-    <!-- 列设置抽屉 -->
-    <TaktColumnDrawer
-      v-model:open="columnSettingVisible"
-      :columns="columns"
-      :checked-keys="visibleColumnKeys"
-      :id-column-key="'groupKey'"
-      entity-scope="company"
-      table-mode="single"
-      @update:checked-keys="handleColumnKeysChange"
-      @reset="handleColumnSettingReset"
-    />
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * BOM 物料成本汇总页（工具栏：合计成本 / 重算成本 / 导入明细 / 导出汇总）
+ * BOM 物料成本汇总页（CRUD + Analyses 成本合计/重算/回填机种）
  * @module views/logistics/manufacturing/bom/material-cost
  */
-import { ref, reactive, computed, onMounted, onBeforeUnmount, nextTick } from 'vue'
-import { message } from 'ant-design-vue'
+import { ref, computed, onMounted, reactive } from 'vue'
+import { message, Modal } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
+import { CreateActionColumn } from '@/components/business/takt-action-column/index'
+import type { ToolBarAction } from '@/components/business/takt-tools-bar/index.vue'
 import { useI18n } from 'vue-i18n'
-import { measureMasterDetailLrTableScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
-import { TAKT_TABLE_SCROLL_Y_MIN } from '@/utils/table-scroll'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import BomMaterialCostProductPanel from './components/material-cost-product-panel.vue'
-import MaterialCostQueryForm from './components/material-cost-query-form.vue'
-import MaterialCostZeroPriceModal from './components/material-cost-zero-price-modal.vue'
+import BomMaterialCostForm from './components/material-cost-form.vue'
+import { getBomMaterialCostList, getBomMaterialCostById, createBomMaterialCost, updateBomMaterialCost, deleteBomMaterialCostById, deleteBomMaterialCostBatch, getBomMaterialCostTemplate, importBomMaterialCost, exportBomMaterialCost } from '@/api/logistics/manufacturing/bom/material-cost'
 import {
-  provideBomMaterialCostMasterContext,
-  type BomMaterialCostModelGroupRecord,
-} from './composables/use-material-cost-master-context'
-import {
-  getBomMaterialCostModelGroupList,
-  exportBomMaterialCost,
-} from '@/api/logistics/manufacturing/bom/material-cost'
-import {
-  getBomMaterialCostItemTemplate,
-  importBomMaterialCostItem,
   recalculateBomMaterialCostItemModelAverage,
-} from '@/api/logistics/manufacturing/bom/material-cost-item'
-import type {
-  BomMaterialCostModelGroup,
-  BomMaterialCostQuery,
-} from '@/types/logistics/manufacturing/bom/material-cost'
+  refreshBomMaterialCostModelFields,
+} from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import type { BomMaterialCost, BomMaterialCostQuery } from '@/types/logistics/manufacturing/bom/material-cost'
 import type { BomMaterialCostItemQuery } from '@/types/logistics/manufacturing/bom/material-cost-item'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiImportLine, RiExportLine } from '@remixicon/vue'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiCalculatorLine, RiRefreshLine, RiPriceTag3Line } from '@remixicon/vue'
 import {
   formatBomMaterialCostItemRecalculateDuration,
   useBomMaterialCostItemRecalculateSignalR,
 } from '@/composables/use-bom-material-cost-item-recalculate-signalr'
-import { BOMMATERIALCOSTITEM_SELF_I18N_KEY } from './composables/use-material-cost-item-i18n'
-import { useBomMaterialCostI18n } from './composables/use-material-cost-i18n'
 import {
   buildDefaultCostingMonth,
   costingMonthToDateQuery,
 } from './utils/bom-material-cost-period'
-import { formatBomMaterialCostAmount } from './utils/bom-material-cost-item-line-cost'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
-import { useTenantStore } from '@/stores/identity/tenant'
+
+import {
+  useBomMaterialCostI18n,
+  BOMMATERIALCOST_LIST_FIELDS,
+  BOMMATERIALCOST_QUERY_STRING_FIELDS,
+  BOMMATERIALCOST_QUERY_FIELDS,
+  BOMMATERIALCOST_SELF_I18N_KEY,
+} from './composables/use-material-cost-i18n'
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useBomMaterialCostI18n()
-
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type BomMaterialCostRowRecord = BomMaterialCost | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
-const tenantStore = useTenantStore()
-/** 汇总导出默认 sheet / 文件名前缀 */
+/** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktBomMaterialCost')
-/** 明细导入默认 sheet / 文件名前缀 */
-const itemExcelNames = taktExcelEntityNames('TaktBomMaterialCostItem')
-/** 查询条件：工厂 / 机种 */
-const queryForm = reactive({
-  plantCode: undefined as string | undefined,
-  modelCode: undefined as string | undefined,
-})
-/** 核算单月 yyyy-MM */
-const costingMonth = ref<string | null>(null)
-/** 重算任务提交中 */
-const recalculatePending = ref(false)
-/** 零价格：月份选择弹窗 */
-const zeroPriceMonthModalVisible = ref(false)
-/** 零价格：已选工厂 */
-const zeroPricePlantCode = ref<string | undefined>(undefined)
-/** 零价格：已选机种 */
-const zeroPriceModelCode = ref<string | undefined>(undefined)
-/** 零价格：机种下拉刷新键 */
-const zeroPriceModelSelectKey = ref(0)
-/** 零价格：已选核算月 yyyy-MM */
-const zeroPriceCostingMonth = ref('')
-/** 零价格清单弹窗 */
-const zeroPriceModalVisible = ref(false)
+/** 列表快捷查询占位文案 */
+const searchPlaceholder = computed(
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
+)
 
-/** 零价机种下拉参数 */
-const zeroPriceModelApiParams = computed(() => ({
-  plantCode: zeroPricePlantCode.value || undefined,
-}))
-/** 计算/重置弹窗 */
-const recalculateModalVisible = ref(false)
-/** 弹窗是否为强制重置 */
-const recalculateModalForce = ref(false)
-/** 默认处理记录数（0=全部） */
-const DEFAULT_PROCESS_RECORD_COUNT = 5000
-/** 弹窗表单：工厂 + 核算月 + 处理记录数 */
-const recalculateForm = reactive({
-  plantCode: undefined as string | undefined,
-  costingMonth: '' as string,
-  processRecordCount: DEFAULT_PROCESS_RECORD_COUNT as number,
-})
-
+/** 快捷查询关键字 */
+const queryKeyword = ref('')
 /** 列表 loading */
 const loading = ref(false)
-/** 机种聚合主表分页数据 */
-const dataSource = ref<BomMaterialCostModelGroup[]>([])
+/** 分页列表数据 */
+const dataSource = ref<BomMaterialCost[]>([])
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
 /** 每页条数 */
@@ -394,253 +469,388 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<BomMaterialCostModelGroupRecord | null>(null)
+const selectedRow = ref<BomMaterialCostRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<BomMaterialCostModelGroupRecord[]>([])
+const selectedRows = ref<BomMaterialCostRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
+/** 新增/编辑弹窗是否打开 */
+const formVisible = ref(false)
+/** 弹窗标题（新增/编辑） */
+const formTitle = ref('')
+/** 传入内嵌表单的编辑数据 */
+const formData = ref<Partial<BomMaterialCost> | null>(null)
+/** 表单提交 loading */
+const formLoading = ref(false)
+/** 内嵌表单组件 ref（validate / getValues / resetFields） */
+const formRef = ref()
+
+/** 高级查询抽屉是否打开 */
+const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of BOMMATERIALCOST_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.modelMonthlyAverageCost !== undefined && form.modelMonthlyAverageCost !== null) {
+    return true
+  }
+  if (form.productMonthlyCost !== undefined && form.productMonthlyCost !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(BOMMATERIALCOST_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof BOMMATERIALCOST_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    modelMonthlyAverageCost: undefined as number | undefined,
+    productMonthlyCost: undefined as number | undefined,  }
+}
+/** 高级查询表单模型 */
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
+/** 高级查询字段元数据（列显隐配置） */
+const queryFieldsMeta = computed(() =>
+  BOMMATERIALCOST_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
+/** 高级查询当前可见字段 key */
+const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
 const columnSettingVisible = ref(false)
 /** 导入对话框是否打开 */
 const importVisible = ref(false)
 /** 表格当前可见列 key */
 const visibleColumnKeys = ref<string[]>([])
+/** 实体主键字段名（row-key、API 路径参数） */
+const entityIdName = 'bomMaterialCostId'
+/** 工具栏「编辑」是否禁用（须恰好选中一行） */
+const updateDisabled = computed(() => selectedRows.value.length !== 1)
+/** 工具栏「删除」是否禁用（未选中任何行） */
+const deleteDisabled = computed(() => selectedRows.value.length === 0)
+
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-/** 三层选中上下文 */
-const { selectedModelGroup, selectedProductRow } = provideBomMaterialCostMasterContext()
-/** 右侧产品+Item 面板 */
-const bomMaterialCostProductPanelRef = ref<InstanceType<typeof BomMaterialCostProductPanel> | null>(null)
+
+/** 默认处理记录数（0=全部） */
+const DEFAULT_PROCESS_RECORD_COUNT = 5000
+/** 合计/重算/回填机种弹窗 */
+const recalculateModalVisible = ref(false)
+/** 弹窗模式 */
+const recalculateModalMode = ref<'sum' | 'recalculate' | 'refreshModelFields'>('sum')
+/** 合计/重算提交中 */
+const recalculatePending = ref(false)
+/** 回填机种提交中 */
+const refreshModelFieldsPending = ref(false)
+/** 弹窗表单 */
+const recalculateForm = reactive({
+  plantCode: '' as string,
+  costingMonth: '' as string,
+  processRecordCount: DEFAULT_PROCESS_RECORD_COUNT as number,
+})
+
+/** 弹窗标题 */
+const recalculateModalTitle = computed(() => {
+  if (recalculateModalMode.value === 'recalculate') {
+    return t('logistics.manufacturing.bom.material-cost.page.costRecalculate')
+  }
+  if (recalculateModalMode.value === 'refreshModelFields') {
+    return t('logistics.manufacturing.bom.material-cost.page.refreshModelFields')
+  }
+  return t('logistics.manufacturing.bom.material-cost.page.costSum')
+})
+
+/** 工具栏扩展：成本合计 / 重算 / 回填机种 */
+const costToolbarLeftActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'cost-sum',
+    label: t('logistics.manufacturing.bom.material-cost.page.costSum'),
+    icon: RiCalculatorLine,
+    permission: 'logistics:manufacturing:bom:material:cost:update',
+    loading: recalculatePending.value,
+    onClick: () => openRecalculateModal('sum'),
+  },
+  {
+    key: 'cost-recalculate',
+    label: t('logistics.manufacturing.bom.material-cost.page.costRecalculate'),
+    icon: RiRefreshLine,
+    permission: 'logistics:manufacturing:bom:material:cost:update',
+    loading: recalculatePending.value,
+    onClick: () => openRecalculateModal('recalculate'),
+  },
+  {
+    key: 'refresh-model-fields',
+    label: t('logistics.manufacturing.bom.material-cost.page.refreshModelFields'),
+    icon: RiPriceTag3Line,
+    permission: 'logistics:manufacturing:bom:material:cost:update',
+    loading: refreshModelFieldsPending.value,
+    onClick: () => openRecalculateModal('refreshModelFields'),
+  },
+])
 
 /**
- * 构建列表/导出查询参数（工厂 + 机种 + 核算单月）
+ * 打开合计/重算/回填机种弹窗
+ * @param mode 弹窗模式
+ */
+function openRecalculateModal(mode: 'sum' | 'recalculate' | 'refreshModelFields') {
+  recalculateModalMode.value = mode
+  const form = advancedQueryForm.value
+  recalculateForm.plantCode = String(form.plantCode ?? selectedRow.value?.plantCode ?? '').trim()
+  const period = String(form.costingPeriod ?? selectedRow.value?.costingPeriod ?? '').trim()
+  recalculateForm.costingMonth = /^\d{4}-\d{2}$/.test(period) ? period : buildDefaultCostingMonth()
+  recalculateForm.processRecordCount = DEFAULT_PROCESS_RECORD_COUNT
+  recalculateModalVisible.value = true
+}
+
+/**
+ * 按弹窗核算月构建明细重算查询
+ * @param costingMonth 核算月 yyyy-MM
+ * @returns 查询 DTO；月份非法时 null
+ */
+function buildRecalculateItemQuery(costingMonth: string): BomMaterialCostItemQuery | null {
+  const dates = costingMonthToDateQuery(costingMonth)
+  if (!dates.costingDateStart || !dates.costingDateEnd) {
+    message.warning(t('logistics.manufacturing.bom.material-cost.page.costNeedMonth'))
+    return null
+  }
+  const form = advancedQueryForm.value
+  const query: BomMaterialCostItemQuery = {
+    pageIndex: 1,
+    pageSize: 1,
+    costingDateStart: dates.costingDateStart,
+    costingDateEnd: dates.costingDateEnd,
+  }
+  const plantCode = String(form.plantCode ?? '').trim() || String(recalculateForm.plantCode ?? '').trim()
+  const productCode = String(form.productCode ?? '').trim()
+  const modelCode = String(form.modelCode ?? '').trim()
+  if (plantCode) query.plantCode = plantCode
+  if (productCode) query.productCode = productCode
+  if (modelCode) query.modelCode = modelCode
+  return query
+}
+
+/**
+ * 弹窗确认：提交合计/重算或回填机种
+ */
+async function handleRecalculateModalOk() {
+  const month = String(recalculateForm.costingMonth ?? '').trim()
+  if (!month) {
+    message.warning(t('logistics.manufacturing.bom.material-cost.page.costNeedMonth'))
+    return
+  }
+  if (recalculateModalMode.value === 'refreshModelFields') {
+    const plant = String(recalculateForm.plantCode ?? '').trim()
+    if (!plant) {
+      message.warning(t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired'))
+      return
+    }
+    refreshModelFieldsPending.value = true
+    try {
+      const modelCode = String(advancedQueryForm.value.modelCode ?? '').trim() || undefined
+      const result = await refreshBomMaterialCostModelFields({
+        plantCode: plant,
+        costingPeriod: month,
+        modelCode,
+      })
+      recalculateModalVisible.value = false
+      message.success(
+        t('logistics.manufacturing.bom.material-cost.page.refreshModelFieldsSuccess', {
+          month: result.costingPeriod,
+          scanned: result.scannedRowCount,
+          modelUpdated: result.modelCodeUpdatedCount,
+          averageUpdated: result.averageUpdatedCount,
+          groups: result.modelGroupCount,
+        }),
+      )
+      await loadData()
+    } catch (error: unknown) {
+      const err = error as { message?: string }
+      message.error(
+        err?.message || t('logistics.manufacturing.bom.material-cost.page.refreshModelFieldsFailed'),
+      )
+    } finally {
+      refreshModelFieldsPending.value = false
+    }
+    return
+  }
+  const processRecordCount = Number(recalculateForm.processRecordCount ?? DEFAULT_PROCESS_RECORD_COUNT)
+  if (!Number.isFinite(processRecordCount) || processRecordCount < 0) {
+    message.warning(t('logistics.manufacturing.bom.material-cost.page.processRecordCountInvalid'))
+    return
+  }
+  const query = buildRecalculateItemQuery(month)
+  if (!query) return
+  const forceRecalculate = recalculateModalMode.value === 'recalculate'
+  if (forceRecalculate) {
+    const confirmed = await new Promise<boolean>((resolve) => {
+      Modal.confirm({
+        title: t('logistics.manufacturing.bom.material-cost.page.costRecalculateConfirmTitle'),
+        content: t('logistics.manufacturing.bom.material-cost.page.costRecalculateConfirmContent'),
+        okText: t('common.page.button.ok'),
+        cancelText: t('common.page.button.cancel'),
+        onOk: () => resolve(true),
+        onCancel: () => resolve(false),
+      })
+    })
+    if (!confirmed) return
+  }
+  recalculatePending.value = true
+  try {
+    const submitted = await recalculateBomMaterialCostItemModelAverage(
+      query,
+      forceRecalculate,
+      Math.floor(processRecordCount),
+    )
+    recalculateModalVisible.value = false
+    const msgKey = forceRecalculate
+      ? 'logistics.manufacturing.bom.material-cost.page.costRecalculateSubmitted'
+      : 'logistics.manufacturing.bom.material-cost.page.costSumSubmitted'
+    message.success(t(msgKey, { month: submitted.processedMonth }))
+  } catch (error: unknown) {
+    const err = error as { message?: string }
+    message.error(err?.message || t('logistics.manufacturing.bom.material-cost.page.costRecalculateFailed'))
+  } finally {
+    recalculatePending.value = false
+  }
+}
+
+useBomMaterialCostItemRecalculateSignalR(async (event) => {
+  if (event.executeStatus === 1) {
+    message.success(
+      t('logistics.manufacturing.bom.material-cost.page.costRecalculateCompleted', {
+        month: event.processedMonth,
+        duration: formatBomMaterialCostItemRecalculateDuration(event.executeDuration),
+        refreshed: event.refreshedGroupCount,
+        skipped: event.skippedGroupCount,
+      }),
+    )
+    await loadData()
+    return
+  }
+  message.error(
+    event.errorMessage || t('logistics.manufacturing.bom.material-cost.page.costRecalculateFailed'),
+  )
+})
+
+/**
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {BomMaterialCostQuery} 查询 DTO
  */
 function buildListQuery(overrides?: Partial<BomMaterialCostQuery>): BomMaterialCostQuery {
-  const dateQuery = costingMonthToDateQuery(costingMonth.value)
+  const form = advancedQueryForm.value
+  const kw = (queryKeyword.value ?? '').trim()
   const query: BomMaterialCostQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
     ...overrides,
   }
-  const plantCode = queryForm.plantCode?.trim()
-  const modelCode = queryForm.modelCode?.trim()
-  if (plantCode) query.plantCode = plantCode
-  if (modelCode) query.modelCode = modelCode
-  if (dateQuery.costingDateStart) query.costingDateStart = dateQuery.costingDateStart
-  if (dateQuery.costingDateEnd) query.costingDateEnd = dateQuery.costingDateEnd
+  if (kw.length > 0) {
+    query.keyWords = kw
+  }
+  const assignTrimmed = (key: keyof BomMaterialCostQuery, value: string | undefined) => {
+    const v = (value ?? '').trim()
+    if (v.length > 0) {
+      query[key] = v as never
+    }
+  }
+  for (const key of BOMMATERIALCOST_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
+  if (form.modelMonthlyAverageCost !== undefined && form.modelMonthlyAverageCost !== null) {
+    query.modelMonthlyAverageCost = form.modelMonthlyAverageCost
+  }
+  if (form.productMonthlyCost !== undefined && form.productMonthlyCost !== null) {
+    query.productMonthlyCost = form.productMonthlyCost
+  }
   return query
 }
-/** 左栏表格容器（实测 scroll.y） */
-const leftTableWrapRef = ref<HTMLElement | null>(null)
-/** 左栏 scroll.y */
-const leftTableScrollY = ref(TAKT_TABLE_SCROLL_Y_MIN)
-/** 左栏 ResizeObserver */
-let leftTableScrollResizeObserver: ResizeObserver | null = null
-
-/** 按左栏容器重算 scroll.y */
-function recalcLeftTableScrollY(): void {
-  const wrap = leftTableWrapRef.value
-  if (!wrap) {
-    return
-  }
-  leftTableScrollY.value = measureMasterDetailLrTableScrollY(wrap)
-}
-
-/** 监听左栏容器尺寸 */
-function startLeftTableScrollObserve(): void {
-  stopLeftTableScrollObserve()
-  recalcLeftTableScrollY()
-  const wrap = leftTableWrapRef.value
-  if (!wrap) {
-    return
-  }
-  leftTableScrollResizeObserver = new ResizeObserver(() => {
-    recalcLeftTableScrollY()
-  })
-  leftTableScrollResizeObserver.observe(wrap)
-}
-
-/** 停止左栏容器监听 */
-function stopLeftTableScrollObserve(): void {
-  leftTableScrollResizeObserver?.disconnect()
-  leftTableScrollResizeObserver = null
-}
-
-/**
- * 默认选中当前登录公司关联工厂
- * @returns {Promise<void>}
- */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  queryForm.plantCode = plant || undefined
-}
-
-/** 默认核算单月：当月 */
-function applyDefaultCostingMonth() {
-  costingMonth.value = buildDefaultCostingMonth()
-}
-
-/** 页面挂载：分页配置 + 字典 + 默认工厂/核算月；列表须查询后加载 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
-  applyDefaultCostingMonth()
-  await applyDefaultPlantFromCompany()
-  await nextTick()
-  startLeftTableScrollObserve()
+  loadData()
 })
 
-watch(
-  () => tenantStore.companyCode,
-  () => {
-    void applyDefaultPlantFromCompany()
-  },
-)
-
-onBeforeUnmount(() => {
-  stopLeftTableScrollObserve()
-})
-
-/** 汇总行点击选中 key（左栏高亮） */
-const selectedMasterKey = ref('')
 
 /**
- * 同步机种主表选中（切换时清空产品选中）
- * @param record 机种聚合行
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
  */
-function syncMasterSelection(record: BomMaterialCostModelGroupRecord | null) {
-  selectedModelGroup.value = record
-  selectedMasterKey.value = record ? getModelGroupKey(record) : ''
-  selectedProductRow.value = null
-}
-
-/**
- * 选中机种主表行后加载产品子表
- * @param record 机种聚合行
- */
-function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as BomMaterialCostModelGroupRecord
-  const key = getModelGroupKey(row)
-  selectedRowKeys.value = [key]
-  selectedRows.value = [row]
-  selectedRow.value = row
-  syncMasterSelection(row)
-}
-
-/**
- * 左栏行点击（高亮 + 同步选中）
- * @param record 机种聚合行
- * @returns customRow 属性
- */
-function onMasterClickRow(record: BomMaterialCostModelGroupRecord) {
-  const key = getModelGroupKey(record)
+function buildBomMaterialCostListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
   return {
-    onClick: () => {
-      handleMasterSelect(record as unknown as Record<string, unknown>)
-    },
-    class:
-      selectedMasterKey.value === key
-        ? 'takt-master-detail-table-row-selected cursor-pointer'
-        : 'cursor-pointer',
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
   }
 }
 
-/**
- * 主表分页变更（v-model 已同步页码与 pageSize）
- * @param _page 页码
- * @param _pageSize 每页条数
- */
-function handleMasterPaginationChange(_page: number, _pageSize: number) {
-  loadData()
-}
-
-/** 机种主表列（工厂/机种/机种月均/币种/核算期间） */
+/** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getBomMaterialCostField(record, 'plantCode') ?? '',
-  },
-  {
-    title: pi.label('modelCode'),
-    dataIndex: 'modelCode',
-    key: 'modelCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBomMaterialCostField(record, 'modelCode') ?? '',
-  },
-  {
-    title: pi.label('modelMonthlyAverageCost'),
-    dataIndex: 'modelMonthlyAverageCost',
-    key: 'modelMonthlyAverageCost',
-    width: 140,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) =>
-      formatBomMaterialCostAmount(getBomMaterialCostField(record, 'modelMonthlyAverageCost')),
-  },
-  {
-    title: pi.label('currencyCode'),
-    dataIndex: 'currencyCode',
-    key: 'currencyCode',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: pi.label('costingPeriod'),
-    dataIndex: 'costingPeriod',
-    key: 'costingPeriod',
-    width: 110,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBomMaterialCostField(record, 'costingPeriod') ?? '',
-  },
-  {
-    title: t('logistics.manufacturing.bom.material-cost.page.productRowCount'),
-    dataIndex: 'productRowCount',
-    key: 'productRowCount',
-    width: 100,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getBomMaterialCostField(record, 'productRowCount') ?? '',
-  },
+  buildBomMaterialCostListColumn('bomMaterialCostId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...BOMMATERIALCOST_LIST_FIELDS.map((key) => buildBomMaterialCostListColumn(key, pi.label(key))),
+  CreateActionColumn({
+    actions: [
+      {
+        key: 'update',
+        label: t('common.page.button.edit'),
+        shape: 'plain',
+        icon: RiEditLine,
+        permission: 'logistics:manufacturing:bom:material:cost:update',
+        onClick: (record: BomMaterialCostRowRecord) => handleEdit(record)
+      },
+      {
+        key: 'delete',
+        label: t('common.page.button.delete'),
+        shape: 'plain',
+        icon: RiDeleteBinLine,
+        permission: 'logistics:manufacturing:bom:material:cost:delete',
+        onClick: (record: BomMaterialCostRowRecord) => handleDeleteOne(record)
+      }
+    ]
+  })
 ])
 
-/**
- * 机种聚合行 key
- * @param record 机种行
- * @returns {string} groupKey
- */
-const getModelGroupKey = (record: BomMaterialCostModelGroupRecord): string => {
-  const g = record as Record<string, unknown>
-  if (g.groupKey != null && String(g.groupKey).length > 0) {
-    return String(g.groupKey)
-  }
-  return `${String(g.plantCode ?? '')}|${String(g.modelCode ?? '')}|${String(g.costingPeriod ?? '')}`
+/** 表格 row-key（优先实体主键字段） */
+const getBomMaterialCostId = (record: BomMaterialCostRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
 }
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const getBomMaterialCostField = (record: any, field: string): any => record?.[field]
 /**
  * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
 const getBomMaterialCostDictValue = (
-  record: BomMaterialCostModelGroupRecord,
+  record: BomMaterialCostRowRecord,
   field: string,
 ): string | number | undefined => {
   const value = (record as Record<string, unknown>)?.[field]
@@ -649,48 +859,56 @@ const getBomMaterialCostDictValue = (
   return String(value)
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: BomMaterialCostModelGroupRecord[]) => {
+  onChange: (keys: (string | number)[], rows: BomMaterialCostRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
-    if (rows.length === 1 && rows[0]) {
-      syncMasterSelection(rows[0])
-    } else if (rows.length === 0) {
-      syncMasterSelection(null)
-    }
   },
-  onSelect: (record: BomMaterialCostModelGroupRecord, selected: boolean) => {
+  onSelect: (record: BomMaterialCostRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
-      syncMasterSelection(record)
-    } else if (
-      selectedRow.value
-      && getModelGroupKey(selectedRow.value) === getModelGroupKey(record)
-    ) {
+    } else if (selectedRow.value && getBomMaterialCostId(selectedRow.value) === getBomMaterialCostId(record)) {
       selectedRow.value = null
-      syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: BomMaterialCostModelGroupRecord[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: BomMaterialCostRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
-    syncMasterSelection(selectedRow.value)
-  },
+  }
 }))
 
-/** 加载机种聚合主表分页（须先选工厂） */
-async function loadData() {
-  if (!queryForm.plantCode?.trim()) {
-    dataSource.value = []
-    total.value = 0
-    syncMasterSelection(null)
-    return
+/** 行点击切换选中（与 rowSelection 联动） */
+const onClickRow = (record: BomMaterialCostRowRecord) => ({
+  onClick: () => {
+    const key = getBomMaterialCostId(record)
+    const index = selectedRowKeys.value.indexOf(key)
+    if (index > -1) {
+      selectedRowKeys.value.splice(index, 1)
+    } else {
+      selectedRowKeys.value.push(key)
+    }
+    selectedRows.value = dataSource.value.filter((item) => selectedRowKeys.value.includes(getBomMaterialCostId(item)))
+    selectedRow.value = selectedRowKeys.value.length === 1 ? (selectedRows.value[0] ?? null) : null
+    if (rowSelection.value.onChange) {
+      rowSelection.value.onChange(selectedRowKeys.value, selectedRows.value)
+    }
   }
+})
+
+/** 加载分页列表 */
+async function loadData() {
   loading.value = true
   try {
-    const res = await getBomMaterialCostModelGroupList(buildListQuery())
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
+    const res = await getBomMaterialCostList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
   } catch (error: any) {
@@ -703,264 +921,112 @@ async function loadData() {
   }
 }
 
-/** 租户/公司切换：先同步公司关联工厂，再重载列表 */
-useTableRefresh(async () => {
-  await applyDefaultPlantFromCompany()
-  await loadData()
-})
+/** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
+useTableRefresh(loadData)
 
-/** 查询（须工厂） */
+/** 快捷查询 */
 function handleSearch() {
-  if (!queryForm.plantCode?.trim()) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired'))
-    return
-  }
   currentPage.value = getTaktDefaultPageIndex()
-  syncMasterSelection(null)
-  selectedRowKeys.value = []
-  selectedRows.value = []
-  selectedRow.value = null
-  void loadData()
+  loadData()
 }
 
-/** 重置工厂/机种/核算月（工厂恢复公司默认；核算月恢复当月） */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
-  queryForm.modelCode = undefined
-  applyDefaultCostingMonth()
+/** 重置查询条件并刷新列表 */
+function handleReset() {
+  queryKeyword.value = ''
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
-  dataSource.value = []
-  total.value = 0
-  syncMasterSelection(null)
-  selectedRowKeys.value = []
-  selectedRows.value = []
-  selectedRow.value = null
+  loadData()
 }
 
-/**
- * 由核算期间 yyyy-MM 生成月起止日期
- * @param period 核算期间
- * @returns 起止 YYYY-MM-DD；非法时 null
- */
-function resolveMonthRangeFromPeriod(period: string): { start: string; end: string } | null {
-  const match = /^(\d{4})-(\d{2})$/.exec(period.trim())
-  if (!match) return null
-  const year = Number(match[1])
-  const month = Number(match[2])
-  if (!Number.isFinite(year) || month < 1 || month > 12) return null
-  const pad = (n: number) => String(n).padStart(2, '0')
-  const lastDay = new Date(year, month, 0).getDate()
-  return {
-    start: `${year}-${pad(month)}-01`,
-    end: `${year}-${pad(month)}-${pad(lastDay)}`,
-  }
+/** 打开新增弹窗 */
+function handleCreate() {
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
+  formData.value = null
+  formVisible.value = true
+  nextTick(() => formRef.value?.resetFields())
 }
-
-/**
- * 解析弹窗默认核算月（选中行 → 查询单月 → 当前月）
- * @returns {string} yyyy-MM
- */
-function resolveDefaultCostingMonth(): string {
-  const row = selectedModelGroup.value as Record<string, unknown> | null
-  const fromRow = String(row?.costingPeriod ?? '').trim()
-  if (resolveMonthRangeFromPeriod(fromRow)) return fromRow
-  const fromQueryMonth = costingMonth.value?.trim()
-  if (fromQueryMonth && resolveMonthRangeFromPeriod(fromQueryMonth)) return fromQueryMonth
-  return buildDefaultCostingMonth()
-}
-
-/**
- * 按弹窗核算月构建明细重算查询（工厂必填：弹窗所选）
- * @param {string} costingMonth 核算月 yyyy-MM
- * @returns 查询 DTO；月份或工厂非法时 null
- */
-function buildRecalculateItemQuery(costingMonth: string): BomMaterialCostItemQuery | null {
-  const plantCode = String(recalculateForm.plantCode ?? '').trim()
-  if (!plantCode) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired'))
-    return null
-  }
-  const range = resolveMonthRangeFromPeriod(costingMonth)
-  if (!range) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.costNeedMonth'))
-    return null
-  }
-  const query: BomMaterialCostItemQuery = {
-    pageIndex: 1,
-    pageSize: 1,
-    plantCode,
-    costingDateStart: range.start,
-    costingDateEnd: range.end,
-  }
-  const modelFromQuery = queryForm.modelCode?.trim()
-  if (modelFromQuery) {
-    query.modelCode = modelFromQuery
-  }
-  if (selectedModelGroup.value && !query.modelCode) {
-    const row = selectedModelGroup.value as Record<string, unknown>
-    const m = String(row.modelCode ?? '').trim()
-    if (m) {
-      query.modelCode = m
-    }
-  }
-  return query
-}
-
-/**
- * 打开零价格：弹窗内选工厂 + 机种 + 核算月
- */
-function openZeroPriceModal() {
-  zeroPricePlantCode.value = queryForm.plantCode?.trim() || undefined
-  zeroPriceModelCode.value = queryForm.modelCode?.trim() || undefined
-  if (!zeroPriceModelCode.value && selectedModelGroup.value) {
-    const m = String((selectedModelGroup.value as Record<string, unknown>).modelCode ?? '').trim()
-    if (m) {
-      zeroPriceModelCode.value = m
-    }
-  }
-  zeroPriceModelSelectKey.value += 1
-  zeroPriceCostingMonth.value = resolveDefaultCostingMonth()
-  zeroPriceMonthModalVisible.value = true
-}
-
-/**
- * 工厂变更：清空机种并刷新下拉
- */
-function handleZeroPricePlantChange() {
-  zeroPriceModelCode.value = undefined
-  zeroPriceModelSelectKey.value += 1
-}
-
-/**
- * 确认工厂 / 机种 / 核算月后打开零价格合并清单
- */
-function handleZeroPriceMonthOk() {
-  const plant = String(zeroPricePlantCode.value ?? '').trim()
-  if (!plant) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired'))
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: BomMaterialCostRowRecord) {
+  const id = getBomMaterialCostId(record)
+  if (!id) {
     return
   }
-  const model = String(zeroPriceModelCode.value ?? '').trim()
-  if (!model) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.selectModelRequired'))
-    return
-  }
-  const month = String(zeroPriceCostingMonth.value ?? '').trim()
-  if (!month) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.costNeedMonth'))
-    return
-  }
-  zeroPricePlantCode.value = plant
-  zeroPriceModelCode.value = model
-  zeroPriceMonthModalVisible.value = false
-  zeroPriceModalVisible.value = true
-}
-
-/**
- * 打开计算/重置成本弹窗（弹窗内选工厂 + 核算月）
- * @param {boolean} forceRecalculate true=重置成本
- */
-function openRecalculateModal(forceRecalculate: boolean) {
-  recalculateModalForce.value = forceRecalculate
-  recalculateForm.plantCode = queryForm.plantCode?.trim() || undefined
-  if (!recalculateForm.plantCode && selectedModelGroup.value) {
-    const p = String((selectedModelGroup.value as Record<string, unknown>).plantCode ?? '').trim()
-    if (p) {
-      recalculateForm.plantCode = p
-    }
-  }
-  recalculateForm.costingMonth = resolveDefaultCostingMonth()
-  recalculateForm.processRecordCount = DEFAULT_PROCESS_RECORD_COUNT
-  recalculateModalVisible.value = true
-}
-
-/**
- * 弹窗确认：提交后台重算
- */
-async function handleRecalculateModalOk() {
-  const plant = String(recalculateForm.plantCode ?? '').trim()
-  if (!plant) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.selectPlantRequired'))
-    return
-  }
-  const month = String(recalculateForm.costingMonth ?? '').trim()
-  if (!month) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.costNeedMonth'))
-    return
-  }
-  const processRecordCount = Number(recalculateForm.processRecordCount ?? DEFAULT_PROCESS_RECORD_COUNT)
-  if (!Number.isFinite(processRecordCount) || processRecordCount < 0) {
-    message.warning(t('logistics.manufacturing.bom.material-cost.page.processRecordCountInvalid'))
-    return
-  }
-  const query = buildRecalculateItemQuery(month)
-  if (!query) return
-  recalculatePending.value = true
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
   try {
-    const submitted = await recalculateBomMaterialCostItemModelAverage(
-      query,
-      recalculateModalForce.value,
-      Math.floor(processRecordCount),
-    )
-    recalculateModalVisible.value = false
-    message.success(
-      t(
-        recalculateModalForce.value
-          ? 'logistics.manufacturing.bom.material-cost.page.costRecalculateSubmitted'
-          : 'logistics.manufacturing.bom.material-cost.page.costSumSubmitted',
-        { month: submitted.processedMonth },
-      ),
-    )
+    const detail = await getBomMaterialCostById(id)
+    formData.value = detail ?? ({ ...record } as Partial<BomMaterialCost>)
+    formVisible.value = true
   } catch (error: unknown) {
-    const err = error as { message?: string }
-    message.error(err?.message || t('logistics.manufacturing.bom.material-cost.page.costRecalculateFailed'))
+    message.error(t('common.feedback.load.data.failed'))
   } finally {
-    recalculatePending.value = false
+    formLoading.value = false
   }
 }
 
-useBomMaterialCostItemRecalculateSignalR(async (event) => {
-  recalculatePending.value = false
-  if (event.executeStatus === 1) {
-    message.success(
-      t('logistics.manufacturing.bom.material-cost.page.costRecalculateCompleted', {
-        month: event.processedMonth,
-        duration: formatBomMaterialCostItemRecalculateDuration(event.executeDuration),
-        refreshed: event.refreshedGroupCount,
-        skipped: event.skippedGroupCount,
-      }),
-    )
-    await loadData()
-    bomMaterialCostProductPanelRef.value?.reload?.()
+/** 工具栏编辑：打开当前单选行 */
+function handleUpdate() {
+  if (selectedRow.value) {
+    void handleEdit(selectedRow.value)
+  } else {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
+  }
+}
+/** 提交新增/编辑表单 */
+async function handleFormSubmit() {
+  const refInst = formRef.value
+  if (!refInst?.validate) return
+  try {
+    await refInst.validate()
+  } catch {
     return
   }
-  message.error(
-    event.errorMessage
-      || t('logistics.manufacturing.bom.material-cost.page.costRecalculateFailed'),
-  )
-})
+  formLoading.value = true
+  try {
+    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
+    const id = (formData.value as any)?.[entityIdName]
+    if (id) {
+      await updateBomMaterialCost(id, payload as any)
+      message.success(t('common.feedback.updated', { target: pi.self() }))
+    } else {
+      await createBomMaterialCost(payload as any)
+      message.success(t('common.feedback.created', { target: pi.self() }))
+    }
+    formVisible.value = false
+    formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+    loadData()
+  } finally {
+    formLoading.value = false
+  }
+}
 
-/** 打开导入对话框（明细源数据） */
+/** 关闭新增/编辑弹窗（不提交） */
+function handleFormCancel() {
+  formVisible.value = false
+  formData.value = null
+  nextTick(() => formRef.value?.resetFields())
+}
+/** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
 }
 
-/** 下载明细导入模板 Excel */
+/** 下载导入模板 Excel */
 async function handleDownloadTemplate(sheetName?: string, fileName?: string): Promise<Blob> {
-  const res = await getBomMaterialCostItemTemplate(sheetName, fileName)
+  const res = await getBomMaterialCostTemplate(sheetName, fileName)
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入明细 Excel */
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
 async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
-  const raw = await importBomMaterialCostItem(file, sheetName)
+  const raw = await importBomMaterialCost(file, sheetName)
   return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新汇总与右侧明细 */
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
 function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  bomMaterialCostProductPanelRef.value?.reload?.()
   if (result.fail === 0 && result.success > 0) {
     setTimeout(() => { importVisible.value = false }, 2000)
   }
@@ -970,11 +1036,13 @@ function handleImportSuccess(result: TaktImportResult) {
 function handleImportCancel() {
   importVisible.value = false
 }
-
-/** 导出当前查询条件下的汇总 Excel */
+/** 导出当前查询条件下的 Excel */
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportBomMaterialCost(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1006,6 +1074,54 @@ async function handleExport() {
     loading.value = false
   }
 }
+/** 删除单行 */
+async function handleDeleteOne(record: BomMaterialCostRowRecord) {
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      await deleteBomMaterialCostById((record as any)[entityIdName])
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      loadData()
+    }
+  })
+}
+/** 批量删除选中行 */
+async function handleDelete() {
+  if (selectedRows.value.length === 0) {
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
+    return
+  }
+  Modal.confirm({
+    title: t('common.tip.confirm.delete.title'),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
+    okText: t('common.page.button.delete'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: async () => {
+      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
+      await deleteBomMaterialCostBatch(ids)
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
+      loadData()
+    }
+  })
+}
+/** 打开高级查询抽屉 */
+function handleAdvancedQuery() {
+  advancedQueryVisible.value = true
+}
+
+/** 高级查询提交：关闭抽屉并重置分页 */
+function handleAdvancedQuerySubmit() {
+  advancedQueryVisible.value = false
+  currentPage.value = getTaktDefaultPageIndex()
+  loadData()
+}
+
+function handleAdvancedQueryReset() {
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
+}
 
 /** 打开列设置抽屉 */
 function handleColumnSetting() {
@@ -1031,4 +1147,17 @@ function handleRefresh() {
 function handleTableChange() {}
 /** 列宽拖拽回调占位 */
 function handleResizeColumn() {}
+/** 分页页码变更 */
+function handlePaginationChange(page: number, size: number) {
+  currentPage.value = page
+  pageSize.value = size
+  loadData()
+}
+
+/** 分页每页条数变更（重置到第 1 页） */
+function handlePaginationSizeChange(_current: number, size: number) {
+  currentPage.value = getTaktDefaultPageIndex()
+  pageSize.value = size
+  loadData()
+}
 </script>

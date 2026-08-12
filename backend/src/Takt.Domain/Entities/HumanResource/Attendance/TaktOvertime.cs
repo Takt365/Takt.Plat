@@ -96,11 +96,6 @@ public class TaktOvertime : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "handling_comment", ColumnDescription = "经办备注", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
     public string? HandlingComment { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 加班状态（字典 sys_approval_status；0=待审批 1=审批中 2=已通过 3=已驳回 4=已撤回 5=已终止）
     /// </summary>
     [SugarColumn(ColumnName = "overtime_status", ColumnDescription = "加班状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

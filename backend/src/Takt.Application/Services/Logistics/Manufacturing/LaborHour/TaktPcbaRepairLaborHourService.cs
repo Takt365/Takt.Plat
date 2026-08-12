@@ -93,12 +93,12 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
         EnsureThreeLayerContext();
         var list = await _pcbaRepairLaborHourRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.ProdTeam ?? string.Empty,
+            x => x.TeamCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.ProdTeam ?? e.Id.ToString(),
+            DictLabel = e.TeamCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -113,11 +113,11 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
         var isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaRepairLaborHourRepository,
             x => x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam
+                && x.TeamCode == entity.TeamCode
                 && x.ShiftNo == entity.ShiftNo);
         if (!isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique)
         {
-            throw new TaktBusinessException("PCBA改修工数统计的ProdDate、ProdTeam、ShiftNo已存在");
+            throw new TaktBusinessException("PCBA改修工数统计的ProdDate、TeamCode、ShiftNo已存在");
         }
         entity = await _pcbaRepairLaborHourRepository.CreateAsync(entity);
         return await GetPcbaRepairLaborHourByIdAsync(entity.Id) ?? entity.Adapt<TaktPcbaRepairLaborHourDto>();
@@ -140,12 +140,12 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
         var isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaRepairLaborHourRepository,
             x => x.ProdDate == entity.ProdDate
-                && x.ProdTeam == entity.ProdTeam
+                && x.TeamCode == entity.TeamCode
                 && x.ShiftNo == entity.ShiftNo,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique)
         {
-            throw new TaktBusinessException("PCBA改修工数统计的ProdDate、ProdTeam、ShiftNo已存在");
+            throw new TaktBusinessException("PCBA改修工数统计的ProdDate、TeamCode、ShiftNo已存在");
         }
         await _pcbaRepairLaborHourRepository.UpdateAsync(entity);
         return await GetPcbaRepairLaborHourByIdAsync(id) ?? throw new TaktBusinessException("PCBA改修工数统计不存在");
@@ -219,19 +219,19 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
             try
             {
                 var entity = rows[i].Adapt<TaktPcbaRepairLaborHour>();
-                var importKey = $"{entity.ProdDate}|{entity.ProdTeam}|{entity.ShiftNo}";
+                var importKey = $"{entity.ProdDate}|{entity.TeamCode}|{entity.ShiftNo}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、ProdTeam、ShiftNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ProdDate、TeamCode、ShiftNo）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique = await _uniqueValidator.IsUniqueAsync(
                     _pcbaRepairLaborHourRepository,
                     x => x.ProdDate == entity.ProdDate
-                        && x.ProdTeam == entity.ProdTeam
+                        && x.TeamCode == entity.TeamCode
                         && x.ShiftNo == entity.ShiftNo);
                 if (!isUnique_ix_takt_logistics_manufacturing_labor_hour_pcba_repair_unique)
                 {
-                    throw new TaktBusinessException("PCBA改修工数统计的ProdDate、ProdTeam、ShiftNo已存在");
+                    throw new TaktBusinessException("PCBA改修工数统计的ProdDate、TeamCode、ShiftNo已存在");
                 }
                 await _pcbaRepairLaborHourRepository.CreateAsync(entity);
                 success += 1;
@@ -287,7 +287,7 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || SqlFunc.ToString(x.StdCapacity).Contains(keywords)
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
@@ -295,6 +295,7 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
                 || SqlFunc.ToString(x.DowntimeMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.ConfirmMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.ActualMinutes).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -302,9 +303,9 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -342,6 +343,11 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
             exp = exp.And(x => x.ActualMinutes == queryDto.ActualMinutes);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -371,6 +377,12 @@ public class TaktPcbaRepairLaborHourService : TaktServiceBase, ITaktPcbaRepairLa
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

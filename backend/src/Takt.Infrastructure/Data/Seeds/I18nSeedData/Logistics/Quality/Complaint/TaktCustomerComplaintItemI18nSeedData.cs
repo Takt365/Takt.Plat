@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerComplaintItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -135,14 +135,14 @@ public class TaktCustomerComplaintItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.customercomplaintitem.productname
             new TranslationSeedItem("entity.customercomplaintitem.productname", "zh-HK", "产品名称_hk", "产品名称"),
 
-            // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "en-US", "批次号_us", "批次号"),
-            // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "ja-JP", "批次号_jp", "批次号"),
-            // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "zh-CN", "批次号", "批次号"),
-            // entity.customercomplaintitem.batchno
-            new TranslationSeedItem("entity.customercomplaintitem.batchno", "zh-HK", "批次号_hk", "批次号"),
+            // entity.customercomplaintitem.batchcode
+            new TranslationSeedItem("entity.customercomplaintitem.batchcode", "en-US", "批次号_us", "批次号"),
+            // entity.customercomplaintitem.batchcode
+            new TranslationSeedItem("entity.customercomplaintitem.batchcode", "ja-JP", "批次号_jp", "批次号"),
+            // entity.customercomplaintitem.batchcode
+            new TranslationSeedItem("entity.customercomplaintitem.batchcode", "zh-CN", "批次号", "批次号"),
+            // entity.customercomplaintitem.batchcode
+            new TranslationSeedItem("entity.customercomplaintitem.batchcode", "zh-HK", "批次号_hk", "批次号"),
 
             // entity.customercomplaintitem.itemtype
             new TranslationSeedItem("entity.customercomplaintitem.itemtype", "en-US", "不良项目类型_us", "不良项目类型（字典 logistics_quality_complaint_item_type）"),

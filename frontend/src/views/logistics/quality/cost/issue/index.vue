@@ -222,11 +222,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="pi.queryLabel('costCurrency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <a-input
-          v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="pi.queryPh('costCurrency', 'required')"
+          v-model:value="advancedQueryForm.currencyCode"
+          :placeholder="pi.queryPh('currencyCode', 'required')"
           show-count
           :maxlength="3"
           allow-clear
@@ -487,7 +487,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -641,13 +640,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'totalCost') ?? ''
   },
   {
-    title: pi.label('costCurrency'),
-    dataIndex: 'costCurrency',
-    key: 'costCurrency',
+    title: pi.label('currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'costCurrency') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'currencyCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -682,8 +681,6 @@ const getQualityIssueId = (record: QualityIssueRowRecord): string => {
  * @param field 字段名
  */
 const getQualityIssueField = (record: any, field: string): any => record?.[field]
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -754,7 +751,7 @@ function handleReset() {
   needRework: '',
   totalTimeMinutes: undefined as number | undefined,
   totalCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -964,7 +961,7 @@ function handleAdvancedQueryReset() {
   needRework: '',
   totalTimeMinutes: undefined as number | undefined,
   totalCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -15,11 +15,12 @@ using Takt.Application.Dtos.Logistics.Manufacturing.Output;
 using Takt.Application.Services.Logistics.Manufacturing.Output;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// 月生产推移转置分析控制器
+/// 月生产推移转置分析控制器（与组立/PCBA 产出 CRUD 分离）
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "月生产推移")]
@@ -34,6 +35,77 @@ public class TaktProductionMonthlyTrendsController : TaktControllerBase
   public TaktProductionMonthlyTrendsController(ITaktProductionMonthlyTrendService productionMonthlyTrendService)
   {
     _productionMonthlyTrendService = productionMonthlyTrendService;
+  }
+
+  /// <summary>
+  /// 推移查询栏：组立/PCBA 产出本表工厂去重选项
+  /// </summary>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移工厂选项")]
+  [HttpGet("plant-options")]
+  public async Task<IActionResult> GetProductionMonthlyTrendPlantOptionsAsync()
+  {
+    try
+    {
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendPlantOptionsAsync();
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
+  }
+
+  /// <summary>
+  /// 推移查询栏：按工厂返回有数据的产出类别
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移产出类别选项")]
+  [HttpGet("output-category-options")]
+  public async Task<IActionResult> GetProductionMonthlyTrendOutputCategoryOptionsAsync([FromQuery] string plantCode)
+  {
+    try
+    {
+      if (string.IsNullOrWhiteSpace(plantCode))
+      {
+        return Success(new List<TaktSelectOption>(), "查询成功");
+      }
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendOutputCategoryOptionsAsync(plantCode);
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
+  }
+
+  /// <summary>
+  /// 推移查询栏：按工厂+产出类别去重机种
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <param name="outputCategory">产出类别（assy/pcba；可空）</param>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:output:production:monthly:list", "月生产推移机种选项")]
+  [HttpGet("model-options")]
+  public async Task<IActionResult> GetProductionMonthlyTrendModelOptionsAsync(
+      [FromQuery] string plantCode,
+      [FromQuery] string? outputCategory = null)
+  {
+    try
+    {
+      if (string.IsNullOrWhiteSpace(plantCode))
+      {
+        return Success(new List<TaktSelectOption>(), "查询成功");
+      }
+      var result = await _productionMonthlyTrendService.GetProductionMonthlyTrendModelOptionsAsync(
+          plantCode, outputCategory);
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
   }
 
   /// <summary>

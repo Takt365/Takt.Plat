@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：culture.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,7 @@ export interface Culture extends TenantDtoBase {
   cultureId: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
-   */
-  cultureCode: string;
-
-  /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName: string;
 
@@ -49,19 +44,14 @@ export interface Culture extends TenantDtoBase {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
    */
-  languageStatus: number;
+  sortOrder: number;
 
   /**
    * 翻译列表（一对多关联） （子表：TaktTranslation）
@@ -84,12 +74,12 @@ export interface CultureQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  cultureCode?: string;
+  relatedPlant?: string;
 
   /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName?: string;
 
@@ -104,19 +94,14 @@ export interface CultureQuery extends TaktPagedQuery {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
    */
-  languageStatus?: number;
+  sortOrder?: number;
 
   /**
    * 创建时间（范围查询-开始）
@@ -131,7 +116,7 @@ export interface CultureQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -153,12 +138,12 @@ export interface CultureCreate {
   tenantCode: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  cultureCode: string;
+  relatedPlant: string;
 
   /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName: string;
 
@@ -173,19 +158,9 @@ export interface CultureCreate {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
-
-  /**
-   * 状态（1=启用，0=禁用）
-   */
-  languageStatus: number;
 
   /**
    * 翻译列表（一对多关联）（子表，级联保存）
@@ -195,7 +170,7 @@ export interface CultureCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -217,24 +192,10 @@ export interface CultureUpdate extends CultureCreate {
    */
   cultureId: string;
 
-}
-
-
-/**
- * Culture 状态更新 DTO
- * 对应前端 CultureStatus
- * @description 对应后端 TaktCultureStatusDto
- */
-export interface CultureStatus {
   /**
-   * CultureID
+   * 翻译列表（一对多关联）（子表，级联保存）
    */
-  cultureId: string;
-
-  /**
-   * 状态（1=启用，0=禁用）
-   */
-  languageStatus: number;
+  translationList?: any;
 
 }
 
@@ -270,12 +231,12 @@ export interface CultureTemplate {
   tenantCode?: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  cultureCode?: string;
+  relatedPlant?: string;
 
   /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName?: string;
 
@@ -290,24 +251,19 @@ export interface CultureTemplate {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 翻译列表（一对多关联）（子表，级联保存）
    */
-  languageStatus?: number;
+  translationList?: TranslationCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -329,12 +285,12 @@ export interface CultureImport {
   tenantCode?: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  cultureCode?: string;
+  relatedPlant?: string;
 
   /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName?: string;
 
@@ -349,24 +305,19 @@ export interface CultureImport {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder?: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault?: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 翻译列表（一对多关联）（子表，级联保存）
    */
-  languageStatus?: number;
+  translationList?: TranslationCreate[];
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -388,12 +339,12 @@ export interface CultureExport {
   cultureId: string;
 
   /**
-   * 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  cultureCode: string;
+  relatedPlant: string;
 
   /**
-   * 语言名称（如：简体中文、English）
+   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
    */
   languageName: string;
 
@@ -408,24 +359,19 @@ export interface CultureExport {
   icon?: string;
 
   /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
    * 默认语言（字典 sys_yes_no_type；1=是 0=否）
    */
   isDefault: number;
 
   /**
-   * 状态（1=启用，0=禁用）
+   * 排序号
    */
-  languageStatus: number;
+  sortOrder: number;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

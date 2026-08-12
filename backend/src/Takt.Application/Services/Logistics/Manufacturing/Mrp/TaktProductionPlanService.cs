@@ -498,6 +498,7 @@ public class TaktProductionPlanService : TaktServiceBase, ITaktProductionPlanSer
                 || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedStatus).Contains(keywords)
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlanDate).Contains(keywords)
@@ -580,6 +581,11 @@ public class TaktProductionPlanService : TaktServiceBase, ITaktProductionPlanSer
         if (!string.IsNullOrEmpty(queryDto?.PlanDescription))
         {
             exp = exp.And(x => x.PlanDescription != null && x.PlanDescription.Contains(queryDto.PlanDescription));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

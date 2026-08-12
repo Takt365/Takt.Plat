@@ -16,11 +16,12 @@ using Takt.Domain.Entities.Logistics.Sales;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
 /// <summary>
-/// 月销售推移转置分析服务
+/// 月销售推移转置分析服务（读销售订单本表；与 CRUD 服务分离）
 /// </summary>
 public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTrendService
 {
@@ -41,6 +42,58 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
         : base(userContext, localizationService)
     {
         _salesOrderRepository = salesOrderRepository;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendPlantOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        var list = await _salesOrderRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode != null
+                && x.PlantCode != string.Empty);
+        return list
+            .GroupBy(e => e.PlantCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendCustomerOptionsAsync(string plantCode)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _salesOrderRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == plant
+                && x.CustomerCode != null
+                && x.CustomerCode != string.Empty);
+        return list
+            .GroupBy(e => e.CustomerCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var name = g.Select(x => x.CustomerName1)
+                    .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim();
+                var label = string.IsNullOrWhiteSpace(name) ? g.Key : $"{g.Key} - {name}";
+                return new TaktSelectOption
+                {
+                    DictValue = g.Key,
+                    DictLabel = label,
+                };
+            })
+            .ToList();
     }
 
     /// <inheritdoc />

@@ -102,7 +102,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
                 NativeName = seed.NativeName,
                 Icon = seed.Icon,
                 IsDefault = seed.IsDefault ? 1 : 0,
-                LanguageStatus = 1,
                 SortOrder = seed.SortOrder,
                 Remark = seed.Remark,
             };
@@ -114,7 +113,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
         culture.NativeName = seed.NativeName;
         culture.Icon = seed.Icon;
         culture.IsDefault = seed.IsDefault ? 1 : 0;
-        culture.LanguageStatus = 1;
         culture.SortOrder = seed.SortOrder;
         culture.Remark = seed.Remark;
 

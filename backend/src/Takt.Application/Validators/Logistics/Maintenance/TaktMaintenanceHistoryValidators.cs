@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoryValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceHistory 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaintenanceHistory 生成，请按需审阅）
 // 
@@ -35,6 +35,12 @@ public class TaktMaintenanceHistoryCreateValidator : AbstractValidator<TaktMaint
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaintenanceWorkOrderId)
             .GreaterThanOrEqualTo(0).WithMessage("来源维护工单ID不能为负数");
         RuleFor(x => x.WorkOrderCode)
@@ -42,9 +48,9 @@ public class TaktMaintenanceHistoryCreateValidator : AbstractValidator<TaktMaint
             .MaximumLength(50).WithMessage("来源维护工单号长度不能超过50个字符");
         RuleFor(x => x.EquipmentId)
             .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
-        RuleFor(x => x.EquipmentCode)
+        RuleFor(x => x.EquipCode)
             .NotEmpty().WithMessage("设备编码不能为空")
-            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
+            .MaximumLength(18).WithMessage("设备编码长度不能超过18个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -74,6 +80,12 @@ public class TaktMaintenanceHistoryUpdateValidator : AbstractValidator<TaktMaint
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaintenanceWorkOrderId)
             .GreaterThanOrEqualTo(0).WithMessage("来源维护工单ID不能为负数");
         RuleFor(x => x.WorkOrderCode)
@@ -81,9 +93,9 @@ public class TaktMaintenanceHistoryUpdateValidator : AbstractValidator<TaktMaint
             .MaximumLength(50).WithMessage("来源维护工单号长度不能超过50个字符");
         RuleFor(x => x.EquipmentId)
             .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
-        RuleFor(x => x.EquipmentCode)
+        RuleFor(x => x.EquipCode)
             .NotEmpty().WithMessage("设备编码不能为空")
-            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
+            .MaximumLength(18).WithMessage("设备编码长度不能超过18个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -109,6 +121,10 @@ public class TaktMaintenanceHistoryImportValidator : AbstractValidator<TaktMaint
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.MaintenanceWorkOrderId)
             .GreaterThanOrEqualTo(0).WithMessage("来源维护工单ID不能为负数");
         RuleFor(x => x.WorkOrderCode)
@@ -116,9 +132,9 @@ public class TaktMaintenanceHistoryImportValidator : AbstractValidator<TaktMaint
             .MaximumLength(50).WithMessage("来源维护工单号长度不能超过50个字符");
         RuleFor(x => x.EquipmentId)
             .GreaterThanOrEqualTo(0).WithMessage("设备ID不能为负数");
-        RuleFor(x => x.EquipmentCode)
+        RuleFor(x => x.EquipCode)
             .NotEmpty().WithMessage("设备编码不能为空")
-            .MaximumLength(50).WithMessage("设备编码长度不能超过50个字符");
+            .MaximumLength(18).WithMessage("设备编码长度不能超过18个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

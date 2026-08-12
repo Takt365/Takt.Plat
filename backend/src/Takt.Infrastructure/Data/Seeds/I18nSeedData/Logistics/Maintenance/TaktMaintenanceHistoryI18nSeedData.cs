@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceHistoryI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceHistory 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -117,14 +117,14 @@ public class TaktMaintenanceHistoryI18nSeedData : ITaktSeedDataCoordinator
             // entity.maintenancehistory.equipmentid
             new TranslationSeedItem("entity.maintenancehistory.equipmentid", "zh-HK", "设备ID_hk", "设备ID（序列化为string以避免Javascript精度问题）"),
 
-            // entity.maintenancehistory.equipmentcode
-            new TranslationSeedItem("entity.maintenancehistory.equipmentcode", "en-US", "设备编码_us", "设备编码（冗余字段,便于查询）"),
-            // entity.maintenancehistory.equipmentcode
-            new TranslationSeedItem("entity.maintenancehistory.equipmentcode", "ja-JP", "设备编码_jp", "设备编码（冗余字段,便于查询）"),
-            // entity.maintenancehistory.equipmentcode
-            new TranslationSeedItem("entity.maintenancehistory.equipmentcode", "zh-CN", "设备编码", "设备编码（冗余字段,便于查询）"),
-            // entity.maintenancehistory.equipmentcode
-            new TranslationSeedItem("entity.maintenancehistory.equipmentcode", "zh-HK", "设备编码_hk", "设备编码（冗余字段,便于查询）"),
+            // entity.maintenancehistory.equipcode
+            new TranslationSeedItem("entity.maintenancehistory.equipcode", "en-US", "设备编码_us", "设备编码（冗余字段,便于查询）"),
+            // entity.maintenancehistory.equipcode
+            new TranslationSeedItem("entity.maintenancehistory.equipcode", "ja-JP", "设备编码_jp", "设备编码（冗余字段,便于查询）"),
+            // entity.maintenancehistory.equipcode
+            new TranslationSeedItem("entity.maintenancehistory.equipcode", "zh-CN", "设备编码", "设备编码（冗余字段,便于查询）"),
+            // entity.maintenancehistory.equipcode
+            new TranslationSeedItem("entity.maintenancehistory.equipcode", "zh-HK", "设备编码_hk", "设备编码（冗余字段,便于查询）"),
 
             // entity.maintenancehistory.maintenancetype
             new TranslationSeedItem("entity.maintenancehistory.maintenancetype", "en-US", "维护类型_us", "维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）"),

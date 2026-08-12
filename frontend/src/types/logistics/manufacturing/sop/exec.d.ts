@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：exec.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,12 +29,7 @@ export interface SopExec extends CompanyDtoBase {
   sopExecId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
@@ -46,7 +41,7 @@ export interface SopExec extends CompanyDtoBase {
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo: string;
+  workOrderCode: string;
 
   /**
    * 产品序列号 SN
@@ -54,12 +49,12 @@ export interface SopExec extends CompanyDtoBase {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
@@ -74,7 +69,7 @@ export interface SopExec extends CompanyDtoBase {
   processSegmentType: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId: string;
 
@@ -84,7 +79,7 @@ export interface SopExec extends CompanyDtoBase {
   workstationName?: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
@@ -94,7 +89,7 @@ export interface SopExec extends CompanyDtoBase {
   employeeName?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
@@ -104,7 +99,7 @@ export interface SopExec extends CompanyDtoBase {
   sopName?: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
@@ -117,11 +112,6 @@ export interface SopExec extends CompanyDtoBase {
    * 版本号快照
    */
   revision: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 开始时间
@@ -144,7 +134,7 @@ export interface SopExec extends CompanyDtoBase {
   execStatus: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 
@@ -194,19 +184,24 @@ export interface SopExecQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo?: string;
+  workOrderCode?: string;
 
   /**
    * 产品序列号 SN
@@ -214,12 +209,12 @@ export interface SopExecQuery extends TaktPagedQuery {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
@@ -229,22 +224,22 @@ export interface SopExecQuery extends TaktPagedQuery {
   processSegmentType?: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
@@ -252,11 +247,6 @@ export interface SopExecQuery extends TaktPagedQuery {
    * 版本号快照
    */
   revision?: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 开始时间（范围查询-开始）
@@ -289,7 +279,7 @@ export interface SopExecQuery extends TaktPagedQuery {
   execStatus?: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 
@@ -333,24 +323,24 @@ export interface SopExecCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
   /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo: string;
+  workOrderCode: string;
 
   /**
    * 产品序列号 SN
@@ -358,12 +348,12 @@ export interface SopExecCreate {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
@@ -373,22 +363,22 @@ export interface SopExecCreate {
   processSegmentType: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
@@ -396,11 +386,6 @@ export interface SopExecCreate {
    * 版本号快照
    */
   revision: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 开始时间
@@ -423,7 +408,7 @@ export interface SopExecCreate {
   execStatus: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 
@@ -467,6 +452,21 @@ export interface SopExecUpdate extends SopExecCreate {
    */
   sopExecId: string;
 
+  /**
+   * 工步执行明细（子表，级联保存）
+   */
+  steps?: any;
+
+  /**
+   * 扫码记录（子表，级联保存）
+   */
+  scans?: any;
+
+  /**
+   * 作业参数（子表，级联保存）
+   */
+  arguments?: any;
+
 }
 
 
@@ -506,19 +506,24 @@ export interface SopExecTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
   /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo?: string;
+  workOrderCode?: string;
 
   /**
    * 产品序列号 SN
@@ -526,12 +531,12 @@ export interface SopExecTemplate {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
@@ -541,22 +546,22 @@ export interface SopExecTemplate {
   processSegmentType?: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
@@ -564,11 +569,6 @@ export interface SopExecTemplate {
    * 版本号快照
    */
   revision?: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 开始时间
@@ -591,7 +591,7 @@ export interface SopExecTemplate {
   execStatus?: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 
@@ -640,24 +640,24 @@ export interface SopExecImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
   /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo?: string;
+  workOrderCode?: string;
 
   /**
    * 产品序列号 SN
@@ -665,12 +665,12 @@ export interface SopExecImport {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
@@ -680,22 +680,22 @@ export interface SopExecImport {
   processSegmentType?: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
@@ -703,11 +703,6 @@ export interface SopExecImport {
    * 版本号快照
    */
   revision?: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 开始时间
@@ -730,7 +725,7 @@ export interface SopExecImport {
   execStatus?: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 
@@ -779,19 +774,19 @@ export interface SopExecExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+   * 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
    */
   productionOrderId?: string;
 
   /**
    * MES 工单号（冗余，便于追溯查询）
    */
-  workOrderNo: string;
+  workOrderCode: string;
 
   /**
    * 产品序列号 SN
@@ -799,12 +794,12 @@ export interface SopExecExport {
   serialNumber?: string;
 
   /**
-   * 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
@@ -814,22 +809,22 @@ export interface SopExecExport {
   processSegmentType: number;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId: string;
 
   /**
-   * 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+   * 员工 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   employeeId: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
   /**
-   * SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
@@ -837,11 +832,6 @@ export interface SopExecExport {
    * 版本号快照
    */
   revision: string;
-
-  /**
-   * 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 开始时间
@@ -864,7 +854,7 @@ export interface SopExecExport {
   execStatus: number;
 
   /**
-   * 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   currentStepId?: string;
 

@@ -106,7 +106,6 @@ export interface FlowStart {
 
 }
 
-
 /**
  * 办结任务请求
  * 对应前端 FlowCompleteTask
@@ -145,7 +144,6 @@ export interface FlowCompleteTask {
 
 }
 
-
 /**
  * 转办请求
  * 对应前端 FlowTransfer
@@ -179,7 +177,6 @@ export interface FlowTransfer {
 
 }
 
-
 /**
  * 加签人项
  * 对应前端 FlowAddApproverItem
@@ -197,7 +194,6 @@ export interface FlowAddApproverItem {
   approverUserName?: string;
 
 }
-
 
 /**
  * 加签请求
@@ -237,7 +233,6 @@ export interface FlowAddApprovers {
 
 }
 
-
 /**
  * 减签请求
  * 对应前端 FlowReduceApproval
@@ -261,7 +256,6 @@ export interface FlowReduceApproval {
 
 }
 
-
 /**
  * 实例操作请求（挂起/恢复/终止/撤回/撤销审批）
  * 对应前端 FlowInstanceOperate
@@ -279,7 +273,6 @@ export interface FlowInstanceOperate {
   reason?: string;
 
 }
-
 
 /**
  * 待办/已办查询（分页与关键词见 TaktPagedQuery）
@@ -333,7 +326,6 @@ export interface FlowTodoQuery extends TaktPagedQuery {
   startTimeEnd?: string;
 
 }
-
 
 /**
  * 当前用户待办数量
@@ -394,7 +386,6 @@ export interface FlowTodoItem {
 
 }
 
-
 /**
  * 流转历史项（前端 history）
  * 对应前端 FlowHistoryItem
@@ -428,7 +419,6 @@ export interface FlowHistoryItem {
 
 }
 
-
 /**
  * 未处理加签项
  * 对应前端 FlowPendingAddApprover
@@ -446,7 +436,6 @@ export interface FlowPendingAddApprover {
   approverUserName: string;
 
 }
-
 
 /**
  * 流程实例详情（前端 FlowInstanceDetail）
@@ -541,7 +530,6 @@ export interface FlowInstanceDetail {
 
 }
 
-
 /**
  * 我的/已办列表项（前端 FlowInstance 列表形态）
  * 对应前端 FlowInstanceListItem
@@ -599,7 +587,6 @@ export interface FlowInstanceListItem {
   frmData?: string;
 
 }
-
 
 /**
  * 我的流程查询扩展

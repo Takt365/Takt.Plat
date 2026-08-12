@@ -15,6 +15,7 @@ using Takt.Application.Dtos.Logistics.Manufacturing.Defect;
 using Takt.Application.Services.Logistics.Manufacturing.Defect;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Defect;
 
@@ -34,6 +35,78 @@ public class TaktDefectMonthlyTrendsController : TaktControllerBase
   public TaktDefectMonthlyTrendsController(ITaktDefectMonthlyTrendService defectMonthlyTrendService)
   {
     _defectMonthlyTrendService = defectMonthlyTrendService;
+  }
+
+  /// <summary>
+  /// 推移查询栏：组立不良 ∪ PCBA 检查工厂去重选项
+  /// </summary>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移工厂选项")]
+  [HttpGet("plant-options")]
+  public async Task<IActionResult> GetDefectMonthlyTrendPlantOptionsAsync()
+  {
+    try
+    {
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendPlantOptionsAsync();
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
+  }
+
+  /// <summary>
+  /// 推移查询栏：按工厂可用不良类别（assy / pcba）
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移不良类别选项")]
+  [HttpGet("defect-category-options")]
+  public async Task<IActionResult> GetDefectMonthlyTrendDefectCategoryOptionsAsync(
+      [FromQuery] string plantCode)
+  {
+    try
+    {
+      if (string.IsNullOrWhiteSpace(plantCode))
+      {
+        return Success(new List<TaktSelectOption>(), "查询成功");
+      }
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendDefectCategoryOptionsAsync(plantCode);
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
+  }
+
+  /// <summary>
+  /// 推移查询栏：按工厂（及可选不良类别）去重机种
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <param name="defectCategory">不良类别（assy / pcba；可空）</param>
+  /// <returns>下拉选项</returns>
+  [TaktPermission("logistics:manufacturing:defect:monthly:list", "月生产不良推移机种选项")]
+  [HttpGet("model-options")]
+  public async Task<IActionResult> GetDefectMonthlyTrendModelOptionsAsync(
+      [FromQuery] string plantCode,
+      [FromQuery] string? defectCategory = null)
+  {
+    try
+    {
+      if (string.IsNullOrWhiteSpace(plantCode))
+      {
+        return Success(new List<TaktSelectOption>(), "查询成功");
+      }
+      var result = await _defectMonthlyTrendService.GetDefectMonthlyTrendModelOptionsAsync(
+          plantCode, defectCategory);
+      return Success(result, "查询成功");
+    }
+    catch (Exception ex)
+    {
+      return HandleException(ex);
+    }
   }
 
   /// <summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.NewsCenter
 // 文件名称：TaktNewsCommentLikeDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：NewsCommentLike 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktNewsCommentLike 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktNewsCommentLikeDto : TaktCompanyDtoBase
     public long NewsCommentLikeId { get; set; }
 
     /// <summary>
-    /// 评论 ID
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CommentId { get; set; }
@@ -47,7 +47,7 @@ public class TaktNewsCommentLikeDto : TaktCompanyDtoBase
     public string? CommentName { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
@@ -91,13 +91,23 @@ public class TaktNewsCommentLikeQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论 ID
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CommentId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -158,18 +168,23 @@ public class TaktNewsCommentLikeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 评论 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CommentId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
@@ -237,13 +252,23 @@ public class TaktNewsCommentLikeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论 ID
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CommentId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -286,18 +311,23 @@ public class TaktNewsCommentLikeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 评论 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CommentId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -346,13 +376,13 @@ public class TaktNewsCommentLikeExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评论 ID
+    /// 评论 ID（选项 TaktNewsComments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CommentId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }

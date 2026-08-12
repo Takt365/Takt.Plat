@@ -497,6 +497,7 @@ public class TaktMaterialRequirementsPlanningService : TaktServiceBase, ITaktMat
                 || SqlFunc.ToString(x.PurchasePlanId).Contains(keywords)
                 || (x.PurchasePlanCode != null && x.PurchasePlanCode.Contains(keywords))
                 || (x.PlanDescription != null && x.PlanDescription.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlanDate).Contains(keywords)
@@ -574,6 +575,11 @@ public class TaktMaterialRequirementsPlanningService : TaktServiceBase, ITaktMat
         if (!string.IsNullOrEmpty(queryDto?.PlanDescription))
         {
             exp = exp.And(x => x.PlanDescription != null && x.PlanDescription.Contains(queryDto.PlanDescription));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

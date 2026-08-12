@@ -30,7 +30,7 @@ export const QUALITYISSUE_LIST_FIELDS = [
   'needRework',
   'totalTimeMinutes',
   'totalCost',
-  'costCurrency',
+  'currencyCode',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -48,7 +48,7 @@ export const QUALITYISSUE_PLACEHOLDER = {
   needRework: 'optional',
   totalTimeMinutes: 'select',
   totalCost: 'select',
-  costCurrency: 'required',
+  currencyCode: 'required',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -67,7 +67,7 @@ export const QUALITYISSUE_QUERY_STRING_FIELDS = [
   'qualityProblemsResponse',
   'reworkDueToDefects',
   'needRework',
-  'costCurrency',
+  'currencyCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

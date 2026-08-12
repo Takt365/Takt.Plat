@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialPlantI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,41 +90,14 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             // entity.materialplant._self
             new TranslationSeedItem("entity.materialplant._self", "zh-HK", "Takt工厂物料信息_hk", "实体名称"),
 
-            // entity.materialplant.plantcode
-            new TranslationSeedItem("entity.materialplant.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialplant.plantcode
-            new TranslationSeedItem("entity.materialplant.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialplant.plantcode
-            new TranslationSeedItem("entity.materialplant.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialplant.plantcode
-            new TranslationSeedItem("entity.materialplant.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.materialplant.materialcode
-            new TranslationSeedItem("entity.materialplant.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterials/options；DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.materialplant.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
             // entity.materialplant.materialcode
-            new TranslationSeedItem("entity.materialplant.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterials/options；DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.materialplant.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
             // entity.materialplant.materialcode
-            new TranslationSeedItem("entity.materialplant.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterials/options；DictValue=MaterialCode）"),
+            new TranslationSeedItem("entity.materialplant.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
             // entity.materialplant.materialcode
-            new TranslationSeedItem("entity.materialplant.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterials/options；DictValue=MaterialCode）"),
-
-            // entity.materialplant.materialname
-            new TranslationSeedItem("entity.materialplant.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
-            // entity.materialplant.materialname
-            new TranslationSeedItem("entity.materialplant.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
-            // entity.materialplant.materialname
-            new TranslationSeedItem("entity.materialplant.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
-            // entity.materialplant.materialname
-            new TranslationSeedItem("entity.materialplant.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
-
-            // entity.materialplant.materialspecification
-            new TranslationSeedItem("entity.materialplant.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),
-            // entity.materialplant.materialspecification
-            new TranslationSeedItem("entity.materialplant.materialspecification", "ja-JP", "物料规格_jp", "物料规格（回填：随物料）"),
-            // entity.materialplant.materialspecification
-            new TranslationSeedItem("entity.materialplant.materialspecification", "zh-CN", "物料规格", "物料规格（回填：随物料）"),
-            // entity.materialplant.materialspecification
-            new TranslationSeedItem("entity.materialplant.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
+            new TranslationSeedItem("entity.materialplant.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
 
             // entity.materialplant.materialdescription
             new TranslationSeedItem("entity.materialplant.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
@@ -134,6 +107,15 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialplant.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
             // entity.materialplant.materialdescription
             new TranslationSeedItem("entity.materialplant.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
+
+            // entity.materialplant.materialspecification
+            new TranslationSeedItem("entity.materialplant.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),
+            // entity.materialplant.materialspecification
+            new TranslationSeedItem("entity.materialplant.materialspecification", "ja-JP", "物料规格_jp", "物料规格（回填：随物料）"),
+            // entity.materialplant.materialspecification
+            new TranslationSeedItem("entity.materialplant.materialspecification", "zh-CN", "物料规格", "物料规格（回填：随物料）"),
+            // entity.materialplant.materialspecification
+            new TranslationSeedItem("entity.materialplant.materialspecification", "zh-HK", "物料规格_hk", "物料规格（回填：随物料）"),
 
             // entity.materialplant.industrysector
             new TranslationSeedItem("entity.materialplant.industrysector", "en-US", "行业领域_us", "行业领域（字典 logistics_industry_sector；A=工厂工程/装备制造，C=化工，M=机械工程，P=制药/医药）"),
@@ -253,31 +235,31 @@ public class TaktMaterialPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialplant.inhouseproductiondays", "zh-HK", "自制生产天数_hk", "自制生产天数（内部生产所需天数，支持 1 位小数，如 0.5、2.5）"),
 
             // entity.materialplant.manufacturer
-            new TranslationSeedItem("entity.materialplant.manufacturer", "en-US", "制造商_us", "制造商"),
+            new TranslationSeedItem("entity.materialplant.manufacturer", "en-US", "制造商_us", "制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.materialplant.manufacturer
-            new TranslationSeedItem("entity.materialplant.manufacturer", "ja-JP", "制造商_jp", "制造商"),
+            new TranslationSeedItem("entity.materialplant.manufacturer", "ja-JP", "制造商_jp", "制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.materialplant.manufacturer
-            new TranslationSeedItem("entity.materialplant.manufacturer", "zh-CN", "制造商", "制造商"),
+            new TranslationSeedItem("entity.materialplant.manufacturer", "zh-CN", "制造商", "制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
             // entity.materialplant.manufacturer
-            new TranslationSeedItem("entity.materialplant.manufacturer", "zh-HK", "制造商_hk", "制造商"),
+            new TranslationSeedItem("entity.materialplant.manufacturer", "zh-HK", "制造商_hk", "制造商（选项 TaktSuppliers/options；DictValue=SupplierCode）"),
 
             // entity.materialplant.manufacturermaterialcode
-            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "en-US", "制造商物料编码_us", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "en-US", "制造商物料编码_us", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）"),
             // entity.materialplant.manufacturermaterialcode
-            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "ja-JP", "制造商物料编码_jp", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "ja-JP", "制造商物料编码_jp", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）"),
             // entity.materialplant.manufacturermaterialcode
-            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "zh-CN", "制造商物料编码", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "zh-CN", "制造商物料编码", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）"),
             // entity.materialplant.manufacturermaterialcode
-            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "zh-HK", "制造商物料编码_hk", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.materialplant.manufacturermaterialcode", "zh-HK", "制造商物料编码_hk", "制造商物料编码（选项 TaktManufacturerMaterials/options；DictValue=ManufacturerMaterialCode）"),
 
-            // entity.materialplant.currency
-            new TranslationSeedItem("entity.materialplant.currency", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.materialplant.currency
-            new TranslationSeedItem("entity.materialplant.currency", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.materialplant.currency
-            new TranslationSeedItem("entity.materialplant.currency", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
-            // entity.materialplant.currency
-            new TranslationSeedItem("entity.materialplant.currency", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.materialplant.currencycode
+            new TranslationSeedItem("entity.materialplant.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.materialplant.currencycode
+            new TranslationSeedItem("entity.materialplant.currencycode", "ja-JP", "币种_jp", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.materialplant.currencycode
+            new TranslationSeedItem("entity.materialplant.currencycode", "zh-CN", "币种", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
+            // entity.materialplant.currencycode
+            new TranslationSeedItem("entity.materialplant.currencycode", "zh-HK", "币种_hk", "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）"),
 
             // entity.materialplant.pricecontrol
             new TranslationSeedItem("entity.materialplant.pricecontrol", "en-US", "价格控制_us", "价格控制（字典 logistics_price_control_type；S=标准价格，V=移动平均价格/周期单价；默认 V）"),

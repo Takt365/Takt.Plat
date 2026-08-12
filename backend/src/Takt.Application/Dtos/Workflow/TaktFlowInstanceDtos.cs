@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Workflow
 // 文件名称：TaktFlowInstanceDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：FlowInstance 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktFlowInstance 生成，请按需审阅）
 // 
@@ -219,6 +219,16 @@ public class TaktFlowInstanceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 实例编码（对外业务单号）
     /// </summary>
     public string? InstanceCode { get; set; } = string.Empty;
@@ -384,10 +394,15 @@ public class TaktFlowInstanceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 实例编码（对外业务单号）
     /// </summary>
@@ -556,6 +571,26 @@ public class TaktFlowInstanceUpdateDto : TaktFlowInstanceCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FlowInstanceId { get; set; }
 
+    /// <summary>
+    /// 待办任务（子表，级联保存）
+    /// </summary>
+    public new List<TaktFlowTaskUpdateDto>? Tasks { get; set; }
+
+    /// <summary>
+    /// 流转历史（子表，级联保存）
+    /// </summary>
+    public new List<TaktFlowTransitionUpdateDto>? HistoricActivities { get; set; }
+
+    /// <summary>
+    /// 流程变量（子表，级联保存）
+    /// </summary>
+    public new List<TaktFlowVariableUpdateDto>? Variables { get; set; }
+
+    /// <summary>
+    /// 加签记录（子表，级联保存）
+    /// </summary>
+    public new List<TaktFlowAddSignUpdateDto>? AddSigns { get; set; }
+
 }
 
 // ========================================
@@ -601,6 +636,16 @@ public class TaktFlowInstanceTemplateDto
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 实例编码（对外业务单号）
     /// </summary>
@@ -764,10 +809,15 @@ public class TaktFlowInstanceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 实例编码（对外业务单号）
     /// </summary>

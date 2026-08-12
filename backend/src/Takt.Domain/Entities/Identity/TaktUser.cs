@@ -50,11 +50,6 @@ public class TaktUser : TaktTenantEntityBase
     [SugarColumn(ColumnName = "employee_id", ColumnDescription = "员工ID", ColumnDataType = "bigint", IsNullable = false)]
     public long EmployeeId { get; set; }
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
-    /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
     /// </summary>
     [SugarColumn(ColumnName = "is_built_in", ColumnDescription = "内置", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

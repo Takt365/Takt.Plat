@@ -35,51 +35,6 @@ public class TaktPayrollDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PayrollId { get; set; }
 
-    /// <summary>
-    /// 薪酬体系编码（租户+公司内唯一）
-    /// </summary>
-    public string PayrollCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 薪酬体系名称
-    /// </summary>
-    public string PayrollName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联薪级表 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PayScaleId { get; set; }
-
-    /// <summary>
-    /// 关联薪级表 名称（填充字段）
-    /// </summary>
-    public string? PayScaleName { get; set; }
-
-    /// <summary>
-    /// 默认公式方案编码（整单工资核算，见 TaktSalaryFormula.set_code）
-    /// </summary>
-    public string? FormulaSetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveDate { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 说明
-    /// </summary>
-    public string? PayrollDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -107,6 +62,11 @@ public class TaktPayrollQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 薪酬体系编码（租户+公司内唯一）
@@ -157,7 +117,7 @@ public class TaktPayrollQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -205,9 +165,10 @@ public class TaktPayrollCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 薪酬体系编码（租户+公司内唯一）
@@ -251,7 +212,7 @@ public class TaktPayrollCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -334,6 +295,11 @@ public class TaktPayrollTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 薪酬体系编码（租户+公司内唯一）
     /// </summary>
     public string? PayrollCode { get; set; } = string.Empty;
@@ -372,7 +338,7 @@ public class TaktPayrollTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -407,9 +373,10 @@ public class TaktPayrollImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 薪酬体系编码（租户+公司内唯一）
@@ -450,7 +417,7 @@ public class TaktPayrollImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -529,7 +496,7 @@ public class TaktPayrollExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）

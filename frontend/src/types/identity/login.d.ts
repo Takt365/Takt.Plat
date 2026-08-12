@@ -313,7 +313,12 @@ export interface UserInfoResponse {
   companyCode: string;
 
   /**
-   * 用户区域文化 BCP47（takt_identity_user.default_culture）
+   * 当前公司关联工厂（takt_company.related_plant）
+   */
+  relatedPlant: string;
+
+  /**
+   * 用户区域文化 BCP47（takt_identity_user.culture_code，UI 偏好）
    */
   defaultCulture: string;
 
@@ -396,9 +401,9 @@ export interface UserInfoResponse {
 
 
 /**
- * 登录前预览：用户默认公司、用户 DefaultCulture 与假日主题（与 TaktUser / TaktUserCompany 对齐）
+ * 登录前预览：用户默认公司与用户 CultureCode
  * 对应前端 LoginPreviewLocale
- * @description 对应后端 TaktLoginPreviewLocaleDto
+ * @description 对应后端 TaktLoginPreviewLocaleResponseDto
  */
 export interface LoginPreviewLocale {
   /**
@@ -407,14 +412,8 @@ export interface LoginPreviewLocale {
   companyCode: string;
 
   /**
-   * 用户区域文化 BCP47（takt_identity_user.default_culture，用于界面语言）
+   * 用户区域文化代码（takt_identity_user.culture_code；登录页 UI 语言仅用此字段）
    */
-  defaultCulture: string;
-
-  /**
-   * 公司区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
-   */
-  companyDefaultCulture: string;
-
+  cultureCode: string;
 }
 

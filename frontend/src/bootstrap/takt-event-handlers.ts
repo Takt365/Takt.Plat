@@ -162,11 +162,11 @@ function showAntdMessage(type: NotificationType, content: string, description?: 
 
 /**
  * 空闲超时登出（兼容旧调用方）
- * @param message 提示文案；缺省 common.tip.session.idle.logout
+ * @param message 提示文案；缺省 layouts.page.session.idlelogout
  * @returns {Promise<void>}
  */
 export async function executeIdleLogoutAsync(message?: string): Promise<void> {
-  const logoutMessage = message ?? translateLocaleMessage('common.tip.session.idle.logout');
+  const logoutMessage = message ?? translateLocaleMessage('layouts.page.session.idlelogout');
   executeIdleLogoutNow(logoutMessage);
 }
 
@@ -212,7 +212,7 @@ export function registerTaktEventHandlers(): void {
       return;
     }
 
-    const logoutMessage = payload?.message ?? translateLocaleMessage('common.tip.session.expired');
+    const logoutMessage = payload?.message ?? translateLocaleMessage('layouts.page.session.expired');
     const userStore = useUserStore();
     if (!userStore.isLoggedIn && router.currentRoute.value.path === '/login') {
       if (logoutMessage) {
@@ -233,7 +233,7 @@ export function registerTaktEventHandlers(): void {
   });
 
   EventBus.on('auth:idle-timeout', (payload) => {
-    const logoutMessage = payload?.message ?? translateLocaleMessage('common.tip.session.idle.logout');
+    const logoutMessage = payload?.message ?? translateLocaleMessage('layouts.page.session.idlelogout');
     executeIdleLogoutNow(logoutMessage);
   });
 

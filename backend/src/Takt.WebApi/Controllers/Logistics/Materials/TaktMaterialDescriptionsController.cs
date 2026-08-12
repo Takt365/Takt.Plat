@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialDescriptionsController.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-05
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料描述控制器
 // 
@@ -41,7 +41,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("logistics:materials:material:list", "物料描述列表")]
+    [TaktPermission("logistics:materials:material:description:list", "物料描述列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetMaterialDescriptionListAsync([FromQuery] TaktMaterialDescriptionQueryDto queryDto)
     {
@@ -61,7 +61,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料描述ID</param>
     /// <returns>物料描述DTO</returns>
-    [TaktPermission("logistics:materials:material:query", "物料描述详情")]
+    [TaktPermission("logistics:materials:material:description:query", "物料描述详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetMaterialDescriptionByIdAsync(long id)
     {
@@ -84,7 +84,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// 获取物料描述选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:materials:material:query", "物料描述选项")]
+    [TaktPermission("logistics:materials:material:description:query", "物料描述选项")]
     [HttpGet("options")]
     public async Task<IActionResult> GetMaterialDescriptionOptionsAsync()
     {
@@ -104,7 +104,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>物料描述DTO</returns>
-    [TaktPermission("logistics:materials:material:create", "创建物料描述")]
+    [TaktPermission("logistics:materials:material:description:create", "创建物料描述")]
     [HttpPost]
     public async Task<IActionResult> CreateMaterialDescriptionAsync([FromBody] TaktMaterialDescriptionCreateDto dto)
     {
@@ -125,7 +125,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// <param name="id">物料描述ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>物料描述DTO</returns>
-    [TaktPermission("logistics:materials:material:update", "更新物料描述")]
+    [TaktPermission("logistics:materials:material:description:update", "更新物料描述")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateMaterialDescriptionAsync(long id, [FromBody] TaktMaterialDescriptionUpdateDto dto)
     {
@@ -145,7 +145,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="id">物料描述ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:delete", "删除物料描述")]
+    [TaktPermission("logistics:materials:material:description:delete", "删除物料描述")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteMaterialDescriptionByIdAsync(long id)
     {
@@ -165,7 +165,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("logistics:materials:material:delete", "批量删除物料描述")]
+    [TaktPermission("logistics:materials:material:description:delete", "批量删除物料描述")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteMaterialDescriptionBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -184,7 +184,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:material:import", "获取物料描述导入模板")]
+    [TaktPermission("logistics:materials:material:description:import", "获取物料描述导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetMaterialDescriptionTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -204,7 +204,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("logistics:materials:material:import", "导入物料描述")]
+    [TaktPermission("logistics:materials:material:description:import", "导入物料描述")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportMaterialDescriptionAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -234,7 +234,7 @@ public class TaktMaterialDescriptionsController : TaktControllerBase
     /// 导出物料描述
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("logistics:materials:material:export", "导出物料描述")]
+    [TaktPermission("logistics:materials:material:description:export", "导出物料描述")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportMaterialDescriptionAsync([FromQuery] TaktMaterialDescriptionQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

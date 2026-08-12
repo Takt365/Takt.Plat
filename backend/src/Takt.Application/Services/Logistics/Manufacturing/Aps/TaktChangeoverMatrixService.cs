@@ -313,6 +313,7 @@ public class TaktChangeoverMatrixService : TaktServiceBase, ITaktChangeoverMatri
                 || (x.ToMaterialCode != null && x.ToMaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.ChangeoverMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.MatrixStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -347,6 +348,11 @@ public class TaktChangeoverMatrixService : TaktServiceBase, ITaktChangeoverMatri
         if (queryDto?.MatrixStatus.HasValue == true)
         {
             exp = exp.And(x => x.MatrixStatus == queryDto.MatrixStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

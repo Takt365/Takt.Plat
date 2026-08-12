@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceService.cs
-// 创建时间：2026-07-21
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格应用服务实现
 // 
@@ -14,7 +14,6 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Procurement;
-using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Entities.Logistics.Procurement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
@@ -30,13 +29,8 @@ namespace Takt.Application.Services.Logistics.Procurement;
 /// </summary>
 public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceService
 {
-    /// <summary>物料/供应商名称按编码分批查询，避免超长 IN 列表</summary>
-    private const int MaterialNameLookupBatchSize = 500;
-
     private readonly ITaktCompanyRepository<TaktPurchasePrice> _purchasePriceRepository;
     private readonly ITaktCompanyRepository<TaktPurchasePriceItem> _purchasePriceItemRepository;
-    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
-    private readonly ITaktCompanyRepository<TaktSupplier> _supplierRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -44,16 +38,12 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     /// </summary>
     /// <param name="purchasePriceRepository">采购价格仓储</param>
     /// <param name="purchasePriceItemRepository">PurchasePriceItem仓储</param>
-    /// <param name="materialPlantRepository">工厂物料仓储</param>
-    /// <param name="supplierRepository">供应商仓储</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktPurchasePriceService(
         ITaktCompanyRepository<TaktPurchasePrice> purchasePriceRepository,
         ITaktCompanyRepository<TaktPurchasePriceItem> purchasePriceItemRepository,
-        ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
-        ITaktCompanyRepository<TaktSupplier> supplierRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -61,18 +51,24 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     {
         _purchasePriceRepository = purchasePriceRepository;
         _purchasePriceItemRepository = purchasePriceItemRepository;
-        _materialPlantRepository = materialPlantRepository;
-        _supplierRepository = supplierRepository;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取采购价格列表（分页）
+    /// 获取采购价格列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchasePriceDto>> GetPurchasePriceListAsync(TaktPurchasePriceQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchasePriceDto>.Create(
+                new List<TaktPurchasePriceDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchasePriceRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,84 +106,12 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
         EnsureThreeLayerContext();
         var list = await _purchasePriceRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PurchasePriceCode ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PurchasePriceCode ?? e.Id.ToString(),
-        }).ToList();
-    }
-
-    /// <inheritdoc />
-    public async Task<List<TaktSelectOption>> GetPurchasePriceSupplierOptionsAsync(string? plantCode = null)
-    {
-        EnsureThreeLayerContext();
-        var trimmedPlant = plantCode?.Trim();
-        if (string.IsNullOrWhiteSpace(trimmedPlant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var list = await _purchasePriceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == trimmedPlant
-                && x.SupplierCode != null
-                && x.SupplierCode != string.Empty,
-            x => x.SupplierCode,
-            false);
-        var codes = list
-            .Select(x => x.SupplierCode.Trim())
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var nameLookup = await LoadSupplierNameLookupAsync(codes);
-        return codes.Select(code =>
-        {
-            var name = nameLookup.TryGetValue(code, out var n) ? n : string.Empty;
-            var label = string.IsNullOrWhiteSpace(name) ? code : $"{code} - {name}";
-            return new TaktSelectOption
-            {
-                DictValue = code,
-                DictLabel = label,
-            };
-        }).ToList();
-    }
-
-    /// <inheritdoc />
-    public async Task<List<TaktSelectOption>> GetPurchasePriceMaterialOptionsAsync(string? plantCode = null)
-    {
-        EnsureThreeLayerContext();
-        var trimmedPlant = plantCode?.Trim();
-        if (string.IsNullOrWhiteSpace(trimmedPlant))
-        {
-            return new List<TaktSelectOption>();
-        }
-        var list = await _purchasePriceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == trimmedPlant
-                && x.MaterialCode != null
-                && x.MaterialCode != string.Empty,
-            x => x.MaterialCode,
-            false);
-        var codes = list
-            .Select(x => x.MaterialCode.Trim())
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(c => c, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var nameLookup = await LoadMaterialNameLookupAsync(trimmedPlant, codes);
-        return codes.Select(code =>
-        {
-            var name = nameLookup.TryGetValue(code, out var n) ? n : string.Empty;
-            var label = string.IsNullOrWhiteSpace(name) ? code : $"{code} - {name}";
-            return new TaktSelectOption
-            {
-                DictValue = code,
-                DictLabel = label,
-            };
+            DictValue = e.PurchasePriceCode,
+            DictLabel = e.MaterialDescription ?? e.PurchasePriceCode,
         }).ToList();
     }
 
@@ -348,7 +272,15 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchasePriceAsync(TaktPurchasePriceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchasePriceQueryDto());
+        var queryDto = query ?? new TaktPurchasePriceQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchasePriceExportDto>(),
+                sheetName ?? "采购价格数据",
+                fileName ?? "采购价格导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchasePriceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -497,204 +429,247 @@ public class TaktPurchasePriceService : TaktServiceBase, ITaktPurchasePriceServi
     {
         var exp = Expressionable.Create<TaktPurchasePrice>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
                 || (x.PriceType != null && x.PriceType.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.PurchaseGroup != null && x.PurchaseGroup.Contains(keywords))
                 || (x.TaxCode != null && x.TaxCode.Contains(keywords))
-                || SqlFunc.ToString(x.GrBasedInvoiceInspection).Contains(keywords)
-                || SqlFunc.ToString(x.PricingDateControl).Contains(keywords)
-                || SqlFunc.ToString(x.PurchaseInquiryId).Contains(keywords)
                 || (x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(keywords))
                 || (x.VariableKey != null && x.VariableKey.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.ValidTo).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchasePriceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchasePriceCode))
         {
-            exp = exp.And(x => x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(queryDto.PurchasePriceCode));
+            var purchasePriceCode = queryDto.PurchasePriceCode;
+            exp = exp.And(x => x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(purchasePriceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PriceType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PriceType))
         {
-            exp = exp.And(x => x.PriceType != null && x.PriceType.Contains(queryDto.PriceType));
+            var priceType = queryDto.PriceType;
+            exp = exp.And(x => x.PriceType != null && x.PriceType.Contains(priceType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
         {
-            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+            var supplierCode = queryDto.SupplierCode;
+            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(supplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(queryDto.PurchaseGroup));
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TaxCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseGroup))
         {
-            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(queryDto.TaxCode));
+            var purchaseGroup = queryDto.PurchaseGroup;
+            exp = exp.And(x => x.PurchaseGroup != null && x.PurchaseGroup.Contains(purchaseGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
+        {
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
         }
 
         if (queryDto?.GrBasedInvoiceInspection.HasValue == true)
         {
-            exp = exp.And(x => x.GrBasedInvoiceInspection == queryDto.GrBasedInvoiceInspection);
+            var grBasedInvoiceInspection = queryDto.GrBasedInvoiceInspection;
+            exp = exp.And(x => x.GrBasedInvoiceInspection == grBasedInvoiceInspection);
         }
 
         if (queryDto?.PricingDateControl.HasValue == true)
         {
-            exp = exp.And(x => x.PricingDateControl == queryDto.PricingDateControl);
+            var pricingDateControl = queryDto.PricingDateControl;
+            exp = exp.And(x => x.PricingDateControl == pricingDateControl);
         }
 
         if (queryDto?.PurchaseInquiryId.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseInquiryId == queryDto.PurchaseInquiryId);
+            var purchaseInquiryId = queryDto.PurchaseInquiryId;
+            exp = exp.And(x => x.PurchaseInquiryId == purchaseInquiryId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseInquiryCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInquiryCode))
         {
-            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(queryDto.PurchaseInquiryCode));
+            var purchaseInquiryCode = queryDto.PurchaseInquiryCode;
+            exp = exp.And(x => x.PurchaseInquiryCode != null && x.PurchaseInquiryCode.Contains(purchaseInquiryCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariableKey))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariableKey))
         {
-            exp = exp.And(x => x.VariableKey != null && x.VariableKey.Contains(queryDto.VariableKey));
+            var variableKey = queryDto.VariableKey;
+            exp = exp.And(x => x.VariableKey != null && x.VariableKey.Contains(variableKey));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.ValidFromStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom >= queryDto.ValidFromStart);
+            var validFromStart = queryDto.ValidFromStart;
+            exp = exp.And(x => x.ValidFrom >= validFromStart);
         }
 
         if (queryDto?.ValidFromEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFrom <= queryDto.ValidFromEnd);
+            var validFromEnd = queryDto.ValidFromEnd;
+            exp = exp.And(x => x.ValidFrom <= validFromEnd);
         }
 
         if (queryDto?.ValidToStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo >= queryDto.ValidToStart);
+            var validToStart = queryDto.ValidToStart;
+            exp = exp.And(x => x.ValidTo >= validToStart);
         }
 
         if (queryDto?.ValidToEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidTo <= queryDto.ValidToEnd);
+            var validToEnd = queryDto.ValidToEnd;
+            exp = exp.And(x => x.ValidTo <= validToEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
     }
 
     /// <summary>
-    /// 加载工厂物料名称字典
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
     /// </summary>
-    /// <param name="plantCode">工厂</param>
-    /// <param name="materialCodes">物料编码</param>
-    /// <returns>编码→名称</returns>
-    private async Task<Dictionary<string, string>> LoadMaterialNameLookupAsync(
-        string plantCode,
-        IReadOnlyList<string> materialCodes)
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchasePriceQueryDto? queryDto)
     {
-        if (materialCodes.Count == 0)
+        if (queryDto == null)
         {
-            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            return false;
         }
-        var codes = materialCodes.Where(c => !string.IsNullOrWhiteSpace(c)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        for (var offset = 0; offset < codes.Count; offset = checked(offset + MaterialNameLookupBatchSize))
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
         {
-            var batch = codes.Skip(offset).Take(MaterialNameLookupBatchSize).ToList();
-            var plants = await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && x.PlantCode == plantCode
-                    && batch.Contains(x.MaterialCode));
-            foreach (var group in plants
-                .Where(p => !string.IsNullOrWhiteSpace(p.MaterialCode))
-                .GroupBy(p => p.MaterialCode.Trim(), StringComparer.OrdinalIgnoreCase))
-            {
-                if (map.ContainsKey(group.Key))
-                {
-                    continue;
-                }
-                map[group.Key] = group.Select(x => x.MaterialName)
-                    .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim() ?? string.Empty;
-            }
+            return true;
         }
-        return map;
-    }
-
-    /// <summary>
-    /// 加载供应商名称字典
-    /// </summary>
-    /// <param name="supplierCodes">供应商编码</param>
-    /// <returns>编码→名称</returns>
-    private async Task<Dictionary<string, string>> LoadSupplierNameLookupAsync(IReadOnlyList<string> supplierCodes)
-    {
-        if (supplierCodes.Count == 0)
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
         {
-            return new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            return true;
         }
-        var codes = supplierCodes.Where(c => !string.IsNullOrWhiteSpace(c)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-        var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        for (var offset = 0; offset < codes.Count; offset = checked(offset + MaterialNameLookupBatchSize))
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchasePriceCode))
         {
-            var batch = codes.Skip(offset).Take(MaterialNameLookupBatchSize).ToList();
-            var suppliers = await _supplierRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && batch.Contains(x.SupplierCode));
-            foreach (var group in suppliers
-                .Where(s => !string.IsNullOrWhiteSpace(s.SupplierCode))
-                .GroupBy(s => s.SupplierCode.Trim(), StringComparer.OrdinalIgnoreCase))
-            {
-                if (map.ContainsKey(group.Key))
-                {
-                    continue;
-                }
-                map[group.Key] = group.Select(x => x.SupplierName1)
-                    .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim() ?? string.Empty;
-            }
+            return true;
         }
-        return map;
+        if (!string.IsNullOrWhiteSpace(queryDto.PriceType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
+        {
+            return true;
+        }
+        if (queryDto.GrBasedInvoiceInspection.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PricingDateControl.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PurchaseInquiryId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInquiryCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.VariableKey))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ValidFromStart.HasValue || queryDto.ValidFromEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ValidToStart.HasValue || queryDto.ValidToEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

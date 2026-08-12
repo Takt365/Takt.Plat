@@ -87,11 +87,6 @@ public class TaktSalaryFormula : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
     /// </summary>
     [SugarColumn(ColumnName = "sort_order", ColumnDescription = "执行顺序", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

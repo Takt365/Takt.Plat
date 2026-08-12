@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktTranslationService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译应用服务接口
 // 
@@ -104,12 +104,5 @@ public interface ITaktTranslationService
     /// 批量保存翻译转置数据
     /// </summary>
     Task<int> SaveTranslationTransposedBatchAsync(TaktTranslationTransposedBatchDto dto);
-
-    /// <summary>
-    /// 获取指定区域文化的前端扁平翻译消息（ResourceType=Frontend）
-    /// </summary>
-    /// <param name="cultureCode">文化编码 BCP47</param>
-    /// <returns>扁平键值 DTO</returns>
-    Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode);
 
 }

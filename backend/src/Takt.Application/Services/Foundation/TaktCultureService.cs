@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktCultureService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：区域应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Foundation;
 
@@ -60,12 +59,20 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     }
 
     /// <summary>
-    /// 获取区域列表（分页）
+    /// 获取区域列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCultureDto>> GetCultureListAsync(TaktCultureQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCultureDto>.Create(
+                new List<TaktCultureDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _cultureRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -95,24 +102,19 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         return dto;    }
 
     /// <summary>
-    /// 获取语言切换选项列表（仅启用；仓储按 SortOrder 升序，不向下拉项回填 SortOrder）
+    /// 获取区域选项列表
     /// </summary>
-    /// <returns>
-    /// TaktSelectOption：DictValue=CultureCode，DictLabel=LanguageName，ExtValue=Icon，ExtLabel=IsDefault（1/0）
-    /// </returns>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetCultureOptionsAsync()
     {
         var list = await _cultureRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.LanguageStatus == 1,
-            x => x.SortOrder,
+            x => x.TenantCode == CurrentTenantCode,
+            x => x.LanguageName ?? string.Empty,
             false);
-
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.CultureCode,
-            DictLabel = e.LanguageName,
-            ExtValue = e.Icon,
-            ExtLabel = ((int)e.IsDefault).ToString(),
+            DictLabel = e.LanguageName ?? e.CultureCode,
         }).ToList();
     }
 
@@ -156,12 +158,7 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         {
             throw new TaktBusinessException("区域不存在");
         }
-        var originalSortOrder = entity.SortOrder;
         dto.Adapt(entity);
-        if (dto.SortOrder <= 0)
-        {
-            entity.SortOrder = originalSortOrder;
-        }
         var isUnique_ix_culture_culture_unique = await _uniqueValidator.IsUniqueAsync(
             _cultureRepository,
             x => x.CultureCode == entity.CultureCode,
@@ -211,23 +208,6 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         {
             await DeleteCultureByIdAsync(id);
         }
-    }
-
-    /// <summary>
-    /// 更新区域状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktCultureDto> UpdateCultureStatusAsync(TaktCultureStatusDto dto)
-    {
-        var entity = await _cultureRepository.GetByIdAsync(dto.CultureId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("区域不存在");
-        }
-        entity.LanguageStatus = dto.LanguageStatus;
-        await _cultureRepository.UpdateAsync(entity);
-        return await GetCultureByIdAsync(dto.CultureId) ?? throw new TaktBusinessException("区域不存在");
     }
 
     /// <summary>
@@ -324,7 +304,15 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCultureAsync(TaktCultureQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCultureQueryDto());
+        var queryDto = query ?? new TaktCultureQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCultureExportDto>(),
+                sheetName ?? "区域数据",
+                fileName ?? "区域导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _cultureRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -362,7 +350,7 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     }
 
     /// <summary>
-    /// 保存区域子表级联（翻译；Create/Update 后按主表 Id 先删后插）
+    /// 保存区域子表级联（翻译；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -370,40 +358,65 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     private async Task SaveCultureChildrenAsync(TaktCulture entity, TaktCultureCreateDto dto)
     {
         // 翻译（TranslationList）
-        if (dto.TranslationList is not { Count: > 0 })
+        List<TaktTranslationUpdateDto>? translationListForSave;
+        if (dto is TaktCultureUpdateDto updateDtoForTranslationList && updateDtoForTranslationList.TranslationList != null)
+        {
+            translationListForSave = updateDtoForTranslationList.TranslationList;
+        }
+        else if (dto.TranslationList != null)
+        {
+            translationListForSave = dto.TranslationList.Adapt<List<TaktTranslationUpdateDto>>();
+        }
+        else
+        {
+            translationListForSave = null;
+        }
+        if (translationListForSave is not { Count: > 0 })
         {
             await _translationRepository.DeleteAsync(x => x.CultureId == entity.Id);
         }
         else
         {
-            var translationlist = dto.TranslationList.Adapt<List<TaktTranslation>>();
-            foreach (var child in translationlist)
+            var existingList = await _translationRepository.GetListAsync(x => x.CultureId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktTranslation>();
+            for (var i = 0; i < translationListForSave.Count; i++)
             {
-                child.CultureId = entity.Id;
-                child.CultureCode = entity.CultureCode;
+                var childDto = translationListForSave[i];
+                childDto.CultureId = entity.Id;
+                if (childDto.TranslationId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.TranslationId, out var target))
+                    {
+                        throw new TaktBusinessException("翻译不存在（TranslationId={childDto.TranslationId}）");
+                    }
+                    if (target.CultureId != entity.Id)
+                    {
+                        throw new TaktBusinessException("翻译不属于当前主表（TranslationId={childDto.TranslationId}）");
+                    }
+                    submittedIds.Add(childDto.TranslationId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.TranslationId;
+                    target.CultureId = entity.Id;
+                    await _translationRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktTranslation>();
+                    child.Id = 0;
+                    child.CultureId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < translationlist.Count; i++)
-                        {
-                            var key = $"{translationlist[i].I18nKey}|{translationlist[i].CultureCode}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"翻译第{i + 1}项与本次提交的其他项重复（I18nKey、CultureCode）");
-                            }
-                        }
-            await _translationRepository.DeleteAsync(x => x.CultureId == entity.Id);
-            foreach (var child in translationlist)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_translation_key_culture_unique = await _uniqueValidator.IsUniqueAsync(
-                _translationRepository,
-                x => x.I18nKey == child.I18nKey
-                    && x.CultureCode == child.CultureCode);
-            if (!isUnique_ix_translation_key_culture_unique)
+                await _translationRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("翻译的I18nKey、CultureCode已存在");
+                await _translationRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _translationRepository.CreateRangeAsync(translationlist);
         }
     }
     // ========================================
@@ -419,78 +432,133 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     {
         var exp = Expressionable.Create<TaktCulture>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.LanguageName != null && x.LanguageName.Contains(keywords))
                 || (x.NativeName != null && x.NativeName.Contains(keywords))
                 || (x.Icon != null && x.Icon.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.IsDefault).Contains(keywords)
-                || SqlFunc.ToString(x.LanguageStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LanguageName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LanguageName))
         {
-            exp = exp.And(x => x.LanguageName != null && x.LanguageName.Contains(queryDto.LanguageName));
+            var languageName = queryDto.LanguageName;
+            exp = exp.And(x => x.LanguageName != null && x.LanguageName.Contains(languageName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NativeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NativeName))
         {
-            exp = exp.And(x => x.NativeName != null && x.NativeName.Contains(queryDto.NativeName));
+            var nativeName = queryDto.NativeName;
+            exp = exp.And(x => x.NativeName != null && x.NativeName.Contains(nativeName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Icon))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Icon))
         {
-            exp = exp.And(x => x.Icon != null && x.Icon.Contains(queryDto.Icon));
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var icon = queryDto.Icon;
+            exp = exp.And(x => x.Icon != null && x.Icon.Contains(icon));
         }
 
         if (queryDto?.IsDefault.HasValue == true)
         {
-            exp = exp.And(x => x.IsDefault == queryDto.IsDefault);
+            var isDefault = queryDto.IsDefault;
+            exp = exp.And(x => x.IsDefault == isDefault);
         }
 
-        if (queryDto?.LanguageStatus.HasValue == true)
+        if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.LanguageStatus == queryDto.LanguageStatus);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCultureQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RelatedPlant))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.LanguageName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NativeName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Icon))
+        {
+            return true;
+        }
+        if (queryDto.IsDefault.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

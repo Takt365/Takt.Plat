@@ -28,7 +28,7 @@ public static class TaktMaskHelper
         "password", "pwd", "passwd", "token", "authorization", "auth", "csrf", "cookie",
         "secret", "key", "apiKey", "apikey", "accessKey", "secretKey", "privateKey", "publicKey",
         "ticket", "cipher", "loginTicket", "idCard", "idcard", "identityCard",
-        "bankCard", "bankcard", "cardNumber", "cardNo", "creditCard",
+        "bankCard", "bankcard", "cardNumber", "cardCode", "creditCard",
         "phone", "mobile", "telephone", "tel", "email", "mail", "address", "addr"
     ];
 

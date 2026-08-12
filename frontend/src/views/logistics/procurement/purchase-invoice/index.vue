@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-invoice -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt采购发票实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt采购发票主表实体管理页面，含查询、增删改，由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -74,28 +74,28 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'currencyCode'">
+        <template v-if="column.key === 'documentType'">
+          <TaktDictTag
+            :value="getPurchaseInvoiceDictValue(record, 'documentType')"
+            dict-type="logistics_purchase_invoice_document_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'transactionEventType'">
+          <TaktDictTag
+            :value="getPurchaseInvoiceDictValue(record, 'transactionEventType')"
+            dict-type="logistics_purchase_invoice_transaction_event_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
             :value="getPurchaseInvoiceDictValue(record, 'currencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
-        <template v-else-if="column.key === 'taxRate'">
+        <template v-else-if="column.key === 'supplyingCountry'">
           <TaktDictTag
-            :value="getPurchaseInvoiceDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
-          />
-        </template>
-        <template v-else-if="column.key === 'paymentMethod'">
-          <TaktDictTag
-            :value="getPurchaseInvoiceDictValue(record, 'paymentMethod')"
-            dict-type="accounting_payment_method_type"
-          />
-        </template>
-        <template v-else-if="column.key === 'invoiceStatus'">
-          <TaktDictTag
-            :value="getPurchaseInvoiceDictValue(record, 'invoiceStatus')"
-            dict-type="logistics_invoice_status"
+            :value="getPurchaseInvoiceDictValue(record, 'supplyingCountry')"
+            dict-type="sys_country_code"
           />
         </template>
       </template>
@@ -135,33 +135,95 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.plantCode"
-          api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('plantCode', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('purchaseInvoiceCode')">
       <a-form-item :label="pi.queryLabel('purchaseInvoiceCode')">
         <a-input
           v-model:value="advancedQueryForm.purchaseInvoiceCode"
           :placeholder="pi.queryPh('purchaseInvoiceCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('purchaseOrderCode')">
-      <a-form-item :label="pi.queryLabel('purchaseOrderCode')">
+      <div v-show="isFieldVisible('fiscalYear')">
+      <a-form-item :label="pi.queryLabel('fiscalYear')">
+        <a-input
+          v-model:value="advancedQueryForm.fiscalYear"
+          :placeholder="pi.queryPh('fiscalYear', 'required')"
+          show-count
+          :maxlength="4"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('documentType')">
+      <a-form-item :label="pi.queryLabel('documentType')">
         <TaktSelect
-          v-model:value="advancedQueryForm.purchaseOrderCode"
-          api-url="TaktPurchaseOrders/options"
-          :placeholder="pi.queryPh('purchaseOrderCode', 'select')"
+          v-model:value="advancedQueryForm.documentType"
+          dict-type="logistics_purchase_invoice_document_type"
+          :placeholder="pi.queryPh('documentType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('documentDateStart')">
+      <a-form-item :label="pi.queryLabel('documentDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.documentDateStart"
+          :placeholder="pi.queryPh('documentDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('documentDateEnd')">
+      <a-form-item :label="pi.queryLabel('documentDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.documentDateEnd"
+          :placeholder="pi.queryPh('documentDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('postingDateStart')">
+      <a-form-item :label="pi.queryLabel('postingDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.postingDateStart"
+          :placeholder="pi.queryPh('postingDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('postingDateEnd')">
+      <a-form-item :label="pi.queryLabel('postingDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.postingDateEnd"
+          :placeholder="pi.queryPh('postingDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('transactionEventType')">
+      <a-form-item :label="pi.queryLabel('transactionEventType')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.transactionEventType"
+          dict-type="logistics_purchase_invoice_transaction_event_type"
+          :placeholder="pi.queryPh('transactionEventType', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('referenceCode')">
+      <a-form-item :label="pi.queryLabel('referenceCode')">
+        <a-input
+          v-model:value="advancedQueryForm.referenceCode"
+          :placeholder="pi.queryPh('referenceCode', 'required')"
+          show-count
+          :maxlength="16"
           allow-clear
         />
       </a-form-item>
@@ -176,46 +238,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('supplierName1')">
-      <a-form-item :label="pi.queryLabel('supplierName1')">
-        <a-input
-          v-model:value="advancedQueryForm.supplierName1"
-          :placeholder="pi.queryPh('supplierName1', 'required')"
-          show-count
-          :maxlength="140"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('invoiceDateStart')">
-      <a-form-item :label="pi.queryLabel('invoiceDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.invoiceDateStart"
-          :placeholder="pi.queryPh('invoiceDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('invoiceDateEnd')">
-      <a-form-item :label="pi.queryLabel('invoiceDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.invoiceDateEnd"
-          :placeholder="pi.queryPh('invoiceDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('totalAmount')">
-      <a-form-item :label="pi.queryLabel('totalAmount')">
-        <a-input-number
-          v-model:value="advancedQueryForm.totalAmount"
-          :placeholder="pi.queryPh('totalAmount', 'required')"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('currencyCode')">
       <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
@@ -226,70 +248,195 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('taxRate')">
-      <a-form-item :label="pi.queryLabel('taxRate')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
-          :placeholder="pi.queryPh('taxRate', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxAmount')">
-      <a-form-item :label="pi.queryLabel('taxAmount')">
+      <div v-show="isFieldVisible('exchangeRate')">
+      <a-form-item :label="pi.queryLabel('exchangeRate')">
         <a-input-number
-          v-model:value="advancedQueryForm.taxAmount"
-          :placeholder="pi.queryPh('taxAmount', 'required')"
+          v-model:value="advancedQueryForm.exchangeRate"
+          :placeholder="pi.queryPh('exchangeRate', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('actualAmount')">
-      <a-form-item :label="pi.queryLabel('actualAmount')">
+      <div v-show="isFieldVisible('grossAmount')">
+      <a-form-item :label="pi.queryLabel('grossAmount')">
         <a-input-number
-          v-model:value="advancedQueryForm.actualAmount"
-          :placeholder="pi.queryPh('actualAmount', 'required')"
+          v-model:value="advancedQueryForm.grossAmount"
+          :placeholder="pi.queryPh('grossAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('paidAmount')">
-      <a-form-item :label="pi.queryLabel('paidAmount')">
+      <div v-show="isFieldVisible('vatAmount')">
+      <a-form-item :label="pi.queryLabel('vatAmount')">
         <a-input-number
-          v-model:value="advancedQueryForm.paidAmount"
-          :placeholder="pi.queryPh('paidAmount', 'required')"
+          v-model:value="advancedQueryForm.vatAmount"
+          :placeholder="pi.queryPh('vatAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('paymentMethod')">
-      <a-form-item :label="pi.queryLabel('paymentMethod')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.paymentMethod"
-          dict-type="accounting_payment_method_type"
-          :placeholder="pi.queryPh('paymentMethod', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('taxInvoiceNo')">
-      <a-form-item :label="pi.queryLabel('taxInvoiceNo')">
+      <div v-show="isFieldVisible('taxJurisdictionCode')">
+      <a-form-item :label="pi.queryLabel('taxJurisdictionCode')">
         <a-input
-          v-model:value="advancedQueryForm.taxInvoiceNo"
-          :placeholder="pi.queryPh('taxInvoiceNo', 'required')"
+          v-model:value="advancedQueryForm.taxJurisdictionCode"
+          :placeholder="pi.queryPh('taxJurisdictionCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="15"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('invoiceStatus')">
-      <a-form-item :label="pi.queryLabel('invoiceStatus')">
+      <div v-show="isFieldVisible('cashDiscountDays1')">
+      <a-form-item :label="pi.queryLabel('cashDiscountDays1')">
+        <a-input-number
+          v-model:value="advancedQueryForm.cashDiscountDays1"
+          :placeholder="pi.queryPh('cashDiscountDays1', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('invoiceFlag')">
+      <a-form-item :label="pi.queryLabel('invoiceFlag')">
+        <a-input
+          v-model:value="advancedQueryForm.invoiceFlag"
+          :placeholder="pi.queryPh('invoiceFlag', 'required')"
+          show-count
+          :maxlength="1"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('headerText')">
+      <a-form-item :label="pi.queryLabel('headerText')">
+        <a-input
+          v-model:value="advancedQueryForm.headerText"
+          :placeholder="pi.queryPh('headerText', 'required')"
+          show-count
+          :maxlength="25"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reversalDocumentCode')">
+      <a-form-item :label="pi.queryLabel('reversalDocumentCode')">
+        <a-input
+          v-model:value="advancedQueryForm.reversalDocumentCode"
+          :placeholder="pi.queryPh('reversalDocumentCode', 'required')"
+          show-count
+          :maxlength="10"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('reversalFiscalYear')">
+      <a-form-item :label="pi.queryLabel('reversalFiscalYear')">
+        <a-input
+          v-model:value="advancedQueryForm.reversalFiscalYear"
+          :placeholder="pi.queryPh('reversalFiscalYear', 'required')"
+          show-count
+          :maxlength="4"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <a-input
+          v-model:value="advancedQueryForm.taxCode"
+          :placeholder="pi.queryPh('taxCode', 'required')"
+          show-count
+          :maxlength="2"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('supplyingCountry')">
+      <a-form-item :label="pi.queryLabel('supplyingCountry')">
         <TaktSelect
-          v-model:value="advancedQueryForm.invoiceStatus"
-          dict-type="logistics_invoice_status"
-          :placeholder="pi.queryPh('invoiceStatus', 'select')"
+          v-model:value="advancedQueryForm.supplyingCountry"
+          dict-type="sys_country_code"
+          :placeholder="pi.queryPh('supplyingCountry', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxExchangeRate')">
+      <a-form-item :label="pi.queryLabel('taxExchangeRate')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxExchangeRate"
+          :placeholder="pi.queryPh('taxExchangeRate', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('baselineDateStart')">
+      <a-form-item :label="pi.queryLabel('baselineDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.baselineDateStart"
+          :placeholder="pi.queryPh('baselineDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('baselineDateEnd')">
+      <a-form-item :label="pi.queryLabel('baselineDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.baselineDateEnd"
+          :placeholder="pi.queryPh('baselineDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('enteredBy')">
+      <a-form-item :label="pi.queryLabel('enteredBy')">
+        <a-input
+          v-model:value="advancedQueryForm.enteredBy"
+          :placeholder="pi.queryPh('enteredBy', 'required')"
+          show-count
+          :maxlength="12"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('exchangeRateDateStart')">
+      <a-form-item :label="pi.queryLabel('exchangeRateDateStart')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.exchangeRateDateStart"
+          :placeholder="pi.queryPh('exchangeRateDateStart', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('exchangeRateDateEnd')">
+      <a-form-item :label="pi.queryLabel('exchangeRateDateEnd')">
+        <a-date-picker
+          v-model:value="advancedQueryForm.exchangeRateDateEnd"
+          :placeholder="pi.queryPh('exchangeRateDateEnd', 'select')"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('transactionCode')">
+      <a-form-item :label="pi.queryLabel('transactionCode')">
+        <a-input
+          v-model:value="advancedQueryForm.transactionCode"
+          :placeholder="pi.queryPh('transactionCode', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('postedBy')">
+      <a-form-item :label="pi.queryLabel('postedBy')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.postedBy"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('postedBy', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -398,7 +545,7 @@
 
 <script setup lang="ts">
 /**
- * Takt采购发票实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt采购发票主表实体管理页 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/procurement/purchase-invoice
  */
 import { ref, computed, onMounted } from 'vue'
@@ -410,7 +557,7 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import PurchaseInvoiceForm from './components/purchase-invoice-form.vue'
 import PurchaseInvoiceItemPanel from './components/purchase-invoice-item-panel.vue'
 import { providePurchaseInvoiceMasterContext, type PurchaseInvoiceRowRecord } from './composables/use-purchase-invoice-master-context'
-import { getPurchaseInvoiceList, getPurchaseInvoiceById, createPurchaseInvoice, updatePurchaseInvoice, deletePurchaseInvoiceById, deletePurchaseInvoiceBatch, getPurchaseInvoiceTemplate, importPurchaseInvoice, exportPurchaseInvoice, updatePurchaseInvoiceStatus } from '@/api/logistics/procurement/purchase-invoice'
+import { getPurchaseInvoiceList, getPurchaseInvoiceById, createPurchaseInvoice, updatePurchaseInvoice, deletePurchaseInvoiceById, deletePurchaseInvoiceBatch, getPurchaseInvoiceTemplate, importPurchaseInvoice, exportPurchaseInvoice } from '@/api/logistics/procurement/purchase-invoice'
 import type { PurchaseInvoice, PurchaseInvoiceQuery } from '@/types/logistics/procurement/purchase-invoice'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
@@ -471,7 +618,40 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PURCHASEINVOICE_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
+    return true
+  }
+  if (form.grossAmount !== undefined && form.grossAmount !== null) {
+    return true
+  }
+  if (form.vatAmount !== undefined && form.vatAmount !== null) {
+    return true
+  }
+  if (form.cashDiscountDays1 !== undefined && form.cashDiscountDays1 !== null) {
+    return true
+  }
+  if (form.taxExchangeRate !== undefined && form.taxExchangeRate !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -481,14 +661,11 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    totalAmount: undefined as number | undefined,
-    taxRate: undefined as number | undefined,
-    taxAmount: undefined as number | undefined,
-    actualAmount: undefined as number | undefined,
-    paidAmount: undefined as number | undefined,
-    paymentMethod: undefined as number | undefined,
-    invoiceStatus: undefined as number | undefined,
-  }
+    exchangeRate: undefined as number | undefined,
+    grossAmount: undefined as number | undefined,
+    vatAmount: undefined as number | undefined,
+    cashDiscountDays1: undefined as number | undefined,
+    taxExchangeRate: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -518,7 +695,7 @@ const { selectedMasterRow } = providePurchaseInvoiceMasterContext()
 const purchaseInvoiceItemPanelRef = ref<InstanceType<typeof PurchaseInvoiceItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PurchaseInvoiceQuery} 查询 DTO
  */
@@ -542,36 +719,29 @@ function buildListQuery(overrides?: Partial<PurchaseInvoiceQuery>): PurchaseInvo
   for (const key of PURCHASEINVOICE_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.totalAmount !== undefined && form.totalAmount !== null) {
-    query.totalAmount = form.totalAmount
+  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
+    query.exchangeRate = form.exchangeRate
   }
-  if (form.taxRate !== undefined && form.taxRate !== null) {
-    query.taxRate = form.taxRate
+  if (form.grossAmount !== undefined && form.grossAmount !== null) {
+    query.grossAmount = form.grossAmount
   }
-  if (form.taxAmount !== undefined && form.taxAmount !== null) {
-    query.taxAmount = form.taxAmount
+  if (form.vatAmount !== undefined && form.vatAmount !== null) {
+    query.vatAmount = form.vatAmount
   }
-  if (form.actualAmount !== undefined && form.actualAmount !== null) {
-    query.actualAmount = form.actualAmount
+  if (form.cashDiscountDays1 !== undefined && form.cashDiscountDays1 !== null) {
+    query.cashDiscountDays1 = form.cashDiscountDays1
   }
-  if (form.paidAmount !== undefined && form.paidAmount !== null) {
-    query.paidAmount = form.paidAmount
-  }
-  if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
-    query.paymentMethod = form.paymentMethod
-  }
-  if (form.invoiceStatus !== undefined && form.invoiceStatus !== null) {
-    query.invoiceStatus = form.invoiceStatus
+  if (form.taxExchangeRate !== undefined && form.taxExchangeRate !== null) {
+    query.taxExchangeRate = form.taxExchangeRate
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -636,15 +806,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'purchaseInvoiceId') ?? ''
   },
   {
-    title: pi.label('plantCode'),
-    dataIndex: 'plantCode',
-    key: 'plantCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'plantCode') ?? ''
-  },
-  {
     title: pi.label('purchaseInvoiceCode'),
     dataIndex: 'purchaseInvoiceCode',
     key: 'purchaseInvoiceCode',
@@ -654,13 +815,56 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'purchaseInvoiceCode') ?? ''
   },
   {
-    title: pi.label('purchaseOrderCode'),
-    dataIndex: 'purchaseOrderCode',
-    key: 'purchaseOrderCode',
+    title: pi.label('fiscalYear'),
+    dataIndex: 'fiscalYear',
+    key: 'fiscalYear',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'purchaseOrderCode') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'fiscalYear') ?? ''
+  },
+  {
+    title: pi.label('documentType'),
+    dataIndex: 'documentType',
+    key: 'documentType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('documentDate'),
+    dataIndex: 'documentDate',
+    key: 'documentDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'documentDate') ?? ''
+  },
+  {
+    title: pi.label('postingDate'),
+    dataIndex: 'postingDate',
+    key: 'postingDate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'postingDate') ?? ''
+  },
+  {
+    title: pi.label('transactionEventType'),
+    dataIndex: 'transactionEventType',
+    key: 'transactionEventType',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('referenceCode'),
+    dataIndex: 'referenceCode',
+    key: 'referenceCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'referenceCode') ?? ''
   },
   {
     title: pi.label('supplierCode'),
@@ -672,33 +876,6 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'supplierCode') ?? ''
   },
   {
-    title: pi.label('supplierName1'),
-    dataIndex: 'supplierName1',
-    key: 'supplierName1',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'supplierName1') ?? ''
-  },
-  {
-    title: pi.label('invoiceDate'),
-    dataIndex: 'invoiceDate',
-    key: 'invoiceDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'invoiceDate') ?? ''
-  },
-  {
-    title: pi.label('totalAmount'),
-    dataIndex: 'totalAmount',
-    key: 'totalAmount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'totalAmount') ?? ''
-  },
-  {
     title: pi.label('currencyCode'),
     dataIndex: 'currencyCode',
     key: 'currencyCode',
@@ -707,64 +884,156 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: pi.label('taxRate'),
-    dataIndex: 'taxRate',
-    key: 'taxRate',
+    title: pi.label('exchangeRate'),
+    dataIndex: 'exchangeRate',
+    key: 'exchangeRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'exchangeRate') ?? ''
+  },
+  {
+    title: pi.label('grossAmount'),
+    dataIndex: 'grossAmount',
+    key: 'grossAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'grossAmount') ?? ''
+  },
+  {
+    title: pi.label('vatAmount'),
+    dataIndex: 'vatAmount',
+    key: 'vatAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'vatAmount') ?? ''
+  },
+  {
+    title: pi.label('taxJurisdictionCode'),
+    dataIndex: 'taxJurisdictionCode',
+    key: 'taxJurisdictionCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'taxJurisdictionCode') ?? ''
+  },
+  {
+    title: pi.label('cashDiscountDays1'),
+    dataIndex: 'cashDiscountDays1',
+    key: 'cashDiscountDays1',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'cashDiscountDays1') ?? ''
+  },
+  {
+    title: pi.label('invoiceFlag'),
+    dataIndex: 'invoiceFlag',
+    key: 'invoiceFlag',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'invoiceFlag') ?? ''
+  },
+  {
+    title: pi.label('headerText'),
+    dataIndex: 'headerText',
+    key: 'headerText',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'headerText') ?? ''
+  },
+  {
+    title: pi.label('reversalDocumentCode'),
+    dataIndex: 'reversalDocumentCode',
+    key: 'reversalDocumentCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'reversalDocumentCode') ?? ''
+  },
+  {
+    title: pi.label('reversalFiscalYear'),
+    dataIndex: 'reversalFiscalYear',
+    key: 'reversalFiscalYear',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'reversalFiscalYear') ?? ''
+  },
+  {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'taxCode') ?? ''
+  },
+  {
+    title: pi.label('supplyingCountry'),
+    dataIndex: 'supplyingCountry',
+    key: 'supplyingCountry',
     width: 120,
     resizable: true,
     ellipsis: true,
   },
   {
-    title: pi.label('taxAmount'),
-    dataIndex: 'taxAmount',
-    key: 'taxAmount',
+    title: pi.label('taxExchangeRate'),
+    dataIndex: 'taxExchangeRate',
+    key: 'taxExchangeRate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'taxAmount') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'taxExchangeRate') ?? ''
   },
   {
-    title: pi.label('actualAmount'),
-    dataIndex: 'actualAmount',
-    key: 'actualAmount',
+    title: pi.label('baselineDate'),
+    dataIndex: 'baselineDate',
+    key: 'baselineDate',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'actualAmount') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'baselineDate') ?? ''
   },
   {
-    title: pi.label('paidAmount'),
-    dataIndex: 'paidAmount',
-    key: 'paidAmount',
+    title: pi.label('enteredBy'),
+    dataIndex: 'enteredBy',
+    key: 'enteredBy',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'paidAmount') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'enteredBy') ?? ''
   },
   {
-    title: pi.label('paymentMethod'),
-    dataIndex: 'paymentMethod',
-    key: 'paymentMethod',
+    title: pi.label('exchangeRateDate'),
+    dataIndex: 'exchangeRateDate',
+    key: 'exchangeRateDate',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'exchangeRateDate') ?? ''
   },
   {
-    title: pi.label('taxInvoiceNo'),
-    dataIndex: 'taxInvoiceNo',
-    key: 'taxInvoiceNo',
+    title: pi.label('transactionCode'),
+    dataIndex: 'transactionCode',
+    key: 'transactionCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'taxInvoiceNo') ?? ''
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'transactionCode') ?? ''
   },
   {
-    title: pi.label('invoiceStatus'),
-    dataIndex: 'invoiceStatus',
-    key: 'invoiceStatus',
+    title: pi.label('postedBy'),
+    dataIndex: 'postedBy',
+    key: 'postedBy',
     width: 120,
     resizable: true,
     ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseInvoiceField(record, 'postedBy') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -814,8 +1083,6 @@ const getPurchaseInvoiceDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -848,6 +1115,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPurchaseInvoiceList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -874,22 +1146,36 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  plantCode: '',
   purchaseInvoiceCode: '',
-  purchaseOrderCode: '',
+  fiscalYear: '',
+  documentType: '',
+  documentDateStart: '',
+  documentDateEnd: '',
+  postingDateStart: '',
+  postingDateEnd: '',
+  transactionEventType: '',
+  referenceCode: '',
   supplierCode: '',
-  supplierName1: '',
-  invoiceDateStart: '',
-  invoiceDateEnd: '',
-  totalAmount: undefined as number | undefined,
   currencyCode: '',
-  taxRate: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  paidAmount: undefined as number | undefined,
-  paymentMethod: undefined as number | undefined,
-  taxInvoiceNo: '',
-  invoiceStatus: undefined as number | undefined,
+  exchangeRate: undefined as number | undefined,
+  grossAmount: undefined as number | undefined,
+  vatAmount: undefined as number | undefined,
+  taxJurisdictionCode: '',
+  cashDiscountDays1: undefined as number | undefined,
+  invoiceFlag: '',
+  headerText: '',
+  reversalDocumentCode: '',
+  reversalFiscalYear: '',
+  taxCode: '',
+  supplyingCountry: '',
+  taxExchangeRate: undefined as number | undefined,
+  baselineDateStart: '',
+  baselineDateEnd: '',
+  enteredBy: '',
+  exchangeRateDateStart: '',
+  exchangeRateDateEnd: '',
+  transactionCode: '',
+  postedBy: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1002,6 +1288,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPurchaseInvoice(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1088,22 +1377,36 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  plantCode: '',
   purchaseInvoiceCode: '',
-  purchaseOrderCode: '',
+  fiscalYear: '',
+  documentType: '',
+  documentDateStart: '',
+  documentDateEnd: '',
+  postingDateStart: '',
+  postingDateEnd: '',
+  transactionEventType: '',
+  referenceCode: '',
   supplierCode: '',
-  supplierName1: '',
-  invoiceDateStart: '',
-  invoiceDateEnd: '',
-  totalAmount: undefined as number | undefined,
   currencyCode: '',
-  taxRate: undefined as number | undefined,
-  taxAmount: undefined as number | undefined,
-  actualAmount: undefined as number | undefined,
-  paidAmount: undefined as number | undefined,
-  paymentMethod: undefined as number | undefined,
-  taxInvoiceNo: '',
-  invoiceStatus: undefined as number | undefined,
+  exchangeRate: undefined as number | undefined,
+  grossAmount: undefined as number | undefined,
+  vatAmount: undefined as number | undefined,
+  taxJurisdictionCode: '',
+  cashDiscountDays1: undefined as number | undefined,
+  invoiceFlag: '',
+  headerText: '',
+  reversalDocumentCode: '',
+  reversalFiscalYear: '',
+  taxCode: '',
+  supplyingCountry: '',
+  taxExchangeRate: undefined as number | undefined,
+  baselineDateStart: '',
+  baselineDateEnd: '',
+  enteredBy: '',
+  exchangeRateDateStart: '',
+  exchangeRateDateEnd: '',
+  transactionCode: '',
+  postedBy: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

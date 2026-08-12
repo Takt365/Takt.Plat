@@ -148,10 +148,10 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             x => x.PlantCode == entity.PlantCode
                 && x.QualityAssuranceCode == entity.QualityAssuranceCode
                 && x.AssuranceMonth == entity.AssuranceMonth
-                && x.DebitNoteNo == entity.DebitNoteNo);
+                && x.DebitNoteCode == entity.DebitNoteCode);
         if (!isUnique_ix_takt_logistics_quality_assurance_qo_unique)
         {
-            throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteNo已存在");
+            throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteCode已存在");
         }
         entity = await _qualityAssuranceRepository.CreateAsync(entity);
                 await SaveQualityAssuranceChildrenAsync(entity, dto);
@@ -177,11 +177,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             x => x.PlantCode == entity.PlantCode
                 && x.QualityAssuranceCode == entity.QualityAssuranceCode
                 && x.AssuranceMonth == entity.AssuranceMonth
-                && x.DebitNoteNo == entity.DebitNoteNo,
+                && x.DebitNoteCode == entity.DebitNoteCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_assurance_qo_unique)
         {
-            throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteNo已存在");
+            throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteCode已存在");
         }
         await _qualityAssuranceRepository.UpdateAsync(entity);
                 await SaveQualityAssuranceChildrenAsync(entity, dto);
@@ -268,20 +268,20 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             try
             {
                 var entity = rows[i].Adapt<TaktQualityAssurance>();
-                var importKey = $"{entity.PlantCode}|{entity.QualityAssuranceCode}|{entity.AssuranceMonth}|{entity.DebitNoteNo}";
+                var importKey = $"{entity.PlantCode}|{entity.QualityAssuranceCode}|{entity.AssuranceMonth}|{entity.DebitNoteCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_assurance_qo_unique = await _uniqueValidator.IsUniqueAsync(
                     _qualityAssuranceRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.QualityAssuranceCode == entity.QualityAssuranceCode
                         && x.AssuranceMonth == entity.AssuranceMonth
-                        && x.DebitNoteNo == entity.DebitNoteNo);
+                        && x.DebitNoteCode == entity.DebitNoteCode);
                 if (!isUnique_ix_takt_logistics_quality_assurance_qo_unique)
                 {
-                    throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteNo已存在");
+                    throw new TaktBusinessException("品质业务主的PlantCode、QualityAssuranceCode、AssuranceMonth、DebitNoteCode已存在");
                 }
                 await _qualityAssuranceRepository.CreateAsync(entity);
                 success += 1;
@@ -1292,10 +1292,11 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
                 || (x.QualityAssuranceCode != null && x.QualityAssuranceCode.Contains(keywords))
                 || (x.AssuranceMonth != null && x.AssuranceMonth.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
-                || (x.DebitNoteNo != null && x.DebitNoteNo.Contains(keywords))
+                || (x.DebitNoteCode != null && x.DebitNoteCode.Contains(keywords))
                 || (x.Recorder != null && x.Recorder.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQualityCost).Contains(keywords)
-                || (x.CostCurrency != null && x.CostCurrency.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -1322,9 +1323,9 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DebitNoteNo))
+        if (!string.IsNullOrEmpty(queryDto?.DebitNoteCode))
         {
-            exp = exp.And(x => x.DebitNoteNo != null && x.DebitNoteNo.Contains(queryDto.DebitNoteNo));
+            exp = exp.And(x => x.DebitNoteCode != null && x.DebitNoteCode.Contains(queryDto.DebitNoteCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Recorder))
@@ -1337,9 +1338,14 @@ public class TaktQualityAssuranceService : TaktServiceBase, ITaktQualityAssuranc
             exp = exp.And(x => x.TotalQualityCost == queryDto.TotalQualityCost);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCurrency))
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CostCurrency != null && x.CostCurrency.Contains(queryDto.CostCurrency));
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

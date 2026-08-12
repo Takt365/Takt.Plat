@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 [SugarIndex("ix_takt_logistics_manufacturing_bom_effective_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EffectiveDate), OrderByType.Asc, false)]
 public class TaktBillOfMaterial : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
@@ -46,23 +41,16 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "parent_material_id", ColumnDescription = "父物料ID", ColumnDataType = "bigint", IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_code", ColumnDescription = "父物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余，回填：随物料）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "parent_material_name", ColumnDescription = "父物料名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string ParentMaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "parent_material_description", ColumnDescription = "父物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? ParentMaterialDescription { get; set; }
 
     /// <summary>
     /// BOM版本号

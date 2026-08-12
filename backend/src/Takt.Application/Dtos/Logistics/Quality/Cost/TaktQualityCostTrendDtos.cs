@@ -51,6 +51,11 @@ public class TaktQualityCostTrendQueryDto : TaktPagedQuery
     /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
+
+    /// <summary>
+    /// CurrencyCode
+    /// </summary>
+    public string? CurrencyCode { get; set; }
 }
 
 /// <summary>
@@ -107,6 +112,11 @@ public class TaktQualityCostTrendDto
     /// 环比变动率（小数比率，保留 4 位）
     /// </summary>
     public decimal? VariancePercent { get; set; }
+
+    /// <summary>
+    /// 成本币种
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
 }
 
 /// <summary>

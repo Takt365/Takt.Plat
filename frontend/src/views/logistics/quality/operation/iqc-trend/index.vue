@@ -116,8 +116,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>

@@ -61,12 +61,12 @@ export interface PcbaRepairDetail extends CompanyDtoBase {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状
@@ -134,6 +134,11 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   pcbaRepairId?: string;
@@ -161,12 +166,12 @@ export interface PcbaRepairDetailQuery extends TaktPagedQuery {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状
@@ -248,9 +253,17 @@ export interface PcbaRepairDetailCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -280,12 +293,12 @@ export interface PcbaRepairDetailCreate {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状
@@ -391,6 +404,11 @@ export interface PcbaRepairDetailTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   pcbaRepairId?: string;
@@ -418,12 +436,12 @@ export interface PcbaRepairDetailTemplate {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状
@@ -495,9 +513,17 @@ export interface PcbaRepairDetailImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * PCBA改修日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -527,12 +553,12 @@ export interface PcbaRepairDetailImport {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状
@@ -631,12 +657,12 @@ export interface PcbaRepairDetailExport {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 卡号
    */
-  cardNo?: string;
+  cardCode?: string;
 
   /**
    * 不良症状

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Controlling
 // 文件名称：TaktCostElementI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCostElement 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -161,15 +161,6 @@ public class TaktCostElementI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.costelement.validto", "zh-CN", "失效日期", "失效日期"),
             // entity.costelement.validto
             new TranslationSeedItem("entity.costelement.validto", "zh-HK", "失效日期_hk", "失效日期"),
-
-            // entity.costelement.relatedplant
-            new TranslationSeedItem("entity.costelement.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.costelement.relatedplant
-            new TranslationSeedItem("entity.costelement.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.costelement.relatedplant
-            new TranslationSeedItem("entity.costelement.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.costelement.relatedplant
-            new TranslationSeedItem("entity.costelement.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.costelement.sortorder
             new TranslationSeedItem("entity.costelement.sortorder", "en-US", "排序号_us", "排序号"),

@@ -25,11 +25,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_aps_production_dispatch_prod_order", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionOrderId), OrderByType.Asc, false)]
 public class TaktProductionDispatch : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 派工单编码
@@ -47,7 +42,7 @@ public class TaktProductionDispatch : TaktCompanyEntityBase
     /// <summary>
     /// 工单号（关联 TaktProductionOrder.ProdOrderCode，冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -60,13 +55,13 @@ public class TaktProductionDispatch : TaktCompanyEntityBase
     /// <summary>
     /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? WorkCenterCode { get; set; }
 
     /// <summary>
     /// 工序编码
     /// </summary>
-    [SugarColumn(ColumnName = "process_code", ColumnDescription = "工序编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "process_code", ColumnDescription = "工序编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
     public string? ProcessCode { get; set; }
 
     /// <summary>

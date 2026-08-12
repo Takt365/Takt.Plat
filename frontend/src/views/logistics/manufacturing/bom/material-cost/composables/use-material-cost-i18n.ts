@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/manufacturing/bom/material-cost/composables
 // 文件名称：use-material-cost-i18n.ts
-// 功能描述：BOM 物料成本主表字段清单 + useBomMaterialCostI18n（字段名映射一次，文案由 entity.bommaterialcost.* 种子动态解析）
+// 功能描述：BOM 物料成本汇总表字段清单 + useBomMaterialCostI18n（字段名映射一次，文案由 entity.bommaterialcost.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -23,6 +23,7 @@ export const BOMMATERIALCOST_LIST_FIELDS = [
   'plantCode',
   'modelCode',
   'modelMonthlyAverageCost',
+  'materialType',
   'productCode',
   'productDescription',
   'productMonthlyCost',
@@ -35,15 +36,16 @@ export const BOMMATERIALCOST_LIST_FIELDS = [
 export const BOMMATERIALCOST_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
   plantCode: 'select',
   modelCode: 'required',
   modelMonthlyAverageCost: 'select',
-  productCode: 'required',
+  materialType: 'select',
+  productCode: 'select',
   productDescription: 'optional',
   productMonthlyCost: 'select',
   currencyCode: 'select',
-  costingPeriod: 'optional',
+  costingPeriod: 'select',
   costingDate: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -54,39 +56,35 @@ export type BomMaterialCostField = keyof typeof BOMMATERIALCOST_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const BOMMATERIALCOST_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'modelCode',
+  'materialType',
   'productCode',
   'productDescription',
   'currencyCode',
   'costingPeriod',
-  'extField',
-  'remark',
-] as const satisfies readonly (keyof BomMaterialCostQuery)[]
-
-/** 日期范围查询字段（单独处理，避免空串绑定 DateTime? 导致 400） */
-export const BOMMATERIALCOST_QUERY_DATE_FIELDS = [
   'costingDateStart',
   'costingDateEnd',
   'createdAtStart',
   'createdAtEnd',
+  'extField',
+  'remark',
 ] as const satisfies readonly (keyof BomMaterialCostQuery)[]
 
 export type BomMaterialCostQueryField =
   | (typeof BOMMATERIALCOST_QUERY_STRING_FIELDS)[number]
-  | (typeof BOMMATERIALCOST_QUERY_DATE_FIELDS)[number]
-  | 'modelMonthlyAverageCost' | 'productMonthlyCost' 
+  | 'modelMonthlyAverageCost' | 'productMonthlyCost'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const BOMMATERIALCOST_QUERY_FIELDS: readonly BomMaterialCostQueryField[] = [
   ...BOMMATERIALCOST_QUERY_STRING_FIELDS,
-  ...BOMMATERIALCOST_QUERY_DATE_FIELDS,
   'modelMonthlyAverageCost',
   'productMonthlyCost',
 ]
 
 /**
- * BOM 物料成本主表字段 i18n：index / material-cost-form 统一入口
+ * BOM 物料成本汇总表字段 i18n：index / material-cost-form 统一入口
  */
 export function useBomMaterialCostI18n() {
   const ef = useEntityFieldI18n(BOMMATERIALCOST_ENTITY_SLUG)

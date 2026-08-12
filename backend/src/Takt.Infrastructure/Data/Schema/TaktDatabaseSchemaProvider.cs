@@ -61,17 +61,41 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
 
     /// <summary>
     /// 获取可 introspect 的租户业务库列表
-    /// 从 TaktConfigurationExtensions.GetTenantConnections 解析连接，DisplayName 取自连接串 Database= 段
+    /// 列出 ConnectionStrings 全部 Tenant_*（含暂存库 900 等），不限于 Database:TenantCodes 种子范围
+    /// DisplayName 取自连接串 Database= 段
     /// </summary>
     /// <returns>租户编码与数据库展示名摘要列表</returns>
     public Task<IReadOnlyList<TaktDatabaseInfo>> GetDatabasesAsync()
     {
-        var list = ResolveTenantConnections()
-            .Select(x => new TaktDatabaseInfo
+        var byCode = new Dictionary<string, TaktDatabaseInfo>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (tenantCode, connectionString) in ResolveTenantConnections())
+        {
+            byCode[tenantCode] = new TaktDatabaseInfo
             {
-                TenantCode = x.TenantCode,
-                DisplayName = ExtractDatabaseDisplayName(x.ConnectionString, x.TenantCode)
-            })
+                TenantCode = tenantCode,
+                DisplayName = ExtractDatabaseDisplayName(connectionString, tenantCode)
+            };
+        }
+        foreach (var child in _configuration.GetSection("ConnectionStrings").GetChildren())
+        {
+            if (!child.Key.StartsWith("Tenant_", StringComparison.OrdinalIgnoreCase)
+                || string.IsNullOrWhiteSpace(child.Value))
+            {
+                continue;
+            }
+            var tenantCode = child.Key["Tenant_".Length..].Trim();
+            if (string.IsNullOrEmpty(tenantCode) || byCode.ContainsKey(tenantCode))
+            {
+                continue;
+            }
+            byCode[tenantCode] = new TaktDatabaseInfo
+            {
+                TenantCode = tenantCode,
+                DisplayName = ExtractDatabaseDisplayName(child.Value, tenantCode)
+            };
+        }
+        var list = byCode.Values
+            .OrderBy(x => x.TenantCode, StringComparer.OrdinalIgnoreCase)
             .ToList();
         return Task.FromResult<IReadOnlyList<TaktDatabaseInfo>>(list);
     }

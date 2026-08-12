@@ -85,11 +85,11 @@ import { useI18n } from 'vue-i18n';
 import {
   exportBomMaterialCostItemVarianceAnalysis,
   getBomMaterialCostItemVarianceAnalysis,
-} from '@/api/logistics/manufacturing/bom/material-cost-item';
+} from '@/api/logistics/manufacturing/bom/material-cost-analysis';
 import type {
   BomMaterialCostItemVarianceLine,
   BomMaterialCostItemVarianceResult,
-} from '@/types/logistics/manufacturing/bom/material-cost-trend';
+} from '@/types/logistics/manufacturing/bom/material-cost-analysis';
 import {
   MATERIAL_COST_ANALYSIS_LOCALE_PREFIX,
   useMaterialCostAnalysis,
@@ -115,14 +115,13 @@ const varianceData = ref<BomMaterialCostItemVarianceResult | null>(null);
 
 /** 差异明细列 */
 const varianceColumns = computed<TableColumnsType>(() => [
-  { title: t('entity.bommaterialcostitem.bomitemno'), dataIndex: 'bomItemNo', key: 'bomItemNo', width: 90 },
+  { title: t('entity.bommaterialcostitem.bomitemcode'), dataIndex: 'bomItemCode', key: 'bomItemCode', width: 90 },
   { title: t('entity.bommaterialcostitem.componentcode'), dataIndex: 'componentCode', key: 'componentCode', width: 120 },
   { title: t('entity.bommaterialcostitem.componentdescription'), dataIndex: 'componentDescription', key: 'componentDescription', width: 160 },
   { title: t(`${localePrefix}.columns.changeType`), dataIndex: 'changeType', key: 'changeType', width: 100 },
   { title: t(`${localePrefix}.variance.baseCost`), dataIndex: 'baseCost', key: 'baseCost', width: 100, align: 'right' },
   { title: t(`${localePrefix}.variance.compareCost`), dataIndex: 'compareCost', key: 'compareCost', width: 100, align: 'right' },
-  { title: t(`${localePrefix}.columns.varianceAmount`), dataIndex: 'varianceAmount', key: 'varianceAmount', width: 100, align: 'right' },
-]);
+  { title: t(`${localePrefix}.columns.varianceAmount`), dataIndex: 'varianceAmount', key: 'varianceAmount', width: 100, align: 'right' }]);
 
 /**
  * 差异行主键
@@ -130,7 +129,7 @@ const varianceColumns = computed<TableColumnsType>(() => [
  * @returns 组件键
  */
 function getVarianceLineKey(record: BomMaterialCostItemVarianceLine) {
-  return `${record.bomItemNo}|${record.componentCode}`;
+  return `${record.bomItemCode}|${record.componentCode}`;
 }
 
 /**

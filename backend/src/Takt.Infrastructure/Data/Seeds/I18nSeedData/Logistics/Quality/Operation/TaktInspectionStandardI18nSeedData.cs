@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktInspectionStandardI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktInspectionStandard 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktInspectionStandardI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.inspectionstandard._self", "zh-CN", "检验标准信息", "实体名称"),
             // entity.inspectionstandard._self
             new TranslationSeedItem("entity.inspectionstandard._self", "zh-HK", "检验标准信息_hk", "实体名称"),
-
-            // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.inspectionstandard.plantcode
-            new TranslationSeedItem("entity.inspectionstandard.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.inspectionstandard.standardcode
             new TranslationSeedItem("entity.inspectionstandard.standardcode", "en-US", "检验标准编码_us", "检验标准编码（唯一索引）"),

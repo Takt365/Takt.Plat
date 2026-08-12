@@ -15,7 +15,7 @@ export default {
     title: '品質コスト推移',
     periodRange: '期間年月',
     costCategory: 'コスト区分',
-    costCurrency: '通貨',
+    currencyCode: '通貨',
     selectPlantRequired: '工場コードを選択してください',
     selectPeriodRequired: '期間年月を選択してください',
     summary: 'コスト区分行 {count} 件（品質保証/問題/事故を月次集計）',

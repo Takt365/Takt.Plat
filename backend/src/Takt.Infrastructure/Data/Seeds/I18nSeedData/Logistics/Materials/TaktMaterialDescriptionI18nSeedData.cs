@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDescriptionI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDescription 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,41 +90,50 @@ public class TaktMaterialDescriptionI18nSeedData : ITaktSeedDataCoordinator
             // entity.materialdescription._self
             new TranslationSeedItem("entity.materialdescription._self", "zh-HK", "Takt物料多语言描述信息_hk", "实体名称"),
 
-            // entity.materialdescription.materialid
-            new TranslationSeedItem("entity.materialdescription.materialid", "en-US", "物料ID_us", "物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）"),
-            // entity.materialdescription.materialid
-            new TranslationSeedItem("entity.materialdescription.materialid", "ja-JP", "物料ID_jp", "物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）"),
-            // entity.materialdescription.materialid
-            new TranslationSeedItem("entity.materialdescription.materialid", "zh-CN", "物料ID", "物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）"),
-            // entity.materialdescription.materialid
-            new TranslationSeedItem("entity.materialdescription.materialid", "zh-HK", "物料ID_hk", "物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）"),
+            // entity.materialdescription.materialcode
+            new TranslationSeedItem("entity.materialdescription.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
+            // entity.materialdescription.materialcode
+            new TranslationSeedItem("entity.materialdescription.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
+            // entity.materialdescription.materialcode
+            new TranslationSeedItem("entity.materialdescription.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
+            // entity.materialdescription.materialcode
+            new TranslationSeedItem("entity.materialdescription.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）"),
 
-            // entity.materialdescription.description
-            new TranslationSeedItem("entity.materialdescription.description", "en-US", "物料描述_us", "物料描述（SAP MAKT.MAKTX）"),
-            // entity.materialdescription.description
-            new TranslationSeedItem("entity.materialdescription.description", "ja-JP", "物料描述_jp", "物料描述（SAP MAKT.MAKTX）"),
-            // entity.materialdescription.description
-            new TranslationSeedItem("entity.materialdescription.description", "zh-CN", "物料描述", "物料描述（SAP MAKT.MAKTX）"),
-            // entity.materialdescription.description
-            new TranslationSeedItem("entity.materialdescription.description", "zh-HK", "物料描述_hk", "物料描述（SAP MAKT.MAKTX）"),
+            // entity.materialdescription.materialdescription
+            new TranslationSeedItem("entity.materialdescription.materialdescription", "en-US", "物料描述_us", "物料描述"),
+            // entity.materialdescription.materialdescription
+            new TranslationSeedItem("entity.materialdescription.materialdescription", "ja-JP", "物料描述_jp", "物料描述"),
+            // entity.materialdescription.materialdescription
+            new TranslationSeedItem("entity.materialdescription.materialdescription", "zh-CN", "物料描述", "物料描述"),
+            // entity.materialdescription.materialdescription
+            new TranslationSeedItem("entity.materialdescription.materialdescription", "zh-HK", "物料描述_hk", "物料描述"),
 
-            // entity.materialdescription.culturecode
-            new TranslationSeedItem("entity.materialdescription.culturecode", "en-US", "语言_us", "语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）"),
-            // entity.materialdescription.culturecode
-            new TranslationSeedItem("entity.materialdescription.culturecode", "ja-JP", "语言_jp", "语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）"),
-            // entity.materialdescription.culturecode
-            new TranslationSeedItem("entity.materialdescription.culturecode", "zh-CN", "语言", "语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）"),
-            // entity.materialdescription.culturecode
-            new TranslationSeedItem("entity.materialdescription.culturecode", "zh-HK", "语言_hk", "语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）"),
+            // entity.materialdescription.materialspecification
+            new TranslationSeedItem("entity.materialdescription.materialspecification", "en-US", "物料规格_us", "物料规格"),
+            // entity.materialdescription.materialspecification
+            new TranslationSeedItem("entity.materialdescription.materialspecification", "ja-JP", "物料规格_jp", "物料规格"),
+            // entity.materialdescription.materialspecification
+            new TranslationSeedItem("entity.materialdescription.materialspecification", "zh-CN", "物料规格", "物料规格"),
+            // entity.materialdescription.materialspecification
+            new TranslationSeedItem("entity.materialdescription.materialspecification", "zh-HK", "物料规格_hk", "物料规格"),
 
-            // entity.materialdescription.material
-            new TranslationSeedItem("entity.materialdescription.material", "en-US", "所属物料_us", "所属物料（多对一）"),
-            // entity.materialdescription.material
-            new TranslationSeedItem("entity.materialdescription.material", "ja-JP", "所属物料_jp", "所属物料（多对一）"),
-            // entity.materialdescription.material
-            new TranslationSeedItem("entity.materialdescription.material", "zh-CN", "所属物料", "所属物料（多对一）"),
-            // entity.materialdescription.material
-            new TranslationSeedItem("entity.materialdescription.material", "zh-HK", "所属物料_hk", "所属物料（多对一）"),
+            // entity.materialdescription.materialmodel
+            new TranslationSeedItem("entity.materialdescription.materialmodel", "en-US", "物料型号_us", "物料型号"),
+            // entity.materialdescription.materialmodel
+            new TranslationSeedItem("entity.materialdescription.materialmodel", "ja-JP", "物料型号_jp", "物料型号"),
+            // entity.materialdescription.materialmodel
+            new TranslationSeedItem("entity.materialdescription.materialmodel", "zh-CN", "物料型号", "物料型号"),
+            // entity.materialdescription.materialmodel
+            new TranslationSeedItem("entity.materialdescription.materialmodel", "zh-HK", "物料型号_hk", "物料型号"),
+
+            // entity.materialdescription.materiallongdescription
+            new TranslationSeedItem("entity.materialdescription.materiallongdescription", "en-US", "物料长描述_us", "物料长描述"),
+            // entity.materialdescription.materiallongdescription
+            new TranslationSeedItem("entity.materialdescription.materiallongdescription", "ja-JP", "物料长描述_jp", "物料长描述"),
+            // entity.materialdescription.materiallongdescription
+            new TranslationSeedItem("entity.materialdescription.materiallongdescription", "zh-CN", "物料长描述", "物料长描述"),
+            // entity.materialdescription.materiallongdescription
+            new TranslationSeedItem("entity.materialdescription.materiallongdescription", "zh-HK", "物料长描述_hk", "物料长描述"),
         };
     }
 

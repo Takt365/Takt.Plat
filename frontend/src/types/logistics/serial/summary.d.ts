@@ -24,109 +24,14 @@ import type {
  */
 export interface SerialSummary extends CompanyDtoBase {
   /**
-   * SerialSummaryID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入）
    */
-  serialSummaryId: string;
+  cultureCode: string
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入）
    */
-  plantCode: string;
-
-  /**
-   * 入库单号
-   */
-  inboundNo: string;
-
-  /**
-   * 入库日期
-   */
-  inboundDate: string;
-
-  /**
-   * 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode: string;
-
-  /**
-   * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
-   */
-  inboundSerialNo: string;
-
-  /**
-   * 入库数量
-   */
-  inboundQuantity: number;
-
-  /**
-   * 产品入库序列号（原始扫描号码）
-   */
-  productInboundSerialNo: string;
-
-  /**
-   * 出库单号（未出库时为空）
-   */
-  outboundNo: string;
-
-  /**
-   * 发货单号（未出库时为空）
-   */
-  shippingInvoiceNo: string;
-
-  /**
-   * 装车日期（未装车时为空）
-   */
-  loadingDate?: string;
-
-  /**
-   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
-   */
-  destination: string;
-
-  /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
-   */
-  destinationPort: string;
-
-  /**
-   * 出库日期（未出库时为空）
-   */
-  outboundDate?: string;
-
-  /**
-   * 出库序列号（计算后的业务序号；未出库时为空）
-   */
-  outboundSerialNo: string;
-
-  /**
-   * 出库数量
-   */
-  outboundQuantity: number;
-
-  /**
-   * 产品出库序列号（原始扫描号码；未出库时为空）
-   */
-  productOutboundSerialNo: string;
-
-}
-
-
-/**
- * SerialSummary 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 SerialSummaryQuery
- * @description 对应后端 TaktSerialSummaryQueryDto
- */
-export interface SerialSummaryQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
+  cultureCode?: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -136,270 +41,7 @@ export interface SerialSummaryQuery extends TaktPagedQuery {
   /**
    * 入库单号
    */
-  inboundNo?: string;
-
-  /**
-   * 入库日期（范围查询-开始）
-   */
-  inboundDateStart?: string;
-
-  /**
-   * 入库日期（范围查询-结束）
-   */
-  inboundDateEnd?: string;
-
-  /**
-   * 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
-   */
-  inboundSerialNo?: string;
-
-  /**
-   * 入库数量
-   */
-  inboundQuantity?: number;
-
-  /**
-   * 产品入库序列号（原始扫描号码）
-   */
-  productInboundSerialNo?: string;
-
-  /**
-   * 出库单号（未出库时为空）
-   */
-  outboundNo?: string;
-
-  /**
-   * 发货单号（未出库时为空）
-   */
-  shippingInvoiceNo?: string;
-
-  /**
-   * 装车日期（未装车时为空）（范围查询-开始）
-   */
-  loadingDateStart?: string;
-
-  /**
-   * 装车日期（未装车时为空）（范围查询-结束）
-   */
-  loadingDateEnd?: string;
-
-  /**
-   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
-   */
-  destination?: string;
-
-  /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
-   */
-  destinationPort?: string;
-
-  /**
-   * 出库日期（未出库时为空）（范围查询-开始）
-   */
-  outboundDateStart?: string;
-
-  /**
-   * 出库日期（未出库时为空）（范围查询-结束）
-   */
-  outboundDateEnd?: string;
-
-  /**
-   * 出库序列号（计算后的业务序号；未出库时为空）
-   */
-  outboundSerialNo?: string;
-
-  /**
-   * 出库数量
-   */
-  outboundQuantity?: number;
-
-  /**
-   * 产品出库序列号（原始扫描号码；未出库时为空）
-   */
-  productOutboundSerialNo?: string;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建SerialSummary DTO
- * 对应前端 SerialSummaryCreate
- * @description 对应后端 TaktSerialSummaryCreateDto
- */
-export interface SerialSummaryCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 入库单号
-   */
-  inboundNo: string;
-
-  /**
-   * 入库日期
-   */
-  inboundDate: string;
-
-  /**
-   * 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode: string;
-
-  /**
-   * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
-   */
-  inboundSerialNo: string;
-
-  /**
-   * 入库数量
-   */
-  inboundQuantity: number;
-
-  /**
-   * 产品入库序列号（原始扫描号码）
-   */
-  productInboundSerialNo: string;
-
-  /**
-   * 出库单号（未出库时为空）
-   */
-  outboundNo: string;
-
-  /**
-   * 发货单号（未出库时为空）
-   */
-  shippingInvoiceNo: string;
-
-  /**
-   * 装车日期（未装车时为空）
-   */
-  loadingDate?: string;
-
-  /**
-   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
-   */
-  destination: string;
-
-  /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
-   */
-  destinationPort: string;
-
-  /**
-   * 出库日期（未出库时为空）
-   */
-  outboundDate?: string;
-
-  /**
-   * 出库序列号（计算后的业务序号；未出库时为空）
-   */
-  outboundSerialNo: string;
-
-  /**
-   * 出库数量
-   */
-  outboundQuantity: number;
-
-  /**
-   * 产品出库序列号（原始扫描号码；未出库时为空）
-   */
-  productOutboundSerialNo: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新SerialSummary DTO
- * 继承 TaktSerialSummaryCreateDto，添加 SerialSummaryId 字段
- * 对应前端 SerialSummaryUpdate
- * @description 对应后端 TaktSerialSummaryUpdateDto
- */
-export interface SerialSummaryUpdate extends SerialSummaryCreate {
-  /**
-   * SerialSummaryID（标识要更新的实体）
-   */
-  serialSummaryId: string;
-
-}
-
-
-/**
- * SerialSummary 导入模板行 DTO
- * 对应前端 SerialSummaryTemplate
- * @description 对应后端 TaktSerialSummaryTemplateDto
- */
-export interface SerialSummaryTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 入库单号
-   */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 入库日期
@@ -414,7 +56,7 @@ export interface SerialSummaryTemplate {
   /**
    * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
    */
-  inboundSerialNo?: string;
+  inboundSerialCode?: string;
 
   /**
    * 入库数量
@@ -424,17 +66,17 @@ export interface SerialSummaryTemplate {
   /**
    * 产品入库序列号（原始扫描号码）
    */
-  productInboundSerialNo?: string;
+  productInboundSerialCode?: string;
 
   /**
    * 出库单号（未出库时为空）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 发货单号（未出库时为空）
    */
-  shippingInvoiceNo?: string;
+  shippingInvoiceCode?: string;
 
   /**
    * 装车日期（未装车时为空）
@@ -459,7 +101,7 @@ export interface SerialSummaryTemplate {
   /**
    * 出库序列号（计算后的业务序号；未出库时为空）
    */
-  outboundSerialNo?: string;
+  outboundSerialCode?: string;
 
   /**
    * 出库数量
@@ -469,7 +111,7 @@ export interface SerialSummaryTemplate {
   /**
    * 产品出库序列号（原始扫描号码；未出库时为空）
    */
-  productOutboundSerialNo?: string;
+  productOutboundSerialCode?: string;
 
   /**
    * 扩展字段JSON
@@ -482,121 +124,6 @@ export interface SerialSummaryTemplate {
   remark?: string;
 
 }
-
-
-/**
- * SerialSummary 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 SerialSummaryImport
- * @description 对应后端 TaktSerialSummaryImportDto
- */
-export interface SerialSummaryImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 入库单号
-   */
-  inboundNo?: string;
-
-  /**
-   * 入库日期
-   */
-  inboundDate?: string;
-
-  /**
-   * 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
-   */
-  inboundSerialNo?: string;
-
-  /**
-   * 入库数量
-   */
-  inboundQuantity?: number;
-
-  /**
-   * 产品入库序列号（原始扫描号码）
-   */
-  productInboundSerialNo?: string;
-
-  /**
-   * 出库单号（未出库时为空）
-   */
-  outboundNo?: string;
-
-  /**
-   * 发货单号（未出库时为空）
-   */
-  shippingInvoiceNo?: string;
-
-  /**
-   * 装车日期（未装车时为空）
-   */
-  loadingDate?: string;
-
-  /**
-   * 仕向地（选项 TaktModelDestinations/options，DictValue=DestinationCode）
-   */
-  destination?: string;
-
-  /**
-   * 目的地港（字典 logistics_destination_port_code；DictValue 为港口/运输编码，如 ACE_AIR、VIE）
-   */
-  destinationPort?: string;
-
-  /**
-   * 出库日期（未出库时为空）
-   */
-  outboundDate?: string;
-
-  /**
-   * 出库序列号（计算后的业务序号；未出库时为空）
-   */
-  outboundSerialNo?: string;
-
-  /**
-   * 出库数量
-   */
-  outboundQuantity?: number;
-
-  /**
-   * 产品出库序列号（原始扫描号码；未出库时为空）
-   */
-  productOutboundSerialNo?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * SerialSummary 导出 DTO（独立实现，不继承响应 Dto）
@@ -622,7 +149,7 @@ export interface SerialSummaryExport {
   /**
    * 入库单号
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 入库日期
@@ -637,7 +164,7 @@ export interface SerialSummaryExport {
   /**
    * 入库序列号（计算后的业务序号；租户+公司+工厂内唯一）
    */
-  inboundSerialNo: string;
+  inboundSerialCode: string;
 
   /**
    * 入库数量
@@ -647,17 +174,17 @@ export interface SerialSummaryExport {
   /**
    * 产品入库序列号（原始扫描号码）
    */
-  productInboundSerialNo: string;
+  productInboundSerialCode: string;
 
   /**
    * 出库单号（未出库时为空）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 发货单号（未出库时为空）
    */
-  shippingInvoiceNo: string;
+  shippingInvoiceCode: string;
 
   /**
    * 装车日期（未装车时为空）
@@ -682,7 +209,7 @@ export interface SerialSummaryExport {
   /**
    * 出库序列号（计算后的业务序号；未出库时为空）
    */
-  outboundSerialNo: string;
+  outboundSerialCode: string;
 
   /**
    * 出库数量
@@ -692,7 +219,7 @@ export interface SerialSummaryExport {
   /**
    * 产品出库序列号（原始扫描号码；未出库时为空）
    */
-  productOutboundSerialNo: string;
+  productOutboundSerialCode: string;
 
   /**
    * 扩展字段JSON

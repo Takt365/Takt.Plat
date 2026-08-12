@@ -17,6 +17,7 @@ export default {
     selectPlantRequired: '工場コードを選択してください',
     selectModelRequired: '機種コードを選択してください',
     selectProductRequired: '製品コードを選択してください',
+    selectMaterialTypeRequired: '品目タイプを選択してください',
     selectPeriodRequired: '原価期間を選択してください',
     summary: '{plant} / {model} / {product} — 単一製品の明細 {componentCount} 行（コスト分析）',
     trendSummary:
@@ -27,6 +28,11 @@ export default {
     filter: {
       all: 'すべて',
       changed: '変動のみ',
+    },
+    sort: {
+      bom: 'BOM展開順（全件）',
+      trend: '騰落優先（全件）',
+      varianceDesc: '差額絶対値降順（全件）',
     },
     trend: {
       none: '—',

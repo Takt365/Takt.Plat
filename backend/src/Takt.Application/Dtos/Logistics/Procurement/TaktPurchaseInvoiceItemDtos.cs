@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceItemDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInvoiceItem 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 // ========================================
 
 /// <summary>
-/// Takt采购发票明细实体
+/// Takt采购发票明细实体（公司级；主子表关系见 PurchaseInvoiceId）
 /// 对应前端 TaktPurchaseInvoiceItemDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -35,96 +35,192 @@ public class TaktPurchaseInvoiceItemDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceItemId { get; set; }
 
-    /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票 名称（填充字段）
-    /// </summary>
-    public string? PurchaseInvoiceName { get; set; }
-
-    /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    public string PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
+
+    /// <summary>
+    /// 采购发票主表
+    /// （主表：TaktPurchaseInvoice）
+    /// </summary>
+    public TaktPurchaseInvoiceDto? PurchaseInvoice { get; set; }
 
 }
 
@@ -149,85 +245,195 @@ public class TaktPurchaseInvoiceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    public string? PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal? InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal? InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal? DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal? DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal? TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal? UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -275,93 +481,196 @@ public class TaktPurchaseInvoiceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "采购发票编码（冗余字段，便于查询）不能为空")]
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
+    /// </summary>
+    [Required(ErrorMessage = "凭证编号（冗余；会计年度见主表 FiscalYear）不能为空")]
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    [Required(ErrorMessage = "采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
-    public string PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -443,85 +752,195 @@ public class TaktPurchaseInvoiceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    public string? PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal? InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal? InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal? DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal? DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal? TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal? UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -556,90 +975,195 @@ public class TaktPurchaseInvoiceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
     /// </summary>
     public string? PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    public string? PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal? InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal? InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal? DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal? DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal? TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal? UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -680,85 +1204,190 @@ public class TaktPurchaseInvoiceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+    /// 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchaseInvoiceId { get; set; }
 
     /// <summary>
-    /// 采购发票编码（冗余字段，便于查询）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证编号（冗余；会计年度见主表 FiscalYear）
     /// </summary>
     public string PurchaseInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 来源采购订单编码
+    /// 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
     /// </summary>
     public string? PurchaseOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源采购订单行号
+    /// 项目（采购凭证项目）
     /// </summary>
-    public int? PurchaseOrderLineNumber { get; set; }
+    public int? PurchaseOrderItem { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 科目分配序号
+    /// </summary>
+    public string? AccountAssignmentSeq { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 评估范围
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string? ValuationArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 金额
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? Amount { get; set; }
 
     /// <summary>
-    /// 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 借/贷标识
     /// </summary>
-    public string PurchaseUnit { get; set; } = string.Empty;
+    public string? DebitCreditIndicator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票数量（基本单位数量）
+    /// 税码
     /// </summary>
-    public decimal InvoiceQuantity { get; set; }
+    public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 开票单价
+    /// 数量
     /// </summary>
-    public decimal InvoiceUnitPrice { get; set; }
+    public decimal? Quantity { get; set; }
 
     /// <summary>
-    /// 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+    /// 订单单位
     /// </summary>
-    public decimal DiscountRate { get; set; }
+    public string? OrderUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 折扣金额
+    /// 订单价格单位数量
     /// </summary>
-    public decimal DiscountAmount { get; set; }
+    public decimal? PoPriceQuantity { get; set; }
 
     /// <summary>
-    /// 含税金额
+    /// 订单价格单位
     /// </summary>
-    public decimal TaxIncludedAmount { get; set; }
+    public string? PoPriceUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未税金额
+    /// 总库存
     /// </summary>
-    public decimal UntaxedAmount { get; set; }
+    public decimal? ValuatedStockQuantity { get; set; }
 
     /// <summary>
-    /// 税费
+    /// 上一过账期间库存
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public decimal? PreviousPeriodStock { get; set; }
+
+    /// <summary>
+    /// 基本计量单位
+    /// </summary>
+    public string? BaseUnit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 评估类
+    /// </summary>
+    public string? ValuationClass { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 标识: 更新采购订单历史
+    /// </summary>
+    public string? UpdatePoHistoryFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 后续借/贷
+    /// </summary>
+    public string? SubsequentDebitCredit { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价格冻结原因
+    /// </summary>
+    public string? BlockReasonPrice { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量冻结原因
+    /// </summary>
+    public string? BlockReasonQuantity { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 质量冻结原因
+    /// </summary>
+    public string? BlockReasonQuality { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 增强冻结原因
+    /// </summary>
+    public string? BlockReasonEnhanced { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 价值串
+    /// </summary>
+    public string? ValueString { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参照
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 条件类型
+    /// </summary>
+    public string? ConditionType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 总价值
+    /// </summary>
+    public decimal? TotalValuatedStockValue { get; set; }
+
+    /// <summary>
+    /// 前期总值
+    /// </summary>
+    public decimal? PreviousPeriodValue { get; set; }
+
+    /// <summary>
+    /// 参考凭证
+    /// </summary>
+    public string? ReferenceDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 当前期间年
+    /// </summary>
+    public string? ReferenceDocumentYear { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考凭证项目
+    /// </summary>
+    public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 库存物料
+    /// </summary>
+    public string? StockManagedMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 文本
+    /// </summary>
+    public string? ItemText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 来自到达的发票的存货过帐行
+    /// </summary>
+    public int? MaterialDocumentItem { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

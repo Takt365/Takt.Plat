@@ -27,16 +27,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarIndex("ix_takt_logistics_quality_customer_complaint_handling_handler_by", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(HandlerBy), OrderByType.Asc, false)]
 public class TaktCustomerComplaintHandling : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉处理记录编码（唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "complaint_handling_code", ColumnDescription = "客诉处理记录编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "complaint_handling_code", ColumnDescription = "客诉处理记录编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ComplaintHandlingCode { get; set; } = string.Empty;
     /// <summary>
     /// 客诉 ID（选项 TaktCustomerComplaints/options；DictValue=Id）
@@ -47,8 +42,8 @@ public class TaktCustomerComplaintHandling : TaktCompanyEntityBase
     /// <summary>
     /// 客诉单号（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "complaint_no", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string ComplaintNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    public string ComplaintCode { get; set; } = string.Empty;
     /// <summary>
     /// 客诉明细 ID（选项 TaktCustomerComplaintItems/options；DictValue=Id）
     /// </summary>
@@ -68,7 +63,7 @@ public class TaktCustomerComplaintHandling : TaktCompanyEntityBase
     /// <summary>
     /// 处理说明
     /// </summary>
-    [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false)]
+    [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string HandlingDescription { get; set; } = string.Empty;
     /// <summary>
     /// 原因分析

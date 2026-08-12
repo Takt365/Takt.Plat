@@ -152,11 +152,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('debitNoteNo')">
-      <a-form-item :label="t('entity.qualityassurance.debitnoteno')">
+      <div v-show="isFieldVisible('debitNoteCode')">
+      <a-form-item :label="t('entity.qualityassurance.debitnoteCode')">
         <a-textarea
-          v-model:value="advancedQueryForm.debitNoteNo"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityassurance.debitnoteno') })"
+          v-model:value="advancedQueryForm.debitNoteCode"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityassurance.debitnoteCode') })"
           :rows="2"
           allow-clear
         />
@@ -182,11 +182,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="t('entity.qualityassurance.costcurrency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="t('entity.qualityassurance.currencyCode')">
         <a-input
-          v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.costcurrency') })"
+          v-model:value="advancedQueryForm.currencyCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityassurance.currencyCode') })"
           show-count
           :maxlength="3"
           allow-clear
@@ -361,10 +361,10 @@ const advancedQueryForm = ref({
   qualityAssuranceCode: '',
   assuranceMonth: '',
   customerName: '',
-  debitNoteNo: '',
+  debitNoteCode: '',
   recorder: '',
   totalQualityCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -376,15 +376,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'qualityAssuranceCode', label: t('entity.qualityassurance.code') },
   { key: 'assuranceMonth', label: t('entity.qualityassurance.assurancemonth') },
   { key: 'customerName', label: t('entity.qualityassurance.customername') },
-  { key: 'debitNoteNo', label: t('entity.qualityassurance.debitnoteno') },
+  { key: 'debitNoteCode', label: t('entity.qualityassurance.debitnoteCode') },
   { key: 'recorder', label: t('entity.qualityassurance.recorder') },
   { key: 'totalQualityCost', label: t('entity.qualityassurance.totalqualitycost') },
-  { key: 'costCurrency', label: t('entity.qualityassurance.costcurrency') },
+  { key: 'currencyCode', label: t('entity.qualityassurance.currencyCode') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -430,12 +429,12 @@ function buildListQuery(overrides?: Partial<QualityAssuranceQuery>): QualityAssu
   assignTrimmed('qualityAssuranceCode', form.qualityAssuranceCode)
   assignTrimmed('assuranceMonth', form.assuranceMonth)
   assignTrimmed('customerName', form.customerName)
-  assignTrimmed('debitNoteNo', form.debitNoteNo)
+  assignTrimmed('debitNoteCode', form.debitNoteCode)
   assignTrimmed('recorder', form.recorder)
   if (form.totalQualityCost !== undefined && form.totalQualityCost !== null) {
     query.totalQualityCost = form.totalQualityCost
   }
-  assignTrimmed('costCurrency', form.costCurrency)
+  assignTrimmed('currencyCode', form.currencyCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -447,7 +446,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -548,13 +546,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'customerName') ?? ''
   },
   {
-    title: t('entity.qualityassurance.debitnoteno'),
-    dataIndex: 'debitNoteNo',
-    key: 'debitNoteNo',
+    title: t('entity.qualityassurance.debitnoteCode'),
+    dataIndex: 'debitNoteCode',
+    key: 'debitNoteCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'debitNoteNo') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'debitNoteCode') ?? ''
   },
   {
     title: t('entity.qualityassurance.recorder'),
@@ -575,13 +573,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'totalQualityCost') ?? ''
   },
   {
-    title: t('entity.qualityassurance.costcurrency'),
-    dataIndex: 'costCurrency',
-    key: 'costCurrency',
+    title: t('entity.qualityassurance.currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'costCurrency') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'currencyCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -613,7 +611,6 @@ const getQualityAssuranceId = (record: any): string => record?.[entityIdName] ??
  * @param field 字段名
  */
 const getQualityAssuranceField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -677,10 +674,10 @@ function handleReset() {
   qualityAssuranceCode: '',
   assuranceMonth: '',
   customerName: '',
-  debitNoteNo: '',
+  debitNoteCode: '',
   recorder: '',
   totalQualityCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -876,10 +873,10 @@ function handleAdvancedQueryReset() {
   qualityAssuranceCode: '',
   assuranceMonth: '',
   customerName: '',
-  debitNoteNo: '',
+  debitNoteCode: '',
   recorder: '',
   totalQualityCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

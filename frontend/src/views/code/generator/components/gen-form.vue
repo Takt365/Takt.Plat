@@ -2499,8 +2499,7 @@ const COLUMN_TABLE_BUSINESS_KEYS = [
   'isSort',
   'queryType',
   'htmlType',
-  'dictType',
-] as const
+  'dictType'] as const
 
 /**
  * 字段配置表默认可见业务列 key
@@ -2585,8 +2584,7 @@ const columnTableColumns = computed<TableColumnsType>(() => {
     withPresentation({ title: gentableColumnLabel('querytype'), dataIndex: 'queryType', key: 'queryType', width: 88 }),
     withPresentation({ title: gentableColumnLabel('htmltype'), dataIndex: 'htmlType', key: 'htmlType', width: 88 }),
     withPresentation({ title: gentableColumnLabel('dicttype'), dataIndex: 'dictType', key: 'dictType', width: 95 }),
-    withPresentation({ title: t('common.action.operation'), key: 'action', width: 72, fixed: 'right' }),
-  ]
+    withPresentation({ title: t('common.action.operation'), key: 'action', width: 72, fixed: 'right' })]
 })
 
 /** 按列设置过滤后的字段配置表展示列（拖拽列与操作列始终保留） */

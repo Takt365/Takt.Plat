@@ -106,10 +106,10 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('reqNo')">
+      <div v-show="isFieldVisible('reqCode')">
       <a-form-item :label="t('entity.talentStaffingRequirement.reqno')">
         <a-input
-          v-model:value="advancedQueryForm.reqNo"
+          v-model:value="advancedQueryForm.reqCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentStaffingRequirement.reqno') })"
           allow-clear
         />
@@ -448,7 +448,7 @@ const formRef = ref()/** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',
@@ -477,7 +477,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'reqNo', label: t('entity.talentStaffingRequirement.reqno') },
+  { key: 'reqCode', label: t('entity.talentStaffingRequirement.reqno') },
   { key: 'deptId', label: t('entity.talentStaffingRequirement.deptid') },
   { key: 'postId', label: t('entity.talentStaffingRequirement.postid') },
   { key: 'jobGrade', label: t('entity.talentStaffingRequirement.jobgrade') },
@@ -502,8 +502,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'ExtField', label: t('common.page.entity.ExtField') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -556,12 +555,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.talentStaffingRequirement.reqno'),
-    dataIndex: 'reqNo',
-    key: 'reqNo',
+    dataIndex: 'reqCode',
+    key: 'reqCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentStaffingRequirementField(record, 'reqNo') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentStaffingRequirementField(record, 'reqCode') ?? ''
   },
   {
     title: t('entity.talentStaffingRequirement.deptid'),
@@ -842,7 +841,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',
@@ -1044,7 +1043,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  reqNo: '',
+  reqCode: '',
   deptId: '',
   postId: '',
   jobGrade: '',

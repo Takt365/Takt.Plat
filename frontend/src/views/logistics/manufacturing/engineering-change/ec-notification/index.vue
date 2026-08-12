@@ -120,10 +120,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecNotificationNo')">
+      <div v-show="isFieldVisible('ecNotificationCode')">
       <a-form-item :label="t('entity.ecnotification.no')">
         <a-input
-          v-model:value="advancedQueryForm.ecNotificationNo"
+          v-model:value="advancedQueryForm.ecNotificationCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.no') })"
           show-count
           :maxlength="30"
@@ -142,11 +142,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecNo')">
-      <a-form-item :label="t('entity.ecnotification.ecno')">
+      <div v-show="isFieldVisible('ecCode')">
+      <a-form-item :label="t('entity.ecnotification.ecCode')">
         <a-input
-          v-model:value="advancedQueryForm.ecNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecno') })"
+          v-model:value="advancedQueryForm.ecCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.ecCode') })"
           show-count
           :maxlength="30"
           allow-clear
@@ -496,9 +496,9 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
-  ecNotificationNo: '',
+  ecNotificationCode: '',
   ecId: '',
-  ecNo: '',
+  ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',
   ecNotificationDateEnd: '',
@@ -524,9 +524,9 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.ecnotification.plantcode') },
-  { key: 'ecNotificationNo', label: t('entity.ecnotification.no') },
+  { key: 'ecNotificationCode', label: t('entity.ecnotification.no') },
   { key: 'ecId', label: t('entity.ecnotification.ecid') },
-  { key: 'ecNo', label: t('entity.ecnotification.ecno') },
+  { key: 'ecCode', label: t('entity.ecnotification.ecCode') },
   { key: 'ecTitle', label: t('entity.ecnotification.ectitle') },
   { key: 'ecNotificationDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
   { key: 'ecNotificationDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ecnotification.date')) },
@@ -547,8 +547,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -563,8 +562,6 @@ const entityIdName = 'ecNotificationId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -589,9 +586,9 @@ function buildListQuery(overrides?: Partial<EcNotificationQuery>): EcNotificatio
     }
   }
   assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('ecNotificationNo', form.ecNotificationNo)
+  assignTrimmed('ecNotificationCode', form.ecNotificationCode)
   assignTrimmed('ecId', form.ecId)
-  assignTrimmed('ecNo', form.ecNo)
+  assignTrimmed('ecCode', form.ecCode)
   assignTrimmed('ecTitle', form.ecTitle)
   assignTrimmed('ecNotificationDateStart', form.ecNotificationDateStart)
   assignTrimmed('ecNotificationDateEnd', form.ecNotificationDateEnd)
@@ -627,12 +624,6 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -656,12 +647,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.ecnotification.no'),
-    dataIndex: 'ecNotificationNo',
-    key: 'ecNotificationNo',
+    dataIndex: 'ecNotificationCode',
+    key: 'ecNotificationCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationCode') ?? ''
   },
   {
     title: t('entity.ecnotification.ecid'),
@@ -673,13 +664,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecId') ?? ''
   },
   {
-    title: t('entity.ecnotification.ecno'),
-    dataIndex: 'ecNo',
-    key: 'ecNo',
+    title: t('entity.ecnotification.ecCode'),
+    dataIndex: 'ecCode',
+    key: 'ecCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecCode') ?? ''
   },
   {
     title: t('entity.ecnotification.ectitle'),
@@ -793,7 +784,6 @@ const getEcNotificationId = (record: any): string => record?.[entityIdName] ?? '
  */
 const getEcNotificationField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -863,9 +853,9 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  ecNotificationNo: '',
+  ecNotificationCode: '',
   ecId: '',
-  ecNo: '',
+  ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',
   ecNotificationDateEnd: '',
@@ -1061,9 +1051,9 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  ecNotificationNo: '',
+  ecNotificationCode: '',
   ecId: '',
-  ecNo: '',
+  ecCode: '',
   ecTitle: '',
   ecNotificationDateStart: '',
   ecNotificationDateEnd: '',

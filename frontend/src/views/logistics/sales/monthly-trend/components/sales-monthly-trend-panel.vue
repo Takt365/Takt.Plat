@@ -177,13 +177,12 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.salesorder.customername'),
+      title: t('entity.salesorder.customername1'),
       dataIndex: 'customerName',
       key: 'customerName',
       width: 180,
       ellipsis: true,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,

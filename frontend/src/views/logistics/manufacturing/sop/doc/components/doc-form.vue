@@ -27,71 +27,40 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopdoc.plantcode')"
+                :label="pi.label('plantCode')"
                 name="plantCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.plantcode') })"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.sopDocId"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.sopcode')"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('sopCode')"
                 name="sopCode"
               >
                 <a-input
                   v-model:value="formState.sopCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.sopcode') })"
+                  :placeholder="pi.ph('sopCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -99,74 +68,78 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.sopname')"
+                :label="pi.label('sopName')"
                 name="sopName"
               >
                 <a-input
                   v-model:value="formState.sopName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.sopname') })"
+                  :placeholder="pi.ph('sopName')"
                   show-count
                   :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.materialcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.sopDocId"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.routingitemid')"
+                :label="pi.label('routingItemId')"
                 name="routingItemId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.routingItemId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.routingitemid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktRoutingItems/options"
+                  :placeholder="pi.ph('routingItemId')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.workstationid')"
+                :label="pi.label('workstationId')"
                 name="workstationId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.workstationId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.workstationid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopWorkstations/options"
+                  :placeholder="pi.ph('workstationId')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.currentrevisionid')"
+                :label="pi.label('currentRevisionId')"
                 name="currentRevisionId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.currentRevisionId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.currentrevisionid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopRevisions/options"
+                  :placeholder="pi.ph('currentRevisionId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('sopStatus')"
+                name="sopStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.sopStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('sopStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -182,27 +155,29 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.defaultlang')"
-                name="defaultLang"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
                 <a-input
-                  v-model:value="formState.defaultLang"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopdoc.defaultlang') })"
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
                   show-count
-                  :maxlength="10"
-                  allow-clear
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopdoc.sopstatus')"
-                name="sopStatus"
+                :label="pi.label('companyCode')"
+                name="companyCode"
               >
-                <TaktSelect
-                  v-model:value="formState.sopStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopdoc.sopstatus') })"
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -219,7 +194,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -234,12 +209,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -262,6 +237,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopDocI18n } from '../composables/use-doc-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopDocI18n()
 import type { SopDocCreate } from '@/types/logistics/manufacturing/sop/doc'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -272,33 +251,34 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","sopCode","sopName","materialCode","routingItemId","workstationId","currentRevisionId","defaultLang","sopStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -361,10 +341,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.sopDocId
-    if (isCreate) {
+    if (!props.formData?.sopDocId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -375,53 +354,46 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.plantcode') }),
-      trigger: 'blur'
+      message: pi.ph('plantCode'),
+      trigger: 'change'
     }
   ],
   sopCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.sopcode') }),
+      message: pi.ph('sopCode'),
       trigger: 'blur'
     }
   ],
   sopName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.sopname') }),
+      message: pi.ph('sopName'),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   routingItemId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.routingitemid') }),
-      trigger: 'blur'
-    }
-  ],
-  defaultLang: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopdoc.defaultlang') }),
-      trigger: 'blur'
+      message: pi.ph('routingItemId'),
+      trigger: 'change'
     }
   ],
   sopStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopdoc.sopstatus') }))
+        return Promise.reject(pi.ph('sopStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopdoc.sopstatus') }))
+        return Promise.reject(pi.ph('sopStatus'))
       }
       return Promise.resolve()
     },

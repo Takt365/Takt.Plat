@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeOnboardingI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployeeOnboarding 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEmployeeOnboardingI18nSeedData : ITaktSeedDataCoordinator
             // entity.employeeonboarding.offerid
             new TranslationSeedItem("entity.employeeonboarding.offerid", "zh-HK", "录用信息ID_hk", "录用信息（选项 TaktTalentOffers/options；DictValue=Id）"),
 
-            // entity.employeeonboarding.todono
-            new TranslationSeedItem("entity.employeeonboarding.todono", "en-US", "待办单号_us", "待办单号（租户+公司内业务编码）"),
-            // entity.employeeonboarding.todono
-            new TranslationSeedItem("entity.employeeonboarding.todono", "ja-JP", "待办单号_jp", "待办单号（租户+公司内业务编码）"),
-            // entity.employeeonboarding.todono
-            new TranslationSeedItem("entity.employeeonboarding.todono", "zh-CN", "待办单号", "待办单号（租户+公司内业务编码）"),
-            // entity.employeeonboarding.todono
-            new TranslationSeedItem("entity.employeeonboarding.todono", "zh-HK", "待办单号_hk", "待办单号（租户+公司内业务编码）"),
+            // entity.employeeonboarding.todocode
+            new TranslationSeedItem("entity.employeeonboarding.todocode", "en-US", "待办单号_us", "待办单号（租户+公司内业务编码）"),
+            // entity.employeeonboarding.todocode
+            new TranslationSeedItem("entity.employeeonboarding.todocode", "ja-JP", "待办单号_jp", "待办单号（租户+公司内业务编码）"),
+            // entity.employeeonboarding.todocode
+            new TranslationSeedItem("entity.employeeonboarding.todocode", "zh-CN", "待办单号", "待办单号（租户+公司内业务编码）"),
+            // entity.employeeonboarding.todocode
+            new TranslationSeedItem("entity.employeeonboarding.todocode", "zh-HK", "待办单号_hk", "待办单号（租户+公司内业务编码）"),
 
             // entity.employeeonboarding.plannedjoineddate
             new TranslationSeedItem("entity.employeeonboarding.plannedjoineddate", "en-US", "计划上岗日期_us", "计划上岗日期（JoinedDate 计划值）"),

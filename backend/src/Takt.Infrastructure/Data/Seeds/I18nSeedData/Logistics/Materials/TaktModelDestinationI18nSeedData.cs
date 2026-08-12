@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktModelDestinationI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktModelDestination 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktModelDestinationI18nSeedData : ITaktSeedDataCoordinator
             // entity.modeldestination.materialcode
             new TranslationSeedItem("entity.modeldestination.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
-            // entity.modeldestination.materialname
-            new TranslationSeedItem("entity.modeldestination.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
-            // entity.modeldestination.materialname
-            new TranslationSeedItem("entity.modeldestination.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
-            // entity.modeldestination.materialname
-            new TranslationSeedItem("entity.modeldestination.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
-            // entity.modeldestination.materialname
-            new TranslationSeedItem("entity.modeldestination.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
+            // entity.modeldestination.materialdescription
+            new TranslationSeedItem("entity.modeldestination.materialdescription", "en-US", "物料描述_us", "物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）"),
+            // entity.modeldestination.materialdescription
+            new TranslationSeedItem("entity.modeldestination.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）"),
+            // entity.modeldestination.materialdescription
+            new TranslationSeedItem("entity.modeldestination.materialdescription", "zh-CN", "物料描述", "物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）"),
+            // entity.modeldestination.materialdescription
+            new TranslationSeedItem("entity.modeldestination.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）"),
 
             // entity.modeldestination.modelcode
             new TranslationSeedItem("entity.modeldestination.modelcode", "en-US", "机种编码_us", "机种编码（40）"),
@@ -118,13 +118,13 @@ public class TaktModelDestinationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.modeldestination.modelcode", "zh-HK", "机种编码_hk", "机种编码（40）"),
 
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "en-US", "机种名称_us", "机种名称（80）"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "en-US", "机种名称_us", "机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "ja-JP", "机种名称_jp", "机种名称（80）"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "ja-JP", "机种名称_jp", "机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "zh-CN", "机种名称", "机种名称（80）"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "zh-CN", "机种名称", "机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）"),
             // entity.modeldestination.modelname
-            new TranslationSeedItem("entity.modeldestination.modelname", "zh-HK", "机种名称_hk", "机种名称（80）"),
+            new TranslationSeedItem("entity.modeldestination.modelname", "zh-HK", "机种名称_hk", "机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）"),
 
             // entity.modeldestination.destinationcode
             new TranslationSeedItem("entity.modeldestination.destinationcode", "en-US", "仕向地编码_us", "仕向地编码（40）"),

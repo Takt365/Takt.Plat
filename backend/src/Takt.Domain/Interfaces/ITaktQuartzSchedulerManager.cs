@@ -57,9 +57,14 @@ public interface ITaktQuartzSchedulerManager
     /// </summary>
     /// <param name="task">定时任务实体</param>
     /// <param name="userName">触发用户</param>
+    /// <param name="executeParams">本次触发执行参数（非空则覆盖任务配置 ExecuteParams）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>任务</returns>
-    Task RunQuartzTaskNowAsync(TaktQuartzTask task, string? userName = null, CancellationToken cancellationToken = default);
+    Task RunQuartzTaskNowAsync(
+        TaktQuartzTask task,
+        string? userName = null,
+        string? executeParams = null,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 启动时加载所有租户的正常状态任务

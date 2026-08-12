@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getWorkCenterResourceId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -585,10 +586,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:aps:work:center:delete',
         onClick: (record: WorkCenterResource) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

@@ -20,10 +20,10 @@ export const PURCHASESALESINVENTORY_SELF_I18N_KEY = buildEntitySelfI18nKey(PURCH
 
 /** 列表业务列（不含主键） */
 export const PURCHASESALESINVENTORY_LIST_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'valuation',
   'unitCode',
   'openingQty',
@@ -49,10 +49,10 @@ export const PURCHASESALESINVENTORY_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   periodCode: 'required',
   materialCode: 'select',
-  materialName: 'required',
+  materialDescription: 'required',
   valuation: 'select',
   unitCode: 'optional',
   openingQty: 'select',
@@ -80,10 +80,10 @@ export type PurchaseSalesInventoryField = keyof typeof PURCHASESALESINVENTORY_PL
 
 /** 高级查询可 trim 的字符串字段 */
 export const PURCHASESALESINVENTORY_QUERY_STRING_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'valuation',
   'unitCode',
   'currencyCode',

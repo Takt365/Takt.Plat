@@ -135,7 +135,6 @@ export interface Menu extends TenantDtoBase {
 
 }
 
-
 /**
  * Menu 树形列表/树选择 DTO（含子节点）
  * 对应 GetMenuTreeAsync 等接口
@@ -150,7 +149,6 @@ export interface MenuTree extends Menu {
 
 }
 
-
 /**
  * Menu 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -162,6 +160,11 @@ export interface MenuQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
@@ -285,7 +288,6 @@ export interface MenuQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Menu DTO
  * 对应前端 MenuCreate
@@ -296,6 +298,11 @@ export interface MenuCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
@@ -399,7 +406,6 @@ export interface MenuCreate {
 
 }
 
-
 /**
  * 更新Menu DTO
  * 继承 TaktMenuCreateDto，添加 MenuId 字段
@@ -413,7 +419,6 @@ export interface MenuUpdate extends MenuCreate {
   menuId: string;
 
 }
-
 
 /**
  * Menu 状态更新 DTO
@@ -433,7 +438,6 @@ export interface MenuStatus {
 
 }
 
-
 /**
  * Menu 排序更新 DTO
  * 对应前端 MenuSort
@@ -452,7 +456,6 @@ export interface MenuSort {
 
 }
 
-
 /**
  * Menu 导入模板行 DTO
  * 对应前端 MenuTemplate
@@ -463,6 +466,11 @@ export interface MenuTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
@@ -565,7 +573,6 @@ export interface MenuTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Menu 导入 DTO（独立实现，不继承 TemplateDto）
@@ -579,6 +586,11 @@ export interface MenuImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
    */
   menuCode?: string;
@@ -679,7 +691,6 @@ export interface MenuImport {
   remark?: string;
 
 }
-
 
 /**
  * Menu 导出 DTO（独立实现，不继承响应 Dto）

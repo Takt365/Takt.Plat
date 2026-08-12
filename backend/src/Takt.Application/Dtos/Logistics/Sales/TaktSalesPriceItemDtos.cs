@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesPriceItemDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesPriceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesPriceItem 生成，请按需审阅）
 // 
@@ -89,7 +89,7 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -119,7 +119,7 @@ public class TaktSalesPriceItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    public string ConditionCurrency { get; set; } = string.Empty;
+    public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
@@ -186,6 +186,16 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -234,7 +244,7 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -264,7 +274,7 @@ public class TaktSalesPriceItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    public string? ConditionCurrency { get; set; } = string.Empty;
+    public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
@@ -337,10 +347,15 @@ public class TaktSalesPriceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
@@ -392,7 +407,7 @@ public class TaktSalesPriceItemCreateDto
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -424,7 +439,7 @@ public class TaktSalesPriceItemCreateDto
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
     [Required(ErrorMessage = "条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）不能为空")]
-    public string ConditionCurrency { get; set; } = string.Empty;
+    public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
@@ -552,6 +567,16 @@ public class TaktSalesPriceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -600,7 +625,7 @@ public class TaktSalesPriceItemTemplateDto
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -630,7 +655,7 @@ public class TaktSalesPriceItemTemplateDto
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    public string? ConditionCurrency { get; set; } = string.Empty;
+    public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
@@ -700,10 +725,15 @@ public class TaktSalesPriceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 销售价格 ID（主子表关系；选项 TaktSalesPrices/options，DictValue=Id）
     /// </summary>
@@ -753,7 +783,7 @@ public class TaktSalesPriceItemImportDto
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -783,7 +813,7 @@ public class TaktSalesPriceItemImportDto
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    public string? ConditionCurrency { get; set; } = string.Empty;
+    public string? ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）
@@ -907,7 +937,7 @@ public class TaktSalesPriceItemExportDto
     /// <summary>
     /// 等级货币（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? ScaleCurrency { get; set; } = string.Empty;
+    public string? ScaleCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计算类型（字典 logistics_calculation_type；默认 A=百分数）
@@ -937,7 +967,7 @@ public class TaktSalesPriceItemExportDto
     /// <summary>
     /// 条件货币（字典 accounting_currency_code；DictValue=CNY/USD 等；默认 CNY）
     /// </summary>
-    public string ConditionCurrency { get; set; } = string.Empty;
+    public string ConditionCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价单位（字典 logistics_price_unit_param；1/10/100/1000；默认 1000）

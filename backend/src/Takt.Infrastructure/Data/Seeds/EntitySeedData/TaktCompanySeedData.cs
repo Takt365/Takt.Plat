@@ -176,7 +176,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
         company.CompanyName1 = seed.CompanyName1;
         company.CompanyShortName = seed.CompanyShortName;
         company.CodeAlias = seed.CodeAlias;
-        company.DefaultCulture = seed.DefaultCulture;
+        company.CultureCode = seed.CultureCode;
         company.RelatedPlant = seed.RelatedPlant;
         company.EnterpriseNature = seed.EnterpriseNature;
         company.IndustryAttribute = seed.IndustryAttribute;
@@ -216,7 +216,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
         string CompanyName1,
         string CompanyShortName,
         string CodeAlias,
-        string DefaultCulture,
+        string CultureCode,
         string RelatedPlant,
         string EnterpriseNature,
         string IndustryAttribute,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/routine/help-desk
 // 文件名称：ticket.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：routine/help-desk 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt工单实体
+ * 服务台工单实体
  * 对应前端 TaktTicketDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Ticket
@@ -31,7 +31,7 @@ export interface Ticket extends CompanyDtoBase {
   /**
    * 工单编码（唯一）
    */
-  ticketNo: string;
+  ticketCode: string;
 
   /**
    * 工单标题
@@ -44,37 +44,37 @@ export interface Ticket extends CompanyDtoBase {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId: string;
 
@@ -84,7 +84,7 @@ export interface Ticket extends CompanyDtoBase {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -94,22 +94,22 @@ export interface Ticket extends CompanyDtoBase {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 关联知识名称（填充字段）
+   * 关联知识 名称（填充字段）
    */
   knowledgeName?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
   /**
-   * 父工单名称（填充字段）
+   * 父工单 名称（填充字段）
    */
   parentTicketName?: string;
 
@@ -139,12 +139,12 @@ export interface Ticket extends CompanyDtoBase {
   closedAt?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
   /**
-   * 关联 IT 设备保修扩展 名称（填充字段）
+   * IT 设备保修扩展 名称（填充字段）
    */
   itAssetName?: string;
 
@@ -154,17 +154,7 @@ export interface Ticket extends CompanyDtoBase {
   assetCode?: string;
 
   /**
-   * 资产名称（填充字段，来自 TaktAsset）
-   */
-  assetName?: string;
-
-  /**
-   * 工单回复列表（详情填充）
-   */
-  replies?: TicketReply[];
-
-  /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -174,12 +164,12 @@ export interface Ticket extends CompanyDtoBase {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus: number;
 
@@ -209,9 +199,19 @@ export interface TicketQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 工单编码（唯一）
    */
-  ticketNo?: string;
+  ticketCode?: string;
 
   /**
    * 工单标题
@@ -224,37 +224,37 @@ export interface TicketQuery extends TaktPagedQuery {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId?: string;
 
@@ -264,7 +264,7 @@ export interface TicketQuery extends TaktPagedQuery {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -274,12 +274,12 @@ export interface TicketQuery extends TaktPagedQuery {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
@@ -334,7 +334,7 @@ export interface TicketQuery extends TaktPagedQuery {
   closedAtEnd?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
@@ -344,7 +344,7 @@ export interface TicketQuery extends TaktPagedQuery {
   assetCode?: string;
 
   /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -354,12 +354,12 @@ export interface TicketQuery extends TaktPagedQuery {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus?: number;
 
@@ -403,14 +403,19 @@ export interface TicketCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 工单编码（唯一）
    */
-  ticketNo: string;
+  ticketCode: string;
 
   /**
    * 工单标题
@@ -423,37 +428,37 @@ export interface TicketCreate {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId: string;
 
@@ -463,7 +468,7 @@ export interface TicketCreate {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -473,12 +478,12 @@ export interface TicketCreate {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
@@ -508,7 +513,7 @@ export interface TicketCreate {
   closedAt?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
@@ -518,7 +523,7 @@ export interface TicketCreate {
   assetCode?: string;
 
   /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -528,12 +533,12 @@ export interface TicketCreate {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus: number;
 
@@ -567,6 +572,11 @@ export interface TicketUpdate extends TicketCreate {
    */
   ticketId: string;
 
+  /**
+   * 子工单列表（父工单时有效；外键：本表 Id = 子工单 ParentTicketId）（子表，级联保存）
+   */
+  childTickets?: any;
+
 }
 
 
@@ -582,7 +592,7 @@ export interface TicketStatus {
   ticketId: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus: number;
 
@@ -606,9 +616,19 @@ export interface TicketTemplate {
   companyCode?: string;
 
   /**
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 工单编码（唯一）
    */
-  ticketNo?: string;
+  ticketCode?: string;
 
   /**
    * 工单标题
@@ -621,37 +641,37 @@ export interface TicketTemplate {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId?: string;
 
@@ -661,7 +681,7 @@ export interface TicketTemplate {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -671,12 +691,12 @@ export interface TicketTemplate {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
@@ -706,7 +726,7 @@ export interface TicketTemplate {
   closedAt?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
@@ -716,7 +736,7 @@ export interface TicketTemplate {
   assetCode?: string;
 
   /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -726,12 +746,12 @@ export interface TicketTemplate {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus?: number;
 
@@ -770,14 +790,19 @@ export interface TicketImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 工单编码（唯一）
    */
-  ticketNo?: string;
+  ticketCode?: string;
 
   /**
    * 工单标题
@@ -790,37 +815,37 @@ export interface TicketImport {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority?: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency?: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact?: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource?: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId?: string;
 
@@ -830,7 +855,7 @@ export interface TicketImport {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -840,12 +865,12 @@ export interface TicketImport {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
@@ -875,7 +900,7 @@ export interface TicketImport {
   closedAt?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
@@ -885,7 +910,7 @@ export interface TicketImport {
   assetCode?: string;
 
   /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -895,12 +920,12 @@ export interface TicketImport {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy?: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus?: number;
 
@@ -941,7 +966,7 @@ export interface TicketExport {
   /**
    * 工单编码（唯一）
    */
-  ticketNo: string;
+  ticketCode: string;
 
   /**
    * 工单标题
@@ -954,37 +979,37 @@ export interface TicketExport {
   ticketContent?: string;
 
   /**
-   * 附件 （JSON列表形式，由TaktFile 统一上传到服务器）。格式：[{ "FileId": 0, "FileName": "", "FilePath": "", "FileSize": 0, "FileType": "", "FileExtension": "", "SortOrder": 0 }]
+   * 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
    */
   attachments?: string;
 
   /**
-   * 优先级（字典 sys_priority_level_category）
+   * 优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）
    */
   priority: number;
 
   /**
-   * 紧急度（字典 sys_urgency_level_category）
+   * 紧急度（字典 sys_urgency_level_category；1=高 2=中 3=低）
    */
   urgency: number;
 
   /**
-   * 影响范围（字典 sys_impact_level_category）
+   * 影响范围（字典 sys_impact_level_category；1=高 2=中 3=低）
    */
   impact: number;
 
   /**
-   * 分类编码（如 incident/request 等）
+   * 分类编码（如 incident/request 等，与 TaktTicketCategoryAssign.CategoryCode 对应）
    */
   categoryCode?: string;
 
   /**
-   * 工单来源（0=门户网站，1=邮件，2=电话，3=API接入）
+   * 工单来源（字典 routine_ticket_source_type；0=门户 1=邮件 2=电话 3=API）
    */
   ticketSource: number;
 
   /**
-   * 提交人ID（序列化为string以避免Javascript精度问题）
+   * 提交人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   submitterId: string;
 
@@ -994,7 +1019,7 @@ export interface TicketExport {
   submitterName?: string;
 
   /**
-   * 处理人ID（序列化为string以避免Javascript精度问题）
+   * 处理人 ID（选项 TaktUsers/options；DictValue=Id）
    */
   assigneeId?: string;
 
@@ -1004,12 +1029,12 @@ export interface TicketExport {
   assigneeName?: string;
 
   /**
-   * 关联知识ID（可选，序列化为string以避免Javascript精度问题）
+   * 关联知识 ID（选项 TaktKnowledges/options；DictValue=Id）
    */
   knowledgeId?: string;
 
   /**
-   * 父工单ID（为空表示顶级工单；非空表示该工单为子工单，序列化为string以避免Javascript精度问题）
+   * 父工单 ID（选项 TaktTickets/options；为空表示顶级工单，DictValue=Id）
    */
   parentTicketId?: string;
 
@@ -1039,7 +1064,7 @@ export interface TicketExport {
   closedAt?: string;
 
   /**
-   * 关联 IT 设备保修扩展 ID
+   * IT 设备保修扩展 ID（选项 TaktItAssets/options；DictValue=Id）
    */
   itAssetId?: string;
 
@@ -1049,7 +1074,7 @@ export interface TicketExport {
   assetCode?: string;
 
   /**
-   * 申请部门ID
+   * 申请部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
    */
   applicantDeptId?: string;
 
@@ -1059,12 +1084,12 @@ export interface TicketExport {
   applicantDeptName?: string;
 
   /**
-   * 申请人（实际申请人；代理人代提时填被代理人）
+   * 申请人 ID（选项 TaktUsers/options；代理人代提时填被代理人，DictValue=Id）
    */
   applicantBy: string;
 
   /**
-   * 工单状态（字典 sys_ticket_status；0=新建，1=已分配，2=处理中，3=待确认，4=已完成，5=已关闭，6=已取消，7=重新打开）
+   * 工单状态（字典 sys_ticket_status；0=新建 1=已分配 2=处理中 3=待确认 4=已完成 5=已关闭 6=已取消 7=重新打开）
    */
   ticketStatus: number;
 

@@ -211,7 +211,6 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             var list = await seedContext.Query<TaktCulture>()
                 .Where(c =>
                     c.TenantCode == tenantCode
-                    && c.LanguageStatus == 1
                     && c.IsDeleted == 0)
                 .OrderBy(c => c.SortOrder)
                 .ToListAsync(cancellationToken);

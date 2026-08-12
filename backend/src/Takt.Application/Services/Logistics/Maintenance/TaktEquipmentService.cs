@@ -126,10 +126,10 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         var isUnique_ix_equipment_code_unique = await _uniqueValidator.IsUniqueAsync(
             _equipmentRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.EquipmentCode == entity.EquipmentCode);
+                && x.EquipCode == entity.EquipCode);
         if (!isUnique_ix_equipment_code_unique)
         {
-            throw new TaktBusinessException("工厂设备的PlantCode、EquipmentCode已存在");
+            throw new TaktBusinessException("工厂设备的PlantCode、EquipCode已存在");
         }
         entity = await _equipmentRepository.CreateAsync(entity);
                 await SaveEquipmentChildrenAsync(entity, dto);
@@ -153,11 +153,11 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         var isUnique_ix_equipment_code_unique = await _uniqueValidator.IsUniqueAsync(
             _equipmentRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.EquipmentCode == entity.EquipmentCode,
+                && x.EquipCode == entity.EquipCode,
             id);
         if (!isUnique_ix_equipment_code_unique)
         {
-            throw new TaktBusinessException("工厂设备的PlantCode、EquipmentCode已存在");
+            throw new TaktBusinessException("工厂设备的PlantCode、EquipCode已存在");
         }
         await _equipmentRepository.UpdateAsync(entity);
                 await SaveEquipmentChildrenAsync(entity, dto);
@@ -257,18 +257,18 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             try
             {
                 var entity = rows[i].Adapt<TaktEquipment>();
-                var importKey = $"{entity.PlantCode}|{entity.EquipmentCode}";
+                var importKey = $"{entity.PlantCode}|{entity.EquipCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、EquipmentCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、EquipCode）");
                 }
                 var isUnique_ix_equipment_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _equipmentRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.EquipmentCode == entity.EquipmentCode);
+                        && x.EquipCode == entity.EquipCode);
                 if (!isUnique_ix_equipment_code_unique)
                 {
-                    throw new TaktBusinessException("工厂设备的PlantCode、EquipmentCode已存在");
+                    throw new TaktBusinessException("工厂设备的PlantCode、EquipCode已存在");
                 }
                 await _equipmentRepository.CreateAsync(entity);
                 success += 1;
@@ -495,12 +495,12 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.EquipmentCode != null && x.EquipmentCode.Contains(keywords))
+                || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || (x.EquipmentName != null && x.EquipmentName.Contains(keywords))
                 || SqlFunc.ToString(x.EquipmentType).Contains(keywords)
                 || (x.EquipmentModel != null && x.EquipmentModel.Contains(keywords))
-                || (x.EquipmentSpecification != null && x.EquipmentSpecification.Contains(keywords))
-                || (x.EquipmentBrand != null && x.EquipmentBrand.Contains(keywords))
+                || (x.EquipSpecification != null && x.EquipSpecification.Contains(keywords))
+                || (x.EquipBrand != null && x.EquipBrand.Contains(keywords))
                 || (x.Manufacturer != null && x.Manufacturer.Contains(keywords))
                 || (x.DealerBy != null && x.DealerBy.Contains(keywords))
                 || (x.SerialNumber != null && x.SerialNumber.Contains(keywords))
@@ -518,6 +518,7 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
                 || SqlFunc.ToString(x.IsCritical).Contains(keywords)
                 || SqlFunc.ToString(x.WarrantyStatus).Contains(keywords)
                 || SqlFunc.ToString(x.EquipmentStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
@@ -534,9 +535,9 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentCode))
+        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipmentCode != null && x.EquipmentCode.Contains(queryDto.EquipmentCode));
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EquipmentName))
@@ -554,14 +555,14 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
             exp = exp.And(x => x.EquipmentModel != null && x.EquipmentModel.Contains(queryDto.EquipmentModel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentSpecification))
+        if (!string.IsNullOrEmpty(queryDto?.EquipSpecification))
         {
-            exp = exp.And(x => x.EquipmentSpecification != null && x.EquipmentSpecification.Contains(queryDto.EquipmentSpecification));
+            exp = exp.And(x => x.EquipSpecification != null && x.EquipSpecification.Contains(queryDto.EquipSpecification));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentBrand))
+        if (!string.IsNullOrEmpty(queryDto?.EquipBrand))
         {
-            exp = exp.And(x => x.EquipmentBrand != null && x.EquipmentBrand.Contains(queryDto.EquipmentBrand));
+            exp = exp.And(x => x.EquipBrand != null && x.EquipBrand.Contains(queryDto.EquipBrand));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Manufacturer))
@@ -647,6 +648,11 @@ public class TaktEquipmentService : TaktServiceBase, ITaktEquipmentService
         if (queryDto?.EquipmentStatus.HasValue == true)
         {
             exp = exp.And(x => x.EquipmentStatus == queryDto.EquipmentStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

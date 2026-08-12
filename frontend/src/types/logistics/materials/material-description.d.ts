@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-description.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-05
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,32 +29,35 @@ export interface MaterialDescription extends TenantDtoBase {
   materialDescriptionId: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId: string;
+  materialCode: string;
 
   /**
-   * 物料名称（填充字段）
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料规格
    */
-  description: string;
+  materialSpecification?: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料型号
    */
-  cultureCode: string;
+  materialModel?: string;
 
   /**
-   * 所属物料（多对一） （主表：TaktMaterial）
+   * 物料长描述
    */
-  material?: Material;
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
+   */
 
 }
-
 
 /**
  * MaterialDescription 分页查询 DTO
@@ -69,19 +72,39 @@ export interface MaterialDescriptionQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId?: string;
+  materialCode?: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料描述
    */
-  description?: string;
+  materialDescription?: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料规格
+   */
+  materialSpecification?: string;
+
+  /**
+   * 物料型号
+   */
+  materialModel?: string;
+
+  /**
+   * 物料长描述
+   */
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
    */
   cultureCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -105,7 +128,6 @@ export interface MaterialDescriptionQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建MaterialDescription DTO
  * 对应前端 MaterialDescriptionCreate
@@ -118,19 +140,39 @@ export interface MaterialDescriptionCreate {
   tenantCode: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId: string;
+  materialCode: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料描述
    */
-  description: string;
+  materialDescription: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料规格
+   */
+  materialSpecification?: string;
+
+  /**
+   * 物料型号
+   */
+  materialModel?: string;
+
+  /**
+   * 物料长描述
+   */
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
    */
   cultureCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 扩展字段JSON
@@ -143,7 +185,6 @@ export interface MaterialDescriptionCreate {
   remark?: string;
 
 }
-
 
 /**
  * 更新MaterialDescription DTO
@@ -159,7 +200,6 @@ export interface MaterialDescriptionUpdate extends MaterialDescriptionCreate {
 
 }
 
-
 /**
  * MaterialDescription 导入模板行 DTO
  * 对应前端 MaterialDescriptionTemplate
@@ -172,19 +212,39 @@ export interface MaterialDescriptionTemplate {
   tenantCode?: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId?: string;
+  materialCode?: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料描述
    */
-  description?: string;
+  materialDescription?: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料规格
+   */
+  materialSpecification?: string;
+
+  /**
+   * 物料型号
+   */
+  materialModel?: string;
+
+  /**
+   * 物料长描述
+   */
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
    */
   cultureCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 扩展字段JSON
@@ -197,7 +257,6 @@ export interface MaterialDescriptionTemplate {
   remark?: string;
 
 }
-
 
 /**
  * MaterialDescription 导入 DTO（独立实现，不继承 TemplateDto）
@@ -211,19 +270,39 @@ export interface MaterialDescriptionImport {
   tenantCode?: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId?: string;
+  materialCode?: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料描述
    */
-  description?: string;
+  materialDescription?: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料规格
+   */
+  materialSpecification?: string;
+
+  /**
+   * 物料型号
+   */
+  materialModel?: string;
+
+  /**
+   * 物料长描述
+   */
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
    */
   cultureCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 扩展字段JSON
@@ -237,7 +316,6 @@ export interface MaterialDescriptionImport {
 
 }
 
-
 /**
  * MaterialDescription 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 MaterialDescriptionExport
@@ -250,17 +328,32 @@ export interface MaterialDescriptionExport {
   materialDescriptionId: string;
 
   /**
-   * 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+   * 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
    */
-  materialId: string;
+  materialCode: string;
 
   /**
-   * 物料描述（SAP MAKT.MAKTX）
+   * 物料描述
    */
-  description: string;
+  materialDescription: string;
 
   /**
-   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+   * 物料规格
+   */
+  materialSpecification?: string;
+
+  /**
+   * 物料型号
+   */
+  materialModel?: string;
+
+  /**
+   * 物料长描述
+   */
+  materialLongDescription?: string;
+
+  /**
+   * 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；存 BCP47 如 zh-CN）
    */
   cultureCode: string;
 

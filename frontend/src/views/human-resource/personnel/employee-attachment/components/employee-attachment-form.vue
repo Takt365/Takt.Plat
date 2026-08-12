@@ -174,7 +174,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'companyCode', 'companyDefaultCulture', 'employeeId', 'attachmentName', 'accessUrl', 'extField', 'remark']
+const formFields = ['tenantCode', 'companyCode','cultureCode', 'employeeId', 'attachmentName', 'accessUrl', 'extField', 'remark']
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -211,9 +211,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 
 /** TaktSelect 搜索：按 label / extLabel 模糊匹配 */

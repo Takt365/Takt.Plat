@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：ITaktQuartzTaskService.cs
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务应用服务接口
 // 
@@ -78,25 +78,12 @@ public interface ITaktQuartzTaskService
     Task<TaktQuartzTaskDto> UpdateQuartzTaskStatusAsync(TaktQuartzTaskStatusDto dto);
 
     /// <summary>
-    /// 启动（恢复）定时任务调度
+    /// 立即执行一次定时任务（触发调度器 RunNow）
     /// </summary>
     /// <param name="id">定时任务ID</param>
+    /// <param name="executeParams">本次执行参数（非空则覆盖任务配置 ExecuteParams）</param>
     /// <returns>DTO</returns>
-    Task<TaktQuartzTaskDto> StartQuartzTaskAsync(long id);
-
-    /// <summary>
-    /// 暂停定时任务调度
-    /// </summary>
-    /// <param name="id">定时任务ID</param>
-    /// <returns>DTO</returns>
-    Task<TaktQuartzTaskDto> PauseQuartzTaskAsync(long id);
-
-    /// <summary>
-    /// 立即执行一次定时任务（不改变启动/暂停调度状态）
-    /// </summary>
-    /// <param name="id">定时任务ID</param>
-    /// <returns>DTO</returns>
-    Task<TaktQuartzTaskDto> ExecuteQuartzTaskNowAsync(long id);
+    Task<TaktQuartzTaskDto> ExecuteQuartzTaskNowAsync(long id, string? executeParams = null);
 
     /// <summary>
     /// 获取导入模板

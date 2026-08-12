@@ -310,6 +310,7 @@ public class TaktProductionDispatchService : TaktServiceBase, ITaktProductionDis
                 || (x.ProcessCode != null && x.ProcessCode.Contains(keywords))
                 || SqlFunc.ToString(x.DispatchQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.DispatchStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -361,6 +362,11 @@ public class TaktProductionDispatchService : TaktServiceBase, ITaktProductionDis
         if (queryDto?.DispatchStatus.HasValue == true)
         {
             exp = exp.And(x => x.DispatchStatus == queryDto.DispatchStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

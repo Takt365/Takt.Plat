@@ -97,12 +97,12 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
         EnsureThreeLayerContext();
         var list = await _inventoryImpairmentProvisionRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ProvisionStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -348,7 +348,7 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.Valuation != null && x.Valuation.Contains(keywords))
                 || SqlFunc.ToString(x.ProvisionScope).Contains(keywords)
                 || SqlFunc.ToString(x.StockQuantity).Contains(keywords)
@@ -365,10 +365,11 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
                 || SqlFunc.ToString(x.ClosingProvision).Contains(keywords)
                 || SqlFunc.ToString(x.ImpairmentLoss).Contains(keywords)
                 || SqlFunc.ToString(x.CarryingAmount).Contains(keywords)
-                || (x.Currency != null && x.Currency.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.ImpairmentReason != null && x.ImpairmentReason.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ProvisionStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PeriodDate).Contains(keywords)
@@ -386,9 +387,9 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Valuation))
@@ -471,9 +472,9 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
             exp = exp.And(x => x.CarryingAmount == queryDto.CarryingAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Currency))
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.Currency != null && x.Currency.Contains(queryDto.Currency));
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ImpairmentReason))
@@ -489,6 +490,11 @@ public class TaktInventoryImpairmentProvisionService : TaktServiceBase, ITaktInv
         if (queryDto?.ProvisionStatus.HasValue == true)
         {
             exp = exp.And(x => x.ProvisionStatus == queryDto.ProvisionStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

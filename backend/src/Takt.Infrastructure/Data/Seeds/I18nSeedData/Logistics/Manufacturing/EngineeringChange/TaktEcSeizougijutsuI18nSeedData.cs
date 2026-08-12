@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcSeizougijutsuI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcSeizougijutsu 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcSeizougijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseizougijutsu.ecndetailid
             new TranslationSeedItem("entity.ecseizougijutsu.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizougijutsu 导航）"),
 
-            // entity.ecseizougijutsu.ecno
-            new TranslationSeedItem("entity.ecseizougijutsu.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.ecseizougijutsu.ecno
-            new TranslationSeedItem("entity.ecseizougijutsu.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.ecseizougijutsu.ecno
-            new TranslationSeedItem("entity.ecseizougijutsu.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.ecseizougijutsu.ecno
-            new TranslationSeedItem("entity.ecseizougijutsu.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.ecseizougijutsu.eccode
+            new TranslationSeedItem("entity.ecseizougijutsu.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.ecseizougijutsu.eccode
+            new TranslationSeedItem("entity.ecseizougijutsu.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.ecseizougijutsu.eccode
+            new TranslationSeedItem("entity.ecseizougijutsu.eccode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.ecseizougijutsu.eccode
+            new TranslationSeedItem("entity.ecseizougijutsu.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.ecseizougijutsu.linenumber
             new TranslationSeedItem("entity.ecseizougijutsu.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

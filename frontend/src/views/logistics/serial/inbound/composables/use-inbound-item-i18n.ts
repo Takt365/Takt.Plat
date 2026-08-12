@@ -21,9 +21,9 @@ export const SERIALINBOUNDITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SERIALINBO
 /** 列表业务列（不含主键） */
 export const SERIALINBOUNDITEM_LIST_FIELDS = [
   'inboundId',
-  'inboundNo',
+  'inboundCode',
   'lineNumber',
-  'inboundSerialNo',
+  'inboundSerialCode',
   'inbound',
 ] as const
 
@@ -33,9 +33,9 @@ export const SERIALINBOUNDITEM_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   inboundId: 'select',
-  inboundNo: 'required',
+  inboundCode: 'required',
   lineNumber: 'select',
-  inboundSerialNo: 'required',
+  inboundSerialCode: 'required',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -46,8 +46,8 @@ export type SerialInboundItemField = keyof typeof SERIALINBOUNDITEM_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALINBOUNDITEM_QUERY_STRING_FIELDS = [
   'inboundId',
-  'inboundNo',
-  'inboundSerialNo',
+  'inboundCode',
+  'inboundSerialCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

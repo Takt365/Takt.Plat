@@ -31,10 +31,10 @@ public class TaktModelDestination : TaktTenantEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -43,7 +43,7 @@ public class TaktModelDestination : TaktTenantEntityBase
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     [SugarColumn(ColumnName = "model_name", ColumnDescription = "机种名称", ColumnDataType = "nvarchar", Length = 80, IsNullable = false)]
     public string ModelName { get; set; } = string.Empty;

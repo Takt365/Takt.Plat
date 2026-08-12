@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Operation
 // 文件名称：TaktIpqcDefectHandlingDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：IpqcDefectHandling 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktIpqcDefectHandling 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktIpqcDefectHandlingDto : TaktCompanyDtoBase
     public string IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderItemId { get; set; }
@@ -132,7 +132,7 @@ public class TaktIpqcDefectHandlingDto : TaktCompanyDtoBase
     public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -165,12 +165,22 @@ public class TaktIpqcDefectHandlingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// IPQC不良处理编码
     /// </summary>
     public string? IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IpqcOrderItemId { get; set; }
@@ -261,7 +271,7 @@ public class TaktIpqcDefectHandlingQueryDto : TaktPagedQuery
     public int? HandlingStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -306,10 +316,15 @@ public class TaktIpqcDefectHandlingCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// IPQC不良处理编码
     /// </summary>
@@ -317,7 +332,7 @@ public class TaktIpqcDefectHandlingCreateDto
     public string IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderItemId { get; set; }
@@ -406,7 +421,7 @@ public class TaktIpqcDefectHandlingCreateDto
     public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -420,6 +435,11 @@ public class TaktIpqcDefectHandlingCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+    /// <summary>
+    /// IpqcDefectHandlingId
+    /// </summary>
+    public long IpqcDefectHandlingId { get; set; }
 }
 
 // ========================================
@@ -438,7 +458,7 @@ public class TaktIpqcDefectHandlingUpdateDto : TaktIpqcDefectHandlingCreateDto
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long IpqcDefectHandlingId { get; set; }
+    public new long IpqcDefectHandlingId { get; set; }
 
 }
 
@@ -509,12 +529,22 @@ public class TaktIpqcDefectHandlingTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// IPQC不良处理编码
     /// </summary>
     public string? IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IpqcOrderItemId { get; set; }
@@ -600,7 +630,7 @@ public class TaktIpqcDefectHandlingTemplateDto
     public int? HandlingStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -632,17 +662,22 @@ public class TaktIpqcDefectHandlingImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// IPQC不良处理编码
     /// </summary>
     public string? IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? IpqcOrderItemId { get; set; }
@@ -728,7 +763,7 @@ public class TaktIpqcDefectHandlingImportDto
     public int? HandlingStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -771,7 +806,7 @@ public class TaktIpqcDefectHandlingExportDto
     public string IpqcDefectHandlingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// IPQC检验单明细 ID（关联 TaktIpqcOrderItem.Id，选项 TaktIpqcOrderItems/options）
+    /// IPQC检验单明细 ID（选项 TaktIpqcOrderItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long IpqcOrderItemId { get; set; }
@@ -857,7 +892,7 @@ public class TaktIpqcDefectHandlingExportDto
     public int HandlingStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

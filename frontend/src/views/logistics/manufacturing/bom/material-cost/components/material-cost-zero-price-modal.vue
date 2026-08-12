@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost/components -->
 <!-- 文件名称：material-cost-zero-price-modal.vue -->
-<!-- 功能描述：零价格合并清单（机种+组件+共用产品；X+F+移动平均价=0） -->
+<!-- 功能描述：组件零价格合并清单（工厂+核算月全机种；按组件合并共用产品；X+F+移动平均价=0） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -10,7 +10,7 @@
 <template>
   <TaktModal
     v-model:open="openProxy"
-    :title="t(`${localePrefix}.zeroPrice.title`, { month: costingMonthLabel, model: modelCodeLabel })"
+    :title="t(`${localePrefix}.zeroPrice.title`, { month: costingMonthLabel })"
     :width="1100"
     :footer="null"
     :use-viewport-size="false"
@@ -21,7 +21,6 @@
         {{
           t(`${localePrefix}.zeroPrice.hint`, {
             month: costingMonthLabel,
-            model: modelCodeLabel,
             productCount,
             componentCount: total,
           })
@@ -80,7 +79,7 @@
 
 <script setup lang="ts">
 /**
- * 零价格合并清单（先选工厂/机种/核算月；按组件合并共用产品）
+ * 组件零价格合并清单（先选工厂/核算月；全部机种；按组件合并共用产品）
  */
 import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
@@ -93,7 +92,7 @@ import {
 import type {
   BomMaterialCostItemZeroMovingPrice,
   BomMaterialCostItemZeroMovingPriceQuery,
-} from '@/types/logistics/manufacturing/bom/material-cost-trend'
+} from '@/types/logistics/manufacturing/bom/material-cost-item'
 import {
   ensureTaktPaginationConfigAsync,
   getTaktDefaultPageIndex,
@@ -110,8 +109,6 @@ const props = defineProps<{
   open: boolean
   /** 工厂 */
   plantCode?: string
-  /** 机种（必填） */
-  modelCode?: string
   /** 核算月 yyyy-MM（必选） */
   costingMonth?: string
 }>()
@@ -132,9 +129,6 @@ const openProxy = computed({
 /** 当前核算月展示 */
 const costingMonthLabel = computed(() => (props.costingMonth ?? '').trim() || '—')
 
-/** 机种展示 */
-const modelCodeLabel = computed(() => (props.modelCode ?? '').trim() || '—')
-
 /** 合并行 */
 const rows = ref<BomMaterialCostItemZeroMovingPrice[]>([])
 /** loading */
@@ -147,7 +141,7 @@ const pageIndex = ref(getTaktDefaultPageIndex())
 const pageSize = ref(getTaktDefaultPageSize())
 /** 总数（合并组件数） */
 const total = ref(0)
-/** 机种下产品数 */
+/** 范围内产品数 */
 const productCount = ref(0)
 
 /** 列定义 */
@@ -220,8 +214,7 @@ const columns = computed<TableColumnsType>(() => [
     dataIndex: 'costingPeriod',
     key: 'costingPeriod',
     width: 100,
-  },
-])
+  }])
 
 /** 可见列 */
 const visibleColumnKeys = computed(() => columns.value.map((c) => String(c.key)))
@@ -269,16 +262,14 @@ function buildZeroPriceQuery(
   overrides?: Partial<BomMaterialCostItemZeroMovingPriceQuery>,
 ): BomMaterialCostItemZeroMovingPriceQuery | null {
   const plant = (props.plantCode ?? '').trim()
-  const model = (props.modelCode ?? '').trim()
   const month = (props.costingMonth ?? '').trim()
-  if (!plant || !model || !month) {
+  if (!plant || !month) {
     return null
   }
   return {
     pageIndex: pageIndex.value,
     pageSize: pageSize.value,
     plantCode: plant,
-    modelCode: model,
     ...costingMonthToDateQuery(month),
     ...overrides,
   }
@@ -323,8 +314,8 @@ async function handlePageChange(page: number, size: number) {
 
 /** 导出当前筛选全部合并行 */
 async function handleExport() {
+  const plant = (props.plantCode ?? '').trim()
   const month = (props.costingMonth ?? '').trim()
-  const model = (props.modelCode ?? '').trim()
   const query = buildZeroPriceQuery({
     pageIndex: 1,
     pageSize: 100000,
@@ -338,13 +329,13 @@ async function handleExport() {
     const exportMeta = await exportBomMaterialCostItemZeroMovingPriceMerged(
       query,
       excelNames.sheet,
-      `${excelNames.fileBase}_zero_price_${model}_${month}`,
+      `${excelNames.fileBase}_zero_price_${plant}_${month}`,
     )
     const blob = (exportMeta as { blob?: Blob }).blob ?? (exportMeta as unknown as Blob)
     const fileName = resolveExportDownloadFileName({
       contentDisposition: (exportMeta as { contentDisposition?: string | null }).contentDisposition ?? null,
       contentType: (exportMeta as { contentType?: string | null }).contentType ?? null,
-      fallbackBase: `${excelNames.fileBase}_zero_price_${model}_${month}`,
+      fallbackBase: `${excelNames.fileBase}_zero_price_${plant}_${month}`,
     })
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -375,19 +366,14 @@ watch(
       emit('update:open', false)
       return
     }
-    if (!(props.modelCode ?? '').trim()) {
-      message.warning(t(`${localePrefix}.selectModelRequired`))
-      emit('update:open', false)
-      return
-    }
     if (!(props.costingMonth ?? '').trim()) {
       message.warning(t(`${localePrefix}.costNeedMonth`))
       emit('update:open', false)
       return
     }
-    await ensureTaktPaginationConfigAsync()
     pageIndex.value = getTaktDefaultPageIndex()
     pageSize.value = getTaktDefaultPageSize()
+    await ensureTaktPaginationConfigAsync()
     await loadData()
   },
 )

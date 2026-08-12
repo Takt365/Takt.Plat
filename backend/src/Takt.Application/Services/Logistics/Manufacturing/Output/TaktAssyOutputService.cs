@@ -501,7 +501,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             if (!string.IsNullOrWhiteSpace(child.TimePeriod)
                 && ShouldRefreshAssyMixedProdBucket(child))
             {
-                bucketsToRefresh.Add((entity.ProdTeam, entity.ProdDate.Date, child.TimePeriod));
+                bucketsToRefresh.Add((entity.TeamCode, entity.ProdDate.Date, child.TimePeriod));
             }
         }
         var proposedMasterProdActualTotal = assyoutputdetails.Sum(x => x.ProdActualQty);
@@ -627,7 +627,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             existing.ProdOrderCode = entity.ProdOrderCode;
             if (ShouldRefreshAssyMixedProdBucket(existing))
             {
-                bucketsToRefresh.Add((entity.ProdTeam, entity.ProdDate.Date, existing.TimePeriod));
+                bucketsToRefresh.Add((entity.TeamCode, entity.ProdDate.Date, existing.TimePeriod));
             }
             TaktAssyOutputDetailDerivedFieldsHelper.ApplyCalculatedFields(
                 existing,
@@ -703,9 +703,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 {
                     existing.CompanyCode = dto.CompanyCode;
                 }
-                if (string.IsNullOrWhiteSpace(existing.CompanyDefaultCulture))
+                if (string.IsNullOrWhiteSpace(existing.CultureCode))
                 {
-                    existing.CompanyDefaultCulture = dto.CompanyDefaultCulture;
+                    existing.CultureCode = dto.CultureCode;
                 }
                 existing.TimePeriod = timePeriod;
                 details.Add(existing);
@@ -717,7 +717,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                     AssyOutputDetailId = 0,
                     TenantCode = dto.TenantCode,
                     CompanyCode = dto.CompanyCode,
-                    CompanyDefaultCulture = dto.CompanyDefaultCulture,
+                    CultureCode = dto.CultureCode,
                     AssyOutputId = 0,
                     ProdOrderCode = dto.ProdOrderCode,
                     LineNumber = lineNumber,
@@ -735,12 +735,12 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <param name="master">组立日报主表</param>
     /// <param name="details">明细列表</param>
     /// <returns>桶键集合</returns>
-    private static HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)> CollectAssyOutputDetailMixedProdBuckets(
+    private static HashSet<(string TeamCode, DateTime ProdDate, string TimePeriod)> CollectAssyOutputDetailMixedProdBuckets(
         TaktAssyOutput master,
         List<TaktAssyOutputDetail> details)
     {
-        var buckets = new HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)>();
-        if (string.IsNullOrWhiteSpace(master.ProdTeam))
+        var buckets = new HashSet<(string TeamCode, DateTime ProdDate, string TimePeriod)>();
+        if (string.IsNullOrWhiteSpace(master.TeamCode))
         {
             return buckets;
         }
@@ -750,7 +750,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             if (!string.IsNullOrWhiteSpace(detail.TimePeriod)
                 && ShouldRefreshAssyMixedProdBucket(detail))
             {
-                buckets.Add((master.ProdTeam, prodDate, detail.TimePeriod));
+                buckets.Add((master.TeamCode, prodDate, detail.TimePeriod));
             }
         }
         return buckets;
@@ -773,7 +773,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <param name="buckets">桶键集合</param>
     /// <returns>任务</returns>
     private async Task RefreshAssyOutputDetailMixedProdBucketsAsync(
-        IEnumerable<(string ProdTeam, DateTime ProdDate, string TimePeriod)> buckets)
+        IEnumerable<(string TeamCode, DateTime ProdDate, string TimePeriod)> buckets)
     {
         EnsureThreeLayerContext();
         foreach (var bucket in buckets.Distinct())
@@ -783,7 +783,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 _assyOutputDetailRepository,
                 CurrentTenantCode,
                 CurrentCompanyCode,
-                bucket.ProdTeam,
+                bucket.TeamCode,
                 bucket.ProdDate,
                 bucket.TimePeriod);
         }
@@ -845,7 +845,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <param name="buckets">桶键集合</param>
     /// <returns>任务</returns>
     private async Task RefreshAssyOutputChangeoverBucketsAsync(
-        IEnumerable<(string ProdTeam, DateTime ProdDate, string TimePeriod)> buckets)
+        IEnumerable<(string TeamCode, DateTime ProdDate, string TimePeriod)> buckets)
     {
         EnsureThreeLayerContext();
         foreach (var bucket in buckets.Distinct())
@@ -857,7 +857,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 _productionOrderRepository,
                 CurrentTenantCode,
                 CurrentCompanyCode,
-                bucket.ProdTeam,
+                bucket.TeamCode,
                 bucket.ProdDate,
                 bucket.TimePeriod);
         }
@@ -869,12 +869,12 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
     /// <param name="master">组立日报主表</param>
     /// <param name="details">明细列表</param>
     /// <returns>桶键集合</returns>
-    private static HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)> CollectAssyOutputDetailChangeoverBuckets(
+    private static HashSet<(string TeamCode, DateTime ProdDate, string TimePeriod)> CollectAssyOutputDetailChangeoverBuckets(
         TaktAssyOutput master,
         List<TaktAssyOutputDetail> details)
     {
-        var buckets = new HashSet<(string ProdTeam, DateTime ProdDate, string TimePeriod)>();
-        if (string.IsNullOrWhiteSpace(master.ProdTeam))
+        var buckets = new HashSet<(string TeamCode, DateTime ProdDate, string TimePeriod)>();
+        if (string.IsNullOrWhiteSpace(master.TeamCode))
         {
             return buckets;
         }
@@ -883,7 +883,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         {
             if (!string.IsNullOrWhiteSpace(detail.TimePeriod))
             {
-                buckets.Add((master.ProdTeam, prodDate, detail.TimePeriod.Trim()));
+                buckets.Add((master.TeamCode, prodDate, detail.TimePeriod.Trim()));
             }
         }
         return buckets;
@@ -934,7 +934,7 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.DirectLabor).Contains(keywords)
                 || SqlFunc.ToString(x.IndirectLabor).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
@@ -942,11 +942,12 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
-                || (x.SerialNo != null && x.SerialNo.Contains(keywords))
+                || (x.SerialCode != null && x.SerialCode.Contains(keywords))
                 || SqlFunc.ToString(x.StdMinutes).Contains(keywords)
                 || SqlFunc.ToString(x.StdCapacity).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -964,9 +965,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
         if (queryDto?.DirectLabor.HasValue == true)
@@ -1004,9 +1005,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (queryDto?.ProdOrderQty.HasValue == true)
@@ -1014,9 +1015,9 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
             exp = exp.And(x => x.ProdOrderQty == queryDto.ProdOrderQty);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.SerialCode))
         {
-            exp = exp.And(x => x.SerialNo != null && x.SerialNo.Contains(queryDto.SerialNo));
+            exp = exp.And(x => x.SerialCode != null && x.SerialCode.Contains(queryDto.SerialCode));
         }
 
         if (queryDto?.StdMinutes.HasValue == true)
@@ -1027,6 +1028,11 @@ public class TaktAssyOutputService : TaktServiceBase, ITaktAssyOutputService
         if (queryDto?.StdCapacity.HasValue == true)
         {
             exp = exp.And(x => x.StdCapacity == queryDto.StdCapacity);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

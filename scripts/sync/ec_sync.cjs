@@ -4,7 +4,7 @@
 // 文件名称：ec_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 工程变更同步（PP_SapEcn/PP_SapEcnSub → source_ec + source_ec_detail；增量 INSERT；含 delta/oper 日志）
+// 功能描述：SAP 工程变更同步（PP_SapEcn/PP_SapEcnSub → ec_source + ec_source_detail；增量 INSERT；含 delta/oper 日志）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -95,7 +95,7 @@ SELECT source_ec_no FROM (
 ) X
 WHERE rn BETWEEN 1 AND ${batchSize};
 
-INSERT INTO [takt_logistics_manufacturing_source_ec]
+INSERT INTO [takt_logistics_manufacturing_ec_source]
 ([id],[source_ec_no],[source_model],[source_title],[source_status],
  [source_issue_date],[source_tcj_owner],[source_tcj_dependency],
  [source_ec_meeting],[source_pp_no],[source_technical_notice_no],
@@ -144,7 +144,7 @@ FROM #source_main S
 INNER JOIN [Sap_Data].[dbo].[PP_SapEcn] S1
   ON LTRIM(RTRIM(S1.[D_SAP_ZPABD_Z001])) = S.source_ec_no
 WHERE NOT EXISTS (
-  SELECT 1 FROM [takt_logistics_manufacturing_source_ec] T
+  SELECT 1 FROM [takt_logistics_manufacturing_ec_source] T
   WHERE T.[source_ec_no] = S.source_ec_no
 );
 
@@ -182,7 +182,7 @@ INNER JOIN #source_main SM
   ON SM.source_ec_no = LTRIM(RTRIM(S.[D_SAP_ZPABD_S001]))
 WHERE LTRIM(RTRIM(S.[D_SAP_ZPABD_S001])) <> '';
 
-INSERT INTO [takt_logistics_manufacturing_source_ec_detail]
+INSERT INTO [takt_logistics_manufacturing_ec_source_detail]
 ([id],[source_ec_id],[source_finished_product],[source_parent_part],
  [source_legacy_part_no],[source_legacy_part_name],[source_legacy_usage],
  [source_legacy_mounting_position],[source_replacement_part_no],
@@ -214,10 +214,10 @@ SELECT
   D.source_bom_effective_date,
   '000', '2300', '900001', GETDATE(), '900001', GETDATE(), 0
 FROM #source_detail D
-INNER JOIN [takt_logistics_manufacturing_source_ec] M
+INNER JOIN [takt_logistics_manufacturing_ec_source] M
   ON M.[source_ec_no] = D.source_ec_no
 WHERE NOT EXISTS (
-  SELECT 1 FROM [takt_logistics_manufacturing_source_ec_detail] T
+  SELECT 1 FROM [takt_logistics_manufacturing_ec_source_detail] T
   WHERE T.[source_ec_id] = M.[id]
     AND T.[source_legacy_part_no] = D.legacy_part_no
 );
@@ -232,13 +232,13 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [user_agent], [browser], [os], [device_type],
   [oper_time], [elapsed_time],
   [tenant_code], [company_code],
-  [ext_field_json], [remark],
+  [ext_field], [remark],
   [created_by], [created_at]
 )
 SELECT
   mi.[id],
   'INSERT',
-  N'takt_logistics_manufacturing_source_ec',
+  N'takt_logistics_manufacturing_ec_source',
   mi.[id],
   '{}',
   (SELECT mi.source_ec_no AS source_ec_no FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
@@ -260,13 +260,13 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [user_agent], [browser], [os], [device_type],
   [oper_time], [elapsed_time],
   [tenant_code], [company_code],
-  [ext_field_json], [remark],
+  [ext_field], [remark],
   [created_by], [created_at]
 )
 SELECT
   di.[id],
   'INSERT',
-  N'takt_logistics_manufacturing_source_ec_detail',
+  N'takt_logistics_manufacturing_ec_source_detail',
   di.[id],
   '{}',
   (SELECT CAST(di.source_ec_id AS NVARCHAR) AS source_ec_id, di.legacy_part_no AS legacy_part_no FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
@@ -323,11 +323,11 @@ SELECT 'DETAIL_INS', @detail_cnt;
   console.log('  Main table: inserted ' + counts.mainInsert);
   console.log('  Detail table: inserted ' + counts.detailInsert);
   console.log('  Main total: ' + execSQLValue(
-    'SELECT COUNT(*) FROM [takt_logistics_manufacturing_source_ec]',
+    'SELECT COUNT(*) FROM [takt_logistics_manufacturing_ec_source]',
     { filePrefix: 'ec_val' }
   ));
   console.log('  Detail total: ' + execSQLValue(
-    'SELECT COUNT(*) FROM [takt_logistics_manufacturing_source_ec_detail]',
+    'SELECT COUNT(*) FROM [takt_logistics_manufacturing_ec_source_detail]',
     { filePrefix: 'ec_val' }
   ));
   console.log('==========================================');

@@ -134,10 +134,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('ecNo')">
+      <div v-show="isFieldVisible('ecCode')">
       <a-form-item :label="t('entity.ec.no')">
         <a-input
-          v-model:value="advancedQueryForm.ecNo"
+          v-model:value="advancedQueryForm.ecCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.no') })"
           show-count
           :maxlength="10"
@@ -443,7 +443,7 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
-  ecNo: '',
+  ecCode: '',
   ecIssueDateStart: '',
   ecIssueDateEnd: '',
   changeStatus: undefined as number | undefined,
@@ -463,7 +463,7 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.ec.plantcode') },
-  { key: 'ecNo', label: t('entity.ec.no') },
+  { key: 'ecCode', label: t('entity.ec.no') },
   { key: 'ecIssueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
   { key: 'ecIssueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
   { key: 'changeStatus', label: t('entity.ec.changestatus') },
@@ -478,8 +478,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -526,7 +525,7 @@ function buildListQuery(overrides?: Partial<EcGijutsuQuery>): EcGijutsuQuery {
     }
   }
   assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('ecNo', form.ecNo)
+  assignTrimmed('ecCode', form.ecCode)
   assignTrimmed('ecIssueDateStart', form.ecIssueDateStart)
   assignTrimmed('ecIssueDateEnd', form.ecIssueDateEnd)
   if (form.changeStatus !== undefined && form.changeStatus !== null) {
@@ -558,7 +557,6 @@ onMounted(async () => {
   void loadEmployeeLabelMap()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -633,14 +631,14 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.ec.no'),
-    dataIndex: 'ecNo',
-    key: 'ecNo',
+    dataIndex: 'ecCode',
+    key: 'ecCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     sorter: (a: EcGijutsu, b: EcGijutsu) =>
-      String(getEcField(a, 'ecNo') ?? '').localeCompare(String(getEcField(b, 'ecNo') ?? '')),
-    customRender: ({ record }: { record: any }) => getEcField(record, 'ecNo') ?? ''
+      String(getEcField(a, 'ecCode') ?? '').localeCompare(String(getEcField(b, 'ecCode') ?? '')),
+    customRender: ({ record }: { record: any }) => getEcField(record, 'ecCode') ?? ''
   },
   {
     title: t('entity.ec.issuedate'),
@@ -785,7 +783,6 @@ function formatEcLeader(record: any): string {
   return employeeLabelById.value[key] ?? key
 }
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -845,7 +842,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  ecNo: '',
+  ecCode: '',
   ecIssueDateStart: '',
   ecIssueDateEnd: '',
   changeStatus: undefined as number | undefined,
@@ -1081,7 +1078,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  ecNo: '',
+  ecCode: '',
   ecIssueDateStart: '',
   ecIssueDateEnd: '',
   changeStatus: undefined as number | undefined,

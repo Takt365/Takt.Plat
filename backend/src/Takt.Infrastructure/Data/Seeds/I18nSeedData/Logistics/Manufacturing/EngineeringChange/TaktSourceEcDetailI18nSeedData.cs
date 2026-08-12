@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -117,14 +117,14 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail.sourceparentpart
             new TranslationSeedItem("entity.sourceecdetail.sourceparentpart", "zh-HK", "上阶物料_hk", "上阶物料"),
 
-            // entity.sourceecdetail.sourcelegacypartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartno", "en-US", "旧物料号_us", "旧物料号"),
-            // entity.sourceecdetail.sourcelegacypartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartno", "ja-JP", "旧物料号_jp", "旧物料号"),
-            // entity.sourceecdetail.sourcelegacypartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartno", "zh-CN", "旧物料号", "旧物料号"),
-            // entity.sourceecdetail.sourcelegacypartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartno", "zh-HK", "旧物料号_hk", "旧物料号"),
+            // entity.sourceecdetail.sourcelegacypartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartcode", "en-US", "旧物料号_us", "旧物料号"),
+            // entity.sourceecdetail.sourcelegacypartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartcode", "ja-JP", "旧物料号_jp", "旧物料号"),
+            // entity.sourceecdetail.sourcelegacypartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartcode", "zh-CN", "旧物料号", "旧物料号"),
+            // entity.sourceecdetail.sourcelegacypartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartcode", "zh-HK", "旧物料号_hk", "旧物料号"),
 
             // entity.sourceecdetail.sourcelegacypartname
             new TranslationSeedItem("entity.sourceecdetail.sourcelegacypartname", "en-US", "旧物料_us", "旧物料"),
@@ -153,14 +153,14 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail.sourcelegacymountingposition
             new TranslationSeedItem("entity.sourceecdetail.sourcelegacymountingposition", "zh-HK", "旧物料安装位置_hk", "旧物料安装位置"),
 
-            // entity.sourceecdetail.sourcereplacementpartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartno", "en-US", "新物料_us", "新物料"),
-            // entity.sourceecdetail.sourcereplacementpartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartno", "ja-JP", "新物料_jp", "新物料"),
-            // entity.sourceecdetail.sourcereplacementpartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartno", "zh-CN", "新物料", "新物料"),
-            // entity.sourceecdetail.sourcereplacementpartno
-            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartno", "zh-HK", "新物料_hk", "新物料"),
+            // entity.sourceecdetail.sourcereplacementpartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartcode", "en-US", "新物料_us", "新物料"),
+            // entity.sourceecdetail.sourcereplacementpartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartcode", "ja-JP", "新物料_jp", "新物料"),
+            // entity.sourceecdetail.sourcereplacementpartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartcode", "zh-CN", "新物料", "新物料"),
+            // entity.sourceecdetail.sourcereplacementpartcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartcode", "zh-HK", "新物料_hk", "新物料"),
 
             // entity.sourceecdetail.sourcereplacementpartname
             new TranslationSeedItem("entity.sourceecdetail.sourcereplacementpartname", "en-US", "新物料_us", "新物料"),
@@ -189,14 +189,14 @@ public class TaktSourceEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceecdetail.sourcereplacementmountingposition
             new TranslationSeedItem("entity.sourceecdetail.sourcereplacementmountingposition", "zh-HK", "新物料安装位置_hk", "新物料安装位置"),
 
-            // entity.sourceecdetail.sourcebomno
-            new TranslationSeedItem("entity.sourceecdetail.sourcebomno", "en-US", "BOM番号_us", "BOM番号"),
-            // entity.sourceecdetail.sourcebomno
-            new TranslationSeedItem("entity.sourceecdetail.sourcebomno", "ja-JP", "BOM番号_jp", "BOM番号"),
-            // entity.sourceecdetail.sourcebomno
-            new TranslationSeedItem("entity.sourceecdetail.sourcebomno", "zh-CN", "BOM番号", "BOM番号"),
-            // entity.sourceecdetail.sourcebomno
-            new TranslationSeedItem("entity.sourceecdetail.sourcebomno", "zh-HK", "BOM番号_hk", "BOM番号"),
+            // entity.sourceecdetail.sourcebomcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcebomcode", "en-US", "BOM番号_us", "BOM番号"),
+            // entity.sourceecdetail.sourcebomcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcebomcode", "ja-JP", "BOM番号_jp", "BOM番号"),
+            // entity.sourceecdetail.sourcebomcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcebomcode", "zh-CN", "BOM番号", "BOM番号"),
+            // entity.sourceecdetail.sourcebomcode
+            new TranslationSeedItem("entity.sourceecdetail.sourcebomcode", "zh-HK", "BOM番号_hk", "BOM番号"),
 
             // entity.sourceecdetail.sourcecompatibility
             new TranslationSeedItem("entity.sourceecdetail.sourcecompatibility", "en-US", "兼容性_us", "兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）"),

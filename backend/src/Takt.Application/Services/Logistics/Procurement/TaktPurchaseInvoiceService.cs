@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchaseInvoiceService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     }
 
     /// <summary>
-    /// 获取采购发票列表（分页）
+    /// 获取采购发票列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchaseInvoiceDto>> GetPurchaseInvoiceListAsync(TaktPurchaseInvoiceQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchaseInvoiceDto>.Create(
+                new List<TaktPurchaseInvoiceDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchaseInvoiceRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,7 +109,7 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     {
         EnsureThreeLayerContext();
         var list = await _purchaseInvoiceRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.InvoiceStatus == 1,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.PurchaseInvoiceCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -121,11 +129,11 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         var entity = dto.Adapt<TaktPurchaseInvoice>();
         var isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseInvoiceRepository,
-            x => x.PlantCode == entity.PlantCode
+            x => x.FiscalYear == entity.FiscalYear
                 && x.PurchaseInvoiceCode == entity.PurchaseInvoiceCode);
         if (!isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique)
         {
-            throw new TaktBusinessException("采购发票的PlantCode、PurchaseInvoiceCode已存在");
+            throw new TaktBusinessException("采购发票的FiscalYear、PurchaseInvoiceCode已存在");
         }
         entity = await _purchaseInvoiceRepository.CreateAsync(entity);
                 await SavePurchaseInvoiceChildrenAsync(entity, dto);
@@ -148,12 +156,12 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
             _purchaseInvoiceRepository,
-            x => x.PlantCode == entity.PlantCode
+            x => x.FiscalYear == entity.FiscalYear
                 && x.PurchaseInvoiceCode == entity.PurchaseInvoiceCode,
             id);
         if (!isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique)
         {
-            throw new TaktBusinessException("采购发票的PlantCode、PurchaseInvoiceCode已存在");
+            throw new TaktBusinessException("采购发票的FiscalYear、PurchaseInvoiceCode已存在");
         }
         await _purchaseInvoiceRepository.UpdateAsync(entity);
                 await SavePurchaseInvoiceChildrenAsync(entity, dto);
@@ -199,23 +207,6 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     }
 
     /// <summary>
-    /// 更新采购发票状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktPurchaseInvoiceDto> UpdatePurchaseInvoiceStatusAsync(TaktPurchaseInvoiceStatusDto dto)
-    {
-        var entity = await _purchaseInvoiceRepository.GetByIdAsync(dto.PurchaseInvoiceId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("采购发票不存在");
-        }
-        entity.InvoiceStatus = dto.InvoiceStatus;
-        await _purchaseInvoiceRepository.UpdateAsync(entity);
-        return await GetPurchaseInvoiceByIdAsync(dto.PurchaseInvoiceId) ?? throw new TaktBusinessException("采购发票不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -251,18 +242,18 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
             try
             {
                 var entity = rows[i].Adapt<TaktPurchaseInvoice>();
-                var importKey = $"{entity.PlantCode}|{entity.PurchaseInvoiceCode}";
+                var importKey = $"{entity.FiscalYear}|{entity.PurchaseInvoiceCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PurchaseInvoiceCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（FiscalYear、PurchaseInvoiceCode）");
                 }
                 var isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _purchaseInvoiceRepository,
-                    x => x.PlantCode == entity.PlantCode
+                    x => x.FiscalYear == entity.FiscalYear
                         && x.PurchaseInvoiceCode == entity.PurchaseInvoiceCode);
                 if (!isUnique_ix_takt_logistics_procurement_purchase_invoice_code_unique)
                 {
-                    throw new TaktBusinessException("采购发票的PlantCode、PurchaseInvoiceCode已存在");
+                    throw new TaktBusinessException("采购发票的FiscalYear、PurchaseInvoiceCode已存在");
                 }
                 await _purchaseInvoiceRepository.CreateAsync(entity);
                 success += 1;
@@ -285,7 +276,15 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchaseInvoiceAsync(TaktPurchaseInvoiceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchaseInvoiceQueryDto());
+        var queryDto = query ?? new TaktPurchaseInvoiceQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchaseInvoiceExportDto>(),
+                sheetName ?? "采购发票数据",
+                fileName ?? "采购发票导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchaseInvoiceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -402,13 +401,12 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                     submittedIds.Add(childDto.PurchaseInvoiceItemId);
                     var isUniqueUpdate_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchaseInvoiceItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PurchaseInvoiceId == x.PurchaseInvoiceId
+                        x => x.PurchaseInvoiceId == x.PurchaseInvoiceId
                 && x.LineNumber == x.LineNumber,
                         childDto.PurchaseInvoiceItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique)
                     {
-                        throw new TaktBusinessException("采购发票明细的CompanyCode、PurchaseInvoiceId、LineNumber已存在");
+                        throw new TaktBusinessException("采购发票明细的PurchaseInvoiceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.PurchaseInvoiceItemId;
@@ -420,12 +418,11 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
                 {
                     var isUniqueCreate_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _purchaseInvoiceItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PurchaseInvoiceId == x.PurchaseInvoiceId
+                        x => x.PurchaseInvoiceId == x.PurchaseInvoiceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_procurement_purchase_invoice_item_invoice_line_unique)
                     {
-                        throw new TaktBusinessException("采购发票明细的CompanyCode、PurchaseInvoiceId、LineNumber已存在");
+                        throw new TaktBusinessException("采购发票明细的PurchaseInvoiceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktPurchaseInvoiceItem>();
                     child.Id = 0;
@@ -474,131 +471,382 @@ public class TaktPurchaseInvoiceService : TaktServiceBase, ITaktPurchaseInvoiceS
     {
         var exp = Expressionable.Create<TaktPurchaseInvoice>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(keywords))
-                || (x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(keywords))
+                (x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(keywords))
+                || (x.FiscalYear != null && x.FiscalYear.Contains(keywords))
+                || (x.DocumentType != null && x.DocumentType.Contains(keywords))
+                || (x.TransactionEventType != null && x.TransactionEventType.Contains(keywords))
+                || (x.ReferenceCode != null && x.ReferenceCode.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
-                || (x.SupplierName1 != null && x.SupplierName1.Contains(keywords))
-                || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
-                || SqlFunc.ToString(x.PaidAmount).Contains(keywords)
-                || SqlFunc.ToString(x.PaymentMethod).Contains(keywords)
-                || (x.TaxInvoiceNo != null && x.TaxInvoiceNo.Contains(keywords))
-                || SqlFunc.ToString(x.InvoiceStatus).Contains(keywords)
+                || (x.TaxJurisdictionCode != null && x.TaxJurisdictionCode.Contains(keywords))
+                || (x.InvoiceFlag != null && x.InvoiceFlag.Contains(keywords))
+                || (x.HeaderText != null && x.HeaderText.Contains(keywords))
+                || (x.ReversalDocumentCode != null && x.ReversalDocumentCode.Contains(keywords))
+                || (x.ReversalFiscalYear != null && x.ReversalFiscalYear.Contains(keywords))
+                || (x.TaxCode != null && x.TaxCode.Contains(keywords))
+                || (x.SupplyingCountry != null && x.SupplyingCountry.Contains(keywords))
+                || (x.EnteredBy != null && x.EnteredBy.Contains(keywords))
+                || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
+                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.InvoiceDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseInvoiceCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var purchaseInvoiceCode = queryDto.PurchaseInvoiceCode;
+            exp = exp.And(x => x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(purchaseInvoiceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseInvoiceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiscalYear))
         {
-            exp = exp.And(x => x.PurchaseInvoiceCode != null && x.PurchaseInvoiceCode.Contains(queryDto.PurchaseInvoiceCode));
+            var fiscalYear = queryDto.FiscalYear;
+            exp = exp.And(x => x.FiscalYear != null && x.FiscalYear.Contains(fiscalYear));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchaseOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentType))
         {
-            exp = exp.And(x => x.PurchaseOrderCode != null && x.PurchaseOrderCode.Contains(queryDto.PurchaseOrderCode));
+            var documentType = queryDto.DocumentType;
+            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(documentType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransactionEventType))
         {
-            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+            var transactionEventType = queryDto.TransactionEventType;
+            exp = exp.And(x => x.TransactionEventType != null && x.TransactionEventType.Contains(transactionEventType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceCode))
         {
-            exp = exp.And(x => x.SupplierName1 != null && x.SupplierName1.Contains(queryDto.SupplierName1));
+            var referenceCode = queryDto.ReferenceCode;
+            exp = exp.And(x => x.ReferenceCode != null && x.ReferenceCode.Contains(referenceCode));
         }
 
-        if (queryDto?.TotalAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
         {
-            exp = exp.And(x => x.TotalAmount == queryDto.TotalAmount);
+            var supplierCode = queryDto.SupplierCode;
+            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(supplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (queryDto?.TaxRate.HasValue == true)
+        if (queryDto?.ExchangeRate.HasValue == true)
         {
-            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+            var exchangeRate = queryDto.ExchangeRate;
+            exp = exp.And(x => x.ExchangeRate == exchangeRate);
         }
 
-        if (queryDto?.TaxAmount.HasValue == true)
+        if (queryDto?.GrossAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            var grossAmount = queryDto.GrossAmount;
+            exp = exp.And(x => x.GrossAmount == grossAmount);
         }
 
-        if (queryDto?.ActualAmount.HasValue == true)
+        if (queryDto?.VatAmount.HasValue == true)
         {
-            exp = exp.And(x => x.ActualAmount == queryDto.ActualAmount);
+            var vatAmount = queryDto.VatAmount;
+            exp = exp.And(x => x.VatAmount == vatAmount);
         }
 
-        if (queryDto?.PaidAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxJurisdictionCode))
         {
-            exp = exp.And(x => x.PaidAmount == queryDto.PaidAmount);
+            var taxJurisdictionCode = queryDto.TaxJurisdictionCode;
+            exp = exp.And(x => x.TaxJurisdictionCode != null && x.TaxJurisdictionCode.Contains(taxJurisdictionCode));
         }
 
-        if (queryDto?.PaymentMethod.HasValue == true)
+        if (queryDto?.CashDiscountDays1.HasValue == true)
         {
-            exp = exp.And(x => x.PaymentMethod == queryDto.PaymentMethod);
+            var cashDiscountDays1 = queryDto.CashDiscountDays1;
+            exp = exp.And(x => x.CashDiscountDays1 == cashDiscountDays1);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TaxInvoiceNo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InvoiceFlag))
         {
-            exp = exp.And(x => x.TaxInvoiceNo != null && x.TaxInvoiceNo.Contains(queryDto.TaxInvoiceNo));
+            var invoiceFlag = queryDto.InvoiceFlag;
+            exp = exp.And(x => x.InvoiceFlag != null && x.InvoiceFlag.Contains(invoiceFlag));
         }
 
-        if (queryDto?.InvoiceStatus.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.HeaderText))
         {
-            exp = exp.And(x => x.InvoiceStatus == queryDto.InvoiceStatus);
+            var headerText = queryDto.HeaderText;
+            exp = exp.And(x => x.HeaderText != null && x.HeaderText.Contains(headerText));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReversalDocumentCode))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var reversalDocumentCode = queryDto.ReversalDocumentCode;
+            exp = exp.And(x => x.ReversalDocumentCode != null && x.ReversalDocumentCode.Contains(reversalDocumentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReversalFiscalYear))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var reversalFiscalYear = queryDto.ReversalFiscalYear;
+            exp = exp.And(x => x.ReversalFiscalYear != null && x.ReversalFiscalYear.Contains(reversalFiscalYear));
         }
 
-        if (queryDto?.InvoiceDateStart.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxCode))
         {
-            exp = exp.And(x => x.InvoiceDate >= queryDto.InvoiceDateStart);
+            var taxCode = queryDto.TaxCode;
+            exp = exp.And(x => x.TaxCode != null && x.TaxCode.Contains(taxCode));
         }
 
-        if (queryDto?.InvoiceDateEnd.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplyingCountry))
         {
-            exp = exp.And(x => x.InvoiceDate <= queryDto.InvoiceDateEnd);
+            var supplyingCountry = queryDto.SupplyingCountry;
+            exp = exp.And(x => x.SupplyingCountry != null && x.SupplyingCountry.Contains(supplyingCountry));
+        }
+
+        if (queryDto?.TaxExchangeRate.HasValue == true)
+        {
+            var taxExchangeRate = queryDto.TaxExchangeRate;
+            exp = exp.And(x => x.TaxExchangeRate == taxExchangeRate);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.EnteredBy))
+        {
+            var enteredBy = queryDto.EnteredBy;
+            exp = exp.And(x => x.EnteredBy != null && x.EnteredBy.Contains(enteredBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransactionCode))
+        {
+            var transactionCode = queryDto.TransactionCode;
+            exp = exp.And(x => x.TransactionCode != null && x.TransactionCode.Contains(transactionCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        {
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.DocumentDateStart.HasValue == true)
+        {
+            var documentDateStart = queryDto.DocumentDateStart;
+            exp = exp.And(x => x.DocumentDate >= documentDateStart);
+        }
+
+        if (queryDto?.DocumentDateEnd.HasValue == true)
+        {
+            var documentDateEnd = queryDto.DocumentDateEnd;
+            exp = exp.And(x => x.DocumentDate <= documentDateEnd);
+        }
+
+        if (queryDto?.PostingDateStart.HasValue == true)
+        {
+            var postingDateStart = queryDto.PostingDateStart;
+            exp = exp.And(x => x.PostingDate >= postingDateStart);
+        }
+
+        if (queryDto?.PostingDateEnd.HasValue == true)
+        {
+            var postingDateEnd = queryDto.PostingDateEnd;
+            exp = exp.And(x => x.PostingDate <= postingDateEnd);
+        }
+
+        if (queryDto?.BaselineDateStart.HasValue == true)
+        {
+            var baselineDateStart = queryDto.BaselineDateStart;
+            exp = exp.And(x => x.BaselineDate >= baselineDateStart);
+        }
+
+        if (queryDto?.BaselineDateEnd.HasValue == true)
+        {
+            var baselineDateEnd = queryDto.BaselineDateEnd;
+            exp = exp.And(x => x.BaselineDate <= baselineDateEnd);
+        }
+
+        if (queryDto?.ExchangeRateDateStart.HasValue == true)
+        {
+            var exchangeRateDateStart = queryDto.ExchangeRateDateStart;
+            exp = exp.And(x => x.ExchangeRateDate >= exchangeRateDateStart);
+        }
+
+        if (queryDto?.ExchangeRateDateEnd.HasValue == true)
+        {
+            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd;
+            exp = exp.And(x => x.ExchangeRateDate <= exchangeRateDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchaseInvoiceQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseInvoiceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FiscalYear))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DocumentType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransactionEventType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (queryDto.ExchangeRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GrossAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.VatAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxJurisdictionCode))
+        {
+            return true;
+        }
+        if (queryDto.CashDiscountDays1.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InvoiceFlag))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HeaderText))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReversalDocumentCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReversalFiscalYear))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplyingCountry))
+        {
+            return true;
+        }
+        if (queryDto.TaxExchangeRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EnteredBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransactionCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.DocumentDateStart.HasValue || queryDto.DocumentDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PostingDateStart.HasValue || queryDto.PostingDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BaselineDateStart.HasValue || queryDto.BaselineDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExchangeRateDateStart.HasValue || queryDto.ExchangeRateDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -202,8 +202,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["lineNumber","allocationCategory","materialCode","inquiryUnit","inquiryQuantity","purchasePerUnit","quotedUnitPrice","taxIncludedAmount","untaxedAmount","taxAmount","isObsolete"]
 
-
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<PurchaseInquiryItemCreate & { purchaseInquiryItemId?: string }> | null

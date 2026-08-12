@@ -125,7 +125,7 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
             var existing = await calendarRepository.GetListAsync(c =>
                 c.TenantCode == tenantCode
                 && c.CompanyCode == company.CompanyCode
-                && c.RelatedPlant == plantCode
+                && c.PlantCode == plantCode
                 && c.CalendarDate >= yearStart
                 && c.CalendarDate <= yearEnd);
             var existingByDate = (existing ?? [])
@@ -147,17 +147,21 @@ public class TaktCalendarSeedData : ITaktSeedDataCoordinator
                         IsWorkingDay = isWorkingDay,
                         HolidayId = holidayId,
                         ShiftId = null,
-                        RelatedPlant = plantCode,
+                        PlantCode = plantCode,
+                        CultureCode = company.CultureCode
                     });
                     continue;
                 }
-                var needUpdate = row.IsWorkingDay != isWorkingDay || row.HolidayId != holidayId;
+                var needUpdate = row.IsWorkingDay != isWorkingDay
+                    || row.HolidayId != holidayId
+                    || row.CultureCode != company.CultureCode;
                 if (!needUpdate)
                 {
                     continue;
                 }
                 row.IsWorkingDay = isWorkingDay;
                 row.HolidayId = holidayId;
+                row.CultureCode = company.CultureCode;
                 toUpdate.Add(row);
             }
             if (toInsert.Count > 0)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDtos.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEc 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceEc 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 设变来源主表实体。
+/// 设变来源明细列表
 /// 对应前端 TaktSourceEcDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -38,7 +38,7 @@ public class TaktSourceEcDto : TaktCompanyDtoBase
     /// <summary>
     /// 设变号码
     /// </summary>
-    public string SourceEcNo { get; set; } = string.Empty;
+    public string SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -51,7 +51,7 @@ public class TaktSourceEcDto : TaktCompanyDtoBase
     public string SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
     public string SourceStatus { get; set; } = string.Empty;
 
@@ -61,7 +61,7 @@ public class TaktSourceEcDto : TaktCompanyDtoBase
     public DateTime SourceIssueDate { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -78,12 +78,12 @@ public class TaktSourceEcDto : TaktCompanyDtoBase
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施
@@ -194,9 +194,24 @@ public class TaktSourceEcQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变号码
     /// </summary>
-    public string? SourceEcNo { get; set; } = string.Empty;
+    public string? SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -209,7 +224,7 @@ public class TaktSourceEcQueryDto : TaktPagedQuery
     public string? SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
     public string? SourceStatus { get; set; } = string.Empty;
 
@@ -224,7 +239,7 @@ public class TaktSourceEcQueryDto : TaktPagedQuery
     public DateTime? SourceIssueDateEnd { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -241,12 +256,12 @@ public class TaktSourceEcQueryDto : TaktPagedQuery
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施
@@ -369,10 +384,25 @@ public class TaktSourceEcCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变号码
     /// </summary>
     [Required(ErrorMessage = "设变号码不能为空")]
-    public string SourceEcNo { get; set; } = string.Empty;
+    public string SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -387,9 +417,9 @@ public class TaktSourceEcCreateDto
     public string SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
-    [Required(ErrorMessage = "状态不能为空")]
+    [Required(ErrorMessage = "状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）不能为空")]
     public string SourceStatus { get; set; } = string.Empty;
 
     /// <summary>
@@ -398,7 +428,7 @@ public class TaktSourceEcCreateDto
     public DateTime SourceIssueDate { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -415,12 +445,12 @@ public class TaktSourceEcCreateDto
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施
@@ -543,6 +573,11 @@ public class TaktSourceEcUpdateDto : TaktSourceEcCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SourceEcId { get; set; }
 
+    /// <summary>
+    /// 设变来源明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktSourceEcDetailUpdateDto>? SourceEcDetails { get; set; }
+
 }
 
 // ========================================
@@ -563,9 +598,9 @@ public class TaktSourceEcStatusDto
     public long SourceEcId { get; set; }
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
-    [Required(ErrorMessage = "状态不能为空")]
+    [Required(ErrorMessage = "状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）不能为空")]
     public string SourceStatus { get; set; } = string.Empty;
 }
 
@@ -584,9 +619,24 @@ public class TaktSourceEcTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变号码
     /// </summary>
-    public string? SourceEcNo { get; set; } = string.Empty;
+    public string? SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -599,7 +649,7 @@ public class TaktSourceEcTemplateDto
     public string? SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
     public string? SourceStatus { get; set; } = string.Empty;
 
@@ -609,7 +659,7 @@ public class TaktSourceEcTemplateDto
     public DateTime? SourceIssueDate { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -626,12 +676,12 @@ public class TaktSourceEcTemplateDto
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施
@@ -746,9 +796,24 @@ public class TaktSourceEcImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变号码
     /// </summary>
-    public string? SourceEcNo { get; set; } = string.Empty;
+    public string? SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -761,7 +826,7 @@ public class TaktSourceEcImportDto
     public string? SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
     public string? SourceStatus { get; set; } = string.Empty;
 
@@ -771,7 +836,7 @@ public class TaktSourceEcImportDto
     public DateTime? SourceIssueDate { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -788,12 +853,12 @@ public class TaktSourceEcImportDto
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施
@@ -914,9 +979,14 @@ public class TaktSourceEcExportDto
     public long SourceEcId { get; set; }
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 设变号码
     /// </summary>
-    public string SourceEcNo { get; set; } = string.Empty;
+    public string SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
@@ -929,7 +999,7 @@ public class TaktSourceEcExportDto
     public string SourceTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态
+    /// 状态（来源 PLM 英文；包含关键字映射 ChangeStatus：Work→1、Cancel→2、Issued→3、Change→4、Fixed→5、Pending→6、Rejected→7）
     /// </summary>
     public string SourceStatus { get; set; } = string.Empty;
 
@@ -939,7 +1009,7 @@ public class TaktSourceEcExportDto
     public DateTime SourceIssueDate { get; set; }
 
     /// <summary>
-    /// TCJ担当
+    /// TCJ担当（来源 PLM 字段；与设变主 EcLeader 无对应关系，导入时不映射）
     /// </summary>
     public string? SourceTcjOwner { get; set; } = string.Empty;
 
@@ -956,12 +1026,12 @@ public class TaktSourceEcExportDto
     /// <summary>
     /// PP番号
     /// </summary>
-    public string? SourcePpNo { get; set; } = string.Empty;
+    public string? SourcePpCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 技联书
     /// </summary>
-    public string? SourceTechnicalNoticeNo { get; set; } = string.Empty;
+    public string? SourceTechnicalNoticeCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 实施

@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form bill-of-material-item-form flex flex-col min-h-0"
+    class="takt-generated-form bill-of-material-item-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.billofmaterialid')"
+                :label="pi.label('billOfMaterialId')"
                 name="billOfMaterialId"
               >
                 <a-input
                   v-model:value="formState.billOfMaterialId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.billofmaterialid') })"
+                  :placeholder="pi.ph('billOfMaterialId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -85,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.bomcode')"
+                :label="pi.label('bomCode')"
                 name="bomCode"
               >
                 <a-input
                   v-model:value="formState.bomCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') })"
+                  :placeholder="pi.ph('bomCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -100,71 +58,99 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.materialid')"
-                name="materialId"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialId"
-                  :options="filteredMaterialPlantOptions"
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.materialid') })"
-                  :disabled="loading || !resolvedPlantCode"
-                  allow-clear
-                  @change="handleMaterialChange"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.billOfMaterialItemId"
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('materialDescription')"
+                name="materialDescription"
+              >
+                <a-textarea
+                  v-model:value="formState.materialDescription"
+                  :placeholder="pi.ph('materialDescription')"
+                  :rows="2"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.usagequantity')"
+                :label="pi.label('usageQuantity')"
                 name="usageQuantity"
               >
                 <a-input-number
                   v-model:value="formState.usageQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.usagequantity') })"
+                  :placeholder="pi.ph('usageQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.materialunit')"
+                :label="pi.label('materialUnit')"
                 name="materialUnit"
               >
                 <TaktSelect
                   v-model:value="formState.materialUnit"
                   dict-type="logistics_unit_of_measure_code"
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.materialunit') })"
-                  :disabled="loading"
-                  allow-clear
+                  :placeholder="pi.ph('materialUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scrapRate')"
+                name="scrapRate"
+              >
+                <a-input-number
+                  v-model:value="formState.scrapRate"
+                  :placeholder="pi.ph('scrapRate')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualUsageQuantity')"
+                name="actualUsageQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.actualUsageQuantity"
+                  :placeholder="pi.ph('actualUsageQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('operationSeq')"
+                name="operationSeq"
+              >
+                <a-input-number
+                  v-model:value="formState.operationSeq"
+                  :placeholder="pi.ph('operationSeq')"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -178,120 +164,143 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.scraprate')"
-                name="scrapRate"
-              >
-                <a-input-number
-                  v-model:value="formState.scrapRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.scraprate') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.actualusagequantity')"
-                name="actualUsageQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.actualUsageQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.actualusagequantity') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.operationseq')"
-                name="operationSeq"
-              >
-                <a-input-number
-                  v-model:value="formState.operationSeq"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.operationseq') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.workcenter')"
+                :label="pi.label('workCenter')"
                 name="workCenter"
               >
                 <TaktSelect
                   v-model:value="formState.workCenter"
-                  :options="filteredWorkCenterOptions"
-                  :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.workcenter') })"
-                  :disabled="loading || !resolvedPlantCode"
-                  allow-clear
+                  api-url="TaktWorkCenters/options"
+                  :placeholder="pi.ph('workCenter')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.position')"
+                :label="pi.label('position')"
                 name="position"
               >
                 <a-input
                   v-model:value="formState.position"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.position') })"
+                  :placeholder="pi.ph('position')"
                   show-count
                   :maxlength="200"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.substitutegroup')"
+                :label="pi.label('substituteGroup')"
                 name="substituteGroup"
               >
                 <a-input
                   v-model:value="formState.substituteGroup"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.substitutegroup') })"
+                  :placeholder="pi.ph('substituteGroup')"
                   show-count
                   :maxlength="10"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.substitutepriority')"
+                :label="pi.label('substitutePriority')"
                 name="substitutePriority"
               >
                 <a-input-number
                   v-model:value="formState.substitutePriority"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.substitutepriority') })"
+                  :placeholder="pi.ph('substitutePriority')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.isoptional')"
+                :label="pi.label('isOptional')"
                 name="isOptional"
               >
                 <TaktSelect
                   v-model:value="formState.isOptional"
                   dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isoptional') })"
-                  :disabled="loading"
+                  :placeholder="pi.ph('isOptional')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.billofmaterialitem.isphantom')"
+                :label="pi.label('isPhantom')"
                 name="isPhantom"
               >
                 <TaktSelect
                   v-model:value="formState.isPhantom"
                   dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isphantom') })"
-                  :disabled="loading"
+                  :placeholder="pi.ph('isPhantom')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -308,7 +317,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -321,24 +330,14 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -355,22 +354,57 @@
       ref="billOfMaterialSubstituteTableRef"
       v-model="childBillOfMaterialSubstituteRows"
       :columns="billOfMaterialSubstituteFormColumns"
-      :title="t('entity.billofmaterialsubstitute._self')"
-      :add-button-entity="t('entity.billofmaterialsubstitute._self')"
+      :title="billOfMaterialSubstitutePi.self()"
+      :add-button-entity="billOfMaterialSubstitutePi.self()"
       id-field="billOfMaterialSubstituteId"
       :default-row="createDefaultBillOfMaterialSubstituteRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
+      class="w-full min-w-0"
     >
       <template #cell-substituteMaterialId="{ record }">
         <TaktSelect
           v-model:value="record.substituteMaterialId"
-          :options="filteredMaterialPlantOptions"
-          :field-names="{ label: 'dictLabel', value: 'dictValue' }"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.billofmaterialsubstitute.substitutematerialid') })"
-          :disabled="loading || !resolvedPlantCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="billOfMaterialSubstitutePi.queryPh('substituteMaterialId', 'select')"
+          :disabled="loading"
           allow-clear
-          @change="(val: string) => handleSubstituteMaterialChange(record, val)"
+        />
+      </template>
+      <template #cell-materialUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.materialUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="billOfMaterialSubstitutePi.ph('materialUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isEnabled="{ record }">
+        <TaktSelect
+          v-model:value="record.isEnabled"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="billOfMaterialSubstitutePi.ph('isEnabled')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-isObsolete="{ record }">
+        <TaktSelect
+          v-model:value="record.isObsolete"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="billOfMaterialSubstitutePi.ph('isObsolete')"
+          :disabled="loading"
+          allow-clear
         />
       </template>
     </TaktEditableTable>
@@ -385,15 +419,17 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useBillOfMaterialItemI18n } from '../composables/use-bill-of-material-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useBillOfMaterialItemI18n()
+
 import type { BillOfMaterialItemCreate } from '@/types/logistics/manufacturing/bom/bill-of-material-item'
-import type { TaktSelectOption } from '@/types/common'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
-import { getMaterialPlantOptions, getMaterialPlantById } from '@/api/logistics/materials/material-plant'
-import { getWorkCenterOptions } from '@/api/logistics/manufacturing/aps/work-center'
-import { getBillOfMaterialById } from '@/api/logistics/manufacturing/bom/bill-of-material'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -402,99 +438,9 @@ const { t } = useI18n()
 const tenantStore = useTenantStore()
 /** Pinia：用户上下文 */
 const userStore = useUserStore()
-/** 工厂物料下拉全量选项 */
-const materialPlantOptions = ref<TaktSelectOption[]>([])
-/** 工作中心下拉全量选项 */
-const workCenterOptions = ref<TaktSelectOption[]>([])
-/** 由 BOM 头解析的工厂代码（用于过滤物料/工作中心） */
-const resolvedPlantCode = ref('')
-/** 按工厂过滤的工厂物料选项 */
-const filteredMaterialPlantOptions = computed(() => {
-  const plantCode = resolvedPlantCode.value || formState.plantCode
-  if (!plantCode) {
-    return materialPlantOptions.value
-  }
-  return materialPlantOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
-})
-/** 按工厂过滤的工作中心选项 */
-const filteredWorkCenterOptions = computed(() => {
-  const plantCode = resolvedPlantCode.value || formState.plantCode
-  if (!plantCode) {
-    return []
-  }
-  return workCenterOptions.value.filter((item) => String(item.extValue ?? '') === String(plantCode))
-})
-
-/** 加载下拉选项 */
-async function loadSelectOptions() {
-  const [mp, wc] = await Promise.all([getMaterialPlantOptions(), getWorkCenterOptions()])
-  materialPlantOptions.value = mp
-  workCenterOptions.value = wc
-}
-
-/** 根据 BOM 头 Id 解析工厂代码 */
-async function resolvePlantCodeFromBom(billOfMaterialId: string | undefined) {
-  if (!billOfMaterialId) {
-    resolvedPlantCode.value = ''
-    return
-  }
-  try {
-    const bom = await getBillOfMaterialById(billOfMaterialId)
-    resolvedPlantCode.value = bom?.plantCode ?? ''
-  } catch {
-    resolvedPlantCode.value = ''
-  }
-}
-
-/** 子项物料选择变更 */
-async function handleMaterialChange(materialId: string | number | undefined) {
-  if (materialId == null || materialId === '') {
-    formState.materialCode = ''
-    return
-  }
-  const option = materialPlantOptions.value.find((item) => String(item.dictValue) === String(materialId))
-  if (option?.extLabel) {
-    formState.materialCode = option.extLabel
-  }
-  try {
-    const mp = await getMaterialPlantById(String(materialId))
-    if (mp?.materialCode) {
-      formState.materialCode = mp.materialCode
-    }
-    if (mp?.baseUnit && !formState.materialUnit) {
-      formState.materialUnit = mp.baseUnit.toLowerCase()
-    }
-  } catch {
-    /* 选项冗余字段已回填 */
-  }
-}
-
-/** 替代料子表行物料选择变更 */
-async function handleSubstituteMaterialChange(record: Record<string, unknown>, materialId: string | number | undefined) {
-  if (materialId == null || materialId === '') {
-    record.substituteMaterialCode = ''
-    return
-  }
-  const option = materialPlantOptions.value.find((item) => String(item.dictValue) === String(materialId))
-  if (option?.extLabel) {
-    record.substituteMaterialCode = option.extLabel
-  }
-  try {
-    const mp = await getMaterialPlantById(String(materialId))
-    if (mp?.materialCode) {
-      record.substituteMaterialCode = mp.materialCode
-    }
-  } catch {
-    /* 选项冗余字段已回填 */
-  }
-}
-
-onMounted(() => {
-  void loadSelectOptions()
-})
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -505,18 +451,32 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","billOfMaterialId","bomCode","lineNumber","materialId","materialCode","usageQuantity","materialUnit","scrapRate","actualUsageQuantity","operationSeq","workCenter","position","substituteGroup","substitutePriority","isOptional","isPhantom","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","billOfMaterialId","bomCode","lineNumber","materialCode","materialDescription","usageQuantity","materialUnit","scrapRate","actualUsageQuantity","operationSeq","workCenter","position","substituteGroup","substitutePriority","isOptional","isPhantom","isObsolete","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
+import { useBillOfMaterialSubstituteI18n } from '../composables/use-bill-of-material-substitute-i18n'
+
+const billOfMaterialSubstitutePi = useBillOfMaterialSubstituteI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childBillOfMaterialSubstituteRows = ref<Record<string, unknown>[]>([])
 const billOfMaterialSubstituteTableRef = ref<{
@@ -525,60 +485,113 @@ const billOfMaterialSubstituteTableRef = ref<{
   resetRows: () => void
 } | null>(null)
 
+/** 是否已持久化的子表行 */
+function isPersistedBillOfMaterialSubstituteRow(row: Record<string, unknown>): boolean {
+  const id = row.billOfMaterialSubstituteId
+  if (id == null || id === '') {
+    return false
+  }
+  return String(id) !== '0'
+}
+
+/** 分配下一可用子表行号（含作废行，仅据当前表格行递增） */
+function allocateNextBillOfMaterialSubstituteLineNumber(): number {
+  const rows = billOfMaterialSubstituteTableRef.value?.getRows?.() ?? childBillOfMaterialSubstituteRows.value
+  return resolveNextDetailLineNumber(0, rows)
+}
+
 /** 子表 billOfMaterialSubstitute 可编辑列 */
 const billOfMaterialSubstituteFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'billOfMaterialId',
-    title: t('entity.billofmaterialsubstitute.billofmaterialid'),
+    title: billOfMaterialSubstitutePi.label('billOfMaterialId'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'bomCode',
-    title: t('entity.billofmaterialsubstitute.bomcode'),
+    title: billOfMaterialSubstitutePi.label('bomCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'primaryMaterialCode',
-    title: t('entity.billofmaterialsubstitute.primarymaterialcode'),
+    title: billOfMaterialSubstitutePi.label('primaryMaterialCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'lineNumber',
-    title: t('entity.billofmaterialsubstitute.linenumber'),
-    editor: 'inputNumber',
-    width: 140, summary: 'sum',
+    title: billOfMaterialSubstitutePi.label('lineNumber'),
+    width: 140,
   },
   {
     key: 'substituteMaterialId',
-    title: t('entity.billofmaterialsubstitute.substitutematerialid'),
-    width: 180,
+    title: billOfMaterialSubstitutePi.label('substituteMaterialId'),
+    width: 140,
   },
   {
     key: 'substituteMaterialCode',
-    title: t('entity.billofmaterialsubstitute.substitutematerialcode'),
-    editor: 'readonly',
+    title: billOfMaterialSubstitutePi.label('substituteMaterialCode'),
+    editor: 'input',
     width: 140,
   },
   {
     key: 'substituteGroup',
-    title: t('entity.billofmaterialsubstitute.substitutegroup'),
+    title: billOfMaterialSubstitutePi.label('substituteGroup'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.billofmaterialsubstitute.substitutegroup') }),
+    width: 140, allowClear: true, placeholder: billOfMaterialSubstitutePi.ph('substituteGroup'),
   },
   {
     key: 'substitutePriority',
-    title: t('entity.billofmaterialsubstitute.substitutepriority'),
-    editor: 'inputNumber',
+    title: billOfMaterialSubstitutePi.label('substitutePriority'),
+    width: 140,
+  },
+  {
+    key: 'usageQuantity',
+    title: billOfMaterialSubstitutePi.label('usageQuantity'),
+    width: 140,
+  },
+  {
+    key: 'materialUnit',
+    title: billOfMaterialSubstitutePi.label('materialUnit'),
+    width: 140,
+  },
+  {
+    key: 'usageRatio',
+    title: billOfMaterialSubstitutePi.label('usageRatio'),
+    width: 140,
+  },
+  {
+    key: 'isEnabled',
+    title: billOfMaterialSubstitutePi.label('isEnabled'),
+    width: 140,
+  },
+  {
+    key: 'effectiveDate',
+    title: billOfMaterialSubstitutePi.label('effectiveDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'expiryDate',
+    title: billOfMaterialSubstitutePi.label('expiryDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'isObsolete',
+    title: billOfMaterialSubstitutePi.label('isObsolete'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<BillOfMaterialItemCreate & { billOfMaterialItemId?: string }> | null | undefined) {
-  childBillOfMaterialSubstituteRows.value = ((val as any)?.substitutes ?? []) as Record<string, unknown>[]
+  const rows_billOfMaterialSubstitute = ((val as any)?.substitutes ?? []) as Record<string, unknown>[]
+  childBillOfMaterialSubstituteRows.value = rows_billOfMaterialSubstitute
 }
 
 function createDefaultBillOfMaterialSubstituteRow(): Record<string, unknown> {
@@ -586,26 +599,42 @@ function createDefaultBillOfMaterialSubstituteRow(): Record<string, unknown> {
     billOfMaterialId: '',
     bomCode: '',
     primaryMaterialCode: '',
-    lineNumber: (childBillOfMaterialSubstituteRows.value.length + 1) * 10,
+    lineNumber: allocateNextBillOfMaterialSubstituteLineNumber(),
     substituteMaterialId: '',
     substituteMaterialCode: '',
     substituteGroup: '',
     substitutePriority: 0,
+    usageQuantity: 0,
+    materialUnit: '',
+    usageRatio: 0,
+    isEnabled: 0,
+    effectiveDate: '',
+    expiryDate: '',
+    isObsolete: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.billOfMaterialItemId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
-    substitutes: billOfMaterialSubstituteTableRef.value?.getRows?.() ?? childBillOfMaterialSubstituteRows.value.map((rest) => ({
-      ...rest,
-      tenantCode: tenantStore.tenantCode,
-      companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-      billOfMaterialItemId: masterId,
-    })),
+    substitutes: billOfMaterialSubstituteTableRef.value?.getRows?.() ?? childBillOfMaterialSubstituteRows.value.map((row) => {
+      const normalized = {
+        ...row,
+        tenantCode: tenantStore.tenantCode,
+        companyCode: tenantStore.companyCode,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        billOfMaterialItemId: masterId,
+      }
+      if (isUpdate && isPersistedBillOfMaterialSubstituteRow(row)) {
+        normalized.billOfMaterialSubstituteId = row.billOfMaterialSubstituteId
+      } else {
+        delete normalized.billOfMaterialSubstituteId
+      }
+      return normalized
+    }),
   }
 }
 
@@ -625,19 +654,18 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值 */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  if (target.isOptional === undefined || target.isOptional === null || target.isOptional === '') {
-    target.isOptional = 0
-  }
-  if (target.isPhantom === undefined || target.isPhantom === null || target.isPhantom === '') {
-    target.isPhantom = 0
-  }
-  if (!target.materialUnit) {
-    target.materialUnit = 'PC'
-  }
+  void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialItemId 才视为编辑） */
 watch(
@@ -664,15 +692,6 @@ watch(
   { immediate: true }
 )
 
-/** BOM 头变更时解析工厂代码 */
-watch(
-  () => formState.billOfMaterialId as string | undefined,
-  (id) => {
-    void resolvePlantCodeFromBom(id)
-  },
-  { immediate: true },
-)
-
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
@@ -689,52 +708,45 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   billOfMaterialId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.billofmaterialid') }),
+      message: pi.ph('billOfMaterialId'),
       trigger: 'blur'
     }
   ],
   bomCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') }),
+      message: pi.ph('bomCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  materialId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialid') }),
-      trigger: 'blur'
-    }
-  ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   usageQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+        return Promise.reject(pi.ph('usageQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+        return Promise.reject(pi.ph('usageQuantity'))
       }
       return Promise.resolve()
     },
@@ -743,18 +755,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialunit') }),
-      trigger: 'blur'
+      message: pi.ph('materialUnit'),
+      trigger: 'change'
     }
   ],
   scrapRate: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+        return Promise.reject(pi.ph('scrapRate'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+        return Promise.reject(pi.ph('scrapRate'))
       }
       return Promise.resolve()
     },
@@ -763,11 +775,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   actualUsageQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+        return Promise.reject(pi.ph('actualUsageQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+        return Promise.reject(pi.ph('actualUsageQuantity'))
       }
       return Promise.resolve()
     },
@@ -776,11 +788,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   operationSeq: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.operationseq') }))
+        return Promise.reject(pi.ph('operationSeq'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.operationseq') }))
+        return Promise.reject(pi.ph('operationSeq'))
       }
       return Promise.resolve()
     },
@@ -789,11 +801,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   substitutePriority: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.substitutepriority') }))
+        return Promise.reject(pi.ph('substitutePriority'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.substitutepriority') }))
+        return Promise.reject(pi.ph('substitutePriority'))
       }
       return Promise.resolve()
     },
@@ -802,11 +814,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isOptional: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isoptional') }))
+        return Promise.reject(pi.ph('isOptional'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isoptional') }))
+        return Promise.reject(pi.ph('isOptional'))
       }
       return Promise.resolve()
     },
@@ -815,11 +827,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isPhantom: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isphantom') }))
+        return Promise.reject(pi.ph('isPhantom'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.isphantom') }))
+        return Promise.reject(pi.ph('isPhantom'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -868,6 +893,10 @@ function getValues(): Record<string, any> {
   if ('isPhantom' in payload) {
     const rawisPhantom = payload.isPhantom
     payload.isPhantom = typeof rawisPhantom === 'number' ? rawisPhantom : Number(rawisPhantom)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

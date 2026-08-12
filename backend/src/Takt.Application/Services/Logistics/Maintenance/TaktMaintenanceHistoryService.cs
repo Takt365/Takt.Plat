@@ -386,7 +386,7 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
                 SqlFunc.ToString(x.MaintenanceWorkOrderId).Contains(keywords)
                 || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.EquipmentId).Contains(keywords)
-                || (x.EquipmentCode != null && x.EquipmentCode.Contains(keywords))
+                || (x.EquipCode != null && x.EquipCode.Contains(keywords))
                 || SqlFunc.ToString(x.MaintenanceType).Contains(keywords)
                 || SqlFunc.ToString(x.MaintenanceCategory).Contains(keywords)
                 || (x.MaintenanceCompany != null && x.MaintenanceCompany.Contains(keywords))
@@ -403,6 +403,7 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
                 || (x.MaintenanceImages != null && x.MaintenanceImages.Contains(keywords))
                 || (x.AcceptedSummary != null && x.AcceptedSummary.Contains(keywords))
                 || (x.AcceptedBy != null && x.AcceptedBy.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.MaintenanceDate).Contains(keywords)
@@ -430,9 +431,9 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
             exp = exp.And(x => x.EquipmentId == queryDto.EquipmentId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentCode))
+        if (!string.IsNullOrEmpty(queryDto?.EquipCode))
         {
-            exp = exp.And(x => x.EquipmentCode != null && x.EquipmentCode.Contains(queryDto.EquipmentCode));
+            exp = exp.And(x => x.EquipCode != null && x.EquipCode.Contains(queryDto.EquipCode));
         }
 
         if (queryDto?.MaintenanceType.HasValue == true)
@@ -515,6 +516,12 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
             exp = exp.And(x => x.AcceptedBy != null && x.AcceptedBy.Contains(queryDto.AcceptedBy));
         }
 
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -594,6 +601,12 @@ public class TaktMaintenanceHistoryService : TaktServiceBase, ITaktMaintenanceHi
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

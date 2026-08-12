@@ -27,188 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.qualityGroupId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectionCategory')"
-                name="inspectionCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.inspectionCategory"
-                  dict-type="logistics_quality_group_inspection_category"
-                  :placeholder="pi.ph('inspectionCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualityGroupCode')"
-                name="qualityGroupCode"
-              >
-                <a-input
-                  v-model:value="formState.qualityGroupCode"
-                  :placeholder="pi.ph('qualityGroupCode')"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
-                  :disabled="!!formData?.qualityGroupId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualityGroupName')"
-                name="qualityGroupName"
-              >
-                <a-input
-                  v-model:value="formState.qualityGroupName"
-                  :placeholder="pi.ph('qualityGroupName')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('qualityGroupDescription')"
-                name="qualityGroupDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.qualityGroupDescription"
-                  :placeholder="pi.ph('qualityGroupDescription')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('responsibleUserId')"
-                name="responsibleUserId"
-              >
-                <TaktSelect
-                  v-model:value="formState.responsibleUserId"
-                  api-url="TaktUsers/options"
-                  :placeholder="pi.ph('responsibleUserId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('contactPhone')"
-                name="contactPhone"
-              >
-                <a-input
-                  v-model:value="formState.contactPhone"
-                  :placeholder="pi.ph('contactPhone')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('contactEmail')"
-                name="contactEmail"
-              >
-                <a-input
-                  v-model:value="formState.contactEmail"
-                  :placeholder="pi.ph('contactEmail')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('isBuiltIn')"
-                name="isBuiltIn"
-              >
-                <TaktSelect
-                  v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('isBuiltIn')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('groupStatus')"
-                name="groupStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.groupStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="pi.ph('groupStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -296,15 +126,14 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

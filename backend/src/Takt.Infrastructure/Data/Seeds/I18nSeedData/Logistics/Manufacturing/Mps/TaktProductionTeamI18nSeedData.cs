@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionTeam 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktProductionTeamI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionteam._self", "zh-CN", "生产班组信息", "实体名称"),
             // entity.productionteam._self
             new TranslationSeedItem("entity.productionteam._self", "zh-HK", "生产班组信息_hk", "实体名称"),
-
-            // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.productionteam.plantcode
-            new TranslationSeedItem("entity.productionteam.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.productionteam.teamcode
             new TranslationSeedItem("entity.productionteam.teamcode", "en-US", "班组编码_us", "班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）"),

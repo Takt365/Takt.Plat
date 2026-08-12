@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/sales/sales-invoice/components -->
 <!-- 文件名称：invoice-form.vue -->
-<!-- 功能描述：Takt销售发票实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt销售发票主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -22,169 +22,23 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/5)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.salesInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('yearMonth')"
-                name="yearMonth"
-              >
-                <a-input
-                  v-model:value="formState.yearMonth"
-                  :placeholder="pi.ph('yearMonth')"
-                  show-count
-                  :maxlength="6"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('customerCode')"
-                name="customerCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.customerCode"
-                  api-url="TaktCustomers/options"
-                  :placeholder="pi.ph('customerCode')"
-                  :disabled="!!formData?.salesInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('customerName1')"
-                name="customerName1"
-              >
-                <a-input
-                  v-model:value="formState.customerName1"
-                  :placeholder="pi.ph('customerName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('currencyCode')"
-                name="currencyCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currencyCode')"
-                  :disabled="!!formData?.salesInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('taxRate')"
-                name="taxRate"
-              >
-                <TaktSelect
-                  v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_rate_param"
-                  :placeholder="pi.ph('taxRate')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('taxAmount')"
-                name="taxAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="pi.ph('taxAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('accountingDocumentCode')"
-                name="accountingDocumentCode"
-              >
-                <a-input
-                  v-model:value="formState.accountingDocumentCode"
-                  :placeholder="pi.ph('accountingDocumentCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.salesInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -244,6 +98,17 @@
       section-border
       class="w-full min-w-0"
     >
+      <template #cell-plantCode="{ record }">
+        <TaktSelect
+          v-model:value="record.plantCode"
+          api-url="TaktPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.queryPh('plantCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
@@ -255,13 +120,24 @@
           allow-clear
         />
       </template>
-      <template #cell-materialType="{ record }">
+      <template #cell-departureCountry="{ record }">
         <TaktSelect
-          v-model:value="record.materialType"
-          dict-type="logistics_material_type"
+          v-model:value="record.departureCountry"
+          dict-type="sys_country_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesInvoiceItemPi.ph('materialType')"
+          :placeholder="salesInvoiceItemPi.ph('departureCountry')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-warehouseCode="{ record }">
+        <TaktSelect
+          v-model:value="record.warehouseCode"
+          api-url="TaktWarehouses/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="salesInvoiceItemPi.queryPh('warehouseCode', 'select')"
           :disabled="loading"
           allow-clear
         />
@@ -277,35 +153,24 @@
           allow-clear
         />
       </template>
-      <template #cell-accountTitle="{ record }">
+      <template #cell-destinationCountryOrder="{ record }">
         <TaktSelect
-          v-model:value="record.accountTitle"
-          api-url="TaktAccountTitles/options"
+          v-model:value="record.destinationCountryOrder"
+          dict-type="sys_country_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesInvoiceItemPi.queryPh('accountTitle', 'select')"
+          :placeholder="salesInvoiceItemPi.ph('destinationCountryOrder')"
           :disabled="loading"
           allow-clear
         />
       </template>
-      <template #cell-unit="{ record }">
+      <template #cell-postedBy="{ record }">
         <TaktSelect
-          v-model:value="record.unit"
-          dict-type="logistics_unit_of_measure_code"
+          v-model:value="record.postedBy"
+          api-url="TaktEmployees/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesInvoiceItemPi.ph('unit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-documentType="{ record }">
-        <TaktSelect
-          v-model:value="record.documentType"
-          dict-type="logistics_accounting_document_type"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesInvoiceItemPi.ph('documentType')"
+          :placeholder="salesInvoiceItemPi.queryPh('postedBy', 'select')"
           :disabled="loading"
           allow-clear
         />
@@ -327,7 +192,7 @@
 
 <script setup lang="ts">
 /**
- * Takt销售发票实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt销售发票主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/sales/sales-invoice/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -365,17 +230,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","yearMonth","customerCode","customerName1","currencyCode","taxRate","taxAmount","accountingDocumentCode","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","billingDocumentCode","billingType","billingCategory","documentCategory","currencyCode","salesOrganization","distributionChannel","pricingProcedure","conditionCode","shippingConditions","billingDate","customerGroup","incoterms1","incoterms2","postingStatus","accountingExchangeRate","paymentTerms","accountAssignmentGroup","countryCode","netAmount","payerCode","customerCode","statisticsCurrencyCode","foreignTradeCode","cancelledBillingDocument","invoiceListType","division","hierarchyTypePricing","tradingPartner","taxDepartureCountry","organizationSalesTaxNumber","countrySalesTaxNumber","referenceCode","cancelledFlag","exchangeRateDate","paymentReference","reversalReason","postedBy","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -413,8 +281,13 @@ function allocateNextSalesInvoiceItemLineNumber(): number {
 /** 子表 salesInvoiceItem 可编辑列 */
 const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
-    key: 'accountingDocumentCode',
-    title: salesInvoiceItemPi.label('accountingDocumentCode'),
+    key: 'plantCode',
+    title: salesInvoiceItemPi.label('plantCode'),
+    width: 140,
+  },
+  {
+    key: 'billingDocumentCode',
+    title: salesInvoiceItemPi.label('billingDocumentCode'),
     editor: 'input',
     width: 140,
   },
@@ -424,76 +297,76 @@ const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'postingDate',
-    title: salesInvoiceItemPi.label('postingDate'),
+    key: 'billingQuantity',
+    title: salesInvoiceItemPi.label('billingQuantity'),
+    width: 140,
+  },
+  {
+    key: 'salesUnit',
+    title: salesInvoiceItemPi.label('salesUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('salesUnit'),
+  },
+  {
+    key: 'baseUnit',
+    title: salesInvoiceItemPi.label('baseUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('baseUnit'),
+  },
+  {
+    key: 'scaleQuantity',
+    title: salesInvoiceItemPi.label('scaleQuantity'),
+    width: 140,
+  },
+  {
+    key: 'billingQuantitySku',
+    title: salesInvoiceItemPi.label('billingQuantitySku'),
+    width: 140,
+  },
+  {
+    key: 'netWeight',
+    title: salesInvoiceItemPi.label('netWeight'),
+    width: 140,
+  },
+  {
+    key: 'grossWeight',
+    title: salesInvoiceItemPi.label('grossWeight'),
+    width: 140,
+  },
+  {
+    key: 'weightUnit',
+    title: salesInvoiceItemPi.label('weightUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('weightUnit'),
+  },
+  {
+    key: 'businessAreaCode',
+    title: salesInvoiceItemPi.label('businessAreaCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('businessAreaCode'),
+  },
+  {
+    key: 'pricingDate',
+    title: salesInvoiceItemPi.label('pricingDate'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
-    key: 'modelName',
-    title: salesInvoiceItemPi.label('modelName'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('modelName'),
-  },
-  {
-    key: 'materialCode',
-    title: salesInvoiceItemPi.label('materialCode'),
+    key: 'serviceRenderedDate',
+    title: salesInvoiceItemPi.label('serviceRenderedDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
-    key: 'materialType',
-    title: salesInvoiceItemPi.label('materialType'),
+    key: 'pricingExchangeRate',
+    title: salesInvoiceItemPi.label('pricingExchangeRate'),
     width: 140,
   },
   {
-    key: 'profitCenterCode',
-    title: salesInvoiceItemPi.label('profitCenterCode'),
-    width: 140,
-  },
-  {
-    key: 'accountTitle',
-    title: salesInvoiceItemPi.label('accountTitle'),
-    width: 140,
-  },
-  {
-    key: 'quantity',
-    title: salesInvoiceItemPi.label('quantity'),
-    width: 140,
-  },
-  {
-    key: 'unit',
-    title: salesInvoiceItemPi.label('unit'),
-    width: 140,
-  },
-  {
-    key: 'localCurrencyAmount',
-    title: salesInvoiceItemPi.label('localCurrencyAmount'),
-    width: 140,
-  },
-  {
-    key: 'transactionCurrencyAmount',
-    title: salesInvoiceItemPi.label('transactionCurrencyAmount'),
-    width: 140,
-  },
-  {
-    key: 'taxIncludedPrice',
-    title: salesInvoiceItemPi.label('taxIncludedPrice'),
-    width: 140,
-  },
-  {
-    key: 'untaxedPrice',
-    title: salesInvoiceItemPi.label('untaxedPrice'),
-    width: 140,
-  },
-  {
-    key: 'taxAmount',
-    title: salesInvoiceItemPi.label('taxAmount'),
-    width: 140,
-  },
-  {
-    key: 'documentType',
-    title: salesInvoiceItemPi.label('documentType'),
+    key: 'netAmount',
+    title: salesInvoiceItemPi.label('netAmount'),
     width: 140,
   },
   {
@@ -508,11 +381,222 @@ const salesInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
+    key: 'referenceDocumentCategory',
+    title: salesInvoiceItemPi.label('referenceDocumentCategory'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('referenceDocumentCategory'),
+  },
+  {
+    key: 'salesDocumentCode',
+    title: salesInvoiceItemPi.label('salesDocumentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('salesDocumentCode'),
+  },
+  {
+    key: 'salesDocumentItem',
+    title: salesInvoiceItemPi.label('salesDocumentItem'),
+    width: 140,
+  },
+  {
+    key: 'salesDocumentReferenceFlag',
+    title: salesInvoiceItemPi.label('salesDocumentReferenceFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('salesDocumentReferenceFlag'),
+  },
+  {
+    key: 'materialCode',
+    title: salesInvoiceItemPi.label('materialCode'),
+    width: 140,
+  },
+  {
+    key: 'materialDescription',
+    title: salesInvoiceItemPi.label('materialDescription'),
+    editor: 'textarea',
+    rows: 1,
+    placeholder: salesInvoiceItemPi.ph('materialDescription'),
+    width: 180,
+  },
+  {
+    key: 'pricingReferenceMaterialCode',
+    title: salesInvoiceItemPi.label('pricingReferenceMaterialCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('pricingReferenceMaterialCode'),
+  },
+  {
+    key: 'batchCode',
+    title: salesInvoiceItemPi.label('batchCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('batchCode'),
+  },
+  {
+    key: 'materialGroup',
+    title: salesInvoiceItemPi.label('materialGroup'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('materialGroup'),
+  },
+  {
+    key: 'salesItemCategory',
+    title: salesInvoiceItemPi.label('salesItemCategory'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('salesItemCategory'),
+  },
+  {
+    key: 'productHierarchy',
+    title: salesInvoiceItemPi.label('productHierarchy'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('productHierarchy'),
+  },
+  {
+    key: 'shippingPoint',
+    title: salesInvoiceItemPi.label('shippingPoint'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('shippingPoint'),
+  },
+  {
+    key: 'division',
+    title: salesInvoiceItemPi.label('division'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('division'),
+  },
+  {
+    key: 'partnerItem',
+    title: salesInvoiceItemPi.label('partnerItem'),
+    width: 140,
+  },
+  {
+    key: 'departureCountry',
+    title: salesInvoiceItemPi.label('departureCountry'),
+    width: 140,
+  },
+  {
+    key: 'plantRegion',
+    title: salesInvoiceItemPi.label('plantRegion'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('plantRegion'),
+  },
+  {
+    key: 'pricingFlag',
+    title: salesInvoiceItemPi.label('pricingFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('pricingFlag'),
+  },
+  {
+    key: 'warehouseCode',
+    title: salesInvoiceItemPi.label('warehouseCode'),
+    width: 140,
+  },
+  {
+    key: 'costAmount',
+    title: salesInvoiceItemPi.label('costAmount'),
+    width: 140,
+  },
+  {
+    key: 'subtotal1',
+    title: salesInvoiceItemPi.label('subtotal1'),
+    width: 140,
+  },
+  {
+    key: 'subtotal2',
+    title: salesInvoiceItemPi.label('subtotal2'),
+    width: 140,
+  },
+  {
+    key: 'subtotal3',
+    title: salesInvoiceItemPi.label('subtotal3'),
+    width: 140,
+  },
+  {
+    key: 'subtotal4',
+    title: salesInvoiceItemPi.label('subtotal4'),
+    width: 140,
+  },
+  {
+    key: 'subtotal5',
+    title: salesInvoiceItemPi.label('subtotal5'),
+    width: 140,
+  },
+  {
+    key: 'subtotal6',
+    title: salesInvoiceItemPi.label('subtotal6'),
+    width: 140,
+  },
+  {
+    key: 'statisticsExchangeRate',
+    title: salesInvoiceItemPi.label('statisticsExchangeRate'),
+    width: 140,
+  },
+  {
+    key: 'profitCenterCode',
+    title: salesInvoiceItemPi.label('profitCenterCode'),
+    width: 140,
+  },
+  {
+    key: 'creditPrice',
+    title: salesInvoiceItemPi.label('creditPrice'),
+    width: 140,
+  },
+  {
+    key: 'customerGroupSalesOrder',
+    title: salesInvoiceItemPi.label('customerGroupSalesOrder'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('customerGroupSalesOrder'),
+  },
+  {
+    key: 'destinationCountryOrder',
+    title: salesInvoiceItemPi.label('destinationCountryOrder'),
+    width: 140,
+  },
+  {
+    key: 'regionOrder',
+    title: salesInvoiceItemPi.label('regionOrder'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('regionOrder'),
+  },
+  {
+    key: 'salesOrganizationOrder',
+    title: salesInvoiceItemPi.label('salesOrganizationOrder'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('salesOrganizationOrder'),
+  },
+  {
+    key: 'distributionChannelOrder',
+    title: salesInvoiceItemPi.label('distributionChannelOrder'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('distributionChannelOrder'),
+  },
+  {
+    key: 'documentCategory',
+    title: salesInvoiceItemPi.label('documentCategory'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: salesInvoiceItemPi.ph('documentCategory'),
+  },
+  {
+    key: 'taxAmount',
+    title: salesInvoiceItemPi.label('taxAmount'),
+    width: 140,
+  },
+  {
+    key: 'grossAmount',
+    title: salesInvoiceItemPi.label('grossAmount'),
+    width: 140,
+  },
+  {
+    key: 'exchangeRateDate',
+    title: salesInvoiceItemPi.label('exchangeRateDate'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'postedBy',
+    title: salesInvoiceItemPi.label('postedBy'),
+    width: 140,
+  },
+  {
     key: 'isObsolete',
     title: salesInvoiceItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesInvoiceCreate & { salesInvoiceId?: string }> | null | undefined) {
@@ -522,24 +606,62 @@ function syncChildRowsFromFormData(val: Partial<SalesInvoiceCreate & { salesInvo
 
 function createDefaultSalesInvoiceItemRow(): Record<string, unknown> {
   return {
-    accountingDocumentCode: '',
+    plantCode: '',
+    billingDocumentCode: '',
     lineNumber: allocateNextSalesInvoiceItemLineNumber(),
-    postingDate: '',
-    modelName: '',
-    materialCode: '',
-    materialType: '',
-    profitCenterCode: '',
-    accountTitle: '',
-    quantity: 0,
-    unit: '',
-    localCurrencyAmount: 0,
-    transactionCurrencyAmount: 0,
-    taxIncludedPrice: 0,
-    untaxedPrice: 0,
-    taxAmount: 0,
-    documentType: '',
+    billingQuantity: 0,
+    salesUnit: '',
+    baseUnit: '',
+    scaleQuantity: 0,
+    billingQuantitySku: 0,
+    netWeight: 0,
+    grossWeight: 0,
+    weightUnit: '',
+    businessAreaCode: '',
+    pricingDate: '',
+    serviceRenderedDate: '',
+    pricingExchangeRate: 0,
+    netAmount: 0,
     referenceDocumentCode: '',
     referenceDocumentItem: 0,
+    referenceDocumentCategory: '',
+    salesDocumentCode: '',
+    salesDocumentItem: 0,
+    salesDocumentReferenceFlag: '',
+    materialCode: '',
+    materialDescription: '',
+    pricingReferenceMaterialCode: '',
+    batchCode: '',
+    materialGroup: '',
+    salesItemCategory: '',
+    productHierarchy: '',
+    shippingPoint: '',
+    division: '',
+    partnerItem: 0,
+    departureCountry: '',
+    plantRegion: '',
+    pricingFlag: '',
+    warehouseCode: '',
+    costAmount: 0,
+    subtotal1: 0,
+    subtotal2: 0,
+    subtotal3: 0,
+    subtotal4: 0,
+    subtotal5: 0,
+    subtotal6: 0,
+    statisticsExchangeRate: 0,
+    profitCenterCode: '',
+    creditPrice: 0,
+    customerGroupSalesOrder: '',
+    destinationCountryOrder: '',
+    regionOrder: '',
+    salesOrganizationOrder: '',
+    distributionChannelOrder: '',
+    documentCategory: '',
+    taxAmount: 0,
+    grossAmount: 0,
+    exchangeRateDate: '',
+    postedBy: '',
     isObsolete: 0,
   }
 }
@@ -555,7 +677,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         salesInvoiceId: masterId,
       }
       if (isUpdate && isPersistedSalesInvoiceItemRow(row)) {
@@ -587,7 +709,10 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   currencyCode: "CNY",
-  taxRate: 10
+  shippingConditions: "Z1",
+  countryCode: "CN",
+  statisticsCurrencyCode: "CNY",
+  taxDepartureCountry: "CN"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -641,31 +766,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
+  billingDocumentCode: [
     {
       required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  yearMonth: [
-    {
-      required: true,
-      message: pi.ph('yearMonth'),
-      trigger: 'blur'
-    }
-  ],
-  customerCode: [
-    {
-      required: true,
-      message: pi.ph('customerCode'),
-      trigger: 'change'
-    }
-  ],
-  customerName1: [
-    {
-      required: true,
-      message: pi.ph('customerName1'),
+      message: pi.ph('billingDocumentCode'),
       trigger: 'blur'
     }
   ],
@@ -676,37 +780,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  taxRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  accountingDocumentCode: [
+  billingDate: [
     {
       required: true,
-      message: pi.ph('accountingDocumentCode'),
-      trigger: 'blur'
+      message: pi.ph('billingDate'),
+      trigger: 'change'
+    }
+  ],
+  netAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('netAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('netAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  customerCode: [
+    {
+      required: true,
+      message: pi.ph('customerCode'),
+      trigger: 'change'
     }
   ],
 }))
@@ -721,13 +819,13 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('taxRate' in payload) {
-    const rawtaxRate = payload.taxRate
-    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  if ('accountingExchangeRate' in payload) {
+    const rawaccountingExchangeRate = payload.accountingExchangeRate
+    payload.accountingExchangeRate = typeof rawaccountingExchangeRate === 'number' ? rawaccountingExchangeRate : Number(rawaccountingExchangeRate)
   }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  if ('netAmount' in payload) {
+    const rawnetAmount = payload.netAmount
+    payload.netAmount = typeof rawnetAmount === 'number' ? rawnetAmount : Number(rawnetAmount)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

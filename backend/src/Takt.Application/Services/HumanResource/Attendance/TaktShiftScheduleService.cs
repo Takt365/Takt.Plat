@@ -93,12 +93,12 @@ public class TaktShiftScheduleService : TaktServiceBase, ITaktShiftScheduleServi
         EnsureThreeLayerContext();
         var list = await _shiftScheduleRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.RelatedPlant ?? string.Empty,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.RelatedPlant ?? e.Id.ToString(),
+            DictLabel = e.PlantCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -257,7 +257,8 @@ public class TaktShiftScheduleService : TaktServiceBase, ITaktShiftScheduleServi
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftId).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ScheduleDate).Contains(keywords)
@@ -285,9 +286,14 @@ public class TaktShiftScheduleService : TaktServiceBase, ITaktShiftScheduleServi
             exp = exp.And(x => x.ShiftId == queryDto.ShiftId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

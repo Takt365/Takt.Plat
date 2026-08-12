@@ -51,7 +51,7 @@ export interface SourceEcDetail extends CompanyDtoBase {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -71,7 +71,7 @@ export interface SourceEcDetail extends CompanyDtoBase {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -91,7 +91,7 @@ export interface SourceEcDetail extends CompanyDtoBase {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性
@@ -125,7 +125,6 @@ export interface SourceEcDetail extends CompanyDtoBase {
 
 }
 
-
 /**
  * SourceEcDetail 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -137,6 +136,11 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 主ID
@@ -156,7 +160,7 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -176,7 +180,7 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -196,7 +200,7 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性
@@ -250,7 +254,6 @@ export interface SourceEcDetailQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建SourceEcDetail DTO
  * 对应前端 SourceEcDetailCreate
@@ -261,6 +264,11 @@ export interface SourceEcDetailCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 主ID
@@ -280,7 +288,7 @@ export interface SourceEcDetailCreate {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -300,7 +308,7 @@ export interface SourceEcDetailCreate {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -320,7 +328,7 @@ export interface SourceEcDetailCreate {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性
@@ -358,7 +366,6 @@ export interface SourceEcDetailCreate {
   remark?: string;
 
 }
-
 
 /**
  * 更新SourceEcDetail DTO
@@ -374,7 +381,6 @@ export interface SourceEcDetailUpdate extends SourceEcDetailCreate {
 
 }
 
-
 /**
  * SourceEcDetail 导入模板行 DTO
  * 对应前端 SourceEcDetailTemplate
@@ -385,6 +391,11 @@ export interface SourceEcDetailTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 主ID
@@ -404,7 +415,7 @@ export interface SourceEcDetailTemplate {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -424,7 +435,7 @@ export interface SourceEcDetailTemplate {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -444,7 +455,7 @@ export interface SourceEcDetailTemplate {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性
@@ -482,7 +493,6 @@ export interface SourceEcDetailTemplate {
   remark?: string;
 
 }
-
 
 /**
  * SourceEcDetail 导入 DTO（独立实现，不继承 TemplateDto）
@@ -496,6 +506,11 @@ export interface SourceEcDetailImport {
   tenantCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 主ID
    */
   sourceEcId?: string;
@@ -513,7 +528,7 @@ export interface SourceEcDetailImport {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -533,7 +548,7 @@ export interface SourceEcDetailImport {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -553,7 +568,7 @@ export interface SourceEcDetailImport {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性
@@ -591,7 +606,6 @@ export interface SourceEcDetailImport {
   remark?: string;
 
 }
-
 
 /**
  * SourceEcDetail 导出 DTO（独立实现，不继承响应 Dto）
@@ -622,7 +636,7 @@ export interface SourceEcDetailExport {
   /**
    * 旧物料号
    */
-  sourceLegacyPartNo?: string;
+  sourceLegacyPartCode?: string;
 
   /**
    * 旧物料
@@ -642,7 +656,7 @@ export interface SourceEcDetailExport {
   /**
    * 新物料
    */
-  sourceReplacementPartNo?: string;
+  sourceReplacementPartCode?: string;
 
   /**
    * 新物料
@@ -662,7 +676,7 @@ export interface SourceEcDetailExport {
   /**
    * BOM番号
    */
-  sourceBomNo?: string;
+  sourceBomCode?: string;
 
   /**
    * 兼容性

@@ -176,11 +176,6 @@ public class TaktCompany : TaktTenantEntityBase
     [SugarColumn(ColumnName = "company_existence", ColumnDescription = "存续状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
     public int CompanyExistence { get; set; } = 1;
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     [SugarColumn(ColumnName = "code_alias", ColumnDescription = "编码代号", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "TKC")]
@@ -245,11 +240,6 @@ public class TaktCompany : TaktTenantEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "financial_management_area", ColumnDescription = "财务管理范围", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "")]
     public string FinancialManagementArea { get; set; } = string.Empty;
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>

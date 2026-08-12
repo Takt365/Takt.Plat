@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:查询栏组件；默认关键字搜索，可通过 #fields 插槽扩展条件（工厂/期间等），统一查询/重置按钮
+功能描述:查询栏组件；关键字输入框宽度=所在栏宽减去查询/重置按钮；可通过 #fields 插槽扩展条件
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -146,6 +146,7 @@ defineExpose({
 </script>
 
 <style scoped>
+/* 整栏占满所在表区域；关键字 flex:1 = 栏宽 − 查询/重置按钮 */
 .takt-query-bar {
   margin: 4px;
   padding: 4px;
@@ -157,7 +158,7 @@ defineExpose({
 }
 
 .takt-query-bar__fields {
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-wrap: wrap;
@@ -166,14 +167,16 @@ defineExpose({
 }
 
 .takt-query-bar__keyword {
-  width: 50vw;
-  flex: 0 0 50vw;
+  flex: 1 1 auto;
+  width: auto;
   min-width: 0;
+  max-width: none;
 }
 
 .takt-query-bar--custom-fields .takt-query-bar__keyword {
   width: 16rem;
   flex: 0 0 16rem;
+  max-width: none;
 }
 
 :deep(.ant-input-affix-wrapper) {
@@ -188,6 +191,7 @@ defineExpose({
 }
 
 .query-actions {
+  flex: 0 0 auto;
   flex-shrink: 0;
 
   :deep(.ant-btn) {

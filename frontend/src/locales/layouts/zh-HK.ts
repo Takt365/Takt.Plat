@@ -19,6 +19,8 @@ export default {
     session: {
       canceltext: "繼續使用",
       content: "您已長時間未操作，系統將在 {minutes} 分鐘後自動登出。任意鍵鼠操作將自動延長會話，無需確認。",
+      expired: "登錄已過期，請重新登錄",
+      idlelogout: "長時間未操作，已自動退出登錄",
       oktext: "立即登出",
       title: "會話即將過期",
     },

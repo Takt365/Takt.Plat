@@ -344,6 +344,7 @@ public class TaktSopAckService : TaktServiceBase, ITaktSopAckService
                 || SqlFunc.ToString(x.WorkstationId).Contains(keywords)
                 || SqlFunc.ToString(x.AcknowledgedBy).Contains(keywords)
                 || (x.AckComment != null && x.AckComment.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.AcknowledgedAt).Contains(keywords)
@@ -379,6 +380,11 @@ public class TaktSopAckService : TaktServiceBase, ITaktSopAckService
         if (!string.IsNullOrEmpty(queryDto?.AckComment))
         {
             exp = exp.And(x => x.AckComment != null && x.AckComment.Contains(queryDto.AckComment));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

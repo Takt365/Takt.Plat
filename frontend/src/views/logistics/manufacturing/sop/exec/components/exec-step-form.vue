@@ -28,52 +28,60 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.execid')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('execId')"
                 name="execId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.execId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.execid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopExecs/options"
+                  :placeholder="pi.ph('execId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.stepid')"
+                :label="pi.label('stepId')"
                 name="stepId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.stepId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.stepid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopSteps/options"
+                  :placeholder="pi.ph('stepId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.stepno')"
+                :label="pi.label('stepNo')"
                 name="stepNo"
               >
                 <a-input-number
                   v-model:value="formState.stepNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.stepno') })"
+                  :placeholder="pi.ph('stepNo')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.startedat')"
+                :label="pi.label('startedAt')"
                 name="startedAt"
               >
                 <a-date-picker
                   v-model:value="formState.startedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.startedat') })"
+                  :placeholder="pi.ph('startedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -81,12 +89,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.endedat')"
+                :label="pi.label('endedAt')"
                 name="endedAt"
               >
                 <a-date-picker
                   v-model:value="formState.endedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.endedat') })"
+                  :placeholder="pi.ph('endedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -94,40 +102,50 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.stepresult')"
+                :label="pi.label('stepResult')"
                 name="stepResult"
               >
                 <TaktSelect
                   v-model:value="formState.stepResult"
                   dict-type="logistics_sop_check_result_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.stepresult') })"
+                  :placeholder="pi.ph('stepResult')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.confirmedby')"
+                :label="pi.label('confirmedBy')"
                 name="confirmedBy"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.confirmedBy"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.confirmedby') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('confirmedBy')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecstep.confirmedat')"
+                :label="pi.label('confirmedAt')"
                 name="confirmedAt"
               >
                 <a-date-picker
                   v-model:value="formState.confirmedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.confirmedat') })"
+                  :placeholder="pi.ph('confirmedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('blockNextStep')"
+                name="blockNextStep"
+              >
+                <TaktSelect
+                  v-model:value="formState.blockNextStep"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('blockNextStep')"
                 />
               </a-form-item>
             </a-col>
@@ -146,6 +164,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopExecStepI18n } from '../composables/use-exec-step-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopExecStepI18n()
+
 import type { SopExecStepCreate } from '@/types/logistics/manufacturing/sop/exec-step'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -157,7 +180,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["execId","stepId","stepNo","startedAt","endedAt","stepResult","confirmedBy","confirmedAt"]
+const formFields = ["plantCode","execId","stepId","stepNo","startedAt","endedAt","stepResult","confirmedBy","confirmedAt","blockNextStep"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -221,28 +245,35 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   execId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.execid') }),
-      trigger: 'blur'
+      message: pi.ph('execId'),
+      trigger: 'change'
     }
   ],
   stepId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecstep.stepid') }),
-      trigger: 'blur'
+      message: pi.ph('stepId'),
+      trigger: 'change'
     }
   ],
   stepNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.stepno') }))
+        return Promise.reject(pi.ph('stepNo'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.stepno') }))
+        return Promise.reject(pi.ph('stepNo'))
       }
       return Promise.resolve()
     },
@@ -251,10 +282,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   startedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.sopexecstep.startedat') }),
+      message: pi.ph('startedAt'),
       trigger: 'change'
     }
   ],
+  blockNextStep: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('blockNextStep'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('blockNextStep'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -273,6 +317,10 @@ function getValues(): Record<string, any> {
   if ('stepResult' in payload) {
     const rawstepResult = payload.stepResult
     payload.stepResult = typeof rawstepResult === 'number' ? rawstepResult : Number(rawstepResult)
+  }
+  if ('blockNextStep' in payload) {
+    const rawblockNextStep = payload.blockNextStep
+    payload.blockNextStep = typeof rawblockNextStep === 'number' ? rawblockNextStep : Number(rawblockNextStep)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.sopExecId = props.masterId

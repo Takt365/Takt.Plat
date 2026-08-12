@@ -515,7 +515,37 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ADMINDIVISION_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.level !== undefined && form.level !== null) {
+    return true
+  }
+  if (form.isLeaf !== undefined && form.isLeaf !== null) {
+    return true
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  if (form.divisionStatus !== undefined && form.divisionStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -528,8 +558,7 @@ function createEmptyAdvancedQueryForm() {
     level: undefined as number | undefined,
     isLeaf: undefined as number | undefined,
     isBuiltIn: undefined as number | undefined,
-    divisionStatus: undefined as number | undefined,
-  }
+    divisionStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -894,8 +923,6 @@ const toAdminDivisionNumber = (value: string | number | undefined | null): numbe
   return Number.isFinite(num) ? num : 0
 }
 
-
-
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
   if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -1049,8 +1076,7 @@ watchEffect(() => {
         onClick: (record: AdminDivisionRowRecord) => handleDeleteOne(record)
       }
     ],
-  }),
-  ]
+  })]
 })
 
 /** 行选择配置 */
@@ -1125,7 +1151,6 @@ const handleReset = () => {
     tableCurrentPage.value = firstPage
   }
 }
-
 
 /**
  * 行内状态切换
@@ -1242,7 +1267,6 @@ async function handleDelete() {
     }
   })
 }
-
 
 /** 打开导入对话框 */
 function handleImport() {

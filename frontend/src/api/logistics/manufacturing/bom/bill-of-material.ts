@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/bom
 // 文件名称：bill-of-material.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -22,12 +22,6 @@ import type {
   BillOfMaterialStatus,
   BillOfMaterialUpdate
 } from '@/types/logistics/manufacturing/bom/bill-of-material';
-import type {
-  BillOfMaterialExplosion
-} from '@/types/logistics/manufacturing/bom/bill-of-material-explosion';
-import type {
-  BillOfMaterialExplosionQuery
-} from '@/types/logistics/manufacturing/bom/bill-of-material-explosion-query';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -61,19 +55,6 @@ export function getBillOfMaterialById(id: string): Promise<BillOfMaterial> {
   return request<BillOfMaterial>({
     url: `${BILL_OF_MATERIAL_API_BASE}/${id}`,
     method: 'get',
-  });
-}
-
-/**
- * BOM 多层递归展开清单
- * @param {BillOfMaterialExplosionQuery} queryDto 展开查询参数
- * @returns {Promise<BillOfMaterialExplosion>} 展开结果
- */
-export function getBillOfMaterialExplosion(queryDto: BillOfMaterialExplosionQuery): Promise<BillOfMaterialExplosion> {
-  return request<BillOfMaterialExplosion>({
-    url: `${BILL_OF_MATERIAL_API_BASE}/explosion`,
-    method: 'get',
-    params: queryDto,
   });
 }
 

@@ -235,6 +235,7 @@ public class TaktBackupLogService : TaktServiceBase, ITaktBackupLogService
                 || SqlFunc.ToString(x.FileSizeBytes).Contains(keywords)
                 || SqlFunc.ToString(x.RunStatus).Contains(keywords)
                 || (x.ErrorMessage != null && x.ErrorMessage.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartedAt).Contains(keywords)
@@ -303,6 +304,11 @@ public class TaktBackupLogService : TaktServiceBase, ITaktBackupLogService
             exp = exp.And(x => x.ErrorMessage != null && x.ErrorMessage.Contains(queryDto.ErrorMessage));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -342,6 +348,12 @@ public class TaktBackupLogService : TaktServiceBase, ITaktBackupLogService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

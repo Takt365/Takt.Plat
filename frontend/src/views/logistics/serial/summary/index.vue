@@ -128,11 +128,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inboundNo')">
-      <a-form-item :label="pi.queryLabel('inboundNo')">
+      <div v-show="isFieldVisible('inboundCode')">
+      <a-form-item :label="pi.queryLabel('inboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.inboundNo"
-          :placeholder="pi.queryPh('inboundNo', 'required')"
+          v-model:value="advancedQueryForm.inboundCode"
+          :placeholder="pi.queryPh('inboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -169,11 +169,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('inboundSerialNo')">
+      <div v-show="isFieldVisible('inboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('inboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.inboundSerialNo"
-          :placeholder="pi.queryPh('inboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.inboundSerialCode"
+          :placeholder="pi.queryPh('inboundSerialCode', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -189,33 +189,33 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productInboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('productInboundSerialNo')">
+      <div v-show="isFieldVisible('productInboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('productInboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.productInboundSerialNo"
-          :placeholder="pi.queryPh('productInboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.productInboundSerialCode"
+          :placeholder="pi.queryPh('productInboundSerialCode', 'required')"
           show-count
           :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('outboundNo')">
-      <a-form-item :label="pi.queryLabel('outboundNo')">
+      <div v-show="isFieldVisible('outboundCode')">
+      <a-form-item :label="pi.queryLabel('outboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.outboundNo"
-          :placeholder="pi.queryPh('outboundNo', 'required')"
+          v-model:value="advancedQueryForm.outboundCode"
+          :placeholder="pi.queryPh('outboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('shippingInvoiceNo')">
-      <a-form-item :label="pi.queryLabel('shippingInvoiceNo')">
+      <div v-show="isFieldVisible('shippingInvoiceCode')">
+      <a-form-item :label="pi.queryLabel('shippingInvoiceCode')">
         <a-input
-          v-model:value="advancedQueryForm.shippingInvoiceNo"
-          :placeholder="pi.queryPh('shippingInvoiceNo', 'required')"
+          v-model:value="advancedQueryForm.shippingInvoiceCode"
+          :placeholder="pi.queryPh('shippingInvoiceCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -282,11 +282,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('outboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('outboundSerialNo')">
+      <div v-show="isFieldVisible('outboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('outboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.outboundSerialNo"
-          :placeholder="pi.queryPh('outboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.outboundSerialCode"
+          :placeholder="pi.queryPh('outboundSerialCode', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -302,11 +302,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productOutboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('productOutboundSerialNo')">
+      <div v-show="isFieldVisible('productOutboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('productOutboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.productOutboundSerialNo"
-          :placeholder="pi.queryPh('productOutboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.productOutboundSerialCode"
+          :placeholder="pi.queryPh('productOutboundSerialCode', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -527,7 +527,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -567,7 +566,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -636,8 +634,6 @@ const getSerialSummaryDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

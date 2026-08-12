@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepMediaDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopStepMedia 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopStepMedia 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopStepMediaDto : TaktCompanyDtoBase
     public long SopStepMediaId { get; set; }
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -95,7 +95,17 @@ public class TaktSopStepMediaQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -161,12 +171,17 @@ public class TaktSopStepMediaCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }
@@ -263,7 +278,17 @@ public class TaktSopStepMediaTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -311,12 +336,17 @@ public class TaktSopStepMediaImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? StepId { get; set; }
@@ -370,7 +400,12 @@ public class TaktSopStepMediaExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StepId { get; set; }

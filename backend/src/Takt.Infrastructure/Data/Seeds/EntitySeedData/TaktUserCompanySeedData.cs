@@ -108,7 +108,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
                     userCompanyRepository,
                     tenantCode,
                     user.Username,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     isDefault);
                 insertCount += inserted;
                 updateCount += updated;
@@ -138,6 +138,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         string tenantCode,
         string username,
         string companyCode,
+        string cultureCode,
         bool isDefault)
     {
         var user = await userRepository.FirstAsync(u => u.TenantCode == tenantCode && u.Username == username);
@@ -161,6 +162,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
                 UserId = user.Id,
                 CompanyCode = companyCode,
                 IsDefault = isDefaultValue,
+                CultureCode = cultureCode
             });
             return (1, 0);
         }

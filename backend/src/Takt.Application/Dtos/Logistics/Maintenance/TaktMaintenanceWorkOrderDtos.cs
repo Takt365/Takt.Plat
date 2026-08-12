@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceWorkOrderDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceWorkOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceWorkOrder 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaintenanceWorkOrderId { get; set; }
 
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护工单号
@@ -70,7 +66,7 @@ public class TaktMaintenanceWorkOrderDto : TaktApprovalDtoBase
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -306,6 +302,11 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -335,7 +336,7 @@ public class TaktMaintenanceWorkOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -638,9 +639,9 @@ public class TaktMaintenanceWorkOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -675,7 +676,7 @@ public class TaktMaintenanceWorkOrderCreateDto
     /// 设备编码（冗余）
     /// </summary>
     [Required(ErrorMessage = "设备编码（冗余）不能为空")]
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -951,6 +952,11 @@ public class TaktMaintenanceWorkOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -980,7 +986,7 @@ public class TaktMaintenanceWorkOrderTemplateDto
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -1197,9 +1203,9 @@ public class TaktMaintenanceWorkOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -1231,7 +1237,7 @@ public class TaktMaintenanceWorkOrderImportDto
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -1478,7 +1484,7 @@ public class TaktMaintenanceWorkOrderExportDto
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）

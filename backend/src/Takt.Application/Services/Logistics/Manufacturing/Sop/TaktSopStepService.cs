@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopStepService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
     }
 
     /// <summary>
-    /// 获取SOP工步列表（分页）
+    /// 获取SOP工步列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopStepDto>> GetSopStepListAsync(TaktSopStepQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopStepDto>.Create(
+                new List<TaktSopStepDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopStepRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,8 +118,8 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.StepTitle ?? e.Id.ToString(),
+            DictValue = e.StepTitle,
+            DictLabel = e.StepTitle,
         }).ToList();
     }
 
@@ -242,7 +250,15 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopStepAsync(TaktSopStepQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopStepQueryDto());
+        var queryDto = query ?? new TaktSopStepQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopStepExportDto>(),
+                sheetName ?? "SOP工步数据",
+                fileName ?? "SOP工步导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopStepRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -283,7 +299,7 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
     }
 
     /// <summary>
-    /// 保存SOP工步子表级联（SOP工步多媒体、SOP工步检验项目；Create/Update 后按主表 Id 先删后插）
+    /// 保存SOP工步子表级联（SOP工步多媒体、SOP工步检验项目；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -291,72 +307,126 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
     private async Task SaveSopStepChildrenAsync(TaktSopStep entity, TaktSopStepCreateDto dto)
     {
         // SOP工步多媒体（MediaList）
-        if (dto.MediaList is not { Count: > 0 })
+        List<TaktSopStepMediaUpdateDto>? mediaListForSave;
+        if (dto is TaktSopStepUpdateDto updateDtoForMediaList && updateDtoForMediaList.MediaList != null)
+        {
+            mediaListForSave = updateDtoForMediaList.MediaList;
+        }
+        else if (dto.MediaList != null)
+        {
+            mediaListForSave = dto.MediaList.Adapt<List<TaktSopStepMediaUpdateDto>>();
+        }
+        else
+        {
+            mediaListForSave = null;
+        }
+        if (mediaListForSave is not { Count: > 0 })
         {
             await _sopStepMediaRepository.DeleteAsync(x => x.StepId == entity.Id);
         }
         else
         {
-            var medialist = dto.MediaList.Adapt<List<TaktSopStepMedia>>();
-            foreach (var child in medialist)
+            var existingList = await _sopStepMediaRepository.GetListAsync(x => x.StepId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopStepMedia>();
+            for (var i = 0; i < mediaListForSave.Count; i++)
             {
-                child.StepId = entity.Id;
-            }
-            var medialistNeedSort = medialist.Where(c => c.SortOrder <= 0).ToList();
-            if (medialistNeedSort.Count > 0)
-            {
-                var maxSort = await _sopStepMediaRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.StepId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, medialistNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in medialist)
+                var childDto = mediaListForSave[i];
+                childDto.StepId = entity.Id;
+                if (childDto.SopStepMediaId > 0)
                 {
-                    if (child.SortOrder <= 0)
+                    if (!existingById.TryGetValue(childDto.SopStepMediaId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("SOP工步多媒体不存在（SopStepMediaId={childDto.SopStepMediaId}）");
                     }
+                    if (target.StepId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP工步多媒体不属于当前主表（SopStepMediaId={childDto.SopStepMediaId}）");
+                    }
+                    submittedIds.Add(childDto.SopStepMediaId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopStepMediaId;
+                    target.StepId = entity.Id;
+                    await _sopStepMediaRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopStepMedia>();
+                    child.Id = 0;
+                    child.StepId = entity.Id;
+                    toCreate.Add(child);
                 }
             }
-            await _sopStepMediaRepository.DeleteAsync(x => x.StepId == entity.Id);
-            foreach (var child in medialist)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _sopStepMediaRepository.DeleteAsync(removed.Id);
             }
-            await _sopStepMediaRepository.CreateRangeAsync(medialist);
+            if (toCreate.Count > 0)
+            {
+                await _sopStepMediaRepository.CreateRangeAsync(toCreate);
+            }
         }
         // SOP工步检验项目（CheckItems）
-        if (dto.CheckItems is not { Count: > 0 })
+        List<TaktSopStepCheckItemUpdateDto>? checkItemsForSave;
+        if (dto is TaktSopStepUpdateDto updateDtoForCheckItems && updateDtoForCheckItems.CheckItems != null)
+        {
+            checkItemsForSave = updateDtoForCheckItems.CheckItems;
+        }
+        else if (dto.CheckItems != null)
+        {
+            checkItemsForSave = dto.CheckItems.Adapt<List<TaktSopStepCheckItemUpdateDto>>();
+        }
+        else
+        {
+            checkItemsForSave = null;
+        }
+        if (checkItemsForSave is not { Count: > 0 })
         {
             await _sopStepCheckItemRepository.DeleteAsync(x => x.StepId == entity.Id);
         }
         else
         {
-            var checkitems = dto.CheckItems.Adapt<List<TaktSopStepCheckItem>>();
-            foreach (var child in checkitems)
+            var existingList = await _sopStepCheckItemRepository.GetListAsync(x => x.StepId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopStepCheckItem>();
+            for (var i = 0; i < checkItemsForSave.Count; i++)
             {
-                child.StepId = entity.Id;
-            }
-            var checkitemsNeedSort = checkitems.Where(c => c.SortOrder <= 0).ToList();
-            if (checkitemsNeedSort.Count > 0)
-            {
-                var maxSort = await _sopStepCheckItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.StepId == entity.Id,
-                    x => x.SortOrder);
-                var sortSeq = _sortOrderGenerator.GenerateSequenceForMaster(entity.Id, checkitemsNeedSort.Count, maxSort).ToList();
-                var sortIdx = 0;
-                foreach (var child in checkitems)
+                var childDto = checkItemsForSave[i];
+                childDto.StepId = entity.Id;
+                if (childDto.SopStepCheckItemId > 0)
                 {
-                    if (child.SortOrder <= 0)
+                    if (!existingById.TryGetValue(childDto.SopStepCheckItemId, out var target))
                     {
-                        child.SortOrder = sortSeq[sortIdx++];
+                        throw new TaktBusinessException("SOP工步检验项目不存在（SopStepCheckItemId={childDto.SopStepCheckItemId}）");
                     }
+                    if (target.StepId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP工步检验项目不属于当前主表（SopStepCheckItemId={childDto.SopStepCheckItemId}）");
+                    }
+                    submittedIds.Add(childDto.SopStepCheckItemId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopStepCheckItemId;
+                    target.StepId = entity.Id;
+                    await _sopStepCheckItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopStepCheckItem>();
+                    child.Id = 0;
+                    child.StepId = entity.Id;
+                    toCreate.Add(child);
                 }
             }
-            await _sopStepCheckItemRepository.DeleteAsync(x => x.StepId == entity.Id);
-            foreach (var child in checkitems)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _sopStepCheckItemRepository.DeleteAsync(removed.Id);
             }
-            await _sopStepCheckItemRepository.CreateRangeAsync(checkitems);
+            if (toCreate.Count > 0)
+            {
+                await _sopStepCheckItemRepository.CreateRangeAsync(toCreate);
+            }
         }
     }
     // ========================================
@@ -372,72 +442,154 @@ public class TaktSopStepService : TaktServiceBase, ITaktSopStepService
     {
         var exp = Expressionable.Create<TaktSopStep>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ContentId).Contains(keywords)
-                || SqlFunc.ToString(x.StepNo).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.StepTitle != null && x.StepTitle.Contains(keywords))
                 || (x.StepDescription != null && x.StepDescription.Contains(keywords))
                 || (x.SafetyAlert != null && x.SafetyAlert.Contains(keywords))
-                || SqlFunc.ToString(x.SafetyPopupRequired).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.ContentId.HasValue == true)
         {
-            exp = exp.And(x => x.ContentId == queryDto.ContentId);
+            var contentId = queryDto.ContentId;
+            exp = exp.And(x => x.ContentId == contentId);
         }
 
         if (queryDto?.StepNo.HasValue == true)
         {
-            exp = exp.And(x => x.StepNo == queryDto.StepNo);
+            var stepNo = queryDto.StepNo;
+            exp = exp.And(x => x.StepNo == stepNo);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.StepTitle))
+        if (!string.IsNullOrWhiteSpace(queryDto?.StepTitle))
         {
-            exp = exp.And(x => x.StepTitle != null && x.StepTitle.Contains(queryDto.StepTitle));
+            var stepTitle = queryDto.StepTitle;
+            exp = exp.And(x => x.StepTitle != null && x.StepTitle.Contains(stepTitle));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.StepDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.StepDescription))
         {
-            exp = exp.And(x => x.StepDescription != null && x.StepDescription.Contains(queryDto.StepDescription));
+            var stepDescription = queryDto.StepDescription;
+            exp = exp.And(x => x.StepDescription != null && x.StepDescription.Contains(stepDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SafetyAlert))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SafetyAlert))
         {
-            exp = exp.And(x => x.SafetyAlert != null && x.SafetyAlert.Contains(queryDto.SafetyAlert));
+            var safetyAlert = queryDto.SafetyAlert;
+            exp = exp.And(x => x.SafetyAlert != null && x.SafetyAlert.Contains(safetyAlert));
         }
 
         if (queryDto?.SafetyPopupRequired.HasValue == true)
         {
-            exp = exp.And(x => x.SafetyPopupRequired == queryDto.SafetyPopupRequired);
+            var safetyPopupRequired = queryDto.SafetyPopupRequired;
+            exp = exp.And(x => x.SafetyPopupRequired == safetyPopupRequired);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopStepQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ContentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StepNo.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StepTitle))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StepDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SafetyAlert))
+        {
+            return true;
+        }
+        if (queryDto.SafetyPopupRequired.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

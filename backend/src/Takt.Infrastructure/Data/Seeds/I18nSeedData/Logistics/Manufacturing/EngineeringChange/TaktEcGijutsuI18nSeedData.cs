@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcGijutsu 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-gijutsu）
 // 
@@ -90,23 +90,14 @@ public class TaktEcGijutsuI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecgijutsu._self
             new TranslationSeedItem("entity.ecgijutsu._self", "zh-HK", "设变技术课主表信息_hk", "实体名称"),
 
-            // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.ecgijutsu.plantcode
-            new TranslationSeedItem("entity.ecgijutsu.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-
-            // entity.ecgijutsu.ecno
-            new TranslationSeedItem("entity.ecgijutsu.ecno", "en-US", "设变单号_us", "设变单号（唯一）"),
-            // entity.ecgijutsu.ecno
-            new TranslationSeedItem("entity.ecgijutsu.ecno", "ja-JP", "设变单号_jp", "设变单号（唯一）"),
-            // entity.ecgijutsu.ecno
-            new TranslationSeedItem("entity.ecgijutsu.ecno", "zh-CN", "设变单号", "设变单号（唯一）"),
-            // entity.ecgijutsu.ecno
-            new TranslationSeedItem("entity.ecgijutsu.ecno", "zh-HK", "设变单号_hk", "设变单号（唯一）"),
+            // entity.ecgijutsu.eccode
+            new TranslationSeedItem("entity.ecgijutsu.eccode", "en-US", "设变单号_us", "设变单号（唯一）"),
+            // entity.ecgijutsu.eccode
+            new TranslationSeedItem("entity.ecgijutsu.eccode", "ja-JP", "设变单号_jp", "设变单号（唯一）"),
+            // entity.ecgijutsu.eccode
+            new TranslationSeedItem("entity.ecgijutsu.eccode", "zh-CN", "设变单号", "设变单号（唯一）"),
+            // entity.ecgijutsu.eccode
+            new TranslationSeedItem("entity.ecgijutsu.eccode", "zh-HK", "设变单号_hk", "设变单号（唯一）"),
 
             // entity.ecgijutsu.ecissuedate
             new TranslationSeedItem("entity.ecgijutsu.ecissuedate", "en-US", "发行日期_us", "发行日期"),

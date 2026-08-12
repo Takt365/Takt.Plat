@@ -133,7 +133,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var detailIds = details.Select(x => x.Id).ToList();
         var ecIds = details.Select(x => x.EcId).Distinct().ToList();
@@ -209,7 +209,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             LineNumber = detail.LineNumber,
             EcIssueDate = ec?.EcIssueDate ?? default,
             EcLeader = ec?.EcLeader ?? string.Empty,
-            EcNo = detail.EcNo,
+            EcCode = detail.EcCode,
             EcModel = detail.EcModel,
             EcNewItem = detail.EcNewItem,
             DeptCells = cells,
@@ -261,14 +261,14 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNo))
+        if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto.EcModel))
         {
@@ -316,6 +316,12 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
                 _ => exp
             };
         }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         return exp.ToExpression();
     }
 
@@ -336,7 +342,7 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var detailIds = details.Select(x => x.Id).ToList();
         var ecIds = details.Select(x => x.EcId).Distinct().ToList();
@@ -425,10 +431,10 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
             EcDetailId = detail.Id,
             EcId = detail.EcId,
             LineNumber = detail.LineNumber,
-            EcNo = detail.EcNo,
-            TechnicalLiaisonNo = FindAttachmentDocNo(attachments, TaktEcAttachmentTypeConstants.Liaison),
-            PNo = FindAttachmentDocNo(attachments, TaktEcAttachmentTypeConstants.Fpp),
-            TcjLiaisonNo = FindAttachmentDocNo(attachments, TaktEcAttachmentTypeConstants.Tcj),
+            EcCode = detail.EcCode,
+            TechnicalLiaisonNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Liaison),
+            PNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Fpp),
+            TcjLiaisonNo = FindAttachmentDocCode(attachments, TaktEcAttachmentTypeConstants.Tcj),
             EcIssueDate = ec?.EcIssueDate ?? ec?.EcEntryDate ?? default,
             EcModel = detail.EcModel,
             EcNewItem = detail.EcNewItem,
@@ -443,11 +449,11 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
     /// <param name="attachments">附件列表</param>
     /// <param name="attachmentType">文件类别</param>
     /// <returns>文件编码</returns>
-    private static string? FindAttachmentDocNo(IReadOnlyList<TaktEcAttachment> attachments, string attachmentType)
+    private static string? FindAttachmentDocCode(IReadOnlyList<TaktEcAttachment> attachments, string attachmentType)
     {
         return attachments
             .FirstOrDefault(x => string.Equals(x.AttachmentType, attachmentType, StringComparison.OrdinalIgnoreCase))
-            ?.DocNo;
+            ?.DocCode;
     }
 
     /// <summary>
@@ -455,19 +461,20 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
     /// </summary>
     /// <param name="stageCode">阶段编码</param>
     /// <param name="stageDate">阶段日期</param>
-    /// <param name="batchNo">批次号</param>
+    /// <param name="batchCode">批次号</param>
     /// <returns>阶段单元格 DTO</returns>
     private static TaktEcExecBatchTransposedStageDto MapBatchStageCell(
         string stageCode,
         DateTime? stageDate,
-        string? batchNo)
+        string? batchCode)
     {
-        var cell = TaktEcExecBatchTransposedHelper.BuildStageCell(stageCode, stageDate, batchNo);
+        var cell = TaktEcExecBatchTransposedHelper.BuildStageCell(stageCode, stageDate, batchCode);
         return new TaktEcExecBatchTransposedStageDto
         {
             StageCode = cell.StageCode,
             StageDate = cell.StageDate,
-            BatchNo = cell.BatchNo,
+            BatchNo = cell.BatchCode,
+            BatchCode = cell.BatchCode ?? string.Empty,
             DateDisplayText = cell.DateDisplayText,
         };
     }
@@ -484,14 +491,14 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords))
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto.EcNo))
+        if (!string.IsNullOrEmpty(queryDto.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto.EcModel))
         {
@@ -515,21 +522,21 @@ public class TaktEcDeptMatrixService : TaktServiceBase, ITaktEcDeptMatrixService
                 .Where(ec => ec.Id == x.EcId && ec.EcIssueDate <= end)
                 .Any());
         }
-        if (!string.IsNullOrEmpty(queryDto.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto.BatchCode))
         {
-            var batchNo = queryDto.BatchNo;
+            var batchCode = queryDto.BatchCode;
             exp = exp.And(x =>
                 SqlFunc.Subqueryable<TaktEcSeikan>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcBukan>()
-                    .Where(d => d.EcnDetailId == x.Id && d.OutboundBatch != null && d.OutboundBatch.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.OutboundBatch != null && d.OutboundBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcSeizounika>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ProductionBatch != null && d.ProductionBatch.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.ProductionBatch != null && d.ProductionBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcSeizouikka>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ProductionTeam != null && d.ProductionTeam.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.ProductionTeam != null && d.ProductionTeam.Contains(batchCode))
                     .Any());
         }
         return exp.ToExpression();

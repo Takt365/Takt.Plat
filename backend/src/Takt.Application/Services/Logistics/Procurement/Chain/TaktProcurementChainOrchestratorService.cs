@@ -451,7 +451,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
-                ItemName = item.MaterialName,
+                ItemName = item.MaterialDescription,
                 ItemDescription = $"{TaktProcurementConstants.CountersignMaterialCodePrefix}{item.MaterialCode}",
                 ItemQuantity = item.InquiryQuantity,
                 ItemAmount = item.TaxIncludedAmount
@@ -497,7 +497,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 CountersignDetailId = 0,
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
-                ItemName = item.MaterialName,
+                ItemName = item.MaterialDescription,
                 ItemDescription = $"{TaktProcurementConstants.CountersignMaterialCodePrefix}{item.MaterialCode}",
                 ItemQuantity = item.RequestQuantity,
                 ItemAmount = item.TaxIncludedAmount
@@ -639,7 +639,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 LineNumber = item.LineNumber,
                 AllocationCategory = item.AllocationCategory,
                 MaterialCode = item.MaterialCode ?? string.Empty,
-                MaterialName = item.MaterialName,
+                MaterialDescription = item.MaterialDescription,
                 MaterialSpecification = item.MaterialSpecification,
                 RequestUnit = item.InquiryUnit,
                 RequestQuantity = item.InquiryQuantity,
@@ -696,7 +696,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
                 RequestCode = request.PurchaseRequestCode,
                 RequestLineNumber = item.LineNumber,
                 MaterialCode = item.MaterialCode ?? string.Empty,
-                MaterialName = item.MaterialName,
+                MaterialDescription = item.MaterialDescription,
                 MaterialSpecification = item.MaterialSpecification,
                 PurchaseUnit = item.RequestUnit,
                 OrderQuantity = item.RequestQuantity,
@@ -746,7 +746,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             {
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = "K",
-                ItemName = item.MaterialName,
+                ItemName = item.MaterialDescription,
                 ItemDescription = item.MaterialSpecification,
                 ItemQuantity = item.OrderQuantity,
                 ItemAmount = item.TaxIncludedAmount
@@ -797,7 +797,7 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
             {
                 LineNumber = item.LineNumber > 0 ? item.LineNumber : (index + 1) * 10,
                 AllocationCategory = item.AllocationCategory ?? "K",
-                ItemName = item.MaterialName,
+                ItemName = item.MaterialDescription,
                 ItemDescription = item.MaterialSpecification,
                 ItemQuantity = item.RequestQuantity,
                 ItemAmount = item.TaxIncludedAmount

@@ -4,8 +4,8 @@
 // 文件名称：TaktDtoBase.cs
 // 创建时间：2026-05-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：DTO基类，对应实体基类 TaktTenantEntityBase 和 TaktApprovalEntityBase，提供统一的公共字段
-// 
+// 功能描述：DTO 基类，对齐 TaktTenant/Company/ApprovalEntityBase（租户 RelatedPlant+CultureCode；公司/审批 PlantCode+CultureCode）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -34,6 +34,16 @@ public abstract class TaktTenantDtoBase
     /// 公司代码（租户级实体不使用公司隔离，固定为空字符串）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code；行戳记，创建时可由仓储按公司主档注入）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -108,6 +118,16 @@ public abstract class TaktCompanyDtoBase
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，创建时由仓储注入）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -176,6 +196,16 @@ public abstract class TaktApprovalDtoBase
     /// 公司代码（第二层数据隔离）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，创建时由仓储注入）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

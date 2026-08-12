@@ -39,7 +39,7 @@ public class TaktEcChangeNotificationPush
     /// <summary>
     /// 通知单号
     /// </summary>
-    public string EcNotificationNo { get; set; } = string.Empty;
+    public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变 ID
@@ -50,7 +50,7 @@ public class TaktEcChangeNotificationPush
     /// <summary>
     /// 设变单号
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题
@@ -92,7 +92,7 @@ public class TaktEcExecutionTaskAssignedPush
     /// <summary>
     /// 设变单号
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码
@@ -129,7 +129,7 @@ public class TaktEcExecutionTaskProgressPush
     /// <summary>
     /// 设变单号
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码
@@ -181,7 +181,7 @@ public class TaktEcChangeClosedPush
     /// <summary>
     /// 设变单号
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 通知单 ID
@@ -214,7 +214,7 @@ public class TaktEcExecutionTaskAlertPush
     /// <summary>
     /// 设变单号
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门编码

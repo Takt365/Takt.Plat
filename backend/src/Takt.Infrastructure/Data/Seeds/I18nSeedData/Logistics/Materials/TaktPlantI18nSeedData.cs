@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             // entity.plant._self
             new TranslationSeedItem("entity.plant._self", "zh-HK", "Takt工厂信息_hk", "实体名称"),
 
-            // entity.plant.code
-            new TranslationSeedItem("entity.plant.code", "en-US", "工厂代码_us", "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）"),
-            // entity.plant.code
-            new TranslationSeedItem("entity.plant.code", "ja-JP", "工厂代码_jp", "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）"),
-            // entity.plant.code
-            new TranslationSeedItem("entity.plant.code", "zh-CN", "工厂代码", "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）"),
-            // entity.plant.code
-            new TranslationSeedItem("entity.plant.code", "zh-HK", "工厂代码_hk", "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）"),
-
             // entity.plant.name1
             new TranslationSeedItem("entity.plant.name1", "en-US", "工厂名称1_us", "工厂名称1"),
             // entity.plant.name1
@@ -134,15 +125,6 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.codealias", "zh-CN", "编码代号", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
             // entity.plant.codealias
             new TranslationSeedItem("entity.plant.codealias", "zh-HK", "编码代号_hk", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
-
-            // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）"),
-            // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）"),
-            // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）"),
-            // entity.plant.defaultculture
-            new TranslationSeedItem("entity.plant.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）"),
 
             // entity.plant.enterprisenature
             new TranslationSeedItem("entity.plant.enterprisenature", "en-US", "企业性质_us", "企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）"),

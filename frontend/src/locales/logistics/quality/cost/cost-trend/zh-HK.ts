@@ -15,7 +15,7 @@ export default {
     title: '質量成本推移',
     periodRange: '期間年月',
     costCategory: '成本類別',
-    costCurrency: '成本幣種',
+    currencyCode: '成本幣種',
     selectPlantRequired: '請選擇工廠代碼',
     selectPeriodRequired: '請選擇期間年月',
     summary: '成本類別行 {count} 條（按月匯總品質保證/問題/事故成本）',

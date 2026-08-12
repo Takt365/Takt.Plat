@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesGroupI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktSalesGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesgroup._self", "zh-CN", "销售组主数据信息", "实体名称"),
             // entity.salesgroup._self
             new TranslationSeedItem("entity.salesgroup._self", "zh-HK", "销售组主数据信息_hk", "实体名称"),
-
-            // entity.salesgroup.plantcode
-            new TranslationSeedItem("entity.salesgroup.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesgroup.plantcode
-            new TranslationSeedItem("entity.salesgroup.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesgroup.plantcode
-            new TranslationSeedItem("entity.salesgroup.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesgroup.plantcode
-            new TranslationSeedItem("entity.salesgroup.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.salesgroup.code
             new TranslationSeedItem("entity.salesgroup.code", "en-US", "销售组编码_us", "销售组编码（3）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktProductionChangeoverDtos.cs
-// 创建时间：2026-07-06
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionChangeover 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionChangeover 生成，请按需审阅）
 // 
@@ -35,18 +35,14 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionChangeoverId { get; set; }
 
-    /// <summary>
-    /// 生产工厂（回填：随工单）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string ChangeoverCategory { get; set; } = string.Empty;
 
@@ -58,7 +54,7 @@ public class TaktProductionChangeoverDto : TaktCompanyDtoBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -148,17 +144,22 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 生产工厂（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string? ChangeoverCategory { get; set; } = string.Empty;
 
@@ -175,7 +176,7 @@ public class TaktProductionChangeoverQueryDto : TaktPagedQuery
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -283,9 +284,9 @@ public class TaktProductionChangeoverCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产工厂（回填：随工单）
@@ -294,14 +295,14 @@ public class TaktProductionChangeoverCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
-    [Required(ErrorMessage = "切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）不能为空")]
+    [Required(ErrorMessage = "切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）不能为空")]
     public string ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -312,7 +313,7 @@ public class TaktProductionChangeoverCreateDto
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -435,19 +436,24 @@ public class TaktProductionChangeoverTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 生产工厂（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
-    public string ChangeoverCategory { get; set; } = string.Empty;
+    public string? ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -457,7 +463,7 @@ public class TaktProductionChangeoverTemplateDto
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -552,9 +558,9 @@ public class TaktProductionChangeoverImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产工厂（回填：随工单）
@@ -562,14 +568,14 @@ public class TaktProductionChangeoverImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
-    public string ChangeoverCategory { get; set; } = string.Empty;
+    public string? ChangeoverCategory { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产日期
@@ -579,7 +585,7 @@ public class TaktProductionChangeoverImportDto
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -685,12 +691,12 @@ public class TaktProductionChangeoverExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 切换类别（字典 logistics_changeover_category，存 DictValue：ASSY/PCBA）
+    /// 切换类别（字典 logistics_changeover_category；存 DictValue：ASSY/PCBA）
     /// </summary>
     public string ChangeoverCategory { get; set; } = string.Empty;
 
@@ -702,7 +708,7 @@ public class TaktProductionChangeoverExportDto
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）

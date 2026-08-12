@@ -86,7 +86,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                     repository,
                     deptRepository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     postData.PostCode,
                     postData.PostName,
                     postData.PostCategory,
@@ -215,6 +215,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<Takt.Domain.Entities.HumanResource.Organization.TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string postCode,
         string postName,
         string postCategory,
@@ -251,7 +252,8 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 ExperienceYears = 1,
                 PostStatus = 1,
                 SortOrder = sortOrder,
-                IsBuiltIn = 1
+                IsBuiltIn = 1,
+                CultureCode = cultureCode
             };
             post = await repository.CreateAsync(post);
             return (post, true);

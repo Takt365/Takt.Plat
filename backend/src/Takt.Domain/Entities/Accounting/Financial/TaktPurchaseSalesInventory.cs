@@ -24,31 +24,26 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarTable("takt_accounting_financial_purchase_sales_inventory", "进销存表")]
 [SugarIndex("ix_purchase_sales_inventory_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_purchase_sales_inventory_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_psi_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(Valuation), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_accounting_financial_psi_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(Valuation), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_accounting_financial_psi_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_accounting_financial_psi_material", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
 public class TaktPurchaseSalesInventory : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 会计期间编码（YYYYMM）
     /// </summary>
     [SugarColumn(ColumnName = "period_code", ColumnDescription = "会计期间", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
     public string PeriodCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料编码（选项 TaktMaterials/options 或 TaktMaterialPlants/options；DictValue=MaterialCode）
+    /// 物料编码（选项 TaktGeneralMaterials/options 或 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料名称（冗余）
+    /// 物料描述（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
     /// </summary>

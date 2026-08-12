@@ -34,9 +34,9 @@ export interface ModelDestination extends TenantDtoBase {
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 机种编码
@@ -65,7 +65,6 @@ export interface ModelDestination extends TenantDtoBase {
 
 }
 
-
 /**
  * ModelDestination 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -79,14 +78,19 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 物料编码
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 机种编码
@@ -135,7 +139,6 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建ModelDestination DTO
  * 对应前端 ModelDestinationCreate
@@ -148,14 +151,19 @@ export interface ModelDestinationCreate {
   tenantCode: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 物料编码
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 机种编码
@@ -189,7 +197,6 @@ export interface ModelDestinationCreate {
 
 }
 
-
 /**
  * 更新ModelDestination DTO
  * 继承 TaktModelDestinationCreateDto，添加 ModelDestinationId 字段
@@ -203,7 +210,6 @@ export interface ModelDestinationUpdate extends ModelDestinationCreate {
   modelDestinationId: string;
 
 }
-
 
 /**
  * ModelDestination 排序更新 DTO
@@ -223,7 +229,6 @@ export interface ModelDestinationSort {
 
 }
 
-
 /**
  * ModelDestination 导入模板行 DTO
  * 对应前端 ModelDestinationTemplate
@@ -236,14 +241,19 @@ export interface ModelDestinationTemplate {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 物料编码
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 机种编码
@@ -276,7 +286,6 @@ export interface ModelDestinationTemplate {
   remark?: string;
 
 }
-
 
 /**
  * ModelDestination 导入 DTO（独立实现，不继承 TemplateDto）
@@ -290,14 +299,19 @@ export interface ModelDestinationImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 物料编码
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 机种编码
@@ -330,7 +344,6 @@ export interface ModelDestinationImport {
   remark?: string;
 
 }
-
 
 /**
  * ModelDestination 导出 DTO（独立实现，不继承响应 Dto）
@@ -349,9 +362,9 @@ export interface ModelDestinationExport {
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 机种编码

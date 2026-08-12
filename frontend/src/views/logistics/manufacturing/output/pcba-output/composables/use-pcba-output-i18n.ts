@@ -27,9 +27,9 @@ export const PCBAOUTPUT_LIST_FIELDS = [
   'prodOrderCode',
   'modelCode',
   'materialCode',
-  'batchNo',
+  'batchCode',
   'prodOrderQty',
-  'serialNo',
+  'serialCode',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -37,6 +37,7 @@ export const PCBAOUTPUT_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
   plantCode: 'optional',
   prodCategory: 'select',
   prodDate: 'select',
@@ -44,9 +45,9 @@ export const PCBAOUTPUT_PLACEHOLDER = {
   prodOrderCode: 'select',
   modelCode: 'optional',
   materialCode: 'optional',
-  batchNo: 'optional',
+  batchCode: 'optional',
   prodOrderQty: 'optional',
-  serialNo: 'optional',
+  serialCode: 'optional',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -56,6 +57,7 @@ export type PcbaOutputField = keyof typeof PCBAOUTPUT_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PCBAOUTPUT_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'prodCategory',
   'prodDateStart',
@@ -64,8 +66,8 @@ export const PCBAOUTPUT_QUERY_STRING_FIELDS = [
   'prodOrderCode',
   'modelCode',
   'materialCode',
-  'batchNo',
-  'serialNo',
+  'batchCode',
+  'serialCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

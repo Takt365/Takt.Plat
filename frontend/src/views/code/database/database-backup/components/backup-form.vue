@@ -214,9 +214,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 
 /**
@@ -242,8 +246,7 @@ function applyCurrentTargetTenant(target: Record<string, unknown>, refreshDefaul
 
 const formFields = [
   'tenantCode',
-  'companyCode',
-  'companyDefaultCulture',
+  'companyCode','cultureCode',
   'backupCode',
   'targetTenantCode',
   'targetDatabaseName',
@@ -257,8 +260,7 @@ const formFields = [
   'backupFileName',
   'hasBackupPassword',
   'extField',
-  'remark',
-]
+  'remark']
 
 interface Props {
   formData?: Partial<DatabaseBackup> | null

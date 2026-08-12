@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktExpenseDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktExpenseDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -171,14 +171,14 @@ public class TaktExpenseDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.expensedetail.accounttitle
             new TranslationSeedItem("entity.expensedetail.accounttitle", "zh-HK", "会计科目_hk", "会计科目（选项 TaktAccountTitles/options；DictValue=Id）"),
 
-            // entity.expensedetail.invoiceno
-            new TranslationSeedItem("entity.expensedetail.invoiceno", "en-US", "发票号码_us", "发票号码"),
-            // entity.expensedetail.invoiceno
-            new TranslationSeedItem("entity.expensedetail.invoiceno", "ja-JP", "发票号码_jp", "发票号码"),
-            // entity.expensedetail.invoiceno
-            new TranslationSeedItem("entity.expensedetail.invoiceno", "zh-CN", "发票号码", "发票号码"),
-            // entity.expensedetail.invoiceno
-            new TranslationSeedItem("entity.expensedetail.invoiceno", "zh-HK", "发票号码_hk", "发票号码"),
+            // entity.expensedetail.invoicecode
+            new TranslationSeedItem("entity.expensedetail.invoicecode", "en-US", "发票号码_us", "发票号码"),
+            // entity.expensedetail.invoicecode
+            new TranslationSeedItem("entity.expensedetail.invoicecode", "ja-JP", "发票号码_jp", "发票号码"),
+            // entity.expensedetail.invoicecode
+            new TranslationSeedItem("entity.expensedetail.invoicecode", "zh-CN", "发票号码", "发票号码"),
+            // entity.expensedetail.invoicecode
+            new TranslationSeedItem("entity.expensedetail.invoicecode", "zh-HK", "发票号码_hk", "发票号码"),
 
             // entity.expensedetail.date
             new TranslationSeedItem("entity.expensedetail.date", "en-US", "费用发生日期_us", "费用发生日期"),

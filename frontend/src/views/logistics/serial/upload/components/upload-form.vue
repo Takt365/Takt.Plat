@@ -27,189 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.serialUploadId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('outboundDate')"
-                name="outboundDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.outboundDate"
-                  :placeholder="pi.ph('outboundDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('shippingInvoiceNo')"
-                name="shippingInvoiceNo"
-              >
-                <a-input
-                  v-model:value="formState.shippingInvoiceNo"
-                  :placeholder="pi.ph('shippingInvoiceNo')"
-                  show-count
-                  :maxlength="9"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('sequenceNo')"
-                name="sequenceNo"
-              >
-                <a-input-number
-                  v-model:value="formState.sequenceNo"
-                  :placeholder="pi.ph('sequenceNo')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.serialUploadId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('totalQuantity')"
-                name="totalQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.totalQuantity"
-                  :placeholder="pi.ph('totalQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serialNo')"
-                name="serialNo"
-              >
-                <a-input
-                  v-model:value="formState.serialNo"
-                  :placeholder="pi.ph('serialNo')"
-                  show-count
-                  :maxlength="7"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('packingQuantity')"
-                name="packingQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.packingQuantity"
-                  :placeholder="pi.ph('packingQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('transportMode')"
-                name="transportMode"
-              >
-                <a-input
-                  v-model:value="formState.transportMode"
-                  :placeholder="pi.ph('transportMode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialText')"
-                name="materialText"
-              >
-                <a-input
-                  v-model:value="formState.materialText"
-                  :placeholder="pi.ph('materialText')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -295,15 +124,14 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -325,7 +153,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 serialUploadId 才视为编辑） */
 watch(
@@ -377,21 +204,21 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  shippingInvoiceNo: [
+  shippingInvoiceCode: [
     {
       required: true,
-      message: pi.ph('shippingInvoiceNo'),
+      message: pi.ph('shippingInvoiceCode'),
       trigger: 'blur'
     }
   ],
-  sequenceNo: [{
+  sequenceCode: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('sequenceNo'))
+        return Promise.reject(pi.ph('sequenceCode'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('sequenceNo'))
+        return Promise.reject(pi.ph('sequenceCode'))
       }
       return Promise.resolve()
     },
@@ -417,10 +244,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  serialNo: [
+  serialCode: [
     {
       required: true,
-      message: pi.ph('serialNo'),
+      message: pi.ph('serialCode'),
       trigger: 'blur'
     }
   ],
@@ -462,9 +289,9 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('sequenceNo' in payload) {
-    const rawsequenceNo = payload.sequenceNo
-    payload.sequenceNo = typeof rawsequenceNo === 'number' ? rawsequenceNo : Number(rawsequenceNo)
+  if ('sequenceCode' in payload) {
+    const rawsequenceCode = payload.sequenceCode
+    payload.sequenceCode = typeof rawsequenceCode === 'number' ? rawsequenceCode : Number(rawsequenceCode)
   }
   if ('totalQuantity' in payload) {
     const rawtotalQuantity = payload.totalQuantity

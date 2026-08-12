@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopWorkstationDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopWorkstation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopWorkstation 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopWorkstationId { get; set; }
 
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工位编码（工厂内唯一）
@@ -51,7 +47,7 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -61,24 +57,24 @@ public class TaktSopWorkstationDto : TaktCompanyDtoBase
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int WorkstationStatus { get; set; } = 0;
 
 }
 
@@ -103,7 +99,12 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -118,7 +119,7 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public string? WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -128,24 +129,24 @@ public class TaktSopWorkstationQueryDto : TaktPagedQuery
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int? WorkstationStatus { get; set; }
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int? WorkstationStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -188,14 +189,14 @@ public class TaktSopWorkstationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -211,7 +212,7 @@ public class TaktSopWorkstationCreateDto
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -221,17 +222,17 @@ public class TaktSopWorkstationCreateDto
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int WorkstationStatus { get; set; } = 0;
 
@@ -285,9 +286,9 @@ public class TaktSopWorkstationStatusDto
     public long SopWorkstationId { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable_status，0=停用，1=启用）不能为空")]
+    [Required(ErrorMessage = "启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）不能为空")]
     public int WorkstationStatus { get; set; } = 0;
 }
 
@@ -335,7 +336,12 @@ public class TaktSopWorkstationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -350,7 +356,7 @@ public class TaktSopWorkstationTemplateDto
     public string? WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -360,17 +366,17 @@ public class TaktSopWorkstationTemplateDto
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? WorkstationStatus { get; set; }
 
@@ -402,12 +408,12 @@ public class TaktSopWorkstationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -422,7 +428,7 @@ public class TaktSopWorkstationImportDto
     public string? WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -432,17 +438,17 @@ public class TaktSopWorkstationImportDto
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int? WorkstationType { get; set; }
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
     /// </summary>
     public int? WorkstationStatus { get; set; }
 
@@ -480,7 +486,7 @@ public class TaktSopWorkstationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -495,7 +501,7 @@ public class TaktSopWorkstationExportDto
     public string WorkstationName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心
+    /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -505,24 +511,24 @@ public class TaktSopWorkstationExportDto
     public string? ProductionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位类型（1=装配，2=检验，3=包装，4=测试，5=其他；字典 sys_workstation_type）
+    /// 工位类型（字典 sys_workstation_type；1=装配，2=检验，3=包装，4=测试，5=其他）
     /// </summary>
     public int WorkstationType { get; set; } = 0;
 
     /// <summary>
-    /// 工艺段类型（1=SMT，2=自插，3=手插，4=修正，5=总装；字典 logistics_process_segment_type）
+    /// 工艺段类型（字典 logistics_process_segment_type；1=SMT，2=自插，3=手插，4=修正，5=总装）
     /// </summary>
     public int ProcessSegmentType { get; set; } = 0;
+
+    /// <summary>
+    /// 启用状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
+    /// </summary>
+    public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 启用状态（字典 sys_normal_disable_status，0=停用，1=启用）
-    /// </summary>
-    public int WorkstationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

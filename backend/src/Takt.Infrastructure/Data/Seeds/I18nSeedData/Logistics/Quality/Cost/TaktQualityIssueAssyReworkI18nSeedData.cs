@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueAssyReworkI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssueAssyRework 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -207,14 +207,14 @@ public class TaktQualityIssueAssyReworkI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityissueassyrework.assycustomername1
             new TranslationSeedItem("entity.qualityissueassyrework.assycustomername1", "zh-HK", "组装顾客名1_hk", "组装顾客名"),
 
-            // entity.qualityissueassyrework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnoteno", "en-US", "组装 Debit Note No_us", "组装 Debit Note No"),
-            // entity.qualityissueassyrework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnoteno", "ja-JP", "组装 Debit Note No_jp", "组装 Debit Note No"),
-            // entity.qualityissueassyrework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnoteno", "zh-CN", "组装 Debit Note No", "组装 Debit Note No"),
-            // entity.qualityissueassyrework.assydebitnoteno
-            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnoteno", "zh-HK", "组装 Debit Note No_hk", "组装 Debit Note No"),
+            // entity.qualityissueassyrework.assydebitnotecode
+            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnotecode", "en-US", "组装 Debit Note No_us", "组装 Debit Note No"),
+            // entity.qualityissueassyrework.assydebitnotecode
+            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnotecode", "ja-JP", "组装 Debit Note No_jp", "组装 Debit Note No"),
+            // entity.qualityissueassyrework.assydebitnotecode
+            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnotecode", "zh-CN", "组装 Debit Note No", "组装 Debit Note No"),
+            // entity.qualityissueassyrework.assydebitnotecode
+            new TranslationSeedItem("entity.qualityissueassyrework.assydebitnotecode", "zh-HK", "组装 Debit Note No_hk", "组装 Debit Note No"),
 
             // entity.qualityissueassyrework.assyotherexpenses2
             new TranslationSeedItem("entity.qualityissueassyrework.assyotherexpenses2", "en-US", "组装其他费用_us", "组装其他费用(元)"),

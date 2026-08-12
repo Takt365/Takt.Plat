@@ -56,11 +56,6 @@ public class TaktEmpBenefitPlan : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "expiry_date", ColumnDescription = "失效日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? ExpiryDate { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status；0=待生效 1=生效中 2=已失效）
     /// </summary>
     [SugarColumn(ColumnName = "emp_benefit_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]

@@ -78,11 +78,6 @@ public class TaktEmpSalary : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "effective_date", ColumnDescription = "生效日期", ColumnDataType = "date", IsNullable = false)]
     public DateTime EffectiveDate { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     [SugarColumn(ColumnName = "emp_salary_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]

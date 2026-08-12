@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Statistics.Logging
 // 文件名称：TaktQuartzLogService.cs
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：任务执行日志应用服务实现
 // 
@@ -52,12 +52,20 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
     }
 
     /// <summary>
-    /// 获取任务执行日志列表（分页）
+    /// 获取任务执行日志列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktQuartzLogDto>> GetQuartzLogListAsync(TaktQuartzLogQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktQuartzLogDto>.Create(
+                new List<TaktQuartzLogDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _quartzLogRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -98,8 +106,8 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.TaskName ?? e.Id.ToString(),
+            DictValue = e.TaskName,
+            DictLabel = e.TaskName,
         }).ToList();
     }
 
@@ -191,7 +199,15 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportQuartzLogAsync(TaktQuartzLogQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktQuartzLogQueryDto());
+        var queryDto = query ?? new TaktQuartzLogQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktQuartzLogExportDto>(),
+                sheetName ?? "任务执行日志数据",
+                fileName ?? "任务执行日志导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _quartzLogRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -220,113 +236,225 @@ public class TaktQuartzLogService : TaktServiceBase, ITaktQuartzLogService
     {
         var exp = Expressionable.Create<TaktQuartzLog>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.QuartzTaskId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.TaskName != null && x.TaskName.Contains(keywords))
                 || (x.JobGroup != null && x.JobGroup.Contains(keywords))
                 || (x.TaskType != null && x.TaskType.Contains(keywords))
-                || SqlFunc.ToString(x.ExecuteDuration).Contains(keywords)
                 || (x.ExecuteParams != null && x.ExecuteParams.Contains(keywords))
                 || (x.ExecuteMessage != null && x.ExecuteMessage.Contains(keywords))
                 || (x.ErrorInfo != null && x.ErrorInfo.Contains(keywords))
                 || (x.ExecuteIp != null && x.ExecuteIp.Contains(keywords))
                 || (x.ExecuteHost != null && x.ExecuteHost.Contains(keywords))
-                || SqlFunc.ToString(x.ExecuteStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ExecuteTime).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.QuartzTaskId.HasValue == true)
         {
-            exp = exp.And(x => x.QuartzTaskId == queryDto.QuartzTaskId);
+            var quartzTaskId = queryDto.QuartzTaskId;
+            exp = exp.And(x => x.QuartzTaskId == quartzTaskId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TaskName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaskName))
         {
-            exp = exp.And(x => x.TaskName != null && x.TaskName.Contains(queryDto.TaskName));
+            var taskName = queryDto.TaskName;
+            exp = exp.And(x => x.TaskName != null && x.TaskName.Contains(taskName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.JobGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.JobGroup))
         {
-            exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(queryDto.JobGroup));
+            var jobGroup = queryDto.JobGroup;
+            exp = exp.And(x => x.JobGroup != null && x.JobGroup.Contains(jobGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TaskType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaskType))
         {
-            exp = exp.And(x => x.TaskType != null && x.TaskType.Contains(queryDto.TaskType));
+            var taskType = queryDto.TaskType;
+            exp = exp.And(x => x.TaskType != null && x.TaskType.Contains(taskType));
         }
 
         if (queryDto?.ExecuteDuration.HasValue == true)
         {
-            exp = exp.And(x => x.ExecuteDuration == queryDto.ExecuteDuration);
+            var executeDuration = queryDto.ExecuteDuration;
+            exp = exp.And(x => x.ExecuteDuration == executeDuration);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExecuteParams))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExecuteParams))
         {
-            exp = exp.And(x => x.ExecuteParams != null && x.ExecuteParams.Contains(queryDto.ExecuteParams));
+            var executeParams = queryDto.ExecuteParams;
+            exp = exp.And(x => x.ExecuteParams != null && x.ExecuteParams.Contains(executeParams));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExecuteMessage))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExecuteMessage))
         {
-            exp = exp.And(x => x.ExecuteMessage != null && x.ExecuteMessage.Contains(queryDto.ExecuteMessage));
+            var executeMessage = queryDto.ExecuteMessage;
+            exp = exp.And(x => x.ExecuteMessage != null && x.ExecuteMessage.Contains(executeMessage));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ErrorInfo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ErrorInfo))
         {
-            exp = exp.And(x => x.ErrorInfo != null && x.ErrorInfo.Contains(queryDto.ErrorInfo));
+            var errorInfo = queryDto.ErrorInfo;
+            exp = exp.And(x => x.ErrorInfo != null && x.ErrorInfo.Contains(errorInfo));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExecuteIp))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExecuteIp))
         {
-            exp = exp.And(x => x.ExecuteIp != null && x.ExecuteIp.Contains(queryDto.ExecuteIp));
+            var executeIp = queryDto.ExecuteIp;
+            exp = exp.And(x => x.ExecuteIp != null && x.ExecuteIp.Contains(executeIp));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExecuteHost))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExecuteHost))
         {
-            exp = exp.And(x => x.ExecuteHost != null && x.ExecuteHost.Contains(queryDto.ExecuteHost));
+            var executeHost = queryDto.ExecuteHost;
+            exp = exp.And(x => x.ExecuteHost != null && x.ExecuteHost.Contains(executeHost));
         }
 
         if (queryDto?.ExecuteStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ExecuteStatus == queryDto.ExecuteStatus);
+            var executeStatus = queryDto.ExecuteStatus;
+            exp = exp.And(x => x.ExecuteStatus == executeStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.ExecuteTimeStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExecuteTime >= queryDto.ExecuteTimeStart);
+            var executeTimeStart = queryDto.ExecuteTimeStart;
+            exp = exp.And(x => x.ExecuteTime >= executeTimeStart);
         }
 
         if (queryDto?.ExecuteTimeEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExecuteTime <= queryDto.ExecuteTimeEnd);
+            var executeTimeEnd = queryDto.ExecuteTimeEnd;
+            exp = exp.And(x => x.ExecuteTime <= executeTimeEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktQuartzLogQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.QuartzTaskId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaskName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.JobGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaskType))
+        {
+            return true;
+        }
+        if (queryDto.ExecuteDuration.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExecuteParams))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExecuteMessage))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ErrorInfo))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExecuteIp))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExecuteHost))
+        {
+            return true;
+        }
+        if (queryDto.ExecuteStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ExecuteTimeStart.HasValue || queryDto.ExecuteTimeEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

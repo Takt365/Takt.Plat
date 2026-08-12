@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,41 +90,41 @@ public class TaktBomMaterialCostI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcost._self
             new TranslationSeedItem("entity.bommaterialcost._self", "zh-HK", "BOM 物料成本汇总表信息_hk", "实体名称"),
 
-            // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcost.plantcode
-            new TranslationSeedItem("entity.bommaterialcost.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.bommaterialcost.modelcode
-            new TranslationSeedItem("entity.bommaterialcost.modelcode", "en-US", "机种编码_us", "机种编码（关联 TaktModelDestination.ModelCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelcode", "en-US", "机种编码_us", "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>"),
             // entity.bommaterialcost.modelcode
-            new TranslationSeedItem("entity.bommaterialcost.modelcode", "ja-JP", "机种编码_jp", "机种编码（关联 TaktModelDestination.ModelCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelcode", "ja-JP", "机种编码_jp", "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>"),
             // entity.bommaterialcost.modelcode
-            new TranslationSeedItem("entity.bommaterialcost.modelcode", "zh-CN", "机种编码", "机种编码（关联 TaktModelDestination.ModelCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelcode", "zh-CN", "机种编码", "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>"),
             // entity.bommaterialcost.modelcode
-            new TranslationSeedItem("entity.bommaterialcost.modelcode", "zh-HK", "机种编码_hk", "机种编码（关联 TaktModelDestination.ModelCode）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelcode", "zh-HK", "机种编码_hk", "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>"),
 
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "en-US", "机种月平均成本_us", "机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "en-US", "机种月成本_us", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "ja-JP", "机种月平均成本_jp", "机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "ja-JP", "机种月成本_jp", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-CN", "机种月平均成本", "机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-CN", "机种月成本", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-HK", "机种月平均成本_hk", "机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-HK", "机种月成本_hk", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
+
+            // entity.bommaterialcost.materialtype
+            new TranslationSeedItem("entity.bommaterialcost.materialtype", "en-US", "物料类型_us", "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>"),
+            // entity.bommaterialcost.materialtype
+            new TranslationSeedItem("entity.bommaterialcost.materialtype", "ja-JP", "物料类型_jp", "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>"),
+            // entity.bommaterialcost.materialtype
+            new TranslationSeedItem("entity.bommaterialcost.materialtype", "zh-CN", "物料类型", "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>"),
+            // entity.bommaterialcost.materialtype
+            new TranslationSeedItem("entity.bommaterialcost.materialtype", "zh-HK", "物料类型_hk", "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>"),
 
             // entity.bommaterialcost.productcode
-            new TranslationSeedItem("entity.bommaterialcost.productcode", "en-US", "产品编码_us", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
+            new TranslationSeedItem("entity.bommaterialcost.productcode", "en-US", "产品编码_us", "产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>"),
             // entity.bommaterialcost.productcode
-            new TranslationSeedItem("entity.bommaterialcost.productcode", "ja-JP", "产品编码_jp", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
+            new TranslationSeedItem("entity.bommaterialcost.productcode", "ja-JP", "产品编码_jp", "产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>"),
             // entity.bommaterialcost.productcode
-            new TranslationSeedItem("entity.bommaterialcost.productcode", "zh-CN", "产品编码", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
+            new TranslationSeedItem("entity.bommaterialcost.productcode", "zh-CN", "产品编码", "产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>"),
             // entity.bommaterialcost.productcode
-            new TranslationSeedItem("entity.bommaterialcost.productcode", "zh-HK", "产品编码_hk", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
+            new TranslationSeedItem("entity.bommaterialcost.productcode", "zh-HK", "产品编码_hk", "产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>"),
 
             // entity.bommaterialcost.productdescription
             new TranslationSeedItem("entity.bommaterialcost.productdescription", "en-US", "产品描述_us", "产品描述"),

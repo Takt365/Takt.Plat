@@ -212,10 +212,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.empbenefitplan.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.empbenefitplan.relatedplant') })"
           show-count
           :maxlength="4"
@@ -395,7 +395,7 @@ const advancedQueryForm = ref({
   expiryDateStart: '',
   expiryDateEnd: '',
   empBenefitStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -412,12 +412,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'expiryDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.expirydate')) },
   { key: 'expiryDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.empbenefitplan.expirydate')) },
   { key: 'empBenefitStatus', label: t('entity.empbenefitplan.empbenefitstatus') },
-  { key: 'relatedPlant', label: t('entity.empbenefitplan.relatedplant') },
+  { key: 'plantCode', label: t('entity.empbenefitplan.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -435,7 +434,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -470,7 +468,7 @@ function buildListQuery(overrides?: Partial<EmpBenefitPlanQuery>): EmpBenefitPla
   if (form.empBenefitStatus !== undefined && form.empBenefitStatus !== null) {
     query.empBenefitStatus = form.empBenefitStatus
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -483,12 +481,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -566,12 +558,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.empbenefitplan.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getEmpBenefitPlanField(record, 'plantCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -603,7 +595,6 @@ const getEmpBenefitPlanId = (record: any): string => record?.[entityIdName] ?? '
  * @param field 字段名
  */
 const getEmpBenefitPlanField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -682,7 +673,7 @@ function handleReset() {
   expiryDateStart: '',
   expiryDateEnd: '',
   empBenefitStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -866,7 +857,7 @@ function handleAdvancedQueryReset() {
   expiryDateStart: '',
   expiryDateEnd: '',
   empBenefitStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

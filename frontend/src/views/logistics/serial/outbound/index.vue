@@ -135,22 +135,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('outboundNo')">
-      <a-form-item :label="pi.queryLabel('outboundNo')">
+      <div v-show="isFieldVisible('outboundCode')">
+      <a-form-item :label="pi.queryLabel('outboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.outboundNo"
-          :placeholder="pi.queryPh('outboundNo', 'required')"
+          v-model:value="advancedQueryForm.outboundCode"
+          :placeholder="pi.queryPh('outboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('shippingInvoiceNo')">
-      <a-form-item :label="pi.queryLabel('shippingInvoiceNo')">
+      <div v-show="isFieldVisible('shippingInvoiceCode')">
+      <a-form-item :label="pi.queryLabel('shippingInvoiceCode')">
         <a-input
-          v-model:value="advancedQueryForm.shippingInvoiceNo"
-          :placeholder="pi.queryPh('shippingInvoiceNo', 'required')"
+          v-model:value="advancedQueryForm.shippingInvoiceCode"
+          :placeholder="pi.queryPh('shippingInvoiceCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -494,7 +494,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -567,22 +566,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'plantCode') ?? ''
   },
   {
-    title: pi.label('outboundNo'),
-    dataIndex: 'outboundNo',
-    key: 'outboundNo',
+    title: pi.label('outboundCode'),
+    dataIndex: 'outboundCode',
+    key: 'outboundCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'outboundNo') ?? ''
+    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'outboundCode') ?? ''
   },
   {
-    title: pi.label('shippingInvoiceNo'),
-    dataIndex: 'shippingInvoiceNo',
-    key: 'shippingInvoiceNo',
+    title: pi.label('shippingInvoiceCode'),
+    dataIndex: 'shippingInvoiceCode',
+    key: 'shippingInvoiceCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'shippingInvoiceNo') ?? ''
+    customRender: ({ record }: { record: any }) => getSerialOutboundField(record, 'shippingInvoiceCode') ?? ''
   },
   {
     title: pi.label('outboundDate'),
@@ -693,8 +692,6 @@ const getSerialOutboundDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -754,8 +751,8 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  outboundNo: '',
-  shippingInvoiceNo: '',
+  outboundCode: '',
+  shippingInvoiceCode: '',
   outboundDateStart: '',
   outboundDateEnd: '',
   destination: '',
@@ -963,8 +960,8 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  outboundNo: '',
-  shippingInvoiceNo: '',
+  outboundCode: '',
+  shippingInvoiceCode: '',
   outboundDateStart: '',
   outboundDateEnd: '',
   destination: '',

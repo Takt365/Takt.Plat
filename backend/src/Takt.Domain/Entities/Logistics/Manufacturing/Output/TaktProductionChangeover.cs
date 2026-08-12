@@ -21,19 +21,14 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 [SugarTable("takt_logistics_manufacturing_output_production_changeover", "生产切换记录表")]
 [SugarIndex("ix_production_changeover_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_changeover_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_production_changeover_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(CurrentProdOrderCode), OrderByType.Asc, nameof(CurrentModelCode), OrderByType.Asc, nameof(ChangeoverProdOrderCode), OrderByType.Asc, nameof(ChangeoverModelCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_production_changeover_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(CurrentProdOrderCode), OrderByType.Asc, nameof(CurrentModelCode), OrderByType.Asc, nameof(ChangeoverProdOrderCode), OrderByType.Asc, nameof(ChangeoverModelCode), OrderByType.Asc, true)]
 public class TaktProductionChangeover : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 生产工厂（回填：随工单）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "生产工厂", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ProdCategory { get; set; }
 
     /// <summary>
@@ -51,8 +46,8 @@ public class TaktProductionChangeover : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 按工厂过滤）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? ProdTeam { get; set; }
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? TeamCode { get; set; }
 
     /// <summary>
     /// 当前工单（切换前工单号，选项 TaktProductionOrders/options，按 PlantCode 过滤）
@@ -63,7 +58,7 @@ public class TaktProductionChangeover : TaktCompanyEntityBase
     /// <summary>
     /// 当前机种（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "current_model_code", ColumnDescription = "当前机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "current_model_code", ColumnDescription = "当前机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string CurrentModelCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -75,7 +70,7 @@ public class TaktProductionChangeover : TaktCompanyEntityBase
     /// <summary>
     /// 切换后机种（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "changeover_model_code", ColumnDescription = "切换后机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "changeover_model_code", ColumnDescription = "切换后机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ChangeoverModelCode { get; set; } = string.Empty;
 
     /// <summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialInboundDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialInbound 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialInbound 生成，请按需审阅）
 // 
@@ -35,15 +35,11 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SerialInboundId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    public string InboundNo { get; set; } = string.Empty;
+    public string InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -56,12 +52,12 @@ public class TaktSerialInboundDto : TaktCompanyDtoBase
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
 
@@ -99,14 +95,19 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    public string? InboundNo { get; set; } = string.Empty;
+    public string? InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期（范围查询-开始）
@@ -124,12 +125,12 @@ public class TaktSerialInboundQueryDto : TaktPagedQuery
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -179,21 +180,21 @@ public class TaktSerialInboundCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
     [Required(ErrorMessage = "入库单号（租户+公司+工厂内唯一）不能为空")]
-    public string InboundNo { get; set; } = string.Empty;
+    public string InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -206,15 +207,15 @@ public class TaktSerialInboundCreateDto
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）不能为空")]
+    [Required(ErrorMessage = "仓库编码（选项 TaktWarehouses/options；DictValue=Id）不能为空")]
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）不能为空")]
+    [Required(ErrorMessage = "库位编码（选项 TaktStorageLocations/options；DictValue=Id）不能为空")]
     public string LocationCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -225,7 +226,7 @@ public class TaktSerialInboundCreateDto
     /// <summary>
     /// 序列号入库明细列表（主子表关系）（子表，级联保存）
     /// </summary>
-    public List<TaktSerialInboundItemUpdateDto>? Items { get; set; }
+    public List<TaktSerialInboundItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -257,6 +258,11 @@ public class TaktSerialInboundUpdateDto : TaktSerialInboundCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SerialInboundId { get; set; }
 
+    /// <summary>
+    /// 序列号入库明细列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktSerialInboundItemUpdateDto>? Items { get; set; }
+
 }
 
 // ========================================
@@ -279,14 +285,19 @@ public class TaktSerialInboundTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    public string? InboundNo { get; set; } = string.Empty;
+    public string? InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -299,12 +310,12 @@ public class TaktSerialInboundTemplateDto
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -346,19 +357,19 @@ public class TaktSerialInboundImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    public string? InboundNo { get; set; } = string.Empty;
+    public string? InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -371,12 +382,12 @@ public class TaktSerialInboundImportDto
     public int? InboundType { get; set; }
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     public string? WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
     public string? LocationCode { get; set; } = string.Empty;
 
@@ -424,14 +435,14 @@ public class TaktSerialInboundExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库单号（租户+公司+工厂内唯一）
     /// </summary>
-    public string InboundNo { get; set; } = string.Empty;
+    public string InboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 入库日期
@@ -444,12 +455,12 @@ public class TaktSerialInboundExportDto
     public int InboundType { get; set; } = 0;
 
     /// <summary>
-    /// 仓库编码（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options）
+    /// 仓库编码（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     public string WarehouseCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 库位编码（关联 TaktStorageLocation.LocationCode，选项 TaktStorageLocations/options）
+    /// 库位编码（选项 TaktStorageLocations/options；DictValue=Id）
     /// </summary>
     public string LocationCode { get; set; } = string.Empty;
 

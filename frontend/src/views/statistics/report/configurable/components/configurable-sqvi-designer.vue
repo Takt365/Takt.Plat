@@ -47,8 +47,8 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item :label="t('common.page.entity.companydefaultculture')" name="companyDefaultCulture">
-              <a-input v-model:value="formState.companyDefaultCulture" size="small" disabled />
+            <a-form-item :label="t('common.page.entity.culturecode')" name="cultureCode">
+              <a-input v-model:value="formState.cultureCode" size="small" disabled />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -744,9 +744,8 @@ const fieldTreeLoading = ref(false)
 
 /** CreateDto 主表字段名 */
 const formFields = [
-  'tenantCode', 'companyCode', 'companyDefaultCulture', 'reportCode', 'reportName',
-  'reportDomain', 'reportSubCategory', 'distinctRows',   'maxExportRows', 'maxQueryRows', 'isPublic', 'reportStatus', 'remark',
-]
+  'tenantCode', 'companyCode', 'cultureCode', 'reportCode', 'reportName',
+  'reportDomain', 'reportSubCategory', 'distinctRows',   'maxExportRows', 'maxQueryRows', 'isPublic', 'reportStatus', 'remark']
 
 /**
  * 注入租户/公司/默认语言
@@ -760,8 +759,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 
@@ -967,14 +966,12 @@ const wizardSteps = computed((): SqviWizardStepItem[] => {
       { id: 'basic', title: t('statistics.report.configurable.page.sqvi.steps.basicinfo') },
       { id: 'join', title: t('statistics.report.configurable.page.sqvi.steps.joindesign') },
       { id: 'fields', title: t('statistics.report.configurable.page.sqvi.steps.datalist') },
-      { id: 'advanced', title: t('statistics.report.configurable.page.sqvi.steps.advanced') },
-    ]
+      { id: 'advanced', title: t('statistics.report.configurable.page.sqvi.steps.advanced') }]
   }
   return [
     { id: 'basic', title: t('statistics.report.configurable.page.sqvi.steps.basicinfo') },
     { id: 'fields', title: t('statistics.report.configurable.page.sqvi.steps.datalist') },
-    { id: 'advanced', title: t('statistics.report.configurable.page.sqvi.steps.advanced') },
-  ]
+    { id: 'advanced', title: t('statistics.report.configurable.page.sqvi.steps.advanced') }]
 })
 
 /** 当前步骤标识 */
@@ -994,8 +991,7 @@ const sourceTypeOptions = computed(() => [
   {
     value: 'join',
     label: t('statistics.report.configurable.page.sqvi.sourcetype.join'),
-  },
-])
+  }])
 
 /** 比较符下拉 */
 const primaryTableOptions = computed(() => tablesByTenant.value[primaryCatalogTenant.value] ?? [])
@@ -1021,8 +1017,7 @@ const joinTypeOptions = computed(() => [
   { value: 1, label: t('statistics.report.configurable.page.sqvi.jointype.inner') },
   { value: 2, label: t('statistics.report.configurable.page.sqvi.jointype.left') },
   { value: 3, label: t('statistics.report.configurable.page.sqvi.jointype.right') },
-  { value: 4, label: t('statistics.report.configurable.page.sqvi.jointype.full') },
-])
+  { value: 4, label: t('statistics.report.configurable.page.sqvi.jointype.full') }])
 
 /** 步骤 3 字段树表列（SQVI：字段清单(描述) / 清单字段 / 选择字段 / 字段名称） */
 const fieldTreeColumns = computed(() => [
@@ -1049,8 +1044,7 @@ const fieldTreeColumns = computed(() => [
     title: t('statistics.report.configurable.page.sqvi.fieldtree.fieldname'),
     key: 'technical',
     width: 220,
-  },
-])
+  }])
 
 /** 字段树是否有可用数据源（含选表器兜底） */
 const hasFieldTreeSources = computed(() => resolveFieldTreeSourceRows().length > 0)
@@ -1113,8 +1107,7 @@ const fieldTreeData = computed((): SqviFieldTreeNode[] => {
       nodeType: 'root',
       title: t('statistics.report.configurable.page.sqvi.fieldtree.root'),
       children: sourceNodes,
-    },
-  ]
+    }]
 })
 
 /** 表连接只读预览列（高级步骤） */
@@ -1123,8 +1116,7 @@ const joinReadonlyColumns = computed(() => [
   { title: t('entity.configurablejoin.leftsourcealias'), key: 'leftSourceAlias', width: 100 },
   { title: t('entity.configurablejoin.leftcolumnname'), key: 'leftColumnName', width: 120 },
   { title: t('entity.configurablejoin.rightsourcealias'), key: 'rightSourceAlias', width: 100 },
-  { title: t('entity.configurablejoin.rightcolumnname'), key: 'rightColumnName', width: 120 },
-])
+  { title: t('entity.configurablejoin.rightcolumnname'), key: 'rightColumnName', width: 120 }])
 
 /** 已配置数据源别名选项（表连接筛选用） */
 const configuredSourceAliasOptions = computed(() =>
@@ -1331,7 +1323,7 @@ function scopeDefaults() {
   return {
     tenantCode: tenantStore.tenantCode,
     companyCode: tenantStore.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
   }
 }
 
@@ -1578,8 +1570,7 @@ function resolveFieldTreeSourceRows(): Array<Record<string, unknown>> {
         sourceAlias: alias,
         tableName,
         isPrimary: 1,
-      },
-    ]
+      }]
   }
   if (isJoinMode.value && tenantCode && tableName && joinTableName.value?.trim()) {
     const joinAlias = joinTableAlias.value?.trim() || 'B'
@@ -1595,8 +1586,7 @@ function resolveFieldTreeSourceRows(): Array<Record<string, unknown>> {
         sourceAlias: joinAlias,
         tableName: joinTableName.value.trim(),
         isPrimary: 0,
-      },
-    ]
+      }]
   }
   return []
 }

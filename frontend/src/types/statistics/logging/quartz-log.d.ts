@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/statistics/logging
 // 文件名称：quartz-log.d.ts
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：statistics/logging 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -119,6 +119,16 @@ export interface QuartzLogQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
    * 关联定时任务 ID
    */
   quartzTaskId?: string;
@@ -223,9 +233,14 @@ export interface QuartzLogCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
 
   /**
    * 关联定时任务 ID
@@ -349,6 +364,11 @@ export interface QuartzLogExport {
    * 公司代码
    */
   companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
 
   /**
    * 关联定时任务 ID

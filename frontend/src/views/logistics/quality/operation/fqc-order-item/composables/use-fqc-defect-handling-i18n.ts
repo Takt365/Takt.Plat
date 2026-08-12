@@ -97,6 +97,7 @@ export const FQCDEFECTHANDLING_PLACEHOLDER = {
   attachments: 'optional',
   handlingStatus: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */

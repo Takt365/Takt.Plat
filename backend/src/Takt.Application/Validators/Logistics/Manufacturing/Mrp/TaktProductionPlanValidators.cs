@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionPlan 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktProductionPlan 生成，请按需审阅）
 // 
@@ -35,9 +35,12 @@ public class TaktProductionPlanCreateValidator : AbstractValidator<TaktProductio
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ProductionPlanCode)
             .NotEmpty().WithMessage("生产计划编码不能为空")
             .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");
@@ -79,9 +82,12 @@ public class TaktProductionPlanUpdateValidator : AbstractValidator<TaktProductio
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.ProductionPlanCode)
             .NotEmpty().WithMessage("生产计划编码不能为空")
             .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");
@@ -119,9 +125,10 @@ public class TaktProductionPlanImportValidator : AbstractValidator<TaktProductio
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(50).WithMessage("工厂代码长度不能超过50个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.ProductionPlanCode)
             .NotEmpty().WithMessage("生产计划编码不能为空")
             .MaximumLength(10).WithMessage("生产计划编码长度不能超过10个字符");

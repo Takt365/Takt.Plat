@@ -275,12 +275,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="pi.queryLabel('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -691,7 +691,7 @@ function matchesProfitCenterRightQuery(record: Record<string, unknown>): boolean
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
   if (advancedQueryForm.value.validToStart && !String(record.validToStart ?? '').includes(String(advancedQueryForm.value.validToStart))) return false
   if (advancedQueryForm.value.validToEnd && !String(record.validToEnd ?? '').includes(String(advancedQueryForm.value.validToEnd))) return false
-  if (advancedQueryForm.value.relatedPlant && !String(record.relatedPlant ?? '').includes(String(advancedQueryForm.value.relatedPlant))) return false
+  if (advancedQueryForm.value.plantCode && !String(record.plantCode ?? '').includes(String(advancedQueryForm.value.plantCode))) return false
   if (advancedQueryForm.value.profitCenterStatus !== undefined && record.profitCenterStatus !== advancedQueryForm.value.profitCenterStatus) return false
   if (advancedQueryForm.value.createdAtStart && !String(record.createdAtStart ?? '').includes(String(advancedQueryForm.value.createdAtStart))) return false
   if (advancedQueryForm.value.createdAtEnd && !String(record.createdAtEnd ?? '').includes(String(advancedQueryForm.value.createdAtEnd))) return false
@@ -737,7 +737,7 @@ function buildProfitCenterUpdateDto(
     profitCenterId: String(profitCenter.profitCenterId),
     tenantCode: profitCenter.tenantCode,
     companyCode: profitCenter.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     profitCenterCode: profitCenter.profitCenterCode,
     profitCenterName: profitCenter.profitCenterName,
     parentId: overrides.parentId,
@@ -748,7 +748,7 @@ function buildProfitCenterUpdateDto(
     profitCenterLevel: profitCenter.profitCenterLevel,
     validFrom: profitCenter.validFrom,
     validTo: profitCenter.validTo,
-    relatedPlant: profitCenter.relatedPlant,
+    plantCode: profitCenter.plantCode,
     profitCenterStatus: profitCenter.profitCenterStatus,
     extField: profitCenter.extField,
     remark: profitCenter.remark,
@@ -859,8 +859,6 @@ const toProfitCenterNumber = (value: string | number | undefined | null): number
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
-
-
 
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -976,13 +974,13 @@ watchEffect(() => {
     customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'validTo') ?? ''
   },
   {
-    title: pi.label('relatedPlant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getProfitCenterField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('profitCenterStatus'),
@@ -1011,8 +1009,7 @@ watchEffect(() => {
         onClick: (record: ProfitCenterRowRecord) => handleDeleteOne(record)
       }
     ],
-  }),
-  ]
+  })]
 })
 
 /** 行选择配置 */
@@ -1071,7 +1068,6 @@ const handleReset = () => {
   advancedQueryForm.value = createEmptyAdvancedQueryForm()
   tableCurrentPage.value = getTaktDefaultPageIndex()
 }
-
 
 /**
  * 行内状态切换
@@ -1188,7 +1184,6 @@ async function handleDelete() {
     }
   })
 }
-
 
 /** 打开导入对话框 */
 function handleImport() {

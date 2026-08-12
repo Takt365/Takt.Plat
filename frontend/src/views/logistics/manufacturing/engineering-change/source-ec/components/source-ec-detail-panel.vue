@@ -117,11 +117,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceLegacyPartNo')">
-      <a-form-item :label="t('entity.sourceecdetail.sourcelegacypartno')">
+      <div v-show="isFieldVisible('sourceLegacyPartCode')">
+      <a-form-item :label="t('entity.sourceecdetail.sourcelegacypartCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceLegacyPartNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcelegacypartno') })"
+          v-model:value="advancedQueryForm.sourceLegacyPartCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcelegacypartCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -159,11 +159,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceReplacementPartNo')">
-      <a-form-item :label="t('entity.sourceecdetail.sourcereplacementpartno')">
+      <div v-show="isFieldVisible('sourceReplacementPartCode')">
+      <a-form-item :label="t('entity.sourceecdetail.sourcereplacementpartCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceReplacementPartNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcereplacementpartno') })"
+          v-model:value="advancedQueryForm.sourceReplacementPartCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcereplacementpartCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -201,11 +201,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sourceBomNo')">
-      <a-form-item :label="t('entity.sourceecdetail.sourcebomno')">
+      <div v-show="isFieldVisible('sourceBomCode')">
+      <a-form-item :label="t('entity.sourceecdetail.sourcebomCode')">
         <a-input
-          v-model:value="advancedQueryForm.sourceBomNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcebomno') })"
+          v-model:value="advancedQueryForm.sourceBomCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceecdetail.sourcebomCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -430,15 +430,15 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   sourceFinishedProduct: '',
   sourceParentPart: '',
-  sourceLegacyPartNo: '',
+  sourceLegacyPartCode: '',
   sourceLegacyPartName: '',
   sourceLegacyUsage: undefined as number | undefined,
   sourceLegacyMountingPosition: '',
-  sourceReplacementPartNo: '',
+  sourceReplacementPartCode: '',
   sourceReplacementPartName: '',
   sourceReplacementUsage: undefined as number | undefined,
   sourceReplacementMountingPosition: '',
-  sourceBomNo: '',
+  sourceBomCode: '',
   SourceCompatibility: '',
   sourceDistinction: '',
   SourceInstruction: '',
@@ -456,15 +456,15 @@ const visibleQueryFieldKeys = ref<string[]>([])
 const queryFieldsMeta = computed(() => [
   { key: 'sourceFinishedProduct', label: t('entity.sourceecdetail.sourcefinishedproduct') },
   { key: 'sourceParentPart', label: t('entity.sourceecdetail.sourceparentpart') },
-  { key: 'sourceLegacyPartNo', label: t('entity.sourceecdetail.sourcelegacypartno') },
+  { key: 'sourceLegacyPartCode', label: t('entity.sourceecdetail.sourcelegacypartCode') },
   { key: 'sourceLegacyPartName', label: t('entity.sourceecdetail.sourcelegacypartname') },
   { key: 'sourceLegacyUsage', label: t('entity.sourceecdetail.sourcelegacyusage') },
   { key: 'sourceLegacyMountingPosition', label: t('entity.sourceecdetail.sourcelegacymountingposition') },
-  { key: 'sourceReplacementPartNo', label: t('entity.sourceecdetail.sourcereplacementpartno') },
+  { key: 'sourceReplacementPartCode', label: t('entity.sourceecdetail.sourcereplacementpartCode') },
   { key: 'sourceReplacementPartName', label: t('entity.sourceecdetail.sourcereplacementpartname') },
   { key: 'sourceReplacementUsage', label: t('entity.sourceecdetail.sourcereplacementusage') },
   { key: 'sourceReplacementMountingPosition', label: t('entity.sourceecdetail.sourcereplacementmountingposition') },
-  { key: 'sourceBomNo', label: t('entity.sourceecdetail.sourcebomno') },
+  { key: 'sourceBomCode', label: t('entity.sourceecdetail.sourcebomCode') },
   { key: 'SourceCompatibility', label: t('entity.sourceecdetail.SourceCompatibility') },
   { key: 'sourceDistinction', label: t('entity.sourceecdetail.sourcedistinction') },
   { key: 'SourceInstruction', label: t('entity.sourceecdetail.SourceInstruction') },
@@ -474,8 +474,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -499,15 +498,15 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   sourceFinishedProduct: '',
   sourceParentPart: '',
-  sourceLegacyPartNo: '',
+  sourceLegacyPartCode: '',
   sourceLegacyPartName: '',
   sourceLegacyUsage: undefined as number | undefined,
   sourceLegacyMountingPosition: '',
-  sourceReplacementPartNo: '',
+  sourceReplacementPartCode: '',
   sourceReplacementPartName: '',
   sourceReplacementUsage: undefined as number | undefined,
   sourceReplacementMountingPosition: '',
-  sourceBomNo: '',
+  sourceBomCode: '',
   SourceCompatibility: '',
   sourceDistinction: '',
   SourceInstruction: '',
@@ -571,10 +570,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiEyeLine,
         permission: 'logistics:manufacturing:engineering:change:source:ec:query',
         onClick: (record: SourceEcDetail) => void handleShowDetail(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -638,19 +635,19 @@ function buildListQuery(overrides?: Partial<SourceEcDetailQuery>): SourceEcDetai
   }
   assignTrimmed('sourceFinishedProduct', form.sourceFinishedProduct)
   assignTrimmed('sourceParentPart', form.sourceParentPart)
-  assignTrimmed('sourceLegacyPartNo', form.sourceLegacyPartNo)
+  assignTrimmed('sourceLegacyPartCode', form.sourceLegacyPartCode)
   assignTrimmed('sourceLegacyPartName', form.sourceLegacyPartName)
   if (form.sourceLegacyUsage !== undefined && form.sourceLegacyUsage !== null) {
     query.sourceLegacyUsage = form.sourceLegacyUsage
   }
   assignTrimmed('sourceLegacyMountingPosition', form.sourceLegacyMountingPosition)
-  assignTrimmed('sourceReplacementPartNo', form.sourceReplacementPartNo)
+  assignTrimmed('sourceReplacementPartCode', form.sourceReplacementPartCode)
   assignTrimmed('sourceReplacementPartName', form.sourceReplacementPartName)
   if (form.sourceReplacementUsage !== undefined && form.sourceReplacementUsage !== null) {
     query.sourceReplacementUsage = form.sourceReplacementUsage
   }
   assignTrimmed('sourceReplacementMountingPosition', form.sourceReplacementMountingPosition)
-  assignTrimmed('sourceBomNo', form.sourceBomNo)
+  assignTrimmed('sourceBomCode', form.sourceBomCode)
   assignTrimmed('SourceCompatibility', form.SourceCompatibility)
   assignTrimmed('sourceDistinction', form.sourceDistinction)
   assignTrimmed('SourceInstruction', form.SourceInstruction)

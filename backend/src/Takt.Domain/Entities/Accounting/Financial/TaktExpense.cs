@@ -46,7 +46,7 @@ public class TaktExpense : TaktApprovalEntityBase
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options；整单唯一，DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "varchar", Length = 10, IsNullable = true)]
     public string? SupplierCode { get; set; }
     /// <summary>
     /// 供应商名称（整单唯一）
@@ -83,12 +83,12 @@ public class TaktExpense : TaktApprovalEntityBase
     /// <summary>
     /// 来源采购订单编码（选项 TaktPurchaseOrders/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "来源采购订单编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "purchase_order_code", ColumnDescription = "来源采购订单编码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? PurchaseOrderCode { get; set; }
     /// <summary>
     /// 来源采购申请编码（选项 TaktPurchaseRequests/options；采购链路自动生成时写入，DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "来源采购申请编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "purchase_request_code", ColumnDescription = "来源采购申请编码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? PurchaseRequestCode { get; set; }
     /// <summary>
     /// 费用金额
@@ -120,11 +120,6 @@ public class TaktExpense : TaktApprovalEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? Attachments { get; set; }
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 费用单状态（字典 sys_approval_status；与 ApprovalStatus 取值一致）
     /// </summary>

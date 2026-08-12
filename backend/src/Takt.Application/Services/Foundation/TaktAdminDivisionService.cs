@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktAdminDivisionService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：行政区划应用服务实现
 // 
@@ -56,12 +56,20 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     }
 
     /// <summary>
-    /// 获取行政区划列表（分页）
+    /// 获取行政区划列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktAdminDivisionDto>> GetAdminDivisionListAsync(TaktAdminDivisionQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktAdminDivisionDto>.Create(
+                new List<TaktAdminDivisionDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _adminDivisionRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -364,7 +372,15 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportAdminDivisionAsync(TaktAdminDivisionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktAdminDivisionQueryDto());
+        var queryDto = query ?? new TaktAdminDivisionQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktAdminDivisionExportDto>(),
+                sheetName ?? "行政区划数据",
+                fileName ?? "行政区划导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _adminDivisionRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -393,120 +409,212 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     {
         var exp = Expressionable.Create<TaktAdminDivision>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.CountryCode != null && x.CountryCode.Contains(keywords))
                 || (x.DivisionCode != null && x.DivisionCode.Contains(keywords))
                 || (x.DivisionName != null && x.DivisionName.Contains(keywords))
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || SqlFunc.ToString(x.Level).Contains(keywords)
                 || (x.DivisionPath != null && x.DivisionPath.Contains(keywords))
-                || SqlFunc.ToString(x.IsLeaf).Contains(keywords)
                 || (x.PostalCode != null && x.PostalCode.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.PhoneCode != null && x.PhoneCode.Contains(keywords))
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.DivisionStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CountryCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountryCode))
         {
-            exp = exp.And(x => x.CountryCode != null && x.CountryCode.Contains(queryDto.CountryCode));
+            var countryCode = queryDto.CountryCode;
+            exp = exp.And(x => x.CountryCode != null && x.CountryCode.Contains(countryCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DivisionCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DivisionCode))
         {
-            exp = exp.And(x => x.DivisionCode != null && x.DivisionCode.Contains(queryDto.DivisionCode));
+            var divisionCode = queryDto.DivisionCode;
+            exp = exp.And(x => x.DivisionCode != null && x.DivisionCode.Contains(divisionCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DivisionName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DivisionName))
         {
-            exp = exp.And(x => x.DivisionName != null && x.DivisionName.Contains(queryDto.DivisionName));
+            var divisionName = queryDto.DivisionName;
+            exp = exp.And(x => x.DivisionName != null && x.DivisionName.Contains(divisionName));
         }
 
         if (queryDto?.ParentId.HasValue == true)
         {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
+            var parentId = queryDto.ParentId;
+            exp = exp.And(x => x.ParentId == parentId);
         }
 
         if (queryDto?.Level.HasValue == true)
         {
-            exp = exp.And(x => x.Level == queryDto.Level);
+            var level = queryDto.Level;
+            exp = exp.And(x => x.Level == level);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DivisionPath))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DivisionPath))
         {
-            exp = exp.And(x => x.DivisionPath != null && x.DivisionPath.Contains(queryDto.DivisionPath));
+            var divisionPath = queryDto.DivisionPath;
+            exp = exp.And(x => x.DivisionPath != null && x.DivisionPath.Contains(divisionPath));
         }
 
         if (queryDto?.IsLeaf.HasValue == true)
         {
-            exp = exp.And(x => x.IsLeaf == queryDto.IsLeaf);
+            var isLeaf = queryDto.IsLeaf;
+            exp = exp.And(x => x.IsLeaf == isLeaf);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostalCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostalCode))
         {
-            exp = exp.And(x => x.PostalCode != null && x.PostalCode.Contains(queryDto.PostalCode));
+            var postalCode = queryDto.PostalCode;
+            exp = exp.And(x => x.PostalCode != null && x.PostalCode.Contains(postalCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PhoneCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PhoneCode))
-        {
-            exp = exp.And(x => x.PhoneCode != null && x.PhoneCode.Contains(queryDto.PhoneCode));
+            var phoneCode = queryDto.PhoneCode;
+            exp = exp.And(x => x.PhoneCode != null && x.PhoneCode.Contains(phoneCode));
         }
 
         if (queryDto?.IsBuiltIn.HasValue == true)
         {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
+            var isBuiltIn = queryDto.IsBuiltIn;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.DivisionStatus.HasValue == true)
         {
-            exp = exp.And(x => x.DivisionStatus == queryDto.DivisionStatus);
+            var divisionStatus = queryDto.DivisionStatus;
+            exp = exp.And(x => x.DivisionStatus == divisionStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
         }
 
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktAdminDivisionQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountryCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DivisionCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DivisionName))
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Level.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DivisionPath))
+        {
+            return true;
+        }
+        if (queryDto.IsLeaf.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostalCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PhoneCode))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DivisionStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

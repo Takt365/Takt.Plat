@@ -24,23 +24,18 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_aps_work_center_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkCenterCode), OrderByType.Asc, true)]
 public class TaktWorkCenter : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作中心编码
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_name", ColumnDescription = "工作中心名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
-    public string WorkCenterName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "work_center_description", ColumnDescription = "工作中心描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
+    public string WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

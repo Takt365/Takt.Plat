@@ -86,7 +86,7 @@ const formData = ref<EcHinkan | null>(null);
 const formRef = ref<InstanceType<typeof EcDeptViewForm> | null>(null);
 /** 列定义 */
 const columns = ref([
-  { title: t('entity.ec.no'), dataIndex: 'ecNo', key: 'ecNo', width: 120 }, { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 140 }, { title: t('entity.ecdetail.ecolditem'), dataIndex: 'ecOldItem', key: 'ecOldItem', width: 140 }, { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 140 }
+  { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 120 }, { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 140 }, { title: t('entity.ecdetail.ecolditem'), dataIndex: 'ecOldItem', key: 'ecOldItem', width: 140 }, { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 140 }
 ]);
 /** 可见列 keys */
 const visibleColumnKeys = ref(columns.value.map(c => String(c.key)));

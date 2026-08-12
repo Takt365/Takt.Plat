@@ -18,8 +18,32 @@ import type {
   EcMonthlyTrendResult,
 } from '@/types/logistics/manufacturing/engineering-change/ec-monthly-trend';
 
-/** API 路由前缀 */
+/** API 路由前缀（对应 TaktEcMonthlyTrendsController） */
 const EC_MONTHLY_TREND_API_BASE = 'TaktEcMonthlyTrends';
+
+/**
+ * 推移查询栏：工厂去重选项 URL（供 TaktSelect api-url）
+ * @returns {string} 相对 API 路径
+ */
+export function getEcMonthlyTrendPlantOptionsUrl(): string {
+  return `${EC_MONTHLY_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 推移查询栏：部门去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getEcMonthlyTrendDeptOptionsUrl(): string {
+  return `${EC_MONTHLY_TREND_API_BASE}/dept-options`;
+}
+
+/**
+ * 推移查询栏：设变单号去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getEcMonthlyTrendEcCodeOptionsUrl(): string {
+  return `${EC_MONTHLY_TREND_API_BASE}/ec-code-options`;
+}
 
 /**
  * 月设变推移分析

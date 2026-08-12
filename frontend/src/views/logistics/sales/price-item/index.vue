@@ -98,9 +98,9 @@
             dict-type="logistics_unit_of_measure_code"
           />
         </template>
-        <template v-else-if="column.key === 'scaleCurrency'">
+        <template v-else-if="column.key === 'scaleCurrencyCode'">
           <TaktDictTag
-            :value="getSalesPriceItemDictValue(record, 'scaleCurrency')"
+            :value="getSalesPriceItemDictValue(record, 'scaleCurrencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
@@ -110,9 +110,9 @@
             dict-type="logistics_calculation_type"
           />
         </template>
-        <template v-else-if="column.key === 'conditionCurrency'">
+        <template v-else-if="column.key === 'conditionCurrencyCode'">
           <TaktDictTag
-            :value="getSalesPriceItemDictValue(record, 'conditionCurrency')"
+            :value="getSalesPriceItemDictValue(record, 'conditionCurrencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
@@ -259,12 +259,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('scaleCurrency')">
-      <a-form-item :label="pi.queryLabel('scaleCurrency')">
+      <div v-show="isFieldVisible('scaleCurrencyCode')">
+      <a-form-item :label="pi.queryLabel('scaleCurrencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.scaleCurrency"
+          v-model:value="advancedQueryForm.scaleCurrencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('scaleCurrency', 'select')"
+          :placeholder="pi.queryPh('scaleCurrencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -315,12 +315,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('conditionCurrency')">
-      <a-form-item :label="pi.queryLabel('conditionCurrency')">
+      <div v-show="isFieldVisible('conditionCurrencyCode')">
+      <a-form-item :label="pi.queryLabel('conditionCurrencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.conditionCurrency"
+          v-model:value="advancedQueryForm.conditionCurrencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('conditionCurrency', 'select')"
+          :placeholder="pi.queryPh('conditionCurrencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -559,7 +559,61 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SALESPRICEITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.salesPriceSeq !== undefined && form.salesPriceSeq !== null) {
+    return true
+  }
+  if (form.scaleQuantity !== undefined && form.scaleQuantity !== null) {
+    return true
+  }
+  if (form.scaleValue !== undefined && form.scaleValue !== null) {
+    return true
+  }
+  if (form.price !== undefined && form.price !== null) {
+    return true
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    return true
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.priceUnit !== undefined && form.priceUnit !== null) {
+    return true
+  }
+  if (form.minOrderQuantity !== undefined && form.minOrderQuantity !== null) {
+    return true
+  }
+  if (form.roundingValue !== undefined && form.roundingValue !== null) {
+    return true
+  }
+  if (form.plannedDeliveryTimeDays !== undefined && form.plannedDeliveryTimeDays !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -580,8 +634,7 @@ function createEmptyAdvancedQueryForm() {
     minOrderQuantity: undefined as number | undefined,
     roundingValue: undefined as number | undefined,
     plannedDeliveryTimeDays: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -611,7 +664,7 @@ const { selectedMasterRow } = provideSalesPriceItemMasterContext()
 const salesPriceScaleQuantityPanelRef = ref<InstanceType<typeof SalesPriceScaleQuantityPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SalesPriceItemQuery} 查询 DTO
  */
@@ -673,13 +726,12 @@ function buildListQuery(overrides?: Partial<SalesPriceItemQuery>): SalesPriceIte
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -821,9 +873,9 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'scaleValue') ?? ''
   },
   {
-    title: pi.label('scaleCurrency'),
-    dataIndex: 'scaleCurrency',
-    key: 'scaleCurrency',
+    title: pi.label('scaleCurrencyCode'),
+    dataIndex: 'scaleCurrencyCode',
+    key: 'scaleCurrencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -873,9 +925,9 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesPriceItemField(record, 'taxAmount') ?? ''
   },
   {
-    title: pi.label('conditionCurrency'),
-    dataIndex: 'conditionCurrency',
-    key: 'conditionCurrency',
+    title: pi.label('conditionCurrencyCode'),
+    dataIndex: 'conditionCurrencyCode',
+    key: 'conditionCurrencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -979,8 +1031,6 @@ const getSalesPriceItemDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1013,6 +1063,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSalesPriceItemList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1048,13 +1103,13 @@ function handleReset() {
   scaleQuantity: undefined as number | undefined,
   scaleUnit: '',
   scaleValue: undefined as number | undefined,
-  scaleCurrency: '',
+  scaleCurrencyCode: '',
   calculationType: '',
   price: undefined as number | undefined,
   untaxedPrice: undefined as number | undefined,
   taxIncludedPrice: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
-  conditionCurrency: '',
+  conditionCurrencyCode: '',
   priceUnit: undefined as number | undefined,
   unitOfMeasure: '',
   minOrderQuantity: undefined as number | undefined,
@@ -1173,6 +1228,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSalesPriceItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1268,13 +1326,13 @@ function handleAdvancedQueryReset() {
   scaleQuantity: undefined as number | undefined,
   scaleUnit: '',
   scaleValue: undefined as number | undefined,
-  scaleCurrency: '',
+  scaleCurrencyCode: '',
   calculationType: '',
   price: undefined as number | undefined,
   untaxedPrice: undefined as number | undefined,
   taxIncludedPrice: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
-  conditionCurrency: '',
+  conditionCurrencyCode: '',
   priceUnit: undefined as number | undefined,
   unitOfMeasure: '',
   minOrderQuantity: undefined as number | undefined,

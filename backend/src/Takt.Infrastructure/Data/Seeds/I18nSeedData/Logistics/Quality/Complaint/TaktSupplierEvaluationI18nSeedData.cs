@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSupplierEvaluation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -296,15 +296,6 @@ public class TaktSupplierEvaluationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "zh-CN", "评价状态", "评价状态（字典 logistics_quality_evaluation_status）"),
             // entity.supplierevaluation.evaluationstatus
             new TranslationSeedItem("entity.supplierevaluation.evaluationstatus", "zh-HK", "评价状态_hk", "评价状态（字典 logistics_quality_evaluation_status）"),
-
-            // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.supplierevaluation.relatedplant
-            new TranslationSeedItem("entity.supplierevaluation.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.supplierevaluation.sortorder
             new TranslationSeedItem("entity.supplierevaluation.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

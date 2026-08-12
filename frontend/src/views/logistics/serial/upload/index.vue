@@ -139,22 +139,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('shippingInvoiceNo')">
-      <a-form-item :label="pi.queryLabel('shippingInvoiceNo')">
+      <div v-show="isFieldVisible('shippingInvoiceCode')">
+      <a-form-item :label="pi.queryLabel('shippingInvoiceCode')">
         <a-input
-          v-model:value="advancedQueryForm.shippingInvoiceNo"
-          :placeholder="pi.queryPh('shippingInvoiceNo', 'required')"
+          v-model:value="advancedQueryForm.shippingInvoiceCode"
+          :placeholder="pi.queryPh('shippingInvoiceCode', 'required')"
           show-count
           :maxlength="9"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sequenceNo')">
-      <a-form-item :label="pi.queryLabel('sequenceNo')">
+      <div v-show="isFieldVisible('sequenceCode')">
+      <a-form-item :label="pi.queryLabel('sequenceCode')">
         <a-input-number
-          v-model:value="advancedQueryForm.sequenceNo"
-          :placeholder="pi.queryPh('sequenceNo', 'required')"
+          v-model:value="advancedQueryForm.sequenceCode"
+          :placeholder="pi.queryPh('sequenceCode', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -178,11 +178,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'required')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="7"
           allow-clear
@@ -405,7 +405,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    sequenceNo: undefined as number | undefined,
+    sequenceCode: undefined as number | undefined,
     totalQuantity: undefined as number | undefined,
     packingQuantity: undefined as number | undefined,
   }
@@ -430,8 +430,6 @@ const entityIdName = 'serialUploadId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -458,8 +456,8 @@ function buildListQuery(overrides?: Partial<SerialUploadQuery>): SerialUploadQue
   for (const key of SERIALUPLOAD_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
-  if (form.sequenceNo !== undefined && form.sequenceNo !== null) {
-    query.sequenceNo = form.sequenceNo
+  if (form.sequenceCode !== undefined && form.sequenceCode !== null) {
+    query.sequenceCode = form.sequenceCode
   }
   if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
     query.totalQuantity = form.totalQuantity
@@ -474,7 +472,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -529,8 +526,6 @@ const getSerialUploadId = (record: SerialUploadRowRecord): string => {
   const id = (record as Record<string, unknown>)?.[entityIdName]
   return id != null ? String(id) : ''
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

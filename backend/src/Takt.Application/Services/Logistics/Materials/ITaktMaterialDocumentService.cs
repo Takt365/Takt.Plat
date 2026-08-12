@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：ITaktMaterialDocumentService.cs
-// 创建时间：2026-07-15
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证应用服务接口
 // 
@@ -69,13 +69,6 @@ public interface ITaktMaterialDocumentService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeleteMaterialDocumentBatchAsync(IEnumerable<long> ids);
-
-    /// <summary>
-    /// 更新物料凭证状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktMaterialDocumentDto> UpdateMaterialDocumentStatusAsync(TaktMaterialDocumentStatusDto dto);
 
     /// <summary>
     /// 获取导入模板

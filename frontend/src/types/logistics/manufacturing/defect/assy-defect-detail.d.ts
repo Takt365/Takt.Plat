@@ -76,7 +76,7 @@ export interface AssyDefectDetail extends CompanyDtoBase {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程
@@ -139,6 +139,11 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   assyDefectId?: string;
@@ -181,7 +186,7 @@ export interface AssyDefectDetailQuery extends TaktPagedQuery {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程
@@ -258,9 +263,17 @@ export interface AssyDefectDetailCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -305,7 +318,7 @@ export interface AssyDefectDetailCreate {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程
@@ -406,6 +419,11 @@ export interface AssyDefectDetailTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
    */
   assyDefectId?: string;
@@ -448,7 +466,7 @@ export interface AssyDefectDetailTemplate {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程
@@ -515,9 +533,17 @@ export interface AssyDefectDetailImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
@@ -562,7 +588,7 @@ export interface AssyDefectDetailImport {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程
@@ -671,7 +697,7 @@ export interface AssyDefectDetailExport {
   /**
    * 随机卡号
    */
-  randomCardNo?: string;
+  randomCardCode?: string;
 
   /**
    * 发生工程

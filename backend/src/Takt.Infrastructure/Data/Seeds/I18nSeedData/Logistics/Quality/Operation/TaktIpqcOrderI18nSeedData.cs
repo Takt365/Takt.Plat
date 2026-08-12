@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Operation
 // 文件名称：TaktIpqcOrderI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktIpqcOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktIpqcOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ipqcorder._self", "zh-CN", "IPQC制程检验单信息", "实体名称"),
             // entity.ipqcorder._self
             new TranslationSeedItem("entity.ipqcorder._self", "zh-HK", "IPQC制程检验单信息_hk", "实体名称"),
-
-            // entity.ipqcorder.plantcode
-            new TranslationSeedItem("entity.ipqcorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.ipqcorder.plantcode
-            new TranslationSeedItem("entity.ipqcorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.ipqcorder.plantcode
-            new TranslationSeedItem("entity.ipqcorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.ipqcorder.plantcode
-            new TranslationSeedItem("entity.ipqcorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.ipqcorder.sourcecode
             new TranslationSeedItem("entity.ipqcorder.sourcecode", "en-US", "来源单号_us", "来源单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）"),

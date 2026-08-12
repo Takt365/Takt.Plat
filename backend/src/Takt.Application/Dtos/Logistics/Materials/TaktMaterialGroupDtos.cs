@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialGroupDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialGroup 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktMaterialGroupDto : TaktTenantDtoBase
     public long MaterialGroupId { get; set; }
 
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     public string MaterialGroupCode { get; set; } = string.Empty;
 
@@ -72,8 +72,13 @@ public class TaktMaterialGroupQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -127,10 +132,15 @@ public class TaktMaterialGroupCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
+    /// </summary>
+    [Required(ErrorMessage = "物料组编码（group_code；租户内唯一；与物料 material_group 对齐）不能为空")]
     public string MaterialGroupCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -214,8 +224,13 @@ public class TaktMaterialGroupTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -251,8 +266,13 @@ public class TaktMaterialGroupImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     public string? MaterialGroupCode { get; set; } = string.Empty;
 
@@ -295,7 +315,7 @@ public class TaktMaterialGroupExportDto
     public long MaterialGroupId { get; set; }
 
     /// <summary>
-    /// 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+    /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
     public string MaterialGroupCode { get; set; } = string.Empty;
 

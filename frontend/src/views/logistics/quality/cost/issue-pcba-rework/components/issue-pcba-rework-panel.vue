@@ -221,11 +221,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('pcbaDebitNoteNo')">
-      <a-form-item :label="t('entity.qualityissuepcbarework.pcbadebitnoteno')">
+      <div v-show="isFieldVisible('pcbaDebitNoteCode')">
+      <a-form-item :label="t('entity.qualityissuepcbarework.pcbadebitnoteCode')">
         <a-textarea
-          v-model:value="advancedQueryForm.pcbaDebitNoteNo"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityissuepcbarework.pcbadebitnoteno') })"
+          v-model:value="advancedQueryForm.pcbaDebitNoteCode"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.qualityissuepcbarework.pcbadebitnoteCode') })"
           :rows="2"
           allow-clear
         />
@@ -427,7 +427,7 @@ const advancedQueryForm = ref({
   pcbaReworkNote: '',
   pcbaScrapCost: undefined as number | undefined,
   pcbaCustomerName: '',
-  pcbaDebitNoteNo: '',
+  pcbaDebitNoteCode: '',
   pcbaOtherExpenses2: undefined as number | undefined,
   pcbaNote: '',
   pcbaRecorder: '',
@@ -452,15 +452,14 @@ const queryFieldsMeta = computed(() => [
   { key: 'pcbaReworkNote', label: t('entity.qualityissuepcbarework.pcbareworknote') },
   { key: 'pcbaScrapCost', label: t('entity.qualityissuepcbarework.pcbascrapcost') },
   { key: 'pcbaCustomerName', label: t('entity.qualityissuepcbarework.pcbacustomername') },
-  { key: 'pcbaDebitNoteNo', label: t('entity.qualityissuepcbarework.pcbadebitnoteno') },
+  { key: 'pcbaDebitNoteCode', label: t('entity.qualityissuepcbarework.pcbadebitnoteCode') },
   { key: 'pcbaOtherExpenses2', label: t('entity.qualityissuepcbarework.pcbaotherexpenses2') },
   { key: 'pcbaNote', label: t('entity.qualityissuepcbarework.pcbanote') },
   { key: 'pcbaRecorder', label: t('entity.qualityissuepcbarework.pcbarecorder') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -494,7 +493,7 @@ function handleAdvancedQueryReset() {
   pcbaReworkNote: '',
   pcbaScrapCost: undefined as number | undefined,
   pcbaCustomerName: '',
-  pcbaDebitNoteNo: '',
+  pcbaDebitNoteCode: '',
   pcbaOtherExpenses2: undefined as number | undefined,
   pcbaNote: '',
   pcbaRecorder: '',
@@ -643,10 +642,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:issue:delete',
         onClick: (record: QualityIssuePcbaRework) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -736,7 +733,7 @@ function buildListQuery(overrides?: Partial<QualityIssuePcbaReworkQuery>): Quali
     query.pcbaScrapCost = form.pcbaScrapCost
   }
   assignTrimmed('pcbaCustomerName', form.pcbaCustomerName)
-  assignTrimmed('pcbaDebitNoteNo', form.pcbaDebitNoteNo)
+  assignTrimmed('pcbaDebitNoteCode', form.pcbaDebitNoteCode)
   if (form.pcbaOtherExpenses2 !== undefined && form.pcbaOtherExpenses2 !== null) {
     query.pcbaOtherExpenses2 = form.pcbaOtherExpenses2
   }

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/mps/production-team/components -->
 <!-- 文件名称：production-team-equipment-panel.vue -->
-<!-- 功能描述：生产班组实体主表实体右侧明细 productionTeamEquipment 独立 CRUD（按主表选中 productionTeamId 分页） -->
+<!-- 功能描述：生产班组实体主表实体右侧明细 productionTeamEquipment 独立 CRUD（按主表选中 prodTeamId 分页） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getProductionTeamEquipmentId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -138,7 +139,7 @@
           v-model:value="advancedQueryForm.teamCode"
           :placeholder="pi.queryPh('teamCode', 'required')"
           show-count
-          :maxlength="32"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -152,43 +153,43 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionEquipmentId')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentId')">
+      <div v-show="isFieldVisible('prodEquipId')">
+      <a-form-item :label="pi.queryLabel('prodEquipId')">
         <a-input
-          v-model:value="advancedQueryForm.productionEquipmentId"
-          :placeholder="pi.queryPh('productionEquipmentId', 'required')"
+          v-model:value="advancedQueryForm.prodEquipId"
+          :placeholder="pi.queryPh('prodEquipId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productionEquipmentCode')">
-      <a-form-item :label="pi.queryLabel('productionEquipmentCode')">
+      <div v-show="isFieldVisible('prodEquipCode')">
+      <a-form-item :label="pi.queryLabel('prodEquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.productionEquipmentCode"
-          :placeholder="pi.queryPh('productionEquipmentCode', 'required')"
+          v-model:value="advancedQueryForm.prodEquipCode"
+          :placeholder="pi.queryPh('prodEquipCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentQuantity')">
-      <a-form-item :label="pi.queryLabel('equipmentQuantity')">
+      <div v-show="isFieldVisible('equipQuantity')">
+      <a-form-item :label="pi.queryLabel('equipQuantity')">
         <a-input-number
-          v-model:value="advancedQueryForm.equipmentQuantity"
-          :placeholder="pi.queryPh('equipmentQuantity', 'required')"
+          v-model:value="advancedQueryForm.equipQuantity"
+          :placeholder="pi.queryPh('equipQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('teamEquipmentStatus')">
-      <a-form-item :label="pi.queryLabel('teamEquipmentStatus')">
+      <div v-show="isFieldVisible('teamEquipStatus')">
+      <a-form-item :label="pi.queryLabel('teamEquipStatus')">
         <TaktSelect
-          v-model:value="advancedQueryForm.teamEquipmentStatus"
+          v-model:value="advancedQueryForm.teamEquipStatus"
           dict-type="sys_normal_disable"
-          :placeholder="pi.queryPh('teamEquipmentStatus', 'select')"
+          :placeholder="pi.queryPh('teamEquipStatus', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -427,8 +428,8 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     lineNumber: undefined as number | undefined,
-    equipmentQuantity: undefined as number | undefined,
-    teamEquipmentStatus: undefined as number | undefined,
+    equipQuantity: undefined as number | undefined,
+    teamEquipStatus: undefined as number | undefined,
     isObsolete: undefined as number | undefined,
   }
 }
@@ -510,24 +511,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getProductionTeamEquipmentField(record, 'plantCode') ?? ''),
   },
   {
-    title: pi.label('productionTeamId'),
-    dataIndex: 'productionTeamId',
-    key: 'productionTeamId',
+    title: pi.label('prodTeamId'),
+    dataIndex: 'prodTeamId',
+    key: 'prodTeamId',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'productionTeamId') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'prodTeamId') ?? ''),
   },
   {
-    title: pi.label('productionTeamName'),
-    dataIndex: 'productionTeamName',
-    key: 'productionTeamName',
+    title: pi.label('prodTeamName'),
+    dataIndex: 'prodTeamName',
+    key: 'prodTeamName',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'productionTeamName') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'prodTeamName') ?? ''),
   },
   {
     title: pi.label('teamCode'),
@@ -550,54 +551,54 @@ const columns = computed<TableColumnsType>(() => [
       String(getProductionTeamEquipmentField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('productionEquipmentId'),
-    dataIndex: 'productionEquipmentId',
-    key: 'productionEquipmentId',
+    title: pi.label('prodEquipId'),
+    dataIndex: 'prodEquipId',
+    key: 'prodEquipId',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'productionEquipmentId') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'prodEquipId') ?? ''),
   },
   {
-    title: pi.label('productionEquipmentName'),
-    dataIndex: 'productionEquipmentName',
-    key: 'productionEquipmentName',
+    title: pi.label('prodEquipName'),
+    dataIndex: 'prodEquipName',
+    key: 'prodEquipName',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'productionEquipmentName') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'prodEquipName') ?? ''),
   },
   {
-    title: pi.label('productionEquipmentCode'),
-    dataIndex: 'productionEquipmentCode',
-    key: 'productionEquipmentCode',
+    title: pi.label('prodEquipCode'),
+    dataIndex: 'prodEquipCode',
+    key: 'prodEquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'productionEquipmentCode') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'prodEquipCode') ?? ''),
   },
   {
-    title: pi.label('equipmentQuantity'),
-    dataIndex: 'equipmentQuantity',
-    key: 'equipmentQuantity',
+    title: pi.label('equipQuantity'),
+    dataIndex: 'equipQuantity',
+    key: 'equipQuantity',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'equipmentQuantity') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'equipQuantity') ?? ''),
   },
   {
-    title: pi.label('teamEquipmentStatus'),
-    dataIndex: 'teamEquipmentStatus',
-    key: 'teamEquipmentStatus',
+    title: pi.label('teamEquipStatus'),
+    dataIndex: 'teamEquipStatus',
+    key: 'teamEquipStatus',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ProductionTeamEquipment }) =>
-      String(getProductionTeamEquipmentField(record, 'teamEquipmentStatus') ?? ''),
+      String(getProductionTeamEquipmentField(record, 'teamEquipStatus') ?? ''),
   },
   {
     title: pi.label('isObsolete'),
@@ -626,10 +627,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mps:production:team:delete',
         onClick: (record: ProductionTeamEquipment) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -748,7 +747,7 @@ function buildListQuery(overrides?: Partial<ProductionTeamEquipmentQuery>): Prod
   const query: ProductionTeamEquipmentQuery = {
     pageIndex: currentPage.value,
     pageSize: pageSize.value,
-    productionTeamId: masterProductionTeamId.value,
+    prodTeamId: masterProductionTeamId.value,
     ...overrides,
   }
   if (kw.length > 0) {
@@ -766,11 +765,11 @@ function buildListQuery(overrides?: Partial<ProductionTeamEquipmentQuery>): Prod
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  if (form.equipmentQuantity !== undefined && form.equipmentQuantity !== null) {
-    query.equipmentQuantity = form.equipmentQuantity
+  if (form.equipQuantity !== undefined && form.equipQuantity !== null) {
+    query.equipQuantity = form.equipQuantity
   }
-  if (form.teamEquipmentStatus !== undefined && form.teamEquipmentStatus !== null) {
-    query.teamEquipmentStatus = form.teamEquipmentStatus
+  if (form.teamEquipStatus !== undefined && form.teamEquipStatus !== null) {
+    query.teamEquipStatus = form.teamEquipStatus
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete

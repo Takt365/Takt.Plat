@@ -31,7 +31,7 @@ export interface SourceEc extends CompanyDtoBase {
   /**
    * 设变号码
    */
-  sourceEcNo: string;
+  sourceEcCode: string;
 
   /**
    * 机种
@@ -71,12 +71,12 @@ export interface SourceEc extends CompanyDtoBase {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施
@@ -170,7 +170,6 @@ export interface SourceEc extends CompanyDtoBase {
 
 }
 
-
 /**
  * SourceEc 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -184,9 +183,14 @@ export interface SourceEcQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 设变号码
    */
-  sourceEcNo?: string;
+  sourceEcCode?: string;
 
   /**
    * 机种
@@ -231,12 +235,12 @@ export interface SourceEcQuery extends TaktPagedQuery {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施
@@ -345,7 +349,6 @@ export interface SourceEcQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建SourceEc DTO
  * 对应前端 SourceEcCreate
@@ -358,9 +361,14 @@ export interface SourceEcCreate {
   tenantCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 设变号码
    */
-  sourceEcNo: string;
+  sourceEcCode: string;
 
   /**
    * 机种
@@ -400,12 +408,12 @@ export interface SourceEcCreate {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施
@@ -509,7 +517,6 @@ export interface SourceEcCreate {
 
 }
 
-
 /**
  * 更新SourceEc DTO
  * 继承 TaktSourceEcCreateDto，添加 SourceEcId 字段
@@ -523,7 +530,6 @@ export interface SourceEcUpdate extends SourceEcCreate {
   sourceEcId: string;
 
 }
-
 
 /**
  * SourceEc 状态更新 DTO
@@ -543,7 +549,6 @@ export interface SourceEcStatus {
 
 }
 
-
 /**
  * SourceEc 导入模板行 DTO
  * 对应前端 SourceEcTemplate
@@ -556,9 +561,14 @@ export interface SourceEcTemplate {
   tenantCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 设变号码
    */
-  sourceEcNo?: string;
+  sourceEcCode?: string;
 
   /**
    * 机种
@@ -598,12 +608,12 @@ export interface SourceEcTemplate {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施
@@ -706,7 +716,6 @@ export interface SourceEcTemplate {
   remark?: string;
 
 }
-
 
 /**
  * SourceEc 导入 DTO（独立实现，不继承 TemplateDto）
@@ -720,9 +729,14 @@ export interface SourceEcImport {
   tenantCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 设变号码
    */
-  sourceEcNo?: string;
+  sourceEcCode?: string;
 
   /**
    * 机种
@@ -762,12 +776,12 @@ export interface SourceEcImport {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施
@@ -870,7 +884,6 @@ export interface SourceEcImport {
   remark?: string;
 
 }
-
 
 /**
  * SourceEc 导出 DTO（独立实现，不继承响应 Dto）
@@ -886,7 +899,7 @@ export interface SourceEcExport {
   /**
    * 设变号码
    */
-  sourceEcNo: string;
+  sourceEcCode: string;
 
   /**
    * 机种
@@ -926,12 +939,12 @@ export interface SourceEcExport {
   /**
    * PP番号
    */
-  sourcePpNo?: string;
+  sourcePpCode?: string;
 
   /**
    * 技联书
    */
-  sourceTechnicalNoticeNo?: string;
+  sourceTechnicalNoticeCode?: string;
 
   /**
    * 实施

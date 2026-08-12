@@ -116,11 +116,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inboundNo')">
-      <a-form-item :label="pi.queryLabel('inboundNo')">
+      <div v-show="isFieldVisible('inboundCode')">
+      <a-form-item :label="pi.queryLabel('inboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.inboundNo"
-          :placeholder="pi.queryPh('inboundNo', 'required')"
+          v-model:value="advancedQueryForm.inboundCode"
+          :placeholder="pi.queryPh('inboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -136,11 +136,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('inboundSerialNo')">
+      <div v-show="isFieldVisible('inboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('inboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.inboundSerialNo"
-          :placeholder="pi.queryPh('inboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.inboundSerialCode"
+          :placeholder="pi.queryPh('inboundSerialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -406,14 +406,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialInboundItemField(record, 'inboundId') ?? ''),
   },
   {
-    title: pi.label('inboundNo'),
-    dataIndex: 'inboundNo',
-    key: 'inboundNo',
+    title: pi.label('inboundCode'),
+    dataIndex: 'inboundCode',
+    key: 'inboundCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialInboundItem }) =>
-      String(getSerialInboundItemField(record, 'inboundNo') ?? ''),
+      String(getSerialInboundItemField(record, 'inboundCode') ?? ''),
   },
   {
     title: pi.label('lineNumber'),
@@ -426,14 +426,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialInboundItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('inboundSerialNo'),
-    dataIndex: 'inboundSerialNo',
-    key: 'inboundSerialNo',
+    title: pi.label('inboundSerialCode'),
+    dataIndex: 'inboundSerialCode',
+    key: 'inboundSerialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialInboundItem }) =>
-      String(getSerialInboundItemField(record, 'inboundSerialNo') ?? ''),
+      String(getSerialInboundItemField(record, 'inboundSerialCode') ?? ''),
   },
   {
     title: pi.label('inbound'),
@@ -462,10 +462,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:serial:inbound:delete',
         onClick: (record: SerialInboundItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,

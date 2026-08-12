@@ -227,8 +227,7 @@ type StorageSelectField =
 const storageSelectFields: StorageSelectField[] = [
   { name: 'uploadPath', labelKey: 'entity.file.path', menuUploadPath: true },
   { name: 'storageNaming', dictType: 'sys_storage_naming_config', labelKey: 'entity.file.name' },
-  { name: 'storageType', dictType: 'sys_storage_type', labelKey: 'entity.file.storagetype' },
-]
+  { name: 'storageType', dictType: 'sys_storage_type', labelKey: 'entity.file.storagetype' }]
 
 /**
  * 是否为菜单推导的上传路径字段
@@ -402,22 +401,19 @@ const createMetaRules = computed<Record<string, Rule[]>>(() => {
         required: true,
         message: t('common.page.form.placeholder.select', { field: t('entity.file.path') }),
         trigger: 'change',
-      },
-    ],
+      }],
     storageNaming: [
       {
         required: true,
         message: t('common.page.form.placeholder.select', { field: t('entity.file.name') }),
         trigger: 'change',
-      },
-    ],
+      }],
     storageType: [
       {
         required: true,
         message: t('common.page.form.placeholder.select', { field: t('entity.file.storagetype') }),
         trigger: 'change',
-      },
-    ],
+      }],
   }
   if (showFtpProviderField.value) {
     base.ftpProvider = [
@@ -425,8 +421,7 @@ const createMetaRules = computed<Record<string, Rule[]>>(() => {
         required: true,
         message: t('common.page.form.placeholder.select', { field: t('foundation.file.page.ftp.provider') }),
         trigger: 'change',
-      },
-    ]
+      }]
   }
   if (showOssProviderField.value) {
     base.ossProvider = [
@@ -434,8 +429,7 @@ const createMetaRules = computed<Record<string, Rule[]>>(() => {
         required: true,
         message: t('common.page.form.placeholder.select', { field: t('foundation.file.page.oss.provider') }),
         trigger: 'change',
-      },
-    ]
+      }]
   }
   if (isCustomStorageNaming.value) {
     base.fileName = [
@@ -443,8 +437,7 @@ const createMetaRules = computed<Record<string, Rule[]>>(() => {
         required: true,
         message: t('common.page.form.placeholder.required', { field: t('entity.file.name') }),
         trigger: 'blur',
-      },
-    ]
+      }]
   }
   return base
 })

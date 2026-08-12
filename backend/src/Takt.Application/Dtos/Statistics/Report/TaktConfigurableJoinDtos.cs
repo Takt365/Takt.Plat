@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableJoinDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableJoin 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableJoin 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Report;
 
@@ -50,7 +49,7 @@ public class TaktConfigurableJoinDto : TaktCompanyDtoBase
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public int JoinType { get; set; }
+    public int JoinType { get; set; } = 0;
 
     /// <summary>
     /// 左表数据源别名
@@ -105,6 +104,16 @@ public class TaktConfigurableJoinQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -182,10 +191,15 @@ public class TaktConfigurableJoinCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -195,7 +209,7 @@ public class TaktConfigurableJoinCreateDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public int JoinType { get; set; }
+    public int JoinType { get; set; } = 0;
 
     /// <summary>
     /// 左表数据源别名
@@ -222,11 +236,6 @@ public class TaktConfigurableJoinCreateDto
     public string RightColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（JOIN 应用顺序）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -236,6 +245,12 @@ public class TaktConfigurableJoinCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -302,6 +317,16 @@ public class TaktConfigurableJoinTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -331,11 +356,6 @@ public class TaktConfigurableJoinTemplateDto
     /// 右表关联列名
     /// </summary>
     public string? RightColumnName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号（JOIN 应用顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -365,10 +385,15 @@ public class TaktConfigurableJoinImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -401,11 +426,6 @@ public class TaktConfigurableJoinImportDto
     public string? RightColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（JOIN 应用顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -415,6 +435,12 @@ public class TaktConfigurableJoinImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -447,7 +473,7 @@ public class TaktConfigurableJoinExportDto
     /// <summary>
     /// 关联类型（内/左/右/全连接）
     /// </summary>
-    public int JoinType { get; set; }
+    public int JoinType { get; set; } = 0;
 
     /// <summary>
     /// 左表数据源别名

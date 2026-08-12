@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentVersionDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DocumentVersion 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocumentVersion 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public long DocumentVersionId { get; set; }
 
     /// <summary>
-    /// 文档 ID
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
@@ -57,7 +57,7 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
@@ -89,7 +89,7 @@ public class TaktDocumentVersionDto : TaktCompanyDtoBase
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisedBy { get; set; }
@@ -133,7 +133,17 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档 ID
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
@@ -149,7 +159,7 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -181,7 +191,7 @@ public class TaktDocumentVersionQueryDto : TaktPagedQuery
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisedBy { get; set; }
@@ -242,12 +252,17 @@ public class TaktDocumentVersionCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 文档 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
@@ -263,7 +278,7 @@ public class TaktDocumentVersionCreateDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
@@ -297,7 +312,7 @@ public class TaktDocumentVersionCreateDto
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisedBy { get; set; }
@@ -364,7 +379,17 @@ public class TaktDocumentVersionTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档 ID
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
@@ -380,7 +405,7 @@ public class TaktDocumentVersionTemplateDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -412,7 +437,7 @@ public class TaktDocumentVersionTemplateDto
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisedBy { get; set; }
@@ -455,12 +480,17 @@ public class TaktDocumentVersionImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 文档 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DocumentId { get; set; }
@@ -476,7 +506,7 @@ public class TaktDocumentVersionImportDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -508,7 +538,7 @@ public class TaktDocumentVersionImportDto
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisedBy { get; set; }
@@ -557,7 +587,7 @@ public class TaktDocumentVersionExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档 ID
+    /// 文档 ID（选项 TaktDocuments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
@@ -573,7 +603,7 @@ public class TaktDocumentVersionExportDto
     public string? VersionNote { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文件 ID
+    /// 文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long FileId { get; set; }
@@ -605,7 +635,7 @@ public class TaktDocumentVersionExportDto
     public string? FileExtension { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修订人 ID
+    /// 修订人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisedBy { get; set; }

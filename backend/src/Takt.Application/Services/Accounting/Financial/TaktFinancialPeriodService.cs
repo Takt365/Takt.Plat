@@ -85,20 +85,26 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
     }
 
     /// <summary>
-    /// 获取财务期间选项列表
+    /// 获取财务期间选项列表（按 FinancialYearCode 去重；DictValue=FinancialYearCode，供业务表 FiscalYear/FinancialYear 下拉）
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetFinancialPeriodOptionsAsync()
     {
         var list = await _financialPeriodRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode,
+            x => x.TenantCode == CurrentTenantCode
+                && x.FinancialYearCode != null
+                && x.FinancialYearCode != string.Empty,
             x => x.FinancialYearCode ?? string.Empty,
             false);
-        return list.Select(e => new TaktSelectOption
-        {
-            DictValue = e.Id,
-            DictLabel = e.FinancialYearCode ?? e.Id.ToString(),
-        }).ToList();
+        return list
+            .GroupBy(e => e.FinancialYearCode!, StringComparer.OrdinalIgnoreCase)
+            .OrderByDescending(g => g.Key, StringComparer.OrdinalIgnoreCase)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -347,7 +353,6 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         {
             exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -367,6 +372,12 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

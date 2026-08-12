@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemArgumentDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoutingItemArgument 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRoutingItemArgument 生成，请按需审阅）
 // 
@@ -57,7 +57,7 @@ public class TaktRoutingItemArgumentDto : TaktCompanyDtoBase
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -110,6 +110,16 @@ public class TaktRoutingItemArgumentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -126,7 +136,7 @@ public class TaktRoutingItemArgumentQueryDto : TaktPagedQuery
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -191,10 +201,15 @@ public class TaktRoutingItemArgumentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -214,7 +229,7 @@ public class TaktRoutingItemArgumentCreateDto
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -309,6 +324,16 @@ public class TaktRoutingItemArgumentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -325,7 +350,7 @@ public class TaktRoutingItemArgumentTemplateDto
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -372,10 +397,15 @@ public class TaktRoutingItemArgumentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工艺路线明细 ID（序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -393,7 +423,7 @@ public class TaktRoutingItemArgumentImportDto
     public string? ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 
@@ -462,7 +492,7 @@ public class TaktRoutingItemArgumentExportDto
     public string ParamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位
+    /// 单位（字典 logistics_unit_of_measure_code）
     /// </summary>
     public string? ParamUnit { get; set; } = string.Empty;
 

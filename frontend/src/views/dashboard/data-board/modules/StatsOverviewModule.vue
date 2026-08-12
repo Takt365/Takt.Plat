@@ -64,8 +64,7 @@ const metricItems = computed(() => [
   { key: 'online', title: t('dashboard.data-board.page.overview.online'), value: overview.value.onlineUsers },
   { key: 'orders', title: t('dashboard.data-board.page.overview.monthorders'), value: overview.value.monthOrders },
   { key: 'ec', title: t('dashboard.data-board.page.overview.ectotal'), value: overview.value.ecTotal },
-  { key: 'wip', title: t('dashboard.data-board.page.overview.wip'), value: overview.value.wipOrders },
-])
+  { key: 'wip', title: t('dashboard.data-board.page.overview.wip'), value: overview.value.wipOrders }])
 
 /**
  * 加载未读消息数
@@ -102,8 +101,7 @@ async function loadData(): Promise<void> {
       fetchDashboardMetricIfPermitted(
         permissionStore.hasAny([
           DASHBOARD_STATS_PERMISSION.messageStatistics,
-          DASHBOARD_STATS_PERMISSION.messageUnreadList,
-        ]),
+          DASHBOARD_STATS_PERMISSION.messageUnreadList]),
         'unread',
         loadUnreadCount,
         0,
@@ -116,8 +114,7 @@ async function loadData(): Promise<void> {
           return stats?.onlineUserCount ?? 0
         },
         0,
-      ),
-    ])
+      )])
     overview.value = {
       ...overview.value,
       todoCount,
@@ -147,8 +144,7 @@ async function loadData(): Promise<void> {
           productionOrderStatus: PRODUCTION_ORDER_IN_PROGRESS,
         }),
         0,
-      ),
-    ])
+      )])
     overview.value = {
       todoCount,
       unreadCount,

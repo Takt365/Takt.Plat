@@ -111,4 +111,70 @@ public static class TaktYearShardTableHelper
         }
         return years[0];
     }
+
+    /// <summary>
+    /// 从 yyyy-MM 期间解析自然年
+    /// </summary>
+    /// <param name="period">期间（yyyy-MM）</param>
+    /// <returns>年份</returns>
+    /// <exception cref="ArgumentException">期间为空或年份非法</exception>
+    public static int ParseYyyyMmPeriodYear(string period)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(period);
+        var s = period.Trim();
+        if (s.Length < 4 || !int.TryParse(s.AsSpan(0, 4), out var year) || year < 1970 || year > 2100)
+        {
+            throw new ArgumentException("期间年份无效", nameof(period));
+        }
+        return year;
+    }
+
+    /// <summary>
+    /// 从 yyyy-MM 期间区间解析涉及的年份列表（升序）；无区间时返回默认年
+    /// </summary>
+    /// <param name="start">起始期间（含，yyyy-MM）</param>
+    /// <param name="end">截止期间（含，yyyy-MM）</param>
+    /// <param name="defaultYear">无区间时默认年</param>
+    /// <returns>年份列表</returns>
+    public static IReadOnlyList<int> ResolveYearsFromYyyyMmPeriod(string? start, string? end, int? defaultYear = null)
+    {
+        if (string.IsNullOrWhiteSpace(start) && string.IsNullOrWhiteSpace(end))
+        {
+            return new[] { defaultYear ?? DateTime.Now.Year };
+        }
+        var y0 = ParseYyyyMmPeriodYear((start ?? end)!);
+        var y1 = ParseYyyyMmPeriodYear((end ?? start)!);
+        if (y0 > y1)
+        {
+            (y0, y1) = (y1, y0);
+        }
+        if (y1 - y0 > 20)
+        {
+            throw new ArgumentOutOfRangeException(nameof(end), "跨年查询跨度不能超过 20 年");
+        }
+        var years = new List<int>(y1 - y0 + 1);
+        for (var y = y0; y <= y1; y++)
+        {
+            years.Add(y);
+        }
+        return years;
+    }
+
+    /// <summary>
+    /// 要求 yyyy-MM 期间起止落在同一自然年（列表/分页按年分表路由）
+    /// </summary>
+    /// <param name="start">起始期间（含，yyyy-MM）</param>
+    /// <param name="end">截止期间（含，yyyy-MM）</param>
+    /// <param name="defaultYear">无区间时默认年</param>
+    /// <returns>唯一年份</returns>
+    /// <exception cref="ArgumentException">跨年或不合法</exception>
+    public static int RequireSingleYearFromYyyyMmPeriod(string? start, string? end, int? defaultYear = null)
+    {
+        var years = ResolveYearsFromYyyyMmPeriod(start, end, defaultYear);
+        if (years.Count != 1)
+        {
+            throw new ArgumentException("按年分表查询时，期间起止须在同一自然年");
+        }
+        return years[0];
+    }
 }

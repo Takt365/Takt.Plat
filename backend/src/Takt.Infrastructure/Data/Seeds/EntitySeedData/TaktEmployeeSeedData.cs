@@ -86,6 +86,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     sqlSugarContext,
                     tenantCode,
                     company.CompanyCode,
+                    company.CultureCode,
                     employeeData.EmployeeCode,
                     employeeData.EmployeeName,
                     index);
@@ -121,7 +122,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
     private static void ApplySeedPersonalProfile(TaktEmployee employee, int sequence)
     {
         employee.BirthDate = new DateTime(1990, 1, 1).AddDays(sequence);
-        employee.IdCardNo = sequence switch
+        employee.IdCardCode = sequence switch
         {
             0 => "110101199001011237",
             1 => "110101199002021242",
@@ -170,8 +171,8 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     Province = "110000",
                     City = "110100",
                     District = "110105",
-                    Address1 = sample.Address1
-                };
+                    Address1 = sample.Address1,
+                CultureCode = employee.CultureCode};
                 await addressRepository.CreateAsync(address);
                 insertCount++;
             }
@@ -197,6 +198,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         TaktSeedContext sqlSugarContext,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string EmployeeCode,
         string name,
         int sequence)
@@ -208,6 +210,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                CultureCode = cultureCode,
                 EmployeeCode = EmployeeCode,
                 EmployeeName = name,
                 Gender = 1,
@@ -221,6 +224,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         employee.EmployeeName = name;
         employee.EmployeeStatus = 2;
         employee.IsBuiltIn = 1;
+        employee.CultureCode = cultureCode;
         ApplySeedPersonalProfile(employee, sequence);
         await sqlSugarContext.Db.Updateable(employee)
             .IgnoreColumns(x => x.EmployeeCode)

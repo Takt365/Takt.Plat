@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/sales/sales-invoice/composables
 // 文件名称：use-invoice-i18n.ts
-// 功能描述：Takt销售发票实体字段清单 + useSalesInvoiceI18n（字段名映射一次，文案由 entity.salesinvoice.* 种子动态解析）
+// 功能描述：Takt销售发票主表实体字段清单 + useSalesInvoiceI18n（字段名映射一次，文案由 entity.salesinvoice.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,14 +20,44 @@ export const SALESINVOICE_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESINVOICE_EN
 
 /** 列表业务列（不含主键） */
 export const SALESINVOICE_LIST_FIELDS = [
-  'plantCode',
-  'yearMonth',
-  'customerCode',
-  'customerName1',
+  'billingDocumentCode',
+  'billingType',
+  'billingCategory',
+  'documentCategory',
   'currencyCode',
-  'taxRate',
-  'taxAmount',
-  'accountingDocumentCode',
+  'salesOrganization',
+  'distributionChannel',
+  'pricingProcedure',
+  'conditionCode',
+  'shippingConditions',
+  'billingDate',
+  'customerGroup',
+  'incoterms1',
+  'incoterms2',
+  'postingStatus',
+  'accountingExchangeRate',
+  'paymentTerms',
+  'accountAssignmentGroup',
+  'countryCode',
+  'netAmount',
+  'payerCode',
+  'customerCode',
+  'statisticsCurrencyCode',
+  'foreignTradeCode',
+  'cancelledBillingDocument',
+  'invoiceListType',
+  'division',
+  'hierarchyTypePricing',
+  'tradingPartner',
+  'taxDepartureCountry',
+  'organizationSalesTaxNumber',
+  'countrySalesTaxNumber',
+  'referenceCode',
+  'cancelledFlag',
+  'exchangeRateDate',
+  'paymentReference',
+  'reversalReason',
+  'postedBy',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -35,16 +65,47 @@ export const SALESINVOICE_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  plantCode: 'select',
-  yearMonth: 'required',
-  customerCode: 'select',
-  customerName1: 'required',
+  billingDocumentCode: 'required',
+  billingType: 'optional',
+  billingCategory: 'optional',
+  documentCategory: 'optional',
   currencyCode: 'select',
-  taxRate: 'select',
-  taxAmount: 'select',
-  accountingDocumentCode: 'required',
+  salesOrganization: 'optional',
+  distributionChannel: 'optional',
+  pricingProcedure: 'optional',
+  conditionCode: 'optional',
+  shippingConditions: 'optional',
+  billingDate: 'select',
+  customerGroup: 'optional',
+  incoterms1: 'optional',
+  incoterms2: 'optional',
+  postingStatus: 'optional',
+  accountingExchangeRate: 'optional',
+  paymentTerms: 'optional',
+  accountAssignmentGroup: 'optional',
+  countryCode: 'optional',
+  netAmount: 'select',
+  payerCode: 'optional',
+  customerCode: 'select',
+  statisticsCurrencyCode: 'optional',
+  foreignTradeCode: 'optional',
+  cancelledBillingDocument: 'optional',
+  invoiceListType: 'optional',
+  division: 'optional',
+  hierarchyTypePricing: 'optional',
+  tradingPartner: 'optional',
+  taxDepartureCountry: 'optional',
+  organizationSalesTaxNumber: 'optional',
+  countrySalesTaxNumber: 'optional',
+  referenceCode: 'optional',
+  cancelledFlag: 'optional',
+  exchangeRateDate: 'optional',
+  paymentReference: 'optional',
+  reversalReason: 'optional',
+  postedBy: 'optional',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -52,12 +113,44 @@ export type SalesInvoiceField = keyof typeof SALESINVOICE_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const SALESINVOICE_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'yearMonth',
-  'customerCode',
-  'customerName1',
+  'billingDocumentCode',
+  'billingType',
+  'billingCategory',
+  'documentCategory',
   'currencyCode',
-  'accountingDocumentCode',
+  'salesOrganization',
+  'distributionChannel',
+  'pricingProcedure',
+  'conditionCode',
+  'shippingConditions',
+  'billingDateStart',
+  'billingDateEnd',
+  'customerGroup',
+  'incoterms1',
+  'incoterms2',
+  'postingStatus',
+  'paymentTerms',
+  'accountAssignmentGroup',
+  'countryCode',
+  'payerCode',
+  'customerCode',
+  'statisticsCurrencyCode',
+  'foreignTradeCode',
+  'cancelledBillingDocument',
+  'invoiceListType',
+  'division',
+  'hierarchyTypePricing',
+  'tradingPartner',
+  'taxDepartureCountry',
+  'organizationSalesTaxNumber',
+  'countrySalesTaxNumber',
+  'referenceCode',
+  'cancelledFlag',
+  'exchangeRateDateStart',
+  'exchangeRateDateEnd',
+  'paymentReference',
+  'reversalReason',
+  'postedBy',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -66,17 +159,17 @@ export const SALESINVOICE_QUERY_STRING_FIELDS = [
 
 export type SalesInvoiceQueryField =
   | (typeof SALESINVOICE_QUERY_STRING_FIELDS)[number]
-  | 'taxRate' | 'taxAmount'
+  | 'accountingExchangeRate' | 'netAmount'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESINVOICE_QUERY_FIELDS: readonly SalesInvoiceQueryField[] = [
   ...SALESINVOICE_QUERY_STRING_FIELDS,
-  'taxRate',
-  'taxAmount',
+  'accountingExchangeRate',
+  'netAmount',
 ]
 
 /**
- * Takt销售发票实体字段 i18n：index / invoice-form 统一入口
+ * Takt销售发票主表实体字段 i18n：index / invoice-form 统一入口
  */
 export function useSalesInvoiceI18n() {
   const ef = useEntityFieldI18n(SALESINVOICE_ENTITY_SLUG)

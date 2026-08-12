@@ -14,7 +14,6 @@ export default {
   page: {
     title: '月销售推移',
     periodRange: '期间年月',
-    customerCode: '客户',
     selectPlantRequired: '请选择工厂代码',
     selectPeriodRequired: '请选择期间年月',
     summary: '客户行 {count} 条（按月汇总销售实付金额）',

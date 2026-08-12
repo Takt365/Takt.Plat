@@ -318,6 +318,7 @@ public class TaktSamplingSchemeService : TaktServiceBase, ITaktSamplingSchemeSer
                 || (x.TransferRuleConfig != null && x.TransferRuleConfig.Contains(keywords))
                 || SqlFunc.ToString(x.SamplingSchemeStatus).Contains(keywords)
                 || (x.SchemeDescription != null && x.SchemeDescription.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -407,6 +408,11 @@ public class TaktSamplingSchemeService : TaktServiceBase, ITaktSamplingSchemeSer
         if (!string.IsNullOrEmpty(queryDto?.SchemeDescription))
         {
             exp = exp.And(x => x.SchemeDescription != null && x.SchemeDescription.Contains(queryDto.SchemeDescription));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -51,6 +51,10 @@ public class TaktDatabaseBackupCreateValidator : AbstractValidator<TaktDatabaseB
         RuleFor(x => x.BackupFileName)
             .MaximumLength(200).WithMessage("备份文件名长度不能超过200个字符")
             .When(x => !string.IsNullOrWhiteSpace(x.BackupFileName));
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+
         RuleFor(x => x.Remark)
             .MaximumLength(500).WithMessage("备注长度不能超过500个字符")
             .When(x => !string.IsNullOrWhiteSpace(x.Remark));

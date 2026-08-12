@@ -129,7 +129,7 @@
           v-model:value="advancedQueryForm.salesOrderCode"
           :placeholder="pi.queryPh('salesOrderCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -153,13 +153,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
-        <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -263,6 +262,15 @@
         <a-input-number
           v-model:value="advancedQueryForm.taxAmount"
           :placeholder="pi.queryPh('taxAmount', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('salesAmount')">
+      <a-form-item :label="pi.queryLabel('salesAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.salesAmount"
+          :placeholder="pi.queryPh('salesAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -500,7 +508,64 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SALESORDERITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.orderQuantity !== undefined && form.orderQuantity !== null) {
+    return true
+  }
+  if (form.shippedQuantity !== undefined && form.shippedQuantity !== null) {
+    return true
+  }
+  if (form.salesPerUnit !== undefined && form.salesPerUnit !== null) {
+    return true
+  }
+  if (form.salesUnitPrice !== undefined && form.salesUnitPrice !== null) {
+    return true
+  }
+  if (form.discountRate !== undefined && form.discountRate !== null) {
+    return true
+  }
+  if (form.discountAmount !== undefined && form.discountAmount !== null) {
+    return true
+  }
+  if (form.taxIncludedAmount !== undefined && form.taxIncludedAmount !== null) {
+    return true
+  }
+  if (form.untaxedAmount !== undefined && form.untaxedAmount !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.salesAmount !== undefined && form.salesAmount !== null) {
+    return true
+  }
+  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -520,9 +585,9 @@ function createEmptyAdvancedQueryForm() {
     taxIncludedAmount: undefined as number | undefined,
     untaxedAmount: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
+    salesAmount: undefined as number | undefined,
     deliveryStatus: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -642,14 +707,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesOrderItem }) =>
-      String(getSalesOrderItemField(record, 'materialName') ?? ''),
+      String(getSalesOrderItemField(record, 'materialDescription') ?? ''),
   },
   {
     title: pi.label('materialSpecification'),
@@ -762,6 +827,16 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesOrderItemField(record, 'taxAmount') ?? ''),
   },
   {
+    title: pi.label('salesAmount'),
+    dataIndex: 'salesAmount',
+    key: 'salesAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: SalesOrderItem }) =>
+      String(getSalesOrderItemField(record, 'salesAmount') ?? ''),
+  },
+  {
     title: pi.label('deliveryStatus'),
     dataIndex: 'deliveryStatus',
     key: 'deliveryStatus',
@@ -798,10 +873,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:sales:order:delete',
         onClick: (record: SalesOrderItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -910,7 +983,7 @@ function onClickRow(record: SalesOrderItem) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SalesOrderItemQuery} 查询 DTO
  */
@@ -964,6 +1037,9 @@ function buildListQuery(overrides?: Partial<SalesOrderItemQuery>): SalesOrderIte
   }
   if (form.taxAmount !== undefined && form.taxAmount !== null) {
     query.taxAmount = form.taxAmount
+  }
+  if (form.salesAmount !== undefined && form.salesAmount !== null) {
+    query.salesAmount = form.salesAmount
   }
   if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
     query.deliveryStatus = form.deliveryStatus
@@ -1201,6 +1277,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSalesOrderItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

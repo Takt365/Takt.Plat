@@ -26,15 +26,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 [SugarIndex("ix_takt_logistics_quality_sampling_scheme_inspection_level", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InspectionLevel), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_sampling_scheme_sampling_scheme_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SamplingSchemeStatus), OrderByType.Asc, false)]
 public class TaktSamplingScheme : TaktCompanyEntityBase
-{    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
+{
     /// <summary>
     /// 抽样方案编码（唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SamplingSchemeCode { get; set; } = string.Empty;
     /// <summary>
     /// 抽样方案名称
@@ -104,7 +100,7 @@ public class TaktSamplingScheme : TaktCompanyEntityBase
     /// <summary>
     /// 抽样方案描述
     /// </summary>
-    [SugarColumn(ColumnName = "scheme_description", ColumnDescription = "抽样方案描述", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    [SugarColumn(ColumnName = "scheme_description", ColumnDescription = "抽样方案描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? SchemeDescription { get; set; }
     /// <summary>
     /// 抽样方案状态（字典 logistics_quality_standard_status）

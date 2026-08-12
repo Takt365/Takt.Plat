@@ -35,75 +35,6 @@ public class TaktPerfSchemeDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PerfSchemeId { get; set; }
 
-    /// <summary>
-    /// 方案编码
-    /// </summary>
-    public string SchemeCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 方案名称
-    /// </summary>
-    public string SchemeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 适用部门
-    /// </summary>
-    public string ApplicableDepartment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 考核周期类型（月度/季度/半年度/年度）
-    /// </summary>
-    public string CycleType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 评分标准（百分制/五分制/等级制）
-    /// </summary>
-    public string ScoringStandard { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 自评权重（%）
-    /// </summary>
-    public decimal SelfEvaluationWeight { get; set; }
-
-    /// <summary>
-    /// 主管评分权重（%）
-    /// </summary>
-    public decimal SupervisorWeight { get; set; }
-
-    /// <summary>
-    /// 指标编码
-    /// </summary>
-    public string MetricCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 指标名称
-    /// </summary>
-    public string MetricName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 指标类别（业绩/能力/态度/管理/创新/质量/效率/安全）
-    /// </summary>
-    public string Category { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 指标类型（定量/定性）
-    /// </summary>
-    public string MetricType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 评分标准说明
-    /// </summary>
-    public string ScoringCriteria { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 标准权重（%）
-    /// </summary>
-    public decimal StandardWeight { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -136,6 +67,11 @@ public class TaktPerfSchemeQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 方案编码
@@ -205,7 +141,7 @@ public class TaktPerfSchemeQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -258,9 +194,10 @@ public class TaktPerfSchemeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 方案编码
@@ -341,7 +278,7 @@ public class TaktPerfSchemeCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
@@ -448,6 +385,11 @@ public class TaktPerfSchemeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 方案编码
     /// </summary>
     public string? SchemeCode { get; set; } = string.Empty;
@@ -515,7 +457,7 @@ public class TaktPerfSchemeTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
@@ -550,9 +492,10 @@ public class TaktPerfSchemeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 方案编码
@@ -622,7 +565,7 @@ public class TaktPerfSchemeImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=启用 1=停用）
@@ -730,7 +673,7 @@ public class TaktPerfSchemeExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

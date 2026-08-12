@@ -8,9 +8,10 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="flex h-full min-h-0 flex-col p-4">
+  <div class="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden p-4">
     <material-cost-trend-query-form
       v-model:plant-code="queryPlantCode"
+      v-model:material-type="queryMaterialType"
       v-model:model-code="queryModelCode"
       v-model:product-code="queryProductCode"
       v-model:period-range="periodRange"
@@ -32,7 +33,7 @@
       :export-disabled="!canExport"
       :export-loading="exportLoading"
       :refresh-loading="panelLoading"
-      :right-actions="trendFilterActions"
+      :right-actions="toolbarRightActions"
       export-permission="logistics:manufacturing:bom:material:cost:trend:export"
       @export="handleExport"
       @refresh="handleRefresh"
@@ -41,8 +42,9 @@
       ref="panelRef"
       v-model:loading="panelLoading"
       v-model:has-rows="hasRows"
-      class="min-h-0 flex-1"
+      class="min-h-0 min-w-0 flex-1"
       :trend-filter="trendFilter"
+      :sort-by="sortBy"
     />
   </div>
 </template>
@@ -58,9 +60,13 @@ import {
   RiArrowDownLine,
   RiArrowUpDownLine,
   RiArrowUpLine,
+  RiLineChartLine,
   RiListCheck,
+  RiNodeTree,
+  RiSortNumberDesc,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
+import { getBomMaterialCostAnalysisPlantOptions } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
@@ -72,13 +78,14 @@ import { provideBomMaterialCostAnalysisMasterContext } from './composables/use-m
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = MATERIAL_COST_ANALYSIS_LOCALE_PREFIX
+const tenantStore = useTenantStore()
 const {
   queryPlantCode,
+  queryMaterialType,
   queryModelCode,
   queryProductCode,
   periodRange,
 } = provideBomMaterialCostAnalysisMasterContext()
-const tenantStore = useTenantStore()
 
 /** 明细面板 loading */
 const panelLoading = ref(false)
@@ -88,8 +95,31 @@ const exportLoading = ref(false)
 const hasRows = ref(false)
 /** 涨跌筛选 */
 const trendFilter = ref('')
-/** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => [
+/** 全量排序（分页前） */
+const sortBy = ref('bom')
+/** 右侧：全量排序 + 涨跌筛选 */
+const toolbarRightActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'sort-bom',
+    icon: RiNodeTree,
+    tooltip: t(`${localePrefix}.sort.bom`),
+    active: sortBy.value === 'bom',
+    onClick: () => setSortBy('bom'),
+  },
+  {
+    key: 'sort-trend',
+    icon: RiLineChartLine,
+    tooltip: t(`${localePrefix}.sort.trend`),
+    active: sortBy.value === 'trend',
+    onClick: () => setSortBy('trend'),
+  },
+  {
+    key: 'sort-variance-desc',
+    icon: RiSortNumberDesc,
+    tooltip: t(`${localePrefix}.sort.varianceDesc`),
+    active: sortBy.value === 'varianceDesc',
+    onClick: () => setSortBy('varianceDesc'),
+  },
   {
     key: 'trend-all',
     icon: RiListCheck,
@@ -117,11 +147,10 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
-  reload?: () => Promise<void>
+  reload?: (trendFilterOverride?: string, sortByOverride?: string) => Promise<void>
   handleExport?: () => Promise<void>
   clear?: () => void
 } | null>(null)
@@ -140,6 +169,10 @@ function handleSearch() {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
     return
   }
+  if (!queryMaterialType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
+    return
+  }
   if (!queryProductCode.value?.trim()) {
     message.warning(t(`${localePrefix}.selectProductRequired`))
     return
@@ -151,13 +184,28 @@ function handleSearch() {
   void panelRef.value?.reload?.()
 }
 
-/** 涨跌筛选 */
+/**
+ * 涨跌筛选：点涨→up 列表，点跌→down 列表；显式把筛选码传给面板请求
+ * @param value 空 / changed / up / down
+ */
 function setTrendFilter(value: string) {
   if (trendFilter.value === value) {
     return
   }
   trendFilter.value = value
-  void panelRef.value?.reload?.()
+  void panelRef.value?.reload?.(value, sortBy.value)
+}
+
+/**
+ * 全量排序（分页前作用于整表）
+ * @param value bom / trend / varianceDesc
+ */
+function setSortBy(value: string) {
+  if (sortBy.value === value) {
+    return
+  }
+  sortBy.value = value
+  void panelRef.value?.reload?.(trendFilter.value, value)
 }
 
 /** 刷新 */
@@ -170,19 +218,37 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
+/**
+ * 默认工厂：公司关联工厂须落在本表 PlantCode 去重列表中；并清空机种/产品
+ * @returns {Promise<void>}
+ */
 async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  queryPlantCode.value = plant || undefined
+  const related = (await resolveCurrentCompanyRelatedPlantCode()).trim()
+  let matched: string | undefined
+  if (related) {
+    try {
+      const plants = await getBomMaterialCostAnalysisPlantOptions()
+      const hit = (plants ?? []).find(
+        (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
+      )
+      matched = hit ? String(hit.dictValue).trim() : undefined
+    } catch {
+      matched = undefined
+    }
+  }
+  queryPlantCode.value = matched
+  queryMaterialType.value = undefined
+  queryModelCode.value = undefined
+  queryProductCode.value = undefined
 }
 
 /** 重置 */
 async function handleReset() {
   await applyDefaultPlantFromCompany()
-  queryModelCode.value = undefined
-  queryProductCode.value = undefined
+  queryMaterialType.value = undefined
   applyDefaultPeriodRange()
   trendFilter.value = ''
+  sortBy.value = 'bom'
   hasRows.value = false
   panelRef.value?.clear?.()
 }
@@ -204,7 +270,11 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    void (async () => {
+      await applyDefaultPlantFromCompany()
+      hasRows.value = false
+      panelRef.value?.clear?.()
+    })()
   },
 )
 

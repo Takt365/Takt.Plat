@@ -422,13 +422,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('defaultCulture')"
-                name="defaultCulture"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.defaultCulture"
+                  v-model:value="formState.cultureCode"
                   dict-type="sys_culture_code"
-                  :placeholder="pi.ph('defaultCulture')"
+                  :placeholder="pi.ph('cultureCode')"
                 />
               </a-form-item>
             </a-col>
@@ -749,12 +749,15 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -780,7 +783,7 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   registrationRegion: "CN",
   businessRegion: "CN",
   companyExistence: 1,
-  defaultCulture: "ZH-CN",
+  cultureCode: "zh-CN",
   currencyCode: "CNY",
   chartOfAccounts: "INT",
   inputTaxCode: "J2",
@@ -1025,10 +1028,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  defaultCulture: [
+  cultureCode: [
     {
       required: true,
-      message: pi.ph('defaultCulture'),
+      message: pi.ph('cultureCode'),
       trigger: 'change'
     }
   ],

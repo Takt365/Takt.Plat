@@ -27,279 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.serialSummaryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inboundNo')"
-                name="inboundNo"
-              >
-                <a-input
-                  v-model:value="formState.inboundNo"
-                  :placeholder="pi.ph('inboundNo')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inboundDate')"
-                name="inboundDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.inboundDate"
-                  :placeholder="pi.ph('inboundDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.serialSummaryId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inboundSerialNo')"
-                name="inboundSerialNo"
-              >
-                <a-input
-                  v-model:value="formState.inboundSerialNo"
-                  :placeholder="pi.ph('inboundSerialNo')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inboundQuantity')"
-                name="inboundQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.inboundQuantity"
-                  :placeholder="pi.ph('inboundQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productInboundSerialNo')"
-                name="productInboundSerialNo"
-              >
-                <a-input
-                  v-model:value="formState.productInboundSerialNo"
-                  :placeholder="pi.ph('productInboundSerialNo')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('outboundNo')"
-                name="outboundNo"
-              >
-                <a-input
-                  v-model:value="formState.outboundNo"
-                  :placeholder="pi.ph('outboundNo')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('shippingInvoiceNo')"
-                name="shippingInvoiceNo"
-              >
-                <a-input
-                  v-model:value="formState.shippingInvoiceNo"
-                  :placeholder="pi.ph('shippingInvoiceNo')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('loadingDate')"
-                name="loadingDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.loadingDate"
-                  :placeholder="pi.ph('loadingDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('destination')"
-                name="destination"
-              >
-                <TaktSelect
-                  v-model:value="formState.destination"
-                  api-url="TaktModelDestinations/options"
-                  :placeholder="pi.ph('destination')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('destinationPort')"
-                name="destinationPort"
-              >
-                <TaktSelect
-                  v-model:value="formState.destinationPort"
-                  dict-type="logistics_destination_port_code"
-                  :placeholder="pi.ph('destinationPort')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('outboundDate')"
-                name="outboundDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.outboundDate"
-                  :placeholder="pi.ph('outboundDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('outboundSerialNo')"
-                name="outboundSerialNo"
-              >
-                <a-input
-                  v-model:value="formState.outboundSerialNo"
-                  :placeholder="pi.ph('outboundSerialNo')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('outboundQuantity')"
-                name="outboundQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.outboundQuantity"
-                  :placeholder="pi.ph('outboundQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('productOutboundSerialNo')"
-                name="productOutboundSerialNo"
-              >
-                <a-input
-                  v-model:value="formState.productOutboundSerialNo"
-                  :placeholder="pi.ph('productOutboundSerialNo')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -387,15 +126,14 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -474,10 +212,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  inboundNo: [
+  inboundCode: [
     {
       required: true,
-      message: pi.ph('inboundNo'),
+      message: pi.ph('inboundCode'),
       trigger: 'blur'
     }
   ],
@@ -495,10 +233,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  inboundSerialNo: [
+  inboundSerialCode: [
     {
       required: true,
-      message: pi.ph('inboundSerialNo'),
+      message: pi.ph('inboundSerialCode'),
       trigger: 'blur'
     }
   ],
@@ -515,24 +253,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  productInboundSerialNo: [
+  productInboundSerialCode: [
     {
       required: true,
-      message: pi.ph('productInboundSerialNo'),
+      message: pi.ph('productInboundSerialCode'),
       trigger: 'blur'
     }
   ],
-  outboundNo: [
+  outboundCode: [
     {
       required: true,
-      message: pi.ph('outboundNo'),
+      message: pi.ph('outboundCode'),
       trigger: 'blur'
     }
   ],
-  shippingInvoiceNo: [
+  shippingInvoiceCode: [
     {
       required: true,
-      message: pi.ph('shippingInvoiceNo'),
+      message: pi.ph('shippingInvoiceCode'),
       trigger: 'blur'
     }
   ],
@@ -550,10 +288,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  outboundSerialNo: [
+  outboundSerialCode: [
     {
       required: true,
-      message: pi.ph('outboundSerialNo'),
+      message: pi.ph('outboundSerialCode'),
       trigger: 'blur'
     }
   ],
@@ -570,10 +308,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  productOutboundSerialNo: [
+  productOutboundSerialCode: [
     {
       required: true,
-      message: pi.ph('productOutboundSerialNo'),
+      message: pi.ph('productOutboundSerialCode'),
       trigger: 'blur'
     }
   ],

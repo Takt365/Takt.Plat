@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopExec 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopExec 生成，请按需审阅）
 // 
@@ -36,12 +36,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public long SopExecId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -54,7 +49,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    public string WorkOrderNo { get; set; } = string.Empty;
+    public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -62,12 +57,12 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
@@ -83,7 +78,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
@@ -94,7 +89,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
@@ -105,7 +100,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? EmployeeName { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
@@ -116,7 +111,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public string? SopName { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -130,11 +125,6 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     /// 版本号快照
     /// </summary>
     public string Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    public string ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
@@ -157,7 +147,7 @@ public class TaktSopExecDto : TaktCompanyDtoBase
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -214,12 +204,17 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -227,7 +222,7 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    public string? WorkOrderNo { get; set; } = string.Empty;
+    public string? WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -235,12 +230,12 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -251,25 +246,25 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -278,11 +273,6 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     /// 版本号快照
     /// </summary>
     public string? Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    public string? ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间（范围查询-开始）
@@ -315,7 +305,7 @@ public class TaktSopExecQueryDto : TaktPagedQuery
     public int? ExecStatus { get; set; }
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -361,18 +351,17 @@ public class TaktSopExecCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -381,7 +370,7 @@ public class TaktSopExecCreateDto
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
     [Required(ErrorMessage = "MES 工单号（冗余，便于追溯查询）不能为空")]
-    public string WorkOrderNo { get; set; } = string.Empty;
+    public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -389,13 +378,13 @@ public class TaktSopExecCreateDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
@@ -406,25 +395,25 @@ public class TaktSopExecCreateDto
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -434,12 +423,6 @@ public class TaktSopExecCreateDto
     /// </summary>
     [Required(ErrorMessage = "版本号快照不能为空")]
     public string Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    [Required(ErrorMessage = "使用语言（选项 TaktCultures/options，DictValue=CultureCode）不能为空")]
-    public string ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
@@ -462,7 +445,7 @@ public class TaktSopExecCreateDto
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -512,6 +495,21 @@ public class TaktSopExecUpdateDto : TaktSopExecCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopExecId { get; set; }
 
+    /// <summary>
+    /// 工步执行明细（子表，级联保存）
+    /// </summary>
+    public new List<TaktSopExecStepUpdateDto>? Steps { get; set; }
+
+    /// <summary>
+    /// 扫码记录（子表，级联保存）
+    /// </summary>
+    public new List<TaktSopExecScanUpdateDto>? Scans { get; set; }
+
+    /// <summary>
+    /// 作业参数（子表，级联保存）
+    /// </summary>
+    public new List<TaktSopArgumentUpdateDto>? Arguments { get; set; }
+
 }
 
 // ========================================
@@ -558,12 +556,17 @@ public class TaktSopExecTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -571,7 +574,7 @@ public class TaktSopExecTemplateDto
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    public string? WorkOrderNo { get; set; } = string.Empty;
+    public string? WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -579,12 +582,12 @@ public class TaktSopExecTemplateDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -595,25 +598,25 @@ public class TaktSopExecTemplateDto
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -622,11 +625,6 @@ public class TaktSopExecTemplateDto
     /// 版本号快照
     /// </summary>
     public string? Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    public string? ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
@@ -649,7 +647,7 @@ public class TaktSopExecTemplateDto
     public int? ExecStatus { get; set; }
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -697,17 +695,17 @@ public class TaktSopExecImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -715,7 +713,7 @@ public class TaktSopExecImportDto
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    public string? WorkOrderNo { get; set; } = string.Empty;
+    public string? WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -723,12 +721,12 @@ public class TaktSopExecImportDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemId { get; set; }
@@ -739,25 +737,25 @@ public class TaktSopExecImportDto
     public int? ProcessSegmentType { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
@@ -766,11 +764,6 @@ public class TaktSopExecImportDto
     /// 版本号快照
     /// </summary>
     public string? Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    public string? ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
@@ -793,7 +786,7 @@ public class TaktSopExecImportDto
     public int? ExecStatus { get; set; }
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }
@@ -847,12 +840,12 @@ public class TaktSopExecExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -860,7 +853,7 @@ public class TaktSopExecExportDto
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    public string WorkOrderNo { get; set; } = string.Empty;
+    public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -868,12 +861,12 @@ public class TaktSopExecExportDto
     public string? SerialNumber { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品/机种物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工序 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+    /// 工序 ID（选项 TaktRoutingItems/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
@@ -884,25 +877,25 @@ public class TaktSopExecExportDto
     public int ProcessSegmentType { get; set; } = 0;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 员工 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 员工 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -911,11 +904,6 @@ public class TaktSopExecExportDto
     /// 版本号快照
     /// </summary>
     public string Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options，DictValue=CultureCode）
-    /// </summary>
-    public string ContentLang { get; set; } = string.Empty;
 
     /// <summary>
     /// 开始时间
@@ -938,7 +926,7 @@ public class TaktSopExecExportDto
     public int ExecStatus { get; set; } = 0;
 
     /// <summary>
-    /// 当前工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+    /// 当前工步 ID（选项 TaktSopSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentStepId { get; set; }

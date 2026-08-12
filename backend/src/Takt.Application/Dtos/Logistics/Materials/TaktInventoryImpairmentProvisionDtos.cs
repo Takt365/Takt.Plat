@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktInventoryImpairmentProvisionDtos.cs
-// 创建时间：2026-07-18
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：InventoryImpairmentProvision 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktInventoryImpairmentProvision 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktInventoryImpairmentProvisionDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long InventoryImpairmentProvisionId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 期间（资产负债表日所属会计期间；业务存当月首日，表示年月，如 2026-07-01 → 2026年7月）
@@ -46,14 +42,14 @@ public class TaktInventoryImpairmentProvisionDto : TaktCompanyDtoBase
     public DateTime PeriodDate { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -136,9 +132,9 @@ public class TaktInventoryImpairmentProvisionDto : TaktCompanyDtoBase
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string Currency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
@@ -178,7 +174,12 @@ public class TaktInventoryImpairmentProvisionQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -193,14 +194,14 @@ public class TaktInventoryImpairmentProvisionQueryDto : TaktPagedQuery
     public DateTime? PeriodDateEnd { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -283,9 +284,9 @@ public class TaktInventoryImpairmentProvisionQueryDto : TaktPagedQuery
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
@@ -343,14 +344,14 @@ public class TaktInventoryImpairmentProvisionCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -359,15 +360,15 @@ public class TaktInventoryImpairmentProvisionCreateDto
     public DateTime PeriodDate { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -451,10 +452,10 @@ public class TaktInventoryImpairmentProvisionCreateDto
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code，DictValue=CNY/USD 等）不能为空")]
-    public string Currency { get; set; } = string.Empty;
+    [Required(ErrorMessage = "币种（字典 accounting_currency_code；DictValue=CNY/USD 等）不能为空")]
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
@@ -566,7 +567,12 @@ public class TaktInventoryImpairmentProvisionTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -576,14 +582,14 @@ public class TaktInventoryImpairmentProvisionTemplateDto
     public DateTime? PeriodDate { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -666,9 +672,9 @@ public class TaktInventoryImpairmentProvisionTemplateDto
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
@@ -708,12 +714,12 @@ public class TaktInventoryImpairmentProvisionImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -723,14 +729,14 @@ public class TaktInventoryImpairmentProvisionImportDto
     public DateTime? PeriodDate { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -813,9 +819,9 @@ public class TaktInventoryImpairmentProvisionImportDto
     public decimal? CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string? Currency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）
@@ -861,7 +867,7 @@ public class TaktInventoryImpairmentProvisionExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -871,14 +877,14 @@ public class TaktInventoryImpairmentProvisionExportDto
     public DateTime PeriodDate { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（冗余展示）
+    /// 物料描述（冗余展示）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）
@@ -961,9 +967,9 @@ public class TaktInventoryImpairmentProvisionExportDto
     public decimal CarryingAmount { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，DictValue=CNY/USD 等）
+    /// 币种（字典 accounting_currency_code；DictValue=CNY/USD 等）
     /// </summary>
-    public string Currency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 跌价原因说明（业务备注：滞销、毁损、市价下跌等）

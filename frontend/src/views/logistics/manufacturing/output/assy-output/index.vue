@@ -163,12 +163,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('TeamCode')">
+      <a-form-item :label="pi.queryLabel('TeamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.TeamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('TeamCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -243,11 +243,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -263,11 +263,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'optional')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'optional')"
           show-count
           :maxlength="80"
           allow-clear
@@ -670,13 +670,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodDate') ?? ''
   },
   {
-    title: pi.label('prodTeam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
+    title: pi.label('TeamCode'),
+    dataIndex: 'TeamCode',
+    key: 'TeamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodTeam') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'TeamCode') ?? ''
   },
   {
     title: pi.label('directLabor'),
@@ -741,13 +741,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'materialCode') ?? ''
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'batchCode') ?? ''
   },
   {
     title: pi.label('prodOrderQty'),
@@ -759,13 +759,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: pi.label('serialNo'),
-    dataIndex: 'serialNo',
-    key: 'serialNo',
+    title: pi.label('serialCode'),
+    dataIndex: 'serialCode',
+    key: 'serialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'serialNo') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyOutputField(record, 'serialCode') ?? ''
   },
   {
     title: pi.label('stdMinutes'),
@@ -785,12 +785,10 @@ const columns = computed<TableColumnsType>(() => [
           {
             default: () =>
               h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
-                h(RiQuestionLine, { class: 'takt-remix-icon' }),
-              ]),
+                h(RiQuestionLine, { class: 'takt-remix-icon' })]),
           },
         ),
-        h('span', null, pi.label('stdCapacity')),
-      ]),
+        h('span', null, pi.label('stdCapacity'))]),
     taktColumnSettingLabel: pi.label('stdCapacity'),
     dataIndex: 'stdCapacity',
     key: 'stdCapacity',
@@ -936,7 +934,7 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodTeam: '',
+  TeamCode: '',
   directLabor: undefined as number | undefined,
   indirectLabor: undefined as number | undefined,
   shiftNo: undefined as number | undefined,
@@ -944,8 +942,8 @@ function handleReset() {
   prodOrderCode: '',
   modelCode: '',
   materialCode: '',
-  batchNo: '',
-  serialNo: '',
+  batchCode: '',
+  serialCode: '',
   prodOrderQty: undefined as number | undefined,
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,
@@ -1164,7 +1162,7 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodTeam: '',
+  TeamCode: '',
   directLabor: undefined as number | undefined,
   indirectLabor: undefined as number | undefined,
   shiftNo: undefined as number | undefined,
@@ -1172,8 +1170,8 @@ function handleAdvancedQueryReset() {
   prodOrderCode: '',
   modelCode: '',
   materialCode: '',
-  batchNo: '',
-  serialNo: '',
+  batchCode: '',
+  serialCode: '',
   prodOrderQty: undefined as number | undefined,
   stdMinutes: undefined as number | undefined,
   stdCapacity: undefined as number | undefined,

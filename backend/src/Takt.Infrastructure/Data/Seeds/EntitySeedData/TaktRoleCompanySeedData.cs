@@ -81,7 +81,8 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
                     companyRepository,
                     tenantCode,
                     role.RoleCode,
-                    company.CompanyCode);
+                    company.CompanyCode,
+                    company.CultureCode);
             }
         }
 
@@ -106,7 +107,8 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
         ITaktTenantSeedRepository<TaktCompany> companyRepository,
         string tenantCode,
         string roleCode,
-        string companyCode)
+        string companyCode,
+        string cultureCode)
     {
         var role = await roleRepository.FirstAsync(r => r.TenantCode == tenantCode && r.RoleCode == roleCode);
         if (role == null) return 0;
@@ -126,6 +128,7 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
             TenantCode = tenantCode,
             RoleId = role.Id,
             CompanyCode = companyCode,
+            CultureCode = cultureCode
         });
         return 1;
     }

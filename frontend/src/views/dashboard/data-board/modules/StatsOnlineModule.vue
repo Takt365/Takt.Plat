@@ -47,8 +47,7 @@ const onlineStats = ref({
 const metricItems = computed(() => [
   { key: 'users', title: t('dashboard.data-board.page.online.users'), value: onlineStats.value.users },
   { key: 'todayvisits', title: t('dashboard.data-board.page.online.todayvisits'), value: onlineStats.value.todayVisits },
-  { key: 'sessions', title: t('dashboard.data-board.page.online.sessions'), value: onlineStats.value.sessions },
-])
+  { key: 'sessions', title: t('dashboard.data-board.page.online.sessions'), value: onlineStats.value.sessions }])
 
 /**
  * 加载在线看板统计

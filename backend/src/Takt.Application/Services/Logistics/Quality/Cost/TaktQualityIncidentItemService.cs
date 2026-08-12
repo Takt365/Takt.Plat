@@ -101,12 +101,12 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
         EnsureThreeLayerContext();
         var list = await _qualityIncidentItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -383,7 +383,7 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
                 || (x.QualityIncidentCode != null && x.QualityIncidentCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || SqlFunc.ToString(x.ScrapCost).Contains(keywords)
                 || SqlFunc.ToString(x.ScrapSize).Contains(keywords)
                 || SqlFunc.ToString(x.PartPrice).Contains(keywords)
@@ -394,6 +394,7 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
                 || SqlFunc.ToString(x.Tax).Contains(keywords)
                 || SqlFunc.ToString(x.ReasonOtherExpenses).Contains(keywords)
                 || (x.ScrapNote != null && x.ScrapNote.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -420,9 +421,9 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (queryDto?.ScrapCost.HasValue == true)
@@ -475,6 +476,11 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
             exp = exp.And(x => x.ScrapNote != null && x.ScrapNote.Contains(queryDto.ScrapNote));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -494,6 +500,12 @@ public class TaktQualityIncidentItemService : TaktServiceBase, ITaktQualityIncid
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

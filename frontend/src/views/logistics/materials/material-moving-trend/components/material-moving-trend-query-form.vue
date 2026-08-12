@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-trend/components -->
 <!-- 文件名称：material-moving-trend-query-form.vue -->
-<!-- 功能描述：物料移动价格推移查询栏（工厂/期间/评估/物料） -->
+<!-- 功能描述：物料移动价格推移查询栏（工厂/期间/物料类型必选/评估/物料） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,35 +12,53 @@
     <div class="material-moving-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
       <TaktSelect
         v-model:value="plantCode"
-        api-url="TaktPlants/options"
+        :api-url="plantOptionsUrl"
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--plant"
         allow-clear
+        show-search
         :placeholder="t('entity.materialmovingprice.plantcode')"
+        @change="handlePlantChange"
       />
       <a-range-picker
         v-model:value="periodRange"
         picker="month"
         format="YYYY-MM"
         value-format="YYYY-MM"
+        :disabled-date="isCostingPeriodMonthDisabled"
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
+      />
+      <TaktSelect
+        v-model:value="materialType"
+        :options="materialTypeOptions"
+        class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--type"
+        :allow-clear="false"
+        show-search
+        :disabled="!plantCode?.trim() || materialTypeOptionsLoading"
+        :placeholder="t('entity.bommaterialcost.materialtype')"
+        @change="handleMaterialTypeChange"
       />
       <TaktSelect
         v-model:value="valuation"
-        dict-type="logistics_valuation_class_category"
+        :api-url="valuationOptionsUrl"
+        :api-params="valuationApiParams"
+        :disabled="!plantCode?.trim()"
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--valuation"
         allow-clear
+        show-search
         :placeholder="t('entity.materialmovingprice.valuation')"
       />
-      <a-input
+      <TaktSelect
         v-model:value="materialCode"
+        :api-url="materialOptionsUrl"
+        :api-params="materialApiParams"
+        :disabled="!plantCode?.trim() || !valuation?.trim()"
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--material"
         allow-clear
+        show-search
         :placeholder="t(`${localePrefix}.materialCode`)"
-        @press-enter="emit('search')"
       />
     </div>
     <a-space class="query-actions">
@@ -70,19 +88,32 @@
 
 <script setup lang="ts">
 /**
- * 物料移动价格推移查询栏：工厂 + 期间 + 评估类别 + 物料编码
+ * 物料移动价格推移查询栏：工厂 → 物料类型(必选，默认 FERT) → 评估类别 → 物料
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
+import {
+  getMaterialMovingPriceTrendMaterialOptionsUrl,
+  getMaterialMovingPriceTrendPlantOptionsUrl,
+  getMaterialMovingPriceTrendValuationOptionsUrl,
+} from '@/api/logistics/materials/material-moving-trend'
+import type { TaktSelectOption } from '@/types/common'
+import { isCostingPeriodMonthDisabled } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
+import {
+  loadBomMaterialTypeOptionsWithDefault,
+  pickDefaultBomMaterialType,
+} from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-type-options'
 
-/** 工厂代码 */
+/** 工厂代码（第 1 级，必选） */
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
-/** 评估类别 */
+/** 产品物料类型（必选，默认 FERT） */
+const materialType = defineModel<string | undefined>('materialType')
+/** 评估类别（第 2 级，必选） */
 const valuation = defineModel<string | undefined>('valuation')
-/** 物料编码 */
-const materialCode = defineModel<string>('materialCode', { default: '' })
+/** 物料编码（第 3 级，可空） */
+const materialCode = defineModel<string | undefined>('materialCode')
 const props = defineProps<{
   /** 查询 loading */
   loading?: boolean
@@ -95,6 +126,105 @@ const emit = defineEmits<{
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.materials.material-moving-trend.page'
+/** 推移本表级联选项 URL（TaktMaterialMovingPriceTrends） */
+const plantOptionsUrl = getMaterialMovingPriceTrendPlantOptionsUrl()
+const valuationOptionsUrl = getMaterialMovingPriceTrendValuationOptionsUrl()
+const materialOptionsUrl = getMaterialMovingPriceTrendMaterialOptionsUrl()
+/** 物料类型选项 */
+const materialTypeOptions = ref<TaktSelectOption[]>([])
+const materialTypeOptionsLoading = ref(false)
+const materialTypeOptionsPlant = ref('')
+let materialTypeLoadToken = 0
+
+/** 第 2 级：工厂 → 评估类别 */
+const valuationApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  return { plantCode: plant }
+})
+
+/** 第 3 级：工厂 + 评估类别 → 物料（可选） */
+const materialApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  const val = valuation.value?.trim()
+  if (!plant || !val) {
+    return undefined
+  }
+  return { plantCode: plant, valuation: val }
+})
+
+/**
+ * 拉取物料类型并默认 FERT
+ * @param {string} plant 工厂
+ * @returns {Promise<string | undefined>} 默认类型
+ */
+async function loadMaterialTypes(plant: string): Promise<string | undefined> {
+  const token = ++materialTypeLoadToken
+  materialTypeOptionsLoading.value = true
+  try {
+    const { options, defaultType } = await loadBomMaterialTypeOptionsWithDefault(plant)
+    if (token !== materialTypeLoadToken) {
+      return undefined
+    }
+    materialTypeOptions.value = options
+    materialTypeOptionsPlant.value = plant
+    return defaultType ?? pickDefaultBomMaterialType(options)
+  } finally {
+    if (token === materialTypeLoadToken) {
+      materialTypeOptionsLoading.value = false
+    }
+  }
+}
+
+/** 工厂变更：清空下游并重拉类型 */
+async function handlePlantChange() {
+  valuation.value = undefined
+  materialCode.value = undefined
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    materialTypeLoadToken += 1
+    materialType.value = undefined
+    materialTypeOptions.value = []
+    materialTypeOptionsPlant.value = ''
+    materialTypeOptionsLoading.value = false
+    return
+  }
+  materialType.value = await loadMaterialTypes(plant)
+}
+
+/** 物料类型不可空：清空时回填默认 */
+function handleMaterialTypeChange() {
+  if (!materialType.value?.trim()) {
+    const def = pickDefaultBomMaterialType(materialTypeOptions.value)
+    if (def) {
+      materialType.value = def
+    }
+  }
+}
+
+/** 评估类别变更：清空物料 */
+watch(
+  () => valuation.value,
+  () => {
+    materialCode.value = undefined
+  },
+)
+
+watch(
+  () => plantCode.value?.trim() || '',
+  async (plant) => {
+    if (!plant || plant === materialTypeOptionsPlant.value) {
+      return
+    }
+    const def = await loadMaterialTypes(plant)
+    if (!materialType.value?.trim() && def) {
+      materialType.value = def
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <style scoped>
@@ -116,6 +246,11 @@ const localePrefix = 'logistics.materials.material-moving-trend.page'
 .material-moving-trend-query-bar__control--period {
   width: 16rem;
   min-width: 14rem;
+}
+
+.material-moving-trend-query-bar__control--type {
+  width: 7rem;
+  min-width: 6rem;
 }
 
 .material-moving-trend-query-bar__control--valuation {

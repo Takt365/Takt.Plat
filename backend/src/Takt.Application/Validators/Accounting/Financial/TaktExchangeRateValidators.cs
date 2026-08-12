@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Financial
 // 文件名称：TaktExchangeRateValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ExchangeRate 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktExchangeRate 生成，请按需审阅）
 // 
@@ -32,6 +32,9 @@ public class TaktExchangeRateCreateValidator : AbstractValidator<TaktExchangeRat
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.FromCurrencyCode)
             .NotEmpty().WithMessage("源币种不能为空")
             .MaximumLength(3).WithMessage("源币种长度不能超过3个字符");
@@ -67,6 +70,9 @@ public class TaktExchangeRateUpdateValidator : AbstractValidator<TaktExchangeRat
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.FromCurrencyCode)
             .NotEmpty().WithMessage("源币种不能为空")
             .MaximumLength(3).WithMessage("源币种长度不能超过3个字符");
@@ -99,6 +105,8 @@ public class TaktExchangeRateImportValidator : AbstractValidator<TaktExchangeRat
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.RelatedPlant)
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
         RuleFor(x => x.FromCurrencyCode)
             .NotEmpty().WithMessage("源币种不能为空")
             .MaximumLength(3).WithMessage("源币种长度不能超过3个字符");

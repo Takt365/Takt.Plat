@@ -373,7 +373,13 @@ const userColumns = computed((): TableColumnsType => normalizeUserTableColumns(p
 
 /** 合并实体基座字段后的完整列 */
 const mergedColumns = computed((): TableColumnsType =>
-  mergeDefaultColumns(userColumns.value, t, props.includeAuditFields, props.entityScope),
+  mergeDefaultColumns(
+    userColumns.value,
+    t,
+    props.includeAuditFields,
+    props.entityScope,
+    props.idColumnKey,
+  ),
 )
 
 /** 列设置过滤前的展示列源 */
@@ -562,6 +568,19 @@ defineExpose({
   overflow-y: scroll !important;
   scrollbar-gutter: stable;
   flex: 1 1 auto;
+  min-width: 0;
+}
+
+/**
+ * 虚拟表格横向滚动条（Ant Design Vue virtual）：勿被 overflow:hidden 裁切
+ */
+.takt-single-table__body--fixed-y :deep(.ant-table-tbody-virtual-scrollbar-horizontal) {
+  display: block !important;
+  height: 8px !important;
+  z-index: 4;
+}
+
+.takt-single-table__body--fixed-y :deep(.ant-table-tbody-virtual-holder) {
   min-width: 0;
 }
 

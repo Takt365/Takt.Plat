@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Compensation
 // 文件名称：TaktSalaryItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalaryItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -215,15 +215,6 @@ public class TaktSalaryItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-CN", "是否计入公积金基数", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.salaryitem.includehousingfundbase
             new TranslationSeedItem("entity.salaryitem.includehousingfundbase", "zh-HK", "是否计入公积金基数_hk", "是否计入公积金基数（字典 sys_yes_no_type；0=否 1=是）"),
-
-            // entity.salaryitem.relatedplant
-            new TranslationSeedItem("entity.salaryitem.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.salaryitem.relatedplant
-            new TranslationSeedItem("entity.salaryitem.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.salaryitem.relatedplant
-            new TranslationSeedItem("entity.salaryitem.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.salaryitem.relatedplant
-            new TranslationSeedItem("entity.salaryitem.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.salaryitem.sortorder
             new TranslationSeedItem("entity.salaryitem.sortorder", "en-US", "排序号_us", "排序号"),

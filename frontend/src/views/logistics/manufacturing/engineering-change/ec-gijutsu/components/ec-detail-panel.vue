@@ -89,11 +89,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('ecNo')">
-      <a-form-item :label="t('entity.ecdetail.ecno')">
+      <div v-show="isFieldVisible('ecCode')">
+      <a-form-item :label="t('entity.ecdetail.ecCode')">
         <a-input
-          v-model:value="advancedQueryForm.ecNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecno') })"
+          v-model:value="advancedQueryForm.ecCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecdetail.ecCode') })"
           show-count
           :maxlength="10"
           allow-clear
@@ -511,7 +511,7 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  ecNo: '',
+  ecCode: '',
   lineNumber: undefined as number | undefined,
   ecModel: '',
   ecBomItem: '',
@@ -546,7 +546,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'ecNo', label: t('entity.ecdetail.ecno') },
+  { key: 'ecCode', label: t('entity.ecdetail.ecCode') },
   { key: 'lineNumber', label: t('entity.ecdetail.linenumber') },
   { key: 'ecModel', label: t('entity.ecdetail.ecmodel') },
   { key: 'ecBomItem', label: t('entity.ecdetail.ecbomitem') },
@@ -575,8 +575,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -598,7 +597,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  ecNo: '',
+  ecCode: '',
   lineNumber: undefined as number | undefined,
   ecModel: '',
   ecBomItem: '',
@@ -673,14 +672,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcDetailField(record, 'ecDetailId') ?? ''),
   },
   {
-    title: t('entity.ecdetail.ecno'),
-    dataIndex: 'ecNo',
-    key: 'ecNo',
+    title: t('entity.ecdetail.ecCode'),
+    dataIndex: 'ecCode',
+    key: 'ecCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
-      String(getEcDetailField(record, 'ecNo') ?? ''),
+      String(getEcDetailField(record, 'ecCode') ?? ''),
   },
   {
     title: t('entity.ecdetail.linenumber'),
@@ -761,8 +760,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: EcDetail }) =>
       String(getEcDetailField(record, 'ecNewStock') ?? ''),
-  },
-])
+  }])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -824,7 +822,7 @@ function buildListQuery(overrides?: Partial<EcDetailQuery>): EcDetailQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('ecNo', form.ecNo)
+  assignTrimmed('ecCode', form.ecCode)
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }

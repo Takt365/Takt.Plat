@@ -22,7 +22,7 @@ export const EMPLOYEEONBOARDING_SELF_I18N_KEY = buildEntitySelfI18nKey(EMPLOYEEO
 export const EMPLOYEEONBOARDING_LIST_FIELDS = [
   'offerId',
   'offerName',
-  'todoNo',
+  'todoCode',
   'plannedJoinedDate',
   'candidateName',
   'mobile',
@@ -41,7 +41,7 @@ export const EMPLOYEEONBOARDING_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   offerId: 'select',
-  todoNo: 'required',
+  todoCode: 'required',
   plannedJoinedDate: 'select',
   candidateName: 'select',
   mobile: 'optional',
@@ -53,6 +53,7 @@ export const EMPLOYEEONBOARDING_PLACEHOLDER = {
   todoStatus: 'select',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -61,7 +62,7 @@ export type EmployeeOnboardingField = keyof typeof EMPLOYEEONBOARDING_PLACEHOLDE
 /** 高级查询可 trim 的字符串字段 */
 export const EMPLOYEEONBOARDING_QUERY_STRING_FIELDS = [
   'offerId',
-  'todoNo',
+  'todoCode',
   'plannedJoinedDateStart',
   'plannedJoinedDateEnd',
   'candidateName',

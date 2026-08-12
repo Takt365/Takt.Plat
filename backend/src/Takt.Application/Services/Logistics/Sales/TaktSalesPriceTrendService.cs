@@ -21,12 +21,13 @@ using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Options;
 using Takt.Shared.Validation;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
 /// <summary>
-/// 销售价格月推移 / 机种推移分析服务
+/// 销售价格月推移 / 机种推移分析服务（读销售价格本表；与 CRUD 服务分离）
 /// </summary>
 public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendService
 {
@@ -75,6 +76,121 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     }
 
     /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        var list = await _salesPriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode != null
+                && x.PlantCode != string.Empty);
+        return list
+            .GroupBy(e => e.PlantCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string plantCode)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _salesPriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == plant
+                && x.PriceType != null
+                && x.PriceType != string.Empty);
+        return list
+            .GroupBy(e => e.PriceType.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(
+        string plantCode,
+        string? priceType = null)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        var type = priceType?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant) || string.IsNullOrEmpty(type))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _salesPriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == plant
+                && x.PriceType == type
+                && x.CustomerCode != null
+                && x.CustomerCode != string.Empty);
+        return list
+            .GroupBy(e => e.CustomerCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(
+        string plantCode,
+        string? priceType = null,
+        string? customerCode = null)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        var type = priceType?.Trim() ?? string.Empty;
+        var customer = customerCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant) || string.IsNullOrEmpty(type) || string.IsNullOrEmpty(customer))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var list = await _salesPriceRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == plant
+                && x.PriceType == type
+                && x.CustomerCode == customer
+                && x.MaterialCode != null
+                && x.MaterialCode != string.Empty);
+        return list
+            .GroupBy(e => e.MaterialCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g =>
+            {
+                var description = g.Select(x => x.MaterialDescription)
+                    .FirstOrDefault(d => !string.IsNullOrWhiteSpace(d))?.Trim();
+                var label = string.IsNullOrWhiteSpace(description) ? g.Key : $"{g.Key} - {description}";
+                return new TaktSelectOption
+                {
+                    DictValue = g.Key,
+                    DictLabel = label,
+                };
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
     public async Task<TaktSalesPriceMonthlyTrendResultDto> GetSalesPriceMonthlyTrendAnalysisAsync(
         TaktSalesPriceMonthlyTrendQueryDto queryDto)
     {
@@ -109,11 +225,11 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         var built = await BuildSalesPriceMonthlyTrendAnalysisAsync(query);
         var columnKeys = new List<string>
         {
-            "plantCode", "materialCode", "materialName", "customerCode", "customerName", "currency", "unit",
+            "plantCode", "materialCode", "materialDescription", "customerCode", "customerName", "currencyCode", "unit",
         };
         var columnLabels = new List<string>
         {
-            "工厂代码", "物料编码", "物料名称", "客户编码", "客户名称", "币种", "单位",
+            "工厂代码", "物料编码", "物料描述", "客户编码", "客户名称", "币种", "单位",
         };
         foreach (var period in built.PeriodOrder)
         {
@@ -128,10 +244,10 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             {
                 ["plantCode"] = row.PlantCode,
                 ["materialCode"] = row.MaterialCode,
-                ["materialName"] = row.MaterialName,
+                ["materialDescription"] = row.MaterialDescription,
                 ["customerCode"] = row.CustomerCode,
                 ["customerName"] = row.CustomerName,
-                ["currency"] = row.Currency,
+                ["currencyCode"] = row.CurrencyCode,
                 ["unit"] = row.Unit,
                 ["basePeriod"] = row.BasePeriod,
                 ["comparePeriod"] = row.ComparePeriod,
@@ -143,9 +259,17 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             };
             foreach (var period in built.PeriodOrder)
             {
-                dict[$"period_{period}"] = row.PeriodUnitPrices.TryGetValue(period, out var price)
-                    ? price
-                    : null;
+                if (!row.PeriodUnitPrices.TryGetValue(period, out var price))
+                {
+                    dict[$"period_{period}"] = null;
+                    continue;
+                }
+                var isCarried = row.PeriodPriceSourcePeriods.TryGetValue(period, out var source)
+                    && !string.IsNullOrWhiteSpace(source)
+                    && !string.Equals(source, period, StringComparison.Ordinal);
+                dict[$"period_{period}"] = isCarried
+                    ? $"{price.ToString("0.00000", System.Globalization.CultureInfo.InvariantCulture)}*"
+                    : price;
             }
             return (IReadOnlyDictionary<string, object?>)dict;
         }).ToList();
@@ -299,20 +423,20 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             var productCodes = info?.ProductCodes ?? new List<string>();
             var modelCodes = info?.ModelCodes ?? new List<string>();
             var bomText = info?.ComponentDescription ?? string.Empty;
-            var materialText = !string.IsNullOrWhiteSpace(row.MaterialName)
-                ? row.MaterialName
+            var materialText = !string.IsNullOrWhiteSpace(row.MaterialDescription)
+                ? row.MaterialDescription
                 : bomText;
             return new TaktSalesPriceModelTrendDto
             {
                 PlantCode = row.PlantCode,
                 MaterialCode = row.MaterialCode,
-                MaterialName = row.MaterialName,
+                MaterialDescription = row.MaterialDescription,
                 CustomerCode = row.CustomerCode,
                 CustomerName = row.CustomerName,
-                Currency = row.Currency,
+                CurrencyCode = row.CurrencyCode,
                 Unit = row.Unit,
                 PeriodUnitPrices = row.PeriodUnitPrices,
-                PeriodPriceSourcePeriods = row.PeriodPriceSourcePeriods,
+                PeriodPriceSourcePeriods = row.PeriodPriceSourcePeriods, // 含缺月回填来源月
                 Trend = row.Trend,
                 BasePeriod = row.BasePeriod,
                 ComparePeriod = row.ComparePeriod,
@@ -573,20 +697,30 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             Unit = r.Item.UnitOfMeasure ?? string.Empty,
             ReferenceCode = key.CustomerCode,
         }).ToList();
-        var points = TaktPriceTrendAnalysisHelper.BuildMonthlyTrendPoints(entries, rangeStart, rangeEnd);
+        // 缺月回填最近有效价（与物料移动价格推移一致；回填写入最近价格日期供前端 * 悬停）
+        var points = TaktPriceTrendAnalysisHelper.BuildMonthlyTrendPoints(
+            entries,
+            rangeStart,
+            rangeEnd,
+            carryForwardMissingMonths: true);
         var pointByMonth = points.ToDictionary(p => p.YearMonth, StringComparer.Ordinal);
+        // 无自定义比较器，避免 JSON 序列化后前端读不到来源日期（* 标记）
+        var periodUnitPrices = new Dictionary<string, decimal>();
+        var periodPriceSourcePeriods = new Dictionary<string, string>();
         var row = new TaktSalesPriceMonthlyTrendDto
         {
             PlantCode = key.PlantCode,
             MaterialCode = key.MaterialCode,
             CustomerCode = key.CustomerCode,
-            MaterialName = string.Empty,
+            MaterialDescription = string.Empty,
             CustomerName = string.Empty,
-            Currency = groupRows
-                .Select(r => r.Item.ConditionCurrency?.Trim())
+            CurrencyCode = groupRows
+                .Select(r => r.Item.ConditionCurrencyCode?.Trim())
                 .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c)) ?? string.Empty,
             Unit = entries.FirstOrDefault(e => !string.IsNullOrWhiteSpace(e.Unit))?.Unit ?? string.Empty,
             Trend = "none",
+            PeriodUnitPrices = periodUnitPrices,
+            PeriodPriceSourcePeriods = periodPriceSourcePeriods,
         };
         foreach (var period in periodOrder)
         {
@@ -594,7 +728,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             {
                 continue;
             }
-            row.PeriodUnitPrices[period] = RoundSalesPriceUnitPrice(point.UnitPrice);
+            periodUnitPrices[period] = RoundSalesPriceUnitPrice(point.UnitPrice);
+            // 当月有价=yyyy-MM；缺月回填=最近价格日期 yyyy-MM-dd（与移动价 * 说明一致）
+            periodPriceSourcePeriods[period] = TaktPriceTrendAnalysisHelper.ResolvePeriodPriceSourceLabel(point);
             if (!string.IsNullOrWhiteSpace(point.Unit))
             {
                 row.Unit = point.Unit;
@@ -702,7 +838,7 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     }
 
     /// <summary>
-    /// 回填物料名称 / 客户名称
+    /// 回填物料描述 / 客户名称
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="rows">推移行</param>
@@ -728,9 +864,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         var customerNames = await LoadCustomerNameLookupAsync(plantCode, customerCodes);
         foreach (var row in rows)
         {
-            if (materialNames.TryGetValue(row.MaterialCode, out var materialName))
+            if (materialNames.TryGetValue(row.MaterialCode, out var materialDescription))
             {
-                row.MaterialName = materialName;
+                row.MaterialDescription = materialDescription;
             }
             if (customerNames.TryGetValue(row.CustomerCode, out var customerName))
             {
@@ -740,7 +876,7 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     }
 
     /// <summary>
-    /// 加载工厂物料名称字典
+    /// 加载工厂物料描述字典
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="materialCodes">物料编码</param>
@@ -771,7 +907,7 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
                 {
                     continue;
                 }
-                map[group.Key] = group.Select(x => x.MaterialName)
+                map[group.Key] = group.Select(x => x.MaterialDescription)
                     .FirstOrDefault(n => !string.IsNullOrWhiteSpace(n))?.Trim() ?? string.Empty;
             }
         }

@@ -16,6 +16,8 @@ export default {
     periodRange: 'Period',
     materialCode: 'Material code',
     selectPlantRequired: 'Please select a plant',
+    selectMaterialTypeRequired: 'Please select a material type',
+    selectValuationRequired: 'Please select a valuation class',
     selectPeriodRequired: 'Please select a period range',
     summary: '{count} material rows (gaps use last positive price; hover * for source month)',
     summaryModel: '{count} material rows (model/product groups from BOM: component→product→model)',

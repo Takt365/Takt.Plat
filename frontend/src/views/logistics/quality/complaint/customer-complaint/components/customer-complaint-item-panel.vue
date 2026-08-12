@@ -163,11 +163,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -674,14 +674,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getCustomerComplaintItemField(record, 'productName') ?? ''),
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: CustomerComplaintItem }) =>
-      String(getCustomerComplaintItemField(record, 'batchNo') ?? ''),
+      String(getCustomerComplaintItemField(record, 'batchCode') ?? ''),
   },
   {
     title: pi.label('itemType'),
@@ -830,10 +830,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:complaint:customer:delete',
         onClick: (record: CustomerComplaintItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

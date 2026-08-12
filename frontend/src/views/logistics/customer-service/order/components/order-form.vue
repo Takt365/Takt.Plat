@@ -262,7 +262,7 @@
                   v-model:value="formState.currencyCode"
                   :placeholder="pi.ph('currencyCode')"
                   show-count
-                  :maxlength="10"
+                  :maxlength="3"
                   allow-clear
                   :disabled="!!formData?.customerServiceOrderId"
                 />
@@ -384,12 +384,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -466,11 +466,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -481,8 +481,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */

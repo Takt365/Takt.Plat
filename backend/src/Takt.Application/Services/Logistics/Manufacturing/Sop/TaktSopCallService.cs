@@ -309,6 +309,7 @@ public class TaktSopCallService : TaktServiceBase, ITaktSopCallService
                 || SqlFunc.ToString(x.RespondedBy).Contains(keywords)
                 || SqlFunc.ToString(x.ResponseSeconds).Contains(keywords)
                 || SqlFunc.ToString(x.CallStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CalledAt).Contains(keywords)
@@ -355,6 +356,11 @@ public class TaktSopCallService : TaktServiceBase, ITaktSopCallService
         if (queryDto?.CallStatus.HasValue == true)
         {
             exp = exp.And(x => x.CallStatus == queryDto.CallStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

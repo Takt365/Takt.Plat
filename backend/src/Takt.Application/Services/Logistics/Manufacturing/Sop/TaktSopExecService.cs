@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工位执行应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
     }
 
     /// <summary>
-    /// 获取SOP工位执行列表（分页）
+    /// 获取SOP工位执行列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopExecDto>> GetSopExecListAsync(TaktSopExecQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopExecDto>.Create(
+                new List<TaktSopExecDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopExecRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -106,12 +114,12 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
         EnsureThreeLayerContext();
         var list = await _sopExecRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ExecStatus == 1,
-            x => x.MaterialCode ?? string.Empty,
+            x => x.WorkOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialCode ?? e.Id.ToString(),
+            DictValue = e.WorkOrderCode,
+            DictLabel = e.WorkOrderCode,
         }).ToList();
     }
 
@@ -260,7 +268,15 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopExecAsync(TaktSopExecQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopExecQueryDto());
+        var queryDto = query ?? new TaktSopExecQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopExecExportDto>(),
+                sheetName ?? "SOP工位执行数据",
+                fileName ?? "SOP工位执行导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopExecRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -304,7 +320,7 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
     }
 
     /// <summary>
-    /// 保存SOP工位执行子表级联（SOP工步执行明细、SOP物料扫码记录、SOP作业参数；Create/Update 后按主表 Id 先删后插）
+    /// 保存SOP工位执行子表级联（SOP工步执行明细、SOP物料扫码记录、SOP作业参数；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -312,58 +328,187 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
     private async Task SaveSopExecChildrenAsync(TaktSopExec entity, TaktSopExecCreateDto dto)
     {
         // SOP工步执行明细（Steps）
-        if (dto.Steps is not { Count: > 0 })
+        List<TaktSopExecStepUpdateDto>? stepsForSave;
+        if (dto is TaktSopExecUpdateDto updateDtoForSteps && updateDtoForSteps.Steps != null)
+        {
+            stepsForSave = updateDtoForSteps.Steps;
+        }
+        else if (dto.Steps != null)
+        {
+            stepsForSave = dto.Steps.Adapt<List<TaktSopExecStepUpdateDto>>();
+        }
+        else
+        {
+            stepsForSave = null;
+        }
+        if (stepsForSave is not { Count: > 0 })
         {
             await _sopExecStepRepository.DeleteAsync(x => x.ExecId == entity.Id);
         }
         else
         {
-            var steps = dto.Steps.Adapt<List<TaktSopExecStep>>();
-            foreach (var child in steps)
+            var existingList = await _sopExecStepRepository.GetListAsync(x => x.ExecId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopExecStep>();
+            for (var i = 0; i < stepsForSave.Count; i++)
             {
-                child.ExecId = entity.Id;
+                var childDto = stepsForSave[i];
+                childDto.ExecId = entity.Id;
+                if (childDto.SopExecStepId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SopExecStepId, out var target))
+                    {
+                        throw new TaktBusinessException("SOP工步执行明细不存在（SopExecStepId={childDto.SopExecStepId}）");
+                    }
+                    if (target.ExecId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP工步执行明细不属于当前主表（SopExecStepId={childDto.SopExecStepId}）");
+                    }
+                    submittedIds.Add(childDto.SopExecStepId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopExecStepId;
+                    target.ExecId = entity.Id;
+                    await _sopExecStepRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopExecStep>();
+                    child.Id = 0;
+                    child.ExecId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-            await _sopExecStepRepository.DeleteAsync(x => x.ExecId == entity.Id);
-            foreach (var child in steps)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _sopExecStepRepository.DeleteAsync(removed.Id);
             }
-            await _sopExecStepRepository.CreateRangeAsync(steps);
+            if (toCreate.Count > 0)
+            {
+                await _sopExecStepRepository.CreateRangeAsync(toCreate);
+            }
         }
         // SOP物料扫码记录（Scans）
-        if (dto.Scans is not { Count: > 0 })
+        List<TaktSopExecScanUpdateDto>? scansForSave;
+        if (dto is TaktSopExecUpdateDto updateDtoForScans && updateDtoForScans.Scans != null)
+        {
+            scansForSave = updateDtoForScans.Scans;
+        }
+        else if (dto.Scans != null)
+        {
+            scansForSave = dto.Scans.Adapt<List<TaktSopExecScanUpdateDto>>();
+        }
+        else
+        {
+            scansForSave = null;
+        }
+        if (scansForSave is not { Count: > 0 })
         {
             await _sopExecScanRepository.DeleteAsync(x => x.ExecId == entity.Id);
         }
         else
         {
-            var scans = dto.Scans.Adapt<List<TaktSopExecScan>>();
-            foreach (var child in scans)
+            var existingList = await _sopExecScanRepository.GetListAsync(x => x.ExecId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopExecScan>();
+            for (var i = 0; i < scansForSave.Count; i++)
             {
-                child.ExecId = entity.Id;
+                var childDto = scansForSave[i];
+                childDto.ExecId = entity.Id;
+                if (childDto.SopExecScanId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SopExecScanId, out var target))
+                    {
+                        throw new TaktBusinessException("SOP物料扫码记录不存在（SopExecScanId={childDto.SopExecScanId}）");
+                    }
+                    if (target.ExecId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP物料扫码记录不属于当前主表（SopExecScanId={childDto.SopExecScanId}）");
+                    }
+                    submittedIds.Add(childDto.SopExecScanId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopExecScanId;
+                    target.ExecId = entity.Id;
+                    await _sopExecScanRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopExecScan>();
+                    child.Id = 0;
+                    child.ExecId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-            await _sopExecScanRepository.DeleteAsync(x => x.ExecId == entity.Id);
-            foreach (var child in scans)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _sopExecScanRepository.DeleteAsync(removed.Id);
             }
-            await _sopExecScanRepository.CreateRangeAsync(scans);
+            if (toCreate.Count > 0)
+            {
+                await _sopExecScanRepository.CreateRangeAsync(toCreate);
+            }
         }
         // SOP作业参数（Arguments）
-        if (dto.Arguments is not { Count: > 0 })
+        List<TaktSopArgumentUpdateDto>? argumentsForSave;
+        if (dto is TaktSopExecUpdateDto updateDtoForArguments && updateDtoForArguments.Arguments != null)
+        {
+            argumentsForSave = updateDtoForArguments.Arguments;
+        }
+        else if (dto.Arguments != null)
+        {
+            argumentsForSave = dto.Arguments.Adapt<List<TaktSopArgumentUpdateDto>>();
+        }
+        else
+        {
+            argumentsForSave = null;
+        }
+        if (argumentsForSave is not { Count: > 0 })
         {
             await _sopArgumentRepository.DeleteAsync(x => x.ExecId == entity.Id);
         }
         else
         {
-            var arguments = dto.Arguments.Adapt<List<TaktSopArgument>>();
-            foreach (var child in arguments)
+            var existingList = await _sopArgumentRepository.GetListAsync(x => x.ExecId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopArgument>();
+            for (var i = 0; i < argumentsForSave.Count; i++)
             {
-                child.ExecId = entity.Id;
+                var childDto = argumentsForSave[i];
+                childDto.ExecId = entity.Id;
+                if (childDto.SopArgumentId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SopArgumentId, out var target))
+                    {
+                        throw new TaktBusinessException("SOP作业参数不存在（SopArgumentId={childDto.SopArgumentId}）");
+                    }
+                    if (target.ExecId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP作业参数不属于当前主表（SopArgumentId={childDto.SopArgumentId}）");
+                    }
+                    submittedIds.Add(childDto.SopArgumentId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopArgumentId;
+                    target.ExecId = entity.Id;
+                    await _sopArgumentRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopArgument>();
+                    child.Id = 0;
+                    child.ExecId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-            await _sopArgumentRepository.DeleteAsync(x => x.ExecId == entity.Id);
-            foreach (var child in arguments)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
+                await _sopArgumentRepository.DeleteAsync(removed.Id);
             }
-            await _sopArgumentRepository.CreateRangeAsync(arguments);
+            if (toCreate.Count > 0)
+            {
+                await _sopArgumentRepository.CreateRangeAsync(toCreate);
+            }
         }
     }
     // ========================================
@@ -379,154 +524,267 @@ public class TaktSopExecService : TaktServiceBase, ITaktSopExecService
     {
         var exp = Expressionable.Create<TaktSopExec>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.ProductionOrderId).Contains(keywords)
-                || (x.WorkOrderNo != null && x.WorkOrderNo.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.WorkOrderCode != null && x.WorkOrderCode.Contains(keywords))
                 || (x.SerialNumber != null && x.SerialNumber.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.RoutingItemId).Contains(keywords)
-                || SqlFunc.ToString(x.ProcessSegmentType).Contains(keywords)
-                || SqlFunc.ToString(x.WorkstationId).Contains(keywords)
-                || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
-                || SqlFunc.ToString(x.SopId).Contains(keywords)
-                || SqlFunc.ToString(x.RevisionId).Contains(keywords)
                 || (x.Revision != null && x.Revision.Contains(keywords))
-                || (x.ContentLang != null && x.ContentLang.Contains(keywords))
-                || SqlFunc.ToString(x.SelfCheckResult).Contains(keywords)
-                || SqlFunc.ToString(x.ExecStatus).Contains(keywords)
-                || SqlFunc.ToString(x.CurrentStepId).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.StartedAt).Contains(keywords)
-                || SqlFunc.ToString(x.EndedAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.ProductionOrderId.HasValue == true)
         {
-            exp = exp.And(x => x.ProductionOrderId == queryDto.ProductionOrderId);
+            var productionOrderId = queryDto.ProductionOrderId;
+            exp = exp.And(x => x.ProductionOrderId == productionOrderId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkOrderNo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkOrderCode))
         {
-            exp = exp.And(x => x.WorkOrderNo != null && x.WorkOrderNo.Contains(queryDto.WorkOrderNo));
+            var workOrderCode = queryDto.WorkOrderCode;
+            exp = exp.And(x => x.WorkOrderCode != null && x.WorkOrderCode.Contains(workOrderCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SerialNumber))
         {
-            exp = exp.And(x => x.SerialNumber != null && x.SerialNumber.Contains(queryDto.SerialNumber));
+            var serialNumber = queryDto.SerialNumber;
+            exp = exp.And(x => x.SerialNumber != null && x.SerialNumber.Contains(serialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
         if (queryDto?.RoutingItemId.HasValue == true)
         {
-            exp = exp.And(x => x.RoutingItemId == queryDto.RoutingItemId);
+            var routingItemId = queryDto.RoutingItemId;
+            exp = exp.And(x => x.RoutingItemId == routingItemId);
         }
 
         if (queryDto?.ProcessSegmentType.HasValue == true)
         {
-            exp = exp.And(x => x.ProcessSegmentType == queryDto.ProcessSegmentType);
+            var processSegmentType = queryDto.ProcessSegmentType;
+            exp = exp.And(x => x.ProcessSegmentType == processSegmentType);
         }
 
         if (queryDto?.WorkstationId.HasValue == true)
         {
-            exp = exp.And(x => x.WorkstationId == queryDto.WorkstationId);
+            var workstationId = queryDto.WorkstationId;
+            exp = exp.And(x => x.WorkstationId == workstationId);
         }
 
         if (queryDto?.EmployeeId.HasValue == true)
         {
-            exp = exp.And(x => x.EmployeeId == queryDto.EmployeeId);
+            var employeeId = queryDto.EmployeeId;
+            exp = exp.And(x => x.EmployeeId == employeeId);
         }
 
         if (queryDto?.SopId.HasValue == true)
         {
-            exp = exp.And(x => x.SopId == queryDto.SopId);
+            var sopId = queryDto.SopId;
+            exp = exp.And(x => x.SopId == sopId);
         }
 
         if (queryDto?.RevisionId.HasValue == true)
         {
-            exp = exp.And(x => x.RevisionId == queryDto.RevisionId);
+            var revisionId = queryDto.RevisionId;
+            exp = exp.And(x => x.RevisionId == revisionId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Revision))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Revision))
         {
-            exp = exp.And(x => x.Revision != null && x.Revision.Contains(queryDto.Revision));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ContentLang))
-        {
-            exp = exp.And(x => x.ContentLang != null && x.ContentLang.Contains(queryDto.ContentLang));
+            var revision = queryDto.Revision;
+            exp = exp.And(x => x.Revision != null && x.Revision.Contains(revision));
         }
 
         if (queryDto?.SelfCheckResult.HasValue == true)
         {
-            exp = exp.And(x => x.SelfCheckResult == queryDto.SelfCheckResult);
+            var selfCheckResult = queryDto.SelfCheckResult;
+            exp = exp.And(x => x.SelfCheckResult == selfCheckResult);
         }
 
         if (queryDto?.ExecStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ExecStatus == queryDto.ExecStatus);
+            var execStatus = queryDto.ExecStatus;
+            exp = exp.And(x => x.ExecStatus == execStatus);
         }
 
         if (queryDto?.CurrentStepId.HasValue == true)
         {
-            exp = exp.And(x => x.CurrentStepId == queryDto.CurrentStepId);
+            var currentStepId = queryDto.CurrentStepId;
+            exp = exp.And(x => x.CurrentStepId == currentStepId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.StartedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.StartedAt >= queryDto.StartedAtStart);
+            var startedAtStart = queryDto.StartedAtStart;
+            exp = exp.And(x => x.StartedAt >= startedAtStart);
         }
 
         if (queryDto?.StartedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.StartedAt <= queryDto.StartedAtEnd);
+            var startedAtEnd = queryDto.StartedAtEnd;
+            exp = exp.And(x => x.StartedAt <= startedAtEnd);
         }
 
         if (queryDto?.EndedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.EndedAt >= queryDto.EndedAtStart);
+            var endedAtStart = queryDto.EndedAtStart;
+            exp = exp.And(x => x.EndedAt >= endedAtStart);
         }
 
         if (queryDto?.EndedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EndedAt <= queryDto.EndedAtEnd);
+            var endedAtEnd = queryDto.EndedAtEnd;
+            exp = exp.And(x => x.EndedAt <= endedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopExecQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ProductionOrderId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SerialNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (queryDto.RoutingItemId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProcessSegmentType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.WorkstationId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EmployeeId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SopId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RevisionId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Revision))
+        {
+            return true;
+        }
+        if (queryDto.SelfCheckResult.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExecStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CurrentStepId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.StartedAtStart.HasValue || queryDto.StartedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EndedAtStart.HasValue || queryDto.EndedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

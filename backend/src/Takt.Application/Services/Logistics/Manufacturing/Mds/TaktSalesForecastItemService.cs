@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastItemService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-07-29
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售预测明细应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
         EnsureThreeLayerContext();
         var list = await _salesForecastItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
-            x => x.MaterialName ?? string.Empty,
+            x => x.SalesForecastCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.SalesForecastCode,
-            DictLabel = e.MaterialName ?? e.SalesForecastCode,
+            DictLabel = e.SalesForecastCode,
         }).ToList();
     }
 
@@ -115,14 +115,14 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
     {
         var entity = dto.Adapt<TaktSalesForecastItem>();
         entity.IsObsolete = 0;
-        var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique = await _uniqueValidator.IsUniqueAsync(
             _salesForecastItemRepository,
             x => x.SalesForecastId == entity.SalesForecastId
-                && x.LineNumber == entity.LineNumber
-                && x.MaterialCode == entity.MaterialCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
+                && x.FiscalYear == entity.FiscalYear
+                && x.PlanMonth == entity.PlanMonth);
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique)
         {
-            throw new TaktBusinessException("销售预测明细的SalesForecastId、LineNumber、MaterialCode已存在");
+            throw new TaktBusinessException("销售预测明细的SalesForecastId、FiscalYear、PlanMonth已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -150,15 +150,15 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
             throw new TaktBusinessException("销售预测明细不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique = await _uniqueValidator.IsUniqueAsync(
             _salesForecastItemRepository,
             x => x.SalesForecastId == entity.SalesForecastId
-                && x.LineNumber == entity.LineNumber
-                && x.MaterialCode == entity.MaterialCode,
+                && x.FiscalYear == entity.FiscalYear
+                && x.PlanMonth == entity.PlanMonth,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique)
         {
-            throw new TaktBusinessException("销售预测明细的SalesForecastId、LineNumber、MaterialCode已存在");
+            throw new TaktBusinessException("销售预测明细的SalesForecastId、FiscalYear、PlanMonth已存在");
         }
         await _salesForecastItemRepository.UpdateAsync(entity);
         return await GetSalesForecastItemByIdAsync(id) ?? throw new TaktBusinessException("销售预测明细不存在");
@@ -263,19 +263,19 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
             try
             {
                 var entity = rows[i].Adapt<TaktSalesForecastItem>();
-                var importKey = $"{entity.SalesForecastId}|{entity.LineNumber}|{entity.MaterialCode}";
+                var importKey = $"{entity.SalesForecastId}|{entity.FiscalYear}|{entity.PlanMonth}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SalesForecastId、LineNumber、MaterialCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（SalesForecastId、FiscalYear、PlanMonth）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique = await _uniqueValidator.IsUniqueAsync(
                     _salesForecastItemRepository,
                     x => x.SalesForecastId == entity.SalesForecastId
-                        && x.LineNumber == entity.LineNumber
-                        && x.MaterialCode == entity.MaterialCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_sales_plan_item_line_unique)
+                        && x.FiscalYear == entity.FiscalYear
+                        && x.PlanMonth == entity.PlanMonth);
+                if (!isUnique_ix_takt_logistics_manufacturing_mds_sales_forecast_item_month_unique)
                 {
-                    throw new TaktBusinessException("销售预测明细的SalesForecastId、LineNumber、MaterialCode已存在");
+                    throw new TaktBusinessException("销售预测明细的SalesForecastId、FiscalYear、PlanMonth已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -351,19 +351,17 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
                 SqlFunc.ToString(x.SalesForecastId).Contains(keywords)
                 || (x.SalesForecastCode != null && x.SalesForecastCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
-                || (x.ModelCode != null && x.ModelCode.Contains(keywords))
-                || (x.ModelName != null && x.ModelName.Contains(keywords))
-                || (x.PlanUnit != null && x.PlanUnit.Contains(keywords))
-                || SqlFunc.ToString(x.PlanQuantity).Contains(keywords)
+                || (x.FiscalYear != null && x.FiscalYear.Contains(keywords))
+                || SqlFunc.ToString(x.PlanMonth).Contains(keywords)
+                || SqlFunc.ToString(x.PlanQuantity001).Contains(keywords)
+                || SqlFunc.ToString(x.PlanQuantity002).Contains(keywords)
+                || SqlFunc.ToString(x.PlanQuantityDelta).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedUnitPrice).Contains(keywords)
                 || SqlFunc.ToString(x.EstimatedAmount).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PlannedDeliveryDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -383,39 +381,29 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrEmpty(queryDto?.FiscalYear))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            exp = exp.And(x => x.FiscalYear != null && x.FiscalYear.Contains(queryDto.FiscalYear));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (queryDto?.PlanMonth.HasValue == true)
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.PlanMonth == queryDto.PlanMonth);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
+        if (queryDto?.PlanQuantity001.HasValue == true)
         {
-            exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
+            exp = exp.And(x => x.PlanQuantity001 == queryDto.PlanQuantity001);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ModelCode))
+        if (queryDto?.PlanQuantity002.HasValue == true)
         {
-            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
+            exp = exp.And(x => x.PlanQuantity002 == queryDto.PlanQuantity002);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ModelName))
+        if (queryDto?.PlanQuantityDelta.HasValue == true)
         {
-            exp = exp.And(x => x.ModelName != null && x.ModelName.Contains(queryDto.ModelName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PlanUnit))
-        {
-            exp = exp.And(x => x.PlanUnit != null && x.PlanUnit.Contains(queryDto.PlanUnit));
-        }
-
-        if (queryDto?.PlanQuantity.HasValue == true)
-        {
-            exp = exp.And(x => x.PlanQuantity == queryDto.PlanQuantity);
+            exp = exp.And(x => x.PlanQuantityDelta == queryDto.PlanQuantityDelta);
         }
 
         if (queryDto?.ConvertedQuantity.HasValue == true)
@@ -433,6 +421,11 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
             exp = exp.And(x => x.EstimatedAmount == queryDto.EstimatedAmount);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -441,16 +434,6 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.PlannedDeliveryDateStart.HasValue == true)
-        {
-            exp = exp.And(x => x.PlannedDeliveryDate >= queryDto.PlannedDeliveryDateStart);
-        }
-
-        if (queryDto?.PlannedDeliveryDateEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.PlannedDeliveryDate <= queryDto.PlannedDeliveryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
@@ -462,6 +445,12 @@ public class TaktSalesForecastItemService : TaktServiceBase, ITaktSalesForecastI
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

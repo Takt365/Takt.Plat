@@ -27,299 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialRequirementsPlanningCode')"
-                name="materialRequirementsPlanningCode"
-              >
-                <a-input
-                  v-model:value="formState.materialRequirementsPlanningCode"
-                  :placeholder="pi.ph('materialRequirementsPlanningCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('masterProductionScheduleId')"
-                name="masterProductionScheduleId"
-              >
-                <a-input
-                  v-model:value="formState.masterProductionScheduleId"
-                  :placeholder="pi.ph('masterProductionScheduleId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mpsCode')"
-                name="mpsCode"
-              >
-                <a-input
-                  v-model:value="formState.mpsCode"
-                  :placeholder="pi.ph('mpsCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('masterDemandScheduleId')"
-                name="masterDemandScheduleId"
-              >
-                <a-input
-                  v-model:value="formState.masterDemandScheduleId"
-                  :placeholder="pi.ph('masterDemandScheduleId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mdsCode')"
-                name="mdsCode"
-              >
-                <a-input
-                  v-model:value="formState.mdsCode"
-                  :placeholder="pi.ph('mdsCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planDate')"
-                name="planDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.planDate"
-                  :placeholder="pi.ph('planDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planPeriodStart')"
-                name="planPeriodStart"
-              >
-                <a-date-picker
-                  v-model:value="formState.planPeriodStart"
-                  :placeholder="pi.ph('planPeriodStart')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planPeriodEnd')"
-                name="planPeriodEnd"
-              >
-                <a-date-picker
-                  v-model:value="formState.planPeriodEnd"
-                  :placeholder="pi.ph('planPeriodEnd')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plannerId')"
-                name="plannerId"
-              >
-                <TaktSelect
-                  v-model:value="formState.plannerId"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('plannerId')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('planBy')"
-                name="planBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.planBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('planBy')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('runStatus')"
-                name="runStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.runStatus"
-                  :placeholder="pi.ph('runStatus')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('productionPlanId')"
-                name="productionPlanId"
-              >
-                <a-input
-                  v-model:value="formState.productionPlanId"
-                  :placeholder="pi.ph('productionPlanId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('productionPlanCode')"
-                name="productionPlanCode"
-              >
-                <a-input
-                  v-model:value="formState.productionPlanCode"
-                  :placeholder="pi.ph('productionPlanCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('purchasePlanId')"
-                name="purchasePlanId"
-              >
-                <a-input
-                  v-model:value="formState.purchasePlanId"
-                  :placeholder="pi.ph('purchasePlanId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('purchasePlanCode')"
-                name="purchasePlanCode"
-              >
-                <a-input
-                  v-model:value="formState.purchasePlanCode"
-                  :placeholder="pi.ph('purchasePlanCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.materialRequirementsPlanningId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('planDescription')"
-                name="planDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.planDescription"
-                  :placeholder="pi.ph('planDescription')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -466,17 +185,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialRequirementsPlanningCode","masterProductionScheduleId","mpsCode","masterDemandScheduleId","mdsCode","planDate","planPeriodStart","planPeriodEnd","plannerId","planBy","runStatus","productionPlanId","productionPlanCode","purchasePlanId","purchasePlanCode","planDescription","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","materialRequirementsPlanningCode","masterProductionScheduleId","mpsCode","masterDemandScheduleId","mdsCode","planDate","planPeriodStart","planPeriodEnd","plannerId","planBy","runStatus","productionPlanId","productionPlanCode","purchasePlanId","purchasePlanCode","planDescription","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -592,8 +314,7 @@ const materialRequirementsPlanningItemFormColumns = computed<TaktEditableTableCo
     key: 'isObsolete',
     title: materialRequirementsPlanningItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<MaterialRequirementsPlanningCreate & { materialRequirementsPlanningId?: string }> | null | undefined) {
@@ -632,7 +353,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         materialRequirementsPlanningId: masterId,
       }
       if (isUpdate && isPersistedMaterialRequirementsPlanningItemRow(row)) {
@@ -665,7 +386,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 materialRequirementsPlanningId 才视为编辑） */
 watch(

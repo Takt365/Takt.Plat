@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：argument.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopArgument extends CompanyDtoBase {
   sopArgumentId: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
@@ -39,7 +39,7 @@ export interface SopArgument extends CompanyDtoBase {
   execName?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
@@ -49,7 +49,7 @@ export interface SopArgument extends CompanyDtoBase {
   execStepName?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -69,7 +69,7 @@ export interface SopArgument extends CompanyDtoBase {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange: number;
 
@@ -104,17 +104,27 @@ export interface SopArgumentQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -129,7 +139,7 @@ export interface SopArgumentQuery extends TaktPagedQuery {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -183,22 +193,27 @@ export interface SopArgumentCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -213,7 +228,7 @@ export interface SopArgumentCreate {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange: number;
 
@@ -267,17 +282,27 @@ export interface SopArgumentTemplate {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -292,7 +317,7 @@ export interface SopArgumentTemplate {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -331,22 +356,27 @@ export interface SopArgumentImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -361,7 +391,7 @@ export interface SopArgumentImport {
   actualValue?: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange?: number;
 
@@ -400,17 +430,22 @@ export interface SopArgumentExport {
   companyCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+   * 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
    */
   routingItemParameterId?: string;
 
@@ -425,7 +460,7 @@ export interface SopArgumentExport {
   actualValue: number;
 
   /**
-   * 是否超差（字典 sys_yes_no_type，0=否，1=是）
+   * 是否超差（字典 sys_yes_no_type；0=否，1=是）
    */
   isOutOfRange: number;
 

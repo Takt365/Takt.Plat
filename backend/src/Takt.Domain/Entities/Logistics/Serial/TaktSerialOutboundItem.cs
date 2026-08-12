@@ -21,7 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarTable("takt_logistics_serial_outbound_item", "序列号出库明细表")]
 [SugarIndex("ix_serial_outbound_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_outbound_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_outbound_item_outbound_serial_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundSerialNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_outbound_item_outbound_serial_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundSerialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_serial_outbound_item_outbound_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundId), OrderByType.Asc, false)]
 public class TaktSerialOutboundItem : TaktCompanyEntityBase
 {
@@ -34,8 +34,8 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string OutboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "outbound_code", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string OutboundCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
@@ -44,8 +44,8 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_serial_no", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string OutboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "outbound_serial_code", ColumnDescription = "出库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string OutboundSerialCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
@@ -53,10 +53,10 @@ public class TaktSerialOutboundItem : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    [SugarColumn(ColumnName = "reference_inbound_no", ColumnDescription = "关联入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string ReferenceInboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "reference_inbound_code", ColumnDescription = "关联入库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "")]
+    public string ReferenceInboundCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
     /// </summary>

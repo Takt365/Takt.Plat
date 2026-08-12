@@ -100,7 +100,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateNumberingAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
@@ -170,7 +170,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "yyyy",
                 "year",
                 SegmentsWithDepartment,
-                "内置：服务台 TaktTicket.TicketNo"),
+                "内置：服务台 TaktTicket.TicketCode"),
             new NumberingSeedTemplate(
                 "AC-ASSET",
                 "资产编码",
@@ -230,7 +230,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 "none",
                 "none",
                 SegmentsWithDepartment,
-                "内置：TaktEquipment.EquipmentCode"),
+                "内置：TaktEquipment.EquipCode"),
             new NumberingSeedTemplate(
                 "LG-SLS-INV",
                 "销售发票编码",
@@ -356,6 +356,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktNumbering> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         NumberingSeedTemplate template)
     {
         var entity = await repository.FirstAsync(x =>
@@ -383,6 +384,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 IsBuiltIn = IsBuiltInYes,
                 NumberingStatus = StatusEnabled,
                 Remark = template.Remark,
+                CultureCode = cultureCode
             };
             ApplyDateFormatResetPeriodAlignment(entity);
             var (exampleCode, currentSequence) = BuildInitialExampleCode(entity, DateTime.Now);

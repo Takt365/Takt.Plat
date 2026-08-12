@@ -34,7 +34,7 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     /// <summary>
     /// 销售报价编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "销售报价编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "sales_quotation_code", ColumnDescription = "销售报价编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesQuotationCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -50,15 +50,15 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
@@ -112,6 +112,12 @@ public class TaktSalesQuotationItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal TaxAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 报价金额
+    /// </summary>
+    [SugarColumn(ColumnName = "quotation_amount", ColumnDescription = "报价金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal QuotationAmount { get; set; } = 0;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

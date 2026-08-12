@@ -389,10 +389,11 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
                 || (x.AssyReworkNote != null && x.AssyReworkNote.Contains(keywords))
                 || SqlFunc.ToString(x.AssyScrapCost).Contains(keywords)
                 || (x.AssyCustomerName1 != null && x.AssyCustomerName1.Contains(keywords))
-                || (x.AssyDebitNoteNo != null && x.AssyDebitNoteNo.Contains(keywords))
+                || (x.AssyDebitNoteCode != null && x.AssyDebitNoteCode.Contains(keywords))
                 || SqlFunc.ToString(x.AssyOtherExpenses2).Contains(keywords)
                 || (x.AssyNote != null && x.AssyNote.Contains(keywords))
                 || (x.AssyRecorder != null && x.AssyRecorder.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -464,9 +465,9 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
             exp = exp.And(x => x.AssyCustomerName1 != null && x.AssyCustomerName1.Contains(queryDto.AssyCustomerName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssyDebitNoteNo))
+        if (!string.IsNullOrEmpty(queryDto?.AssyDebitNoteCode))
         {
-            exp = exp.And(x => x.AssyDebitNoteNo != null && x.AssyDebitNoteNo.Contains(queryDto.AssyDebitNoteNo));
+            exp = exp.And(x => x.AssyDebitNoteCode != null && x.AssyDebitNoteCode.Contains(queryDto.AssyDebitNoteCode));
         }
 
         if (queryDto?.AssyOtherExpenses2.HasValue == true)
@@ -482,6 +483,11 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
         if (!string.IsNullOrEmpty(queryDto?.AssyRecorder))
         {
             exp = exp.And(x => x.AssyRecorder != null && x.AssyRecorder.Contains(queryDto.AssyRecorder));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -503,6 +509,12 @@ public class TaktQualityIssueAssyReworkService : TaktServiceBase, ITaktQualityIs
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

@@ -24,84 +24,14 @@ import type {
  */
 export interface EcKoubai extends CompanyDtoBase {
   /**
-   * EcKoubaiID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入）
    */
-  ecKoubaiId: string;
+  cultureCode: string
 
   /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
+   * 区域文化编码（登录或公司切换注入）
    */
-  ecnDetailId: string;
-
-  /**
-   * 设变明细 名称（填充字段）
-   */
-  ecnDetailName?: string;
-
-  /**
-   * 设变单号（冗余，便于查询）
-   */
-  ecNo: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
-   */
-  deptCode: string;
-
-  /**
-   * 是否实施（0=否 1=是，字典 sys_yes_no）
-   */
-  isImplemented: number;
-
-  /**
-   * 执行内容（各部门通用）
-   */
-  execContent?: string;
-
-  /**
-   * 采购订单发行日期
-   */
-  purchaseOrderIssueDate?: string;
-
-  /**
-   * 供应商
-   */
-  supplier?: string;
-
-  /**
-   * 采购订单号码
-   */
-  purchaseOrderNo?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * EcKoubai 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 EcKoubaiQuery
- * @description 对应后端 TaktEcKoubaiQueryDto
- */
-export interface EcKoubaiQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
+  cultureCode?: string
 
   /**
    * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
@@ -111,219 +41,7 @@ export interface EcKoubaiQuery extends TaktPagedQuery {
   /**
    * 设变单号（冗余，便于查询）
    */
-  ecNo?: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
-   */
-  deptCode?: string;
-
-  /**
-   * 是否实施（0=否 1=是，字典 sys_yes_no）
-   */
-  isImplemented?: number;
-
-  /**
-   * 执行内容（各部门通用）
-   */
-  execContent?: string;
-
-  /**
-   * 采购订单发行日期（范围查询-开始）
-   */
-  purchaseOrderIssueDateStart?: string;
-
-  /**
-   * 采购订单发行日期（范围查询-结束）
-   */
-  purchaseOrderIssueDateEnd?: string;
-
-  /**
-   * 供应商
-   */
-  supplier?: string;
-
-  /**
-   * 采购订单号码
-   */
-  purchaseOrderNo?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建EcKoubai DTO
- * 对应前端 EcKoubaiCreate
- * @description 对应后端 TaktEcKoubaiCreateDto
- */
-export interface EcKoubaiCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
-   */
-  ecnDetailId: string;
-
-  /**
-   * 设变单号（冗余，便于查询）
-   */
-  ecNo: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
-   */
-  deptCode: string;
-
-  /**
-   * 是否实施（0=否 1=是，字典 sys_yes_no）
-   */
-  isImplemented: number;
-
-  /**
-   * 执行内容（各部门通用）
-   */
-  execContent?: string;
-
-  /**
-   * 采购订单发行日期
-   */
-  purchaseOrderIssueDate?: string;
-
-  /**
-   * 供应商
-   */
-  supplier?: string;
-
-  /**
-   * 采购订单号码
-   */
-  purchaseOrderNo?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新EcKoubai DTO
- * 继承 TaktEcKoubaiCreateDto，添加 EcKoubaiId 字段
- * 对应前端 EcKoubaiUpdate
- * @description 对应后端 TaktEcKoubaiUpdateDto
- */
-export interface EcKoubaiUpdate extends EcKoubaiCreate {
-  /**
-   * EcKoubaiID（标识要更新的实体）
-   */
-  ecKoubaiId: string;
-
-}
-
-
-/**
- * EcKoubai 作废/撤销作废 DTO
- * 对应前端 EcKoubaiObsolete
- * @description 对应后端 TaktEcKoubaiObsoleteDto
- */
-export interface EcKoubaiObsolete {
-  /**
-   * EcKoubaiID
-   */
-  ecKoubaiId: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * EcKoubai 导入模板行 DTO
- * 对应前端 EcKoubaiTemplate
- * @description 对应后端 TaktEcKoubaiTemplateDto
- */
-export interface EcKoubaiTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
-   */
-  ecnDetailId?: string;
-
-  /**
-   * 设变单号（冗余，便于查询）
-   */
-  ecNo?: string;
+  ecCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -358,7 +76,7 @@ export interface EcKoubaiTemplate {
   /**
    * 采购订单号码
    */
-  purchaseOrderNo?: string;
+  purchaseOrderCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -376,91 +94,6 @@ export interface EcKoubaiTemplate {
   remark?: string;
 
 }
-
-
-/**
- * EcKoubai 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 EcKoubaiImport
- * @description 对应后端 TaktEcKoubaiImportDto
- */
-export interface EcKoubaiImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）
-   */
-  ecnDetailId?: string;
-
-  /**
-   * 设变单号（冗余，便于查询）
-   */
-  ecNo?: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 部门编码（TaktDept.DeptCode，5 位，如 D0510）
-   */
-  deptCode?: string;
-
-  /**
-   * 是否实施（0=否 1=是，字典 sys_yes_no）
-   */
-  isImplemented?: number;
-
-  /**
-   * 执行内容（各部门通用）
-   */
-  execContent?: string;
-
-  /**
-   * 采购订单发行日期
-   */
-  purchaseOrderIssueDate?: string;
-
-  /**
-   * 供应商
-   */
-  supplier?: string;
-
-  /**
-   * 采购订单号码
-   */
-  purchaseOrderNo?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * EcKoubai 导出 DTO（独立实现，不继承响应 Dto）
@@ -486,7 +119,7 @@ export interface EcKoubaiExport {
   /**
    * 设变单号（冗余，便于查询）
    */
-  ecNo: string;
+  ecCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -521,7 +154,7 @@ export interface EcKoubaiExport {
   /**
    * 采购订单号码
    */
-  purchaseOrderNo?: string;
+  purchaseOrderCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

@@ -286,10 +286,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.accounttitle.relatedplant')">
         <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.accounttitle.relatedplant') })"
           allow-clear
@@ -539,7 +539,7 @@ const advancedQueryForm = ref({
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
@@ -565,7 +565,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'isCurrency', label: t('entity.accounttitle.iscurrency') },
   { key: 'isCash', label: t('entity.accounttitle.iscash') },
   { key: 'isBank', label: t('entity.accounttitle.isbank') },
-  { key: 'relatedPlant', label: t('entity.accounttitle.relatedplant') },
+  { key: 'plantCode', label: t('entity.accounttitle.relatedplant') },
   { key: 'accountTitleStatus', label: t('entity.accounttitle.status') },
   { key: 'validFromStart', label: t('entity.accounttitle.validfromstart') },
   { key: 'validFromEnd', label: t('entity.accounttitle.validfromend') },
@@ -574,8 +574,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 导入对话框是否打开 */
@@ -761,7 +760,7 @@ function matchesAccountTitleRightQuery(record: Record<string, unknown>): boolean
   if (advancedQueryForm.value.isCurrency !== undefined && record.isCurrency !== advancedQueryForm.value.isCurrency) return false
   if (advancedQueryForm.value.isCash !== undefined && record.isCash !== advancedQueryForm.value.isCash) return false
   if (advancedQueryForm.value.isBank !== undefined && record.isBank !== advancedQueryForm.value.isBank) return false
-  if (advancedQueryForm.value.relatedPlant && String(record.relatedPlant ?? '') !== String(advancedQueryForm.value.relatedPlant)) return false
+  if (advancedQueryForm.value.plantCode && String(record.plantCode ?? '') !== String(advancedQueryForm.value.plantCode)) return false
   if (advancedQueryForm.value.accountTitleStatus !== undefined && record.accountTitleStatus !== advancedQueryForm.value.accountTitleStatus) return false
   if (advancedQueryForm.value.validFromStart && !String(record.validFromStart ?? '').includes(String(advancedQueryForm.value.validFromStart))) return false
   if (advancedQueryForm.value.validFromEnd && !String(record.validFromEnd ?? '').includes(String(advancedQueryForm.value.validFromEnd))) return false
@@ -811,7 +810,7 @@ function buildAccountTitleUpdateDto(
     accountTitleId: String(accountTitle.accountTitleId),
     tenantCode: accountTitle.tenantCode,
     companyCode: accountTitle.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     accountTitleCode: accountTitle.accountTitleCode,
     accountTitleName: accountTitle.accountTitleName,
     parentId: overrides.parentId,
@@ -824,7 +823,7 @@ function buildAccountTitleUpdateDto(
     isCurrency: accountTitle.isCurrency,
     isCash: accountTitle.isCash,
     isBank: accountTitle.isBank,
-    relatedPlant: accountTitle.relatedPlant,
+    plantCode: accountTitle.plantCode,
     accountTitleStatus: accountTitle.accountTitleStatus,
     validFrom: accountTitle.validFrom,
     validTo: accountTitle.validTo,
@@ -930,7 +929,6 @@ const getAccountTitleDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
 
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -1073,12 +1071,12 @@ watchEffect(() => {
   },
   {
     title: t('entity.accounttitle.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: Record<string, unknown> }) => getAccountTitleField(record, 'plantCode') ?? ''
   },
   {
     title: t('entity.accounttitle.status'),
@@ -1125,8 +1123,7 @@ watchEffect(() => {
         onClick: (record: AccountTitle) => handleDeleteOne(record)
       }
     ],
-  }),
-  ]
+  })]
 })
 
 /** 行选择配置 */
@@ -1196,7 +1193,7 @@ const handleReset = () => {
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',
@@ -1209,7 +1206,6 @@ const handleReset = () => {
   }
   tableCurrentPage.value = getTaktDefaultPageIndex()
 }
-
 
 /**
  * 行内状态切换
@@ -1420,7 +1416,7 @@ function handleAdvancedQueryReset() {
   isCurrency: undefined as number | undefined,
   isCash: undefined as number | undefined,
   isBank: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   accountTitleStatus: undefined as number | undefined,
   validFromStart: '',
   validFromEnd: '',

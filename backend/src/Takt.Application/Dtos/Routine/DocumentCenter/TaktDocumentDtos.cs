@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.DocumentCenter
 // 文件名称：TaktDocumentDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Document 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDocument 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Routine.DocumentCenter;
 // ========================================
 
 /// <summary>
-/// 文管中心主实体 支持制度、流程、模板等文档的分类、版本与权限控制；需审批通过后发布（草稿→审批→发布）
+/// 文管中心主实体 支持制度、流程、模板等文档的分类、版本与权限控制；需审批通过后发布（草稿→审批→发布） 审批态见基类 ApprovalStatus，字典 sys_approval_status
 /// 对应前端 TaktDocumentDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -46,12 +46,12 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 
@@ -76,7 +76,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -123,7 +123,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
@@ -134,7 +134,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -145,7 +145,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int DocumentIsTop { get; set; } = 0;
 
@@ -160,7 +160,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public int DownloadCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
     public string TargetScope { get; set; } = string.Empty;
 
@@ -180,7 +180,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int DocumentStatus { get; set; } = 0;
 
@@ -189,6 +189,7 @@ public class TaktDocumentDto : TaktApprovalDtoBase
     /// （子表：TaktDocumentVersion）
     /// </summary>
     public List<TaktDocumentVersionDto>? Versions { get; set; }
+
 }
 
 // ========================================
@@ -212,6 +213,16 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 文档编码（租户+公司内唯一）
     /// </summary>
     public string? DocumentCode { get; set; } = string.Empty;
@@ -222,12 +233,12 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -252,7 +263,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -314,7 +325,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public DateTime? DocumentPublishTimeEnd { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublisherId { get; set; }
@@ -325,7 +336,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -336,7 +347,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? DocumentIsTop { get; set; }
 
@@ -351,7 +362,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public int? DownloadCount { get; set; }
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
     public string? TargetScope { get; set; } = string.Empty;
 
@@ -371,7 +382,7 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int? DocumentStatus { get; set; }
 
@@ -439,58 +450,34 @@ public class TaktDocumentQueryDto : TaktPagedQuery
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 生效时间（范围查询-开始）；与 DocumentEffectiveTimeStart 同义
-    /// </summary>
-    public DateTime? EffectiveTimeStart
-    {
-        get => DocumentEffectiveTimeStart;
-        set => DocumentEffectiveTimeStart = value;
-    }
-
-    /// <summary>
     /// 生效时间（范围查询-结束）；与 DocumentEffectiveTimeEnd 同义
     /// </summary>
-    public DateTime? EffectiveTimeEnd
-    {
-        get => DocumentEffectiveTimeEnd;
-        set => DocumentEffectiveTimeEnd = value;
-    }
+    public DateTime? EffectiveTimeEnd { get; set; }
 
     /// <summary>
-    /// 失效时间（范围查询-开始）；与 DocumentExpireTimeStart 同义
+    /// 生效时间（范围查询-开始）；与 DocumentEffectiveTimeStart 同义
     /// </summary>
-    public DateTime? ExpireTimeStart
-    {
-        get => DocumentExpireTimeStart;
-        set => DocumentExpireTimeStart = value;
-    }
+    public DateTime? EffectiveTimeStart { get; set; }
 
     /// <summary>
     /// 失效时间（范围查询-结束）；与 DocumentExpireTimeEnd 同义
     /// </summary>
-    public DateTime? ExpireTimeEnd
-    {
-        get => DocumentExpireTimeEnd;
-        set => DocumentExpireTimeEnd = value;
-    }
+    public DateTime? ExpireTimeEnd { get; set; }
 
     /// <summary>
-    /// 发布时间（范围查询-开始）；与 DocumentPublishTimeStart 同义
+    /// 失效时间（范围查询-开始）；与 DocumentExpireTimeStart 同义
     /// </summary>
-    public DateTime? PublishTimeStart
-    {
-        get => DocumentPublishTimeStart;
-        set => DocumentPublishTimeStart = value;
-    }
+    public DateTime? ExpireTimeStart { get; set; }
 
     /// <summary>
     /// 发布时间（范围查询-结束）；与 DocumentPublishTimeEnd 同义
     /// </summary>
-    public DateTime? PublishTimeEnd
-    {
-        get => DocumentPublishTimeEnd;
-        set => DocumentPublishTimeEnd = value;
-    }
+    public DateTime? PublishTimeEnd { get; set; }
+
+    /// <summary>
+    /// 发布时间（范围查询-开始）；与 DocumentPublishTimeStart 同义
+    /// </summary>
+    public DateTime? PublishTimeStart { get; set; }
 }
 
 // ========================================
@@ -513,10 +500,15 @@ public class TaktDocumentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 文档编码（租户+公司内唯一）
     /// </summary>
@@ -530,12 +522,12 @@ public class TaktDocumentCreateDto
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 
@@ -560,7 +552,7 @@ public class TaktDocumentCreateDto
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -607,7 +599,7 @@ public class TaktDocumentCreateDto
     public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
@@ -619,7 +611,7 @@ public class TaktDocumentCreateDto
     public string PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -630,7 +622,7 @@ public class TaktDocumentCreateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int DocumentIsTop { get; set; } = 0;
 
@@ -645,9 +637,9 @@ public class TaktDocumentCreateDto
     public int DownloadCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
-    [Required(ErrorMessage = "目标范围（all=全员，company=本公司，department=本部门，custom=自定义）不能为空")]
+    [Required(ErrorMessage = "目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）不能为空")]
     public string TargetScope { get; set; } = string.Empty;
 
     /// <summary>
@@ -661,7 +653,7 @@ public class TaktDocumentCreateDto
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int DocumentStatus { get; set; } = 0;
 
@@ -700,6 +692,11 @@ public class TaktDocumentUpdateDto : TaktDocumentCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DocumentId { get; set; }
 
+    /// <summary>
+    /// 版本历史列表（主子表关系）（子表，级联保存）
+    /// </summary>
+    public new List<TaktDocumentVersionUpdateDto>? Versions { get; set; }
+
 }
 
 // ========================================
@@ -720,9 +717,9 @@ public class TaktDocumentStatusDto
     public long DocumentId { get; set; }
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
-    [Required(ErrorMessage = "文档状态不能为空")]
+    [Required(ErrorMessage = "文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）不能为空")]
     public int DocumentStatus { get; set; } = 0;
 }
 
@@ -770,6 +767,16 @@ public class TaktDocumentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 文档编码（租户+公司内唯一）
     /// </summary>
     public string? DocumentCode { get; set; } = string.Empty;
@@ -780,12 +787,12 @@ public class TaktDocumentTemplateDto
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -810,7 +817,7 @@ public class TaktDocumentTemplateDto
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -857,7 +864,7 @@ public class TaktDocumentTemplateDto
     public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublisherId { get; set; }
@@ -868,7 +875,7 @@ public class TaktDocumentTemplateDto
     public string? PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -879,7 +886,7 @@ public class TaktDocumentTemplateDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? DocumentIsTop { get; set; }
 
@@ -894,7 +901,7 @@ public class TaktDocumentTemplateDto
     public int? DownloadCount { get; set; }
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
     public string? TargetScope { get; set; } = string.Empty;
 
@@ -909,7 +916,7 @@ public class TaktDocumentTemplateDto
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int? DocumentStatus { get; set; }
 
@@ -946,10 +953,15 @@ public class TaktDocumentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 文档编码（租户+公司内唯一）
     /// </summary>
@@ -961,12 +973,12 @@ public class TaktDocumentImportDto
     public string? DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int? DocumentCategory { get; set; }
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int? ConfidentialLevel { get; set; }
 
@@ -991,7 +1003,7 @@ public class TaktDocumentImportDto
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -1038,7 +1050,7 @@ public class TaktDocumentImportDto
     public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PublisherId { get; set; }
@@ -1049,7 +1061,7 @@ public class TaktDocumentImportDto
     public string? PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -1060,7 +1072,7 @@ public class TaktDocumentImportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? DocumentIsTop { get; set; }
 
@@ -1075,7 +1087,7 @@ public class TaktDocumentImportDto
     public int? DownloadCount { get; set; }
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
     public string? TargetScope { get; set; } = string.Empty;
 
@@ -1090,7 +1102,7 @@ public class TaktDocumentImportDto
     public string? TargetUsers { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int? DocumentStatus { get; set; }
 
@@ -1138,12 +1150,12 @@ public class TaktDocumentExportDto
     public string DocumentTitle { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文档分类
+    /// 文档分类（字典 routine_document_category；0=制度 1=流程 2=模板 3=规范 4=其他）
     /// </summary>
     public int DocumentCategory { get; set; } = 0;
 
     /// <summary>
-    /// 密级
+    /// 密级（字典 routine_document_confidential_level；0=公开 1=内部 2=机密 3=绝密）
     /// </summary>
     public int ConfidentialLevel { get; set; } = 0;
 
@@ -1168,7 +1180,7 @@ public class TaktDocumentExportDto
     public string? DocumentTags { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前文件 ID
+    /// 当前文件 ID（选项 TaktFiles/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FileId { get; set; }
@@ -1215,7 +1227,7 @@ public class TaktDocumentExportDto
     public DateTime? DocumentPublishTime { get; set; }
 
     /// <summary>
-    /// 发布人 ID
+    /// 发布人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PublisherId { get; set; }
@@ -1226,7 +1238,7 @@ public class TaktDocumentExportDto
     public string PublisherName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 归属部门 ID
+    /// 归属部门 ID（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
@@ -1237,7 +1249,7 @@ public class TaktDocumentExportDto
     public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 置顶
+    /// 置顶（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int DocumentIsTop { get; set; } = 0;
 
@@ -1252,7 +1264,7 @@ public class TaktDocumentExportDto
     public int DownloadCount { get; set; } = 0;
 
     /// <summary>
-    /// 目标范围（all=全员，company=本公司，department=本部门，custom=自定义）
+    /// 目标范围（列存业务码 all/company/department/custom；语义对齐 sys_publish_scope_type 的 0=全部/1=指定部门/2=指定用户/3=指定角色）
     /// </summary>
     public string TargetScope { get; set; } = string.Empty;
 
@@ -1272,7 +1284,7 @@ public class TaktDocumentExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 文档状态
+    /// 文档状态（字典 sys_publish_status；0=草稿 1=已发布 2=已撤回 3=已过期）
     /// </summary>
     public int DocumentStatus { get; set; } = 0;
 

@@ -113,10 +113,10 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
         var isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique = await _uniqueValidator.IsUniqueAsync(
             _serialSummaryRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InboundSerialNo == entity.InboundSerialNo);
+                && x.InboundSerialCode == entity.InboundSerialCode);
         if (!isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique)
         {
-            throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialNo已存在");
+            throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialCode已存在");
         }
         entity = await _serialSummaryRepository.CreateAsync(entity);
         return await GetSerialSummaryByIdAsync(entity.Id) ?? entity.Adapt<TaktSerialSummaryDto>();
@@ -139,11 +139,11 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
         var isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique = await _uniqueValidator.IsUniqueAsync(
             _serialSummaryRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InboundSerialNo == entity.InboundSerialNo,
+                && x.InboundSerialCode == entity.InboundSerialCode,
             id);
         if (!isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique)
         {
-            throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialNo已存在");
+            throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialCode已存在");
         }
         await _serialSummaryRepository.UpdateAsync(entity);
         return await GetSerialSummaryByIdAsync(id) ?? throw new TaktBusinessException("序列号汇总不存在");
@@ -217,18 +217,18 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             try
             {
                 var entity = rows[i].Adapt<TaktSerialSummary>();
-                var importKey = $"{entity.PlantCode}|{entity.InboundSerialNo}";
+                var importKey = $"{entity.PlantCode}|{entity.InboundSerialCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、InboundSerialNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、InboundSerialCode）");
                 }
                 var isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique = await _uniqueValidator.IsUniqueAsync(
                     _serialSummaryRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.InboundSerialNo == entity.InboundSerialNo);
+                        && x.InboundSerialCode == entity.InboundSerialCode);
                 if (!isUnique_ix_takt_logistics_serial_summary_inbound_serial_unique)
                 {
-                    throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialNo已存在");
+                    throw new TaktBusinessException("序列号汇总的PlantCode、InboundSerialCode已存在");
                 }
                 await _serialSummaryRepository.CreateAsync(entity);
                 success += 1;
@@ -285,18 +285,19 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.InboundNo != null && x.InboundNo.Contains(keywords))
+                || (x.InboundCode != null && x.InboundCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.InboundSerialNo != null && x.InboundSerialNo.Contains(keywords))
+                || (x.InboundSerialCode != null && x.InboundSerialCode.Contains(keywords))
                 || SqlFunc.ToString(x.InboundQuantity).Contains(keywords)
-                || (x.ProductInboundSerialNo != null && x.ProductInboundSerialNo.Contains(keywords))
-                || (x.OutboundNo != null && x.OutboundNo.Contains(keywords))
-                || (x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(keywords))
+                || (x.ProductInboundSerialCode != null && x.ProductInboundSerialCode.Contains(keywords))
+                || (x.OutboundCode != null && x.OutboundCode.Contains(keywords))
+                || (x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(keywords))
                 || (x.Destination != null && x.Destination.Contains(keywords))
                 || (x.DestinationPort != null && x.DestinationPort.Contains(keywords))
-                || (x.OutboundSerialNo != null && x.OutboundSerialNo.Contains(keywords))
+                || (x.OutboundSerialCode != null && x.OutboundSerialCode.Contains(keywords))
                 || SqlFunc.ToString(x.OutboundQuantity).Contains(keywords)
-                || (x.ProductOutboundSerialNo != null && x.ProductOutboundSerialNo.Contains(keywords))
+                || (x.ProductOutboundSerialCode != null && x.ProductOutboundSerialCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InboundDate).Contains(keywords)
@@ -311,9 +312,9 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.InboundCode))
         {
-            exp = exp.And(x => x.InboundNo != null && x.InboundNo.Contains(queryDto.InboundNo));
+            exp = exp.And(x => x.InboundCode != null && x.InboundCode.Contains(queryDto.InboundCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
@@ -321,9 +322,9 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InboundSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.InboundSerialCode))
         {
-            exp = exp.And(x => x.InboundSerialNo != null && x.InboundSerialNo.Contains(queryDto.InboundSerialNo));
+            exp = exp.And(x => x.InboundSerialCode != null && x.InboundSerialCode.Contains(queryDto.InboundSerialCode));
         }
 
         if (queryDto?.InboundQuantity.HasValue == true)
@@ -331,19 +332,19 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             exp = exp.And(x => x.InboundQuantity == queryDto.InboundQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductInboundSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.ProductInboundSerialCode))
         {
-            exp = exp.And(x => x.ProductInboundSerialNo != null && x.ProductInboundSerialNo.Contains(queryDto.ProductInboundSerialNo));
+            exp = exp.And(x => x.ProductInboundSerialCode != null && x.ProductInboundSerialCode.Contains(queryDto.ProductInboundSerialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.OutboundCode))
         {
-            exp = exp.And(x => x.OutboundNo != null && x.OutboundNo.Contains(queryDto.OutboundNo));
+            exp = exp.And(x => x.OutboundCode != null && x.OutboundCode.Contains(queryDto.OutboundCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceNo))
+        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceCode))
         {
-            exp = exp.And(x => x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(queryDto.ShippingInvoiceNo));
+            exp = exp.And(x => x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(queryDto.ShippingInvoiceCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Destination))
@@ -356,9 +357,9 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             exp = exp.And(x => x.DestinationPort != null && x.DestinationPort.Contains(queryDto.DestinationPort));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.OutboundSerialCode))
         {
-            exp = exp.And(x => x.OutboundSerialNo != null && x.OutboundSerialNo.Contains(queryDto.OutboundSerialNo));
+            exp = exp.And(x => x.OutboundSerialCode != null && x.OutboundSerialCode.Contains(queryDto.OutboundSerialCode));
         }
 
         if (queryDto?.OutboundQuantity.HasValue == true)
@@ -366,9 +367,14 @@ public class TaktSerialSummaryService : TaktServiceBase, ITaktSerialSummaryServi
             exp = exp.And(x => x.OutboundQuantity == queryDto.OutboundQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductOutboundSerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.ProductOutboundSerialCode))
         {
-            exp = exp.And(x => x.ProductOutboundSerialNo != null && x.ProductOutboundSerialNo.Contains(queryDto.ProductOutboundSerialNo));
+            exp = exp.And(x => x.ProductOutboundSerialCode != null && x.ProductOutboundSerialCode.Contains(queryDto.ProductOutboundSerialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -110,14 +110,17 @@ public class TaktDept : TaktCompanyEntityBase
     // ========================================
     // 导航属性区域
     // ========================================
+
     /// <summary>
-    /// 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）
+    /// 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktRoleDept.DeptId))]
     public List<TaktRoleDept>? RoleDepts { get; set; }
+
     /// <summary>
-    /// 员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）
+    /// 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktEmployeeDept.DeptId))]
     public List<TaktEmployeeDept>? EmployeeDepts { get; set; }
+
 }

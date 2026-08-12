@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：exec-scan.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopExecScan extends CompanyDtoBase {
   sopExecScanId: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
@@ -39,7 +39,7 @@ export interface SopExecScan extends CompanyDtoBase {
   execName?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
@@ -49,7 +49,7 @@ export interface SopExecScan extends CompanyDtoBase {
   execStepName?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -64,12 +64,12 @@ export interface SopExecScan extends CompanyDtoBase {
   scannedBarcode: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult: number;
 
@@ -109,17 +109,27 @@ export interface SopExecScanQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -129,12 +139,12 @@ export interface SopExecScanQuery extends TaktPagedQuery {
   scannedBarcode?: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -193,22 +203,27 @@ export interface SopExecScanCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -218,12 +233,12 @@ export interface SopExecScanCreate {
   scannedBarcode: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult: number;
 
@@ -282,17 +297,27 @@ export interface SopExecScanTemplate {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -302,12 +327,12 @@ export interface SopExecScanTemplate {
   scannedBarcode?: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -351,22 +376,27 @@ export interface SopExecScanImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -376,12 +406,12 @@ export interface SopExecScanImport {
   scannedBarcode?: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult?: number;
 
@@ -425,17 +455,22 @@ export interface SopExecScanExport {
   companyCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
    */
   execStepId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -445,12 +480,12 @@ export interface SopExecScanExport {
   scannedBarcode: string;
 
   /**
-   * 期望物料编码
+   * 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   expectedMaterialCode?: string;
 
   /**
-   * 扫码结果（1=PASS，2=NG；字典 logistics_sop_scan_result_type）
+   * 扫码结果（字典 logistics_sop_scan_result_type；1=PASS，2=NG）
    */
   scanResult: number;
 

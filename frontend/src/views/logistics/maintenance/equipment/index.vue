@@ -129,10 +129,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
+      <div v-show="isFieldVisible('EquipCode')">
       <a-form-item :label="t('entity.equipment.code')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
+          v-model:value="advancedQueryForm.EquipCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.code') })"
           show-count
           :maxlength="50"
@@ -171,10 +171,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentSpecification')">
+      <div v-show="isFieldVisible('EquipSpecification')">
       <a-form-item :label="t('entity.equipment.specification')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentSpecification"
+          v-model:value="advancedQueryForm.EquipSpecification"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.specification') })"
           show-count
           :maxlength="200"
@@ -182,10 +182,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentBrand')">
+      <div v-show="isFieldVisible('EquipBrand')">
       <a-form-item :label="t('entity.equipment.brand')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentBrand"
+          v-model:value="advancedQueryForm.EquipBrand"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.brand') })"
           show-count
           :maxlength="100"
@@ -637,12 +637,12 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   plantCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
   equipmentModel: '',
-  equipmentSpecification: '',
-  equipmentBrand: '',
+  EquipSpecification: '',
+  EquipBrand: '',
   manufacturer: '',
   dealerBy: '',
   serialNumber: '',
@@ -678,12 +678,12 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.equipment.plantcode') },
-  { key: 'equipmentCode', label: t('entity.equipment.code') },
+  { key: 'EquipCode', label: t('entity.equipment.code') },
   { key: 'equipmentName', label: t('entity.equipment.name') },
   { key: 'equipmentType', label: t('entity.equipment.type') },
   { key: 'equipmentModel', label: t('entity.equipment.model') },
-  { key: 'equipmentSpecification', label: t('entity.equipment.specification') },
-  { key: 'equipmentBrand', label: t('entity.equipment.brand') },
+  { key: 'EquipSpecification', label: t('entity.equipment.specification') },
+  { key: 'EquipBrand', label: t('entity.equipment.brand') },
   { key: 'manufacturer', label: t('entity.equipment.manufacturer') },
   { key: 'dealerBy', label: t('entity.equipment.dealerby') },
   { key: 'serialNumber', label: t('entity.equipment.serialnumber') },
@@ -714,8 +714,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -733,7 +732,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -758,14 +756,14 @@ function buildListQuery(overrides?: Partial<EquipmentQuery>): EquipmentQuery {
     }
   }
   assignTrimmed('plantCode', form.plantCode)
-  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('EquipCode', form.EquipCode)
   assignTrimmed('equipmentName', form.equipmentName)
   if (form.equipmentType !== undefined && form.equipmentType !== null) {
     query.equipmentType = form.equipmentType
   }
   assignTrimmed('equipmentModel', form.equipmentModel)
-  assignTrimmed('equipmentSpecification', form.equipmentSpecification)
-  assignTrimmed('equipmentBrand', form.equipmentBrand)
+  assignTrimmed('EquipSpecification', form.EquipSpecification)
+  assignTrimmed('EquipBrand', form.EquipBrand)
   assignTrimmed('manufacturer', form.manufacturer)
   assignTrimmed('dealerBy', form.dealerBy)
   assignTrimmed('serialNumber', form.serialNumber)
@@ -814,12 +812,6 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -843,12 +835,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.equipment.code'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentCode') ?? ''
+    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipCode') ?? ''
   },
   {
     title: t('entity.equipment.name'),
@@ -879,21 +871,21 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.equipment.specification'),
-    dataIndex: 'equipmentSpecification',
-    key: 'equipmentSpecification',
+    dataIndex: 'EquipSpecification',
+    key: 'EquipSpecification',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentSpecification') ?? ''
+    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipSpecification') ?? ''
   },
   {
     title: t('entity.equipment.brand'),
-    dataIndex: 'equipmentBrand',
-    key: 'equipmentBrand',
+    dataIndex: 'EquipBrand',
+    key: 'EquipBrand',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentBrand') ?? ''
+    customRender: ({ record }: { record: any }) => getEquipmentField(record, 'EquipBrand') ?? ''
   },
   {
     title: t('entity.equipment.manufacturer'),
@@ -1123,7 +1115,6 @@ const getEquipmentId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getEquipmentField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1193,12 +1184,12 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
   equipmentModel: '',
-  equipmentSpecification: '',
-  equipmentBrand: '',
+  EquipSpecification: '',
+  EquipBrand: '',
   manufacturer: '',
   dealerBy: '',
   serialNumber: '',
@@ -1401,12 +1392,12 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   equipmentType: undefined as number | undefined,
   equipmentModel: '',
-  equipmentSpecification: '',
-  equipmentBrand: '',
+  EquipSpecification: '',
+  EquipBrand: '',
   manufacturer: '',
   dealerBy: '',
   serialNumber: '',

@@ -16,8 +16,32 @@ import type {
   DefectMonthlyTrendResult,
 } from '@/types/logistics/manufacturing/defect/defect-monthly-trend';
 
-/** API 路由前缀 */
+/** API 路由前缀（对应 TaktDefectMonthlyTrendsController） */
 const DEFECT_MONTHLY_TREND_API_BASE = 'TaktDefectMonthlyTrends';
+
+/**
+ * 推移查询栏：工厂去重选项 URL（供 TaktSelect api-url）
+ * @returns {string} 相对 API 路径
+ */
+export function getDefectMonthlyTrendPlantOptionsUrl(): string {
+  return `${DEFECT_MONTHLY_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 推移查询栏：不良类别去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getDefectMonthlyTrendDefectCategoryOptionsUrl(): string {
+  return `${DEFECT_MONTHLY_TREND_API_BASE}/defect-category-options`;
+}
+
+/**
+ * 推移查询栏：机种去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getDefectMonthlyTrendModelOptionsUrl(): string {
+  return `${DEFECT_MONTHLY_TREND_API_BASE}/model-options`;
+}
 
 /**
  * 月生产不良推移分析

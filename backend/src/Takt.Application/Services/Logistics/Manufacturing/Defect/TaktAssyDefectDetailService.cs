@@ -427,13 +427,14 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
                 || (x.DefectCategory != null && x.DefectCategory.Contains(keywords))
                 || SqlFunc.ToString(x.DefectQty).Contains(keywords)
                 || SqlFunc.ToString(x.CumulativeDefectQty).Contains(keywords)
-                || (x.RandomCardNo != null && x.RandomCardNo.Contains(keywords))
+                || (x.RandomCardCode != null && x.RandomCardCode.Contains(keywords))
                 || (x.OccurrenceEngineering != null && x.OccurrenceEngineering.Contains(keywords))
                 || (x.TestStep != null && x.TestStep.Contains(keywords))
                 || (x.DefectSymptom != null && x.DefectSymptom.Contains(keywords))
                 || (x.DefectLocation != null && x.DefectLocation.Contains(keywords))
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
                 || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -480,9 +481,9 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exp = exp.And(x => x.CumulativeDefectQty == queryDto.CumulativeDefectQty);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RandomCardNo))
+        if (!string.IsNullOrEmpty(queryDto?.RandomCardCode))
         {
-            exp = exp.And(x => x.RandomCardNo != null && x.RandomCardNo.Contains(queryDto.RandomCardNo));
+            exp = exp.And(x => x.RandomCardCode != null && x.RandomCardCode.Contains(queryDto.RandomCardCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.OccurrenceEngineering))
@@ -515,6 +516,11 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
             exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(queryDto.RepairOperator));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -534,6 +540,12 @@ public class TaktAssyDefectDetailService : TaktServiceBase, ITaktAssyDefectDetai
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

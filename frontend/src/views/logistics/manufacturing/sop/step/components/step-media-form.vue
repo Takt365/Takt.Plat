@@ -28,38 +28,48 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopstepmedia.stepid')"
-                name="stepId"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.stepId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopstepmedia.stepid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopstepmedia.mediatype')"
+                :label="pi.label('stepId')"
+                name="stepId"
+              >
+                <TaktSelect
+                  v-model:value="formState.stepId"
+                  api-url="TaktSopSteps/options"
+                  :placeholder="pi.ph('stepId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('mediaType')"
                 name="mediaType"
               >
                 <TaktSelect
                   v-model:value="formState.mediaType"
                   dict-type="logistics_sop_media_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopstepmedia.mediatype') })"
+                  :placeholder="pi.ph('mediaType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopstepmedia.fileurl')"
+                :label="pi.label('fileUrl')"
                 name="fileUrl"
               >
                 <a-input
                   v-model:value="formState.fileUrl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopstepmedia.fileurl') })"
+                  :placeholder="pi.ph('fileUrl')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -68,55 +78,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopstepmedia.fileext')"
+                :label="pi.label('fileExt')"
                 name="fileExt"
               >
                 <a-input
                   v-model:value="formState.fileExt"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopstepmedia.fileext') })"
+                  :placeholder="pi.ph('fileExt')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -136,9 +105,13 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopStepMediaI18n } from '../composables/use-step-media-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopStepMediaI18n()
+
 import type { SopStepMediaCreate } from '@/types/logistics/manufacturing/sop/step-media'
 import TaktSelect from '@/components/business/takt-select/index.vue'
-import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
@@ -148,7 +121,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["stepId","mediaType","fileUrl","fileExt","extField","remark"]
+const formFields = ["plantCode","stepId","mediaType","fileUrl","fileExt"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -207,21 +181,28 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   stepId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopstepmedia.stepid') }),
-      trigger: 'blur'
+      message: pi.ph('stepId'),
+      trigger: 'change'
     }
   ],
   mediaType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopstepmedia.mediatype') }))
+        return Promise.reject(pi.ph('mediaType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopstepmedia.mediatype') }))
+        return Promise.reject(pi.ph('mediaType'))
       }
       return Promise.resolve()
     },
@@ -230,7 +211,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   fileUrl: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopstepmedia.fileurl') }),
+      message: pi.ph('fileUrl'),
       trigger: 'blur'
     }
   ],

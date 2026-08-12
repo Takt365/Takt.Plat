@@ -481,17 +481,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM1;
             updateCount += updateLM1;
 
-            var (insertLM2, updateLM2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL", menu =>
+            // TaktGeneralMaterial：MenuCode/路由/权限与「全局物料」一致（禁止再用旧码 LOGISTICS_MATERIALS_MATERIAL）
+            var (insertLM2, updateLM2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_GENERAL_MATERIAL", menu =>
             {
                 menu.MenuName = "全局物料";
-                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL";
-                menu.I18nKey = "menu.logistics.materials.material";
+                menu.MenuCode = "LOGISTICS_MATERIALS_GENERAL_MATERIAL";
+                menu.I18nKey = "menu.logistics.materials.general.material";
                 menu.Icon = "RiArchiveLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:material:list";
-                menu.RoutePath = "/logistics/materials/material";
-                menu.ComponentPath = "logistics/materials/material/index";
+                menu.Permission = "logistics:materials:general:material:list";
+                menu.RoutePath = "/logistics/materials/general-material";
+                menu.ComponentPath = "logistics/materials/general-material/index";
                 menu.SortOrder = 2;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
@@ -501,7 +502,42 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM2;
             updateCount += updateLM2;
 
-            // TaktMaterialPlant：实体全名含 MATERIAL，MenuCode/I18nKey/Permission 均须 MATERIAL_PLANT 分段
+            // 退役旧 MenuCode（TaktMaterial 时代残留）
+            var obsoleteGeneralMaterialMenu = await menuRepository.FirstAsync(m =>
+                m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_MATERIALS_MATERIAL" && m.IsDeleted == 0);
+            if (obsoleteGeneralMaterialMenu != null)
+            {
+                obsoleteGeneralMaterialMenu.IsVisible = 0;
+                obsoleteGeneralMaterialMenu.IsDeleted = 1;
+                obsoleteGeneralMaterialMenu.MenuStatus = 0;
+                obsoleteGeneralMaterialMenu.UpdatedBy = 900001;
+                obsoleteGeneralMaterialMenu.UpdatedAt = DateTime.Now;
+                await menuRepository.UpdateAsync(obsoleteGeneralMaterialMenu);
+                updateCount += 1;
+            }
+
+            // TaktMaterialDescription（SAP MAKT）；Permission 与控制器/前端一致：material:description
+            var (insertLM2d, updateLM2d) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_DESCRIPTION", menu =>
+            {
+                menu.MenuName = "物料描述";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_DESCRIPTION";
+                menu.I18nKey = "menu.logistics.materials.material.description";
+                menu.Icon = "RiFileTextLine";
+                menu.ParentId = logisticsMaterialMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:materials:material:description:list";
+                menu.RoutePath = "/logistics/materials/material-description";
+                menu.ComponentPath = "logistics/materials/material-description/index";
+                menu.SortOrder = 3;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLM2d;
+            updateCount += updateLM2d;
+
+            // TaktMaterialPlant ≠ TaktPlant；Permission 与控制器一致：material:plant（禁止挂在 generalmaterial 下）
             var (insertLM3, updateLM3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_PLANT", menu =>
             {
                 menu.MenuName = "工厂物料";
@@ -513,7 +549,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:material:plant:list";
                 menu.RoutePath = "/logistics/materials/material-plant";
                 menu.ComponentPath = "logistics/materials/material-plant/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -534,7 +570,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:warehouse:list";
                 menu.RoutePath = "/logistics/materials/warehouse";
                 menu.ComponentPath = "logistics/materials/warehouse/index";
-                menu.SortOrder = 4;
+                menu.SortOrder = 5;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -554,7 +590,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:material:group:list";
                 menu.RoutePath = "/logistics/materials/material-group";
                 menu.ComponentPath = "logistics/materials/material-group/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 6;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -563,18 +599,18 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM3Mg;
             updateCount += updateLM3Mg;
 
-            var (insertLM4, updateLM4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_PACKAGING", menu =>
+            var (insertLM4, updateLM4) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_PACKAGING_MATERIAL", menu =>
             {
                 menu.MenuName = "包装物料";
-                menu.MenuCode = "LOGISTICS_MATERIALS_PACKAGING";
-                menu.I18nKey = "menu.logistics.materials.packaging";
+                menu.MenuCode = "LOGISTICS_MATERIALS_PACKAGING_MATERIAL";
+                menu.I18nKey = "menu.logistics.materials.packaging.material";
                 menu.Icon = "RiBox3Line";
                 menu.ParentId = logisticsMaterialMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:materials:packaging:list";
-                menu.RoutePath = "/logistics/materials/packaging";
-                menu.ComponentPath = "logistics/materials/packaging/index";
-                menu.SortOrder = 6;
+                menu.Permission = "logistics:materials:packaging:material:list";
+                menu.RoutePath = "/logistics/materials/packaging-material";
+                menu.ComponentPath = "logistics/materials/packaging-material/index";
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -594,7 +630,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:model:destination:list";
                 menu.RoutePath = "/logistics/materials/model-destination";
                 menu.ComponentPath = "logistics/materials/model-destination/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -603,30 +639,11 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM5;
             updateCount += updateLM5;
 
-            var (insertLM6, updateLM6) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MANUFACTURER_MATERIAL", menu =>
-            {
-                menu.MenuName = "制造商物料";
-                menu.MenuCode = "LOGISTICS_MATERIALS_MANUFACTURER_MATERIAL";
-                menu.I18nKey = "menu.logistics.materials.manufacturer.material";
-                menu.Icon = "RiBuilding4Line";
-                menu.ParentId = logisticsMaterialMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:materials:manufacturer:material:material:list";
-                menu.RoutePath = "/logistics/materials/manufacturer";
-                menu.ComponentPath = "logistics/materials/manufacturer/index";
-                menu.SortOrder = 8;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertLM6;
-            updateCount += updateLM6;
-
-            var (insertLM7, updateLM7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION", menu =>
+            // TaktMaterialDocument：MenuCode 与实体/路由 material-document 一致（禁止再用 TRANSACTION）
+            var (insertLM7, updateLM7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_DOCUMENT", menu =>
             {
                 menu.MenuName = "物料凭证";
-                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MATERIAL_DOCUMENT";
                 menu.I18nKey = "menu.logistics.materials.material.document";
                 menu.Icon = "RiExchangeLine";
                 menu.ParentId = logisticsMaterialMenu.Id;
@@ -642,6 +659,19 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLM7;
             updateCount += updateLM7;
+
+            var obsoleteMaterialDocumentMenu = await menuRepository.FirstAsync(m =>
+                m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION" && m.IsDeleted == 0);
+            if (obsoleteMaterialDocumentMenu != null)
+            {
+                obsoleteMaterialDocumentMenu.IsVisible = 0;
+                obsoleteMaterialDocumentMenu.IsDeleted = 1;
+                obsoleteMaterialDocumentMenu.MenuStatus = 0;
+                obsoleteMaterialDocumentMenu.UpdatedBy = 900001;
+                obsoleteMaterialDocumentMenu.UpdatedAt = DateTime.Now;
+                await menuRepository.UpdateAsync(obsoleteMaterialDocumentMenu);
+                updateCount += 1;
+            }
 
             // TaktMaterialMovingPrice：按工厂/期间/物料/评估类别维护移动价格
             var (insertLM8, updateLM8) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_MOVING_PRICE", menu =>
@@ -685,6 +715,27 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM9;
             updateCount += updateLM9;
 
+            // 机种移动推移（BOM FERT 产品机种组 + 月移动单价）
+            var (insertLM9b, updateLM9b) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MODEL_MOVING_TREND", menu =>
+            {
+                menu.MenuName = "机种移动推移";
+                menu.MenuCode = "LOGISTICS_MATERIALS_MODEL_MOVING_TREND";
+                menu.I18nKey = "menu.logistics.materials.model.moving.trend";
+                menu.Icon = "RiLineChartLine";
+                menu.ParentId = logisticsMaterialMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:materials:model:moving:trend:list";
+                menu.RoutePath = "/logistics/materials/model-moving-trend";
+                menu.ComponentPath = "logistics/materials/model-moving-trend/index";
+                menu.SortOrder = 12;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLM9b;
+            updateCount += updateLM9b;
+
             // TaktInventoryImpairmentProvision：存货跌价准备
             var (insertLM10, updateLM10) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_INVENTORY_IMPAIRMENT_PROVISION", menu =>
             {
@@ -697,7 +748,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:materials:inventory:impairment:provision:list";
                 menu.RoutePath = "/logistics/materials/inventory-impairment-provision";
                 menu.ComponentPath = "logistics/materials/inventory-impairment-provision/index";
-                menu.SortOrder = 12;
+                menu.SortOrder = 13;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -750,6 +801,26 @@ public class TaktMenuLevel3SeedData
             insertCount += insert04;
             updateCount += update04;
 
+            var (insert04m, update04m) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_MANUFACTURER_MATERIAL", menu =>
+            {
+                menu.MenuName = "制造商物料";
+                menu.MenuCode = "LOGISTICS_PROCUREMENT_MANUFACTURER_MATERIAL";
+                menu.I18nKey = "menu.logistics.procurement.manufacturer.material";
+                menu.Icon = "RiBuilding4Line";
+                menu.ParentId = logisticsProcurementMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:procurement:manufacturer:material:list";
+                menu.RoutePath = "/logistics/procurement/manufacturer-material";
+                menu.ComponentPath = "logistics/procurement/manufacturer-material/index";
+                menu.SortOrder = 3;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insert04m;
+            updateCount += update04m;
+
             var (insert06, update06) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_SOURCE_OF_SUPPLY", menu =>
             {
                 menu.MenuName = "货源清单";
@@ -761,7 +832,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:source:of:supply:list";
                 menu.RoutePath = "/logistics/procurement/source-of-supply";
                 menu.ComponentPath = "logistics/procurement/source-of-supply/index";
-                menu.SortOrder = 3;
+                menu.SortOrder = 4;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -769,6 +840,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insert06;
             updateCount += update06;
+
+            var (insert07Fc, update07Fc) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_FORECAST", menu =>
+            {
+                menu.MenuName = "采购预测";
+                menu.MenuCode = "LOGISTICS_PROCUREMENT_PURCHASE_FORECAST";
+                menu.I18nKey = "menu.logistics.procurement.purchase.forecast";
+                menu.Icon = "RiLineChartLine";
+                menu.ParentId = logisticsProcurementMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:procurement:purchase:forecast:list";
+                menu.RoutePath = "/logistics/procurement/purchase-forecast";
+                menu.ComponentPath = "logistics/procurement/purchase-forecast/index";
+                menu.SortOrder = 35;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insert07Fc;
+            updateCount += update07Fc;
 
             var (insert07, update07) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_REQUEST", menu =>
             {
@@ -870,6 +961,27 @@ public class TaktMenuLevel3SeedData
             insertCount += insert08PriceTrend;
             updateCount += update08PriceTrend;
 
+            // 机种采购推移（BOM FERT 产品机种组 + 月采购单价）
+            var (insert08ModelPurchaseTrend, update08ModelPurchaseTrend) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_MODEL_PURCHASE_TREND", menu =>
+            {
+                menu.MenuName = "机种采购推移";
+                menu.MenuCode = "LOGISTICS_PROCUREMENT_MODEL_PURCHASE_TREND";
+                menu.I18nKey = "menu.logistics.procurement.model.purchase.trend";
+                menu.Icon = "RiLineChartLine";
+                menu.ParentId = logisticsProcurementMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:procurement:model:purchase:trend:list";
+                menu.RoutePath = "/logistics/procurement/model-purchase-trend";
+                menu.ComponentPath = "logistics/procurement/model-purchase-trend/index";
+                menu.SortOrder = 9;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insert08ModelPurchaseTrend;
+            updateCount += update08ModelPurchaseTrend;
+
             var (insert09, update09) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_PROCUREMENT_PURCHASE_INVOICE", menu =>
             {
                 menu.MenuName = "采购发票";
@@ -881,7 +993,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:invoice:list";
                 menu.RoutePath = "/logistics/procurement/purchase-invoice";
                 menu.ComponentPath = "logistics/procurement/purchase-invoice/index";
-                menu.SortOrder = 9;
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -901,7 +1013,7 @@ public class TaktMenuLevel3SeedData
                 menu.Permission = "logistics:procurement:purchase:group:list";
                 menu.RoutePath = "/logistics/procurement/purchase-group";
                 menu.ComponentPath = "logistics/procurement/purchase-group/index";
-                menu.SortOrder = 10;
+                menu.SortOrder = 11;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -1357,6 +1469,26 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLS2;
             updateCount += updateLS2;
+
+            var (insertLS2m, updateLS2m) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_SELLER_MATERIAL", menu =>
+            {
+                menu.MenuName = "销售商物料";
+                menu.MenuCode = "LOGISTICS_SALES_SELLER_MATERIAL";
+                menu.I18nKey = "menu.logistics.sales.seller.material";
+                menu.Icon = "RiShoppingBag3Line";
+                menu.ParentId = logisticsSalesMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:sales:seller:material:list";
+                menu.RoutePath = "/logistics/sales/seller-material";
+                menu.ComponentPath = "logistics/sales/seller-material/index";
+                menu.SortOrder = 3;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertLS2m;
+            updateCount += updateLS2m;
 
             var (insertLS3, updateLS3) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_SALES_QUOTATION", menu =>
             {

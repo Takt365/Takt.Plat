@@ -98,11 +98,11 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('ecNo')">
-      <a-form-item :label="t('entity.ecattachment.ecno')">
+      <div v-show="isFieldVisible('ecCode')">
+      <a-form-item :label="t('entity.ecattachment.ecCode')">
         <a-input
-          v-model:value="advancedQueryForm.ecNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecno') })"
+          v-model:value="advancedQueryForm.ecCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') })"
           show-count
           :maxlength="10"
           allow-clear
@@ -129,11 +129,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('docNo')">
-      <a-form-item :label="t('entity.ecattachment.docno')">
+      <div v-show="isFieldVisible('docCode')">
+      <a-form-item :label="t('entity.ecattachment.docCode')">
         <a-input
-          v-model:value="advancedQueryForm.docNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docno') })"
+          v-model:value="advancedQueryForm.docCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -299,10 +299,10 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
-  ecNo: '',
+  ecCode: '',
   lineNumber: undefined as number | undefined,
   attachmentType: '',
-  docNo: '',
+  docCode: '',
   fileName: '',
   accessUrl: '',
   createdAtStart: '',
@@ -314,17 +314,16 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'ecNo', label: t('entity.ecattachment.ecno') },
+  { key: 'ecCode', label: t('entity.ecattachment.ecCode') },
   { key: 'lineNumber', label: t('entity.ecattachment.linenumber') },
   { key: 'attachmentType', label: t('entity.ecattachment.attachmenttype') },
-  { key: 'docNo', label: t('entity.ecattachment.docno') },
+  { key: 'docCode', label: t('entity.ecattachment.docCode') },
   { key: 'fileName', label: t('entity.ecattachment.filename') },
   { key: 'accessUrl', label: t('entity.ecattachment.accessurl') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 function handleAdvancedQuery() {
   advancedQueryVisible.value = true
@@ -338,10 +337,10 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
-  ecNo: '',
+  ecCode: '',
   lineNumber: undefined as number | undefined,
   attachmentType: '',
-  docNo: '',
+  docCode: '',
   fileName: '',
   accessUrl: '',
   createdAtStart: '',
@@ -393,14 +392,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getEcAttachmentField(record, 'ecAttachmentId') ?? ''),
   },
   {
-    title: t('entity.ecattachment.ecno'),
-    dataIndex: 'ecNo',
-    key: 'ecNo',
+    title: t('entity.ecattachment.ecCode'),
+    dataIndex: 'ecCode',
+    key: 'ecCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcAttachment }) =>
-      String(getEcAttachmentField(record, 'ecNo') ?? ''),
+      String(getEcAttachmentField(record, 'ecCode') ?? ''),
   },
   {
     title: t('entity.ecattachment.linenumber'),
@@ -425,14 +424,14 @@ const columns = computed<TableColumnsType>(() => [
     }),
   },
   {
-    title: t('entity.ecattachment.docno'),
-    dataIndex: 'docNo',
-    key: 'docNo',
+    title: t('entity.ecattachment.docCode'),
+    dataIndex: 'docCode',
+    key: 'docCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: EcAttachment }) =>
-      String(getEcAttachmentField(record, 'docNo') ?? ''),
+      String(getEcAttachmentField(record, 'docCode') ?? ''),
   },
   {
     title: t('entity.ecattachment.filename'),
@@ -481,10 +480,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
         onClick: (record: EcAttachment) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -549,12 +546,12 @@ function buildListQuery(overrides?: Partial<EcAttachmentQuery>): EcAttachmentQue
       query[key] = v as never
     }
   }
-  assignTrimmed('ecNo', form.ecNo)
+  assignTrimmed('ecCode', form.ecCode)
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
   assignTrimmed('attachmentType', form.attachmentType)
-  assignTrimmed('docNo', form.docNo)
+  assignTrimmed('docCode', form.docCode)
   assignTrimmed('fileName', form.fileName)
   assignTrimmed('accessUrl', form.accessUrl)
   assignTrimmed('createdAtStart', form.createdAtStart)
@@ -619,7 +616,7 @@ function handleCreate() {
   }
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.ecattachment._self') })
   formData.value = {
-    ecNo: String(selectedMasterRow.value?.ecNo ?? ''),
+    ecCode: String(selectedMasterRow.value?.ecCode ?? ''),
   }
   formVisible.value = true
 }

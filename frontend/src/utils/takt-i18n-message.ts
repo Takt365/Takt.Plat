@@ -111,7 +111,7 @@ export function interpolateLocaleMessage(
 
 /**
  * 按字符串键翻译（bootstrap / request 等非 SFC 场景；与 buildNestedLocaleMessages 同一套树结构）
- * @param key i18n 键（如 common.tip.session.idle.logout）
+ * @param key i18n 键（如 layouts.page.session.idlelogout）
  * @param params 插值参数
  * @returns 本地化文案；未命中时返回键本身（对齐 locales/index missing 行为）
  */

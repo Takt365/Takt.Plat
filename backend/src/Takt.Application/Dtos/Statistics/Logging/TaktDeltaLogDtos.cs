@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktDeltaLogDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DeltaLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDeltaLog 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -37,14 +36,14 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     public long DeltaLogId { get; set; }
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -63,22 +62,22 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     public string? PrimaryKeyName { get; set; }
 
     /// <summary>
-    /// 修改前数据 JSON（旧值快照）
+    /// 修改前数据 JSON（旧值快照；无数据为空串）
     /// </summary>
     public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修改后数据 JSON（新值快照）
+    /// 修改后数据 JSON（新值快照；无数据为空串）
     /// </summary>
     public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 差异内容 JSON（变更字段及旧/新值明细）
+    /// 差异内容 JSON（变更字段及旧/新值明细；无差异为空串）
     /// </summary>
     public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获）
+    /// 执行的 SQL 语句（AOP 捕获；无 SQL 为空串）
     /// </summary>
     public string SqlStatement { get; set; } = string.Empty;
 
@@ -98,19 +97,19 @@ public class TaktDeltaLogDto : TaktCompanyDtoBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）
@@ -145,14 +144,24 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
-    public string? OperType { get; set; }
+    public string? OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -166,22 +175,22 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     public long? PrimaryKeyId { get; set; }
 
     /// <summary>
-    /// 修改前数据 JSON（旧值快照）
+    /// 修改前数据 JSON（旧值快照；无数据为空串）
     /// </summary>
     public string? BeforeData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修改后数据 JSON（新值快照）
+    /// 修改后数据 JSON（新值快照；无数据为空串）
     /// </summary>
     public string? AfterData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 差异内容 JSON（变更字段及旧/新值明细）
+    /// 差异内容 JSON（变更字段及旧/新值明细；无差异为空串）
     /// </summary>
     public string? DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获，可选）
+    /// 执行的 SQL 语句（AOP 捕获；无 SQL 为空串）
     /// </summary>
     public string? SqlStatement { get; set; } = string.Empty;
 
@@ -201,19 +210,19 @@ public class TaktDeltaLogQueryDto : TaktPagedQuery
     public string? UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType，查询条件，可选）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string? Browser { get; set; }
+    public string? Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem，查询条件，可选）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string? Os { get; set; }
+    public string? Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType，查询条件，可选）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string? DeviceType { get; set; }
+    public string? DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）（范围查询-开始）
@@ -271,20 +280,26 @@ public class TaktDeltaLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    [Required(ErrorMessage = "用户名（登录账号）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    [Required(ErrorMessage = "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）不能为空")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    [Required(ErrorMessage = "操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）不能为空")]
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -299,54 +314,64 @@ public class TaktDeltaLogCreateDto
     public long? PrimaryKeyId { get; set; }
 
     /// <summary>
-    /// 修改前数据 JSON（旧值快照）
+    /// 修改前数据 JSON（旧值快照；无数据为空串）
     /// </summary>
+    [Required(ErrorMessage = "修改前数据 JSON（旧值快照；无数据为空串）不能为空")]
     public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修改后数据 JSON（新值快照）
+    /// 修改后数据 JSON（新值快照；无数据为空串）
     /// </summary>
+    [Required(ErrorMessage = "修改后数据 JSON（新值快照；无数据为空串）不能为空")]
     public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 差异内容 JSON（变更字段及旧/新值明细）
+    /// 差异内容 JSON（变更字段及旧/新值明细；无差异为空串）
     /// </summary>
+    [Required(ErrorMessage = "差异内容 JSON（变更字段及旧/新值明细；无差异为空串）不能为空")]
     public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获）
+    /// 执行的 SQL 语句（AOP 捕获；无 SQL 为空串）
     /// </summary>
+    [Required(ErrorMessage = "执行的 SQL 语句（AOP 捕获；无 SQL 为空串）不能为空")]
     public string SqlStatement { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
+    [Required(ErrorMessage = "操作 IP不能为空")]
     public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
+    [Required(ErrorMessage = "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）不能为空")]
     public string OperLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
     /// </summary>
+    [Required(ErrorMessage = "用户代理（User-Agent）不能为空")]
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    [Required(ErrorMessage = "浏览器（TaktConstants.BrowserType，默认 unknown）不能为空")]
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    [Required(ErrorMessage = "操作系统（TaktConstants.OperatingSystem，默认 unknown）不能为空")]
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    [Required(ErrorMessage = "登录设备（TaktConstants.DeviceType，默认 unknown）不能为空")]
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）
@@ -412,14 +437,14 @@ public class TaktDeltaLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，如 create=新增、update=修改、delete=删除、query=查询）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 数据库表名（SugarTable 物理表名）
@@ -433,22 +458,22 @@ public class TaktDeltaLogExportDto
     public long? PrimaryKeyId { get; set; }
 
     /// <summary>
-    /// 修改前数据 JSON（旧值快照）
+    /// 修改前数据 JSON（旧值快照；无数据为空串）
     /// </summary>
     public string BeforeData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修改后数据 JSON（新值快照）
+    /// 修改后数据 JSON（新值快照；无数据为空串）
     /// </summary>
     public string AfterData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 差异内容 JSON（变更字段及旧/新值明细）
+    /// 差异内容 JSON（变更字段及旧/新值明细；无差异为空串）
     /// </summary>
     public string DiffData { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行的 SQL 语句（AOP 捕获）
+    /// 执行的 SQL 语句（AOP 捕获；无 SQL 为空串）
     /// </summary>
     public string SqlStatement { get; set; } = string.Empty;
 
@@ -468,19 +493,19 @@ public class TaktDeltaLogExportDto
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（数据变更发生时刻）

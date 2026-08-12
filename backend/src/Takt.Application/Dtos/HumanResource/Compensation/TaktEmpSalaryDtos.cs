@@ -35,79 +35,6 @@ public class TaktEmpSalaryDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmpSalaryId { get; set; }
 
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联薪酬体系 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PayrollId { get; set; }
-
-    /// <summary>
-    /// 关联薪酬体系 名称（填充字段）
-    /// </summary>
-    public string? PayrollName { get; set; }
-
-    /// <summary>
-    /// 关联薪级 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PayScaleId { get; set; }
-
-    /// <summary>
-    /// 关联薪级 名称（填充字段）
-    /// </summary>
-    public string? PayScaleName { get; set; }
-
-    /// <summary>
-    /// 基本工资（元）
-    /// </summary>
-    public decimal BaseSalary { get; set; }
-
-    /// <summary>
-    /// 岗位工资（元）
-    /// </summary>
-    public decimal PositionSalary { get; set; }
-
-    /// <summary>
-    /// 津贴合计（元）
-    /// </summary>
-    public decimal AllowanceTotal { get; set; }
-
-    /// <summary>
-    /// 关联薪资项目 ID（如股权激励项，对应 TaktSalaryItem 中 item_type 为股权激励的记录）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? SalaryItemId { get; set; }
-
-    /// <summary>
-    /// 关联薪资项目 名称（填充字段）
-    /// </summary>
-    public string? SalaryItemName { get; set; }
-
-    /// <summary>
-    /// 授予股数/份数（股权激励定薪时使用）
-    /// </summary>
-    public decimal EmpSalaryShareCount { get; set; }
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveDate { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -135,6 +62,11 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工 ID
@@ -198,7 +130,7 @@ public class TaktEmpSalaryQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -246,9 +178,10 @@ public class TaktEmpSalaryCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -309,7 +242,7 @@ public class TaktEmpSalaryCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -392,6 +325,11 @@ public class TaktEmpSalaryTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -448,7 +386,7 @@ public class TaktEmpSalaryTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -483,9 +421,10 @@ public class TaktEmpSalaryImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -544,7 +483,7 @@ public class TaktEmpSalaryImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -641,7 +580,7 @@ public class TaktEmpSalaryExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）

@@ -22,7 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarTable("takt_logistics_manufacturing_sop_content", "SOP多语言正文表")]
 [SugarIndex("ix_sop_content_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_content_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_content_lang_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RevisionId), OrderByType.Asc, nameof(ContentLang), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_content_culture_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RevisionId), OrderByType.Asc, nameof(CultureCode), OrderByType.Asc, true)]
 public class TaktSopContent : TaktCompanyEntityBase
 {
     /// <summary>
@@ -38,12 +38,6 @@ public class TaktSopContent : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "sop_id", ColumnDescription = "SOP主档ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
-
-    /// <summary>
-    /// 正文语言（选项 TaktCultures/options；DictValue=CultureCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "content_lang", ColumnDescription = "正文语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
-    public string ContentLang { get; set; } = "zh-CN";
 
     /// <summary>
     /// 正文标题

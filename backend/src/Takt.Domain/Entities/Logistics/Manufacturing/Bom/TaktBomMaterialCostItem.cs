@@ -26,7 +26,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
     new[]
     {
         nameof(TenantCode), nameof(CompanyCode), nameof(PlantCode), nameof(ProductCode),
-        nameof(SequenceNo), nameof(BomLevel), nameof(BomItemNo), nameof(ComponentCode),
+        nameof(SequenceCode), nameof(BomLevel), nameof(BomItemCode), nameof(ComponentCode),
         nameof(ComponentQuantity), nameof(BatchIndicator), nameof(ProductionRelated),
         nameof(PurchaseType), nameof(SpecialProcurementType), nameof(CostingDate)
     },
@@ -44,29 +44,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 [SugarIndex("ix_takt_logistics_manufacturing_bom_material_cost_item_costing_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CostingDate), OrderByType.Asc, false)]
 public class TaktBomMaterialCostItem : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
-    /// </summary>
-    [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string ProductCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 序号（展开行序号，如 0010）
-    /// </summary>
-    [SugarColumn(ColumnName = "sequence_no", ColumnDescription = "序号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string SequenceNo { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 产品描述
-    /// </summary>
-    [SugarColumn(ColumnName = "product_description", ColumnDescription = "产品描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 层级（BOM 展开层级，如 01/02）
@@ -75,10 +52,28 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string BomLevel { get; set; } = string.Empty;
 
     /// <summary>
+    /// 序号（展开行序号，如 0010）
+    /// </summary>
+    [SugarColumn(ColumnName = "sequence_code", ColumnDescription = "序号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string SequenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// </summary>
+    [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    public string ProductCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品描述
+    /// </summary>
+    [SugarColumn(ColumnName = "product_description", ColumnDescription = "产品描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string ProductDescription { get; set; } = string.Empty;
+
+    /// <summary>
     /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    [SugarColumn(ColumnName = "bom_item_no", ColumnDescription = "BOM项目号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string BomItemNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "bom_item_code", ColumnDescription = "BOM项目号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -143,8 +138,8 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     /// <summary>
     /// 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
-    [SugarColumn(ColumnName = "moving_price_currency", ColumnDescription = "移动价格货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
-    public string MovingPriceCurrency { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "moving_price_currency_code", ColumnDescription = "移动价格货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
+    public string MovingPriceCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购组织
@@ -161,7 +156,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -179,8 +174,8 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     /// <summary>
     /// 采购货币（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_currency", ColumnDescription = "采购货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
-    public string PurchaseCurrency { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "purchase_currency_code", ColumnDescription = "采购货币", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
+    public string PurchaseCurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 核算日期

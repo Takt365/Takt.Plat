@@ -349,8 +349,9 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
                 || SqlFunc.ToString(x.ExpectedLifeMonths).Contains(keywords)
                 || SqlFunc.ToString(x.DepreciationMethod).Contains(keywords)
                 || SqlFunc.ToString(x.MonthlyDepreciation).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || SqlFunc.ToString(x.AssetStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PurchaseDate).Contains(keywords)
@@ -446,14 +447,19 @@ public class TaktAssetService : TaktServiceBase, ITaktAssetService
             exp = exp.And(x => x.MonthlyDepreciation == queryDto.MonthlyDepreciation);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.AssetStatus.HasValue == true)
         {
             exp = exp.And(x => x.AssetStatus == queryDto.AssetStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

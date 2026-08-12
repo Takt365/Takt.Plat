@@ -35,65 +35,6 @@ public class TaktTrainingPlanDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TrainingPlanId { get; set; }
 
-    /// <summary>
-    /// 计划编码（租户+公司内唯一）
-    /// </summary>
-    public string PlanCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划名称
-    /// </summary>
-    public string PlanName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划年度
-    /// </summary>
-    public int PlanYear { get; set; } = 0;
-
-    /// <summary>
-    /// 计划类型（年度/季度/月度/专项）
-    /// </summary>
-    public string PlanType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 适用部门
-    /// </summary>
-    public string ApplicableDepartment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划开始日期
-    /// </summary>
-    public DateTime StartDate { get; set; }
-
-    /// <summary>
-    /// 计划结束日期
-    /// </summary>
-    public DateTime EndDate { get; set; }
-
-    /// <summary>
-    /// 培训目标
-    /// </summary>
-    public string TrainingObjectives { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划培训人数
-    /// </summary>
-    public int PlannedHeadcount { get; set; } = 0;
-
-    /// <summary>
-    /// 培训预算（元）
-    /// </summary>
-    public decimal TrainingBudget { get; set; }
-
-    /// <summary>
-    /// 计划说明
-    /// </summary>
-    public string TrainingPlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
@@ -121,6 +62,11 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -190,7 +136,7 @@ public class TaktTrainingPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
@@ -281,9 +227,10 @@ public class TaktTrainingPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -350,7 +297,7 @@ public class TaktTrainingPlanCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
@@ -433,6 +380,11 @@ public class TaktTrainingPlanTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 计划编码（租户+公司内唯一）
     /// </summary>
     public string? PlanCode { get; set; } = string.Empty;
@@ -490,7 +442,7 @@ public class TaktTrainingPlanTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
@@ -525,9 +477,10 @@ public class TaktTrainingPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 计划编码（租户+公司内唯一）
@@ -587,7 +540,7 @@ public class TaktTrainingPlanImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）
@@ -680,7 +633,7 @@ public class TaktTrainingPlanExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 业务状态（1=启用 0=禁用）

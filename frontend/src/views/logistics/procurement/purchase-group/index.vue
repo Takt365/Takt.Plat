@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getPurchaseGroupId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -71,16 +72,16 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'GroupStatus'">
+        <template v-if="column.key === 'groupStatus'">
           <a-switch
-            :checked="getPurchaseGroupField(record, 'GroupStatus') === 1"
+            :checked="getPurchaseGroupDictValue(record, 'groupStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handleGroupStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
-            :value="getPurchaseGroupField(record, 'isBuiltIn')"
+            :value="getPurchaseGroupDictValue(record, 'isBuiltIn')"
             dict-type="sys_yes_no_type"
           />
         </template>
@@ -125,11 +126,21 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('purchaseGroupCode')">
-      <a-form-item :label="t('entity.purchasegroup.code')">
+      <a-form-item :label="pi.queryLabel('purchaseGroupCode')">
         <a-input
           v-model:value="advancedQueryForm.purchaseGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.code') })"
+          :placeholder="pi.queryPh('purchaseGroupCode', 'required')"
           show-count
           :maxlength="3"
           allow-clear
@@ -137,10 +148,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseGroupName')">
-      <a-form-item :label="t('entity.purchasegroup.name')">
+      <a-form-item :label="pi.queryLabel('purchaseGroupName')">
         <a-input
           v-model:value="advancedQueryForm.purchaseGroupName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.name') })"
+          :placeholder="pi.queryPh('purchaseGroupName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -148,31 +159,30 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('purchaseGroupDescription')">
-      <a-form-item :label="t('entity.purchasegroup.description')">
+      <a-form-item :label="pi.queryLabel('purchaseGroupDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.purchaseGroupDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.purchasegroup.description') })"
+          :placeholder="pi.queryPh('purchaseGroupDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('responsibleUserId')">
-      <a-form-item :label="t('entity.purchasegroup.responsibleuserid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('responsibleUserId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.responsibleUserId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.responsibleuserid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktUsers/options"
+          :placeholder="pi.queryPh('responsibleUserId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactPhone')">
-      <a-form-item :label="t('entity.purchasegroup.contactphone')">
+      <a-form-item :label="pi.queryLabel('contactPhone')">
         <a-input
           v-model:value="advancedQueryForm.contactPhone"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.contactphone') })"
+          :placeholder="pi.queryPh('contactPhone', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -180,41 +190,41 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('contactEmail')">
-      <a-form-item :label="t('entity.purchasegroup.contactemail')">
+      <a-form-item :label="pi.queryLabel('contactEmail')">
         <a-input
           v-model:value="advancedQueryForm.contactEmail"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.purchasegroup.contactemail') })"
+          :placeholder="pi.queryPh('contactEmail', 'required')"
           show-count
           :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('GroupStatus')">
-      <a-form-item :label="t('entity.purchasegroup.status')">
+      <div v-show="isFieldVisible('isBuiltIn')">
+      <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
-          v-model:value="advancedQueryForm.GroupStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasegroup.status') })"
+          v-model:value="advancedQueryForm.isBuiltIn"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('isBuiltIn')">
-      <a-form-item :label="t('entity.purchasegroup.isbuiltin')">
+      <div v-show="isFieldVisible('groupStatus')">
+      <a-form-item :label="pi.queryLabel('groupStatus')">
         <TaktSelect
-          v-model:value="advancedQueryForm.isBuiltIn"
-          dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.purchasegroup.isbuiltin') })"
+          v-model:value="advancedQueryForm.groupStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('groupStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -222,10 +232,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -247,7 +257,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -261,10 +271,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -278,14 +288,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.purchasegroup._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.purchasegroup._self"
+        v-if="importVisible"
+        :entity-i18n-key="PURCHASEGROUP_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -323,20 +334,33 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import PurchaseGroupForm from './components/purchase-group-form.vue'
-import { getPurchaseGroupList, getPurchaseGroupById, createPurchaseGroup, updatePurchaseGroup, deletePurchaseGroupById, deletePurchaseGroupBatch, getPurchaseGroupTemplate, importPurchaseGroup, exportPurchaseGroup, updateGroupStatus } from '@/api/logistics/procurement/purchase-group'
+import { getPurchaseGroupList, getPurchaseGroupById, createPurchaseGroup, updatePurchaseGroup, deletePurchaseGroupById, deletePurchaseGroupBatch, getPurchaseGroupTemplate, importPurchaseGroup, exportPurchaseGroup, updatePurchaseGroupStatus } from '@/api/logistics/procurement/purchase-group'
 import type { PurchaseGroup, PurchaseGroupQuery } from '@/types/logistics/procurement/purchase-group'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  usePurchaseGroupI18n,
+  PURCHASEGROUP_LIST_FIELDS,
+  PURCHASEGROUP_QUERY_STRING_FIELDS,
+  PURCHASEGROUP_QUERY_FIELDS,
+  PURCHASEGROUP_SELF_I18N_KEY,
+} from './composables/use-purchase-group-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = usePurchaseGroupI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type PurchaseGroupRowRecord = PurchaseGroup | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktPurchaseGroup')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.purchasegroup._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -352,9 +376,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<PurchaseGroup | null>(null)
+const selectedRow = ref<PurchaseGroupRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<PurchaseGroup[]>([])
+const selectedRows = ref<PurchaseGroupRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -371,36 +395,50 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PURCHASEGROUP_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  if (form.groupStatus !== undefined && form.groupStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(PURCHASEGROUP_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof PURCHASEGROUP_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    isBuiltIn: undefined as number | undefined,
+    groupStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  purchaseGroupCode: '',
-  purchaseGroupName: '',
-  purchaseGroupDescription: '',
-  responsibleUserId: '',
-  contactPhone: '',
-  contactEmail: '',
-  GroupStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'purchaseGroupCode', label: t('entity.purchasegroup.code') },
-  { key: 'purchaseGroupName', label: t('entity.purchasegroup.name') },
-  { key: 'purchaseGroupDescription', label: t('entity.purchasegroup.description') },
-  { key: 'responsibleUserId', label: t('entity.purchasegroup.responsibleuserid') },
-  { key: 'contactPhone', label: t('entity.purchasegroup.contactphone') },
-  { key: 'contactEmail', label: t('entity.purchasegroup.contactemail') },
-  { key: 'GroupStatus', label: t('entity.purchasegroup.status') },
-  { key: 'isBuiltIn', label: t('entity.purchasegroup.isbuiltin') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  PURCHASEGROUP_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -419,9 +457,8 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PurchaseGroupQuery} 查询 DTO
  */
@@ -442,119 +479,50 @@ function buildListQuery(overrides?: Partial<PurchaseGroupQuery>): PurchaseGroupQ
       query[key] = v as never
     }
   }
-  assignTrimmed('purchaseGroupCode', form.purchaseGroupCode)
-  assignTrimmed('purchaseGroupName', form.purchaseGroupName)
-  assignTrimmed('purchaseGroupDescription', form.purchaseGroupDescription)
-  assignTrimmed('responsibleUserId', form.responsibleUserId)
-  assignTrimmed('contactPhone', form.contactPhone)
-  assignTrimmed('contactEmail', form.contactEmail)
-  if (form.GroupStatus !== undefined && form.GroupStatus !== null) {
-    query.GroupStatus = form.GroupStatus
+  for (const key of PURCHASEGROUP_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
   }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.groupStatus !== undefined && form.groupStatus !== null) {
+    query.groupStatus = form.groupStatus
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
-
-
-
-
-
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildPurchaseGroupListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'purchaseGroupId',
-    key: 'purchaseGroupId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'purchaseGroupId') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.code'),
-    dataIndex: 'purchaseGroupCode',
-    key: 'purchaseGroupCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'purchaseGroupCode') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.name'),
-    dataIndex: 'purchaseGroupName',
-    key: 'purchaseGroupName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'purchaseGroupName') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.description'),
-    dataIndex: 'purchaseGroupDescription',
-    key: 'purchaseGroupDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'purchaseGroupDescription') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.responsibleuserid'),
-    dataIndex: 'responsibleUserId',
-    key: 'responsibleUserId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'responsibleUserId') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.contactphone'),
-    dataIndex: 'contactPhone',
-    key: 'contactPhone',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'contactPhone') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.contactemail'),
-    dataIndex: 'contactEmail',
-    key: 'contactEmail',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPurchaseGroupField(record, 'contactEmail') ?? ''
-  },
-  {
-    title: t('entity.purchasegroup.status'),
-    dataIndex: 'GroupStatus',
-    key: 'GroupStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.purchasegroup.isbuiltin'),
-    dataIndex: 'isBuiltIn',
-    key: 'isBuiltIn',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
+  buildPurchaseGroupListColumn('purchaseGroupId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...PURCHASEGROUP_LIST_FIELDS.map((key) => buildPurchaseGroupListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -563,7 +531,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:procurement:purchase:group:update',
-        onClick: (record: PurchaseGroup) => handleEdit(record)
+        onClick: (record: PurchaseGroupRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -571,44 +539,61 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:purchase:group:delete',
-        onClick: (record: PurchaseGroup) => handleDeleteOne(record)
+        onClick: (record: PurchaseGroupRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getPurchaseGroupId = (record: any): string => record?.[entityIdName] ?? ''
+const getPurchaseGroupId = (record: PurchaseGroupRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getPurchaseGroupField = (record: any, field: string): any => record?.[field]
+const getPurchaseGroupDictValue = (
+  record: PurchaseGroupRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
 
+/** 将行字段/字典值转为有限 number */
+const toPurchaseGroupNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: PurchaseGroup[]) => {
+  onChange: (keys: (string | number)[], rows: PurchaseGroupRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: PurchaseGroup, selected: boolean) => {
+  onSelect: (record: PurchaseGroupRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getPurchaseGroupId(selectedRow.value) === getPurchaseGroupId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: PurchaseGroup[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: PurchaseGroupRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: PurchaseGroup) => ({
+const onClickRow = (record: PurchaseGroupRowRecord) => ({
   onClick: () => {
     const key = getPurchaseGroupId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -629,6 +614,11 @@ const onClickRow = (record: PurchaseGroup) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPurchaseGroupList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -654,44 +644,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  purchaseGroupCode: '',
-  purchaseGroupName: '',
-  purchaseGroupDescription: '',
-  responsibleUserId: '',
-  contactPhone: '',
-  contactEmail: '',
-  GroupStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.purchasegroup._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: PurchaseGroup) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.purchasegroup._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: PurchaseGroupRowRecord) {
+  const id = getPurchaseGroupId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getPurchaseGroupById(id)
+    formData.value = detail ?? ({ ...record } as Partial<PurchaseGroup>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.purchasegroup._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -709,10 +698,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePurchaseGroup(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.purchasegroup._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createPurchaseGroup(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.purchasegroup._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -740,15 +729,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPurchaseGroup(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPurchaseGroup(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -759,6 +751,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPurchaseGroup(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -782,24 +777,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.purchasegroup._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[PurchaseGroup] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.purchasegroup._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: PurchaseGroup) {
+async function handleDeleteOne(record: PurchaseGroupRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.purchasegroup._self'), name: t('common.tip.this.target', { target: t('entity.purchasegroup._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePurchaseGroupById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.purchasegroup._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -807,18 +802,18 @@ async function handleDeleteOne(record: PurchaseGroup) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.purchasegroup._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.purchasegroup._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePurchaseGroupBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.purchasegroup._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -828,21 +823,21 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handleGroupStatusChange(record: PurchaseGroup, checked: boolean) {
+async function handleGroupStatusChange(record: PurchaseGroupRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getPurchaseGroupField(record, 'GroupStatus')
+  const oldVal = toPurchaseGroupNumber(getPurchaseGroupDictValue(record, 'groupStatus'))
   const id = getPurchaseGroupId(record)
   const row = dataSource.value.find((item) => getPurchaseGroupId(item) === id)
   if (row) {
-    row.GroupStatus = newVal
+    row.groupStatus = newVal
   }
   try {
-    await updateGroupStatus({ purchaseGroupId: id, GroupStatus: newVal })
+    await updatePurchaseGroupStatus({ purchaseGroupId: id, groupStatus: newVal })
     message.success(t('common.feedback.updated'))
     
   } catch (error: unknown) {
     if (row) {
-      row.GroupStatus = oldVal
+      row.groupStatus = oldVal
     }
     message.error(t('common.feedback.failed'))
   }
@@ -860,20 +855,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  purchaseGroupCode: '',
-  purchaseGroupName: '',
-  purchaseGroupDescription: '',
-  responsibleUserId: '',
-  contactPhone: '',
-  contactEmail: '',
-  GroupStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

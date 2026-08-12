@@ -35,93 +35,6 @@ public class TaktPerfAssessmentDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PerfAssessmentId { get; set; }
 
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 考核周期（如 2026-Q1、2026-Annual）
-    /// </summary>
-    public string AssessmentPeriod { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 考核日期
-    /// </summary>
-    public DateTime AssessmentDate { get; set; }
-
-    /// <summary>
-    /// 方案指标 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long SchemeMetricId { get; set; }
-
-    /// <summary>
-    /// 方案指标 名称（填充字段）
-    /// </summary>
-    public string? SchemeMetricName { get; set; }
-
-    /// <summary>
-    /// 自评分数
-    /// </summary>
-    public decimal SelfScore { get; set; }
-
-    /// <summary>
-    /// 自评说明
-    /// </summary>
-    public string SelfEvaluationNotes { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 主管评分
-    /// </summary>
-    public decimal SupervisorScore { get; set; }
-
-    /// <summary>
-    /// 主管评语
-    /// </summary>
-    public string SupervisorComments { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 综合得分
-    /// </summary>
-    public decimal FinalScore { get; set; }
-
-    /// <summary>
-    /// 绩效等级（A/B/C/D/E）
-    /// </summary>
-    public string PerformanceGrade { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 评审人 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ReviewerId { get; set; }
-
-    /// <summary>
-    /// 评审人 名称（填充字段）
-    /// </summary>
-    public string? ReviewerName { get; set; }
-
-    /// <summary>
-    /// 面谈日期
-    /// </summary>
-    public DateTime InterviewDate { get; set; }
-
-    /// <summary>
-    /// 面谈记录
-    /// </summary>
-    public string InterviewNotes { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
@@ -149,6 +62,11 @@ public class TaktPerfAssessmentQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工 ID
@@ -236,7 +154,7 @@ public class TaktPerfAssessmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
@@ -284,9 +202,10 @@ public class TaktPerfAssessmentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -371,7 +290,7 @@ public class TaktPerfAssessmentCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
@@ -454,6 +373,11 @@ public class TaktPerfAssessmentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -529,7 +453,7 @@ public class TaktPerfAssessmentTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
@@ -564,9 +488,10 @@ public class TaktPerfAssessmentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -644,7 +569,7 @@ public class TaktPerfAssessmentImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
@@ -760,7 +685,7 @@ public class TaktPerfAssessmentExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）

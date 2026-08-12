@@ -53,7 +53,7 @@ export const CUSTOMERSERVICETICKET_LIST_FIELDS = [
 export const CUSTOMERSERVICETICKET_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
   plantCode: 'required',
   serviceTicketCode: 'required',
   clientId: 'required',
@@ -90,6 +90,7 @@ export type CustomerServiceTicketField = keyof typeof CUSTOMERSERVICETICKET_PLAC
 
 /** 高级查询可 trim 的字符串字段 */
 export const CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'serviceTicketCode',
   'clientId',

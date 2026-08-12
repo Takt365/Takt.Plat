@@ -174,6 +174,11 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -320,6 +325,11 @@ public class TaktGenTableColumnCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -499,6 +509,11 @@ public class TaktGenTableColumnTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -582,6 +597,11 @@ public class TaktGenTableColumnImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>

@@ -15,6 +15,7 @@ export default {
     title: 'BOM成本分析',
     periodRange: '核算期間',
     selectPlantRequired: '請選擇工廠代碼',
+    selectMaterialTypeRequired: '請選擇物料類型',
     selectPeriodRequired: '請選擇核算期間',
     queryFailed: 'BOM成本分析查詢失敗',
     exportSuccess: 'BOM成本分析匯出成功',

@@ -17,6 +17,7 @@ export default {
     selectPlantRequired: '请选择工厂代码',
     selectModelRequired: '请选择机种编码',
     selectProductRequired: '请选择产品编码',
+    selectMaterialTypeRequired: '请选择物料类型',
     selectPeriodRequired: '请选择核算期间',
     summary: '{plant} / {model} / {product} — 单个产品明细组件 {componentCount} 行（成本分析报表）',
     trendSummary:
@@ -27,6 +28,11 @@ export default {
     filter: {
       all: '全部',
       changed: '仅变动',
+    },
+    sort: {
+      bom: 'BOM 展开序（全表）',
+      trend: '涨跌优先（全表）',
+      varianceDesc: '差额绝对值降序（全表）',
     },
     trend: {
       none: '—',

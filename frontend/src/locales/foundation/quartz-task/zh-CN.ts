@@ -13,6 +13,22 @@
 export default {
   page: {
     executeSubmitted: '已提交后台执行，完成后将通知并刷新列表',
+    executeMonth: {
+      modalTitle: '选择核算月份',
+      costingMonth: '核算月份',
+      costingMonthPlaceholder: '请选择核算月份',
+      costingMonthRequired: '请选择核算月份',
+      hint: '默认当月；Cron 自动执行未传参数时亦按当月计算。',
+    },
+    executeDb: {
+      modalTitle: '选择同步数据库',
+      sourceDatabase: '源表数据库',
+      targetDatabase: '目标表数据库',
+      sourceRequired: '请选择源表数据库',
+      targetRequired: '请选择目标表数据库',
+      hintTargetOnly: '源库固定为 Sap_Data（或本库回填）；请选择写入的目标租户库。',
+      hintSourceTarget: '请选择暂存源库与写入目标租户库；Cron 任务须在 ExecuteParams 配置同名字段。',
+    },
     signalr: {
       executeSucceeded: '任务 {code} 执行成功（{duration}ms）',
       executeFailed: '任务 {code} 执行失败（{duration}ms）',

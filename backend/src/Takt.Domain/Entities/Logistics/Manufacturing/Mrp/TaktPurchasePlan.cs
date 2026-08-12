@@ -30,11 +30,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mrp;
 [SugarIndex("ix_takt_logistics_manufacturing_mrp_purchase_plan_production_plan", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProductionPlanId), OrderByType.Asc, false)]
 public class TaktPurchasePlan : TaktApprovalEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 采购计划编码（租户+公司+工厂内业务唯一）
@@ -52,7 +47,7 @@ public class TaktPurchasePlan : TaktApprovalEntityBase
     /// <summary>
     /// 来源 MRP 编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? MaterialRequirementsPlanningCode { get; set; }
 
     /// <summary>

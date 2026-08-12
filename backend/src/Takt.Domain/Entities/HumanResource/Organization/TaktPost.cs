@@ -116,7 +116,7 @@ public class TaktPost : TaktCompanyEntityBase
     // ========================================
 
     /// <summary>
-    /// 员工岗位关联（RBAC，表 takt_human_resource_organization_employee_post）
+    /// 员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktEmployeePost.PostId))]
     public List<TaktEmployeePost>? EmployeePosts { get; set; }

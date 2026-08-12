@@ -23,25 +23,20 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 [SugarTable("takt_logistics_manufacturing_defect_assy_batch", "组立批量不良统计表")]
 [SugarIndex("ix_assy_batch_defect_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_assy_batch_defect_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_assy_batch_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(BatchNo), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_manufacturing_defect_assy_batch_batch_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BatchNo), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_assy_batch_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdCategory), OrderByType.Asc, nameof(BatchCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_defect_assy_batch_batch_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BatchCode), OrderByType.Asc, false)]
 public class TaktAssyBatchDefect : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
     /// <summary>
     /// 批次（统计维度）
     /// </summary>
-    [SugarColumn(ColumnName = "batch_no", ColumnDescription = "批次", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string BatchNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "batch_code", ColumnDescription = "批次", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string BatchCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产日期组（与生产工单组一一对应，yyyy-MM-dd 逗号分隔，取同工单最早生产日期）
     /// </summary>
@@ -55,7 +50,7 @@ public class TaktAssyBatchDefect : TaktCompanyEntityBase
     /// <summary>
     /// 机种（取最近日报）
     /// </summary>
-    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ModelCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产物料组（与生产工单组一一对应，逗号分隔，同工单取最近日报物料编码）

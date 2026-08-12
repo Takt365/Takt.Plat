@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopAckI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopAck 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktSopAckI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopack._self", "zh-CN", "SOP 确认信息", "实体名称"),
             // entity.sopack._self
             new TranslationSeedItem("entity.sopack._self", "zh-HK", "SOP 确认信息_hk", "实体名称"),
-
-            // entity.sopack.plantcode
-            new TranslationSeedItem("entity.sopack.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopack.plantcode
-            new TranslationSeedItem("entity.sopack.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopack.plantcode
-            new TranslationSeedItem("entity.sopack.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopack.plantcode
-            new TranslationSeedItem("entity.sopack.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.sopack.sopid
             new TranslationSeedItem("entity.sopack.sopid", "en-US", "SOP主档ID_us", "SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）"),

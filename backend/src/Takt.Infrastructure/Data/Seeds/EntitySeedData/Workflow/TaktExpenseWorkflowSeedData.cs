@@ -83,7 +83,11 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
         int updateCount = 0;
         foreach (var company in orderedCompanies)
         {
-            var (form, fi, fu) = await UpsertFormAsync(formRepository, tenantCode, company.CompanyCode);
+            var (form, fi, fu) = await UpsertFormAsync(
+                formRepository,
+                tenantCode,
+                company.CompanyCode,
+                company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -93,6 +97,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -169,7 +174,8 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
     private static async Task<(TaktFlowForm Form, int InsertCount, int UpdateCount)> UpsertFormAsync(
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
-        string companyCode)
+        string companyCode,
+        string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
             f.TenantCode == tenantCode && f.CompanyCode == companyCode && f.FormCode == FormCode);
@@ -192,7 +198,8 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedTableName = "takt_accounting_financial_expense",
                 RelatedFormField = relatedField,
                 SortOrder = 13,
-                FormStatus = 1
+                FormStatus = 1,
+                CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
             return (form, 1, 0);
@@ -212,6 +219,7 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktFlowForm form,
         string processContent)
     {
@@ -239,7 +247,8 @@ public class TaktExpenseWorkflowSeedData : ITaktSeedDataCoordinator
                 DeploymentId = "expense-v1-seed",
                 FormId = form.Id,
                 FormCode = form.FormCode,
-                SortOrder = 13
+                SortOrder = 13,
+                CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);
             return (scheme, 1, 0);

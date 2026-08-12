@@ -53,6 +53,117 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
   }
 
   /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync()
+  {
+    EnsureThreeLayerContext();
+    var assyList = await _assyDefectRepository.GetListAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode != null
+            && x.PlantCode != string.Empty);
+    var pcbaList = await _pcbaInspectionRepository.GetListAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode != null
+            && x.PlantCode != string.Empty);
+    return assyList.Select(e => e.PlantCode.Trim())
+        .Concat(pcbaList.Select(e => e.PlantCode.Trim()))
+        .Where(c => !string.IsNullOrWhiteSpace(c))
+        .GroupBy(c => c, StringComparer.OrdinalIgnoreCase)
+        .OrderBy(g => g.Key, StringComparer.Ordinal)
+        .Select(g => new TaktSelectOption
+        {
+          DictValue = g.Key,
+          DictLabel = g.Key,
+        })
+        .ToList();
+  }
+
+  /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string plantCode)
+  {
+    EnsureThreeLayerContext();
+    var plant = plantCode?.Trim() ?? string.Empty;
+    if (string.IsNullOrEmpty(plant))
+    {
+      return new List<TaktSelectOption>();
+    }
+    var options = new List<TaktSelectOption>();
+    var assyHit = await _assyDefectRepository.FirstAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == plant);
+    if (assyHit != null)
+    {
+      options.Add(new TaktSelectOption
+      {
+        DictValue = CategoryAssy,
+        DictLabel = ResolveCategoryName(CategoryAssy) ?? CategoryAssy,
+      });
+    }
+    var pcbaHit = await _pcbaInspectionRepository.FirstAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == plant);
+    if (pcbaHit != null)
+    {
+      options.Add(new TaktSelectOption
+      {
+        DictValue = CategoryPcba,
+        DictLabel = ResolveCategoryName(CategoryPcba) ?? CategoryPcba,
+      });
+    }
+    return options;
+  }
+
+  /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(
+      string plantCode,
+      string? defectCategory = null)
+  {
+    EnsureThreeLayerContext();
+    var plant = plantCode?.Trim() ?? string.Empty;
+    if (string.IsNullOrEmpty(plant))
+    {
+      return new List<TaktSelectOption>();
+    }
+    var categoryFilter = string.IsNullOrWhiteSpace(defectCategory)
+        ? null
+        : NormalizeCategoryFilter(defectCategory);
+    var models = new List<string>();
+    if (ShouldIncludeCategory(categoryFilter, CategoryAssy))
+    {
+      var assyList = await _assyDefectRepository.GetListAsync(
+          x => x.TenantCode == CurrentTenantCode
+              && x.CompanyCode == CurrentCompanyCode
+              && x.PlantCode == plant
+              && x.ModelCode != null
+              && x.ModelCode != string.Empty);
+      models.AddRange(assyList.Select(e => e.ModelCode.Trim()));
+    }
+    if (ShouldIncludeCategory(categoryFilter, CategoryPcba))
+    {
+      var pcbaList = await _pcbaInspectionRepository.GetListAsync(
+          x => x.TenantCode == CurrentTenantCode
+              && x.CompanyCode == CurrentCompanyCode
+              && x.PlantCode == plant
+              && x.ModelCode != null
+              && x.ModelCode != string.Empty);
+      models.AddRange(pcbaList.Select(e => e.ModelCode.Trim()));
+    }
+    return models
+        .Where(c => !string.IsNullOrWhiteSpace(c))
+        .GroupBy(c => c, StringComparer.OrdinalIgnoreCase)
+        .OrderBy(g => g.Key, StringComparer.Ordinal)
+        .Select(g => new TaktSelectOption
+        {
+          DictValue = g.Key,
+          DictLabel = g.Key,
+        })
+        .ToList();
+  }
+
+  /// <inheritdoc />
   public async Task<TaktDefectMonthlyTrendResultDto> GetDefectMonthlyTrendAnalysisAsync(
       TaktDefectMonthlyTrendQueryDto queryDto)
   {

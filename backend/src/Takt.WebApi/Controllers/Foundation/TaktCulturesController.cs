@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktCulturesController.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：区域控制器
 // 
@@ -42,7 +42,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
-    [TaktPermission("foundation:i18n:list", "区域列表")]
+    [TaktPermission("foundation:culture:list", "区域列表")]
     [HttpGet("list")]
     public async Task<IActionResult> GetCultureListAsync([FromQuery] TaktCultureQueryDto queryDto)
     {
@@ -62,7 +62,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="id">区域ID</param>
     /// <returns>区域DTO</returns>
-    [TaktPermission("foundation:i18n:query", "区域详情")]
+    [TaktPermission("foundation:culture:query", "区域详情")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCultureByIdAsync(long id)
     {
@@ -105,7 +105,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="dto">创建DTO</param>
     /// <returns>区域DTO</returns>
-    [TaktPermission("foundation:i18n:create", "创建区域")]
+    [TaktPermission("foundation:culture:create", "创建区域")]
     [HttpPost]
     public async Task<IActionResult> CreateCultureAsync([FromBody] TaktCultureCreateDto dto)
     {
@@ -126,7 +126,7 @@ public class TaktCulturesController : TaktControllerBase
     /// <param name="id">区域ID</param>
     /// <param name="dto">更新DTO</param>
     /// <returns>区域DTO</returns>
-    [TaktPermission("foundation:i18n:update", "更新区域")]
+    [TaktPermission("foundation:culture:update", "更新区域")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateCultureAsync(long id, [FromBody] TaktCultureUpdateDto dto)
     {
@@ -146,7 +146,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="id">区域ID</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:i18n:delete", "删除区域")]
+    [TaktPermission("foundation:culture:delete", "删除区域")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCultureByIdAsync(long id)
     {
@@ -166,7 +166,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="ids">ID列表</param>
     /// <returns>操作结果</returns>
-    [TaktPermission("foundation:i18n:delete", "批量删除区域")]
+    [TaktPermission("foundation:culture:delete", "批量删除区域")]
     [HttpDelete("batch")]
     public async Task<IActionResult> DeleteCultureBatchAsync([FromBody] IEnumerable<long> ids)
     {
@@ -182,31 +182,11 @@ public class TaktCulturesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 更新区域状态
-    /// </summary>
-    /// <param name="dto">状态 DTO（TaktCommonStatus 枚举）</param>
-    /// <returns>区域DTO</returns>
-    [TaktPermission("foundation:i18n:update", "更新区域状态")]
-    [HttpPut("status")]
-    public async Task<IActionResult> UpdateCultureStatusAsync([FromBody] TaktCultureStatusDto dto)
-    {
-        try
-        {
-            var result = await _cultureService.UpdateCultureStatusAsync(dto);
-            return Success(result, "更新成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 更新区域排序
     /// </summary>
     /// <param name="dto">排序DTO</param>
     /// <returns>区域DTO</returns>
-    [TaktPermission("foundation:i18n:update", "更新区域排序")]
+    [TaktPermission("foundation:culture:update", "更新区域排序")]
     [HttpPut("sort")]
     public async Task<IActionResult> UpdateCultureSortAsync([FromBody] TaktCultureSortDto dto)
     {
@@ -225,7 +205,7 @@ public class TaktCulturesController : TaktControllerBase
     /// 获取导入模板
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:i18n:import", "获取区域导入模板")]
+    [TaktPermission("foundation:culture:import", "获取区域导入模板")]
     [HttpGet("template")]
     public async Task<IActionResult> GetCultureTemplateAsync([FromQuery] string? sheetName = null, [FromQuery] string? templateName = null)
     {
@@ -245,7 +225,7 @@ public class TaktCulturesController : TaktControllerBase
     /// </summary>
     /// <param name="file">Excel文件</param>
     /// <returns>导入结果</returns>
-    [TaktPermission("foundation:i18n:import", "导入区域")]
+    [TaktPermission("foundation:culture:import", "导入区域")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportCultureAsync(IFormFile file, [FromQuery] string? sheetName = null)
     {
@@ -275,7 +255,7 @@ public class TaktCulturesController : TaktControllerBase
     /// 导出区域
     /// </summary>
     /// <returns>Excel文件</returns>
-    [TaktPermission("foundation:i18n:export", "导出区域")]
+    [TaktPermission("foundation:culture:export", "导出区域")]
     [HttpGet("export")]
     public async Task<IActionResult> ExportCultureAsync([FromQuery] TaktCultureQueryDto? query = null, [FromQuery] string? sheetName = null, [FromQuery] string? exportName = null)
     {

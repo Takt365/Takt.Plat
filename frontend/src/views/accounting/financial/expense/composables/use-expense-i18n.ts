@@ -39,7 +39,7 @@ export const EXPENSE_LIST_FIELDS = [
   'expenseDate',
   'applicationReason',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'expenseStatus',
 ] as const
 
@@ -66,7 +66,7 @@ export const EXPENSE_PLACEHOLDER = {
   expenseDate: 'select',
   applicationReason: 'optional',
   attachments: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   expenseStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -92,7 +92,7 @@ export const EXPENSE_QUERY_STRING_FIELDS = [
   'expenseDateEnd',
   'applicationReason',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'initiatorId',
   'initiatedAtStart',
   'initiatedAtEnd',

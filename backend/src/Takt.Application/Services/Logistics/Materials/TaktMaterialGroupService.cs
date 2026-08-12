@@ -345,7 +345,6 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
         {
             exp = exp.And(x => x.MaterialGroupDescription != null && x.MaterialGroupDescription.Contains(queryDto.MaterialGroupDescription));
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -365,6 +364,12 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

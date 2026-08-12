@@ -35,40 +35,6 @@ public class TaktPayScaleDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PayScaleId { get; set; }
 
-    /// <summary>
-    /// 薪级编码（租户+公司内唯一）
-    /// </summary>
-    public string ScaleCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 薪级名称
-    /// </summary>
-    public string ScaleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 等级（数字越大等级越高）
-    /// </summary>
-    public int GradeLevel { get; set; } = 0;
-
-    /// <summary>
-    /// 下限金额（元）
-    /// </summary>
-    public decimal MinSalary { get; set; }
-
-    /// <summary>
-    /// 中位金额（元）
-    /// </summary>
-    public decimal MidSalary { get; set; }
-
-    /// <summary>
-    /// 上限金额（元）
-    /// </summary>
-    public decimal MaxSalary { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -103,6 +69,11 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 薪级编码（租户+公司内唯一）
     /// </summary>
     public string? ScaleCode { get; set; } = string.Empty;
@@ -135,7 +106,7 @@ public class TaktPayScaleQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -188,9 +159,10 @@ public class TaktPayScaleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 薪级编码（租户+公司内唯一）
@@ -228,7 +200,7 @@ public class TaktPayScaleCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -335,6 +307,11 @@ public class TaktPayScaleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 薪级编码（租户+公司内唯一）
     /// </summary>
     public string? ScaleCode { get; set; } = string.Empty;
@@ -367,7 +344,7 @@ public class TaktPayScaleTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -402,9 +379,10 @@ public class TaktPayScaleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 薪级编码（租户+公司内唯一）
@@ -439,7 +417,7 @@ public class TaktPayScaleImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -512,7 +490,7 @@ public class TaktPayScaleExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

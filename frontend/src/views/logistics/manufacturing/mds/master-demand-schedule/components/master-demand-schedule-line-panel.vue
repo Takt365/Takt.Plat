@@ -187,7 +187,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktGeneralMaterials/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
@@ -689,10 +689,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mds:master:demand:schedule:delete',
         onClick: (record: MasterDemandScheduleLine) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

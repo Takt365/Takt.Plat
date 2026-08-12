@@ -2,34 +2,23 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/model-cost-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：机种成本推移（工厂/机种/期间；汇总合并 + 差异组件 BOM 展开行涨跌 Tabs） -->
+<!-- 功能描述：机种成本推移（材料成本；机种/物料多选可空） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
 
 <template>
-  <div class="flex h-full min-h-0 flex-col p-4">
+  <div class="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden p-4">
     <model-cost-trend-query-form
       v-model:plant-code="queryPlantCode"
-      v-model:model-code="queryModelCode"
+      v-model:material-type="queryMaterialType"
+      v-model:model-codes="queryModelCodes"
+      v-model:component-codes="queryComponentCodes"
       v-model:period-range="periodRange"
       :loading="panelLoading"
       @search="handleSearch"
       @reset="handleReset"
     />
-    <a-tabs
-      v-model:activeKey="activeTab"
-      class="model-cost-trend-tabs mb-1 shrink-0"
-    >
-      <a-tab-pane
-        key="summary"
-        :tab="t(`${localePrefix}.tabs.summary`)"
-      />
-      <a-tab-pane
-        key="detail"
-        :tab="t(`${localePrefix}.tabs.detail`)"
-      />
-    </a-tabs>
     <TaktToolsBar
       :show-create="false"
       :show-update="false"
@@ -41,10 +30,10 @@
       :show-column-setting="false"
       :show-fullscreen="false"
       :show-refresh="true"
-      :export-disabled="!queryPlantCode || !queryModelCode || !hasRows"
+      :export-disabled="!canExport"
       :export-loading="exportLoading"
       :refresh-loading="panelLoading"
-      :right-actions="trendFilterActions"
+      :right-actions="toolbarRightActions"
       export-permission="logistics:manufacturing:bom:model:cost:trend:export"
       @export="handleExport"
       @refresh="handleRefresh"
@@ -53,16 +42,17 @@
       ref="panelRef"
       v-model:loading="panelLoading"
       v-model:has-rows="hasRows"
-      class="min-h-0 flex-1"
+      class="min-h-0 min-w-0 flex-1"
       :trend-filter="trendFilter"
-      :merge-mode="activeTab"
+      :sort-by="sortBy"
+      merge-mode="summary"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * 机种成本推移 · 查询栏 + Tabs（汇总 / 差异组件）+ 工具栏 + 转置涨跌表
+ * 机种成本推移 · 查询栏 + 工具栏
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -71,24 +61,33 @@ import {
   RiArrowDownLine,
   RiArrowUpDownLine,
   RiArrowUpLine,
+  RiFundsLine,
+  RiLineChartLine,
   RiListCheck,
+  RiSortNumberAsc,
+  RiSortNumberDesc,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import ModelCostTrendQueryForm from './components/model-cost-trend-query-form.vue'
-import { provideBomMaterialCostAnalysisMasterContext } from '@/views/logistics/manufacturing/bom/material-cost-trend/composables/use-material-cost-analysis-master-context'
+import { getBomMaterialCostAnalysisPlantOptions } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
 import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
+import ModelCostTrendQueryForm from './components/model-cost-trend-query-form.vue'
+import { provideBomMaterialCostAnalysisMasterContext } from '@/views/logistics/manufacturing/bom/material-cost-trend/composables/use-material-cost-analysis-master-context'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import ModelCostTrendPanel from './components/model-cost-trend-panel.vue'
 
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.bom.model-cost-trend.page'
-const { queryPlantCode, queryModelCode, periodRange } = provideBomMaterialCostAnalysisMasterContext()
 const tenantStore = useTenantStore()
+const {
+  queryPlantCode,
+  queryMaterialType,
+  queryModelCodes,
+  queryComponentCodes,
+  periodRange,
+} = provideBomMaterialCostAnalysisMasterContext()
 
-/** Tab：summary=机种成本推移；detail=差异组件推移 */
-const activeTab = ref<'summary' | 'detail'>('summary')
 /** 明细面板 loading */
 const panelLoading = ref(false)
 /** 导出 loading */
@@ -97,8 +96,38 @@ const exportLoading = ref(false)
 const hasRows = ref(false)
 /** 涨跌筛选 */
 const trendFilter = ref('')
-/** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => [
+/** 全量排序（分页前） */
+const sortBy = ref('productCountDesc')
+/** 右侧：全量排序 + 涨跌筛选 */
+const toolbarRightActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'sort-product-count-desc',
+    icon: RiSortNumberDesc,
+    tooltip: t(`${localePrefix}.sort.productCountDesc`),
+    active: sortBy.value === 'productCountDesc',
+    onClick: () => setSortBy('productCountDesc'),
+  },
+  {
+    key: 'sort-product-count-asc',
+    icon: RiSortNumberAsc,
+    tooltip: t(`${localePrefix}.sort.productCountAsc`),
+    active: sortBy.value === 'productCountAsc',
+    onClick: () => setSortBy('productCountAsc'),
+  },
+  {
+    key: 'sort-trend',
+    icon: RiLineChartLine,
+    tooltip: t(`${localePrefix}.sort.trend`),
+    active: sortBy.value === 'trend',
+    onClick: () => setSortBy('trend'),
+  },
+  {
+    key: 'sort-variance-desc',
+    icon: RiFundsLine,
+    tooltip: t(`${localePrefix}.sort.varianceDesc`),
+    active: sortBy.value === 'varianceDesc',
+    onClick: () => setSortBy('varianceDesc'),
+  },
   {
     key: 'trend-all',
     icon: RiListCheck,
@@ -126,39 +155,89 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
-  reload?: () => Promise<void>
+  reload?: (trendFilterOverride?: string, sortByOverride?: string) => Promise<void>
   handleExport?: () => Promise<void>
   clear?: () => void
 } | null>(null)
 
-/** 查询 */
-function handleSearch() {
+/** 查询条件是否满足 */
+const canQuery = computed(
+  () =>
+    !!queryPlantCode.value?.trim()
+    && !!queryMaterialType.value?.trim()
+    && !!periodRange.value?.[0]
+    && !!periodRange.value?.[1],
+)
+
+/** 可否导出 */
+const canExport = computed(() => canQuery.value && hasRows.value)
+
+/**
+ * 校验查询条件
+ * @returns 是否通过
+ */
+function validateQuery(): boolean {
   if (!queryPlantCode.value?.trim()) {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
-    return
+    return false
   }
-  if (!queryModelCode.value?.trim()) {
-    message.warning(t(`${localePrefix}.selectModelRequired`))
+  if (!queryMaterialType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
+    return false
+  }
+  if (!periodRange.value?.[0] || !periodRange.value?.[1]) {
+    message.warning(t(`${localePrefix}.selectPeriodRequired`))
+    return false
+  }
+  return true
+}
+
+/** 查询 */
+function handleSearch() {
+  if (!validateQuery()) {
     return
   }
   void panelRef.value?.reload?.()
 }
 
-/** 涨跌筛选 */
+/**
+ * 涨跌筛选
+ * @param value 空 / changed / up / down
+ */
 function setTrendFilter(value: string) {
   if (trendFilter.value === value) {
     return
   }
   trendFilter.value = value
-  void panelRef.value?.reload?.()
+  if (!canQuery.value) {
+    return
+  }
+  void panelRef.value?.reload?.(value, sortBy.value)
+}
+
+/**
+ * 全量排序（分页前作用于整表）
+ * @param value productCountDesc / productCountAsc / trend
+ */
+function setSortBy(value: string) {
+  if (sortBy.value === value) {
+    return
+  }
+  sortBy.value = value
+  if (!canQuery.value) {
+    return
+  }
+  void panelRef.value?.reload?.(trendFilter.value, value)
 }
 
 /** 刷新 */
 function handleRefresh() {
+  if (!validateQuery()) {
+    return
+  }
   void panelRef.value?.reload?.()
 }
 
@@ -167,26 +246,44 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
+/**
+ * 默认工厂
+ * @returns {Promise<void>}
+ */
 async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  queryPlantCode.value = plant || undefined
+  const related = (await resolveCurrentCompanyRelatedPlantCode()).trim()
+  let matched: string | undefined
+  if (related) {
+    try {
+      const plants = await getBomMaterialCostAnalysisPlantOptions()
+      const hit = (plants ?? []).find(
+        (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
+      )
+      matched = hit ? String(hit.dictValue).trim() : undefined
+    } catch {
+      matched = undefined
+    }
+  }
+  queryPlantCode.value = matched
+  queryMaterialType.value = undefined
+  queryModelCodes.value = []
+  queryComponentCodes.value = []
 }
 
 /** 重置 */
 async function handleReset() {
   await applyDefaultPlantFromCompany()
-  queryModelCode.value = undefined
+  queryMaterialType.value = undefined
   applyDefaultPeriodRange()
   trendFilter.value = ''
+  sortBy.value = 'productCountDesc'
   hasRows.value = false
   panelRef.value?.clear?.()
 }
 
 /** 导出 */
 async function handleExport() {
-  if (!queryPlantCode.value?.trim() || !queryModelCode.value?.trim()) {
-    message.warning(t(`${localePrefix}.selectModelRequired`))
+  if (!validateQuery()) {
     return
   }
   if (!hasRows.value) {
@@ -204,18 +301,13 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    void (async () => {
+      await applyDefaultPlantFromCompany()
+      hasRows.value = false
+      panelRef.value?.clear?.()
+    })()
   },
 )
-
-watch(activeTab, () => {
-  if (queryPlantCode.value?.trim() && queryModelCode.value?.trim()) {
-    void panelRef.value?.reload?.()
-  } else {
-    panelRef.value?.clear?.()
-    hasRows.value = false
-  }
-})
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()

@@ -32,12 +32,21 @@
             :scroll="{ y: productTableScrollY }"
             @resize-column="handleProductResizeColumn"
           >
-            <template #bodyCell="{ column, record }">
-              <template v-if="column.key === 'currencyCode'">
+            <template #bodyCell="{ column, record, text }">
+              <template v-if="column.key === 'materialType'">
+                <TaktDictTag
+                  :value="String((record as BomMaterialCost).materialType ?? '')"
+                  dict-type="logistics_material_type"
+                />
+              </template>
+              <template v-else-if="column.key === 'currencyCode'">
                 <TaktDictTag
                   :value="String((record as BomMaterialCost).currencyCode ?? '')"
                   dict-type="accounting_currency_code"
                 />
+              </template>
+              <template v-else>
+                {{ text }}
               </template>
             </template>
           </TaktSingleTable>
@@ -131,9 +140,9 @@ const hasProductSelection = computed(() => !!selectedProductRow.value)
 const productVisibleKeys = ref([
   'productCode',
   'productDescription',
+  'materialType',
   'productMonthlyCost',
-  'currencyCode',
-])
+  'currencyCode'])
 
 /**
  * 产品行主键
@@ -144,7 +153,7 @@ function getProductRowKey(record: BomMaterialCostRowRecord): string {
   const row = record as BomMaterialCost & { id?: string }
   const id = String(row.bomMaterialCostId ?? row.id ?? '').trim()
   if (id) return id
-  return `${row.plantCode ?? ''}|${row.productCode ?? ''}|${row.costingPeriod ?? ''}`
+  return `${row.plantCode ?? ''}|${row.materialType ?? ''}|${row.productCode ?? ''}|${row.costingPeriod ?? ''}`
 }
 
 /** 产品列定义 */
@@ -164,6 +173,13 @@ const productColumns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: pi.label('materialType'),
+    dataIndex: 'materialType',
+    key: 'materialType',
+    width: 100,
+    ellipsis: true,
+  },
+  {
     title: pi.label('productMonthlyCost'),
     dataIndex: 'productMonthlyCost',
     key: 'productMonthlyCost',
@@ -177,8 +193,7 @@ const productColumns = computed<TableColumnsType>(() => [
     dataIndex: 'currencyCode',
     key: 'currencyCode',
     width: 80,
-  },
-])
+  }])
 
 /**
  * 列宽调整
@@ -268,12 +283,14 @@ async function loadProductData() {
   }
   productLoading.value = true
   try {
+    const materialType = String(g.materialType ?? '').trim()
     const res = await getBomMaterialCostList({
       pageIndex: productPage.value,
       pageSize: productPageSize.value,
       plantCode: String(g.plantCode),
       modelCode: String(g.modelCode),
       costingPeriod: String(g.costingPeriod),
+      ...(materialType ? { materialType } : {}),
     })
     productDataSource.value = res.data ?? []
     productTotal.value = res.total ?? 0
@@ -315,7 +332,7 @@ function reload() {
 watch(
   () => {
     const g = selectedModelGroup.value as Record<string, unknown> | null
-    return `${g?.plantCode ?? ''}|${g?.modelCode ?? ''}|${g?.costingPeriod ?? ''}`
+    return `${g?.plantCode ?? ''}|${g?.materialType ?? ''}|${g?.modelCode ?? ''}|${g?.costingPeriod ?? ''}`
   },
   () => {
     productPage.value = getTaktDefaultPageIndex()

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationDeliveryI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotificationDelivery 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcNotificationDeliveryI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotificationdelivery.ecnotificationid
             new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationid", "zh-HK", "通知单ID_hk", "通知单 ID"),
 
-            // entity.ecnotificationdelivery.ecnotificationno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationno", "en-US", "通知单号_us", "通知单号（冗余）"),
-            // entity.ecnotificationdelivery.ecnotificationno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationno", "ja-JP", "通知单号_jp", "通知单号（冗余）"),
-            // entity.ecnotificationdelivery.ecnotificationno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationno", "zh-CN", "通知单号", "通知单号（冗余）"),
-            // entity.ecnotificationdelivery.ecnotificationno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationno", "zh-HK", "通知单号_hk", "通知单号（冗余）"),
+            // entity.ecnotificationdelivery.ecnotificationcode
+            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationcode", "en-US", "通知单号_us", "通知单号（冗余）"),
+            // entity.ecnotificationdelivery.ecnotificationcode
+            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationcode", "ja-JP", "通知单号_jp", "通知单号（冗余）"),
+            // entity.ecnotificationdelivery.ecnotificationcode
+            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationcode", "zh-CN", "通知单号", "通知单号（冗余）"),
+            // entity.ecnotificationdelivery.ecnotificationcode
+            new TranslationSeedItem("entity.ecnotificationdelivery.ecnotificationcode", "zh-HK", "通知单号_hk", "通知单号（冗余）"),
 
             // entity.ecnotificationdelivery.ecid
             new TranslationSeedItem("entity.ecnotificationdelivery.ecid", "en-US", "设变ID_us", "设变 ID"),
@@ -117,14 +117,14 @@ public class TaktEcNotificationDeliveryI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotificationdelivery.ecid
             new TranslationSeedItem("entity.ecnotificationdelivery.ecid", "zh-HK", "设变ID_hk", "设变 ID"),
 
-            // entity.ecnotificationdelivery.ecno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecno", "en-US", "设变单号_us", "设变单号（冗余）"),
-            // entity.ecnotificationdelivery.ecno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余）"),
-            // entity.ecnotificationdelivery.ecno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecno", "zh-CN", "设变单号", "设变单号（冗余）"),
-            // entity.ecnotificationdelivery.ecno
-            new TranslationSeedItem("entity.ecnotificationdelivery.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余）"),
+            // entity.ecnotificationdelivery.eccode
+            new TranslationSeedItem("entity.ecnotificationdelivery.eccode", "en-US", "设变单号_us", "设变单号（冗余）"),
+            // entity.ecnotificationdelivery.eccode
+            new TranslationSeedItem("entity.ecnotificationdelivery.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余）"),
+            // entity.ecnotificationdelivery.eccode
+            new TranslationSeedItem("entity.ecnotificationdelivery.eccode", "zh-CN", "设变单号", "设变单号（冗余）"),
+            // entity.ecnotificationdelivery.eccode
+            new TranslationSeedItem("entity.ecnotificationdelivery.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余）"),
 
             // entity.ecnotificationdelivery.deptcode
             new TranslationSeedItem("entity.ecnotificationdelivery.deptcode", "en-US", "目标部门编码_us", "目标部门编码（TaktDept.DeptCode，如 D0710、D0810）"),

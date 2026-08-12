@@ -21,8 +21,8 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarTable("takt_logistics_quality_supplier_evaluation", "供应商评价考核表")]
 [SugarIndex("ix_supplier_evaluation_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_supplier_evaluation_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(SupplierEvaluationCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SupplierEvaluationCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_supplier_evaluation_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_evaluation_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EvaluationDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_overall_rating", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OverallRating), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_supplier_evaluation_supplier_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SupplierId), OrderByType.Asc, false)]
@@ -31,7 +31,7 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     /// <summary>
     /// 评价表编码（组合唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "supplier_evaluation_code", ColumnDescription = "评价表编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SupplierEvaluationCode { get; set; } = string.Empty;
     /// <summary>
     /// 供应商 ID（选项 TaktSuppliers/options；DictValue=Id）
@@ -47,7 +47,7 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     /// <summary>
     /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? SupplierCode { get; set; }
     /// <summary>
     /// 评价日期
@@ -144,11 +144,6 @@ public class TaktSupplierEvaluation : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "evaluation_status", ColumnDescription = "评价状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int EvaluationStatus { get; set; } = 0;
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>

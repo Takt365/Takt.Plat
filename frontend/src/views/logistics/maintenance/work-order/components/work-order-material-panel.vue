@@ -164,11 +164,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -407,7 +407,7 @@ import {
 import { formatSummaryValue } from '@/components/business/takt-editable-table/editable-table-utils'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
-import MaintenanceWorkOrderMaterialForm from './work-order-material-form.vue'
+import MaintenanceWorkOrderMaterialForm from './work-order-general-material-form.vue'
 import { useMaintenanceWorkOrderMasterContext } from '../composables/use-work-order-master-context'
 import {
   getMaintenanceWorkOrderMaterialList,
@@ -633,14 +633,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaintenanceWorkOrderMaterialField(record, 'materialCode') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaintenanceWorkOrderMaterial }) =>
-      String(getMaintenanceWorkOrderMaterialField(record, 'materialName') ?? ''),
+      String(getMaintenanceWorkOrderMaterialField(record, 'materialDescription') ?? ''),
   },
   {
     title: pi.label('requiredQuantity'),
@@ -759,10 +759,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
         onClick: (record: MaintenanceWorkOrderMaterial) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

@@ -26,17 +26,12 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 [SugarTable("takt_logistics_manufacturing_mps_personnel_operation_rate", "人员稼动率表")]
 [SugarIndex("ix_personnel_operation_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_personnel_operation_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_por_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(TimeCategory), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_mps_personnel_operation_rate_start_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartDate), OrderByType.Asc, false)]
 public class TaktPersonnelOperationRate : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 时间类别（1=天，2=周，3=月）
@@ -71,14 +66,14 @@ public class TaktPersonnelOperationRate : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
-    public string ProdTeam { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team_name", ColumnDescription = "生产班组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? ProdTeamName { get; set; }
+    [SugarColumn(ColumnName = "team_code_name", ColumnDescription = "生产班组名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? TeamCodeName { get; set; }
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）

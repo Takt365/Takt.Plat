@@ -49,8 +49,8 @@ public class TaktMaintenanceHistory : TaktCompanyEntityBase
     /// <summary>
     /// 设备编码（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string EquipmentCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 18, IsNullable = false)]
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护类型（字典 logistics_maintenance_type；0=定期保养，1=故障维修，2=大修，3=改造升级，4=其他）

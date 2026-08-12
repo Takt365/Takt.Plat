@@ -156,7 +156,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         }
         var oldProdCategory = entity.ProdCategory;
         var oldProdOrderCode = entity.ProdOrderCode;
-        var oldBatchNo = entity.BatchNo;
+        var oldBatchCode = entity.BatchCode;
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_unique = await _uniqueValidator.IsUniqueAsync(
             _assyDefectRepository,
@@ -172,9 +172,9 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         await SyncDefectStatsFromAssyDefectAsync(entity);
         if (!string.Equals(oldProdCategory, entity.ProdCategory, StringComparison.Ordinal)
             || !string.Equals(oldProdOrderCode, entity.ProdOrderCode, StringComparison.Ordinal)
-            || !string.Equals(oldBatchNo ?? string.Empty, entity.BatchNo ?? string.Empty, StringComparison.Ordinal))
+            || !string.Equals(oldBatchCode ?? string.Empty, entity.BatchCode ?? string.Empty, StringComparison.Ordinal))
         {
-            await SyncDefectStatsForDimensionAsync(oldProdCategory, oldProdOrderCode, oldBatchNo);
+            await SyncDefectStatsForDimensionAsync(oldProdCategory, oldProdOrderCode, oldBatchCode);
         }
         return await GetAssyDefectByIdAsync(id) ?? throw new TaktBusinessException("组立不良日报不存在");
     }
@@ -193,14 +193,14 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         }
         var prodCategory = entity.ProdCategory;
         var prodOrderCode = entity.ProdOrderCode;
-        var batchNo = entity.BatchNo;
+        var batchCode = entity.BatchCode;
         await _assyDefectDetailRepository.DeleteAsync(x => x.AssyDefectId == entity.Id);
         var deleted = await _assyDefectRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("组立不良日报不存在或已删除");
         }
-        await SyncDefectStatsForDimensionAsync(prodCategory, prodOrderCode, batchNo);
+        await SyncDefectStatsForDimensionAsync(prodCategory, prodOrderCode, batchCode);
     }
 
     /// <summary>
@@ -482,7 +482,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         target.DefectCategory = childDto.DefectCategory;
         target.DefectQty = childDto.DefectQty;
         target.CumulativeDefectQty = childDto.CumulativeDefectQty;
-        target.RandomCardNo = childDto.RandomCardNo;
+        target.RandomCardCode = childDto.RandomCardCode;
         target.OccurrenceEngineering = childDto.OccurrenceEngineering;
         target.TestStep = childDto.TestStep;
         target.DefectSymptom = childDto.DefectSymptom;
@@ -515,9 +515,9 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
     /// </summary>
     /// <param name="prodCategory">生产类别</param>
     /// <param name="prodOrderCode">工单号</param>
-    /// <param name="batchNo">批次</param>
+    /// <param name="batchCode">批次</param>
     /// <returns>任务</returns>
-    private async Task SyncDefectStatsForDimensionAsync(string? prodCategory, string? prodOrderCode, string? batchNo)
+    private async Task SyncDefectStatsForDimensionAsync(string? prodCategory, string? prodOrderCode, string? batchCode)
     {
         EnsureThreeLayerContext();
         await TaktAssyOutputDefectSyncHelper.SyncDefectStatsForDimensionAsync(
@@ -528,7 +528,7 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             CurrentCompanyCode,
             prodCategory,
             prodOrderCode,
-            batchNo);
+            batchCode);
     }
     // ========================================
     // 查询表达式
@@ -549,16 +549,17 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || (x.ProdOrderType != null && x.ProdOrderType.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
                 || SqlFunc.ToString(x.GoodQuantity).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -576,9 +577,9 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -606,9 +607,9 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
             exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
@@ -624,6 +625,11 @@ public class TaktAssyDefectService : TaktServiceBase, ITaktAssyDefectService
         if (queryDto?.GoodQuantity.HasValue == true)
         {
             exp = exp.And(x => x.GoodQuantity == queryDto.GoodQuantity);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

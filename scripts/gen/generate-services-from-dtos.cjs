@@ -12,9 +12,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgsFromArgv, parseEntityBaseFromCsFile } = require('./generate-script-common.cjs');
+const { writeGeneratedFile, logGeneratedFileWritePolicy, parseSingleEntityGenerateArgsFromArgv, parseEntityBaseFromCsFile, dtoBaseHasCompanyIsolation, resolveIsolationDtoBase } = require('./generate-script-common.cjs');
 const {
   isRbacJunctionEntity,
+  isStandaloneChildVueEntity,
   assertNotRbacJunctionEntityCli,
   assertNotManualDtoEntityCli,
   shouldExcludeDtoFile: shouldExcludeRbacDtoFile,
@@ -37,6 +38,7 @@ const {
   extractPrimaryEnableStatusMeta,
   extractBuiltInDisableStatusMeta,
   optionsBlockUsesStaleIntStatusCompare,
+  parseEntityScalarProperties,
 } = require('./generate-enum-common.cjs');
 
 // ========================================
@@ -59,6 +61,12 @@ const INFRASTRUCTURE_DTO_FILE_NAMES = new Set([
 
 /** QueryDto 中继承自 TaktPagedQuery 的字段，不参与 QueryExpression */
 const PAGED_QUERY_FIELDS = new Set(['PageIndex', 'PageSize', 'KeyWords']);
+
+/**
+ * 列表/导出：无业务查询条件时返回空结果（不默认当前月、不全表扫描）。
+ * 有条件时走 QueryExpression + 分页/导出（正常过滤，不是「解锁全表」）。
+ * 由 HasAnyListQueryFilter + GetXxxListAsync / ExportXxxAsync 入口守卫统一实现。
+ */
 
 /** DTO 基类（与 TaktDtoBase.cs 一致，驱动隔离过滤与仓储接口） */
 const DTO_BASE_NAMES = ['TaktTenantDtoBase', 'TaktCompanyDtoBase', 'TaktApprovalDtoBase'];
@@ -298,9 +306,18 @@ function hasGetOptionsAsyncMethod(content, methodName) {
  * @param {string} repoField 如 _menuRepository
  * @param {{ statusField?: string, enabledValue?: number }|null} [statusMeta]
  * @param {Set<string>|null} [entityPropNames] 实体属性名；块内引用不存在的属性则视为失效并重生成
+ * @param {Array<{ name: string, bareType: string }>|null} [entityScalarProps] 实体标量属性（含类型）；用于检出 string Status 上残留的 == 1
+ * @param {string|null} [dtoBase] TaktTenantDtoBase / TaktCompanyDtoBase / TaktApprovalDtoBase（隔离以三基类为准）
  * @returns {boolean}
  */
-function isValidOptionsImplementationBlock(block, repoField, statusMeta = null, entityPropNames = null) {
+function isValidOptionsImplementationBlock(
+  block,
+  repoField,
+  statusMeta = null,
+  entityPropNames = null,
+  entityScalarProps = null,
+  dtoBase = null,
+) {
   if (!block || !block.trim()) {
     return false;
   }
@@ -314,14 +331,46 @@ function isValidOptionsImplementationBlock(block, repoField, statusMeta = null, 
   if (/\bBuild\w+Tree(?:Options)?\s*\(/.test(block)) {
     return false;
   }
-  if (optionsBlockUsesStaleIntStatusCompare(block, statusMeta)) {
+  // 三基类隔离：Options 谓词必须与 Tenant / Company / Approval 一致
+  if (dtoBase && !optionsBlockMatchesIsolationScope(block, dtoBase)) {
     return false;
   }
-  if (optionsBlockReferencesMissingEntityProps(block, entityPropNames)) {
+  if (optionsBlockUsesStaleIntStatusCompare(block, statusMeta, entityScalarProps)) {
+    return false;
+  }
+  if (optionsBlockReferencesMissingEntityProps(block, entityPropNames, dtoBase)) {
     return false;
   }
   // 平铺 Options：禁止 DictValue/DictLabel 使用雪花 Id（须业务 *Code）
   if (optionsBlockUsesSnowflakeIdForSelect(block)) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Options 块隔离谓词是否与三基类一致（双向校验，禁止胡来）
+ * - TaktTenantDtoBase：禁止 CompanyCode / EnsureThreeLayerContext
+ * - TaktCompanyDtoBase / TaktApprovalDtoBase：必须含 CompanyCode == CurrentCompanyCode
+ * @param {string} block
+ * @param {string} dtoBase
+ * @returns {boolean} true=匹配隔离级别
+ */
+function optionsBlockMatchesIsolationScope(block, dtoBase) {
+  if (!block || !dtoBase) {
+    return true;
+  }
+  const hasCompanyPred = /\.CompanyCode\s*==\s*CurrentCompanyCode/.test(block);
+  const hasEnsureThree = /\bEnsureThreeLayerContext\s*\(/.test(block);
+  if (!dtoBaseHasCompanyIsolation(dtoBase)) {
+    // 租户级：无公司列
+    if (hasCompanyPred || /\.CompanyCode\b/.test(block) || hasEnsureThree) {
+      return false;
+    }
+    return true;
+  }
+  // 公司级 / 审批级：必须过滤 CompanyCode（缺则跨公司串数据，强制重生成）
+  if (!hasCompanyPred) {
     return false;
   }
   return true;
@@ -355,9 +404,10 @@ function optionsBlockUsesSnowflakeIdForSelect(block) {
  * Options 方法块是否引用了实体上已删除/不存在的属性（如旧 MaterialName）
  * @param {string} block
  * @param {Set<string>|null|undefined} entityPropNames
+ * @param {string|null} [dtoBase] 仅公司/审批基类把 CompanyCode 列入白名单
  * @returns {boolean} true=存在缺失引用，应重生成
  */
-function optionsBlockReferencesMissingEntityProps(block, entityPropNames) {
+function optionsBlockReferencesMissingEntityProps(block, entityPropNames, dtoBase = null) {
   if (!block || !entityPropNames || entityPropNames.size === 0) {
     return false;
   }
@@ -365,7 +415,9 @@ function optionsBlockReferencesMissingEntityProps(block, entityPropNames) {
     ...entityPropNames,
     'Id',
     'TenantCode',
-    'CompanyCode',
+    'CultureCode',
+    'PlantCode',
+    'RelatedPlant',
     'CreatedAt',
     'CreatedBy',
     'UpdatedAt',
@@ -379,6 +431,10 @@ function optionsBlockReferencesMissingEntityProps(block, entityPropNames) {
     'ApprovalStatus',
     'FlowInstanceId',
   ]);
+  // CompanyCode 仅 TaktCompany* / TaktApproval*；禁止默认白名单导致租户级 Options 误保留
+  if (dtoBaseHasCompanyIsolation(dtoBase)) {
+    allowed.add('CompanyCode');
+  }
   const re = /\b(?:e|x|item)\.([A-Z]\w*)\b/g;
   let m;
   while ((m = re.exec(block)) !== null) {
@@ -399,6 +455,8 @@ function optionsBlockReferencesMissingEntityProps(block, entityPropNames) {
  * @param {boolean} [params.refreshOptions]
  * @param {object|null} [params.statusMeta]
  * @param {Set<string>|null} [params.entityPropNames]
+ * @param {Array<{ name: string, bareType: string }>|null} [params.entityScalarProps]
+ * @param {string|null} [params.dtoBase]
  * @returns {{ block: string, preserved: boolean, regenerated: boolean }}
  */
 function resolveOptionsImplementationBlock({
@@ -409,6 +467,8 @@ function resolveOptionsImplementationBlock({
   refreshOptions = false,
   statusMeta = null,
   entityPropNames = null,
+  entityScalarProps = null,
+  dtoBase = null,
 }) {
   if (!hasGetOptionsAsyncMethod(existingContent, methodName)) {
     return { block: freshTemplate, preserved: false, regenerated: false };
@@ -421,7 +481,17 @@ function resolveOptionsImplementationBlock({
     methodName,
     'implementation',
   );
-  if (preserved && isValidOptionsImplementationBlock(preserved, repoField, statusMeta, entityPropNames)) {
+  if (
+    preserved
+    && isValidOptionsImplementationBlock(
+      preserved,
+      repoField,
+      statusMeta,
+      entityPropNames,
+      entityScalarProps,
+      dtoBase,
+    )
+  ) {
     return { block: preserved, preserved: true, regenerated: false };
   }
   return { block: freshTemplate, preserved: false, regenerated: true };
@@ -462,8 +532,9 @@ function buildGetOptionsAsyncInterfaceSection(entityShort, hasTree, dtoInfo, des
 
 /**
  * 非树形实体：GetXxxOptionsAsync 默认实现模板（DictValue/DictLabel 均禁止雪花 Id）
- * @param {string} nameField 展示字段（Name / Code / nvarchar）
- * @param {string} valueField 业务 Code，无则 Name，再无则首个业务 nvarchar
+ * @param {string} nameField 展示字段（Name / Code / nvarchar / int）
+ * @param {string} valueField 业务 Code，无则 Name，再无则首个业务 nvarchar/int
+ * @param {boolean} [valueAsString] int 字段须 ToString 作为 DictValue/排序键
  */
 function buildFlatOptionsAsyncImplTemplate(
   entityShort,
@@ -473,13 +544,24 @@ function buildFlatOptionsAsyncImplTemplate(
   optionsListPredicate,
   nameField,
   valueField,
+  valueAsString = false,
 ) {
   if (!valueField || valueField === 'Id') {
     throw new Error(
-      `Get${entityShort}OptionsAsync：valueField 须为 *Code / *Name / 业务 nvarchar，禁止雪花 Id`,
+      `Get${entityShort}OptionsAsync：valueField 须为 *Code / *Name / 业务 nvarchar/int，禁止雪花 Id`,
     );
   }
   const labelField = nameField && nameField !== 'Id' ? nameField : valueField;
+  const orderExpr = valueAsString
+    ? `x => x.${labelField}.ToString()`
+    : `x => x.${labelField} ?? string.Empty`;
+  const valueExpr = valueAsString ? `e.${valueField}.ToString()` : `e.${valueField}`;
+  const labelExpr =
+    labelField === valueField
+      ? valueExpr
+      : valueAsString
+        ? `e.${labelField}.ToString()`
+        : `e.${labelField} ?? e.${valueField}`;
   let block = '';
   block += buildMethodXmlDoc({ summary: `获取${desc}选项列表`, returns: '下拉选项' });
   block += `    public async Task<List<TaktSelectOption>> Get${entityShort}OptionsAsync()\n`;
@@ -487,17 +569,12 @@ function buildFlatOptionsAsyncImplTemplate(
   block += ensureContextLine;
   block += `        var list = await ${repoField}.GetListAsync(\n`;
   block += `            ${optionsListPredicate},\n`;
-  block += `            x => x.${labelField} ?? string.Empty,\n`;
+  block += `            ${orderExpr},\n`;
   block += '            false);\n';
   block += '        return list.Select(e => new TaktSelectOption\n';
   block += '        {\n';
-  block += `            DictValue = e.${valueField},\n`;
-  if (labelField === valueField) {
-    // 无可用 *Name（如仅有 FormName）：标签与值都用 *Code
-    block += `            DictLabel = e.${valueField},\n`;
-  } else {
-    block += `            DictLabel = e.${labelField} ?? e.${valueField},\n`;
-  }
+  block += `            DictValue = ${valueExpr},\n`;
+  block += `            DictLabel = ${labelExpr},\n`;
   block += '        }).ToList();\n';
   block += '    }\n\n';
   return block;
@@ -628,13 +705,15 @@ function parseDtoBase(dtoFile, dtoInfo) {
 }
 
 /**
- * QueryExpression / Options 等 lambda 的数据隔离前缀
+ * QueryExpression / Options 等 lambda 的数据隔离前缀（三基类）
+ * - Tenant：仅 TenantCode
+ * - Company / Approval：TenantCode + CompanyCode
  * @param {string} dtoBase
  * @param {string} varName 实体参数名（如 holiday）
  * @returns {string[]}
  */
 function buildIsolationFilterLines(dtoBase, varName) {
-  if (dtoBase === 'TaktTenantDtoBase') {
+  if (!dtoBaseHasCompanyIsolation(dtoBase)) {
     return [`        return ${varName} => ${varName}.TenantCode == CurrentTenantCode`];
   }
   return [
@@ -644,11 +723,11 @@ function buildIsolationFilterLines(dtoBase, varName) {
 }
 
 /**
- * GetById 等详情校验：租户/公司不匹配则视为不存在
+ * GetById 等详情校验：租户/公司不匹配则视为不存在（三基类）
  * @param {string} dtoBase
  */
 function buildEntityScopeGuard(dtoBase) {
-  if (dtoBase === 'TaktTenantDtoBase') {
+  if (!dtoBaseHasCompanyIsolation(dtoBase)) {
     return 'entity.TenantCode != CurrentTenantCode';
   }
   return 'entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode';
@@ -682,15 +761,12 @@ ${builtInGuardLines}        if (entity.IsObsolete == 1)
 }
 
 /**
- * Options 列表查询 predicate（可选：仅启用状态）
- * @param {string} dtoBase
+ * Options 列表查询 predicate（三基类隔离 + 可选启用态）
+ * @param {string} dtoBase TaktTenantDtoBase | TaktCompanyDtoBase | TaktApprovalDtoBase
  * @param {{ field?: string, kind?: string, enabledLiteral?: string, intEnabled?: number }|null} [statusMeta]
  */
 function buildOptionsListPredicate(dtoBase, statusMeta = null, hasIsObsolete = false) {
-  const scope =
-    dtoBase === 'TaktTenantDtoBase'
-      ? 'x.TenantCode == CurrentTenantCode'
-      : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
+  const scope = buildTenantCompanyScope(dtoBase, 'x');
   const obsoletePart = hasIsObsolete ? ' && x.IsObsolete == 0' : '';
   if (statusMeta?.kind === 'int') {
     return `x => ${scope} && x.${statusMeta.field} == ${statusMeta.intEnabled ?? 1}${obsoletePart}`;
@@ -699,11 +775,11 @@ function buildOptionsListPredicate(dtoBase, statusMeta = null, hasIsObsolete = f
 }
 
 /**
- * 写入选项方法前的上下文校验
+ * 写入选项方法前的上下文校验（仅公司/审批级需要三层上下文）
  * @param {string} dtoBase
  */
 function buildEnsureContextLine(dtoBase) {
-  if (dtoBase === 'TaktTenantDtoBase') {
+  if (!dtoBaseHasCompanyIsolation(dtoBase)) {
     return '';
   }
   return '        EnsureThreeLayerContext();\n';
@@ -762,10 +838,13 @@ function identifyCrudType(entityFile) {
   if (!entityFile) {
     return 'Single';
   }
-  const content = readUtf8(entityFile);
-  if (/\[Navigate\(\s*NavigateType\.OneToMany/.test(content)) {
+  const cascadingChildren = parseOneToManyNavigations(entityFile).filter(
+    (nav) => !isRbacJunctionEntity(nav.childShort) && !isStandaloneChildVueEntity(nav.childShort),
+  );
+  if (cascadingChildren.length > 0) {
     return 'MasterDetail';
   }
+  const content = readUtf8(entityFile);
   if (/public\s+\w+\??\s+ParentId\s*\{/.test(content)) {
     return 'Tree';
   }
@@ -1222,10 +1301,12 @@ function buildMasterDetailChildUpsertBlock(c, entityName, entityShort, entityFil
     lines.push(`${indent}        childDto.${field} = entity.${field};`);
   }
   if (c.childSeq?.lineNumber) {
-    lines.push(`${indent}        var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";`);
+    // 行号去重键：公司/审批级用 CompanyCode；租户级无公司列，用 TenantCode
+    const lineScopeField = dtoBaseHasCompanyIsolation(dtoBase) ? 'CompanyCode' : 'TenantCode';
+    lines.push(`${indent}        var lineKey = $"{entity.${lineScopeField}}|{entity.Id}|{childDto.LineNumber}";`);
     lines.push(`${indent}        if (!seenLineKeys.Add(lineKey))`);
     lines.push(`${indent}        {`);
-    lines.push(`${indent}            throw new TaktBusinessException("${childDesc}第{i + 1}项与本次提交的其他项重复（CompanyCode、${c.masterIdField}、LineNumber）");`);
+    lines.push(`${indent}            throw new TaktBusinessException("${childDesc}第{i + 1}项与本次提交的其他项重复（${lineScopeField}、${c.masterIdField}、LineNumber）");`);
     lines.push(`${indent}        }`);
   }
   lines.push(`${indent}        if (childDto.${childIdProp} > 0)`);
@@ -1362,7 +1443,7 @@ function generateMasterDetailServiceExtras(
   desc,
 ) {
   const rawChildren = parseOneToManyNavigations(entityFile).filter(
-    (nav) => !isRbacJunctionEntity(nav.childShort),
+    (nav) => !isRbacJunctionEntity(nav.childShort) && !isStandaloneChildVueEntity(nav.childShort),
   );
   if (!rawChildren.length) {
     return null;
@@ -1591,6 +1672,9 @@ function listBusinessStringPropertyNames(entityFile) {
   const standard = new Set([
     'TenantCode',
     'CompanyCode',
+    'CultureCode',
+    'PlantCode',
+    'RelatedPlant',
     'ExtField',
     'Remark',
     'CreatedBy',
@@ -1687,18 +1771,51 @@ function getOptionsValueFieldName(entityFile, entityShort) {
  * @param {string} entityShort
  * @param {string} desc
  */
+/**
+ * 无业务 nvarchar 时：整数展示字段回退（如 StepNo）；Options 生成时 ToString
+ * @param {string} entityFile
+ * @returns {string|null}
+ */
+function getFirstBusinessIntDisplayField(entityFile) {
+  const content = readUtf8(entityFile);
+  const intRegex = /public\s+int\??\s+(\w+)\s*\{/g;
+  const skip = new Set([
+    'IsDeleted',
+    'IsBuiltIn',
+    'IsLeaf',
+    'Level',
+    'ApprovalStatus',
+  ]);
+  const names = [];
+  let m;
+  while ((m = intRegex.exec(content)) !== null) {
+    if (skip.has(m[1])) continue;
+    if (/^Is[A-Z]/.test(m[1])) continue;
+    if (m[1].endsWith('Status')) continue;
+    names.push(m[1]);
+  }
+  return (
+    names.find((f) => f.endsWith('No')) ||
+    names.find((f) => f === 'SortOrder') ||
+    names[0] ||
+    null
+  );
+}
+
 function resolveOptionsDisplayFields(entityFile, entityShort, desc) {
   const codeField = resolvePrimaryBusinessCodeField(entityFile, entityShort);
   const nameOnly = getNameFieldName(entityFile, entityShort);
   const firstNvarchar = getFirstBusinessNvarcharField(entityFile, entityShort);
-  const valueField = codeField || nameOnly || firstNvarchar;
+  const firstInt = getFirstBusinessIntDisplayField(entityFile);
+  const valueField = codeField || nameOnly || firstNvarchar || firstInt;
   if (!valueField || valueField === 'Id') {
     throw new Error(
-      `实体 Takt${entityShort}（${desc}）无可用 Options 字段：请提供 {Entity}Code，或 *Name，或至少一个业务 nvarchar 字段（禁止雪花 Id）`,
+      `实体 Takt${entityShort}（${desc}）无可用 Options 字段：请提供 {Entity}Code，或 *Name，或至少一个业务 nvarchar/int 字段（禁止雪花 Id）`,
     );
   }
-  const nameField = nameOnly || codeField || firstNvarchar || valueField;
-  return { nameField, valueField };
+  const nameField = nameOnly || codeField || firstNvarchar || firstInt || valueField;
+  const valueAsString = Boolean(firstInt && valueField === firstInt && !codeField && !nameOnly && !firstNvarchar);
+  return { nameField, valueField, valueAsString };
 }
 
 function extractEntityPropertyNames(entityFile) {
@@ -1723,12 +1840,14 @@ function entityHasParentId(entityFile) {
 }
 
 /**
- * 租户/公司隔离谓词（与 buildOptionsListPredicate 一致）
+ * 租户/公司隔离谓词（三基类；与 buildOptionsListPredicate 同源）
+ * - TaktTenantDtoBase → 仅 TenantCode
+ * - TaktCompanyDtoBase / TaktApprovalDtoBase → TenantCode + CompanyCode
  * @param {string} dtoBase
  * @param {string} varName
  */
 function buildTenantCompanyScope(dtoBase, varName) {
-  if (dtoBase === 'TaktTenantDtoBase') {
+  if (!dtoBaseHasCompanyIsolation(dtoBase)) {
     return `${varName}.TenantCode == CurrentTenantCode`;
   }
   return `${varName}.TenantCode == CurrentTenantCode && ${varName}.CompanyCode == CurrentCompanyCode`;
@@ -2105,13 +2224,13 @@ function extractDtoPropertyNames(dtoContent, className) {
 }
 
 /**
- * 按 DTO 基类返回唯一索引中由仓储自动隔离的字段（不参与应用层查重条件）
+ * 按 DTO/实体基类返回唯一索引中由仓储自动隔离的字段（不参与应用层查重条件）
  * @param {string} dtoBase TaktTenantDtoBase / TaktCompanyDtoBase / TaktApprovalDtoBase
  * @returns {Set<string>}
  */
 function getUniqueIndexScopeFields(dtoBase) {
   const scopeFields = new Set(['TenantCode']);
-  if (dtoBase === 'TaktCompanyDtoBase' || dtoBase === 'TaktApprovalDtoBase') {
+  if (dtoBaseHasCompanyIsolation(dtoBase)) {
     scopeFields.add('CompanyCode');
   }
   return scopeFields;
@@ -2303,7 +2422,14 @@ function extractQueryDtoProperties(dtoContent, queryDtoName, entityPropertyNames
     if (name.endsWith('Start') || name.endsWith('End')) {
       continue;
     }
-    if (!entityPropertyNames.has(name) && name !== 'Remark' && name !== 'ExtField') {
+    if (
+      !entityPropertyNames.has(name) &&
+      name !== 'Remark' &&
+      name !== 'ExtField' &&
+      name !== 'CultureCode' &&
+      name !== 'PlantCode' &&
+      name !== 'RelatedPlant'
+    ) {
       continue;
     }
     const bareType = rawType.replace('?', '').trim();
@@ -2510,10 +2636,7 @@ function buildBuiltInStatusDisableGuardLines(desc, builtInStatusMeta, dtoPropNam
  * @param {{ forIncludeDisabled?: boolean }} [opts] forIncludeDisabled=true 时生成三元 Expression 用的启用谓词片段
  */
 function buildLazyTreeChildPredicate(dtoBase, statusMeta, hasIsObsolete = false) {
-  const scope =
-    dtoBase === 'TaktTenantDtoBase'
-      ? 'x.TenantCode == CurrentTenantCode'
-      : 'x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode';
+  const scope = buildTenantCompanyScope(dtoBase, 'x');
   const obsoletePart = hasIsObsolete ? ' && x.IsObsolete == 0' : '';
   const base = `${scope} && x.ParentId == parentId${obsoletePart}`;
   if (statusMeta?.kind === 'int') {
@@ -2552,8 +2675,7 @@ function generateTreeServiceMethods(
   const hasSortOrder = /public\s+int\s+SortOrder\s*\{/.test(entityContent);
   const hasIsLeaf = /public\s+int\s+IsLeaf\s*\{/.test(entityContent);
   const hasIsObsolete = entityFileHasIsObsolete(entityFile);
-  const ensureLine =
-    dtoBase === 'TaktTenantDtoBase' ? '' : '        EnsureThreeLayerContext();\n';
+  const ensureLine = buildEnsureContextLine(dtoBase);
   const pred = buildLazyTreeChildPredicate(dtoBase, statusMeta, hasIsObsolete);
   const sortOrderAssign = hasSortOrder
     ? '                    SortOrder = item.SortOrder,\n'
@@ -2850,20 +2972,15 @@ function generateServiceInterface(
 function collectKeyWordsSearchFields(queryProps, dateRanges) {
   const fields = [];
   const seen = new Set();
+  // 仅字符串业务字段；禁止 SqlFunc.ToString(CreatedAt).Contains —— 短关键字会命中几乎全表
   for (const prop of queryProps) {
-    if (seen.has(prop.name)) {
+    if (!prop.isString || seen.has(prop.name)) {
       continue;
     }
     seen.add(prop.name);
-    fields.push({ name: prop.name, isString: prop.isString });
+    fields.push({ name: prop.name, isString: true });
   }
-  for (const range of dateRanges) {
-    if (seen.has(range.baseName)) {
-      continue;
-    }
-    seen.add(range.baseName);
-    fields.push({ name: range.baseName, isString: false });
-  }
+  void dateRanges;
   return fields;
 }
 
@@ -2879,9 +2996,9 @@ function buildKeyWordsExpressionLines(queryProps, dateRanges) {
     return [];
   }
   const lines = [];
-  lines.push('        if (!string.IsNullOrEmpty(queryDto?.KeyWords))');
+  lines.push('        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))');
   lines.push('        {');
-  lines.push('            var keywords = queryDto.KeyWords;');
+  lines.push('            var keywords = queryDto.KeyWords!.Trim();');
   lines.push('            exp = exp.And(x =>');
   keyWordFields.forEach((field, index) => {
     const prefix = index === 0 ? '                ' : '                || ';
@@ -2898,10 +3015,75 @@ function buildKeyWordsExpressionLines(queryProps, dateRanges) {
 }
 
 /**
+ * 生成「是否存在任一业务查询条件」方法（分页字段除外；无参时列表/导出返回空）
+ * @param {string} queryDtoTypeName QueryDto 类型名
+ * @param {Array} queryProps 查询属性
+ * @param {Array} dateRanges 日期范围
+ * @param {boolean} hasIsObsolete 是否含 IsObsolete（未传值不视为用户条件）
+ * @returns {string}
+ */
+function buildHasAnyListQueryFilterMethod(
+  queryDtoTypeName,
+  queryProps,
+  dateRanges,
+  hasIsObsolete = false,
+) {
+  const lines = [];
+  lines.push('    /// <summary>');
+  lines.push('    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描');
+  lines.push('    /// </summary>');
+  lines.push('    /// <param name="queryDto">查询 DTO</param>');
+  lines.push('    /// <returns>有条件为 true</returns>');
+  lines.push(`    private static bool HasAnyListQueryFilter(${queryDtoTypeName}? queryDto)`);
+  lines.push('    {');
+  lines.push('        if (queryDto == null)');
+  lines.push('        {');
+  lines.push('            return false;');
+  lines.push('        }');
+  lines.push('        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))');
+  lines.push('        {');
+  lines.push('            return true;');
+  lines.push('        }');
+  const loopProps = hasIsObsolete ? queryProps.filter((p) => p.name !== 'IsObsolete') : queryProps;
+  for (const prop of loopProps) {
+    if (prop.isString) {
+      lines.push(`        if (!string.IsNullOrWhiteSpace(queryDto.${prop.name}))`);
+      lines.push('        {');
+      lines.push('            return true;');
+      lines.push('        }');
+      continue;
+    }
+    if (prop.isDateTime || prop.isSharedEnum || prop.isNullableEnum || prop.isBool || prop.isNumeric) {
+      lines.push(`        if (queryDto.${prop.name}.HasValue)`);
+      lines.push('        {');
+      lines.push('            return true;');
+      lines.push('        }');
+    }
+  }
+  if (hasIsObsolete) {
+    lines.push('        if (queryDto.IsObsolete.HasValue)');
+    lines.push('        {');
+    lines.push('            return true;');
+    lines.push('        }');
+  }
+  for (const range of dateRanges) {
+    lines.push(`        if (queryDto.${range.startField}.HasValue || queryDto.${range.endField}.HasValue)`);
+    lines.push('        {');
+    lines.push('            return true;');
+    lines.push('        }');
+  }
+  lines.push('        return false;');
+  lines.push('    }');
+  lines.push('');
+  return lines.join('\n');
+}
+
+/**
  * 生成 QueryExpression 方法体（SqlSugar Expressionable，租户/公司隔离由仓储 Where 处理）
  * @param {string} entityName 实体类名
  * @param {Array} queryProps 查询 DTO 属性（不含范围 Start/End）
  * @param {Array} dateRanges 日期范围字段
+ * @param {boolean} [hasIsObsolete=false]
  * @returns {string} 方法体 C# 代码
  */
 function buildQueryExpressionBody(entityName, queryProps, dateRanges, hasIsObsolete = false) {
@@ -2924,10 +3106,13 @@ function buildQueryExpressionBody(entityName, queryProps, dateRanges, hasIsObsol
 
   for (const prop of loopProps) {
     if (prop.isString) {
-      lines.push(`        if (!string.IsNullOrEmpty(queryDto?.${prop.name}))`);
+      // 局部变量捕获：避免 SqlSugar 无法翻译 queryDto.Xxx 导致条件丢失（表现为有参却查出全表）
+      const localName = prop.name.charAt(0).toLowerCase() + prop.name.slice(1);
+      lines.push(`        if (!string.IsNullOrWhiteSpace(queryDto?.${prop.name}))`);
       lines.push('        {');
+      lines.push(`            var ${localName} = queryDto.${prop.name};`);
       lines.push(
-        `            exp = exp.And(x => x.${prop.name} != null && x.${prop.name}.Contains(queryDto.${prop.name}));`,
+        `            exp = exp.And(x => x.${prop.name} != null && x.${prop.name}.Contains(${localName}));`,
       );
       lines.push('        }');
       lines.push('');
@@ -2937,7 +3122,8 @@ function buildQueryExpressionBody(entityName, queryProps, dateRanges, hasIsObsol
     if (prop.isDateTime) {
       lines.push(`        if (queryDto?.${prop.name}.HasValue == true)`);
       lines.push('        {');
-      lines.push(`            exp = exp.And(x => x.${prop.name} == queryDto.${prop.name});`);
+      lines.push(`            var ${prop.name.charAt(0).toLowerCase() + prop.name.slice(1)} = queryDto.${prop.name};`);
+      lines.push(`            exp = exp.And(x => x.${prop.name} == ${prop.name.charAt(0).toLowerCase() + prop.name.slice(1)});`);
       lines.push('        }');
       lines.push('');
       continue;
@@ -2946,21 +3132,27 @@ function buildQueryExpressionBody(entityName, queryProps, dateRanges, hasIsObsol
     if (prop.isSharedEnum || prop.isNullableEnum || prop.isBool || prop.isNumeric) {
       lines.push(`        if (queryDto?.${prop.name}.HasValue == true)`);
       lines.push('        {');
-      lines.push(`            exp = exp.And(x => x.${prop.name} == queryDto.${prop.name});`);
+      const localName = prop.name.charAt(0).toLowerCase() + prop.name.slice(1);
+      lines.push(`            var ${localName} = queryDto.${prop.name};`);
+      lines.push(`            exp = exp.And(x => x.${prop.name} == ${localName});`);
       lines.push('        }');
       lines.push('');
     }
   }
 
   for (const range of dateRanges) {
+    const startLocal = range.startField.charAt(0).toLowerCase() + range.startField.slice(1);
+    const endLocal = range.endField.charAt(0).toLowerCase() + range.endField.slice(1);
     lines.push(`        if (queryDto?.${range.startField}.HasValue == true)`);
     lines.push('        {');
-    lines.push(`            exp = exp.And(x => x.${range.baseName} >= queryDto.${range.startField});`);
+    lines.push(`            var ${startLocal} = queryDto.${range.startField};`);
+    lines.push(`            exp = exp.And(x => x.${range.baseName} >= ${startLocal});`);
     lines.push('        }');
     lines.push('');
     lines.push(`        if (queryDto?.${range.endField}.HasValue == true)`);
     lines.push('        {');
-    lines.push(`            exp = exp.And(x => x.${range.baseName} <= queryDto.${range.endField});`);
+    lines.push(`            var ${endLocal} = queryDto.${range.endField};`);
+    lines.push(`            exp = exp.And(x => x.${range.baseName} <= ${endLocal});`);
     lines.push('        }');
     lines.push('');
   }
@@ -2992,14 +3184,12 @@ function generateServiceImplementation(
   const dtoContent = readUtf8(findDtoFileByEntity(entityName));
   const entityContent = readUtf8(entityFile);
   const entityProps = extractEntityPropertyNames(entityFile);
+  const entityScalarProps = parseEntityScalarProperties(entityContent);
   const queryProps = extractQueryDtoProperties(dtoContent, dtoInfo.query, entityProps);
   const dateRanges = extractDateRangeFields(dtoContent, dtoInfo.query, entityProps);
   const enableStatusMeta = extractPrimaryEnableStatusMeta(entityContent, entityShort);
-  const { nameField, valueField: optionsValueField } = resolveOptionsDisplayFields(
-    entityFile,
-    entityShort,
-    desc,
-  );
+  const { nameField, valueField: optionsValueField, valueAsString: optionsValueAsString } =
+    resolveOptionsDisplayFields(entityFile, entityShort, desc);
   const importDtoName = dtoInfo.import;
   const uniqueIndexes = extractUniqueIndexes(entityFile, dtoBase);
   const manyToOneMasterEarly =
@@ -3236,14 +3426,22 @@ function generateServiceImplementation(
   content += '        _uniqueValidator = uniqueValidator;\n';
   content += '    }\n\n';
 
-  // List
+  // List（无业务查询条件 → 空结果；有条件 → QueryExpression + 分页）
   content += buildMethodXmlDoc({
-    summary: `获取${desc}列表（分页）`,
+    summary: `获取${desc}列表（分页；无业务查询条件时返回空结果）`,
     params: [{ name: 'queryDto', desc: '查询DTO' }],
     returns: '分页结果',
   });
   content += `    public async Task<TaktPagedResult<${dtoInfo.base}>> Get${entityShort}ListAsync(${dtoInfo.query} queryDto)\n`;
   content += '    {\n';
+  content += '        if (!HasAnyListQueryFilter(queryDto))\n';
+  content += '        {\n';
+  content += `            return TaktPagedResult<${dtoInfo.base}>.Create(\n`;
+  content += `                new List<${dtoInfo.base}>(),\n`;
+  content += '                0,\n';
+  content += '                queryDto.PageIndex,\n';
+  content += '                queryDto.PageSize);\n';
+  content += '        }\n';
   content += '        var predicate = QueryExpression(queryDto);\n';
   content += `        var (data, total) = await ${repoField}.GetPagedAsync(\n`;
   content += '            queryDto.PageIndex,\n';
@@ -3285,6 +3483,8 @@ function generateServiceImplementation(
       refreshOptions: genOptions.refreshOptions === true,
       statusMeta: enableStatusMeta,
       entityPropNames: entityProps,
+      entityScalarProps,
+      dtoBase,
     });
     content += treeOptionsResolved.block;
     if (treeOptionsResolved.preserved) {
@@ -3303,6 +3503,7 @@ function generateServiceImplementation(
       optionsListPredicate,
       nameField,
       optionsValueField,
+      optionsValueAsString,
     );
     const flatOptionsResolved = resolveOptionsImplementationBlock({
       existingContent,
@@ -3312,6 +3513,8 @@ function generateServiceImplementation(
       refreshOptions: genOptions.refreshOptions === true,
       statusMeta: enableStatusMeta,
       entityPropNames: entityProps,
+      entityScalarProps,
+      dtoBase,
     });
     content += flatOptionsResolved.block;
     if (flatOptionsResolved.preserved) {
@@ -3681,7 +3884,15 @@ function generateServiceImplementation(
   });
   content += `    public async Task<(string fileName, byte[] fileContent)> Export${entityShort}Async(${dtoInfo.query}? query = null, string? sheetName = null, string? fileName = null)\n`;
   content += '    {\n';
-  content += `        var predicate = QueryExpression(query ?? new ${dtoInfo.query}());\n`;
+  content += `        var queryDto = query ?? new ${dtoInfo.query}();\n`;
+  content += '        if (!HasAnyListQueryFilter(queryDto))\n';
+  content += '        {\n';
+  content += `            return await TaktExcelHelper.ExportAsync(\n`;
+  content += `                new List<${exportDto}>(),\n`;
+  content += `                sheetName ?? "${desc}数据",\n`;
+  content += `                fileName ?? "${desc}导出.xlsx");\n`;
+  content += '        }\n';
+  content += '        var predicate = QueryExpression(queryDto);\n';
   content += `        var list = await ${repoField}.GetListAsync(predicate);\n`;
   content += '        if (list == null || list.Count == 0)\n';
   content += '        {\n';
@@ -3731,7 +3942,13 @@ function generateServiceImplementation(
   content += `    private static Expression<Func<${entityName}, bool>> QueryExpression(${dtoInfo.query}? queryDto)\n`;
   content += '    {\n';
   content += `${queryExprBody}\n`;
-  content += '    }\n';
+  content += '    }\n\n';
+  content += buildHasAnyListQueryFilterMethod(
+    dtoInfo.query,
+    queryProps,
+    dateRanges,
+    hasIsObsolete,
+  );
   if (transposedGen?.transposedQueryExpr) {
     content += '\n';
     content += '    /// <summary>\n';
@@ -3848,10 +4065,18 @@ function processDtoFile(dtoFile, options) {
   if (crudType === 'MasterDetail') {
     const navChildren = parseOneToManyNavigations(entityFile);
     const rbacNavs = navChildren.filter((n) => isRbacJunctionEntity(n.childShort));
-    const masterNavs = navChildren.filter((n) => !isRbacJunctionEntity(n.childShort));
+    const standaloneNavs = navChildren.filter((n) => isStandaloneChildVueEntity(n.childShort));
+    const masterNavs = navChildren.filter(
+      (n) => !isRbacJunctionEntity(n.childShort) && !isStandaloneChildVueEntity(n.childShort),
+    );
     if (rbacNavs.length > 0 || hasRbacParentConfig(entityShort)) {
       console.log(
         `  ℹ️  RBAC 关联委托 ITaktRbacService（${hasRbacParentConfig(entityShort) ? 'rbac-parent-config' : rbacNavs.map((n) => n.childShort).join('、')}）`,
+      );
+    }
+    if (standaloneNavs.length > 0) {
+      console.log(
+        `  ℹ️  独立菜单从实体（不级联）：${standaloneNavs.map((n) => n.childShort).join('、')}`,
       );
     }
     if (masterNavs.length > 0) {
@@ -3871,6 +4096,16 @@ function processDtoFile(dtoFile, options) {
   } else if (hasRbacParentConfig(entityShort)) {
     console.log('  ℹ️  RBAC 关联委托 ITaktRbacService（rbac-parent-config）');
   }
+  if (crudType === 'Single') {
+    const standaloneOnly = parseOneToManyNavigations(entityFile).filter((n) =>
+      isStandaloneChildVueEntity(n.childShort),
+    );
+    if (standaloneOnly.length > 0) {
+      console.log(
+        `  ℹ️  实体导航含独立菜单从实体（单表生成，不级联）：${standaloneOnly.map((n) => n.childShort).join('、')}`,
+      );
+    }
+  }
 
   if (!options.force && (EXISTING_MANUAL_SERVICE_ENTITIES.has(entityName) || shouldExcludeStandaloneService(entityName))) {
     console.log(`  ⏭️  跳过：已有手工服务（实体 ${entityName}），使用 --force 可覆盖`);
@@ -3880,21 +4115,26 @@ function processDtoFile(dtoFile, options) {
   const output = getServiceOutputPaths(entityFile, entityName);
 
   const description = extractEntityDescription(entityFile) || entityShort;
-  const dtoBase = parseDtoBase(dtoFile, dtoInfo);
-  if (!dtoBase) {
+  const dtoBaseFromDto = parseDtoBase(dtoFile, dtoInfo);
+  if (!dtoBaseFromDto) {
     console.log(
       `  ❌ 无法识别 DTO 基类：${dtoInfo.base} 须继承 TaktTenantDtoBase / TaktCompanyDtoBase / TaktApprovalDtoBase`,
     );
     return { status: 'failed' };
   }
-  const entityBase = DTO_BASE_TO_ENTITY_BASE[dtoBase];
   const entityBaseFromFile = parseEntityBase(entityFile);
-  if (entityBaseFromFile !== entityBase) {
+  // 隔离/Options 以 Domain 实体三基类为准（CompanyCode 是否存在以实体为准）
+  const dtoBase = resolveIsolationDtoBase(dtoBaseFromDto, entityBaseFromFile) || dtoBaseFromDto;
+  const entityBaseExpected = DTO_BASE_TO_ENTITY_BASE[dtoBaseFromDto];
+  if (entityBaseFromFile && entityBaseFromFile !== entityBaseExpected) {
     console.log(
-      `  ⚠️  DTO 基类 ${dtoBase}（→${entityBase}）与实体基类 ${entityBaseFromFile} 不一致，以 DTO 为准`,
+      `  ⚠️  DTO 基类 ${dtoBaseFromDto}（→${entityBaseExpected}）与实体基类 ${entityBaseFromFile} 不一致，隔离/Options 以实体为准 → ${dtoBase}`,
     );
   }
-  console.log(`  DtoBase: ${dtoBase}  →  ${DTO_BASE_TO_REPOSITORY[dtoBase]}`);
+  const isolationHint = dtoBaseHasCompanyIsolation(dtoBase)
+    ? 'TenantCode + CompanyCode'
+    : '仅 TenantCode';
+  console.log(`  DtoBase: ${dtoBase}  →  ${DTO_BASE_TO_REPOSITORY[dtoBase]}（${isolationHint}）`);
   if (entityHasIsBuiltIn(entityFile)) {
     console.log('  ℹ️  实体含 IsBuiltIn：已生成创建/更新/单删/批删/状态更新内置保护');
   }
@@ -4004,10 +4244,10 @@ function printUsage() {
   - 已禁用 --all；每次必须指定一个实体
   - 扫描 Takt.Application/Dtos/**/*Dtos.cs
   - 仅处理同时具备 TaktXxxDto / QueryDto / CreateDto / UpdateDto 的聚合模块
-  - 隔离与仓储由主 DTO 继承的 DtoBase 决定：
-      TaktTenantDtoBase → ITaktTenantRepository，仅 TenantCode
-      TaktCompanyDtoBase → ITaktCompanyRepository，TenantCode + CompanyCode
-      TaktApprovalDtoBase → ITaktApprovalRepository，TenantCode + CompanyCode
+  - 隔离与仓储由主 DTO / Domain 实体三基类决定（不一致时隔离以实体为准）：
+      TaktTenantEntityBase / TaktTenantDtoBase → ITaktTenantRepository，仅 TenantCode；Options 禁止 CompanyCode / EnsureThreeLayerContext
+      TaktCompanyEntityBase / TaktCompanyDtoBase → ITaktCompanyRepository，TenantCode + CompanyCode；Options 必须含 CompanyCode 过滤
+      TaktApprovalEntityBase / TaktApprovalDtoBase → ITaktApprovalRepository，TenantCode + CompanyCode；Options 同公司级
   - 排除 User（与 generate-dtos-from-entity.cjs 一致，禁止生成/覆盖）
   - Translation：额外生成转置查询/批量保存（多语言表格）
   - 输出策略：文件不存在则创建，已存在则覆盖更新（无需 --force）
@@ -4018,13 +4258,13 @@ function printUsage() {
   - RBAC 八表：主实体 Create/Update/Delete 委托 ITaktRbacService（见 scripts/gen/rbac-parent-config.cjs，User 除外）
   - Auth 等手工服务仅在不带 --force 时跳过
   - 树形实体（含 ParentId）：生成懒加载 GetXxxTreeOptionsAsync(parentId) + GetXxxTreeAsync(parentId)（仅一层，见 TaktLazyTreeHelper），不生成 GetXxxOptionsAsync / 递归 Build*Tree
-  - Get*OptionsAsync：磁盘上无该方法 → 生成默认模板；已存在且实现含仓储 GetListAsync、非递归 Build*Tree、且引用属性仍在实体上 → 原样保留
-  - 已存在但含遗留无效调用（如 GetTenantMenuListAsync）、全量递归 Build*Tree、或引用已删字段（如旧 MaterialName）→ 自动改用模板重新生成
+  - Get*OptionsAsync：磁盘上无该方法 → 按三基类生成默认模板；已存在且隔离谓词/字段仍有效 → 原样保留
+  - 已存在但隔离级别错误（租户级残留 CompanyCode，或公司/审批级缺少 CompanyCode 过滤）、遗留无效调用、全量递归 Build*Tree、或引用已删字段 → 自动改用模板重新生成
   - DictLabel：优先 {Entity}Name / *Name；否则与 DictValue 同字段
   - DictValue（平铺）：*Code → *Name → 首个业务 nvarchar；禁止雪花 Id；树形 TreeOptions 的 DictValue 仍为 Id 字符串（ParentId 外键）
   - --refresh-options：强制重新生成所有 Get*OptionsAsync / Get*TreeOptionsAsync 实现
   - 实体含 IsBuiltIn（int，字典 sys_yes_no_type）时：创建/导入强制 0；更新保留原值；单删/批删前校验；状态更新禁止将内置项设为非启用(1)
-  - 实体含 SortOrder / LineNumber：Create、Import、主子表 Save*ChildrenAsync 在值 <= 0 时经 ITaktSortOrderGenerator / ITaktLineNumberGenerator 自动生成；SortOrder/独立子表用 GetMaxIntAsync；主子表 Save 无 IsObsolete 时用 GetMaxIntAsync(includeSoftDeleted: true)
+  - 实体含 SortOrder / LineNumber：Create、Import、主子表 Save*ChildrenAsync 在值 <= 0 时经 ITaktSortOrderGenerator / ITaktLineNumberGenerator 自动生成；SortOrder/独立子表用 GetMaxIntAsync；主子表 Save 用 IsObsolete 时用 GetMaxIntAsync(includeSoftDeleted: true)
 `);
 }
 

@@ -29,12 +29,13 @@ export const PURCHASEPRICEITEM_LIST_FIELDS = [
   'scaleQuantity',
   'scaleUnit',
   'scaleValue',
-  'scaleCurrency',
+  'scaleCurrencyCode',
   'calculationType',
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
-  'conditionCurrency',
+  'taxAmount',
+  'conditionCurrencyCode',
   'priceUnit',
   'unitOfMeasure',
   'minOrderQuantity',
@@ -57,12 +58,13 @@ export const PURCHASEPRICEITEM_PLACEHOLDER = {
   scaleQuantity: 'select',
   scaleUnit: 'optional',
   scaleValue: 'select',
-  scaleCurrency: 'optional',
+  scaleCurrencyCode: 'optional',
   calculationType: 'select',
   price: 'select',
   untaxedPrice: 'select',
   taxIncludedPrice: 'select',
-  conditionCurrency: 'select',
+  taxAmount: 'select',
+  conditionCurrencyCode: 'select',
   priceUnit: 'select',
   unitOfMeasure: 'select',
   minOrderQuantity: 'select',
@@ -71,6 +73,7 @@ export const PURCHASEPRICEITEM_PLACEHOLDER = {
   isObsolete: 'select',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -84,9 +87,9 @@ export const PURCHASEPRICEITEM_QUERY_STRING_FIELDS = [
   'scaleType',
   'scaleBasis',
   'scaleUnit',
-  'scaleCurrency',
+  'scaleCurrencyCode',
   'calculationType',
-  'conditionCurrency',
+  'conditionCurrencyCode',
   'unitOfMeasure',
   'createdAtStart',
   'createdAtEnd',
@@ -96,7 +99,7 @@ export const PURCHASEPRICEITEM_QUERY_STRING_FIELDS = [
 
 export type PurchasePriceItemQueryField =
   | (typeof PURCHASEPRICEITEM_QUERY_STRING_FIELDS)[number]
-  | 'purchasePriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
+  | 'purchasePriceSeq' | 'scaleQuantity' | 'scaleValue' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'priceUnit' | 'minOrderQuantity' | 'roundingValue' | 'plannedDeliveryTimeDays' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryField[] = [
@@ -107,6 +110,7 @@ export const PURCHASEPRICEITEM_QUERY_FIELDS: readonly PurchasePriceItemQueryFiel
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
+  'taxAmount',
   'priceUnit',
   'minOrderQuantity',
   'roundingValue',

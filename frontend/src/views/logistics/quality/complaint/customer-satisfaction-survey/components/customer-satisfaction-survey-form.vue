@@ -27,409 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerSatisfactionSurveyCode')"
-                name="customerSatisfactionSurveyCode"
-              >
-                <a-input
-                  v-model:value="formState.customerSatisfactionSurveyCode"
-                  :placeholder="pi.ph('customerSatisfactionSurveyCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerSatisfactionSurveyId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerId')"
-                name="customerId"
-              >
-                <TaktSelect
-                  v-model:value="formState.customerId"
-                  api-url="TaktCustomers/options"
-                  :placeholder="pi.ph('customerId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerName1')"
-                name="customerName1"
-              >
-                <a-input
-                  v-model:value="formState.customerName1"
-                  :placeholder="pi.ph('customerName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerCode')"
-                name="customerCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.customerCode"
-                  api-url="TaktCustomers/options"
-                  :placeholder="pi.ph('customerCode')"
-                  :disabled="!!formData?.customerSatisfactionSurveyId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('surveyDate')"
-                name="surveyDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.surveyDate"
-                  :placeholder="pi.ph('surveyDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('surveyMethod')"
-                name="surveyMethod"
-              >
-                <TaktSelect
-                  v-model:value="formState.surveyMethod"
-                  dict-type="logistics_quality_survey_method"
-                  :placeholder="pi.ph('surveyMethod')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('surveyType')"
-                name="surveyType"
-              >
-                <TaktSelect
-                  v-model:value="formState.surveyType"
-                  dict-type="logistics_quality_survey_type"
-                  :placeholder="pi.ph('surveyType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('surveyPeriod')"
-                name="surveyPeriod"
-              >
-                <TaktSelect
-                  v-model:value="formState.surveyPeriod"
-                  dict-type="logistics_quality_period"
-                  :placeholder="pi.ph('surveyPeriod')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('surveyorBy')"
-                name="surveyorBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.surveyorBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('surveyorBy')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerContact')"
-                name="customerContact"
-              >
-                <a-input
-                  v-model:value="formState.customerContact"
-                  :placeholder="pi.ph('customerContact')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerPhone')"
-                name="customerPhone"
-              >
-                <a-input
-                  v-model:value="formState.customerPhone"
-                  :placeholder="pi.ph('customerPhone')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('overallSatisfaction')"
-                name="overallSatisfaction"
-              >
-                <TaktSelect
-                  v-model:value="formState.overallSatisfaction"
-                  dict-type="logistics_quality_satisfaction_level"
-                  :placeholder="pi.ph('overallSatisfaction')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('totalScore')"
-                name="totalScore"
-              >
-                <a-input-number
-                  v-model:value="formState.totalScore"
-                  :placeholder="pi.ph('totalScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualityScore')"
-                name="qualityScore"
-              >
-                <a-input-number
-                  v-model:value="formState.qualityScore"
-                  :placeholder="pi.ph('qualityScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('deliveryScore')"
-                name="deliveryScore"
-              >
-                <a-input-number
-                  v-model:value="formState.deliveryScore"
-                  :placeholder="pi.ph('deliveryScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceScore')"
-                name="serviceScore"
-              >
-                <a-input-number
-                  v-model:value="formState.serviceScore"
-                  :placeholder="pi.ph('serviceScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('priceScore')"
-                name="priceScore"
-              >
-                <a-input-number
-                  v-model:value="formState.priceScore"
-                  :placeholder="pi.ph('priceScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('technicalScore')"
-                name="technicalScore"
-              >
-                <a-input-number
-                  v-model:value="formState.technicalScore"
-                  :placeholder="pi.ph('technicalScore')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerPraise')"
-                name="customerPraise"
-              >
-                <a-input
-                  v-model:value="formState.customerPraise"
-                  :placeholder="pi.ph('customerPraise')"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerFeedback')"
-                name="customerFeedback"
-              >
-                <a-input
-                  v-model:value="formState.customerFeedback"
-                  :placeholder="pi.ph('customerFeedback')"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('improvementPlan')"
-                name="improvementPlan"
-              >
-                <a-input
-                  v-model:value="formState.improvementPlan"
-                  :placeholder="pi.ph('improvementPlan')"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('relatedComplaintId')"
-                name="relatedComplaintId"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedComplaintId"
-                  api-url="TaktCustomerComplaints/options"
-                  :placeholder="pi.ph('relatedComplaintId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('attachments')"
-                name="attachments"
-              >
-                <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="pi.ph('attachments')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('surveyStatus')"
-                name="surveyStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.surveyStatus"
-                  dict-type="logistics_quality_survey_status"
-                  :placeholder="pi.ph('surveyStatus')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('followUpStatus')"
-                name="followUpStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.followUpStatus"
-                  dict-type="logistics_quality_follow_up_status"
-                  :placeholder="pi.ph('followUpStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -588,17 +197,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","customerSatisfactionSurveyCode","customerId","customerName1","customerCode","surveyDate","surveyMethod","surveyType","surveyPeriod","surveyorBy","customerContact","customerPhone","overallSatisfaction","totalScore","qualityScore","deliveryScore","serviceScore","priceScore","technicalScore","customerPraise","customerFeedback","improvementPlan","relatedComplaintId","attachments","surveyStatus","relatedPlant","followUpStatus","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","customerSatisfactionSurveyCode","customerId","customerName1","customerCode","surveyDate","surveyMethod","surveyType","surveyPeriod","surveyorBy","customerContact","customerPhone","overallSatisfaction","totalScore","qualityScore","deliveryScore","serviceScore","priceScore","technicalScore","customerPraise","customerFeedback","improvementPlan","relatedComplaintId","attachments","surveyStatus","plantCode","followUpStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -706,8 +318,7 @@ const customerSatisfactionSurveyItemFormColumns = computed<TaktEditableTableColu
     key: 'isObsolete',
     title: customerSatisfactionSurveyItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<CustomerSatisfactionSurveyCreate & { customerSatisfactionSurveyId?: string }> | null | undefined) {
@@ -744,7 +355,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         customerSatisfactionSurveyCode: masterId,
       }
       if (isUpdate && isPersistedCustomerSatisfactionSurveyItemRow(row)) {
@@ -926,10 +537,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  relatedPlant: [
+  plantCode: [
     {
       required: true,
-      message: pi.ph('relatedPlant'),
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],

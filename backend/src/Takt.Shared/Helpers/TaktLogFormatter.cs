@@ -61,6 +61,10 @@ public static class TaktLogFormatter
         {
             parts.Add($"rid={context.RequestId}");
         }
+        if (!string.IsNullOrWhiteSpace(context.TraceId))
+        {
+            parts.Add($"tid={context.TraceId}");
+        }
         if (!string.IsNullOrWhiteSpace(context.TenantCode))
         {
             parts.Add($"tenant={context.TenantCode}");
@@ -205,6 +209,7 @@ public static class TaktLogFormatter
         AddIfNotEmpty(properties, "CompanyCode", context.CompanyCode);
         AddIfNotEmpty(properties, "Route", context.Route);
         AddIfNotEmpty(properties, "RequestId", context.RequestId);
+        AddIfNotEmpty(properties, "TraceId", context.TraceId);
         AddIfNotEmpty(properties, "ClientIp", context.ClientIp);
 
         if (context.Extra == null)

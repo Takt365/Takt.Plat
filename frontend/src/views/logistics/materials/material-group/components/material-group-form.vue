@@ -150,13 +150,16 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","materialGroupCode","materialGroupName","materialGroupDescription","extField","remark"]
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -178,7 +181,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 materialGroupId 才视为编辑） */
 watch(
@@ -254,7 +256,6 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.materialGroupId)
-
 
   formRef.value?.clearValidate()
 }

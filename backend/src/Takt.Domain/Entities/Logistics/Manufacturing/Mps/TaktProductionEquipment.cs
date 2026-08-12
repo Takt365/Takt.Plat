@@ -16,35 +16,30 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 
 /// <summary>
-/// 生产设备主数据（排程资源；粗能力 StdEquipmentHourlyCapacity=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate；多穴=(60÷StdMinutesPerCycle)×CavityCount×AvailabilityRate）
+/// 生产设备主数据（排程资源；粗能力 StdEquipHourlyCapacity=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate；多穴=(60÷StdMinutesPerCycle)×CavityCount×AvailabilityRate）
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_mps_production_equipment", "生产设备表")]
 [SugarIndex("ix_production_equipment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_production_equipment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_mps_production_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(StorageLocation), OrderByType.Asc, nameof(ProductionEquipmentCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_mps_production_equipment_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(StorageLocation), OrderByType.Asc, nameof(ProdEquipCode), OrderByType.Asc, true)]
 public class TaktProductionEquipment : TaktCompanyEntityBase
 {
     // ---- 基础标识 ----
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "equip_category", ColumnDescription = "设备类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int EquipCategory { get; set; } = 1;
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_category", ColumnDescription = "设备类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int EquipmentCategory { get; set; } = 1;
-    /// <summary>
-    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipmentCode / 资产MES编码）
-    /// </summary>
-    [SugarColumn(ColumnName = "production_equipment_code", ColumnDescription = "生产设备编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_equip_code", ColumnDescription = "生产设备编码", ColumnDataType = "nvarchar", Length = 18, IsNullable = false)]
+    public string ProdEquipCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产设备名称（列表展示名）
     /// </summary>
-    [SugarColumn(ColumnName = "production_equipment_name", ColumnDescription = "生产设备名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string ProductionEquipmentName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_equip_name", ColumnDescription = "生产设备名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string ProdEquipName { get; set; } = string.Empty;
     /// <summary>
     /// 制造商
     /// </summary>
@@ -53,8 +48,8 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 设备品牌（铭牌 Brand）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_brand", ColumnDescription = "设备品牌", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? EquipmentBrand { get; set; }
+    [SugarColumn(ColumnName = "equip_brand", ColumnDescription = "设备品牌", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? EquipBrand { get; set; }
     /// <summary>
     /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
@@ -63,13 +58,13 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    [SugarColumn(ColumnName = "model_no", ColumnDescription = "型号", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? ModelNo { get; set; }
+    [SugarColumn(ColumnName = "model_code", ColumnDescription = "型号", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? ModelCode { get; set; }
     /// <summary>
     /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? SerialNo { get; set; }
+    [SugarColumn(ColumnName = "serial_code", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? SerialCode { get; set; }
     /// <summary>
     /// 出厂日期（Manufacturing Date）
     /// </summary>
@@ -78,8 +73,8 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 设备规格
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_specification", ColumnDescription = "设备规格", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? EquipmentSpecification { get; set; }
+    [SugarColumn(ColumnName = "equip_specification", ColumnDescription = "设备规格", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    public string? EquipSpecification { get; set; }
 
     // ---- 产能与节拍 ----
     /// <summary>
@@ -110,8 +105,8 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    [SugarColumn(ColumnName = "std_equipment_hourly_capacity", ColumnDescription = "设备标准小时产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
-    public decimal StdEquipmentHourlyCapacity { get; set; } = 0;
+    [SugarColumn(ColumnName = "std_equip_hourly_capacity", ColumnDescription = "设备标准小时产能", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
+    public decimal StdEquipHourlyCapacity { get; set; } = 0;
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
     /// </summary>
@@ -363,8 +358,8 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_administrator", ColumnDescription = "设备管理员", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
-    public string? EquipmentAdministrator { get; set; }
+    [SugarColumn(ColumnName = "equip_administrator", ColumnDescription = "设备管理员", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? EquipAdministrator { get; set; }
     /// <summary>
     /// 排序号
     /// </summary>
@@ -373,6 +368,6 @@ public class TaktProductionEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    [SugarColumn(ColumnName = "production_equipment_status", ColumnDescription = "生产设备状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
-    public int ProductionEquipmentStatus { get; set; } = 1;
+    [SugarColumn(ColumnName = "prod_equip_status", ColumnDescription = "生产设备状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]
+    public int ProdEquipStatus { get; set; } = 1;
 }

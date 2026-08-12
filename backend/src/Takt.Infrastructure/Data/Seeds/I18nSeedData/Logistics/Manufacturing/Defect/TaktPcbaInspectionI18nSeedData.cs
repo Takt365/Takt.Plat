@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaInspection 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktPcbaInspectionI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbainspection._self
             new TranslationSeedItem("entity.pcbainspection._self", "zh-HK", "PCBA检查日报信息_hk", "实体名称"),
 
-            // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "en-US", "工厂代码_us", "工厂代码（回填：随工单）"),
-            // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（回填：随工单）"),
-            // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-CN", "工厂代码", "工厂代码（回填：随工单）"),
-            // entity.pcbainspection.plantcode
-            new TranslationSeedItem("entity.pcbainspection.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（回填：随工单）"),
-
             // entity.pcbainspection.prodcategory
             new TranslationSeedItem("entity.pcbainspection.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbainspection.prodcategory
@@ -144,14 +135,14 @@ public class TaktPcbaInspectionI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbainspection.modelcode
             new TranslationSeedItem("entity.pcbainspection.modelcode", "zh-HK", "机种_hk", "机种"),
 
-            // entity.pcbainspection.batchno
-            new TranslationSeedItem("entity.pcbainspection.batchno", "en-US", "批次_us", "批次"),
-            // entity.pcbainspection.batchno
-            new TranslationSeedItem("entity.pcbainspection.batchno", "ja-JP", "批次_jp", "批次"),
-            // entity.pcbainspection.batchno
-            new TranslationSeedItem("entity.pcbainspection.batchno", "zh-CN", "批次", "批次"),
-            // entity.pcbainspection.batchno
-            new TranslationSeedItem("entity.pcbainspection.batchno", "zh-HK", "批次_hk", "批次"),
+            // entity.pcbainspection.batchcode
+            new TranslationSeedItem("entity.pcbainspection.batchcode", "en-US", "批次_us", "批次"),
+            // entity.pcbainspection.batchcode
+            new TranslationSeedItem("entity.pcbainspection.batchcode", "ja-JP", "批次_jp", "批次"),
+            // entity.pcbainspection.batchcode
+            new TranslationSeedItem("entity.pcbainspection.batchcode", "zh-CN", "批次", "批次"),
+            // entity.pcbainspection.batchcode
+            new TranslationSeedItem("entity.pcbainspection.batchcode", "zh-HK", "批次_hk", "批次"),
 
             // entity.pcbainspection.materialcode
             new TranslationSeedItem("entity.pcbainspection.materialcode", "en-US", "物料编码_us", "物料编码"),

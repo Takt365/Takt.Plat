@@ -326,6 +326,7 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
                 || (x.FileExtension != null && x.FileExtension.Contains(keywords))
                 || SqlFunc.ToString(x.RevisedBy).Contains(keywords)
                 || (x.RevisedByName != null && x.RevisedByName.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.RevisedAt).Contains(keywords)
@@ -388,6 +389,11 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
             exp = exp.And(x => x.RevisedByName != null && x.RevisedByName.Contains(queryDto.RevisedByName));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -417,6 +423,12 @@ public class TaktDocumentVersionService : TaktServiceBase, ITaktDocumentVersionS
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

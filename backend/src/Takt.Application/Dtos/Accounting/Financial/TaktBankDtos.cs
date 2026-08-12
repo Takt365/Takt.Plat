@@ -182,6 +182,11 @@ public class TaktBankQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -347,6 +352,11 @@ public class TaktBankCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -526,6 +536,11 @@ public class TaktBankTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -678,6 +693,11 @@ public class TaktBankImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>

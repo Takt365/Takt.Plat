@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopCallDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopCall 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopCall 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopCallId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
@@ -52,7 +48,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -68,7 +64,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -84,7 +80,7 @@ public class TaktSopCallDto : TaktCompanyDtoBase
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -133,18 +129,23 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -155,7 +156,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
@@ -171,7 +172,7 @@ public class TaktSopCallQueryDto : TaktPagedQuery
     public DateTime? CalledAtEnd { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -237,24 +238,24 @@ public class TaktSopCallCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -265,7 +266,7 @@ public class TaktSopCallCreateDto
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -276,7 +277,7 @@ public class TaktSopCallCreateDto
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -372,18 +373,23 @@ public class TaktSopCallTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -394,7 +400,7 @@ public class TaktSopCallTemplateDto
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
@@ -405,7 +411,7 @@ public class TaktSopCallTemplateDto
     public DateTime? CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -453,23 +459,23 @@ public class TaktSopCallImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -480,7 +486,7 @@ public class TaktSopCallImportDto
     public int? CallType { get; set; }
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CallerId { get; set; }
@@ -491,7 +497,7 @@ public class TaktSopCallImportDto
     public DateTime? CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }
@@ -545,18 +551,18 @@ public class TaktSopCallExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkstationId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（关联 TaktSopExec.Id，选项 TaktSopExecs/options）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
@@ -567,7 +573,7 @@ public class TaktSopCallExportDto
     public int CallType { get; set; } = 0;
 
     /// <summary>
-    /// 呼叫人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 呼叫人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CallerId { get; set; }
@@ -578,7 +584,7 @@ public class TaktSopCallExportDto
     public DateTime CalledAt { get; set; }
 
     /// <summary>
-    /// 响应人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 响应人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RespondedBy { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Complaint
 // 文件名称：TaktSupplierEvaluationItemValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SupplierEvaluationItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSupplierEvaluationItem 生成，请按需审阅）
 // 
@@ -35,11 +35,17 @@ public class TaktSupplierEvaluationItemCreateValidator : AbstractValidator<TaktS
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EvaluationId)
             .GreaterThanOrEqualTo(0).WithMessage("评价表 ID不能为负数");
         RuleFor(x => x.SupplierEvaluationCode)
             .NotEmpty().WithMessage("评价表编码不能为空")
-            .MaximumLength(50).WithMessage("评价表编码长度不能超过50个字符");
+            .MaximumLength(20).WithMessage("评价表编码长度不能超过20个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("评价项目名称不能为空")
             .MaximumLength(200).WithMessage("评价项目名称长度不能超过200个字符");
@@ -72,11 +78,17 @@ public class TaktSupplierEvaluationItemUpdateValidator : AbstractValidator<TaktS
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EvaluationId)
             .GreaterThanOrEqualTo(0).WithMessage("评价表 ID不能为负数");
         RuleFor(x => x.SupplierEvaluationCode)
             .NotEmpty().WithMessage("评价表编码不能为空")
-            .MaximumLength(50).WithMessage("评价表编码长度不能超过50个字符");
+            .MaximumLength(20).WithMessage("评价表编码长度不能超过20个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("评价项目名称不能为空")
             .MaximumLength(200).WithMessage("评价项目名称长度不能超过200个字符");
@@ -105,11 +117,15 @@ public class TaktSupplierEvaluationItemImportValidator : AbstractValidator<TaktS
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.EvaluationId)
             .GreaterThanOrEqualTo(0).WithMessage("评价表 ID不能为负数");
         RuleFor(x => x.SupplierEvaluationCode)
             .NotEmpty().WithMessage("评价表编码不能为空")
-            .MaximumLength(50).WithMessage("评价表编码长度不能超过50个字符");
+            .MaximumLength(20).WithMessage("评价表编码长度不能超过20个字符");
         RuleFor(x => x.ItemName)
             .NotEmpty().WithMessage("评价项目名称不能为空")
             .MaximumLength(200).WithMessage("评价项目名称长度不能超过200个字符");

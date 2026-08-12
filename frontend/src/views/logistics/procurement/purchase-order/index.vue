@@ -87,10 +87,16 @@
             dict-type="accounting_currency_code"
           />
         </template>
+        <template v-else-if="column.key === 'taxCode'">
+          <TaktDictTag
+            :value="getPurchaseOrderDictValue(record, 'taxCode')"
+            dict-type="accounting_tax_code"
+          />
+        </template>
         <template v-else-if="column.key === 'taxRate'">
           <TaktDictTag
             :value="getPurchaseOrderDictValue(record, 'taxRate')"
-            dict-type="accounting_tax_rate_param"
+            dict-type="accounting_tax_code"
           />
         </template>
         <template v-else-if="column.key === 'paymentMethod'">
@@ -164,7 +170,7 @@
           v-model:value="advancedQueryForm.purchaseOrderCode"
           :placeholder="pi.queryPh('purchaseOrderCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -185,7 +191,7 @@
           v-model:value="advancedQueryForm.purchaseRequestCode"
           :placeholder="pi.queryPh('purchaseRequestCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -318,11 +324,30 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('exchangeRate')">
+      <a-form-item :label="pi.queryLabel('exchangeRate')">
+        <a-input-number
+          v-model:value="advancedQueryForm.exchangeRate"
+          :placeholder="pi.queryPh('exchangeRate', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxCode')">
+      <a-form-item :label="pi.queryLabel('taxCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.taxCode"
+          dict-type="accounting_tax_code"
+          :placeholder="pi.queryPh('taxCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('taxRate')">
       <a-form-item :label="pi.queryLabel('taxRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.taxRate"
-          dict-type="accounting_tax_rate_param"
+          dict-type="accounting_tax_code"
           :placeholder="pi.queryPh('taxRate', 'select')"
           allow-clear
         />
@@ -442,6 +467,16 @@
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -600,7 +635,67 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PURCHASEORDER_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.totalQuantity !== undefined && form.totalQuantity !== null) {
+    return true
+  }
+  if (form.totalAmount !== undefined && form.totalAmount !== null) {
+    return true
+  }
+  if (form.discountAmount !== undefined && form.discountAmount !== null) {
+    return true
+  }
+  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
+    return true
+  }
+  if (form.taxRate !== undefined && form.taxRate !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.actualAmount !== undefined && form.actualAmount !== null) {
+    return true
+  }
+  if (form.receivedQuantity !== undefined && form.receivedQuantity !== null) {
+    return true
+  }
+  if (form.receivedAmount !== undefined && form.receivedAmount !== null) {
+    return true
+  }
+  if (form.paidAmount !== undefined && form.paidAmount !== null) {
+    return true
+  }
+  if (form.paymentMethod !== undefined && form.paymentMethod !== null) {
+    return true
+  }
+  if (form.deliveryMethod !== undefined && form.deliveryMethod !== null) {
+    return true
+  }
+  if (form.orderStatus !== undefined && form.orderStatus !== null) {
+    return true
+  }
+  if (form.deliveryStatus !== undefined && form.deliveryStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -613,6 +708,7 @@ function createEmptyAdvancedQueryForm() {
     totalQuantity: undefined as number | undefined,
     totalAmount: undefined as number | undefined,
     discountAmount: undefined as number | undefined,
+    exchangeRate: undefined as number | undefined,
     taxRate: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
     actualAmount: undefined as number | undefined,
@@ -622,8 +718,7 @@ function createEmptyAdvancedQueryForm() {
     paymentMethod: undefined as number | undefined,
     deliveryMethod: undefined as number | undefined,
     orderStatus: undefined as number | undefined,
-    deliveryStatus: undefined as number | undefined,
-  }
+    deliveryStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -653,7 +748,7 @@ const { selectedMasterRow } = providePurchaseOrderMasterContext()
 const purchaseOrderItemPanelRef = ref<InstanceType<typeof PurchaseOrderItemPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PurchaseOrderQuery} 查询 DTO
  */
@@ -685,6 +780,9 @@ function buildListQuery(overrides?: Partial<PurchaseOrderQuery>): PurchaseOrderQ
   }
   if (form.discountAmount !== undefined && form.discountAmount !== null) {
     query.discountAmount = form.discountAmount
+  }
+  if (form.exchangeRate !== undefined && form.exchangeRate !== null) {
+    query.exchangeRate = form.exchangeRate
   }
   if (form.taxRate !== undefined && form.taxRate !== null) {
     query.taxRate = form.taxRate
@@ -718,13 +816,12 @@ function buildListQuery(overrides?: Partial<PurchaseOrderQuery>): PurchaseOrderQ
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -914,6 +1011,23 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
+    title: pi.label('exchangeRate'),
+    dataIndex: 'exchangeRate',
+    key: 'exchangeRate',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getPurchaseOrderField(record, 'exchangeRate') ?? ''
+  },
+  {
+    title: pi.label('taxCode'),
+    dataIndex: 'taxCode',
+    key: 'taxCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
     title: pi.label('taxRate'),
     dataIndex: 'taxRate',
     key: 'taxRate',
@@ -1062,8 +1176,6 @@ const toPurchaseOrderNumber = (value: string | number | undefined | null): numbe
   return Number.isFinite(num) ? num : 0
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1096,6 +1208,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPurchaseOrderList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1139,6 +1256,8 @@ function handleReset() {
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
   currencyCode: '',
+  exchangeRate: undefined as number | undefined,
+  taxCode: '',
   taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
@@ -1152,6 +1271,7 @@ function handleReset() {
   deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
+  cultureCode: '',
   extField: '',
   remark: '',
   }
@@ -1262,6 +1382,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPurchaseOrder(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1389,6 +1512,8 @@ function handleAdvancedQueryReset() {
   totalAmount: undefined as number | undefined,
   discountAmount: undefined as number | undefined,
   currencyCode: '',
+  exchangeRate: undefined as number | undefined,
+  taxCode: '',
   taxRate: undefined as number | undefined,
   taxAmount: undefined as number | undefined,
   actualAmount: undefined as number | undefined,
@@ -1402,6 +1527,7 @@ function handleAdvancedQueryReset() {
   deliveryStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
+  cultureCode: '',
   extField: '',
   remark: '',
   }

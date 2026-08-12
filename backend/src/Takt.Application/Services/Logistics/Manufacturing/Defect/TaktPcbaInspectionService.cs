@@ -451,8 +451,9 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -489,14 +490,19 @@ public class TaktPcbaInspectionService : TaktServiceBase, ITaktPcbaInspectionSer
             exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

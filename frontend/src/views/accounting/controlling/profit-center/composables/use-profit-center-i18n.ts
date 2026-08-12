@@ -30,7 +30,7 @@ export const PROFITCENTER_LIST_FIELDS = [
   'profitCenterLevel',
   'validFrom',
   'validTo',
-  'relatedPlant',
+  'plantCode',
   'profitCenterStatus',
 ] as const
 
@@ -49,7 +49,7 @@ export const PROFITCENTER_PLACEHOLDER = {
   profitCenterLevel: 'select',
   validFrom: 'select',
   validTo: 'select',
-  relatedPlant: 'select',
+  plantCode: 'select',
   profitCenterStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -71,7 +71,7 @@ export const PROFITCENTER_QUERY_STRING_FIELDS = [
   'validFromEnd',
   'validToStart',
   'validToEnd',
-  'relatedPlant',
+  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

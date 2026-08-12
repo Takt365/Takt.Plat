@@ -306,7 +306,8 @@ public class TaktBonusPlanService : TaktServiceBase, ITaktBonusPlanService
                 || SqlFunc.ToString(x.DefaultAmount).Contains(keywords)
                 || SqlFunc.ToString(x.PlanStatus).Contains(keywords)
                 || (x.BonusPlanDescription != null && x.BonusPlanDescription.Contains(keywords))
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -354,9 +355,14 @@ public class TaktBonusPlanService : TaktServiceBase, ITaktBonusPlanService
             exp = exp.And(x => x.BonusPlanDescription != null && x.BonusPlanDescription.Contains(queryDto.BonusPlanDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

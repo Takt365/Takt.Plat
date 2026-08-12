@@ -65,7 +65,6 @@ export interface IsoCode extends TenantDtoBase {
 
 }
 
-
 /**
  * IsoCode 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -77,6 +76,11 @@ export interface IsoCodeQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
@@ -135,7 +139,6 @@ export interface IsoCodeQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建IsoCode DTO
  * 对应前端 IsoCodeCreate
@@ -146,6 +149,11 @@ export interface IsoCodeCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
@@ -189,7 +197,6 @@ export interface IsoCodeCreate {
 
 }
 
-
 /**
  * 更新IsoCode DTO
  * 继承 TaktIsoCodeCreateDto，添加 IsoCodeId 字段
@@ -203,7 +210,6 @@ export interface IsoCodeUpdate extends IsoCodeCreate {
   isoCodeId: string;
 
 }
-
 
 /**
  * IsoCode 状态更新 DTO
@@ -223,7 +229,6 @@ export interface IsoCodeStatus {
 
 }
 
-
 /**
  * IsoCode 排序更新 DTO
  * 对应前端 IsoCodeSort
@@ -242,7 +247,6 @@ export interface IsoCodeSort {
 
 }
 
-
 /**
  * IsoCode 导入模板行 DTO
  * 对应前端 IsoCodeTemplate
@@ -253,6 +257,11 @@ export interface IsoCodeTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
@@ -295,7 +304,6 @@ export interface IsoCodeTemplate {
   remark?: string;
 
 }
-
 
 /**
  * IsoCode 导入 DTO（独立实现，不继承 TemplateDto）
@@ -309,6 +317,11 @@ export interface IsoCodeImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
    */
   isoCodeCategory?: number;
@@ -349,7 +362,6 @@ export interface IsoCodeImport {
   remark?: string;
 
 }
-
 
 /**
  * IsoCode 导出 DTO（独立实现，不继承响应 Dto）

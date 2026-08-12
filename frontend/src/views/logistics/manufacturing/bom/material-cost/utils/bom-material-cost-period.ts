@@ -4,14 +4,14 @@
 // 文件名称：bom-material-cost-period.ts
 // 创建时间：2026-07-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：核算单月默认值与 costingDateStart/End 纯转换（浏览页仅单月）
+// 功能描述：核算单月默认值与 costingDateStart/End 纯转换（分析页默认期间截止上月）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
 /**
- * 默认核算单月（当月 yyyy-MM）
+ * 默认核算单月（当月 yyyy-MM；浏览/重算页可用）
  * @returns {string} yyyy-MM
  */
 export function buildDefaultCostingMonth(): string {
@@ -20,16 +20,34 @@ export function buildDefaultCostingMonth(): string {
 }
 
 /**
- * 默认核算年月区间（含当月共 monthCount 个月；供分析/推移多月页使用）
+ * 默认核算年月区间（截止上月共 monthCount 个月；当月无实绩，不含当月）
  * @param monthCount 月数（≥1）
  * @returns {[string, string]} [起 yyyy-MM, 止 yyyy-MM]
  */
 export function buildDefaultCostingPeriodRange(monthCount = 3): [string, string] {
   const count = Math.max(1, Math.floor(monthCount))
-  const end = new Date()
+  const now = new Date()
+  const end = new Date(now.getFullYear(), now.getMonth() - 1, 1)
   const start = new Date(end.getFullYear(), end.getMonth() - (count - 1), 1)
   const fmt = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
   return [fmt(start), fmt(end)]
+}
+
+/**
+ * 年月选择禁用：当月及以后（分析页当月无实绩）
+ * @param current Ant Design month picker 当前格（dayjs 兼容：year/month）
+ * @returns {boolean} true=禁用
+ */
+export function isCostingPeriodMonthDisabled(
+  current: { year: () => number; month: () => number } | null | undefined,
+): boolean {
+  if (!current) {
+    return false
+  }
+  const now = new Date()
+  const y = current.year()
+  const m = current.month()
+  return y > now.getFullYear() || (y === now.getFullYear() && m >= now.getMonth())
 }
 
 /**

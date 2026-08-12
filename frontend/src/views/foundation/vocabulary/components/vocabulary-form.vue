@@ -175,13 +175,16 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","wordText","wordCategory","filterLevel","replaceText","status","extField","remark"]
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -336,7 +339,6 @@ function resetFields() {
   }
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.vocabularyId)
-
 
   formRef.value?.clearValidate()
 }

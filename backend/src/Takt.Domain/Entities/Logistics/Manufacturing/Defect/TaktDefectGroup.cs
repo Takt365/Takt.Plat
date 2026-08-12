@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Defect;
 public class TaktDefectGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
     /// </summary>
     [SugarColumn(ColumnName = "defect_category", ColumnDescription = "不良类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

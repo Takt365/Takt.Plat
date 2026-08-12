@@ -4,7 +4,7 @@
 // 文件名称：TaktHolidaySeedData.cs
 // 创建时间：2026-05-27
 // 创建人：Takt365(Cursor AI)
-// 功能描述：2026 年公众假期种子（按 Database:CompanyCodes 各公司及 DefaultCulture 区域写入；不参与公司域克隆）
+// 功能描述：2026 年公众假期种子（按 Database:CompanyCodes 各公司及 CultureCode 区域写入；不参与公司域克隆）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -24,7 +24,7 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
 /// 假日种子数据初始化（2026 年中国 / 美国 / 日本 / 香港公众假期）
-/// 各租户库按 <c>CompanyCodes</c> 全部启用公司、按 <c>DefaultCulture</c> 写入区域假期；幂等：存在则更新，不存在则创建
+/// 各租户库按 <c>CompanyCodes</c> 全部启用公司、按 <c>CultureCode</c> 写入区域假期；幂等：存在则更新，不存在则创建
 /// </summary>
 public class TaktHolidaySeedData : ITaktSeedDataCoordinator
 {
@@ -104,6 +104,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
                     repository,
                     tenantCode,
                     company.CompanyCode,
+                    company.CultureCode,
                     holidayData);
 
                 insertCount += i;
@@ -117,13 +118,13 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 获取指定公司应写入的假日种子（按公司 DefaultCulture 匹配地区模板）
+    /// 获取指定公司应写入的假日种子（按公司 CultureCode 匹配地区模板）
     /// </summary>
     /// <param name="company">公司实体</param>
     /// <returns>该公司假日种子列表</returns>
     private static List<TaktHolidaySeedItem> GetHolidaysForCompany(TaktCompany company)
     {
-        var items = company.DefaultCulture switch
+        var items = company.CultureCode switch
         {
             "zh-CN" => GetChina2026Items().ToList(),
             "ja-JP" => GetJapan2026Items().ToList(),
@@ -304,6 +305,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktHoliday> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktHolidaySeedItem seed)
     {
         var startDate = seed.StartDate.Date;
@@ -321,6 +323,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                CultureCode = cultureCode,
                 HolidayName = seed.HolidayName,
                 HolidayType = seed.HolidayType,
                 StartDate = startDate,
@@ -341,6 +344,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         holiday.HolidayGreeting = seed.HolidayGreeting;
         holiday.HolidayQuote = seed.HolidayQuote;
         holiday.HolidayTheme = seed.HolidayTheme;
+        holiday.CultureCode = cultureCode;
 
         await repository.UpdateAsync(holiday);
 

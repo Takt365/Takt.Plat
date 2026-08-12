@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -680,95 +680,95 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.accounting.cost.element.type.secondary
             ("dict.accounting.cost.element.type.secondary", "zh-HK", "次级成本要素_hk", "成本要素类型.次级"),
 
-            // dict.accounting.currency.code.cny
-            ("dict.accounting.currency.code.cny", "en-US", "人民币_us", "币种.人民币"),
-            // dict.accounting.currency.code.cny
-            ("dict.accounting.currency.code.cny", "ja-JP", "人民币_jp", "币种.人民币"),
-            // dict.accounting.currency.code.cny
-            ("dict.accounting.currency.code.cny", "zh-CN", "人民币", "币种.人民币"),
-            // dict.accounting.currency.code.cny
-            ("dict.accounting.currency.code.cny", "zh-HK", "人民币_hk", "币种.人民币"),
+            // dict.accounting.currencyCode.code.cny
+            ("dict.accounting.currencyCode.code.cny", "en-US", "人民币_us", "币种.人民币"),
+            // dict.accounting.currencyCode.code.cny
+            ("dict.accounting.currencyCode.code.cny", "ja-JP", "人民币_jp", "币种.人民币"),
+            // dict.accounting.currencyCode.code.cny
+            ("dict.accounting.currencyCode.code.cny", "zh-CN", "人民币", "币种.人民币"),
+            // dict.accounting.currencyCode.code.cny
+            ("dict.accounting.currencyCode.code.cny", "zh-HK", "人民币_hk", "币种.人民币"),
 
-            // dict.accounting.currency.code.usd
-            ("dict.accounting.currency.code.usd", "en-US", "美元_us", "币种.美元"),
-            // dict.accounting.currency.code.usd
-            ("dict.accounting.currency.code.usd", "ja-JP", "美元_jp", "币种.美元"),
-            // dict.accounting.currency.code.usd
-            ("dict.accounting.currency.code.usd", "zh-CN", "美元", "币种.美元"),
-            // dict.accounting.currency.code.usd
-            ("dict.accounting.currency.code.usd", "zh-HK", "美元_hk", "币种.美元"),
+            // dict.accounting.currencyCode.code.usd
+            ("dict.accounting.currencyCode.code.usd", "en-US", "美元_us", "币种.美元"),
+            // dict.accounting.currencyCode.code.usd
+            ("dict.accounting.currencyCode.code.usd", "ja-JP", "美元_jp", "币种.美元"),
+            // dict.accounting.currencyCode.code.usd
+            ("dict.accounting.currencyCode.code.usd", "zh-CN", "美元", "币种.美元"),
+            // dict.accounting.currencyCode.code.usd
+            ("dict.accounting.currencyCode.code.usd", "zh-HK", "美元_hk", "币种.美元"),
 
-            // dict.accounting.currency.code.eur
-            ("dict.accounting.currency.code.eur", "en-US", "欧元_us", "币种.欧元"),
-            // dict.accounting.currency.code.eur
-            ("dict.accounting.currency.code.eur", "ja-JP", "欧元_jp", "币种.欧元"),
-            // dict.accounting.currency.code.eur
-            ("dict.accounting.currency.code.eur", "zh-CN", "欧元", "币种.欧元"),
-            // dict.accounting.currency.code.eur
-            ("dict.accounting.currency.code.eur", "zh-HK", "欧元_hk", "币种.欧元"),
+            // dict.accounting.currencyCode.code.eur
+            ("dict.accounting.currencyCode.code.eur", "en-US", "欧元_us", "币种.欧元"),
+            // dict.accounting.currencyCode.code.eur
+            ("dict.accounting.currencyCode.code.eur", "ja-JP", "欧元_jp", "币种.欧元"),
+            // dict.accounting.currencyCode.code.eur
+            ("dict.accounting.currencyCode.code.eur", "zh-CN", "欧元", "币种.欧元"),
+            // dict.accounting.currencyCode.code.eur
+            ("dict.accounting.currencyCode.code.eur", "zh-HK", "欧元_hk", "币种.欧元"),
 
-            // dict.accounting.currency.code.jpy
-            ("dict.accounting.currency.code.jpy", "en-US", "日元_us", "币种.日元"),
-            // dict.accounting.currency.code.jpy
-            ("dict.accounting.currency.code.jpy", "ja-JP", "日元_jp", "币种.日元"),
-            // dict.accounting.currency.code.jpy
-            ("dict.accounting.currency.code.jpy", "zh-CN", "日元", "币种.日元"),
-            // dict.accounting.currency.code.jpy
-            ("dict.accounting.currency.code.jpy", "zh-HK", "日元_hk", "币种.日元"),
+            // dict.accounting.currencyCode.code.jpy
+            ("dict.accounting.currencyCode.code.jpy", "en-US", "日元_us", "币种.日元"),
+            // dict.accounting.currencyCode.code.jpy
+            ("dict.accounting.currencyCode.code.jpy", "ja-JP", "日元_jp", "币种.日元"),
+            // dict.accounting.currencyCode.code.jpy
+            ("dict.accounting.currencyCode.code.jpy", "zh-CN", "日元", "币种.日元"),
+            // dict.accounting.currencyCode.code.jpy
+            ("dict.accounting.currencyCode.code.jpy", "zh-HK", "日元_hk", "币种.日元"),
 
-            // dict.accounting.currency.code.gbp
-            ("dict.accounting.currency.code.gbp", "en-US", "英镑_us", "币种.英镑"),
-            // dict.accounting.currency.code.gbp
-            ("dict.accounting.currency.code.gbp", "ja-JP", "英镑_jp", "币种.英镑"),
-            // dict.accounting.currency.code.gbp
-            ("dict.accounting.currency.code.gbp", "zh-CN", "英镑", "币种.英镑"),
-            // dict.accounting.currency.code.gbp
-            ("dict.accounting.currency.code.gbp", "zh-HK", "英镑_hk", "币种.英镑"),
+            // dict.accounting.currencyCode.code.gbp
+            ("dict.accounting.currencyCode.code.gbp", "en-US", "英镑_us", "币种.英镑"),
+            // dict.accounting.currencyCode.code.gbp
+            ("dict.accounting.currencyCode.code.gbp", "ja-JP", "英镑_jp", "币种.英镑"),
+            // dict.accounting.currencyCode.code.gbp
+            ("dict.accounting.currencyCode.code.gbp", "zh-CN", "英镑", "币种.英镑"),
+            // dict.accounting.currencyCode.code.gbp
+            ("dict.accounting.currencyCode.code.gbp", "zh-HK", "英镑_hk", "币种.英镑"),
 
-            // dict.accounting.currency.code.hkd
-            ("dict.accounting.currency.code.hkd", "en-US", "港币_us", "币种.港币"),
-            // dict.accounting.currency.code.hkd
-            ("dict.accounting.currency.code.hkd", "ja-JP", "港币_jp", "币种.港币"),
-            // dict.accounting.currency.code.hkd
-            ("dict.accounting.currency.code.hkd", "zh-CN", "港币", "币种.港币"),
-            // dict.accounting.currency.code.hkd
-            ("dict.accounting.currency.code.hkd", "zh-HK", "港币_hk", "币种.港币"),
+            // dict.accounting.currencyCode.code.hkd
+            ("dict.accounting.currencyCode.code.hkd", "en-US", "港币_us", "币种.港币"),
+            // dict.accounting.currencyCode.code.hkd
+            ("dict.accounting.currencyCode.code.hkd", "ja-JP", "港币_jp", "币种.港币"),
+            // dict.accounting.currencyCode.code.hkd
+            ("dict.accounting.currencyCode.code.hkd", "zh-CN", "港币", "币种.港币"),
+            // dict.accounting.currencyCode.code.hkd
+            ("dict.accounting.currencyCode.code.hkd", "zh-HK", "港币_hk", "币种.港币"),
 
-            // dict.accounting.currency.code.krw
-            ("dict.accounting.currency.code.krw", "en-US", "韩元_us", "币种.韩元"),
-            // dict.accounting.currency.code.krw
-            ("dict.accounting.currency.code.krw", "ja-JP", "韩元_jp", "币种.韩元"),
-            // dict.accounting.currency.code.krw
-            ("dict.accounting.currency.code.krw", "zh-CN", "韩元", "币种.韩元"),
-            // dict.accounting.currency.code.krw
-            ("dict.accounting.currency.code.krw", "zh-HK", "韩元_hk", "币种.韩元"),
+            // dict.accounting.currencyCode.code.krw
+            ("dict.accounting.currencyCode.code.krw", "en-US", "韩元_us", "币种.韩元"),
+            // dict.accounting.currencyCode.code.krw
+            ("dict.accounting.currencyCode.code.krw", "ja-JP", "韩元_jp", "币种.韩元"),
+            // dict.accounting.currencyCode.code.krw
+            ("dict.accounting.currencyCode.code.krw", "zh-CN", "韩元", "币种.韩元"),
+            // dict.accounting.currencyCode.code.krw
+            ("dict.accounting.currencyCode.code.krw", "zh-HK", "韩元_hk", "币种.韩元"),
 
-            // dict.accounting.currency.code.aud
-            ("dict.accounting.currency.code.aud", "en-US", "澳元_us", "币种.澳元"),
-            // dict.accounting.currency.code.aud
-            ("dict.accounting.currency.code.aud", "ja-JP", "澳元_jp", "币种.澳元"),
-            // dict.accounting.currency.code.aud
-            ("dict.accounting.currency.code.aud", "zh-CN", "澳元", "币种.澳元"),
-            // dict.accounting.currency.code.aud
-            ("dict.accounting.currency.code.aud", "zh-HK", "澳元_hk", "币种.澳元"),
+            // dict.accounting.currencyCode.code.aud
+            ("dict.accounting.currencyCode.code.aud", "en-US", "澳元_us", "币种.澳元"),
+            // dict.accounting.currencyCode.code.aud
+            ("dict.accounting.currencyCode.code.aud", "ja-JP", "澳元_jp", "币种.澳元"),
+            // dict.accounting.currencyCode.code.aud
+            ("dict.accounting.currencyCode.code.aud", "zh-CN", "澳元", "币种.澳元"),
+            // dict.accounting.currencyCode.code.aud
+            ("dict.accounting.currencyCode.code.aud", "zh-HK", "澳元_hk", "币种.澳元"),
 
-            // dict.accounting.currency.code.cad
-            ("dict.accounting.currency.code.cad", "en-US", "加元_us", "币种.加元"),
-            // dict.accounting.currency.code.cad
-            ("dict.accounting.currency.code.cad", "ja-JP", "加元_jp", "币种.加元"),
-            // dict.accounting.currency.code.cad
-            ("dict.accounting.currency.code.cad", "zh-CN", "加元", "币种.加元"),
-            // dict.accounting.currency.code.cad
-            ("dict.accounting.currency.code.cad", "zh-HK", "加元_hk", "币种.加元"),
+            // dict.accounting.currencyCode.code.cad
+            ("dict.accounting.currencyCode.code.cad", "en-US", "加元_us", "币种.加元"),
+            // dict.accounting.currencyCode.code.cad
+            ("dict.accounting.currencyCode.code.cad", "ja-JP", "加元_jp", "币种.加元"),
+            // dict.accounting.currencyCode.code.cad
+            ("dict.accounting.currencyCode.code.cad", "zh-CN", "加元", "币种.加元"),
+            // dict.accounting.currencyCode.code.cad
+            ("dict.accounting.currencyCode.code.cad", "zh-HK", "加元_hk", "币种.加元"),
 
-            // dict.accounting.currency.code.chf
-            ("dict.accounting.currency.code.chf", "en-US", "瑞士法郎_us", "币种.瑞士法郎"),
-            // dict.accounting.currency.code.chf
-            ("dict.accounting.currency.code.chf", "ja-JP", "瑞士法郎_jp", "币种.瑞士法郎"),
-            // dict.accounting.currency.code.chf
-            ("dict.accounting.currency.code.chf", "zh-CN", "瑞士法郎", "币种.瑞士法郎"),
-            // dict.accounting.currency.code.chf
-            ("dict.accounting.currency.code.chf", "zh-HK", "瑞士法郎_hk", "币种.瑞士法郎"),
+            // dict.accounting.currencyCode.code.chf
+            ("dict.accounting.currencyCode.code.chf", "en-US", "瑞士法郎_us", "币种.瑞士法郎"),
+            // dict.accounting.currencyCode.code.chf
+            ("dict.accounting.currencyCode.code.chf", "ja-JP", "瑞士法郎_jp", "币种.瑞士法郎"),
+            // dict.accounting.currencyCode.code.chf
+            ("dict.accounting.currencyCode.code.chf", "zh-CN", "瑞士法郎", "币种.瑞士法郎"),
+            // dict.accounting.currencyCode.code.chf
+            ("dict.accounting.currencyCode.code.chf", "zh-HK", "瑞士法郎_hk", "币种.瑞士法郎"),
 
             // dict.accounting.chart.of.accounts.int
             ("dict.accounting.chart.of.accounts.int", "en-US", "INT_us", "帐目表.INT"),
@@ -7528,6 +7528,33 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.logistics.valuation.class.category.z300", "zh-CN", "原材料", "评估类别.原材料"),
             // dict.logistics.valuation.class.category.z300
             ("dict.logistics.valuation.class.category.z300", "zh-HK", "原材料_hk", "评估类别.原材料"),
+
+            // dict.logistics.mds.product.category.cad
+            ("dict.logistics.mds.product.category.cad", "en-US", "CAD_us", "销售预测产品类别.CAD"),
+            // dict.logistics.mds.product.category.cad
+            ("dict.logistics.mds.product.category.cad", "ja-JP", "CAD_jp", "销售预测产品类别.CAD"),
+            // dict.logistics.mds.product.category.cad
+            ("dict.logistics.mds.product.category.cad", "zh-CN", "CAD", "销售预测产品类别.CAD"),
+            // dict.logistics.mds.product.category.cad
+            ("dict.logistics.mds.product.category.cad", "zh-HK", "CAD_hk", "销售预测产品类别.CAD"),
+
+            // dict.logistics.mds.product.category.isd
+            ("dict.logistics.mds.product.category.isd", "en-US", "ISD_us", "销售预测产品类别.ISD"),
+            // dict.logistics.mds.product.category.isd
+            ("dict.logistics.mds.product.category.isd", "ja-JP", "ISD_jp", "销售预测产品类别.ISD"),
+            // dict.logistics.mds.product.category.isd
+            ("dict.logistics.mds.product.category.isd", "zh-CN", "ISD", "销售预测产品类别.ISD"),
+            // dict.logistics.mds.product.category.isd
+            ("dict.logistics.mds.product.category.isd", "zh-HK", "ISD_hk", "销售预测产品类别.ISD"),
+
+            // dict.logistics.mds.product.category.pad
+            ("dict.logistics.mds.product.category.pad", "en-US", "PAD_us", "销售预测产品类别.PAD"),
+            // dict.logistics.mds.product.category.pad
+            ("dict.logistics.mds.product.category.pad", "ja-JP", "PAD_jp", "销售预测产品类别.PAD"),
+            // dict.logistics.mds.product.category.pad
+            ("dict.logistics.mds.product.category.pad", "zh-CN", "PAD", "销售预测产品类别.PAD"),
+            // dict.logistics.mds.product.category.pad
+            ("dict.logistics.mds.product.category.pad", "zh-HK", "PAD_hk", "销售预测产品类别.PAD"),
 
             // dict.logistics.inventory.provision.scope.item
             ("dict.logistics.inventory.provision.scope.item", "en-US", "按单个存货项目_us", "存货跌价计提范围.按单个存货项目"),

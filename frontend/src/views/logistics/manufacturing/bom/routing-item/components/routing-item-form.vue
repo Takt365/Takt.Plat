@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form routing-item-form flex flex-col min-h-0"
+    class="takt-generated-form routing-item-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,54 +29,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.routingid')"
+                :label="pi.label('routingId')"
                 name="routingId"
               >
                 <a-input
                   v-model:value="formState.routingId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingid') })"
+                  :placeholder="pi.ph('routingId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -85,14 +43,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.routingcode')"
+                :label="pi.label('routingCode')"
                 name="routingCode"
               >
                 <a-input
                   v-model:value="formState.routingCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingcode') })"
+                  :placeholder="pi.ph('routingCode')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="8"
                   allow-clear
                   :disabled="!!formData?.routingItemId"
                 />
@@ -100,65 +58,97 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.baseunit')"
+                :label="pi.label('baseUnit')"
                 name="baseUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.baseUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.baseunit') })"
-                  show-count
-                  :maxlength="5"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('baseUnit')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.basequantity')"
+                :label="pi.label('baseQuantity')"
                 name="baseQuantity"
               >
                 <a-input-number
                   v-model:value="formState.baseQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.basequantity') })"
+                  :placeholder="pi.ph('baseQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.standardminutes')"
+                :label="pi.label('standardMinutes')"
                 name="standardMinutes"
               >
                 <a-input-number
                   v-model:value="formState.standardMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.standardminutes') })"
+                  :placeholder="pi.ph('standardMinutes')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitem.timeunit')"
+                :label="pi.label('timeUnit')"
                 name="timeUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.timeUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.timeunit') })"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
+                  dict-type="logistics_time_unit"
+                  :placeholder="pi.ph('timeUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('standardShorts')"
+                name="standardShorts"
+              >
+                <a-input-number
+                  v-model:value="formState.standardShorts"
+                  :placeholder="pi.ph('standardShorts')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pointsUnit')"
+                name="pointsUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.pointsUnit"
+                  dict-type="logistics_points_unit"
+                  :placeholder="pi.ph('pointsUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('pointsToMinutesRate')"
+                name="pointsToMinutesRate"
+              >
+                <TaktSelect
+                  v-model:value="formState.pointsToMinutesRate"
+                  dict-type="logistics_points_to_minutes_rate"
+                  :placeholder="pi.ph('pointsToMinutesRate')"
                 />
               </a-form-item>
             </a-col>
@@ -172,127 +162,101 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.routingitem.standardshorts')"
-                name="standardShorts"
-              >
-                <a-input-number
-                  v-model:value="formState.standardShorts"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.standardshorts') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.pointsunit')"
-                name="pointsUnit"
-              >
-                <a-input
-                  v-model:value="formState.pointsUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.pointsunit') })"
-                  show-count
-                  :maxlength="5"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.pointstominutesrate')"
-                name="pointsToMinutesRate"
-              >
-                <TaktSelect
-                  v-model:value="formState.pointsToMinutesRate"
-                  dict-type="logistics_points_to_minutes_rate"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.convertedminutes')"
+                :label="pi.label('convertedMinutes')"
                 name="convertedMinutes"
               >
                 <a-input-number
                   v-model:value="formState.convertedMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.convertedminutes') })"
+                  :placeholder="pi.ph('convertedMinutes')"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.setupminutes')"
-                name="setupMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.setupMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.setupminutes') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.teardownminutes')"
-                name="teardownMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.teardownMinutes"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.teardownminutes') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.routingitem.isinspection')"
-                name="isInspection"
-              >
-                <TaktSelect
-                  v-model:value="formState.isInspection"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.isinspection') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.routingitem.processdescription')"
+                :label="pi.label('setupMinutes')"
+                name="setupMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.setupMinutes"
+                  :placeholder="pi.ph('setupMinutes')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('teardownMinutes')"
+                name="teardownMinutes"
+              >
+                <a-input-number
+                  v-model:value="formState.teardownMinutes"
+                  :placeholder="pi.ph('teardownMinutes')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('isInspection')"
+                name="isInspection"
+              >
+                <TaktSelect
+                  v-model:value="formState.isInspection"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isInspection')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('processDescription')"
                 name="processDescription"
               >
                 <a-textarea
                   v-model:value="formState.processDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.routingitem.processdescription') })"
+                  :placeholder="pi.ph('processDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.routingitem.processsegmenttype')"
+                :label="pi.label('processSegmentType')"
                 name="processSegmentType"
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
                   dict-type="logistics_process_segment_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.processsegmenttype') })"
+                  :placeholder="pi.ph('processSegmentType')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.routingitem.extjson')"
+                :label="pi.label('extJson')"
                 name="extJson"
               >
                 <a-input
                   v-model:value="formState.extJson"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.extjson') })"
+                  :placeholder="pi.ph('extJson')"
                   show-count
                   :maxlength="4000"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
                 />
               </a-form-item>
             </a-col>
@@ -308,6 +272,48 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -319,7 +325,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -334,12 +340,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -356,13 +362,27 @@
       ref="routingItemArgumentTableRef"
       v-model="childRoutingItemArgumentRows"
       :columns="routingItemArgumentFormColumns"
-      :title="t('entity.routingitemargument._self')"
-      :add-button-entity="t('entity.routingitemargument._self')"
+      :title="routingItemArgumentPi.self()"
+      :add-button-entity="routingItemArgumentPi.self()"
       id-field="routingItemArgumentId"
       :default-row="createDefaultRoutingItemArgumentRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-paramUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.paramUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="routingItemArgumentPi.ph('paramUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -374,6 +394,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useRoutingItemI18n } from '../composables/use-routing-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useRoutingItemI18n()
+
 import type { RoutingItemCreate } from '@/types/logistics/manufacturing/bom/routing-item'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -390,7 +415,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -401,18 +426,31 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","routingId","routingCode","lineNumber","baseUnit","baseQuantity","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","setupMinutes","teardownMinutes","isInspection","processDescription","processSegmentType","extJson","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","routingId","routingCode","lineNumber","baseUnit","baseQuantity","standardMinutes","timeUnit","standardShorts","pointsUnit","pointsToMinutesRate","convertedMinutes","setupMinutes","teardownMinutes","isInspection","processDescription","processSegmentType","extJson","isObsolete","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useRoutingItemArgumentI18n } from '../composables/use-routing-item-argument-i18n'
+
+const routingItemArgumentPi = useRoutingItemArgumentI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childRoutingItemArgumentRows = ref<Record<string, unknown>[]>([])
 const routingItemArgumentTableRef = ref<{
@@ -425,61 +463,42 @@ const routingItemArgumentTableRef = ref<{
 const routingItemArgumentFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'paramCode',
-    title: t('entity.routingitemargument.paramcode'),
+    title: routingItemArgumentPi.label('paramCode'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'paramName',
-    title: t('entity.routingitemargument.paramname'),
+    title: routingItemArgumentPi.label('paramName'),
     editor: 'input',
     width: 140,
   },
   {
     key: 'paramUnit',
-    title: t('entity.routingitemargument.paramunit'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.routingitemargument.paramunit') }),
+    title: routingItemArgumentPi.label('paramUnit'),
+    width: 140,
   },
   {
     key: 'standardValue',
-    title: t('entity.routingitemargument.standardvalue'),
-    editor: 'inputNumber',
+    title: routingItemArgumentPi.label('standardValue'),
     width: 140,
   },
   {
     key: 'lowerLimit',
-    title: t('entity.routingitemargument.lowerlimit'),
-    editor: 'inputNumber',
+    title: routingItemArgumentPi.label('lowerLimit'),
     width: 140,
   },
   {
     key: 'upperLimit',
-    title: t('entity.routingitemargument.upperlimit'),
-    editor: 'inputNumber',
-    width: 140,
-  },
-  {
-    key: 'extField',
-    title: t('common.page.entity.extfield'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
-    width: 140,
-  },
-  {
-    key: 'remark',
-    title: t('common.page.entity.remark'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
+    title: routingItemArgumentPi.label('upperLimit'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<RoutingItemCreate & { routingItemId?: string }> | null | undefined) {
-  childRoutingItemArgumentRows.value = ((val as any)?.arguments ?? []) as Record<string, unknown>[]
+  const rows_routingItemArgument = ((val as any)?.arguments ?? []) as Record<string, unknown>[]
+  childRoutingItemArgumentRows.value = rows_routingItemArgument
 }
 
 function createDefaultRoutingItemArgumentRow(): Record<string, unknown> {
@@ -490,21 +509,20 @@ function createDefaultRoutingItemArgumentRow(): Record<string, unknown> {
     standardValue: 0,
     lowerLimit: 0,
     upperLimit: 0,
-    extField: '',
-    remark: '',
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.routingItemId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
     arguments: routingItemArgumentTableRef.value?.getRows?.() ?? childRoutingItemArgumentRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       routingItemId: masterId,
     })),
   }
@@ -528,8 +546,10 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  processSegmentType: 1,
-  isInspection: 0,
+  timeUnit: "MIN",
+  pointsUnit: "SHORT",
+  pointsToMinutesRate: "1",
+  processSegmentType: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -586,25 +606,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   routingId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingid') }),
+      message: pi.ph('routingId'),
       trigger: 'blur'
     }
   ],
   routingCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingcode') }),
+      message: pi.ph('routingCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
@@ -613,18 +633,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   baseUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.baseunit') }),
-      trigger: 'blur'
+      message: pi.ph('baseUnit'),
+      trigger: 'change'
     }
   ],
   baseQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.basequantity') }))
+        return Promise.reject(pi.ph('baseQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.basequantity') }))
+        return Promise.reject(pi.ph('baseQuantity'))
       }
       return Promise.resolve()
     },
@@ -633,11 +653,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   standardMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.standardminutes') }))
+        return Promise.reject(pi.ph('standardMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.standardminutes') }))
+        return Promise.reject(pi.ph('standardMinutes'))
       }
       return Promise.resolve()
     },
@@ -646,18 +666,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   timeUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.timeunit') }),
-      trigger: 'blur'
+      message: pi.ph('timeUnit'),
+      trigger: 'change'
     }
   ],
   standardShorts: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.standardshorts') }))
+        return Promise.reject(pi.ph('standardShorts'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.standardshorts') }))
+        return Promise.reject(pi.ph('standardShorts'))
       }
       return Promise.resolve()
     },
@@ -666,25 +686,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   pointsUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.pointsunit') }),
-      trigger: 'blur'
+      message: pi.ph('pointsUnit'),
+      trigger: 'change'
     }
   ],
   pointsToMinutesRate: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') }),
+      message: pi.ph('pointsToMinutesRate'),
       trigger: 'change'
     }
   ],
   convertedMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.convertedminutes') }))
+        return Promise.reject(pi.ph('convertedMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.convertedminutes') }))
+        return Promise.reject(pi.ph('convertedMinutes'))
       }
       return Promise.resolve()
     },
@@ -693,11 +713,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   setupMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.setupminutes') }))
+        return Promise.reject(pi.ph('setupMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.setupminutes') }))
+        return Promise.reject(pi.ph('setupMinutes'))
       }
       return Promise.resolve()
     },
@@ -706,31 +726,50 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   teardownMinutes: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.teardownminutes') }))
+        return Promise.reject(pi.ph('teardownMinutes'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.teardownminutes') }))
+        return Promise.reject(pi.ph('teardownMinutes'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  isInspection: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitem.isinspection') }),
-      trigger: 'change'
-    }
-  ],
-  processSegmentType: [{
+  isInspection: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.processsegmenttype') }))
+        return Promise.reject(pi.ph('isInspection'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.routingitem.processsegmenttype') }))
+        return Promise.reject(pi.ph('isInspection'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  processSegmentType: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('processSegmentType'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('processSegmentType'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -776,9 +815,17 @@ function getValues(): Record<string, any> {
     const rawteardownMinutes = payload.teardownMinutes
     payload.teardownMinutes = typeof rawteardownMinutes === 'number' ? rawteardownMinutes : Number(rawteardownMinutes)
   }
+  if ('isInspection' in payload) {
+    const rawisInspection = payload.isInspection
+    payload.isInspection = typeof rawisInspection === 'number' ? rawisInspection : Number(rawisInspection)
+  }
   if ('processSegmentType' in payload) {
     const rawprocessSegmentType = payload.processSegmentType
     payload.processSegmentType = typeof rawprocessSegmentType === 'number' ? rawprocessSegmentType : Number(rawprocessSegmentType)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

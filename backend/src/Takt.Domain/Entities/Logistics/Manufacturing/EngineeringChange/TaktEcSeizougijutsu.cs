@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_seizougijutsu", "设变制技执行表")]
 [SugarIndex("ix_ec_seizougijutsu_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_seizougijutsu_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcnDetailId), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_seizougijutsu_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktEcSeizougijutsu : TaktCompanyEntityBase
 {
     /// <summary>
@@ -29,11 +30,12 @@ public class TaktEcSeizougijutsu : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ecn_detail_id", ColumnDescription = "设变明细ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcnDetailId { get; set; }
+
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>

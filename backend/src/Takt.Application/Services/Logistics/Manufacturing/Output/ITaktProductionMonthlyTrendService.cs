@@ -11,14 +11,38 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// 月生产推移转置分析服务
+/// 月生产推移转置分析服务（读组立/PCBA 产出本表；与 CRUD 服务分离）
 /// </summary>
 public interface ITaktProductionMonthlyTrendService
 {
+    /// <summary>
+    /// 推移查询栏：组立/PCBA 产出本表工厂去重选项（并集）
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetProductionMonthlyTrendPlantOptionsAsync();
+
+    /// <summary>
+    /// 推移查询栏：按工厂返回有数据的产出类别（assy / pcba）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetProductionMonthlyTrendOutputCategoryOptionsAsync(string plantCode);
+
+    /// <summary>
+    /// 推移查询栏：按工厂（及可选产出类别）去重机种
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="outputCategory">产出类别（assy/pcba；空则并集）</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetProductionMonthlyTrendModelOptionsAsync(
+        string plantCode,
+        string? outputCategory = null);
+
     /// <summary>
     /// 获取月生产推移转置分析（分页）
     /// </summary>

@@ -34,7 +34,7 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     /// <summary>
     /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -76,8 +76,8 @@ public class TaktAssyDefectDetail : TaktCompanyEntityBase
     /// <summary>
     /// 随机卡号
     /// </summary>
-    [SugarColumn(ColumnName = "random_card_no", ColumnDescription = "随机卡号", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? RandomCardNo { get; set; }
+    [SugarColumn(ColumnName = "random_card_code", ColumnDescription = "随机卡号", Length = 50, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? RandomCardCode { get; set; }
 
     /// <summary>
     /// 发生工程

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktItAssetDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ItAsset 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktItAsset 生成，请按需审阅）
 // 
@@ -36,12 +36,12 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     public long ItAssetId { get; set; }
 
     /// <summary>
-    /// 资产号码
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     public string AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int WarrantyType { get; set; } = 0;
 
@@ -94,6 +94,7 @@ public class TaktItAssetDto : TaktCompanyDtoBase
     /// 保修/维保说明
     /// </summary>
     public string? WarrantyRemark { get; set; } = string.Empty;
+
 }
 
 // ========================================
@@ -117,12 +118,22 @@ public class TaktItAssetQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产号码
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int? WarrantyType { get; set; }
 
@@ -242,18 +253,23 @@ public class TaktItAssetCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 资产号码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    [Required(ErrorMessage = "资产号码不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
+    /// </summary>
+    [Required(ErrorMessage = "资产号码（选项 TaktAssets/options；DictValue=AssetCode）不能为空")]
     public string AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int WarrantyType { get; set; } = 0;
 
@@ -359,12 +375,22 @@ public class TaktItAssetTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产号码
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int? WarrantyType { get; set; }
 
@@ -446,17 +472,22 @@ public class TaktItAssetImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 资产号码
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     public string? AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int? WarrantyType { get; set; }
 
@@ -544,12 +575,12 @@ public class TaktItAssetExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 资产号码
+    /// 资产号码（选项 TaktAssets/options；DictValue=AssetCode）
     /// </summary>
     public string AssetCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 保修类型（见 TaktWarrantyType）
+    /// 保修类型（字典 sys_warranty_type；0=原厂保修 1=延长保修 2=上门保修 3=寄修保修 4=维保合同 5=付费保养）
     /// </summary>
     public int WarrantyType { get; set; } = 0;
 

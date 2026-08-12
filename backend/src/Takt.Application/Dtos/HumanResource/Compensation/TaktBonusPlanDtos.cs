@@ -35,56 +35,6 @@ public class TaktBonusPlanDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BonusPlanId { get; set; }
 
-    /// <summary>
-    /// 方案编码（租户+公司内唯一）
-    /// </summary>
-    public string PlanCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 方案名称
-    /// </summary>
-    public string PlanName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 奖金类型（字典 hr_comp_bonus_type）
-    /// </summary>
-    public int BonusType { get; set; } = 0;
-
-    /// <summary>
-    /// 计算方式（字典 hr_comp_bonus_calc_method_type）
-    /// </summary>
-    public int CalcMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 关联计算公式 ID（按公式计算时引用 TaktSalaryFormula）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? SalaryFormulaId { get; set; }
-
-    /// <summary>
-    /// 关联计算公式 名称（填充字段）
-    /// </summary>
-    public string? SalaryFormulaName { get; set; }
-
-    /// <summary>
-    /// 默认奖金金额或基数（元）
-    /// </summary>
-    public decimal DefaultAmount { get; set; }
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime EffectiveDate { get; set; }
-
-    /// <summary>
-    /// 方案说明
-    /// </summary>
-    public string? BonusPlanDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -112,6 +62,11 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 方案编码（租户+公司内唯一）
@@ -162,7 +117,7 @@ public class TaktBonusPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -210,9 +165,10 @@ public class TaktBonusPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 方案编码（租户+公司内唯一）
@@ -261,7 +217,7 @@ public class TaktBonusPlanCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -344,6 +300,11 @@ public class TaktBonusPlanTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 方案编码（租户+公司内唯一）
     /// </summary>
     public string? PlanCode { get; set; } = string.Empty;
@@ -387,7 +348,7 @@ public class TaktBonusPlanTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -422,9 +383,10 @@ public class TaktBonusPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 方案编码（租户+公司内唯一）
@@ -470,7 +432,7 @@ public class TaktBonusPlanImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -554,7 +516,7 @@ public class TaktBonusPlanExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）

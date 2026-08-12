@@ -28,7 +28,7 @@ export const PURCHASEPLANITEM_LIST_FIELDS = [
   'productionPlanLineNumber',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'planUnit',
   'planQuantity',
@@ -54,7 +54,7 @@ export const PURCHASEPLANITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'productionPlanLineNumber',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'planUnit',
   'planQuantity',
@@ -95,7 +95,7 @@ export const PURCHASEPLANITEM_PLACEHOLDER = {
   productionPlanLineNumber: 'optional',
   materialRequirementsPlanningItemId: 'optional',
   materialCode: 'select',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   planUnit: 'select',
   planQuantity: 'select',
@@ -109,6 +109,7 @@ export const PURCHASEPLANITEM_PLACEHOLDER = {
   referenceSupplierCode: 'optional',
   referenceSupplierName1: 'optional',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -121,7 +122,7 @@ export const PURCHASEPLANITEM_QUERY_STRING_FIELDS = [
   'productionPlanCode',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'planUnit',
   'plannedArrivalDateStart',

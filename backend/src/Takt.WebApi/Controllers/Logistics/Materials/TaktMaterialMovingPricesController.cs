@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Materials
 // 文件名称：TaktMaterialMovingPricesController.cs
-// 创建时间：2026-07-16
+// 创建时间：2026-07-31
 // 创建人：Takt365(Cursor AI)
 // 功能描述：移动价格控制器
 // 
@@ -241,98 +241,6 @@ public class TaktMaterialMovingPricesController : TaktControllerBase
         try
         {
             var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceAsync(query, sheetName, exportName);
-            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 物料月移动价格推移分析
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>转置分析结果</returns>
-    [TaktPermission("logistics:materials:material:moving:trend:list", "物料移动价格推移")]
-    [HttpGet("monthly-trend-analysis")]
-    public async Task<IActionResult> GetMaterialMovingPriceMonthlyTrendAnalysisAsync(
-        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _materialMovingPriceService.GetMaterialMovingPriceMonthlyTrendAnalysisAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 清单导出：物料月移动价格推移（物料×月份转置）
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="exportName">导出文件名</param>
-    /// <returns>Excel 文件</returns>
-    [TaktPermission("logistics:materials:material:moving:trend:export", "清单导出物料移动价格推移")]
-    [HttpGet("monthly-trend-analysis/export")]
-    public async Task<IActionResult> ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(
-        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto query,
-        [FromQuery] string? sheetName = null,
-        [FromQuery] string? exportName = null)
-    {
-        try
-        {
-            var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(query, sheetName, exportName);
-            return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 物料-机种-价格推移分析（BOM 产品/机种组 + 月单价）
-    /// </summary>
-    /// <param name="queryDto">查询 DTO</param>
-    /// <returns>分析结果</returns>
-    [TaktPermission("logistics:materials:material:moving:trend:list", "物料机种价格推移")]
-    [HttpGet("model-trend-analysis")]
-    public async Task<IActionResult> GetMaterialMovingPriceModelTrendAnalysisAsync(
-        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _materialMovingPriceService.GetMaterialMovingPriceModelTrendAnalysisAsync(queryDto);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 清单导出：物料-机种-价格推移
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="exportName">导出文件名</param>
-    /// <returns>Excel 文件</returns>
-    [TaktPermission("logistics:materials:material:moving:trend:export", "清单导出物料机种价格推移")]
-    [HttpGet("model-trend-analysis/export")]
-    public async Task<IActionResult> ExportMaterialMovingPriceModelTrendAnalysisAsync(
-        [FromQuery] TaktMaterialMovingPriceMonthlyTrendQueryDto query,
-        [FromQuery] string? sheetName = null,
-        [FromQuery] string? exportName = null)
-    {
-        try
-        {
-            var (resultFileName, fileContent) = await _materialMovingPriceService.ExportMaterialMovingPriceModelTrendAnalysisAsync(query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
         }
         catch (Exception ex)

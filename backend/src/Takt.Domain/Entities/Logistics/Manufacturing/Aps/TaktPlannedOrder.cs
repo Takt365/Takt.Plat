@@ -25,16 +25,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_aps_planned_order_mrp_item", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialRequirementsPlanningItemId), OrderByType.Asc, false)]
 public class TaktPlannedOrder : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 计划订单编码
     /// </summary>
-    [SugarColumn(ColumnName = "planned_order_code", ColumnDescription = "计划订单编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "planned_order_code", ColumnDescription = "计划订单编码", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -47,7 +42,7 @@ public class TaktPlannedOrder : TaktCompanyEntityBase
     /// <summary>
     /// 来源 MRP 编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? MaterialRequirementsPlanningCode { get; set; }
 
     /// <summary>
@@ -60,7 +55,7 @@ public class TaktPlannedOrder : TaktCompanyEntityBase
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -90,7 +85,7 @@ public class TaktPlannedOrder : TaktCompanyEntityBase
     /// <summary>
     /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
-    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = true)]
     public string? RoutingCode { get; set; }
 
     /// <summary>

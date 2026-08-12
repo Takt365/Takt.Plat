@@ -15,6 +15,7 @@ export default {
     title: 'BOMコスト分析',
     periodRange: '原価期間',
     selectPlantRequired: '工場コードを選択してください',
+    selectMaterialTypeRequired: '品目タイプを選択してください',
     selectPeriodRequired: '原価期間を選択してください',
     queryFailed: 'BOMコスト分析の照会に失敗しました',
     exportSuccess: 'BOMコスト分析のエクスポートに成功しました',
@@ -22,6 +23,11 @@ export default {
     filter: {
       all: 'すべて',
       changed: '騰落のみ',
+    },
+    sort: {
+      productCode: '製品コード（全件）',
+      trend: '騰落優先（全件）',
+      varianceDesc: '差額絶対値降順（全件）',
     },
     columns: {
       trend: '騰落',

@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Attendance;
 // ========================================
 
 /// <summary>
-/// 工厂日历（公司级；按 RelatedPlant 区分工厂维度）
+/// 工厂日历（公司级；按 PlantCode 区分工厂维度）
 /// 对应前端 TaktCalendarDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -35,42 +35,6 @@ public class TaktCalendarDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CalendarId { get; set; }
 
-    /// <summary>
-    /// 日历日期
-    /// </summary>
-    public DateTime CalendarDate { get; set; }
-
-    /// <summary>
-    /// 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
-    /// </summary>
-    public int IsWorkingDay { get; set; } = 0;
-
-    /// <summary>
-    /// 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? HolidayId { get; set; }
-
-    /// <summary>
-    /// 关联假日 名称（填充字段）
-    /// </summary>
-    public string? HolidayName { get; set; }
-
-    /// <summary>
-    /// 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ShiftId { get; set; }
-
-    /// <summary>
-    /// 关联班次 名称（填充字段）
-    /// </summary>
-    public string? ShiftName { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -93,6 +57,11 @@ public class TaktCalendarQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 日历日期（范围查询-开始）
@@ -124,7 +93,7 @@ public class TaktCalendarQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -167,9 +136,10 @@ public class TaktCalendarCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 日历日期
@@ -197,7 +167,7 @@ public class TaktCalendarCreateDto
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（为空表示公司级通用日历）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -251,6 +221,11 @@ public class TaktCalendarTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 日历日期
     /// </summary>
     public DateTime? CalendarDate { get; set; }
@@ -275,7 +250,7 @@ public class TaktCalendarTemplateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -305,9 +280,10 @@ public class TaktCalendarImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 日历日期
@@ -334,7 +310,7 @@ public class TaktCalendarImportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -394,7 +370,7 @@ public class TaktCalendarExportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

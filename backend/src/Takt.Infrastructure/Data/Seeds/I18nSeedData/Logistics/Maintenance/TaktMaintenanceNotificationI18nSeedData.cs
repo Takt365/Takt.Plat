@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktMaintenanceNotificationI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaintenanceNotification 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktMaintenanceNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.maintenancenotification._self
             new TranslationSeedItem("entity.maintenancenotification._self", "zh-HK", "维护通知单信息_hk", "实体名称"),
 
-            // entity.maintenancenotification.plantcode
-            new TranslationSeedItem("entity.maintenancenotification.plantcode", "en-US", "工厂代码_us", "工厂代码"),
-            // entity.maintenancenotification.plantcode
-            new TranslationSeedItem("entity.maintenancenotification.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
-            // entity.maintenancenotification.plantcode
-            new TranslationSeedItem("entity.maintenancenotification.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.maintenancenotification.plantcode
-            new TranslationSeedItem("entity.maintenancenotification.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
-
             // entity.maintenancenotification.notificationcode
             new TranslationSeedItem("entity.maintenancenotification.notificationcode", "en-US", "通知单号_us", "通知单号"),
             // entity.maintenancenotification.notificationcode
@@ -117,14 +108,14 @@ public class TaktMaintenanceNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.maintenancenotification.equipmentid
             new TranslationSeedItem("entity.maintenancenotification.equipmentid", "zh-HK", "设备ID_hk", "设备ID（序列化为string以避免Javascript精度问题）"),
 
-            // entity.maintenancenotification.equipmentcode
-            new TranslationSeedItem("entity.maintenancenotification.equipmentcode", "en-US", "设备编码_us", "设备编码（冗余，便于查询）"),
-            // entity.maintenancenotification.equipmentcode
-            new TranslationSeedItem("entity.maintenancenotification.equipmentcode", "ja-JP", "设备编码_jp", "设备编码（冗余，便于查询）"),
-            // entity.maintenancenotification.equipmentcode
-            new TranslationSeedItem("entity.maintenancenotification.equipmentcode", "zh-CN", "设备编码", "设备编码（冗余，便于查询）"),
-            // entity.maintenancenotification.equipmentcode
-            new TranslationSeedItem("entity.maintenancenotification.equipmentcode", "zh-HK", "设备编码_hk", "设备编码（冗余，便于查询）"),
+            // entity.maintenancenotification.equipcode
+            new TranslationSeedItem("entity.maintenancenotification.equipcode", "en-US", "设备编码_us", "设备编码（冗余，便于查询）"),
+            // entity.maintenancenotification.equipcode
+            new TranslationSeedItem("entity.maintenancenotification.equipcode", "ja-JP", "设备编码_jp", "设备编码（冗余，便于查询）"),
+            // entity.maintenancenotification.equipcode
+            new TranslationSeedItem("entity.maintenancenotification.equipcode", "zh-CN", "设备编码", "设备编码（冗余，便于查询）"),
+            // entity.maintenancenotification.equipcode
+            new TranslationSeedItem("entity.maintenancenotification.equipcode", "zh-HK", "设备编码_hk", "设备编码（冗余，便于查询）"),
 
             // entity.maintenancenotification.equipmentname
             new TranslationSeedItem("entity.maintenancenotification.equipmentname", "en-US", "设备名称_us", "设备名称（冗余）"),

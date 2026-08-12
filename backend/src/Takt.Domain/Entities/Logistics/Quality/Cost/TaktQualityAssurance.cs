@@ -22,20 +22,15 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 [SugarTable("takt_logistics_quality_assurance", "品质业务主表")]
 [SugarIndex("ix_quality_assurance_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_quality_assurance_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_assurance_qo_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityAssuranceCode), OrderByType.Asc, nameof(AssuranceMonth), OrderByType.Asc, nameof(DebitNoteNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_assurance_qo_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(QualityAssuranceCode), OrderByType.Asc, nameof(AssuranceMonth), OrderByType.Asc, nameof(DebitNoteCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_quality_assurance_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktQualityAssurance : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 品质业务编码(唯一,如:QO-2026-0001)
     /// </summary>
-    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityAssuranceCode { get; set; } = string.Empty;
 
     // ==================== 基础日期与信息 ====================
@@ -55,8 +50,8 @@ public class TaktQualityAssurance : TaktCompanyEntityBase
     /// <summary>
     /// Debit Note No
     /// </summary>
-    [SugarColumn(ColumnName = "debit_note_no", ColumnDescription = "Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? DebitNoteNo { get; set; }
+    [SugarColumn(ColumnName = "debit_note_code", ColumnDescription = "Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? DebitNoteCode { get; set; }
 
     /// <summary>
     /// 记录者
@@ -75,8 +70,8 @@ public class TaktQualityAssurance : TaktCompanyEntityBase
     /// <summary>
     /// 成本币种(CNY/USD/JPY等)
     /// </summary>
-    [SugarColumn(ColumnName = "cost_currency", ColumnDescription = "成本币种", Length = 3, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
-    public string CostCurrency { get; set; } = "CNY";
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "成本币种", Length = 3, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
 
     // ==================== 导航关系 ====================
 

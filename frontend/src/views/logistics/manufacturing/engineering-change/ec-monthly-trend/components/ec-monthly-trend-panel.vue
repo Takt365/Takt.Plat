@@ -121,7 +121,7 @@ const props = defineProps<{
   /** 年月区间 */
   periodRange?: [string, string] | null
   /** 设变单号 */
-  ecNo?: string
+  ecCode?: string
   /** 区分 */
   ecDistinction?: number
   /** 变更状态 */
@@ -168,7 +168,7 @@ const hasQuery = computed(() => !!props.plantCode?.trim())
 
 /** 标识列 */
 const idColumnKey = computed(() =>
-  props.activeTab === 'implement' ? 'deptCode' : 'ecNo',
+  props.activeTab === 'implement' ? 'deptCode' : 'ecCode',
 )
 
 /** 摘要 */
@@ -201,8 +201,7 @@ const columns = computed<TableColumnsType>(() => {
         width: 120,
         ellipsis: true,
         fixed: 'left',
-      },
-    ]
+      }]
     for (const period of periodOrder.value) {
       cols.push({
         title: period,
@@ -249,9 +248,9 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.ecgijutsu.ecno'),
-      dataIndex: 'ecNo',
-      key: 'ecNo',
+      title: t('entity.ecgijutsu.ecCode'),
+      dataIndex: 'ecCode',
+      key: 'ecCode',
       width: 140,
       ellipsis: true,
       fixed: 'left',
@@ -263,8 +262,7 @@ const columns = computed<TableColumnsType>(() => {
       width: 120,
       ellipsis: true,
       fixed: 'left',
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -315,7 +313,7 @@ function getRowKey(record: EcTrendRow): string {
     return `${row.plantCode}|${row.deptCode}`
   }
   const row = record as EcMonthlyTrend
-  return `${row.plantCode}|${row.ecNo}|${row.deptCode}`
+  return `${row.plantCode}|${row.ecCode}|${row.deptCode}`
 }
 
 /**
@@ -440,7 +438,7 @@ function buildIssueQuery() {
   }
   return {
     plantCode: plant,
-    ecNo: props.ecNo?.trim() || undefined,
+    ecCode: props.ecCode?.trim() || undefined,
     deptCode: props.deptCode?.trim() || undefined,
     ecDistinction: props.ecDistinction,
     changeStatus: props.changeStatus,

@@ -663,12 +663,10 @@ const columns = computed<TableColumnsType>(() => [
           {
             default: () =>
               h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
-                h(RiQuestionLine, { class: 'takt-remix-icon' }),
-              ]),
+                h(RiQuestionLine, { class: 'takt-remix-icon' })]),
           },
         ),
-        h('span', null, pi.label('stdCapacity')),
-      ]),
+        h('span', null, pi.label('stdCapacity'))]),
     taktColumnSettingLabel: pi.label('stdCapacity'),
     dataIndex: 'stdCapacity',
     key: 'stdCapacity',
@@ -777,12 +775,10 @@ const columns = computed<TableColumnsType>(() => [
           {
             default: () =>
               h('span', { class: 'takt-form-label-hint-icon inline-flex cursor-help' }, [
-                h(RiQuestionLine, { class: 'takt-remix-icon' }),
-              ]),
+                h(RiQuestionLine, { class: 'takt-remix-icon' })]),
           },
         ),
-        h('span', null, pi.label('confirmMinutes')),
-      ]),
+        h('span', null, pi.label('confirmMinutes'))]),
     taktColumnSettingLabel: pi.label('confirmMinutes'),
     dataIndex: 'confirmMinutes',
     key: 'confirmMinutes',
@@ -832,10 +828,8 @@ const columns = computed<TableColumnsType>(() => [
         permission: 'logistics:manufacturing:output:assy:update',
         disabled: () => masterProdDateLocked.value,
         onClick: (record: AssyOutputDetail) => void handleEdit(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

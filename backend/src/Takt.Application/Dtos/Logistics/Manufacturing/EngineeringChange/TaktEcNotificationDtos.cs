@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcNotification 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcNotification 生成，请按需审阅）
 // 
@@ -35,15 +35,11 @@ public class TaktEcNotificationDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcNotificationId { get; set; }
 
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    public string EcNotificationNo { get; set; } = string.Empty;
+    public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -59,7 +55,7 @@ public class TaktEcNotificationDto : TaktApprovalDtoBase
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）
@@ -131,6 +127,11 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -138,7 +139,7 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    public string? EcNotificationNo { get; set; } = string.Empty;
+    public string? EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -149,7 +150,7 @@ public class TaktEcNotificationQueryDto : TaktPagedQuery
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）
@@ -281,9 +282,9 @@ public class TaktEcNotificationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -295,7 +296,7 @@ public class TaktEcNotificationCreateDto
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
     [Required(ErrorMessage = "通知单号（唯一，如：EC-2026-0001）不能为空")]
-    public string EcNotificationNo { get; set; } = string.Empty;
+    public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -307,7 +308,7 @@ public class TaktEcNotificationCreateDto
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "设变单号（冗余字段，便于查询）不能为空")]
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）
@@ -426,6 +427,11 @@ public class TaktEcNotificationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -433,7 +439,7 @@ public class TaktEcNotificationTemplateDto
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    public string? EcNotificationNo { get; set; } = string.Empty;
+    public string? EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -444,7 +450,7 @@ public class TaktEcNotificationTemplateDto
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）
@@ -515,9 +521,9 @@ public class TaktEcNotificationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -527,7 +533,7 @@ public class TaktEcNotificationImportDto
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    public string? EcNotificationNo { get; set; } = string.Empty;
+    public string? EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -538,7 +544,7 @@ public class TaktEcNotificationImportDto
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）
@@ -617,7 +623,7 @@ public class TaktEcNotificationExportDto
     /// <summary>
     /// 通知单号（唯一，如：EC-2026-0001）
     /// </summary>
-    public string EcNotificationNo { get; set; } = string.Empty;
+    public string EcNotificationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联的设变主表ID（序列化为string以避免Javascript精度问题）
@@ -628,7 +634,7 @@ public class TaktEcNotificationExportDto
     /// <summary>
     /// 设变单号（冗余字段，便于查询）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变标题（冗余字段）

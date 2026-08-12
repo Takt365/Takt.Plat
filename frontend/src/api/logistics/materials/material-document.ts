@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/materials
 // 文件名称：material-document.ts
-// 创建时间：2026-07-15
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   MaterialDocument,
   MaterialDocumentCreate,
-  MaterialDocumentStatus,
   MaterialDocumentUpdate
 } from '@/types/logistics/materials/material-document';
 
@@ -106,19 +105,6 @@ export function deleteMaterialDocumentBatch(ids: string[]): Promise<void> {
     url: `${MATERIAL_DOCUMENT_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新物料凭证状态
- * @param {MaterialDocumentStatus} dto 状态 DTO
- * @returns {Promise<MaterialDocument>} 物料凭证DTO
- */
-export function updateMaterialDocumentStatus(dto: MaterialDocumentStatus): Promise<MaterialDocument> {
-  return request<MaterialDocument>({
-    url: `${MATERIAL_DOCUMENT_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

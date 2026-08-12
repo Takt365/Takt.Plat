@@ -34,7 +34,7 @@ public class TaktAssyOutputDetail : TaktCompanyEntityBase
     /// <summary>
     /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
     
     /// <summary>

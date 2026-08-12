@@ -155,13 +155,13 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     public async Task<TaktEcGijutsuDto> CreateEcGijutsuAsync(TaktEcGijutsuCreateDto dto)
     {
         var entity = dto.Adapt<TaktEcGijutsu>();
-        var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
             _ecEngRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.EcNo == entity.EcNo);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique)
+                && x.EcCode == entity.EcCode);
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique)
         {
-            throw new TaktBusinessException("设变技术课主的PlantCode、EcNo已存在");
+            throw new TaktBusinessException("设变技术课主的PlantCode、EcCode已存在");
         }
         entity = await _ecEngRepository.CreateAsync(entity);
         await SaveEcGijutsuChildrenAsync(entity, dto);
@@ -189,14 +189,14 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             throw new TaktBusinessException("设变技术课主不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
             _ecEngRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.EcNo == entity.EcNo,
+                && x.EcCode == entity.EcCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique)
         {
-            throw new TaktBusinessException("设变技术课主的PlantCode、EcNo已存在");
+            throw new TaktBusinessException("设变技术课主的PlantCode、EcCode已存在");
         }
         await _ecEngRepository.UpdateAsync(entity);
                 await SaveEcGijutsuChildrenAsync(entity, dto);
@@ -296,18 +296,18 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             try
             {
                 var entity = rows[i].Adapt<TaktEcGijutsu>();
-                var importKey = $"{entity.PlantCode}|{entity.EcNo}";
+                var importKey = $"{entity.PlantCode}|{entity.EcCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、EcNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、EcCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecEngRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.EcNo == entity.EcNo);
-                if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique)
+                        && x.EcCode == entity.EcCode);
+                if (!isUnique_ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique)
                 {
-                    throw new TaktBusinessException("设变技术课主的PlantCode、EcNo已存在");
+                    throw new TaktBusinessException("设变技术课主的PlantCode、EcCode已存在");
                 }
                 await _ecEngRepository.CreateAsync(entity);
                 success += 1;
@@ -502,22 +502,22 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                         var seenKeys = new HashSet<string>(StringComparer.Ordinal);
                         for (var i = 0; i < notifications.Count; i++)
                         {
-                            var key = $"{notifications[i].CompanyCode}|{notifications[i].EcNotificationNo}";
+                            var key = $"{notifications[i].CompanyCode}|{notifications[i].EcNotificationCode}";
                             if (!seenKeys.Add(key))
                             {
-                                throw new TaktBusinessException($"工程变更通知单第{i + 1}项与本次提交的其他项重复（CompanyCode、EcNotificationNo）");
+                                throw new TaktBusinessException($"工程变更通知单第{i + 1}项与本次提交的其他项重复（CompanyCode、EcNotificationCode）");
                             }
                         }
             await _ecNotificationRepository.DeleteAsync(x => x.EcId == entity.Id);
             foreach (var child in notifications)
             {
-            var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
+            var isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
                 _ecNotificationRepository,
                 x => x.CompanyCode == child.CompanyCode
-                    && x.EcNotificationNo == child.EcNotificationNo);
-            if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique)
+                    && x.EcNotificationCode == child.EcNotificationCode);
+            if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique)
             {
-                throw new TaktBusinessException("工程变更通知单的CompanyCode、EcNotificationNo已存在");
+                throw new TaktBusinessException("工程变更通知单的CompanyCode、EcNotificationCode已存在");
             }
             }
             await _ecNotificationRepository.CreateRangeAsync(notifications);
@@ -602,14 +602,14 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         EnsureThreeLayerContext();
         var plantCode = ResolvePlantCodeFromSourceEcCompanyCode(CurrentCompanyCode);
         AssertRequestedPlantCodeMatches(queryDto.PlantCode, plantCode, CurrentCompanyCode);
-        var importedEcNos = (await _ecEngRepository.GetListAsync(
+        var importedEcCodes = (await _ecEngRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode))
-            .Select(x => x.EcNo)
+            .Select(x => x.EcCode)
             .Where(x => !string.IsNullOrWhiteSpace(x))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var predicate = UnimportedSourceEcQueryExpression(queryDto, importedEcNos);
+        var predicate = UnimportedSourceEcQueryExpression(queryDto, importedEcCodes);
         var (data, total) = await _sourceEcRepository.GetPagedAsync(
             predicate,
             queryDto.PageIndex,
@@ -632,7 +632,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         var items = data.Select(source => new TaktEcGijutsuSourceEcInputItemDto
         {
             SourceEcId = source.Id,
-            SourceEcNo = source.SourceEcNo,
+            SourceEcCode = source.SourceEcCode,
             SourceModel = source.SourceModel,
             SourceTitle = source.SourceTitle,
             SourceIssueDate = source.SourceIssueDate,
@@ -685,17 +685,17 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                     x.TenantCode == CurrentTenantCode
                     && x.CompanyCode == CurrentCompanyCode
                     && x.PlantCode == plantCode
-                    && x.EcNo == sourceEc.SourceEcNo) > 0;
+                    && x.EcCode == sourceEc.SourceEcCode) > 0;
                 if (alreadyImported)
                 {
-                    throw new TaktBusinessException($"设变 {sourceEc.SourceEcNo} 已在工厂 {plantCode} 导入");
+                    throw new TaktBusinessException($"设变 {sourceEc.SourceEcCode} 已在工厂 {plantCode} 导入");
                 }
                 var sourceDetails = await _sourceEcDetailRepository.GetListAsync(x => x.SourceEcId == sourceEc.Id);
                 var createDto = await BuildEcGijutsuCreateFromSourceAsync(
                     sourceEc,
                     sourceDetails,
                     plantCode,
-                    dto.CompanyDefaultCulture,
+                    dto.CultureCode,
                     today);
                 var created = await CreateEcGijutsuAsync(createDto);
                 result.SuccessCount += 1;
@@ -736,17 +736,17 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plantCode
-            && x.EcNo == sourceEc.SourceEcNo) > 0;
+            && x.EcCode == sourceEc.SourceEcCode) > 0;
         if (alreadyImported)
         {
-            throw new TaktBusinessException($"设变 {sourceEc.SourceEcNo} 已在工厂 {plantCode} 导入");
+            throw new TaktBusinessException($"设变 {sourceEc.SourceEcCode} 已在工厂 {plantCode} 导入");
         }
         var sourceDetails = await _sourceEcDetailRepository.GetListAsync(x => x.SourceEcId == sourceEc.Id);
         var createDto = await BuildEcGijutsuCreateFromSourceAsync(
             sourceEc,
             sourceDetails,
             plantCode,
-            dto.CompanyDefaultCulture,
+            dto.CultureCode,
             DateTime.Today);
         createDto.EcLeader = string.Empty;
         createDto.EcDistinction = 0;
@@ -809,14 +809,14 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         string? companyDefaultCulture,
         DateTime entryDate)
     {
-        var ecNo = sourceEc.SourceEcNo ?? string.Empty;
+        var ecCode = sourceEc.SourceEcCode ?? string.Empty;
         var materialCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var detail in sourceDetails)
         {
             TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceFinishedProduct, materialCodes);
             TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceParentPart, materialCodes);
-            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceLegacyPartNo, materialCodes);
-            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceReplacementPartNo, materialCodes);
+            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceLegacyPartCode, materialCodes);
+            TaktEcDetailMaterialPlantMapper.CollectMaterialCode(detail.SourceReplacementPartCode, materialCodes);
         }
         var materialsByCode = await LoadMaterialPlantsByCodesAsync(plantCode, materialCodes);
         var lineNumber = 0;
@@ -828,21 +828,21 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             {
                 TenantCode = CurrentTenantCode,
                 CompanyCode = CurrentCompanyCode,
-                CompanyDefaultCulture = companyDefaultCulture ?? string.Empty,
-                EcNo = ecNo,
+                CultureCode = companyDefaultCulture ?? string.Empty,
+                EcCode = ecCode,
                 LineNumber = lineNumber,
                 EcModel = sourceEc.SourceModel,
                 EcBomItem = detail.SourceFinishedProduct,
                 EcBomSubItem = detail.SourceParentPart,
-                EcOldItem = detail.SourceLegacyPartNo,
+                EcOldItem = detail.SourceLegacyPartCode,
                 EcOldText = detail.SourceLegacyPartName,
                 EcOldUsage = detail.SourceLegacyUsage,
                 EcOldPosition = detail.SourceLegacyMountingPosition,
-                EcNewItem = detail.SourceReplacementPartNo,
+                EcNewItem = detail.SourceReplacementPartCode,
                 EcNewText = detail.SourceReplacementPartName,
                 EcNewUsage = detail.SourceReplacementUsage,
                 EcNewPosition = detail.SourceReplacementMountingPosition,
-                EcBomLineNo = detail.SourceBomNo,
+                EcBomLineCode = detail.SourceBomCode,
                 EcIsCompatible = detail.SourceCompatibility,
                 EcSecondDistinction = detail.SourceDistinction,
                 EcInstruction = detail.SourceInstruction,
@@ -856,9 +856,9 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         {
             TenantCode = CurrentTenantCode,
             CompanyCode = CurrentCompanyCode,
-            CompanyDefaultCulture = companyDefaultCulture ?? string.Empty,
+            CultureCode = companyDefaultCulture ?? string.Empty,
             PlantCode = plantCode,
-            EcNo = ecNo,
+            EcCode = ecCode,
             EcIssueDate = sourceEc.SourceIssueDate,
             ChangeStatus = TaktEcSourceStatusMapper.MapToChangeStatusOrThrow(sourceEc.SourceStatus),
             EcTitle = sourceEc.SourceTitle,
@@ -871,7 +871,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             EcDetails = ecDetails,
             Attachments = TaktEcSourceAttachmentMapper.MapAttachments(
                 sourceEc,
-                ecNo,
+                ecCode,
                 CurrentTenantCode,
                 CurrentCompanyCode,
                 companyDefaultCulture ?? string.Empty).Adapt<List<TaktEcAttachmentUpdateDto>>(),
@@ -912,15 +912,15 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             return;
         }
         var deptNames = await ResolveDeptDisplayNamesAsync(TaktEcDeptCodes.SourceImportDeptOrder);
-        var notificationNo = BuildEcNotificationNo(entity.PlantCode, entity.EcNo);
+        var notificationNo = BuildEcNotificationCode(entity.PlantCode, entity.EcCode);
         var notification = new TaktEcNotification
         {
             TenantCode = CurrentTenantCode,
             CompanyCode = CurrentCompanyCode,
             PlantCode = entity.PlantCode,
-            EcNotificationNo = notificationNo,
+            EcNotificationCode = notificationNo,
             EcId = entity.Id,
-            EcNo = entity.EcNo,
+            EcCode = entity.EcCode,
             EcTitle = entity.EcTitle,
             EcNotificationDate = notificationDate.Date,
             EcNotificationDeptCodes = string.Join(",", TaktEcDeptCodes.SourceImportDeptOrder),
@@ -931,7 +931,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         var isUnique = await _uniqueValidator.IsUniqueAsync(
             _ecNotificationRepository,
             x => x.CompanyCode == notification.CompanyCode
-                && x.EcNotificationNo == notification.EcNotificationNo);
+                && x.EcNotificationCode == notification.EcNotificationCode);
         if (!isUnique)
         {
             throw new TaktBusinessException($"工程变更通知单号 {notificationNo} 已存在");
@@ -943,13 +943,13 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     /// 生成设变通知单号（工厂+设变单号，公司内唯一）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
-    /// <param name="ecNo">设变单号</param>
+    /// <param name="ecCode">设变单号</param>
     /// <returns>通知单号</returns>
-    private static string BuildEcNotificationNo(string plantCode, string ecNo)
+    private static string BuildEcNotificationCode(string plantCode, string ecCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(ecNo);
-        return $"{plantCode.Trim()}-ECN-{ecNo.Trim()}";
+        ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
+        return $"{plantCode.Trim()}-ECN-{ecCode.Trim()}";
     }
 
     /// <summary>
@@ -1015,22 +1015,22 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
     /// 构建未导入来源设变查询表达式
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
-    /// <param name="importedEcNos">目标工厂已导入的设变单号集合</param>
+    /// <param name="importedEcCodes">目标工厂已导入的设变单号集合</param>
     /// <returns>查询表达式</returns>
     private Expression<Func<TaktSourceEc, bool>> UnimportedSourceEcQueryExpression(
         TaktEcGijutsuSourceEcInputQueryDto queryDto,
-        IReadOnlySet<string> importedEcNos)
+        IReadOnlySet<string> importedEcCodes)
     {
         var exp = Expressionable.Create<TaktSourceEc>()
             .And(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        if (importedEcNos.Count > 0)
+        if (importedEcCodes.Count > 0)
         {
-            exp = exp.And(x => !importedEcNos.Contains(x.SourceEcNo));
+            exp = exp.And(x => !importedEcCodes.Contains(x.SourceEcCode));
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SourceEcNo))
+        if (!string.IsNullOrWhiteSpace(queryDto.SourceEcCode))
         {
-            var sourceEcNo = queryDto.SourceEcNo.Trim();
-            exp = exp.And(x => x.SourceEcNo.Contains(sourceEcNo));
+            var sourceEcCode = queryDto.SourceEcCode.Trim();
+            exp = exp.And(x => x.SourceEcCode.Contains(sourceEcCode));
         }
         if (!string.IsNullOrWhiteSpace(queryDto.SourceTitle))
         {
@@ -1041,7 +1041,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         {
             var keywords = queryDto.KeyWords.Trim();
             exp = exp.And(x =>
-                x.SourceEcNo.Contains(keywords)
+                x.SourceEcCode.Contains(keywords)
                 || x.SourceModel.Contains(keywords)
                 || x.SourceTitle.Contains(keywords)
                 || (x.SourceTcjOwner != null && x.SourceTcjOwner.Contains(keywords))
@@ -1068,7 +1068,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.ChangeStatus).Contains(keywords)
                 || (x.EcTitle != null && x.EcTitle.Contains(keywords))
                 || (x.EcContent != null && x.EcContent.Contains(keywords))
@@ -1076,6 +1076,7 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
                 || SqlFunc.ToString(x.EcLossAmount).Contains(keywords)
                 || SqlFunc.ToString(x.EcDistinction).Contains(keywords)
                 || SqlFunc.ToString(x.EcStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcIssueDate).Contains(keywords)
@@ -1089,9 +1090,9 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (queryDto?.ChangeStatus.HasValue == true)
@@ -1127,6 +1128,12 @@ public class TaktEcGijutsuService : TaktServiceBase, ITaktEcGijutsuService
         if (queryDto?.EcStatus.HasValue == true)
         {
             exp = exp.And(x => x.EcStatus == queryDto.EcStatus);
+        }
+
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

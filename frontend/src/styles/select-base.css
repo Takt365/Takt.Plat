@@ -1,0 +1,50 @@
+/* ========================================
+ * 项目名称：节拍工厂·Takt Plat
+ * 命名空间：frontend/src/styles
+ * 文件名称：select-base.css
+ * 创建时间：2026-08-09
+ * 创建人：Takt365(Cursor AI)
+ * 功能描述：TaktSelect / TaktTreeSelect 多选宽度与标签溢出（多选=单选基准宽×2）
+ *
+ * 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+ * 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+ * ======================================== */
+
+/**
+ * 普通单选「选项列表」基准宽度；查询栏可在控件上覆盖 --takt-select-base-width
+ * 多选自动宽：calc(var(--takt-select-base-width) * 2)，标签超出以 +N 响应式溢出
+ */
+:root {
+  --takt-select-base-width: 9rem;
+}
+
+.takt-select.takt-select--multiple-auto-width,
+.takt-tree-select-wrapper.takt-tree-select--multiple-auto-width {
+  width: calc(var(--takt-select-base-width) * 2);
+  max-width: 100%;
+  min-width: var(--takt-select-base-width);
+  box-sizing: border-box;
+}
+
+.takt-tree-select-wrapper.takt-tree-select--multiple-auto-width .takt-tree-select,
+.takt-tree-select-wrapper.takt-tree-select--multiple-auto-width .ant-select {
+  width: 100%;
+}
+
+/* 多选标签单行溢出，配合 maxTagCount=responsive */
+.takt-select.takt-select--multiple .ant-select-selector,
+.takt-tree-select-wrapper.takt-tree-select--multiple .ant-select-selector {
+  overflow: hidden;
+}
+
+.takt-select.takt-select--multiple .ant-select-selection-overflow,
+.takt-tree-select-wrapper.takt-tree-select--multiple .ant-select-selection-overflow {
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.takt-select.takt-select--multiple .ant-select-selection-item,
+.takt-tree-select-wrapper.takt-tree-select--multiple .ant-select-selection-item {
+  max-width: 100%;
+}

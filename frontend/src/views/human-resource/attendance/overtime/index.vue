@@ -253,10 +253,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.overtime.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.overtime.relatedplant') })"
           show-count
           :maxlength="4"
@@ -581,7 +581,7 @@ const advancedQueryForm = ref({
   totalActualHours: undefined as number | undefined,
   overtimeType: undefined as number | undefined,
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -615,7 +615,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'totalActualHours', label: t('entity.overtime.totalactualhours') },
   { key: 'overtimeType', label: t('entity.overtime.type') },
   { key: 'reason', label: t('entity.overtime.reason') },
-  { key: 'relatedPlant', label: t('entity.overtime.relatedplant') },
+  { key: 'plantCode', label: t('entity.overtime.relatedplant') },
   { key: 'handlingBy', label: t('entity.overtime.handlingby') },
   { key: 'handlingAtStart', label: t('entity.overtime.handlingatstart') },
   { key: 'handlingAtEnd', label: t('entity.overtime.handlingatend') },
@@ -632,8 +632,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -698,7 +697,7 @@ function buildListQuery(overrides?: Partial<OvertimeQuery>): OvertimeQuery {
     query.overtimeType = form.overtimeType
   }
   assignTrimmed('reason', form.reason)
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('handlingBy', form.handlingBy)
   assignTrimmed('handlingAtStart', form.handlingAtStart)
   assignTrimmed('handlingAtEnd', form.handlingAtEnd)
@@ -728,7 +727,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -883,12 +881,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.overtime.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getOvertimeField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getOvertimeField(record, 'plantCode') ?? ''
   },
   {
     title: t('entity.overtime.handlingby'),
@@ -955,7 +953,6 @@ const getOvertimeId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getOvertimeField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1028,7 +1025,7 @@ function handleReset() {
   totalActualHours: undefined as number | undefined,
   overtimeType: undefined as number | undefined,
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',
@@ -1246,7 +1243,7 @@ function handleAdvancedQueryReset() {
   totalActualHours: undefined as number | undefined,
   overtimeType: undefined as number | undefined,
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   handlingBy: '',
   handlingAtStart: '',
   handlingAtEnd: '',

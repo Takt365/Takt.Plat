@@ -251,11 +251,6 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public string FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int SortOrder { get; set; } = 0;
@@ -293,6 +288,11 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司名称1
@@ -568,6 +568,11 @@ public class TaktCompanyCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司名称1
@@ -936,6 +941,11 @@ public class TaktCompanyTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公司名称1
     /// </summary>
     public string? CompanyName1 { get; set; } = string.Empty;
@@ -1191,6 +1201,11 @@ public class TaktCompanyImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司名称1

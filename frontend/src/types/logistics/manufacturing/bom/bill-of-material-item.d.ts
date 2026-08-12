@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,19 +49,14 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId: string;
-
-  /**
-   * 子项物料名称（填充字段）
-   */
-  materialName?: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -89,7 +84,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   operationSeq: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -119,7 +114,7 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -127,11 +122,6 @@ export interface BillOfMaterialItem extends CompanyDtoBase {
    * 物料清单（BOM头） （主表：TaktBillOfMaterial）
    */
   bom?: BillOfMaterial;
-
-  /**
-   * 子项物料（工厂物料主数据） （主表：TaktMaterialPlant）
-   */
-  materialPlant?: MaterialPlant;
 
   /**
    * 替代料明细（一行主件可维护多条替代物料） （子表：TaktBillOfMaterialSubstitute）
@@ -159,6 +149,16 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialId?: string;
@@ -174,14 +174,14 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId?: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -209,7 +209,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   operationSeq?: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -239,7 +239,7 @@ export interface BillOfMaterialItemQuery extends TaktPagedQuery {
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -283,9 +283,14 @@ export interface BillOfMaterialItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
@@ -303,14 +308,14 @@ export interface BillOfMaterialItemCreate {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -338,7 +343,7 @@ export interface BillOfMaterialItemCreate {
   operationSeq: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -368,14 +373,14 @@ export interface BillOfMaterialItemCreate {
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
   /**
    * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
    */
-  substitutes?: BillOfMaterialSubstituteUpdate[];
+  substitutes?: BillOfMaterialSubstituteCreate[];
 
   /**
    * 扩展字段JSON
@@ -401,6 +406,11 @@ export interface BillOfMaterialItemUpdate extends BillOfMaterialItemCreate {
    * BillOfMaterialItemID（标识要更新的实体）
    */
   billOfMaterialItemId: string;
+
+  /**
+   * 替代料明细（一行主件可维护多条替代物料）（子表，级联保存）
+   */
+  substitutes?: any;
 
 }
 
@@ -441,6 +451,16 @@ export interface BillOfMaterialItemTemplate {
   companyCode?: string;
 
   /**
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialId?: string;
@@ -456,14 +476,14 @@ export interface BillOfMaterialItemTemplate {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId?: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -491,7 +511,7 @@ export interface BillOfMaterialItemTemplate {
   operationSeq?: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -521,7 +541,7 @@ export interface BillOfMaterialItemTemplate {
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -560,9 +580,14 @@ export interface BillOfMaterialItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 物料清单ID（关联BOM头，序列化为string以避免Javascript精度问题）
@@ -580,14 +605,14 @@ export interface BillOfMaterialItemImport {
   lineNumber?: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId?: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -615,7 +640,7 @@ export interface BillOfMaterialItemImport {
   operationSeq?: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -645,7 +670,7 @@ export interface BillOfMaterialItemImport {
   isPhantom?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -699,14 +724,14 @@ export interface BillOfMaterialItemExport {
   lineNumber: number;
 
   /**
-   * 子项物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  materialId: string;
-
-  /**
-   * 子项物料编码（冗余，component_item_code）
+   * 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
+
+  /**
+   * 子项物料描述（回填：随物料）
+   */
+  materialDescription?: string;
 
   /**
    * 用量（quantity）
@@ -734,7 +759,7 @@ export interface BillOfMaterialItemExport {
   operationSeq: number;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
    */
   workCenter?: string;
 
@@ -764,7 +789,7 @@ export interface BillOfMaterialItemExport {
   isPhantom: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice-item.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt销售发票明细实体
+ * Takt销售发票明细实体（公司级；主子表关系见 SalesInvoiceId）
  * 对应前端 TaktSalesInvoiceItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SalesInvoiceItem
@@ -24,556 +24,99 @@ import type {
  */
 export interface SalesInvoiceItem extends CompanyDtoBase {
   /**
-   * SalesInvoiceItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入）
    */
-  salesInvoiceItemId: string;
+  cultureCode: string
 
   /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+   * 区域文化编码（登录或公司切换注入）
    */
-  salesInvoiceId: string;
+  cultureCode?: string
 
   /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
-   */
-  salesInvoiceName?: string;
-
-  /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
-   */
-  accountingDocumentCode: string;
-
-  /**
-   * 行号（项目/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 过帐日期
-   */
-  postingDate: string;
-
-  /**
-   * 机种名称
-   */
-  modelName?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode: string;
-
-  /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
-   */
-  materialType: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName: string;
-
-  /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
-   */
-  profitCenterCode?: string;
-
-  /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
-   */
-  accountTitle?: string;
-
-  /**
-   * 数量
-   */
-  quantity: number;
-
-  /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  unit: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount: number;
-
-  /**
-   * 业务货币计价的金额
-   */
-  transactionCurrencyAmount: number;
-
-  /**
-   * 含税价格（打印用；如 100.00）
-   */
-  taxIncludedPrice: number;
-
-  /**
-   * 未税价格（打印用；如 88.50）
-   */
-  untaxedPrice: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType: string;
-
-  /**
-   * 参考凭证
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 参考凭证项目（行号）
-   */
-  referenceDocumentItem?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 销售发票主表 （主表：TaktSalesInvoice）
-   */
-  salesInvoice?: SalesInvoice;
-
-}
-
-
-/**
- * SalesInvoiceItem 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 SalesInvoiceItemQuery
- * @description 对应后端 TaktSalesInvoiceItemQueryDto
- */
-export interface SalesInvoiceItemQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+   * 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId?: string;
 
   /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+   * 工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  accountingDocumentCode?: string;
+  plantCode?: string;
 
   /**
-   * 行号（项目/序号，固定步长=10）
+   * 开票凭证（冗余）
    */
-  lineNumber?: number;
+  billingDocumentCode?: string;
 
   /**
-   * 过帐日期（范围查询-开始）
-   */
-  postingDateStart?: string;
-
-  /**
-   * 过帐日期（范围查询-结束）
-   */
-  postingDateEnd?: string;
-
-  /**
-   * 机种名称
-   */
-  modelName?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
-   */
-  materialType?: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName?: string;
-
-  /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
-   */
-  profitCenterCode?: string;
-
-  /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
-   */
-  accountTitle?: string;
-
-  /**
-   * 数量
-   */
-  quantity?: number;
-
-  /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  unit?: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount?: number;
-
-  /**
-   * 业务货币计价的金额
-   */
-  transactionCurrencyAmount?: number;
-
-  /**
-   * 含税价格（打印用；如 100.00）
-   */
-  taxIncludedPrice?: number;
-
-  /**
-   * 未税价格（打印用；如 88.50）
-   */
-  untaxedPrice?: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount?: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType?: string;
-
-  /**
-   * 参考凭证
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 参考凭证项目（行号）
-   */
-  referenceDocumentItem?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建SalesInvoiceItem DTO
- * 对应前端 SalesInvoiceItemCreate
- * @description 对应后端 TaktSalesInvoiceItemCreateDto
- */
-export interface SalesInvoiceItemCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
-   */
-  salesInvoiceId: string;
-
-  /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
-   */
-  accountingDocumentCode: string;
-
-  /**
-   * 行号（项目/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 过帐日期
-   */
-  postingDate: string;
-
-  /**
-   * 机种名称
-   */
-  modelName?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode: string;
-
-  /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
-   */
-  materialType: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName: string;
-
-  /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
-   */
-  profitCenterCode?: string;
-
-  /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
-   */
-  accountTitle?: string;
-
-  /**
-   * 数量
-   */
-  quantity: number;
-
-  /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  unit: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount: number;
-
-  /**
-   * 业务货币计价的金额
-   */
-  transactionCurrencyAmount: number;
-
-  /**
-   * 含税价格（打印用；如 100.00）
-   */
-  taxIncludedPrice: number;
-
-  /**
-   * 未税价格（打印用；如 88.50）
-   */
-  untaxedPrice: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType: string;
-
-  /**
-   * 参考凭证
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 参考凭证项目（行号）
-   */
-  referenceDocumentItem?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新SalesInvoiceItem DTO
- * 继承 TaktSalesInvoiceItemCreateDto，添加 SalesInvoiceItemId 字段
- * 对应前端 SalesInvoiceItemUpdate
- * @description 对应后端 TaktSalesInvoiceItemUpdateDto
- */
-export interface SalesInvoiceItemUpdate extends SalesInvoiceItemCreate {
-  /**
-   * SalesInvoiceItemID（标识要更新的实体）
-   */
-  salesInvoiceItemId: string;
-
-}
-
-
-/**
- * SalesInvoiceItem 作废/撤销作废 DTO
- * 对应前端 SalesInvoiceItemObsolete
- * @description 对应后端 TaktSalesInvoiceItemObsoleteDto
- */
-export interface SalesInvoiceItemObsolete {
-  /**
-   * SalesInvoiceItemID
-   */
-  salesInvoiceItemId: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * SalesInvoiceItem 导入模板行 DTO
- * 对应前端 SalesInvoiceItemTemplate
- * @description 对应后端 TaktSalesInvoiceItemTemplateDto
- */
-export interface SalesInvoiceItemTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
-   */
-  salesInvoiceId?: string;
-
-  /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
-   */
-  accountingDocumentCode?: string;
-
-  /**
-   * 行号（项目/序号，固定步长=10）
+   * 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
    */
   lineNumber?: number;
 
   /**
-   * 过帐日期
+   * 已出发票数量
    */
-  postingDate?: string;
+  billingQuantity?: number;
 
   /**
-   * 机种名称
+   * 销售单位
    */
-  modelName?: string;
+  salesUnit?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   * 基本计量单位
    */
-  materialCode?: string;
+  baseUnit?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 等级数量
    */
-  materialType?: string;
+  scaleQuantity?: number;
 
   /**
-   * 物料名称（回填：随物料）
+   * 库存单位开票数量
    */
-  materialName?: string;
+  billingQuantitySku?: number;
 
   /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   * 净重量
    */
-  profitCenterCode?: string;
+  netWeight?: number;
 
   /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+   * 毛重
    */
-  accountTitle?: string;
+  grossWeight?: number;
 
   /**
-   * 数量
+   * 重量单位
    */
-  quantity?: number;
+  weightUnit?: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 业务范围
    */
-  unit?: string;
+  businessAreaCode?: string;
 
   /**
-   * 本位币金额
+   * 定价日期
    */
-  localCurrencyAmount?: number;
+  pricingDate?: string;
 
   /**
-   * 业务货币计价的金额
+   * 提供服务日期
    */
-  transactionCurrencyAmount?: number;
+  serviceRenderedDate?: string;
 
   /**
-   * 含税价格（打印用；如 100.00）
+   * 汇率
    */
-  taxIncludedPrice?: number;
+  pricingExchangeRate?: number;
 
   /**
-   * 未税价格（打印用；如 88.50）
+   * 净价值
    */
-  untaxedPrice?: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount?: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType?: string;
+  netAmount?: number;
 
   /**
    * 参考凭证
@@ -581,9 +124,199 @@ export interface SalesInvoiceItemTemplate {
   referenceDocumentCode?: string;
 
   /**
-   * 参考凭证项目（行号）
+   * 参考项目
    */
   referenceDocumentItem?: number;
+
+  /**
+   * 先前凭证类别
+   */
+  referenceDocumentCategory?: string;
+
+  /**
+   * 销售凭证
+   */
+  salesDocumentCode?: string;
+
+  /**
+   * 销售凭证项目
+   */
+  salesDocumentItem?: number;
+
+  /**
+   * 销售凭证参考
+   */
+  salesDocumentReferenceFlag?: string;
+
+  /**
+   * 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   */
+  materialCode?: string;
+
+  /**
+   * 描述
+   */
+  materialDescription?: string;
+
+  /**
+   * 定价参考物料
+   */
+  pricingReferenceMaterialCode?: string;
+
+  /**
+   * 批次
+   */
+  batchCode?: string;
+
+  /**
+   * 物料组
+   */
+  materialGroup?: string;
+
+  /**
+   * 项目类别
+   */
+  salesItemCategory?: string;
+
+  /**
+   * 产品层次（最长 18，故 Length=18）
+   */
+  productHierarchy?: string;
+
+  /**
+   * 装运点/接收点
+   */
+  shippingPoint?: string;
+
+  /**
+   * 产品组
+   */
+  division?: string;
+
+  /**
+   * 合作伙伴项目
+   */
+  partnerItem?: number;
+
+  /**
+   * 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  departureCountry?: string;
+
+  /**
+   * 交货工厂地区
+   */
+  plantRegion?: string;
+
+  /**
+   * 定价
+   */
+  pricingFlag?: string;
+
+  /**
+   * 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+   */
+  warehouseCode?: string;
+
+  /**
+   * 成本
+   */
+  costAmount?: number;
+
+  /**
+   * 小计1
+   */
+  subtotal1?: number;
+
+  /**
+   * 小计2
+   */
+  subtotal2?: number;
+
+  /**
+   * 小计3
+   */
+  subtotal3?: number;
+
+  /**
+   * 小计4
+   */
+  subtotal4?: number;
+
+  /**
+   * 小计5
+   */
+  subtotal5?: number;
+
+  /**
+   * 小计6
+   */
+  subtotal6?: number;
+
+  /**
+   * 汇率统计
+   */
+  statisticsExchangeRate?: number;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
+
+  /**
+   * 信贷价格
+   */
+  creditPrice?: number;
+
+  /**
+   * 客户组销售订单
+   */
+  customerGroupSalesOrder?: string;
+
+  /**
+   * 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  destinationCountryOrder?: string;
+
+  /**
+   * 地区订单
+   */
+  regionOrder?: string;
+
+  /**
+   * 订单的销售机构
+   */
+  salesOrganizationOrder?: string;
+
+  /**
+   * 订单分销渠道
+   */
+  distributionChannelOrder?: string;
+
+  /**
+   * SD 凭证类别
+   */
+  documentCategory?: string;
+
+  /**
+   * 税额
+   */
+  taxAmount?: number;
+
+  /**
+   * 总值
+   */
+  grossAmount?: number;
+
+  /**
+   * 换算日期
+   */
+  exchangeRateDate?: string;
+
+  /**
+   * 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -601,146 +334,6 @@ export interface SalesInvoiceItemTemplate {
   remark?: string;
 
 }
-
-
-/**
- * SalesInvoiceItem 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 SalesInvoiceItemImport
- * @description 对应后端 TaktSalesInvoiceItemImportDto
- */
-export interface SalesInvoiceItemImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
-   */
-  salesInvoiceId?: string;
-
-  /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
-   */
-  accountingDocumentCode?: string;
-
-  /**
-   * 行号（项目/序号，固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 过帐日期
-   */
-  postingDate?: string;
-
-  /**
-   * 机种名称
-   */
-  modelName?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
-   */
-  materialType?: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName?: string;
-
-  /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
-   */
-  profitCenterCode?: string;
-
-  /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
-   */
-  accountTitle?: string;
-
-  /**
-   * 数量
-   */
-  quantity?: number;
-
-  /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  unit?: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount?: number;
-
-  /**
-   * 业务货币计价的金额
-   */
-  transactionCurrencyAmount?: number;
-
-  /**
-   * 含税价格（打印用；如 100.00）
-   */
-  taxIncludedPrice?: number;
-
-  /**
-   * 未税价格（打印用；如 88.50）
-   */
-  untaxedPrice?: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount?: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType?: string;
-
-  /**
-   * 参考凭证
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 参考凭证项目（行号）
-   */
-  referenceDocumentItem?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * SalesInvoiceItem 导出 DTO（独立实现，不继承响应 Dto）
@@ -759,94 +352,89 @@ export interface SalesInvoiceItemExport {
   companyCode: string;
 
   /**
-   * 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+   * 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
    */
   salesInvoiceId: string;
 
   /**
-   * 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+   * 工厂（选项 TaktPlants/options；DictValue=PlantCode）
    */
-  accountingDocumentCode: string;
+  plantCode?: string;
 
   /**
-   * 行号（项目/序号，固定步长=10）
+   * 开票凭证（冗余）
+   */
+  billingDocumentCode: string;
+
+  /**
+   * 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 过帐日期
+   * 已出发票数量
    */
-  postingDate: string;
+  billingQuantity?: number;
 
   /**
-   * 机种名称
+   * 销售单位
    */
-  modelName?: string;
+  salesUnit?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   * 基本计量单位
    */
-  materialCode: string;
+  baseUnit?: string;
 
   /**
-   * 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+   * 等级数量
    */
-  materialType: string;
+  scaleQuantity?: number;
 
   /**
-   * 物料名称（回填：随物料）
+   * 库存单位开票数量
    */
-  materialName: string;
+  billingQuantitySku?: number;
 
   /**
-   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   * 净重量
    */
-  profitCenterCode?: string;
+  netWeight?: number;
 
   /**
-   * 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+   * 毛重
    */
-  accountTitle?: string;
+  grossWeight?: number;
 
   /**
-   * 数量
+   * 重量单位
    */
-  quantity: number;
+  weightUnit?: string;
 
   /**
-   * 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 业务范围
    */
-  unit: string;
+  businessAreaCode?: string;
 
   /**
-   * 本位币金额
+   * 定价日期
    */
-  localCurrencyAmount: number;
+  pricingDate?: string;
 
   /**
-   * 业务货币计价的金额
+   * 提供服务日期
    */
-  transactionCurrencyAmount: number;
+  serviceRenderedDate?: string;
 
   /**
-   * 含税价格（打印用；如 100.00）
+   * 汇率
    */
-  taxIncludedPrice: number;
+  pricingExchangeRate?: number;
 
   /**
-   * 未税价格（打印用；如 88.50）
+   * 净价值
    */
-  untaxedPrice: number;
-
-  /**
-   * 税费（打印用；行税额，如 11.50）
-   */
-  taxAmount: number;
-
-  /**
-   * 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-   */
-  documentType: string;
+  netAmount?: number;
 
   /**
    * 参考凭证
@@ -854,9 +442,199 @@ export interface SalesInvoiceItemExport {
   referenceDocumentCode?: string;
 
   /**
-   * 参考凭证项目（行号）
+   * 参考项目
    */
   referenceDocumentItem?: number;
+
+  /**
+   * 先前凭证类别
+   */
+  referenceDocumentCategory?: string;
+
+  /**
+   * 销售凭证
+   */
+  salesDocumentCode?: string;
+
+  /**
+   * 销售凭证项目
+   */
+  salesDocumentItem?: number;
+
+  /**
+   * 销售凭证参考
+   */
+  salesDocumentReferenceFlag?: string;
+
+  /**
+   * 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   */
+  materialCode: string;
+
+  /**
+   * 描述
+   */
+  materialDescription?: string;
+
+  /**
+   * 定价参考物料
+   */
+  pricingReferenceMaterialCode?: string;
+
+  /**
+   * 批次
+   */
+  batchCode?: string;
+
+  /**
+   * 物料组
+   */
+  materialGroup?: string;
+
+  /**
+   * 项目类别
+   */
+  salesItemCategory?: string;
+
+  /**
+   * 产品层次（最长 18，故 Length=18）
+   */
+  productHierarchy?: string;
+
+  /**
+   * 装运点/接收点
+   */
+  shippingPoint?: string;
+
+  /**
+   * 产品组
+   */
+  division?: string;
+
+  /**
+   * 合作伙伴项目
+   */
+  partnerItem?: number;
+
+  /**
+   * 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  departureCountry?: string;
+
+  /**
+   * 交货工厂地区
+   */
+  plantRegion?: string;
+
+  /**
+   * 定价
+   */
+  pricingFlag?: string;
+
+  /**
+   * 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+   */
+  warehouseCode?: string;
+
+  /**
+   * 成本
+   */
+  costAmount?: number;
+
+  /**
+   * 小计1
+   */
+  subtotal1?: number;
+
+  /**
+   * 小计2
+   */
+  subtotal2?: number;
+
+  /**
+   * 小计3
+   */
+  subtotal3?: number;
+
+  /**
+   * 小计4
+   */
+  subtotal4?: number;
+
+  /**
+   * 小计5
+   */
+  subtotal5?: number;
+
+  /**
+   * 小计6
+   */
+  subtotal6?: number;
+
+  /**
+   * 汇率统计
+   */
+  statisticsExchangeRate?: number;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
+
+  /**
+   * 信贷价格
+   */
+  creditPrice?: number;
+
+  /**
+   * 客户组销售订单
+   */
+  customerGroupSalesOrder?: string;
+
+  /**
+   * 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  destinationCountryOrder?: string;
+
+  /**
+   * 地区订单
+   */
+  regionOrder?: string;
+
+  /**
+   * 订单的销售机构
+   */
+  salesOrganizationOrder?: string;
+
+  /**
+   * 订单分销渠道
+   */
+  distributionChannelOrder?: string;
+
+  /**
+   * SD 凭证类别
+   */
+  documentCategory?: string;
+
+  /**
+   * 税额
+   */
+  taxAmount?: number;
+
+  /**
+   * 总值
+   */
+  grossAmount?: number;
+
+  /**
+   * 换算日期
+   */
+  exchangeRateDate?: string;
+
+  /**
+   * 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

@@ -75,7 +75,6 @@ export interface ExchangeRate extends TenantDtoBase {
 
 }
 
-
 /**
  * ExchangeRate 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -87,6 +86,11 @@ export interface ExchangeRateQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
@@ -165,7 +169,6 @@ export interface ExchangeRateQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建ExchangeRate DTO
  * 对应前端 ExchangeRateCreate
@@ -176,6 +179,11 @@ export interface ExchangeRateCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
@@ -234,7 +242,6 @@ export interface ExchangeRateCreate {
 
 }
 
-
 /**
  * 更新ExchangeRate DTO
  * 继承 TaktExchangeRateCreateDto，添加 ExchangeRateId 字段
@@ -248,7 +255,6 @@ export interface ExchangeRateUpdate extends ExchangeRateCreate {
   exchangeRateId: string;
 
 }
-
 
 /**
  * ExchangeRate 状态更新 DTO
@@ -268,7 +274,6 @@ export interface ExchangeRateStatus {
 
 }
 
-
 /**
  * ExchangeRate 导入模板行 DTO
  * 对应前端 ExchangeRateTemplate
@@ -279,6 +284,11 @@ export interface ExchangeRateTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
@@ -336,7 +346,6 @@ export interface ExchangeRateTemplate {
   remark?: string;
 
 }
-
 
 /**
  * ExchangeRate 导入 DTO（独立实现，不继承 TemplateDto）
@@ -350,6 +359,11 @@ export interface ExchangeRateImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode?: string;
@@ -405,7 +419,6 @@ export interface ExchangeRateImport {
   remark?: string;
 
 }
-
 
 /**
  * ExchangeRate 导出 DTO（独立实现，不继承响应 Dto）

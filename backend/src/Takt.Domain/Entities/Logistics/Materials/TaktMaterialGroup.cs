@@ -4,7 +4,7 @@
 // 文件名称：TaktMaterialGroup.cs
 // 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt物料组主数据实体（material_group），定义物料组层级与组织归属（与 TaktMaterial.MaterialGroup 对齐）
+// 功能描述：Takt物料组主数据实体（material_group），定义物料组层级与组织归属（与 TaktGeneralMaterial.MaterialGroup 对齐）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

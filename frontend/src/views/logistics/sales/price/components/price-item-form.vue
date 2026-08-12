@@ -112,13 +112,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('scaleCurrency')"
-                name="scaleCurrency"
+                :label="pi.label('scaleCurrencyCode')"
+                name="scaleCurrencyCode"
               >
                 <TaktSelect
-                  v-model:value="formState.scaleCurrency"
+                  v-model:value="formState.scaleCurrencyCode"
                   dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('scaleCurrency')"
+                  :placeholder="pi.ph('scaleCurrencyCode')"
+                  :disabled="!!formData?.salesPriceItemId"
                 />
               </a-form-item>
             </a-col>
@@ -194,13 +195,14 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('conditionCurrency')"
-                name="conditionCurrency"
+                :label="pi.label('conditionCurrencyCode')"
+                name="conditionCurrencyCode"
               >
                 <TaktSelect
-                  v-model:value="formState.conditionCurrency"
+                  v-model:value="formState.conditionCurrencyCode"
                   dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('conditionCurrency')"
+                  :placeholder="pi.ph('conditionCurrencyCode')"
+                  :disabled="!!formData?.salesPriceItemId"
                 />
               </a-form-item>
             </a-col>
@@ -345,9 +347,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["salesPriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrency","calculationType","price","untaxedPrice","taxIncludedPrice","taxAmount","conditionCurrency","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","scaleQuantities","scaleValues"]
-
-
+const formFields = ["salesPriceSeq","priceType","scaleType","scaleBasis","scaleQuantity","scaleUnit","scaleValue","scaleCurrencyCode","calculationType","price","untaxedPrice","taxIncludedPrice","taxAmount","conditionCurrencyCode","priceUnit","unitOfMeasure","minOrderQuantity","roundingValue","plannedDeliveryTimeDays","isObsolete","scaleQuantities","scaleValues"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -373,9 +373,9 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   priceType: "PB00",
   scaleType: "A",
   scaleBasis: "C",
-  scaleCurrency: "CNY",
+  scaleCurrencyCode: "CNY",
   calculationType: "A",
-  conditionCurrency: "CNY",
+  conditionCurrencyCode: "CNY",
   priceUnit: 1000
 }
 
@@ -521,10 +521,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  conditionCurrency: [
+  conditionCurrencyCode: [
     {
       required: true,
-      message: pi.ph('conditionCurrency'),
+      message: pi.ph('conditionCurrencyCode'),
       trigger: 'change'
     }
   ],

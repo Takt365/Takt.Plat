@@ -22,11 +22,11 @@ export const SERIALUPLOAD_SELF_I18N_KEY = buildEntitySelfI18nKey(SERIALUPLOAD_EN
 export const SERIALUPLOAD_LIST_FIELDS = [
   'plantCode',
   'outboundDate',
-  'shippingInvoiceNo',
-  'sequenceNo',
+  'shippingInvoiceCode',
+  'sequenceCode',
   'materialCode',
   'totalQuantity',
-  'serialNo',
+  'serialCode',
   'packingQuantity',
   'transportMode',
   'materialText',
@@ -39,11 +39,11 @@ export const SERIALUPLOAD_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   plantCode: 'select',
   outboundDate: 'select',
-  shippingInvoiceNo: 'required',
-  sequenceNo: 'select',
+  shippingInvoiceCode: 'required',
+  sequenceCode: 'select',
   materialCode: 'select',
   totalQuantity: 'select',
-  serialNo: 'required',
+  serialCode: 'required',
   packingQuantity: 'select',
   transportMode: 'required',
   materialText: 'required',
@@ -59,9 +59,9 @@ export const SERIALUPLOAD_QUERY_STRING_FIELDS = [
   'plantCode',
   'outboundDateStart',
   'outboundDateEnd',
-  'shippingInvoiceNo',
+  'shippingInvoiceCode',
   'materialCode',
-  'serialNo',
+  'serialCode',
   'transportMode',
   'materialText',
   'createdAtStart',
@@ -72,12 +72,12 @@ export const SERIALUPLOAD_QUERY_STRING_FIELDS = [
 
 export type SerialUploadQueryField =
   | (typeof SERIALUPLOAD_QUERY_STRING_FIELDS)[number]
-  | 'sequenceNo' | 'totalQuantity' | 'packingQuantity'
+  | 'sequenceCode' | 'totalQuantity' | 'packingQuantity'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SERIALUPLOAD_QUERY_FIELDS: readonly SerialUploadQueryField[] = [
   ...SERIALUPLOAD_QUERY_STRING_FIELDS,
-  'sequenceNo',
+  'sequenceCode',
   'totalQuantity',
   'packingQuantity',
 ]

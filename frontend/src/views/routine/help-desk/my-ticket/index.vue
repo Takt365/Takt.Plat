@@ -199,14 +199,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
 }))
 /** 表格列 */
 const columns = computed<TableColumnsType>(() => [
-  { title: t('entity.ticket.no'), dataIndex: 'ticketNo', key: 'ticketNo', width: 140, ellipsis: true },
+  { title: t('entity.ticket.no'), dataIndex: 'ticketCode', key: 'ticketCode', width: 140, ellipsis: true },
   { title: t('entity.ticket.title'), dataIndex: 'title', key: 'title', width: 200, ellipsis: true },
   { title: t('entity.ticket.status'), dataIndex: 'ticketStatus', key: 'ticketStatus', width: 120 },
   { title: t('entity.ticket.priority'), dataIndex: 'priority', key: 'priority', width: 100 },
   { title: t('entity.ticket.categorycode'), dataIndex: 'categoryCode', key: 'categoryCode', width: 120, ellipsis: true },
   { title: t('entity.ticket.assetcode'), dataIndex: 'assetCode', key: 'assetCode', width: 120, ellipsis: true },
-  { title: t('common.page.entity.createdat'), dataIndex: 'createdAt', key: 'createdAt', width: 160, ellipsis: true },
-])
+  { title: t('common.page.entity.createdat'), dataIndex: 'createdAt', key: 'createdAt', width: 160, ellipsis: true }])
 /** row-key */
 const getTicketId = (record: Ticket): string => record.ticketId ?? ''
 /** 行选择 */

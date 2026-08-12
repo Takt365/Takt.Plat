@@ -10,7 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-
 /**
  * 跨租户整表数据克隆请求 DTO（同租户内禁止；一次 1~5 张表）
  * 对应前端 TableClone
@@ -54,7 +53,6 @@ export interface TableClone {
 
 }
 
-
 /**
  * 单张表的跨租户克隆项
  * 对应前端 TableCloneItem
@@ -72,7 +70,6 @@ export interface TableCloneItem {
   targetTableName: string;
 
 }
-
 
 /**
  * 跨租户整表克隆备份预览 DTO（备份窗口）
@@ -96,7 +93,6 @@ export interface TableClonePreview {
   targets: TableCloneTargetPreviewItem[];
 
 }
-
 
 /**
  * 单张目标表备份预览项
@@ -136,7 +132,6 @@ export interface TableCloneTargetPreviewItem {
 
 }
 
-
 /**
  * 跨租户整表克隆批量结果 DTO
  * 对应前端 TableCloneResult
@@ -164,7 +159,6 @@ export interface TableCloneResult {
   tables: TableCloneTableResult[];
 
 }
-
 
 /**
  * 单张表克隆结果 DTO

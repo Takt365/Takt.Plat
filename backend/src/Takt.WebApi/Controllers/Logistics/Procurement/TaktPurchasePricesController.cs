@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchasePricesController.cs
-// 创建时间：2026-07-21
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格控制器
 // 
@@ -91,46 +91,6 @@ public class TaktPurchasePricesController : TaktControllerBase
         try
         {
             var result = await _purchasePriceService.GetPurchasePriceOptionsAsync();
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取采购价格中的供应商选项（按工厂去重）
-    /// </summary>
-    /// <param name="plantCode">工厂代码</param>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:purchase:price:query", "采购价格供应商选项")]
-    [HttpGet("supplier-options")]
-    public async Task<IActionResult> GetPurchasePriceSupplierOptionsAsync([FromQuery] string? plantCode = null)
-    {
-        try
-        {
-            var result = await _purchasePriceService.GetPurchasePriceSupplierOptionsAsync(plantCode);
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 获取采购价格中的物料选项（按工厂去重）
-    /// </summary>
-    /// <param name="plantCode">工厂代码</param>
-    /// <returns>下拉选项</returns>
-    [TaktPermission("logistics:procurement:purchase:price:query", "采购价格物料选项")]
-    [HttpGet("material-options")]
-    public async Task<IActionResult> GetPurchasePriceMaterialOptionsAsync([FromQuery] string? plantCode = null)
-    {
-        try
-        {
-            var result = await _purchasePriceService.GetPurchasePriceMaterialOptionsAsync(plantCode);
             return Success(result, "查询成功");
         }
         catch (Exception ex)

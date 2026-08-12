@@ -460,7 +460,8 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
                 || (x.IncidentReason != null && x.IncidentReason.Contains(keywords))
                 || SqlFunc.ToString(x.TotalScrapQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.TotalScrapCost).Contains(keywords)
-                || (x.CostCurrency != null && x.CostCurrency.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.IncidentDate).Contains(keywords)
@@ -503,9 +504,14 @@ public class TaktQualityIncidentService : TaktServiceBase, ITaktQualityIncidentS
             exp = exp.And(x => x.TotalScrapCost == queryDto.TotalScrapCost);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CostCurrency))
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CostCurrency != null && x.CostCurrency.Contains(queryDto.CostCurrency));
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

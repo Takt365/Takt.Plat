@@ -98,11 +98,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sequenceNo')">
-      <a-form-item :label="pi.queryLabel('sequenceNo')">
+      <div v-show="isFieldVisible('sequenceCode')">
+      <a-form-item :label="pi.queryLabel('sequenceCode')">
         <a-input
-          v-model:value="advancedQueryForm.sequenceNo"
-          :placeholder="pi.queryPh('sequenceNo', 'required')"
+          v-model:value="advancedQueryForm.sequenceCode"
+          :placeholder="pi.queryPh('sequenceCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -130,11 +130,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('bomItemNo')">
-      <a-form-item :label="pi.queryLabel('bomItemNo')">
+      <div v-show="isFieldVisible('bomItemCode')">
+      <a-form-item :label="pi.queryLabel('bomItemCode')">
         <a-input
-          v-model:value="advancedQueryForm.bomItemNo"
-          :placeholder="pi.queryPh('bomItemNo', 'required')"
+          v-model:value="advancedQueryForm.bomItemCode"
+          :placeholder="pi.queryPh('bomItemCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -243,12 +243,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('movingPriceCurrency')">
-      <a-form-item :label="pi.queryLabel('movingPriceCurrency')">
+      <div v-show="isFieldVisible('movingPriceCurrencyCode')">
+      <a-form-item :label="pi.queryLabel('movingPriceCurrencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.movingPriceCurrency"
+          v-model:value="advancedQueryForm.movingPriceCurrencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('movingPriceCurrency', 'select')"
+          :placeholder="pi.queryPh('movingPriceCurrencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -302,12 +302,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('purchaseCurrency')">
-      <a-form-item :label="pi.queryLabel('purchaseCurrency')">
+      <div v-show="isFieldVisible('purchaseCurrencyCode')">
+      <a-form-item :label="pi.queryLabel('purchaseCurrencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.purchaseCurrency"
+          v-model:value="advancedQueryForm.purchaseCurrencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('purchaseCurrency', 'select')"
+          :placeholder="pi.queryPh('purchaseCurrencyCode', 'select')"
           allow-clear
         />
       </a-form-item>

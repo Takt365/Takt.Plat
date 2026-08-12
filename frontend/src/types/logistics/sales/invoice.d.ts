@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：invoice.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt销售发票实体
+ * Takt销售发票主表实体（公司级）
  * 对应前端 TaktSalesInvoiceDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 SalesInvoice
@@ -24,201 +24,207 @@ import type {
  */
 export interface SalesInvoice extends CompanyDtoBase {
   /**
-   * SalesInvoiceID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入）
    */
-  salesInvoiceId: string;
+  cultureCode: string
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入）
    */
-  plantCode: string;
+  cultureCode?: string
 
   /**
-   * 年度期间（yyyyMM）
+   * 开票凭证
    */
-  yearMonth: string;
+  billingDocumentCode?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+   * 开票类型
    */
-  customerCode: string;
+  billingType?: string;
 
   /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+   * 出具发票类别
    */
-  customerName1: string;
+  billingCategory?: string;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * SD 凭证类别
    */
-  currencyCode: string;
+  documentCategory?: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
-   */
-  accountingDocumentCode: string;
-
-  /**
-   * 销售发票明细列表（主子表关系，一张发票可有多个明细行） （子表：TaktSalesInvoiceItem）
-   */
-  items?: SalesInvoiceItem[];
-
-}
-
-
-/**
- * SalesInvoice 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 SalesInvoiceQuery
- * @description 对应后端 TaktSalesInvoiceQueryDto
- */
-export interface SalesInvoiceQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 年度期间（yyyyMM）
-   */
-  yearMonth?: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode?: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1?: string;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 凭证货币（字典 accounting_currency_code）
    */
   currencyCode?: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   * 销售组织
    */
-  taxRate?: number;
+  salesOrganization?: string;
 
   /**
-   * 税费
+   * 分销渠道
    */
-  taxAmount?: number;
+  distributionChannel?: string;
 
   /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
+   * 定价过程
    */
-  accountingDocumentCode?: string;
+  pricingProcedure?: string;
 
   /**
-   * 创建时间（范围查询-开始）
+   * 单据条件号
    */
-  createdAtStart?: string;
+  conditionCode?: string;
 
   /**
-   * 创建时间（范围查询-结束）
+   * 装运条件（字典 logistics_shipping_conditions）
    */
-  createdAtEnd?: string;
+  shippingConditions?: string;
 
   /**
-   * 扩展字段JSON
+   * 出具发票日期
    */
-  extField?: string;
+  billingDate?: string;
 
   /**
-   * 备注（模糊查询）
+   * 客户组
    */
-  remark?: string;
-
-}
-
-
-/**
- * 创建SalesInvoice DTO
- * 对应前端 SalesInvoiceCreate
- * @description 对应后端 TaktSalesInvoiceCreateDto
- */
-export interface SalesInvoiceCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
+  customerGroup?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 国际贸易条件
    */
-  companyCode: string;
+  incoterms1?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 国际贸易条件(部分2)（最长 28，故 Length=28）
    */
-  companyDefaultCulture: string;
+  incoterms2?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 过账状态
    */
-  plantCode: string;
+  postingStatus?: string;
 
   /**
-   * 年度期间（yyyyMM）
+   * 会计汇率
    */
-  yearMonth: string;
+  accountingExchangeRate?: number;
 
   /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+   * 付款条件
    */
-  customerCode: string;
+  paymentTerms?: string;
 
   /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+   * 客户分配帐户组别
    */
-  customerName1: string;
+  accountAssignmentGroup?: string;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  currencyCode: string;
+  countryCode?: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   * 净价值
    */
-  taxRate: number;
+  netAmount?: number;
 
   /**
-   * 税费
+   * 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
-  taxAmount: number;
+  payerCode?: string;
 
   /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
+   * 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
-  accountingDocumentCode: string;
+  customerCode?: string;
 
   /**
-   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+   * 统计货币（字典 accounting_currency_code）
+   */
+  statisticsCurrencyCode?: string;
+
+  /**
+   * 外贸数据编号
+   */
+  foreignTradeCode?: string;
+
+  /**
+   * 已取消的开票凭证
+   */
+  cancelledBillingDocument?: string;
+
+  /**
+   * 发票清单类型
+   */
+  invoiceListType?: string;
+
+  /**
+   * 产品组
+   */
+  division?: string;
+
+  /**
+   * 定价的层次类型
+   */
+  hierarchyTypePricing?: string;
+
+  /**
+   * 贸易伙伴
+   */
+  tradingPartner?: string;
+
+  /**
+   * 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  taxDepartureCountry?: string;
+
+  /**
+   * 组织销售税编号
+   */
+  organizationSalesTaxNumber?: string;
+
+  /**
+   * 国家销售税编号
+   */
+  countrySalesTaxNumber?: string;
+
+  /**
+   * 参考（最长 16，故 Length=16）
+   */
+  referenceCode?: string;
+
+  /**
+   * 已被取消
+   */
+  cancelledFlag?: string;
+
+  /**
+   * 换算日期
+   */
+  exchangeRateDate?: string;
+
+  /**
+   * 付款参考（最长 30，故 Length=30）
+   */
+  paymentReference?: string;
+
+  /**
+   * 冲销原因
+   */
+  reversalReason?: string;
+
+  /**
+   * 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
+
+  /**
+   * 销售发票明细列表（主子表关系）（子表，级联保存）
    */
   items?: SalesInvoiceItemCreate[];
 
@@ -233,180 +239,6 @@ export interface SalesInvoiceCreate {
   remark?: string;
 
 }
-
-
-/**
- * 更新SalesInvoice DTO
- * 继承 TaktSalesInvoiceCreateDto，添加 SalesInvoiceId 字段
- * 对应前端 SalesInvoiceUpdate
- * @description 对应后端 TaktSalesInvoiceUpdateDto
- */
-export interface SalesInvoiceUpdate extends SalesInvoiceCreate {
-  /**
-   * SalesInvoiceID（标识要更新的实体）
-   */
-  salesInvoiceId: string;
-
-  /**
-   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
-   */
-  items?: any;
-
-}
-
-
-/**
- * SalesInvoice 导入模板行 DTO
- * 对应前端 SalesInvoiceTemplate
- * @description 对应后端 TaktSalesInvoiceTemplateDto
- */
-export interface SalesInvoiceTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 年度期间（yyyyMM）
-   */
-  yearMonth?: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode?: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1?: string;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode?: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
-   */
-  accountingDocumentCode?: string;
-
-  /**
-   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
-   */
-  items?: SalesInvoiceItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * SalesInvoice 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 SalesInvoiceImport
- * @description 对应后端 TaktSalesInvoiceImportDto
- */
-export interface SalesInvoiceImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 年度期间（yyyyMM）
-   */
-  yearMonth?: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode?: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1?: string;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode?: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
-   */
-  accountingDocumentCode?: string;
-
-  /**
-   * 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
-   */
-  items?: SalesInvoiceItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * SalesInvoice 导出 DTO（独立实现，不继承响应 Dto）
@@ -425,44 +257,194 @@ export interface SalesInvoiceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   * 开票凭证
    */
-  plantCode: string;
+  billingDocumentCode: string;
 
   /**
-   * 年度期间（yyyyMM）
+   * 开票类型
    */
-  yearMonth: string;
+  billingType?: string;
 
   /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+   * 出具发票类别
    */
-  customerCode: string;
+  billingCategory?: string;
 
   /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+   * SD 凭证类别
    */
-  customerName1: string;
+  documentCategory?: string;
 
   /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+   * 凭证货币（字典 accounting_currency_code）
    */
   currencyCode: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   * 销售组织
    */
-  taxRate: number;
+  salesOrganization?: string;
 
   /**
-   * 税费
+   * 分销渠道
    */
-  taxAmount: number;
+  distributionChannel?: string;
 
   /**
-   * 会计凭证编码（租户+公司+工厂内唯一）
+   * 定价过程
    */
-  accountingDocumentCode: string;
+  pricingProcedure?: string;
+
+  /**
+   * 单据条件号
+   */
+  conditionCode?: string;
+
+  /**
+   * 装运条件（字典 logistics_shipping_conditions）
+   */
+  shippingConditions?: string;
+
+  /**
+   * 出具发票日期
+   */
+  billingDate: string;
+
+  /**
+   * 客户组
+   */
+  customerGroup?: string;
+
+  /**
+   * 国际贸易条件
+   */
+  incoterms1?: string;
+
+  /**
+   * 国际贸易条件(部分2)（最长 28，故 Length=28）
+   */
+  incoterms2?: string;
+
+  /**
+   * 过账状态
+   */
+  postingStatus?: string;
+
+  /**
+   * 会计汇率
+   */
+  accountingExchangeRate?: number;
+
+  /**
+   * 付款条件
+   */
+  paymentTerms?: string;
+
+  /**
+   * 客户分配帐户组别
+   */
+  accountAssignmentGroup?: string;
+
+  /**
+   * 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  countryCode?: string;
+
+  /**
+   * 净价值
+   */
+  netAmount: number;
+
+  /**
+   * 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  payerCode?: string;
+
+  /**
+   * 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+   */
+  customerCode: string;
+
+  /**
+   * 统计货币（字典 accounting_currency_code）
+   */
+  statisticsCurrencyCode?: string;
+
+  /**
+   * 外贸数据编号
+   */
+  foreignTradeCode?: string;
+
+  /**
+   * 已取消的开票凭证
+   */
+  cancelledBillingDocument?: string;
+
+  /**
+   * 发票清单类型
+   */
+  invoiceListType?: string;
+
+  /**
+   * 产品组
+   */
+  division?: string;
+
+  /**
+   * 定价的层次类型
+   */
+  hierarchyTypePricing?: string;
+
+  /**
+   * 贸易伙伴
+   */
+  tradingPartner?: string;
+
+  /**
+   * 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+   */
+  taxDepartureCountry?: string;
+
+  /**
+   * 组织销售税编号
+   */
+  organizationSalesTaxNumber?: string;
+
+  /**
+   * 国家销售税编号
+   */
+  countrySalesTaxNumber?: string;
+
+  /**
+   * 参考（最长 16，故 Length=16）
+   */
+  referenceCode?: string;
+
+  /**
+   * 已被取消
+   */
+  cancelledFlag?: string;
+
+  /**
+   * 换算日期
+   */
+  exchangeRateDate?: string;
+
+  /**
+   * 付款参考（最长 30，故 Length=30）
+   */
+  paymentReference?: string;
+
+  /**
+   * 冲销原因
+   */
+  reversalReason?: string;
+
+  /**
+   * 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
 
   /**
    * 扩展字段JSON

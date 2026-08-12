@@ -898,7 +898,7 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
                 || (x.Nickname != null && x.Nickname.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || SqlFunc.ToString(x.UserType).Contains(keywords)
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || SqlFunc.ToString(x.UserStatus).Contains(keywords)
@@ -931,9 +931,9 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
             exp = exp.And(x => x.UserStatus == queryDto.UserStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (queryDto?.CreatedBy.HasValue == true)
@@ -960,6 +960,12 @@ public class TaktUserService : TaktServiceBase, ITaktUserService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

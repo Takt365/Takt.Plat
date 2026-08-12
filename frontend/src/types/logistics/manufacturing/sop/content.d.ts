@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：content.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopContent extends CompanyDtoBase {
   sopContentId: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
@@ -39,7 +39,7 @@ export interface SopContent extends CompanyDtoBase {
   revisionName?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
@@ -47,11 +47,6 @@ export interface SopContent extends CompanyDtoBase {
    * SOP 主档 名称（填充字段）
    */
   sopName?: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 正文标题
@@ -89,19 +84,24 @@ export interface SopContentQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 正文标题
@@ -148,24 +148,24 @@ export interface SopContentCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 正文标题
@@ -202,6 +202,11 @@ export interface SopContentUpdate extends SopContentCreate {
    */
   sopContentId: string;
 
+  /**
+   * 工步列表（子表，级联保存）
+   */
+  steps?: any;
+
 }
 
 
@@ -222,19 +227,24 @@ export interface SopContentTemplate {
   companyCode?: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 正文标题
@@ -276,24 +286,24 @@ export interface SopContentImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId?: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang?: string;
 
   /**
    * 正文标题
@@ -335,19 +345,19 @@ export interface SopContentExport {
   companyCode: string;
 
   /**
-   * 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   revisionId: string;
 
   /**
-   * SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
-
-  /**
-   * 正文语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  contentLang: string;
 
   /**
    * 正文标题

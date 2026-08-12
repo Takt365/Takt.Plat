@@ -40,12 +40,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('inboundNo')"
-                name="inboundNo"
+                :label="pi.label('inboundCode')"
+                name="inboundCode"
               >
                 <a-input
-                  v-model:value="formState.inboundNo"
-                  :placeholder="pi.ph('inboundNo')"
+                  v-model:value="formState.inboundCode"
+                  :placeholder="pi.ph('inboundCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -66,12 +66,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('inboundSerialNo')"
-                name="inboundSerialNo"
+                :label="pi.label('inboundSerialCode')"
+                name="inboundSerialCode"
               >
                 <a-input
-                  v-model:value="formState.inboundSerialNo"
-                  :placeholder="pi.ph('inboundSerialNo')"
+                  v-model:value="formState.inboundSerialCode"
+                  :placeholder="pi.ph('inboundSerialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -149,9 +149,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["inboundId","inboundNo","lineNumber","inboundSerialNo","extField","remark"]
-
-
+const formFields = ["inboundId","inboundCode","lineNumber","inboundSerialCode","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -176,7 +174,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 serialInboundItemId 才视为编辑） */
 watch(
@@ -209,10 +206,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  inboundNo: [
+  inboundCode: [
     {
       required: true,
-      message: pi.ph('inboundNo'),
+      message: pi.ph('inboundCode'),
       trigger: 'blur'
     }
   ],
@@ -229,10 +226,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  inboundSerialNo: [
+  inboundSerialCode: [
     {
       required: true,
-      message: pi.ph('inboundSerialNo'),
+      message: pi.ph('inboundSerialCode'),
       trigger: 'blur'
     }
   ],

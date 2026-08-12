@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/aps
 // 文件名称：work-center.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/aps 模块 API（自动生成，请勿手改路由常量）
 // 

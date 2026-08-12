@@ -24,28 +24,23 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_changeover_matrix_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkCenterCode), OrderByType.Asc, nameof(FromMaterialCode), OrderByType.Asc, nameof(ToMaterialCode), OrderByType.Asc, true)]
 public class TaktChangeoverMatrix : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 换型前物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "from_material_code", ColumnDescription = "换型前物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "from_material_code", ColumnDescription = "换型前物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string FromMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 换型后物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "to_material_code", ColumnDescription = "换型后物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "to_material_code", ColumnDescription = "换型后物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ToMaterialCode { get; set; } = string.Empty;
 
     /// <summary>

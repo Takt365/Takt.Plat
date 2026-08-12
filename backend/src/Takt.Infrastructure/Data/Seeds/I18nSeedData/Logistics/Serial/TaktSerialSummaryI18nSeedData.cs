@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Serial
 // 文件名称：TaktSerialSummaryI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSerialSummary 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,23 +90,14 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialsummary._self
             new TranslationSeedItem("entity.serialsummary._self", "zh-HK", "序列号汇总信息_hk", "实体名称"),
 
-            // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.serialsummary.plantcode
-            new TranslationSeedItem("entity.serialsummary.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
-            // entity.serialsummary.inboundno
-            new TranslationSeedItem("entity.serialsummary.inboundno", "en-US", "入库单号_us", "入库单号"),
-            // entity.serialsummary.inboundno
-            new TranslationSeedItem("entity.serialsummary.inboundno", "ja-JP", "入库单号_jp", "入库单号"),
-            // entity.serialsummary.inboundno
-            new TranslationSeedItem("entity.serialsummary.inboundno", "zh-CN", "入库单号", "入库单号"),
-            // entity.serialsummary.inboundno
-            new TranslationSeedItem("entity.serialsummary.inboundno", "zh-HK", "入库单号_hk", "入库单号"),
+            // entity.serialsummary.inboundcode
+            new TranslationSeedItem("entity.serialsummary.inboundcode", "en-US", "入库单号_us", "入库单号"),
+            // entity.serialsummary.inboundcode
+            new TranslationSeedItem("entity.serialsummary.inboundcode", "ja-JP", "入库单号_jp", "入库单号"),
+            // entity.serialsummary.inboundcode
+            new TranslationSeedItem("entity.serialsummary.inboundcode", "zh-CN", "入库单号", "入库单号"),
+            // entity.serialsummary.inboundcode
+            new TranslationSeedItem("entity.serialsummary.inboundcode", "zh-HK", "入库单号_hk", "入库单号"),
 
             // entity.serialsummary.inbounddate
             new TranslationSeedItem("entity.serialsummary.inbounddate", "en-US", "入库日期_us", "入库日期"),
@@ -126,14 +117,14 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialsummary.materialcode
             new TranslationSeedItem("entity.serialsummary.materialcode", "zh-HK", "产品物料_hk", "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
-            // entity.serialsummary.inboundserialno
-            new TranslationSeedItem("entity.serialsummary.inboundserialno", "en-US", "入库序列号_us", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
-            // entity.serialsummary.inboundserialno
-            new TranslationSeedItem("entity.serialsummary.inboundserialno", "ja-JP", "入库序列号_jp", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
-            // entity.serialsummary.inboundserialno
-            new TranslationSeedItem("entity.serialsummary.inboundserialno", "zh-CN", "入库序列号", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
-            // entity.serialsummary.inboundserialno
-            new TranslationSeedItem("entity.serialsummary.inboundserialno", "zh-HK", "入库序列号_hk", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
+            // entity.serialsummary.inboundserialcode
+            new TranslationSeedItem("entity.serialsummary.inboundserialcode", "en-US", "入库序列号_us", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
+            // entity.serialsummary.inboundserialcode
+            new TranslationSeedItem("entity.serialsummary.inboundserialcode", "ja-JP", "入库序列号_jp", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
+            // entity.serialsummary.inboundserialcode
+            new TranslationSeedItem("entity.serialsummary.inboundserialcode", "zh-CN", "入库序列号", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
+            // entity.serialsummary.inboundserialcode
+            new TranslationSeedItem("entity.serialsummary.inboundserialcode", "zh-HK", "入库序列号_hk", "入库序列号（计算后的业务序号；租户+公司+工厂内唯一）"),
 
             // entity.serialsummary.inboundquantity
             new TranslationSeedItem("entity.serialsummary.inboundquantity", "en-US", "入库数量_us", "入库数量"),
@@ -144,32 +135,32 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialsummary.inboundquantity
             new TranslationSeedItem("entity.serialsummary.inboundquantity", "zh-HK", "入库数量_hk", "入库数量"),
 
-            // entity.serialsummary.productinboundserialno
-            new TranslationSeedItem("entity.serialsummary.productinboundserialno", "en-US", "产品入库序列号_us", "产品入库序列号（原始扫描号码）"),
-            // entity.serialsummary.productinboundserialno
-            new TranslationSeedItem("entity.serialsummary.productinboundserialno", "ja-JP", "产品入库序列号_jp", "产品入库序列号（原始扫描号码）"),
-            // entity.serialsummary.productinboundserialno
-            new TranslationSeedItem("entity.serialsummary.productinboundserialno", "zh-CN", "产品入库序列号", "产品入库序列号（原始扫描号码）"),
-            // entity.serialsummary.productinboundserialno
-            new TranslationSeedItem("entity.serialsummary.productinboundserialno", "zh-HK", "产品入库序列号_hk", "产品入库序列号（原始扫描号码）"),
+            // entity.serialsummary.productinboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productinboundserialcode", "en-US", "产品入库序列号_us", "产品入库序列号（原始扫描号码）"),
+            // entity.serialsummary.productinboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productinboundserialcode", "ja-JP", "产品入库序列号_jp", "产品入库序列号（原始扫描号码）"),
+            // entity.serialsummary.productinboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productinboundserialcode", "zh-CN", "产品入库序列号", "产品入库序列号（原始扫描号码）"),
+            // entity.serialsummary.productinboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productinboundserialcode", "zh-HK", "产品入库序列号_hk", "产品入库序列号（原始扫描号码）"),
 
-            // entity.serialsummary.outboundno
-            new TranslationSeedItem("entity.serialsummary.outboundno", "en-US", "出库单号_us", "出库单号（未出库时为空）"),
-            // entity.serialsummary.outboundno
-            new TranslationSeedItem("entity.serialsummary.outboundno", "ja-JP", "出库单号_jp", "出库单号（未出库时为空）"),
-            // entity.serialsummary.outboundno
-            new TranslationSeedItem("entity.serialsummary.outboundno", "zh-CN", "出库单号", "出库单号（未出库时为空）"),
-            // entity.serialsummary.outboundno
-            new TranslationSeedItem("entity.serialsummary.outboundno", "zh-HK", "出库单号_hk", "出库单号（未出库时为空）"),
+            // entity.serialsummary.outboundcode
+            new TranslationSeedItem("entity.serialsummary.outboundcode", "en-US", "出库单号_us", "出库单号（未出库时为空）"),
+            // entity.serialsummary.outboundcode
+            new TranslationSeedItem("entity.serialsummary.outboundcode", "ja-JP", "出库单号_jp", "出库单号（未出库时为空）"),
+            // entity.serialsummary.outboundcode
+            new TranslationSeedItem("entity.serialsummary.outboundcode", "zh-CN", "出库单号", "出库单号（未出库时为空）"),
+            // entity.serialsummary.outboundcode
+            new TranslationSeedItem("entity.serialsummary.outboundcode", "zh-HK", "出库单号_hk", "出库单号（未出库时为空）"),
 
-            // entity.serialsummary.shippinginvoiceno
-            new TranslationSeedItem("entity.serialsummary.shippinginvoiceno", "en-US", "发货单号_us", "发货单号（未出库时为空）"),
-            // entity.serialsummary.shippinginvoiceno
-            new TranslationSeedItem("entity.serialsummary.shippinginvoiceno", "ja-JP", "发货单号_jp", "发货单号（未出库时为空）"),
-            // entity.serialsummary.shippinginvoiceno
-            new TranslationSeedItem("entity.serialsummary.shippinginvoiceno", "zh-CN", "发货单号", "发货单号（未出库时为空）"),
-            // entity.serialsummary.shippinginvoiceno
-            new TranslationSeedItem("entity.serialsummary.shippinginvoiceno", "zh-HK", "发货单号_hk", "发货单号（未出库时为空）"),
+            // entity.serialsummary.shippinginvoicecode
+            new TranslationSeedItem("entity.serialsummary.shippinginvoicecode", "en-US", "发货单号_us", "发货单号（未出库时为空）"),
+            // entity.serialsummary.shippinginvoicecode
+            new TranslationSeedItem("entity.serialsummary.shippinginvoicecode", "ja-JP", "发货单号_jp", "发货单号（未出库时为空）"),
+            // entity.serialsummary.shippinginvoicecode
+            new TranslationSeedItem("entity.serialsummary.shippinginvoicecode", "zh-CN", "发货单号", "发货单号（未出库时为空）"),
+            // entity.serialsummary.shippinginvoicecode
+            new TranslationSeedItem("entity.serialsummary.shippinginvoicecode", "zh-HK", "发货单号_hk", "发货单号（未出库时为空）"),
 
             // entity.serialsummary.loadingdate
             new TranslationSeedItem("entity.serialsummary.loadingdate", "en-US", "装车日期_us", "装车日期（未装车时为空）"),
@@ -207,14 +198,14 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialsummary.outbounddate
             new TranslationSeedItem("entity.serialsummary.outbounddate", "zh-HK", "出库日期_hk", "出库日期（未出库时为空）"),
 
-            // entity.serialsummary.outboundserialno
-            new TranslationSeedItem("entity.serialsummary.outboundserialno", "en-US", "出库序列号_us", "出库序列号（计算后的业务序号；未出库时为空）"),
-            // entity.serialsummary.outboundserialno
-            new TranslationSeedItem("entity.serialsummary.outboundserialno", "ja-JP", "出库序列号_jp", "出库序列号（计算后的业务序号；未出库时为空）"),
-            // entity.serialsummary.outboundserialno
-            new TranslationSeedItem("entity.serialsummary.outboundserialno", "zh-CN", "出库序列号", "出库序列号（计算后的业务序号；未出库时为空）"),
-            // entity.serialsummary.outboundserialno
-            new TranslationSeedItem("entity.serialsummary.outboundserialno", "zh-HK", "出库序列号_hk", "出库序列号（计算后的业务序号；未出库时为空）"),
+            // entity.serialsummary.outboundserialcode
+            new TranslationSeedItem("entity.serialsummary.outboundserialcode", "en-US", "出库序列号_us", "出库序列号（计算后的业务序号；未出库时为空）"),
+            // entity.serialsummary.outboundserialcode
+            new TranslationSeedItem("entity.serialsummary.outboundserialcode", "ja-JP", "出库序列号_jp", "出库序列号（计算后的业务序号；未出库时为空）"),
+            // entity.serialsummary.outboundserialcode
+            new TranslationSeedItem("entity.serialsummary.outboundserialcode", "zh-CN", "出库序列号", "出库序列号（计算后的业务序号；未出库时为空）"),
+            // entity.serialsummary.outboundserialcode
+            new TranslationSeedItem("entity.serialsummary.outboundserialcode", "zh-HK", "出库序列号_hk", "出库序列号（计算后的业务序号；未出库时为空）"),
 
             // entity.serialsummary.outboundquantity
             new TranslationSeedItem("entity.serialsummary.outboundquantity", "en-US", "出库数量_us", "出库数量"),
@@ -225,14 +216,14 @@ public class TaktSerialSummaryI18nSeedData : ITaktSeedDataCoordinator
             // entity.serialsummary.outboundquantity
             new TranslationSeedItem("entity.serialsummary.outboundquantity", "zh-HK", "出库数量_hk", "出库数量"),
 
-            // entity.serialsummary.productoutboundserialno
-            new TranslationSeedItem("entity.serialsummary.productoutboundserialno", "en-US", "产品出库序列号_us", "产品出库序列号（原始扫描号码；未出库时为空）"),
-            // entity.serialsummary.productoutboundserialno
-            new TranslationSeedItem("entity.serialsummary.productoutboundserialno", "ja-JP", "产品出库序列号_jp", "产品出库序列号（原始扫描号码；未出库时为空）"),
-            // entity.serialsummary.productoutboundserialno
-            new TranslationSeedItem("entity.serialsummary.productoutboundserialno", "zh-CN", "产品出库序列号", "产品出库序列号（原始扫描号码；未出库时为空）"),
-            // entity.serialsummary.productoutboundserialno
-            new TranslationSeedItem("entity.serialsummary.productoutboundserialno", "zh-HK", "产品出库序列号_hk", "产品出库序列号（原始扫描号码；未出库时为空）"),
+            // entity.serialsummary.productoutboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productoutboundserialcode", "en-US", "产品出库序列号_us", "产品出库序列号（原始扫描号码；未出库时为空）"),
+            // entity.serialsummary.productoutboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productoutboundserialcode", "ja-JP", "产品出库序列号_jp", "产品出库序列号（原始扫描号码；未出库时为空）"),
+            // entity.serialsummary.productoutboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productoutboundserialcode", "zh-CN", "产品出库序列号", "产品出库序列号（原始扫描号码；未出库时为空）"),
+            // entity.serialsummary.productoutboundserialcode
+            new TranslationSeedItem("entity.serialsummary.productoutboundserialcode", "zh-HK", "产品出库序列号_hk", "产品出库序列号（原始扫描号码；未出库时为空）"),
         };
     }
 

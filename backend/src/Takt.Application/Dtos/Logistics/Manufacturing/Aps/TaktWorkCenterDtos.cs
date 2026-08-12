@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Aps
 // 文件名称：TaktWorkCenterDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：WorkCenter 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktWorkCenter 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktWorkCenterDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkCenterId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工作中心编码
@@ -46,9 +42,9 @@ public class TaktWorkCenterDto : TaktCompanyDtoBase
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    public string WorkCenterName { get; set; } = string.Empty;
+    public string WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -84,7 +80,12 @@ public class TaktWorkCenterQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -94,9 +95,9 @@ public class TaktWorkCenterQueryDto : TaktPagedQuery
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    public string? WorkCenterName { get; set; } = string.Empty;
+    public string? WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -144,14 +145,14 @@ public class TaktWorkCenterCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -161,10 +162,10 @@ public class TaktWorkCenterCreateDto
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    [Required(ErrorMessage = "工作中心名称不能为空")]
-    public string WorkCenterName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "工作中心描述不能为空")]
+    public string WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -257,7 +258,12 @@ public class TaktWorkCenterTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -267,9 +273,9 @@ public class TaktWorkCenterTemplateDto
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    public string? WorkCenterName { get; set; } = string.Empty;
+    public string? WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -309,12 +315,12 @@ public class TaktWorkCenterImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -324,9 +330,9 @@ public class TaktWorkCenterImportDto
     public string? WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    public string? WorkCenterName { get; set; } = string.Empty;
+    public string? WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
@@ -372,7 +378,7 @@ public class TaktWorkCenterExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -382,9 +388,9 @@ public class TaktWorkCenterExportDto
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    public string WorkCenterName { get; set; } = string.Empty;
+    public string WorkCenterDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）

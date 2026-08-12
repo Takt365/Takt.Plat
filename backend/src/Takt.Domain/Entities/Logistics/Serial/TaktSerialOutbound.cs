@@ -21,26 +21,21 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarTable("takt_logistics_serial_outbound", "序列号出库表")]
 [SugarIndex("ix_serial_outbound_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_outbound_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_outbound_outbound_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(OutboundNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_outbound_outbound_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(OutboundCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_serial_outbound_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_outbound_outbound_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundDate), OrderByType.Asc, false)]
 public class TaktSerialOutbound : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 出库单号（租户+公司+工厂内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "outbound_no", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string OutboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "outbound_code", ColumnDescription = "出库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string OutboundCode { get; set; } = string.Empty;
     /// <summary>
     /// 发货单号
     /// </summary>
-    [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "shipping_invoice_code", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false, DefaultValue = "")]
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
     /// <summary>
     /// 装车日期
     /// </summary>

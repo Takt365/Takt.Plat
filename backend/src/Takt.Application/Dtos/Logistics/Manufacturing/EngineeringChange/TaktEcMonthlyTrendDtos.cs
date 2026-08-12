@@ -66,6 +66,11 @@ public class TaktEcMonthlyTrendQueryDto : TaktPagedQuery
     /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string? EcCode { get; set; }
 }
 
 /// <summary>
@@ -117,6 +122,11 @@ public class TaktEcMonthlyTrendDto
     /// 环比变动率（小数比率，保留 4 位）
     /// </summary>
     public decimal? VariancePercent { get; set; }
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>

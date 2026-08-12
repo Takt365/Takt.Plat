@@ -330,7 +330,7 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.OfferId).Contains(keywords)
-                || (x.TodoNo != null && x.TodoNo.Contains(keywords))
+                || (x.TodoCode != null && x.TodoCode.Contains(keywords))
                 || (x.CandidateName != null && x.CandidateName.Contains(keywords))
                 || (x.Mobile != null && x.Mobile.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
@@ -339,6 +339,7 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
                 || SqlFunc.ToString(x.EmployeeJoinedId).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
                 || SqlFunc.ToString(x.TodoStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedJoinedDate).Contains(keywords)
@@ -351,9 +352,9 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             exp = exp.And(x => x.OfferId == queryDto.OfferId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TodoNo))
+        if (!string.IsNullOrEmpty(queryDto?.TodoCode))
         {
-            exp = exp.And(x => x.TodoNo != null && x.TodoNo.Contains(queryDto.TodoNo));
+            exp = exp.And(x => x.TodoCode != null && x.TodoCode.Contains(queryDto.TodoCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CandidateName))
@@ -396,6 +397,11 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
             exp = exp.And(x => x.TodoStatus == queryDto.TodoStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -425,6 +431,12 @@ public class TaktEmployeeOnboardingService : TaktServiceBase, ITaktEmployeeOnboa
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

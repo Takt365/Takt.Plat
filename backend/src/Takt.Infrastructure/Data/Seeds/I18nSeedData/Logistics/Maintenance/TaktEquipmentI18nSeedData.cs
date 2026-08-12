@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Maintenance
 // 文件名称：TaktEquipmentI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,23 +90,14 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipment._self
             new TranslationSeedItem("entity.equipment._self", "zh-HK", "Takt工厂设备信息_hk", "实体名称"),
 
-            // entity.equipment.plantcode
-            new TranslationSeedItem("entity.equipment.plantcode", "en-US", "工厂代码_us", "工厂代码（不可空）"),
-            // entity.equipment.plantcode
-            new TranslationSeedItem("entity.equipment.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（不可空）"),
-            // entity.equipment.plantcode
-            new TranslationSeedItem("entity.equipment.plantcode", "zh-CN", "工厂代码", "工厂代码（不可空）"),
-            // entity.equipment.plantcode
-            new TranslationSeedItem("entity.equipment.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（不可空）"),
-
-            // entity.equipment.code
-            new TranslationSeedItem("entity.equipment.code", "en-US", "设备编码_us", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
-            // entity.equipment.code
-            new TranslationSeedItem("entity.equipment.code", "ja-JP", "设备编码_jp", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
-            // entity.equipment.code
-            new TranslationSeedItem("entity.equipment.code", "zh-CN", "设备编码", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
-            // entity.equipment.code
-            new TranslationSeedItem("entity.equipment.code", "zh-HK", "设备编码_hk", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
+            // entity.equipment.equipcode
+            new TranslationSeedItem("entity.equipment.equipcode", "en-US", "设备编码_us", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
+            // entity.equipment.equipcode
+            new TranslationSeedItem("entity.equipment.equipcode", "ja-JP", "设备编码_jp", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
+            // entity.equipment.equipcode
+            new TranslationSeedItem("entity.equipment.equipcode", "zh-CN", "设备编码", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
+            // entity.equipment.equipcode
+            new TranslationSeedItem("entity.equipment.equipcode", "zh-HK", "设备编码_hk", "设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）"),
 
             // entity.equipment.name
             new TranslationSeedItem("entity.equipment.name", "en-US", "设备名称_us", "设备名称"),
@@ -135,23 +126,23 @@ public class TaktEquipmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipment.model
             new TranslationSeedItem("entity.equipment.model", "zh-HK", "设备型号_hk", "设备型号"),
 
-            // entity.equipment.specification
-            new TranslationSeedItem("entity.equipment.specification", "en-US", "设备规格_us", "设备规格"),
-            // entity.equipment.specification
-            new TranslationSeedItem("entity.equipment.specification", "ja-JP", "设备规格_jp", "设备规格"),
-            // entity.equipment.specification
-            new TranslationSeedItem("entity.equipment.specification", "zh-CN", "设备规格", "设备规格"),
-            // entity.equipment.specification
-            new TranslationSeedItem("entity.equipment.specification", "zh-HK", "设备规格_hk", "设备规格"),
+            // entity.equipment.equipspecification
+            new TranslationSeedItem("entity.equipment.equipspecification", "en-US", "设备规格_us", "设备规格"),
+            // entity.equipment.equipspecification
+            new TranslationSeedItem("entity.equipment.equipspecification", "ja-JP", "设备规格_jp", "设备规格"),
+            // entity.equipment.equipspecification
+            new TranslationSeedItem("entity.equipment.equipspecification", "zh-CN", "设备规格", "设备规格"),
+            // entity.equipment.equipspecification
+            new TranslationSeedItem("entity.equipment.equipspecification", "zh-HK", "设备规格_hk", "设备规格"),
 
-            // entity.equipment.brand
-            new TranslationSeedItem("entity.equipment.brand", "en-US", "设备品牌_us", "设备品牌"),
-            // entity.equipment.brand
-            new TranslationSeedItem("entity.equipment.brand", "ja-JP", "设备品牌_jp", "设备品牌"),
-            // entity.equipment.brand
-            new TranslationSeedItem("entity.equipment.brand", "zh-CN", "设备品牌", "设备品牌"),
-            // entity.equipment.brand
-            new TranslationSeedItem("entity.equipment.brand", "zh-HK", "设备品牌_hk", "设备品牌"),
+            // entity.equipment.equipbrand
+            new TranslationSeedItem("entity.equipment.equipbrand", "en-US", "设备品牌_us", "设备品牌"),
+            // entity.equipment.equipbrand
+            new TranslationSeedItem("entity.equipment.equipbrand", "ja-JP", "设备品牌_jp", "设备品牌"),
+            // entity.equipment.equipbrand
+            new TranslationSeedItem("entity.equipment.equipbrand", "zh-CN", "设备品牌", "设备品牌"),
+            // entity.equipment.equipbrand
+            new TranslationSeedItem("entity.equipment.equipbrand", "zh-HK", "设备品牌_hk", "设备品牌"),
 
             // entity.equipment.manufacturer
             new TranslationSeedItem("entity.equipment.manufacturer", "en-US", "制造商_us", "制造商"),

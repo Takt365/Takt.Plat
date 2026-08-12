@@ -28,6 +28,7 @@ export const PURCHASEPRICESCALEQUANTITY_LIST_FIELDS = [
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ] as const
 
@@ -41,6 +42,7 @@ export const PURCHASEPRICESCALEQUANTITY_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
   'action',
 ] as const
@@ -53,6 +55,7 @@ export const PURCHASEPRICESCALEQUANTITY_SUMMARY_SUM_FIELDS = [
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ] as const
 
@@ -68,7 +71,9 @@ export const PURCHASEPRICESCALEQUANTITY_PLACEHOLDER = {
   price: 'select',
   untaxedPrice: 'select',
   taxIncludedPrice: 'select',
+  taxAmount: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -85,7 +90,7 @@ export const PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS = [
 
 export type PurchasePriceScaleQuantityQueryField =
   | (typeof PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS)[number]
-  | 'purchasePriceSeq' | 'purchaseScaleSeq' | 'scaleQuantity' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'isObsolete'
+  | 'purchasePriceSeq' | 'purchaseScaleSeq' | 'scaleQuantity' | 'price' | 'untaxedPrice' | 'taxIncludedPrice' | 'taxAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEPRICESCALEQUANTITY_QUERY_FIELDS: readonly PurchasePriceScaleQuantityQueryField[] = [
@@ -96,6 +101,7 @@ export const PURCHASEPRICESCALEQUANTITY_QUERY_FIELDS: readonly PurchasePriceScal
   'price',
   'untaxedPrice',
   'taxIncludedPrice',
+  'taxAmount',
   'isObsolete',
 ]
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktPersonnelOperationRateDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PersonnelOperationRate 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPersonnelOperationRate 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktPersonnelOperationRateDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PersonnelOperationRateId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 时间类别（1=天，2=周，3=月）
@@ -66,14 +62,14 @@ public class TaktPersonnelOperationRateDto : TaktCompanyDtoBase
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -208,7 +204,12 @@ public class TaktPersonnelOperationRateQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -248,14 +249,14 @@ public class TaktPersonnelOperationRateQueryDto : TaktPagedQuery
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -408,14 +409,14 @@ public class TaktPersonnelOperationRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -444,15 +445,15 @@ public class TaktPersonnelOperationRateCreateDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）不能为空")]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -640,7 +641,12 @@ public class TaktPersonnelOperationRateTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -670,14 +676,14 @@ public class TaktPersonnelOperationRateTemplateDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -817,12 +823,12 @@ public class TaktPersonnelOperationRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -852,14 +858,14 @@ public class TaktPersonnelOperationRateImportDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -1005,7 +1011,7 @@ public class TaktPersonnelOperationRateExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -1035,14 +1041,14 @@ public class TaktPersonnelOperationRateExportDto
     public int? MonthNumber { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组名称
     /// </summary>
-    public string? ProdTeamName { get; set; } = string.Empty;
+    public string? TeamCodeName { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）

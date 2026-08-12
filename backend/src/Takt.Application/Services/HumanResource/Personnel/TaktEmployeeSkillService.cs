@@ -260,6 +260,7 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
                 || SqlFunc.ToString(x.SkillLevel).Contains(keywords)
                 || (x.CertificateName != null && x.CertificateName.Contains(keywords))
                 || (x.CertificateCode != null && x.CertificateCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ObtainedDate).Contains(keywords)
@@ -303,6 +304,11 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
             exp = exp.And(x => x.CertificateCode != null && x.CertificateCode.Contains(queryDto.CertificateCode));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -342,6 +348,12 @@ public class TaktEmployeeSkillService : TaktServiceBase, ITaktEmployeeSkillServi
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

@@ -12,7 +12,7 @@
     <ec-monthly-trend-query-form
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
-      v-model:ec-no="ecNo"
+      v-model:ec-code="ecCode"
       v-model:ec-distinction="ecDistinction"
       v-model:change-status="changeStatus"
       v-model:ec-status="ecStatus"
@@ -63,7 +63,7 @@
       :active-tab="activeTab"
       :plant-code="plantCode"
       :period-range="periodRange"
-      :ec-no="ecNo"
+      :ec-code="ecCode"
       :ec-distinction="ecDistinction"
       :change-status="changeStatus"
       :ec-status="ecStatus"
@@ -86,7 +86,6 @@ import {
   RiListCheck,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import EcMonthlyTrendQueryForm from './components/ec-monthly-trend-query-form.vue'
@@ -104,7 +103,7 @@ const plantCode = ref<string | undefined>()
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(null)
 /** 设变单号 */
-const ecNo = ref('')
+const ecCode = ref<string | undefined>()
 /** 区分 */
 const ecDistinction = ref<number | undefined>()
 /** 变更状态 */
@@ -112,7 +111,7 @@ const changeStatus = ref<number | undefined>()
 /** 设变状态 */
 const ecStatus = ref<number | undefined>()
 /** 部门编码（设变推移 / 实施推移） */
-const deptCode = ref('')
+const deptCode = ref<string | undefined>()
 /** 明细面板 loading */
 const panelLoading = ref(false)
 /** 导出 loading */
@@ -150,8 +149,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -190,24 +188,23 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
+/** 清空工厂级联与结果 */
+function clearPlantCascade() {
+  plantCode.value = undefined
+  deptCode.value = undefined
+  ecCode.value = undefined
+  hasRows.value = false
+  panelRef.value?.clear?.()
 }
 
 /** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
-  ecNo.value = ''
+function handleReset() {
+  clearPlantCascade()
   ecDistinction.value = undefined
   changeStatus.value = undefined
   ecStatus.value = undefined
-  deptCode.value = ''
   applyDefaultPeriodRange()
   trendFilter.value = ''
-  hasRows.value = false
-  panelRef.value?.clear?.()
 }
 
 /** 导出 */
@@ -231,14 +228,13 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    clearPlantCascade()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
   void getTaktDefaultPageSize()
 })
 </script>

@@ -28,7 +28,7 @@ export interface QualityCostTrendQuery extends TaktPagedQuery {
   /** 成本类别：assurance / issue / incident */
   costCategory?: string;
   /** 成本币种 */
-  costCurrency?: string;
+  currencyCode?: string;
   /** 涨跌筛选 */
   trendFilter?: string;
 }
@@ -45,7 +45,7 @@ export interface QualityCostTrend {
   /** 成本类别显示名 */
   costCategoryName?: string | null;
   /** 成本币种 */
-  costCurrency: string;
+  currencyCode: string;
   /** 各期间汇总金额 */
   periodAmounts?: Record<string, number>;
   /** 环比涨跌 */

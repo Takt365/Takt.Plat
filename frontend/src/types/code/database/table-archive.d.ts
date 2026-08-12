@@ -49,6 +49,11 @@ export interface TableArchive extends CompanyDtoBase {
 
 /** 分页查询 */
 export interface TableArchiveQuery extends TaktPagedQuery {
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
   targetTenantCode?: string;
   targetDatabaseName?: string;
   tableName?: string;
@@ -68,7 +73,15 @@ export interface TableArchiveQuery extends TaktPagedQuery {
 export interface TableArchiveCreate {
   tenantCode?: string;
   companyCode?: string;
-  companyDefaultCulture?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
   targetTenantCode: string;
   targetDatabaseName: string;
   tableName: string;

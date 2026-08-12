@@ -26,7 +26,7 @@ export const PCBAINSPECTION_LIST_FIELDS = [
   'prodOrderCode',
   'prodOrderQty',
   'modelCode',
-  'batchNo',
+  'batchCode',
   'materialCode',
 ] as const
 
@@ -41,7 +41,7 @@ export const PCBAINSPECTION_PLACEHOLDER = {
   prodOrderCode: 'select',
   prodOrderQty: 'select',
   modelCode: 'required',
-  batchNo: 'optional',
+  batchCode: 'optional',
   materialCode: 'required',
   extField: 'optional',
   remark: 'optional',
@@ -57,7 +57,7 @@ export const PCBAINSPECTION_QUERY_STRING_FIELDS = [
   'prodOrderType',
   'prodOrderCode',
   'modelCode',
-  'batchNo',
+  'batchCode',
   'materialCode',
   'createdAtStart',
   'createdAtEnd',

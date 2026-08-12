@@ -35,7 +35,7 @@
                   v-model:value="formState.prodOrderCode"
                   :placeholder="pi.ph('prodOrderCode')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="12"
                   allow-clear
                   :disabled="!!formData?.pcbaOutputDetailId"
                 />
@@ -69,25 +69,26 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodTeam')"
-                name="prodTeam"
+                :label="pi.label('teamCode')"
+                name="teamCode"
               >
                 <TaktSelect
-                  v-model:value="formState.prodTeam"
+                  v-model:value="formState.teamCode"
                   api-url="TaktProductionTeams/options"
-                  :placeholder="pi.ph('prodTeam')"
+                  :placeholder="pi.ph('teamCode')"
+                  :disabled="!!formData?.pcbaOutputDetailId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('productionEquipmentCode')"
-                name="productionEquipmentCode"
+                :label="pi.label('prodEquipCode')"
+                name="prodEquipCode"
               >
                 <TaktSelect
-                  v-model:value="formState.productionEquipmentCode"
+                  v-model:value="formState.prodEquipCode"
                   api-url="TaktProductionEquipments/options"
-                  :placeholder="pi.ph('productionEquipmentCode')"
+                  :placeholder="pi.ph('prodEquipCode')"
                   :disabled="!!formData?.pcbaOutputDetailId"
                 />
               </a-form-item>
@@ -145,10 +146,12 @@
                 :label="pi.label('pcbBoardType')"
                 name="pcbBoardType"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.pcbBoardType"
-                  dict-type="logistics_pcba_function_category"
                   :placeholder="pi.ph('pcbBoardType')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -200,15 +203,16 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('serialNo')"
-                name="serialNo"
+                :label="pi.label('serialCode')"
+                name="serialCode"
               >
                 <a-input
-                  v-model:value="formState.serialNo"
-                  :placeholder="pi.ph('serialNo')"
+                  v-model:value="formState.serialCode"
+                  :placeholder="pi.ph('serialCode')"
                   show-count
                   :maxlength="80"
                   allow-clear
+                  :disabled="!!formData?.pcbaOutputDetailId"
                 />
               </a-form-item>
             </a-col>
@@ -241,10 +245,12 @@
                 :label="pi.label('downtimeReason')"
                 name="downtimeReason"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.downtimeReason"
-                  dict-type="logistics_stop_reason_category"
                   :placeholder="pi.ph('downtimeReason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -335,10 +341,12 @@
                 :label="pi.label('unachievedReason')"
                 name="unachievedReason"
               >
-                <TaktSelect
+                <a-input
                   v-model:value="formState.unachievedReason"
-                  dict-type="logistics_nonachievement_reason_category"
                   :placeholder="pi.ph('unachievedReason')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -406,11 +414,9 @@ import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { usePcbaOutputDetailI18n } from '../composables/use-pcba-output-detail-i18n'
-import { usePcbaOutputDetailDictFormat } from '../composables/use-pcba-output-detail-dict-format'
 
 /** 实体字段 i18n */
 const pi = usePcbaOutputDetailI18n()
-const { hydrateDetailDictFields, formatDetailDictFieldsForSubmit } = usePcbaOutputDetailDictFormat()
 
 import type { PcbaOutputDetailCreate } from '@/types/logistics/manufacturing/output/pcba-output-detail'
 import TaktSelect from '@/components/business/takt-select/index.vue'
@@ -423,9 +429,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","timePeriod","prodTeam","productionEquipmentCode","directLabor","indirectLabor","shiftNo","stdShorts","pcbBoardType","panelSide","batchQty","dailyCompletedQty","serialNo","defectCount","downtimeMinutes","downtimeReason","downtimeDescription","repairMinutes","switchCount","switchTime","stopTime","totalMinutes","unachievedReason","unachievedDescription","confirmMinutes","mixedProd","isObsolete"]
-
-
+const formFields = ["prodOrderCode","lineNumber","timePeriod","teamCode","prodEquipCode","directLabor","indirectLabor","shiftNo","stdShorts","pcbBoardType","panelSide","batchQty","dailyCompletedQty","serialCode","defectCount","downtimeMinutes","downtimeReason","downtimeDescription","repairMinutes","switchCount","switchTime","stopTime","totalMinutes","unachievedReason","unachievedDescription","confirmMinutes","mixedProd","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -465,7 +469,6 @@ watch(
   (val) => {
     if (val?.pcbaOutputDetailId) {
       const next = { ...val } as Record<string, unknown>
-      hydrateDetailDictFields(next)
       Object.keys(formState).forEach((k) => delete formState[k])
 
       Object.assign(formState, next)
@@ -473,9 +476,7 @@ watch(
     } else {
       Object.keys(formState).forEach((k) => delete formState[k])
       if (val && typeof val === 'object' && Object.keys(val).length > 0) {
-        const next = { ...val } as Record<string, unknown>
-        hydrateDetailDictFields(next)
-        Object.assign(formState, next)
+        Object.assign(formState, val)
       }
       applyFormDefaults(formState)
       formRef.value?.clearValidate()
@@ -513,17 +514,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  prodTeam: [
+  teamCode: [
     {
       required: true,
-      message: pi.ph('prodTeam'),
+      message: pi.ph('teamCode'),
       trigger: 'change'
     }
   ],
-  productionEquipmentCode: [
+  prodEquipCode: [
     {
       required: true,
-      message: pi.ph('productionEquipmentCode'),
+      message: pi.ph('prodEquipCode'),
       trigger: 'change'
     }
   ],
@@ -583,7 +584,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('pcbBoardType'),
-      trigger: 'change'
+      trigger: 'blur'
     }
   ],
   panelSide: [
@@ -619,10 +620,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  serialNo: [
+  serialCode: [
     {
       required: true,
-      message: pi.ph('serialNo'),
+      message: pi.ph('serialCode'),
       trigger: 'blur'
     }
   ],
@@ -836,7 +837,6 @@ function getValues(): Record<string, any> {
     payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  formatDetailDictFieldsForSubmit(payload)
   payload.pcbaOutputId = props.masterId
   return payload
 }
@@ -845,9 +845,7 @@ function getValues(): Record<string, any> {
 function resetFields() {
   Object.keys(formState).forEach((k) => delete formState[k])
   if (props.formData && typeof props.formData === 'object') {
-    const next = { ...props.formData } as Record<string, unknown>
-    hydrateDetailDictFields(next)
-    Object.assign(formState, next)
+    Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
   activeTab.value = 'tab-0'

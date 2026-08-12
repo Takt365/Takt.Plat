@@ -27,7 +27,7 @@ export const ASSYDEFECTDETAIL_LIST_FIELDS = [
   'defectCategory',
   'defectQty',
   'cumulativeDefectQty',
-  'randomCardNo',
+  'randomCardCode',
   'occurrenceEngineering',
   'testStep',
   'defectSymptom',
@@ -46,7 +46,7 @@ export const ASSYDEFECTDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'defectCategory',
   'defectQty',
   'cumulativeDefectQty',
-  'randomCardNo',
+  'randomCardCode',
   'occurrenceEngineering',
   'testStep',
   'defectSymptom',
@@ -77,7 +77,7 @@ export const ASSYDEFECTDETAIL_PLACEHOLDER = {
   defectCategory: 'optional',
   defectQty: 'select',
   cumulativeDefectQty: 'select',
-  randomCardNo: 'optional',
+  randomCardCode: 'optional',
   occurrenceEngineering: 'optional',
   testStep: 'optional',
   defectSymptom: 'optional',
@@ -85,6 +85,7 @@ export const ASSYDEFECTDETAIL_PLACEHOLDER = {
   defectReason: 'optional',
   repairOperator: 'optional',
   assyDefectId: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -94,7 +95,7 @@ export type AssyDefectDetailField = keyof typeof ASSYDEFECTDETAIL_PLACEHOLDER
 export const ASSYDEFECTDETAIL_QUERY_STRING_FIELDS = [
   'prodOrderCode',
   'defectCategory',
-  'randomCardNo',
+  'randomCardCode',
   'occurrenceEngineering',
   'testStep',
   'defectSymptom',

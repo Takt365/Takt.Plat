@@ -47,14 +47,14 @@ public static class TaktEcDeptViewMapper
                 dto.Remark = mp.Remark;
                 dto.PurchaseOrderIssueDate = mp.PurchaseOrderIssueDate;
                 dto.Supplier = mp.Supplier;
-                dto.PurchaseOrderNo = mp.PurchaseOrderNo;
+                dto.PurchaseOrderCode = mp.PurchaseOrderCode;
                 break;
             case TaktEcUkeken iqc:
                 dto.EcExecId = iqc.Id;
                 dto.IsImplemented = iqc.IsImplemented;
                 dto.Content = iqc.ExecContent;
                 dto.Remark = iqc.Remark;
-                dto.IqcOrderNo = iqc.IqcOrderNo;
+                dto.IqcOrderCode = iqc.IqcOrderCode;
                 dto.InspectionDate = iqc.InspectionDate;
                 break;
             case TaktEcBukan mc:
@@ -73,7 +73,7 @@ public static class TaktEcDeptViewMapper
                 dto.ProductionDate = pcba.ProductionDate;
                 dto.ProductionBatch = pcba.ProductionBatch;
                 dto.ProductionTeam = pcba.ProductionTeam;
-                dto.OutboundOrderNo = pcba.OutboundOrderNo;
+                dto.OutboundOrderCode = pcba.OutboundOrderCode;
                 break;
             case TaktEcSeizouikka assy:
                 dto.EcExecId = assy.Id;
@@ -92,7 +92,7 @@ public static class TaktEcDeptViewMapper
                 dto.ProductionTeam = qa.ProductionTeam;
                 dto.InspectionDate = qa.InspectionDate;
                 dto.InspectionBatch = qa.InspectionBatch;
-                dto.SamplingNo = qa.SamplingNo;
+                dto.SamplingCode = qa.SamplingCode;
                 break;
             case TaktEcSeizougijutsu te:
                 dto.EcExecId = te.Id;
@@ -132,19 +132,19 @@ public static class TaktEcDeptViewMapper
         if (row.OldProductHandling != null) dto.OldProductHandling = row.OldProductHandling;
         if (row.PurchaseOrderIssueDate.HasValue) dto.PurchaseOrderIssueDate = row.PurchaseOrderIssueDate;
         if (row.Supplier != null) dto.Supplier = row.Supplier;
-        if (row.PurchaseOrderNo != null) dto.PurchaseOrderNo = row.PurchaseOrderNo;
-        if (row.IqcOrderNo != null) dto.IqcOrderNo = row.IqcOrderNo;
+        if (row.PurchaseOrderCode != null) dto.PurchaseOrderCode = row.PurchaseOrderCode;
+        if (row.IqcOrderCode != null) dto.IqcOrderCode = row.IqcOrderCode;
         if (row.InspectionDate.HasValue) dto.InspectionDate = row.InspectionDate;
         if (row.OutboundBatch != null) dto.OutboundBatch = row.OutboundBatch;
         if (row.OutboundDate.HasValue) dto.OutboundDate = row.OutboundDate;
         if (row.ProductionDate.HasValue) dto.ProductionDate = row.ProductionDate;
         if (row.ProductionBatch != null) dto.ProductionBatch = row.ProductionBatch;
-        if (row.OutboundOrderNo != null) dto.OutboundOrderNo = row.OutboundOrderNo;
+        if (row.OutboundOrderCode != null) dto.OutboundOrderCode = row.OutboundOrderCode;
         if (row.ProductionTeam != null) dto.ProductionTeam = row.ProductionTeam;
         if (row.ImplementationDate.HasValue) dto.ImplementationDate = row.ImplementationDate;
         if (row.ImplementationBatch != null) dto.ImplementationBatch = row.ImplementationBatch;
         if (row.InspectionBatch != null) dto.InspectionBatch = row.InspectionBatch;
-        if (row.SamplingNo != null) dto.SamplingNo = row.SamplingNo;
+        if (row.SamplingCode != null) dto.SamplingCode = row.SamplingCode;
         if (row.ConfirmationDate.HasValue) dto.ConfirmationDate = row.ConfirmationDate;
         if (row.IsSopUpdated.HasValue) dto.IsSopUpdated = row.IsSopUpdated.Value;
         if (row.Remark != null) dto.Remark = row.Remark;
@@ -179,14 +179,14 @@ public static class TaktEcDeptViewMapper
                 dto.Remark = mp.Remark;
                 dto.PurchaseOrderIssueDate = mp.PurchaseOrderIssueDate;
                 dto.Supplier = mp.Supplier;
-                dto.PurchaseOrderNo = mp.PurchaseOrderNo;
+                dto.PurchaseOrderCode = mp.PurchaseOrderCode;
                 break;
             case TaktEcUkeken iqc:
                 dto.EcDetailId = iqc.EcnDetailId;
                 dto.IsImplemented = iqc.IsImplemented;
                 dto.Content = iqc.ExecContent;
                 dto.Remark = iqc.Remark;
-                dto.IqcOrderNo = iqc.IqcOrderNo;
+                dto.IqcOrderCode = iqc.IqcOrderCode;
                 dto.InspectionDate = iqc.InspectionDate;
                 break;
             case TaktEcBukan mc:
@@ -205,7 +205,7 @@ public static class TaktEcDeptViewMapper
                 dto.ProductionDate = pcba.ProductionDate;
                 dto.ProductionBatch = pcba.ProductionBatch;
                 dto.ProductionTeam = pcba.ProductionTeam;
-                dto.OutboundOrderNo = pcba.OutboundOrderNo;
+                dto.OutboundOrderCode = pcba.OutboundOrderCode;
                 break;
             case TaktEcSeizouikka assy:
                 dto.EcDetailId = assy.EcnDetailId;
@@ -224,7 +224,7 @@ public static class TaktEcDeptViewMapper
                 dto.ProductionTeam = qa.ProductionTeam;
                 dto.InspectionDate = qa.InspectionDate;
                 dto.InspectionBatch = qa.InspectionBatch;
-                dto.SamplingNo = qa.SamplingNo;
+                dto.SamplingCode = qa.SamplingCode;
                 break;
             case TaktEcSeizougijutsu te:
                 dto.EcDetailId = te.EcnDetailId;

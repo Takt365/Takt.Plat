@@ -91,7 +91,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
             foreach (var seed in templates)
             {
                 var (_, inserted, updated) = await CreateOrUpdateProductionEquipmentAsync(
-                    repository, tenantCode, company.CompanyCode, plantCode, seed);
+                    repository, tenantCode, company.CompanyCode, company.CultureCode, plantCode, seed);
                 insertCount += inserted;
                 updateCount += updated;
             }
@@ -110,15 +110,15 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
             // 1 Panasonic SP18P-L
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "PRI-SP18PL-01",
-                ProductionEquipmentName = "松下 SP18P-L 全自动锡膏印刷机",
-                EquipmentCategory = 13,
+                ProdEquipCode = "PRI-SP18PL-01",
+                ProdEquipName = "松下 SP18P-L 全自动锡膏印刷机",
+                EquipCategory = 13,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "SP18P-L",
-                ModelNo = "NM-EJP1A",
-                SerialNo = "1P8V0336",
-                EquipmentSpecification = "基板L50×W50～L510×W460mm；厚0.3～4mm；循环8s+印刷；重复定位±12.5μm；丝网框736×736mm",
+                ModelCode = "NM-EJP1A",
+                SerialCode = "1P8V0336",
+                EquipSpecification = "基板L50×W50～L510×W460mm；厚0.3～4mm；循环8s+印刷；重复定位±12.5μm；丝网框736×736mm",
                 ManufacturingDate = new DateTime(2009, 1, 1),
                 CommissioningDate = new DateTime(2009, 6, 15),
                 StdCycleTimeSeconds = 27m,
@@ -126,7 +126,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.45m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 102m,
+                StdEquipHourlyCapacity = 102m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 25m,
@@ -157,20 +157,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT1-印刷",
                 SortOrder = 1,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 2 Panasonic CM602-L（铭牌：机型名 CM602-L / 型号 NM-EJM8A / 序列号 11FV2851 / 制造 20090717）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "SMT-CM602L-01",
-                ProductionEquipmentName = "松下 CM602-L 高速多功能贴片机",
-                EquipmentCategory = 11,
+                ProdEquipCode = "SMT-CM602L-01",
+                ProdEquipName = "松下 CM602-L 高速多功能贴片机",
+                EquipCategory = 11,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "CM602-L",
-                ModelNo = "NM-EJM8A",
-                SerialNo = "11FV2851",
-                EquipmentSpecification = "自动生产设备；电源200/220/380/400/420/480V 3Φ 50/60Hz 4.0kVA；供气≤0.78MPa；工作气压0.54MPa 170L/min；短路2.5kA",
+                ModelCode = "NM-EJM8A",
+                SerialCode = "11FV2851",
+                EquipSpecification = "自动生产设备；电源200/220/380/400/420/480V 3Φ 50/60Hz 4.0kVA；供气≤0.78MPa；工作气压0.54MPa 170L/min；短路2.5kA",
                 ManufacturingDate = new DateTime(2009, 7, 17),
                 CommissioningDate = new DateTime(2009, 11, 1),
                 StdCycleTimeSeconds = 7.2m,
@@ -178,7 +178,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.12m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 382.5m,
+                StdEquipHourlyCapacity = 382.5m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 60m,
@@ -208,20 +208,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT1-贴片",
                 SortOrder = 2,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 3 Tamura TAP30-407PM
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "REF-TAP30407-01",
-                ProductionEquipmentName = "田村 TAP30-407PM 回流焊炉",
-                EquipmentCategory = 14,
+                ProdEquipCode = "REF-TAP30407-01",
+                ProdEquipName = "田村 TAP30-407PM 回流焊炉",
+                EquipCategory = 14,
                 Manufacturer = "田村",
-                EquipmentBrand = "Tamura",
+                EquipBrand = "Tamura",
                 MachineType = "TAP30-407PM",
-                ModelNo = null,
-                SerialNo = "T407PM0812",
-                EquipmentSpecification = "7温区1冷却；PCB Min50×50 Max300×330mm；链速0.3～1.7m/min；26kVA；边夹传送",
+                ModelCode = null,
+                SerialCode = "T407PM0812",
+                EquipSpecification = "7温区1冷却；PCB Min50×50 Max300×330mm；链速0.3～1.7m/min；26kVA；边夹传送",
                 ManufacturingDate = new DateTime(2008, 8, 1),
                 CommissioningDate = new DateTime(2009, 1, 20),
                 StdCycleTimeSeconds = 21m,
@@ -229,7 +229,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.35m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 131.14m,
+                StdEquipHourlyCapacity = 131.14m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 15m,
@@ -258,20 +258,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT1-回流",
                 SortOrder = 3,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 4 Marantz U22XHML-650（马兰士电子在线 AOI）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AOI-U22XHML-01",
-                ProductionEquipmentName = "马兰士电子 U22XHML-650 在线AOI",
-                EquipmentCategory = 2,
+                ProdEquipCode = "AOI-U22XHML-01",
+                ProdEquipName = "马兰士电子 U22XHML-650 在线AOI",
+                EquipCategory = 2,
                 Manufacturer = "马兰士",
-                EquipmentBrand = "Marantz",
+                EquipBrand = "Marantz",
                 MachineType = "U22XHML-650",
-                ModelNo = null,
-                SerialNo = "U22XH1405",
-                EquipmentSpecification = "在线式AOI；U22XH ML 系列；基板范围650mm级；元件/焊点外观检测",
+                ModelCode = null,
+                SerialCode = "U22XH1405",
+                EquipSpecification = "在线式AOI；U22XH ML 系列；基板范围650mm级；元件/焊点外观检测",
                 ManufacturingDate = new DateTime(2014, 5, 1),
                 CommissioningDate = new DateTime(2014, 9, 1),
                 StdCycleTimeSeconds = 33m,
@@ -279,7 +279,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.55m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 83.45m,
+                StdEquipHourlyCapacity = 83.45m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 20m,
@@ -308,20 +308,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT1-AOI",
                 SortOrder = 4,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 5 Panasonic SP18P-L
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "PRI-SP18PL-02",
-                ProductionEquipmentName = "松下 SP18P-L 全自动锡膏印刷机",
-                EquipmentCategory = 13,
+                ProdEquipCode = "PRI-SP18PL-02",
+                ProdEquipName = "松下 SP18P-L 全自动锡膏印刷机",
+                EquipCategory = 13,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "SP18P-L",
-                ModelNo = "NM-EJP1A",
-                SerialNo = "1P8V0412",
-                EquipmentSpecification = "基板L50×W50～L510×W460mm；厚0.3～4mm；循环8s+印刷；重复定位±12.5μm；丝网框736×736mm",
+                ModelCode = "NM-EJP1A",
+                SerialCode = "1P8V0412",
+                EquipSpecification = "基板L50×W50～L510×W460mm；厚0.3～4mm；循环8s+印刷；重复定位±12.5μm；丝网框736×736mm",
                 ManufacturingDate = new DateTime(2009, 3, 1),
                 CommissioningDate = new DateTime(2010, 2, 1),
                 StdCycleTimeSeconds = 27m,
@@ -329,7 +329,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.45m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 102m,
+                StdEquipHourlyCapacity = 102m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 25m,
@@ -360,20 +360,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-印刷",
                 SortOrder = 5,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 6 神州视觉 ALD-ST3-450（在线式 3D SPI；铭牌）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "SPI-ALDST3-01",
-                ProductionEquipmentName = "神州视觉 ALD-ST3-450 在线3D SPI",
-                EquipmentCategory = 16,
+                ProdEquipCode = "SPI-ALDST3-01",
+                ProdEquipName = "神州视觉 ALD-ST3-450 在线3D SPI",
+                EquipCategory = 16,
                 Manufacturer = "东莞市神州视觉科技有限公司",
-                EquipmentBrand = "ALeader",
+                EquipBrand = "ALeader",
                 MachineType = "全自动锡膏印刷检测设备",
-                ModelNo = "ALD-ST3-450",
-                SerialNo = "01450180237",
-                EquipmentSpecification = "Solder Paste Inspection；AC230V 6.5A 50/60Hz 1.5kVA；气压0.2～0.8MPa；外形L1300×W966×H1597mm；重量850kg",
+                ModelCode = "ALD-ST3-450",
+                SerialCode = "01450180237",
+                EquipSpecification = "Solder Paste Inspection；AC230V 6.5A 50/60Hz 1.5kVA；气压0.2～0.8MPa；外形L1300×W966×H1597mm；重量850kg",
                 ManufacturingDate = new DateTime(2018, 8, 1),
                 CommissioningDate = new DateTime(2018, 10, 15),
                 StdCycleTimeSeconds = 18m,
@@ -381,7 +381,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.30m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 153m,
+                StdEquipHourlyCapacity = 153m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 15m,
@@ -410,20 +410,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-SPI",
                 SortOrder = 6,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 7 Panasonic CM602-L
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "SMT-CM602L-02",
-                ProductionEquipmentName = "松下 CM602-L 高速多功能贴片机",
-                EquipmentCategory = 11,
+                ProdEquipCode = "SMT-CM602L-02",
+                ProdEquipName = "松下 CM602-L 高速多功能贴片机",
+                EquipCategory = 11,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "CM602-L",
-                ModelNo = "NM-EJM8A",
-                SerialNo = "1C6M2241",
-                EquipmentSpecification = "12吸嘴高速头100000CPH(0.036s/chip)；贴装精度±40μm/chip；PCB L510×W460mm；气压0.49MPa 170L/min",
+                ModelCode = "NM-EJM8A",
+                SerialCode = "1C6M2241",
+                EquipSpecification = "12吸嘴高速头100000CPH(0.036s/chip)；贴装精度±40μm/chip；PCB L510×W460mm；气压0.49MPa 170L/min",
                 ManufacturingDate = new DateTime(2010, 1, 15),
                 CommissioningDate = new DateTime(2010, 5, 1),
                 StdCycleTimeSeconds = 7.2m,
@@ -431,7 +431,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.12m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 382.5m,
+                StdEquipHourlyCapacity = 382.5m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 60m,
@@ -461,20 +461,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-贴片",
                 SortOrder = 7,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 8 Panasonic DT401-F（铭牌：机型名 DT401-F / 型号 KXF-E64C / 序列号 125V3535 / 制造 20090717）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "SMT-DT401F-01",
-                ProductionEquipmentName = "松下 DT401-F 多功能贴片机",
-                EquipmentCategory = 11,
+                ProdEquipCode = "SMT-DT401F-01",
+                ProdEquipName = "松下 DT401-F 多功能贴片机",
+                EquipCategory = 11,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "DT401-F",
-                ModelNo = "KXF-E64C",
-                SerialNo = "125V3535",
-                EquipmentSpecification = "自动生产设备；电源200/220/380/400/420/480V 3Φ 50/60Hz 1.5kVA；供气≤0.78MPa；工作气压0.54MPa 150L/min；短路2.5kA",
+                ModelCode = "KXF-E64C",
+                SerialCode = "125V3535",
+                EquipSpecification = "自动生产设备；电源200/220/380/400/420/480V 3Φ 50/60Hz 1.5kVA；供气≤0.78MPa；工作气压0.54MPa 150L/min；短路2.5kA",
                 ManufacturingDate = new DateTime(2009, 7, 17),
                 CommissioningDate = new DateTime(2009, 11, 1),
                 StdCycleTimeSeconds = 10.8m,
@@ -482,7 +482,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.18m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 255m,
+                StdEquipHourlyCapacity = 255m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 45m,
@@ -512,20 +512,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-贴片2",
                 SortOrder = 8,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 9 Tamura TNP50-572EM（铭牌：MODEL TNP50-572EM / NO. 5827 / DATE 2008.7 / POWER AC200V 41kVA / WEIGHT 2000kg）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "REF-TNP50572-01",
-                ProductionEquipmentName = "田村 TNP50-572EM 氮气回流焊装置",
-                EquipmentCategory = 14,
+                ProdEquipCode = "REF-TNP50572-01",
+                ProdEquipName = "田村 TNP50-572EM 氮气回流焊装置",
+                EquipCategory = 14,
                 Manufacturer = "田村",
-                EquipmentBrand = "Tamura",
+                EquipBrand = "Tamura",
                 MachineType = "TNP50-572EM",
-                ModelNo = null,
-                SerialNo = "5827",
-                EquipmentSpecification = "AC200V 41kVA；整机重量2000kg；日本制造；氮气回流焊",
+                ModelCode = null,
+                SerialCode = "5827",
+                EquipSpecification = "AC200V 41kVA；整机重量2000kg；日本制造；氮气回流焊",
                 ManufacturingDate = new DateTime(2008, 7, 1),
                 CommissioningDate = new DateTime(2008, 11, 15),
                 StdCycleTimeSeconds = 19.2m,
@@ -533,7 +533,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.32m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 143.44m,
+                StdEquipHourlyCapacity = 143.44m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 20m,
@@ -562,20 +562,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-回流",
                 SortOrder = 9,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 10 Aleader ALD8710S
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AOI-ALD8710S-01",
-                ProductionEquipmentName = "神州视觉 ALD8710S 在线AOI",
-                EquipmentCategory = 2,
+                ProdEquipCode = "AOI-ALD8710S-01",
+                ProdEquipName = "神州视觉 ALD8710S 在线AOI",
+                EquipCategory = 2,
                 Manufacturer = "神州视觉",
-                EquipmentBrand = "ALeader",
+                EquipBrand = "ALeader",
                 MachineType = "ALD8710S",
-                ModelNo = null,
-                SerialNo = "ALD87101602",
-                EquipmentSpecification = "在线式2D AOI；炉后焊点/元件外观检测；高分辨率CCD",
+                ModelCode = null,
+                SerialCode = "ALD87101602",
+                EquipSpecification = "在线式2D AOI；炉后焊点/元件外观检测；高分辨率CCD",
                 ManufacturingDate = new DateTime(2016, 2, 1),
                 CommissioningDate = new DateTime(2016, 5, 20),
                 StdCycleTimeSeconds = 33m,
@@ -583,7 +583,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.55m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 83.45m,
+                StdEquipHourlyCapacity = 83.45m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 20m,
@@ -612,20 +612,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "SMT2-AOI",
                 SortOrder = 10,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 11 Panasonic AV-B（全自动卧式/轴向插件机，非 AOI）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AI-AVB-01",
-                ProductionEquipmentName = "松下 AV-B 全自动卧式插件机",
-                EquipmentCategory = 12,
+                ProdEquipCode = "AI-AVB-01",
+                ProdEquipName = "松下 AV-B 全自动卧式插件机",
+                EquipCategory = 12,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "AV-B",
-                ModelNo = null,
-                SerialNo = "AVB070601",
-                EquipmentSpecification = "全自动卧式插件（AI）；轴向/跳线元件插入；与 AV/AVK 系列同族",
+                ModelCode = null,
+                SerialCode = "AVB070601",
+                EquipSpecification = "全自动卧式插件（AI）；轴向/跳线元件插入；与 AV/AVK 系列同族",
                 ManufacturingDate = new DateTime(2007, 6, 1),
                 CommissioningDate = new DateTime(2008, 1, 15),
                 StdCycleTimeSeconds = 0.15m,
@@ -633,7 +633,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.0025m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 20400m,
+                StdEquipHourlyCapacity = 20400m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 45m,
@@ -662,20 +662,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 CumulativeRunHours = 0m,
                 StorageLocation = "AI1-插件",
                 SortOrder = 11,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 12 Panasonic AVK-3（全自动卧式插件机，非 AOI）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AI-AVK3-01",
-                ProductionEquipmentName = "松下 AVK-3 全自动卧式插件机",
-                EquipmentCategory = 12,
+                ProdEquipCode = "AI-AVK3-01",
+                ProdEquipName = "松下 AVK-3 全自动卧式插件机",
+                EquipCategory = 12,
                 Manufacturer = "松下生产科技株式会社",
-                EquipmentBrand = "Panasonic",
+                EquipBrand = "Panasonic",
                 MachineType = "AVK-3",
-                ModelNo = null,
-                SerialNo = "AVK3080401",
-                EquipmentSpecification = "全自动卧式插件（AI）；AVK 系列高速轴向插件；插入节拍约0.15s/点",
+                ModelCode = null,
+                SerialCode = "AVK3080401",
+                EquipSpecification = "全自动卧式插件（AI）；AVK 系列高速轴向插件；插入节拍约0.15s/点",
                 ManufacturingDate = new DateTime(2008, 4, 1),
                 CommissioningDate = new DateTime(2008, 9, 1),
                 StdCycleTimeSeconds = 0.15m,
@@ -683,7 +683,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.0025m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 20400m,
+                StdEquipHourlyCapacity = 20400m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 45m,
@@ -712,20 +712,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 CumulativeRunHours = 0m,
                 StorageLocation = "AI2-插件",
                 SortOrder = 12,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 13 TDK VC-7A（径向/立式自动插件机，非 SPI）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AI-VC7A-01",
-                ProductionEquipmentName = "TDK VC-7A 立式径向自动插件机",
-                EquipmentCategory = 12,
+                ProdEquipCode = "AI-VC7A-01",
+                ProdEquipName = "TDK VC-7A 立式径向自动插件机",
+                EquipCategory = 12,
                 Manufacturer = "东电化",
-                EquipmentBrand = "TDK",
+                EquipBrand = "TDK",
                 MachineType = "VC-7A",
-                ModelNo = null,
-                SerialNo = "VC7A060501",
-                EquipmentSpecification = "Radial Lead Inserter；约9200pcs/h（约0.4s/个）；跨距2.5/5.0mm（可扩7.5mm）；头转0°/+90°（可选四方向反转）；电阻/电容/二极管/三极管/LED；PCB约400×300mm；料站40/80/120；Sequencer链夹送料；切脚/弯脚（N型）",
+                ModelCode = null,
+                SerialCode = "VC7A060501",
+                EquipSpecification = "Radial Lead Inserter；约9200pcs/h（约0.4s/个）；跨距2.5/5.0mm（可扩7.5mm）；头转0°/+90°（可选四方向反转）；电阻/电容/二极管/三极管/LED；PCB约400×300mm；料站40/80/120；Sequencer链夹送料；切脚/弯脚（N型）",
                 ManufacturingDate = new DateTime(2006, 5, 1),
                 CommissioningDate = new DateTime(2006, 11, 1),
                 StdCycleTimeSeconds = 0.4m,
@@ -733,7 +733,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.0067m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 7038m,
+                StdEquipHourlyCapacity = 7038m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 45m,
@@ -762,20 +762,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 CumulativeRunHours = 0m,
                 StorageLocation = "AI1-径向",
                 SortOrder = 13,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 14 TDK VC-7AT（铭牌：MODEL VC-7AT / TYPE VC-7G80RT / MFG.NO AV-7T 091 / 制造 1997-04）
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "AI-VC7AT-01",
-                ProductionEquipmentName = "TDK VC-7AT 立式径向自动插件机",
-                EquipmentCategory = 12,
+                ProdEquipCode = "AI-VC7AT-01",
+                ProdEquipName = "TDK VC-7AT 立式径向自动插件机",
+                EquipCategory = 12,
                 Manufacturer = "东电化",
-                EquipmentBrand = "TDK",
+                EquipBrand = "TDK",
                 MachineType = "VC-7AT",
-                ModelNo = "VC-7G80RT",
-                SerialNo = "AV-7T 091",
-                EquipmentSpecification = "avisert；3Φ AC200V 50/60Hz 2.5A；整机重量1200kg；台湾制造",
+                ModelCode = "VC-7G80RT",
+                SerialCode = "AV-7T 091",
+                EquipSpecification = "avisert；3Φ AC200V 50/60Hz 2.5A；整机重量1200kg；台湾制造",
                 ManufacturingDate = new DateTime(1997, 4, 1),
                 CommissioningDate = new DateTime(1998, 1, 15),
                 StdCycleTimeSeconds = 0.4m,
@@ -783,7 +783,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.0067m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 7038m,
+                StdEquipHourlyCapacity = 7038m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 45m,
@@ -812,20 +812,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 CumulativeRunHours = 0m,
                 StorageLocation = "AI2-径向",
                 SortOrder = 14,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 15 JYI DIANN JT-550
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "SEL-JT550-01",
-                ProductionEquipmentName = "精诚智焊 JT-550 选择性波峰焊机",
-                EquipmentCategory = 15,
+                ProdEquipCode = "SEL-JT550-01",
+                ProdEquipName = "精诚智焊 JT-550 选择性波峰焊机",
+                EquipCategory = 15,
                 Manufacturer = "精诚智焊",
-                EquipmentBrand = "JYI DIANN",
+                EquipBrand = "JYI DIANN",
                 MachineType = "JT-550",
-                ModelNo = null,
-                SerialNo = "JT5501708",
-                EquipmentSpecification = "选择性波峰焊；局部焊接；PCB Max550mm级",
+                ModelCode = null,
+                SerialCode = "JT5501708",
+                EquipSpecification = "选择性波峰焊；局部焊接；PCB Max550mm级",
                 ManufacturingDate = new DateTime(2017, 8, 1),
                 CommissioningDate = new DateTime(2017, 11, 15),
                 StdCycleTimeSeconds = 210m,
@@ -833,7 +833,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 3.5m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 13.12m,
+                StdEquipHourlyCapacity = 13.12m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 35m,
@@ -863,20 +863,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 CumulativeRunHours = 0m,
                 StorageLocation = "MI1-选焊",
                 SortOrder = 15,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 16 ANDA JN-350BS
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "REF-JN350BS-01",
-                ProductionEquipmentName = "安达 JN-350BS 氮气回流焊炉",
-                EquipmentCategory = 14,
+                ProdEquipCode = "REF-JN350BS-01",
+                ProdEquipName = "安达 JN-350BS 氮气回流焊炉",
+                EquipCategory = 14,
                 Manufacturer = "安达",
-                EquipmentBrand = "ANDA",
+                EquipBrand = "ANDA",
                 MachineType = "JN-350BS",
-                ModelNo = null,
-                SerialNo = "JN3501503",
-                EquipmentSpecification = "氮气回流焊；8～10温区；350mm级带宽；N2气氛",
+                ModelCode = null,
+                SerialCode = "JN3501503",
+                EquipSpecification = "氮气回流焊；8～10温区；350mm级带宽；N2气氛",
                 ManufacturingDate = new DateTime(2015, 3, 1),
                 CommissioningDate = new DateTime(2015, 7, 1),
                 StdCycleTimeSeconds = 19.8m,
@@ -884,7 +884,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.33m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 139.09m,
+                StdEquipHourlyCapacity = 139.09m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 20m,
@@ -913,20 +913,20 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "MI1-回流",
                 SortOrder = 16,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
             // 17 Kelongwei FL-ADS300
             new TaktProductionEquipment
             {
-                ProductionEquipmentCode = "REF-FLADS300-01",
-                ProductionEquipmentName = "科隆威 FL-ADS300 氮气回流焊炉",
-                EquipmentCategory = 14,
+                ProdEquipCode = "REF-FLADS300-01",
+                ProdEquipName = "科隆威 FL-ADS300 氮气回流焊炉",
+                EquipCategory = 14,
                 Manufacturer = "科隆威",
-                EquipmentBrand = "Kelongwei",
+                EquipBrand = "Kelongwei",
                 MachineType = "FL-ADS300",
-                ModelNo = null,
-                SerialNo = "FLADS1606",
-                EquipmentSpecification = "氮气回流焊；ADS温控；300mm级带宽；N2气氛",
+                ModelCode = null,
+                SerialCode = "FLADS1606",
+                EquipSpecification = "氮气回流焊；ADS温控；300mm级带宽；N2气氛",
                 ManufacturingDate = new DateTime(2016, 6, 1),
                 CommissioningDate = new DateTime(2016, 10, 1),
                 StdCycleTimeSeconds = 19.8m,
@@ -934,7 +934,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 StdMinutesPerCycle = 0.33m,
                 TheoreticalSpm = 0m,
                 TheoreticalCycleTimeSeconds = 0m,
-                StdEquipmentHourlyCapacity = 139.09m,
+                StdEquipHourlyCapacity = 139.09m,
                 AvailabilityRate = 0.85m,
                 PerformanceRate = 0.90m,
                 SetupMinutes = 20m,
@@ -963,7 +963,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 InterfaceType = "SMEMA",
                 StorageLocation = "MI2-回流",
                 SortOrder = 17,
-                ProductionEquipmentStatus = 1,
+                ProdEquipStatus = 1,
             },
         ];
     }
@@ -975,6 +975,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktProductionEquipment> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string plantCode,
         TaktProductionEquipment seed)
     {
@@ -982,7 +983,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
             e.TenantCode == tenantCode
             && e.CompanyCode == companyCode
             && e.PlantCode == plantCode
-            && e.ProductionEquipmentCode == seed.ProductionEquipmentCode);
+            && e.ProdEquipCode == seed.ProdEquipCode);
         if (equipment == null)
         {
             equipment = new TaktProductionEquipment
@@ -990,6 +991,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 PlantCode = plantCode,
+                CultureCode = cultureCode
             };
             CopySeedFields(equipment, seed);
             equipment = await repository.CreateAsync(equipment);
@@ -1005,15 +1007,15 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
     /// </summary>
     private static void CopySeedFields(TaktProductionEquipment target, TaktProductionEquipment seed)
     {
-        target.ProductionEquipmentCode = seed.ProductionEquipmentCode;
-        target.ProductionEquipmentName = seed.ProductionEquipmentName;
-        target.EquipmentCategory = seed.EquipmentCategory;
+        target.ProdEquipCode = seed.ProdEquipCode;
+        target.ProdEquipName = seed.ProdEquipName;
+        target.EquipCategory = seed.EquipCategory;
         target.Manufacturer = seed.Manufacturer;
-        target.EquipmentBrand = seed.EquipmentBrand;
+        target.EquipBrand = seed.EquipBrand;
         target.MachineType = seed.MachineType;
-        target.ModelNo = seed.ModelNo;
-        target.SerialNo = seed.SerialNo;
-        target.EquipmentSpecification = seed.EquipmentSpecification;
+        target.ModelCode = seed.ModelCode;
+        target.SerialCode = seed.SerialCode;
+        target.EquipSpecification = seed.EquipSpecification;
         target.ManufacturingDate = seed.ManufacturingDate;
         target.CommissioningDate = seed.CommissioningDate;
         target.DecommissioningDate = seed.DecommissioningDate;
@@ -1023,7 +1025,7 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         target.StdMinutesPerCycle = seed.StdMinutesPerCycle;
         target.TheoreticalSpm = seed.TheoreticalSpm;
         target.TheoreticalCycleTimeSeconds = seed.TheoreticalCycleTimeSeconds;
-        target.StdEquipmentHourlyCapacity = seed.StdEquipmentHourlyCapacity;
+        target.StdEquipHourlyCapacity = seed.StdEquipHourlyCapacity;
         target.AvailabilityRate = seed.AvailabilityRate;
         target.PerformanceRate = seed.PerformanceRate;
         target.SetupMinutes = seed.SetupMinutes;
@@ -1069,8 +1071,8 @@ public class TaktProductionEquipmentSeedData : ITaktSeedDataCoordinator
         target.CumulativeRunHours = seed.CumulativeRunHours;
         target.InterfaceType = seed.InterfaceType;
         target.StorageLocation = seed.StorageLocation;
-        target.EquipmentAdministrator = seed.EquipmentAdministrator;
+        target.EquipAdministrator = seed.EquipAdministrator;
         target.SortOrder = seed.SortOrder;
-        target.ProductionEquipmentStatus = seed.ProductionEquipmentStatus;
+        target.ProdEquipStatus = seed.ProdEquipStatus;
     }
 }

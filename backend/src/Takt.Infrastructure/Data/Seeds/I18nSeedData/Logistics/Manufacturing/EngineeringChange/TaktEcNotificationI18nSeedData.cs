@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcNotificationI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcNotification 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/engineering-change/ec-notification）
 // 
@@ -90,23 +90,14 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotification._self
             new TranslationSeedItem("entity.ecnotification._self", "zh-HK", "工程变更通知单信息_hk", "实体名称"),
 
-            // entity.ecnotification.plantcode
-            new TranslationSeedItem("entity.ecnotification.plantcode", "en-US", "工厂代码_us", "工厂代码"),
-            // entity.ecnotification.plantcode
-            new TranslationSeedItem("entity.ecnotification.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
-            // entity.ecnotification.plantcode
-            new TranslationSeedItem("entity.ecnotification.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.ecnotification.plantcode
-            new TranslationSeedItem("entity.ecnotification.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
-
-            // entity.ecnotification.no
-            new TranslationSeedItem("entity.ecnotification.no", "en-US", "通知单号_us", "通知单号（唯一，如：EC-2026-0001）"),
-            // entity.ecnotification.no
-            new TranslationSeedItem("entity.ecnotification.no", "ja-JP", "通知单号_jp", "通知单号（唯一，如：EC-2026-0001）"),
-            // entity.ecnotification.no
-            new TranslationSeedItem("entity.ecnotification.no", "zh-CN", "通知单号", "通知单号（唯一，如：EC-2026-0001）"),
-            // entity.ecnotification.no
-            new TranslationSeedItem("entity.ecnotification.no", "zh-HK", "通知单号_hk", "通知单号（唯一，如：EC-2026-0001）"),
+            // entity.ecnotification.code
+            new TranslationSeedItem("entity.ecnotification.code", "en-US", "通知单号_us", "通知单号（唯一，如：EC-2026-0001）"),
+            // entity.ecnotification.code
+            new TranslationSeedItem("entity.ecnotification.code", "ja-JP", "通知单号_jp", "通知单号（唯一，如：EC-2026-0001）"),
+            // entity.ecnotification.code
+            new TranslationSeedItem("entity.ecnotification.code", "zh-CN", "通知单号", "通知单号（唯一，如：EC-2026-0001）"),
+            // entity.ecnotification.code
+            new TranslationSeedItem("entity.ecnotification.code", "zh-HK", "通知单号_hk", "通知单号（唯一，如：EC-2026-0001）"),
 
             // entity.ecnotification.ecid
             new TranslationSeedItem("entity.ecnotification.ecid", "en-US", "设变ID_us", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
@@ -117,14 +108,14 @@ public class TaktEcNotificationI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecnotification.ecid
             new TranslationSeedItem("entity.ecnotification.ecid", "zh-HK", "设变ID_hk", "关联的设变主表ID（序列化为string以避免Javascript精度问题）"),
 
-            // entity.ecnotification.ecno
-            new TranslationSeedItem("entity.ecnotification.ecno", "en-US", "设变单号_us", "设变单号（冗余字段，便于查询）"),
-            // entity.ecnotification.ecno
-            new TranslationSeedItem("entity.ecnotification.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余字段，便于查询）"),
-            // entity.ecnotification.ecno
-            new TranslationSeedItem("entity.ecnotification.ecno", "zh-CN", "设变单号", "设变单号（冗余字段，便于查询）"),
-            // entity.ecnotification.ecno
-            new TranslationSeedItem("entity.ecnotification.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段，便于查询）"),
+            // entity.ecnotification.eccode
+            new TranslationSeedItem("entity.ecnotification.eccode", "en-US", "设变单号_us", "设变单号（冗余字段，便于查询）"),
+            // entity.ecnotification.eccode
+            new TranslationSeedItem("entity.ecnotification.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余字段，便于查询）"),
+            // entity.ecnotification.eccode
+            new TranslationSeedItem("entity.ecnotification.eccode", "zh-CN", "设变单号", "设变单号（冗余字段，便于查询）"),
+            // entity.ecnotification.eccode
+            new TranslationSeedItem("entity.ecnotification.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段，便于查询）"),
 
             // entity.ecnotification.ectitle
             new TranslationSeedItem("entity.ecnotification.ectitle", "en-US", "设变标题_us", "设变标题（冗余字段）"),

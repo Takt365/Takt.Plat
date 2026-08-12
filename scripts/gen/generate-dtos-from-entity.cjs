@@ -19,9 +19,16 @@ const {
   sanitizeXmlDocPlainText,
   parseEntityClassHeaderFromCsContent,
   resolveDtoBaseFromEntityBase,
+  isTenantEntityBase,
+  isCompanyOrApprovalEntityBase,
   ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
-const { isRbacJunctionEntity, assertNotRbacJunctionEntityCli, assertNotManualDtoEntityCli } = require('./generate-entity-exclusions.cjs');
+const {
+  isRbacJunctionEntity,
+  isStandaloneChildVueEntity,
+  assertNotRbacJunctionEntityCli,
+  assertNotManualDtoEntityCli,
+} = require('./generate-entity-exclusions.cjs');
 const { isTransposableEntity, appendTransposedDtoBlock } = require('./generate-transposed-support.cjs');
 const {
   resolveRbacCreateFieldFromNav,
@@ -49,6 +56,9 @@ const ENTITY_BASE_FIELDS = new Set([
   'Id',
   'TenantCode',
   'CompanyCode',
+  'CultureCode',
+  'PlantCode',
+  'RelatedPlant',
   'ExtField',
   'Remark',
   'CreatedBy',
@@ -257,34 +267,43 @@ function appendEntityIdProperty(lines, idProp, options = {}) {
 
 /**
  * CreateDto / TemplateDto / ImportDto 租户与公司隔离字段（业务字段之前）
- * TenantCode / CompanyCode / CompanyDefaultCulture 由登录上下文或公司切换注入，不加 [Required]
+ * TenantCode / CompanyCode / CultureCode / PlantCode / RelatedPlant 由登录上下文或公司切换注入，不加 [Required]
  * @param {string[]} lines
  * @param {string} entityBase
- * @param {{ forImport?: boolean, withCompanyDefaultCulture?: boolean }} [options]
- *   forImport=true 时字段可空（Excel 导入）；
- *   withCompanyDefaultCulture=true 时追加 CompanyDefaultCulture（仅 CreateDto / ImportDto）
+ * @param {{ forImport?: boolean, entityShort?: string }} [options]
+ *   forImport=true 时字段可空（Excel 导入）
+ *   CultureCode / PlantCode 仅公司/审批级；RelatedPlant 仅租户级（TaktPlant 除外：主档即 PlantCode）
  */
 function appendTenantCompanyCreateImportProperties(lines, entityBase, options = {}) {
-  const { forImport = false, withCompanyDefaultCulture = false } = options;
+  const { forImport = false, entityShort = '' } = options;
   const stringType = forImport ? 'string?' : 'string';
   lines.push('    /// <summary>');
   lines.push('    /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）');
   lines.push('    /// </summary>');
   lines.push(`    public ${stringType} TenantCode { get; set; } = string.Empty;`);
   lines.push('');
-  if (entityBase === 'TaktCompanyEntityBase' || entityBase === 'TaktApprovalEntityBase') {
+  if (isCompanyOrApprovalEntityBase(entityBase)) {
     lines.push('    /// <summary>');
     lines.push('    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）');
     lines.push('    /// </summary>');
     lines.push(`    public ${stringType} CompanyCode { get; set; } = string.Empty;`);
     lines.push('');
-    if (withCompanyDefaultCulture) {
-      lines.push('    /// <summary>');
-      lines.push('    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）');
-      lines.push('    /// </summary>');
-      lines.push(`    public ${stringType} CompanyDefaultCulture { get; set; } = string.Empty;`);
-      lines.push('');
-    }
+    lines.push('    /// <summary>');
+    lines.push('    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）');
+    lines.push('    /// </summary>');
+    lines.push(`    public ${stringType} CultureCode { get; set; } = string.Empty;`);
+    lines.push('');
+    lines.push('    /// <summary>');
+    lines.push('    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）');
+    lines.push('    /// </summary>');
+    lines.push(`    public ${stringType} PlantCode { get; set; } = string.Empty;`);
+    lines.push('');
+  } else if (isTenantEntityBase(entityBase) && entityShort !== 'Plant') {
+    lines.push('    /// <summary>');
+    lines.push('    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）');
+    lines.push('    /// </summary>');
+    lines.push(`    public ${stringType} RelatedPlant { get; set; } = string.Empty;`);
+    lines.push('');
   }
 }
 
@@ -424,15 +443,28 @@ function appendQueryLongProperty(lines, name, summary) {
 }
 
 /**
- * QueryDto 第 1～2 位：租户 / 公司隔离字段（业务字段之前）
+ * QueryDto 第 1～n 位：租户 / 公司 / 区域文化 / 工厂隔离字段（业务字段之前）
  * @param {string[]} lines
  * @param {string} entityBase
+ * @param {string} [entityShort]
  */
-function appendTenantCompanyQueryProperties(lines, entityBase) {
+function appendTenantCompanyQueryProperties(lines, entityBase, entityShort = '') {
   appendQueryStringProperty(lines, 'TenantCode', '租户编码');
 
-  if (entityBase === 'TaktCompanyEntityBase' || entityBase === 'TaktApprovalEntityBase') {
+  if (isCompanyOrApprovalEntityBase(entityBase)) {
     appendQueryStringProperty(lines, 'CompanyCode', '公司代码');
+    appendQueryStringProperty(lines, 'CultureCode', '区域文化编码（字典 sys_culture_code）');
+    appendQueryStringProperty(
+      lines,
+      'PlantCode',
+      '工厂代码（选项 TaktPlants/options；DictValue=PlantCode）',
+    );
+  } else if (isTenantEntityBase(entityBase) && entityShort !== 'Plant') {
+    appendQueryStringProperty(
+      lines,
+      'RelatedPlant',
+      '关联工厂（选项 TaktPlants/options；DictValue=PlantCode）',
+    );
   }
 }
 
@@ -442,7 +474,7 @@ function appendTenantCompanyQueryProperties(lines, entityBase) {
  * @param {string} entityBase
  */
 function appendApprovalQueryProperties(lines, entityBase) {
-  if (entityBase !== 'TaktApprovalEntityBase') {
+  if (!entityBase || !entityBase.includes('Approval')) {
     return;
   }
   appendQueryEnumProperty(lines, 'TaktApprovalStatus', 'ApprovalStatus', '审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）');
@@ -700,10 +732,28 @@ function isDetailChildEntity(entity) {
  * @param {object[]} navigationProperties
  * @param {Map<string, object>} entityRegistry
  */
+/**
+ * 主表级联用的 OneToMany（排除 RBAC 关联表与独立菜单从实体）
+ * @param {object[]} navigationProperties
+ * @returns {object[]}
+ */
+function filterCascadingOneToManyNavigations(navigationProperties) {
+  return (navigationProperties || []).filter((nav) => {
+    if (!(nav.navigateType === 'OneToMany' || nav.isCollection)) {
+      return false;
+    }
+    if (isRbacJunctionEntity(nav.relatedEntityShort)) {
+      return false;
+    }
+    if (isStandaloneChildVueEntity(nav.relatedEntityShort)) {
+      return false;
+    }
+    return true;
+  });
+}
+
 function appendMasterDetailMaxLineNumberProperties(lines, navigationProperties, entityRegistry) {
-  const oneToMany = navigationProperties.filter(
-    (nav) => nav.navigateType === 'OneToMany' || nav.isCollection,
-  );
+  const oneToMany = filterCascadingOneToManyNavigations(navigationProperties);
   oneToMany.forEach((nav) => {
     const child = entityRegistry.get(nav.relatedEntityType);
     if (!child || !child.properties.some((p) => p.name === 'LineNumber')) {
@@ -731,7 +781,7 @@ function appendMasterDetailMaxLineNumberProperties(lines, navigationProperties, 
 function appendMasterDetailCreateProperties(lines, navigationProperties, entityShort, options = {}) {
   const useChildUpdateDto = options.cascadeChildUseUpdateDto === true;
   const useNewKeyword = options.useNewKeyword === true;
-  const oneToMany = navigationProperties.filter(
+  const oneToMany = (navigationProperties || []).filter(
     (nav) => nav.navigateType === 'OneToMany' || nav.isCollection,
   );
   if (!oneToMany.length) {
@@ -748,6 +798,10 @@ function appendMasterDetailCreateProperties(lines, navigationProperties, entityS
       lines.push('    /// </summary>');
       lines.push(`    public ${field.type} ${field.prop} { get; set; }`);
       lines.push('');
+      return;
+    }
+    // 独立菜单明细：不写入主表 Create/Update 级联集合
+    if (isStandaloneChildVueEntity(nav.relatedEntityShort)) {
       return;
     }
     const childDtoType = useChildUpdateDto
@@ -771,6 +825,12 @@ function appendMasterDetailCreateProperties(lines, navigationProperties, entityS
 function collectNavigationDtoUsings(entity, navigationProperties, entityRegistry) {
   const usings = new Set();
   navigationProperties.forEach((nav) => {
+    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isStandaloneChildVueEntity(nav.relatedEntityShort)) {
+      return;
+    }
+    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isRbacJunctionEntity(nav.relatedEntityShort)) {
+      return;
+    }
     const related = entityRegistry.get(nav.relatedEntityType);
     if (related && related.dtoNamespace !== entity.dtoNamespace) {
       usings.add(related.dtoNamespace);
@@ -789,6 +849,13 @@ function appendNavigationDtoProperties(lines, navigationProperties) {
     return;
   }
   navigationProperties.forEach((nav) => {
+    // 独立菜单明细：响应 DTO 不嵌套全量子表（走子表独立 list）
+    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isStandaloneChildVueEntity(nav.relatedEntityShort)) {
+      return;
+    }
+    if ((nav.navigateType === 'OneToMany' || nav.isCollection) && isRbacJunctionEntity(nav.relatedEntityShort)) {
+      return;
+    }
     const dtoTypeName = `Takt${nav.relatedEntityShort}Dto`;
     const csharpType = nav.isCollection ? `List<${dtoTypeName}>?` : `${dtoTypeName}?`;
     const roleLabel = nav.isCollection ? '子表' : '主表';
@@ -1074,7 +1141,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   lines.push('/// </summary>');
   lines.push(`public class Takt${entityShort}QueryDto : TaktPagedQuery`);
   lines.push('{');
-  appendTenantCompanyQueryProperties(lines, entity.entityBase);
+  appendTenantCompanyQueryProperties(lines, entity.entityBase, entityShort);
   entity.properties.forEach((prop) => {
     if (isDateTimeProperty(prop)) {
       appendDateRangeQueryProperties(lines, prop);
@@ -1123,7 +1190,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
   const dtoNames = buildAggregateDtoClassNames(entityShort);
   lines.push(`public class ${dtoNames.create}`);
   lines.push('{');
-  appendTenantCompanyCreateImportProperties(lines, entity.entityBase, { withCompanyDefaultCulture: true });
+  appendTenantCompanyCreateImportProperties(lines, entity.entityBase, { entityShort });
   createProps.forEach((prop) => {
     const required = prop.bareType === 'string' && !prop.isNullable && !prop.name.includes('Hash');
     emitProperty(prop, { required }).forEach((l) => lines.push(`    ${l.trimStart()}`));
@@ -1230,7 +1297,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push('/// </summary>');
     lines.push(`public class Takt${entityShort}TemplateDto`);
     lines.push('{');
-    appendTenantCompanyCreateImportProperties(lines, entity.entityBase, { forImport: true });
+    appendTenantCompanyCreateImportProperties(lines, entity.entityBase, { forImport: true, entityShort });
     const templateProps = getTemplateImportProps(createProps);
     appendEmittedProperties(
       lines,
@@ -1251,7 +1318,7 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push('{');
     appendTenantCompanyCreateImportProperties(lines, entity.entityBase, {
       forImport: true,
-      withCompanyDefaultCulture: true,
+      entityShort,
     });
     appendEmittedProperties(
       lines,
@@ -1278,11 +1345,22 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
     lines.push(`public class Takt${entityShort}ExportDto`);
     lines.push('{');
     appendEntityIdProperty(lines, idProp, { summary: `${entityShort}ID` });
-    if (entity.entityBase === 'TaktCompanyEntityBase') {
+    if (isCompanyOrApprovalEntityBase(entity.entityBase)) {
       lines.push('    /// <summary>');
       lines.push('    /// 公司代码');
       lines.push('    /// </summary>');
       lines.push('    public string CompanyCode { get; set; } = string.Empty;');
+      lines.push('');
+      lines.push('    /// <summary>');
+      lines.push('    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）');
+      lines.push('    /// </summary>');
+      lines.push('    public string PlantCode { get; set; } = string.Empty;');
+      lines.push('');
+    } else if (isTenantEntityBase(entity.entityBase) && entityShort !== 'Plant') {
+      lines.push('    /// <summary>');
+      lines.push('    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）');
+      lines.push('    /// </summary>');
+      lines.push('    public string RelatedPlant { get; set; } = string.Empty;');
       lines.push('');
     }
     appendEmittedProperties(lines, entity.properties);
@@ -1444,19 +1522,20 @@ function printUsage() {
   - 禁止 TaktCreateXxxDto、TaktUpdateXxxDto 等动词前置命名
     含 ParentId 时另生成 TreeDto
   - QueryDto 字段顺序：
-      1) TenantCode；（公司/审批级）CompanyCode
+      1) TenantCode；（公司/审批级）CompanyCode、CultureCode、PlantCode；（租户级）RelatedPlant
       2) 业务字段
       3) （审批级）ApprovalStatus、InitiatorId、InitiatedAtStart/End、ApprovedBy、ApprovedAtStart/End
       4) CreatedAtStart/End、ExtField、Remark
   - CreateDto / TemplateDto / ImportDto 字段顺序：
-      1) TenantCode；（公司/审批级）CompanyCode
-      2) （公司/审批级 CreateDto / ImportDto）CompanyDefaultCulture
-      3) 业务字段（TemplateDto / ImportDto 与 CreateDto 全量一致，导入列可空）
-      4) 主子表 List<子CreateDto>?、RBAC 反向 *Ids/*Codes（与 CreateDto 一致）
-      5) ExtField、Remark
-    租户级（TaktTenantEntityBase）仅 TenantCode；公司/审批级含 TenantCode + CompanyCode；
-    CreateDto / ImportDto 另含 CompanyDefaultCulture（TemplateDto 不含）；
-    TenantCode / CompanyCode / CompanyDefaultCulture 由登录或公司切换注入，不加 [Required]
+      1) TenantCode；（公司/审批级）CompanyCode、CultureCode、PlantCode；（租户级）RelatedPlant
+      2) 业务字段（TemplateDto / ImportDto 与 CreateDto 全量一致，导入列可空）
+      3) 主子表 List<子CreateDto>?、RBAC 反向 *Ids/*Codes（与 CreateDto 一致）
+      4) ExtField、Remark
+    租户级（TaktTenantEntityBase）TenantCode + RelatedPlant；公司/审批级含 TenantCode + CompanyCode + CultureCode + PlantCode；
+    租户级实体若自身声明 CultureCode（User/Translation 等）作为业务字段生成；
+    TenantCode / CompanyCode / CultureCode / PlantCode / RelatedPlant 由登录或公司切换注入，不加 [Required]
+    ❌ 禁止再生成 CompanyDefaultCulture（与 CultureCode 重复）
+    ❌ PlantCode（工厂代码，公司/审批行）≠ RelatedPlant（关联工厂，租户行）
   - QueryDto 日期：实体含 DateTime/DateOnly 业务字段 → 各字段 XxxStart/XxxEnd；
     且始终追加 CreatedAtStart/CreatedAtEnd（基类创建时间）
   - 生成前自动执行 generate-entity-rbac-navigations（rbac-parent-config → 实体导航属性区域）

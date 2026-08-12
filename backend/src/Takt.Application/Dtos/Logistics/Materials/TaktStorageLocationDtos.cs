@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktStorageLocationDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：StorageLocation 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktStorageLocation 生成，请按需审阅）
 // 
@@ -35,21 +35,6 @@ public class TaktStorageLocationDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StorageLocationId { get; set; }
 
-    /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long WarehouseId { get; set; }
-
-    /// <summary>
-    /// 仓库 名称（填充字段）
-    /// </summary>
-    public string? WarehouseName { get; set; }
-
-    /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
@@ -115,7 +100,12 @@ public class TaktStorageLocationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
@@ -201,12 +191,12 @@ public class TaktStorageLocationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WarehouseId { get; set; }
@@ -350,7 +340,12 @@ public class TaktStorageLocationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
@@ -418,12 +413,12 @@ public class TaktStorageLocationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WarehouseId { get; set; }
@@ -497,7 +492,7 @@ public class TaktStorageLocationExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 仓库 ID（关联 TaktWarehouse.Id，选项 TaktWarehouses/options）
+    /// 仓库 ID（选项 TaktWarehouses/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WarehouseId { get; set; }

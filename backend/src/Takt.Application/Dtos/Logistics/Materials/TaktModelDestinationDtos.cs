@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktModelDestinationDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ModelDestination 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktModelDestination 生成，请按需审阅）
 // 
@@ -36,14 +36,14 @@ public class TaktModelDestinationDto : TaktTenantDtoBase
     public long ModelDestinationId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -51,7 +51,7 @@ public class TaktModelDestinationDto : TaktTenantDtoBase
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
 
@@ -87,15 +87,20 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料编码
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -103,7 +108,7 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
@@ -157,40 +162,45 @@ public class TaktModelDestinationCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料编码
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码不能为空")]
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
     /// </summary>
-    [Required(ErrorMessage = "机种编码不能为空")]
+    [Required(ErrorMessage = "机种编码（40）不能为空")]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
-    [Required(ErrorMessage = "机种名称不能为空")]
+    [Required(ErrorMessage = "机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）不能为空")]
     public string ModelName { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地编码（40）
     /// </summary>
-    [Required(ErrorMessage = "仕向地编码不能为空")]
+    [Required(ErrorMessage = "仕向地编码（40）不能为空")]
     public string DestinationCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 仕向地名称（80）
     /// </summary>
-    [Required(ErrorMessage = "仕向地名称不能为空")]
+    [Required(ErrorMessage = "仕向地名称（80）不能为空")]
     public string DestinationName { get; set; } = string.Empty;
 
     /// <summary>
@@ -263,15 +273,20 @@ public class TaktModelDestinationTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料编码
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -279,7 +294,7 @@ public class TaktModelDestinationTemplateDto
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
@@ -315,15 +330,20 @@ public class TaktModelDestinationImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
     /// <summary>
-    /// 物料编码
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -331,7 +351,7 @@ public class TaktModelDestinationImportDto
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     public string? ModelName { get; set; } = string.Empty;
 
@@ -374,14 +394,14 @@ public class TaktModelDestinationExportDto
     public long ModelDestinationId { get; set; }
 
     /// <summary>
-    /// 物料编码
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种编码（40）
@@ -389,7 +409,7 @@ public class TaktModelDestinationExportDto
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称（80）
+    /// 机种名称（回填：按 ModelCode 取物料描述表 culture_code=Z1）
     /// </summary>
     public string ModelName { get; set; } = string.Empty;
 

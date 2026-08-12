@@ -87,6 +87,11 @@ public class TaktIsoCodeQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
@@ -157,6 +162,11 @@ public class TaktIsoCodeCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
@@ -283,6 +293,11 @@ public class TaktIsoCodeTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>
@@ -335,6 +350,11 @@ public class TaktIsoCodeImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 编码类别（字典 sys_iso_code_category；0=不使用，1=部门）
     /// </summary>

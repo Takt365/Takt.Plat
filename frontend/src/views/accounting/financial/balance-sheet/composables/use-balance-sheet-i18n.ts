@@ -20,7 +20,7 @@ export const BALANCESHEET_SELF_I18N_KEY = buildEntitySelfI18nKey(BALANCESHEET_EN
 
 /** 列表业务列（不含主键） */
 export const BALANCESHEET_LIST_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'statementLineCode',
   'statementLineName',
@@ -44,7 +44,7 @@ export const BALANCESHEET_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   periodCode: 'required',
   statementLineCode: 'required',
   statementLineName: 'required',
@@ -70,7 +70,7 @@ export type BalanceSheetField = keyof typeof BALANCESHEET_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const BALANCESHEET_QUERY_STRING_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'statementLineCode',
   'statementLineName',

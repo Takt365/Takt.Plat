@@ -114,7 +114,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateQualityGroupAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
@@ -161,6 +161,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktQualityGroup> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         QualityGroupSeedItem seed)
     {
         var group = await repository.FirstAsync(g =>
@@ -183,6 +184,7 @@ public class TaktQualityGroupSeedData : ITaktSeedDataCoordinator
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 GroupStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             group = await repository.CreateAsync(group);
             return (group, 1, 0);

@@ -215,17 +215,32 @@ function extractBuiltInDisableStatusMeta(entityContent) {
 }
 
 /**
- * Options 实现是否含过时的 int 字面量比较（enum 字段却写 == 1）
- * @param {string|null} block
- * @param {{ field?: string, kind?: string }|null} statusMeta
- */
-/**
- * Options 实现是否含过时的状态比较（枚举字面量或缺少 int 启用过滤）
+ * Options 实现是否含过时的状态比较：
+ * - 对非 int 属性仍写 `x.Xxx == 1`（实体 Status 已改为 string 时常见）
+ * - int 启用态却写枚举字面量，或缺少 `== intEnabled`
  * @param {string|null} block
  * @param {{ field?: string, kind?: string, intEnabled?: number }|null} statusMeta
+ * @param {Array<{ name: string, bareType: string }>|null} [entityScalarProps]
  */
-function optionsBlockUsesStaleIntStatusCompare(block, statusMeta) {
-  if (!block || !statusMeta?.field || statusMeta.kind !== 'int') {
+function optionsBlockUsesStaleIntStatusCompare(block, statusMeta, entityScalarProps = null) {
+  if (!block) {
+    return false;
+  }
+  if (entityScalarProps?.length) {
+    const litRe = /\bx\.(\w+)\s*==\s*\d+\b/g;
+    let m;
+    while ((m = litRe.exec(block)) !== null) {
+      const prop = entityScalarProps.find((p) => p.name === m[1]);
+      if (!prop) {
+        continue;
+      }
+      const t = prop.bareType;
+      if (t !== 'int' && t !== 'long' && t !== 'decimal' && !isSharedEnumType(t) && t !== 'TaktCommonStatus') {
+        return true;
+      }
+    }
+  }
+  if (!statusMeta?.field || statusMeta.kind !== 'int') {
     return false;
   }
   const enabled = statusMeta.intEnabled ?? 1;

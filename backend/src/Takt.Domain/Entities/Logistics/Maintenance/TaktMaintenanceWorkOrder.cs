@@ -28,11 +28,6 @@ namespace Takt.Domain.Entities.Logistics.Maintenance;
 [SugarIndex("ix_takt_logistics_maintenance_work_order_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
 public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
 {
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 维护工单号
@@ -63,8 +58,8 @@ public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
     /// <summary>
     /// 设备编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string EquipmentCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 18, IsNullable = false)]
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -99,7 +94,7 @@ public class TaktMaintenanceWorkOrder : TaktApprovalEntityBase
     /// <summary>
     /// 工作中心
     /// </summary>
-    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? WorkCenter { get; set; }
 
     /// <summary>

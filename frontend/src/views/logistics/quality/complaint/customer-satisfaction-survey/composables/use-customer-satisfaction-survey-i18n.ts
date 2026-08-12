@@ -44,7 +44,7 @@ export const CUSTOMERSATISFACTIONSURVEY_LIST_FIELDS = [
   'relatedComplaintId',
   'attachments',
   'surveyStatus',
-  'relatedPlant',
+  'plantCode',
   'followUpStatus',
 ] as const
 
@@ -77,7 +77,7 @@ export const CUSTOMERSATISFACTIONSURVEY_PLACEHOLDER = {
   relatedComplaintId: 'optional',
   attachments: 'optional',
   surveyStatus: 'select',
-  relatedPlant: 'select',
+  plantCode: 'select',
   followUpStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -102,7 +102,7 @@ export const CUSTOMERSATISFACTIONSURVEY_QUERY_STRING_FIELDS = [
   'improvementPlan',
   'relatedComplaintId',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

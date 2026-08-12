@@ -103,30 +103,30 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
                 if (team == null)
                 {
                     TaktLogger.Warning(
-                        "工厂 {PlantCode} 未找到班组 {TeamCode}，跳过设备组行 {EquipmentCode}",
+                        "工厂 {PlantCode} 未找到班组 {TeamCode}，跳过设备组行 {EquipCode}",
                         plantCode,
                         seed.TeamCode,
-                        seed.ProductionEquipmentCode);
+                        seed.ProdEquipCode);
                     continue;
                 }
                 var equipment = await equipmentRepository.FirstAsync(e =>
                     e.TenantCode == tenantCode
                     && e.CompanyCode == company.CompanyCode
                     && e.PlantCode == plantCode
-                    && e.ProductionEquipmentCode == seed.ProductionEquipmentCode);
+                    && e.ProdEquipCode == seed.ProdEquipCode);
                 if (equipment == null)
                 {
                     TaktLogger.Warning(
-                        "工厂 {PlantCode} 未找到设备 {EquipmentCode}，跳过班组 {TeamCode} 设备组行",
+                        "工厂 {PlantCode} 未找到设备 {EquipCode}，跳过班组 {TeamCode} 设备组行",
                         plantCode,
-                        seed.ProductionEquipmentCode,
+                        seed.ProdEquipCode,
                         seed.TeamCode);
                     continue;
                 }
                 var (_, inserted, updated) = await CreateOrUpdateProductionTeamEquipmentAsync(
                     teamEquipmentRepository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     plantCode,
                     team,
                     equipment,
@@ -151,54 +151,54 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             {
                 TeamCode = "SMT1",
                 LineNumber = 10,
-                ProductionEquipmentCode = "PRI-SP18PL-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "PRI-SP18PL-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT1",
                 LineNumber = 20,
-                ProductionEquipmentCode = "SPI-ALDST3-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "SPI-ALDST3-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT1",
                 LineNumber = 30,
-                ProductionEquipmentCode = "SMT-CM602L-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "SMT-CM602L-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT1",
                 LineNumber = 40,
-                ProductionEquipmentCode = "SMT-DT401F-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "SMT-DT401F-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT1",
                 LineNumber = 50,
-                ProductionEquipmentCode = "REF-TNP50572-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "REF-TNP50572-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT1",
                 LineNumber = 60,
-                ProductionEquipmentCode = "AOI-ALD8710S-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AOI-ALD8710S-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             // SMT2 线
@@ -206,36 +206,36 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             {
                 TeamCode = "SMT2",
                 LineNumber = 10,
-                ProductionEquipmentCode = "PRI-SP18PL-02",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "PRI-SP18PL-02",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT2",
                 LineNumber = 20,
-                ProductionEquipmentCode = "SMT-CM602L-02",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "SMT-CM602L-02",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT2",
                 LineNumber = 30,
-                ProductionEquipmentCode = "REF-TAP30407-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "REF-TAP30407-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "SMT2",
                 LineNumber = 40,
-                ProductionEquipmentCode = "AOI-U22XHML-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AOI-U22XHML-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             // AI 线
@@ -243,36 +243,36 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             {
                 TeamCode = "AI1",
                 LineNumber = 10,
-                ProductionEquipmentCode = "AI-AVB-01",
-                EquipmentQuantity = 2,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AI-AVB-01",
+                EquipQuantity = 2,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "AI1",
                 LineNumber = 20,
-                ProductionEquipmentCode = "AI-AVK3-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AI-AVK3-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "AI1",
                 LineNumber = 30,
-                ProductionEquipmentCode = "AI-VC7A-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AI-VC7A-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "AI1",
                 LineNumber = 40,
-                ProductionEquipmentCode = "AI-VC7AT-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "AI-VC7AT-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             // 手插线
@@ -280,27 +280,27 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             {
                 TeamCode = "MI1",
                 LineNumber = 10,
-                ProductionEquipmentCode = "SEL-JT550-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "SEL-JT550-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "MI1",
                 LineNumber = 20,
-                ProductionEquipmentCode = "REF-JN350BS-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "REF-JN350BS-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
             new TaktProductionTeamEquipment
             {
                 TeamCode = "MI1",
                 LineNumber = 30,
-                ProductionEquipmentCode = "REF-FLADS300-01",
-                EquipmentQuantity = 1,
-                TeamEquipmentStatus = StatusEnabled,
+                ProdEquipCode = "REF-FLADS300-01",
+                EquipQuantity = 1,
+                TeamEquipStatus = StatusEnabled,
                 IsObsolete = NotObsolete,
             },
         ];
@@ -313,6 +313,7 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktProductionTeamEquipment> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string plantCode,
         TaktProductionTeam team,
         TaktProductionEquipment equipment,
@@ -322,8 +323,8 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.PlantCode == plantCode
-            && x.ProductionTeamId == team.Id
-            && x.ProductionEquipmentId == equipment.Id);
+            && x.ProdTeamId == team.Id
+            && x.ProdEquipId == equipment.Id);
         if (row == null)
         {
             row = new TaktProductionTeamEquipment
@@ -331,14 +332,15 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 PlantCode = plantCode,
-                ProductionTeamId = team.Id,
+                ProdTeamId = team.Id,
                 TeamCode = team.TeamCode,
                 LineNumber = seed.LineNumber,
-                ProductionEquipmentId = equipment.Id,
-                ProductionEquipmentCode = equipment.ProductionEquipmentCode,
-                EquipmentQuantity = seed.EquipmentQuantity,
-                TeamEquipmentStatus = seed.TeamEquipmentStatus,
+                ProdEquipId = equipment.Id,
+                ProdEquipCode = equipment.ProdEquipCode,
+                EquipQuantity = seed.EquipQuantity,
+                TeamEquipStatus = seed.TeamEquipStatus,
                 IsObsolete = seed.IsObsolete,
+                CultureCode = cultureCode
             };
             row = await repository.CreateAsync(row);
             return (row, 1, 0);
@@ -354,19 +356,19 @@ public class TaktProductionTeamEquipmentSeedData : ITaktSeedDataCoordinator
             row.LineNumber = seed.LineNumber;
             needUpdate = true;
         }
-        if (row.ProductionEquipmentCode != equipment.ProductionEquipmentCode)
+        if (row.ProdEquipCode != equipment.ProdEquipCode)
         {
-            row.ProductionEquipmentCode = equipment.ProductionEquipmentCode;
+            row.ProdEquipCode = equipment.ProdEquipCode;
             needUpdate = true;
         }
-        if (row.EquipmentQuantity != seed.EquipmentQuantity)
+        if (row.EquipQuantity != seed.EquipQuantity)
         {
-            row.EquipmentQuantity = seed.EquipmentQuantity;
+            row.EquipQuantity = seed.EquipQuantity;
             needUpdate = true;
         }
-        if (row.TeamEquipmentStatus != seed.TeamEquipmentStatus)
+        if (row.TeamEquipStatus != seed.TeamEquipStatus)
         {
-            row.TeamEquipmentStatus = seed.TeamEquipmentStatus;
+            row.TeamEquipStatus = seed.TeamEquipStatus;
             needUpdate = true;
         }
         if (row.IsObsolete != seed.IsObsolete)

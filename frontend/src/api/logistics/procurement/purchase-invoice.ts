@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-invoice.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   PurchaseInvoice,
   PurchaseInvoiceCreate,
-  PurchaseInvoiceStatus,
   PurchaseInvoiceUpdate
 } from '@/types/logistics/procurement/purchase-invoice';
 
@@ -106,19 +105,6 @@ export function deletePurchaseInvoiceBatch(ids: string[]): Promise<void> {
     url: `${PURCHASE_INVOICE_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新采购发票状态
- * @param {PurchaseInvoiceStatus} dto 状态 DTO
- * @returns {Promise<PurchaseInvoice>} 采购发票DTO
- */
-export function updatePurchaseInvoiceStatus(dto: PurchaseInvoiceStatus): Promise<PurchaseInvoice> {
-  return request<PurchaseInvoice>({
-    url: `${PURCHASE_INVOICE_API_BASE}/status`,
-    method: 'put',
-    data: dto,
   });
 }
 

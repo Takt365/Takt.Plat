@@ -35,10 +35,6 @@ public class TaktProfitLossDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProfitLossId { get; set; }
 
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
@@ -133,9 +129,14 @@ public class TaktProfitLossQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
@@ -248,15 +249,16 @@ public class TaktProfitLossCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
@@ -427,9 +429,14 @@ public class TaktProfitLossTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
@@ -524,14 +531,15 @@ public class TaktProfitLossImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
@@ -634,7 +642,7 @@ public class TaktProfitLossExportDto
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）

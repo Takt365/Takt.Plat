@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -23,15 +23,6 @@ import type {
  * @description 对应后端 TaktBillOfMaterialDto
  */
 export interface BillOfMaterial extends CompanyDtoBase {
-  /**
-   * BillOfMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  billOfMaterialId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
 
   /**
    * BOM编码（业务单据号，便于检索，非唯一键）
@@ -44,19 +35,14 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomName: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -69,7 +55,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   bomType: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber: string;
 
@@ -89,7 +75,7 @@ export interface BillOfMaterial extends CompanyDtoBase {
   parentMaterialUnit: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity: number;
 
@@ -134,7 +120,12 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -149,19 +140,14 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomName?: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId?: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode?: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName?: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -174,7 +160,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   bomType?: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -204,7 +190,7 @@ export interface BillOfMaterialQuery extends TaktPagedQuery {
   parentMaterialUnit?: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity?: number;
 
@@ -263,12 +249,12 @@ export interface BillOfMaterialCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -283,19 +269,14 @@ export interface BillOfMaterialCreate {
   bomName: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -308,7 +289,7 @@ export interface BillOfMaterialCreate {
   bomType: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber: string;
 
@@ -328,7 +309,7 @@ export interface BillOfMaterialCreate {
   parentMaterialUnit: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity: number;
 
@@ -345,7 +326,7 @@ export interface BillOfMaterialCreate {
   /**
    * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
    */
-  items?: BillOfMaterialItemUpdate[];
+  items?: BillOfMaterialItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -371,6 +352,11 @@ export interface BillOfMaterialUpdate extends BillOfMaterialCreate {
    * BillOfMaterialID（标识要更新的实体）
    */
   billOfMaterialId: string;
+
+  /**
+   * BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -430,7 +416,12 @@ export interface BillOfMaterialTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -445,19 +436,14 @@ export interface BillOfMaterialTemplate {
   bomName?: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId?: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode?: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName?: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -470,7 +456,7 @@ export interface BillOfMaterialTemplate {
   bomType?: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -490,7 +476,7 @@ export interface BillOfMaterialTemplate {
   parentMaterialUnit?: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity?: number;
 
@@ -539,12 +525,12 @@ export interface BillOfMaterialImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -559,19 +545,14 @@ export interface BillOfMaterialImport {
   bomName?: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId?: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode?: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName?: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -584,7 +565,7 @@ export interface BillOfMaterialImport {
   bomType?: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber?: string;
 
@@ -604,7 +585,7 @@ export interface BillOfMaterialImport {
   parentMaterialUnit?: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity?: number;
 
@@ -653,7 +634,7 @@ export interface BillOfMaterialExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -668,19 +649,14 @@ export interface BillOfMaterialExport {
   bomName: string;
 
   /**
-   * 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-   */
-  parentMaterialId: string;
-
-  /**
-   * 父物料编码（父项物料编码 item_code，冗余）
+   * 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   parentMaterialCode: string;
 
   /**
-   * 父物料名称（冗余）
+   * 父物料描述（回填：随物料）
    */
-  parentMaterialName: string;
+  parentMaterialDescription?: string;
 
   /**
    * BOM版本号
@@ -693,7 +669,7 @@ export interface BillOfMaterialExport {
   bomType: number;
 
   /**
-   * 备选BOM编码（对应SAP Alternative BOM，如01/02）
+   * 备选BOM编码（对应，如01/02）
    */
   alternativeBomNumber: string;
 
@@ -713,7 +689,7 @@ export interface BillOfMaterialExport {
   parentMaterialUnit: string;
 
   /**
-   * 基本数量（BOM基数，对应SAP Base quantity）
+   * 基本数量（BOM基数，对应）
    */
   parentMaterialQuantity: number;
 

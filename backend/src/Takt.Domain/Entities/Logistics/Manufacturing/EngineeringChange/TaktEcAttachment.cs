@@ -17,8 +17,9 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_ec_attachment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_attachment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_attachment_type", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AttachmentType), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_doc_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DocNo), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_attachment_doc_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DocCode), OrderByType.Asc, false)]
 public class TaktEcAttachment : TaktCompanyEntityBase
 {
     /// <summary>
@@ -28,11 +29,12 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcId { get; set; }
 
+
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -49,8 +51,8 @@ public class TaktEcAttachment : TaktCompanyEntityBase
     /// <summary>
     /// 文件编码（如联络编码等）
     /// </summary>
-    [SugarColumn(ColumnName = "doc_no", ColumnDescription = "文件编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string DocNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "doc_code", ColumnDescription = "文件编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string DocCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 文件名称

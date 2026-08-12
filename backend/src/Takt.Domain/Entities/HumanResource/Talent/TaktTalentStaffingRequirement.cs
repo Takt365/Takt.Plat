@@ -4,7 +4,7 @@
 // 文件名称：TaktTalentStaffingRequirement.cs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：用人需求（人才链路第1步；字段对齐业务 ReqNo/DeptID/PositionID 等清单）
+// 功能描述：用人需求（人才链路第1步；字段对齐业务 ReqCode/DeptID/PositionID 等清单）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -22,7 +22,7 @@ namespace Takt.Domain.Entities.HumanResource.Talent;
 /// </summary>
 [SugarTable("takt_human_resource_talent_staffing_requirement", "用人需求表")]
 [SugarIndex("ix_talent_staffing_requirement_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_talent_staffing_requirement_req_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ReqNo), OrderByType.Asc, true)]
+[SugarIndex("ix_talent_staffing_requirement_req_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ReqCode), OrderByType.Asc, true)]
 [SugarIndex("ix_talent_staffing_requirement_approval", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApprovalStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_talent_staffing_requirement_dept", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DeptId), OrderByType.Asc, false)]
 public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
@@ -30,8 +30,8 @@ public class TaktTalentStaffingRequirement : TaktApprovalEntityBase
     /// <summary>
     /// 需求单号（租户+公司内唯一；自动生成，如 PR-2026-00123）
     /// </summary>
-    [SugarColumn(ColumnName = "req_no", ColumnDescription = "需求单号", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
-    public string ReqNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "req_code", ColumnDescription = "需求单号", ColumnDataType = "varchar", Length = 30, IsNullable = false)]
+    public string ReqCode { get; set; } = string.Empty;
     /// <summary>
     /// 申请部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>

@@ -20,11 +20,6 @@ import type {
   MaterialMovingPriceCreate,
   MaterialMovingPriceUpdate
 } from '@/types/logistics/materials/material-moving-price';
-import type {
-  MaterialMovingPriceMonthlyTrendQuery,
-  MaterialMovingPriceMonthlyTrendResult,
-  MaterialMovingPriceModelTrendResult
-} from '@/types/logistics/materials/material-moving-trend';
 
 /**
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
@@ -194,87 +189,5 @@ export function exportMaterialMovingPrice(
       exportName
     },
     responseType: 'blob',
-  });
-}
-
-/**
- * 物料月移动价格推移分析
- * @param {MaterialMovingPriceMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<MaterialMovingPriceMonthlyTrendResult>} 转置结果
- */
-export function getMaterialMovingPriceMonthlyTrendAnalysis(
-  queryDto: MaterialMovingPriceMonthlyTrendQuery
-): Promise<MaterialMovingPriceMonthlyTrendResult> {
-  return request<MaterialMovingPriceMonthlyTrendResult>({
-    url: `${MATERIAL_MOVING_PRICE_API_BASE}/monthly-trend-analysis`,
-    method: 'get',
-    params: queryDto,
-  });
-}
-
-/**
- * 导出物料月移动价格推移分析
- * @param {MaterialMovingPriceMonthlyTrendQuery} query 查询条件
- * @param {string} [sheetName] 工作表名
- * @param {string} [exportName] 导出文件名
- * @returns {Promise<Blob>} Excel 文件
- */
-export function exportMaterialMovingPriceMonthlyTrendAnalysis(
-  query: MaterialMovingPriceMonthlyTrendQuery,
-  sheetName?: string,
-  exportName?: string
-): Promise<Blob> {
-  return request<Blob>({
-    url: `${MATERIAL_MOVING_PRICE_API_BASE}/monthly-trend-analysis/export`,
-    method: 'get',
-    params: {
-      ...query,
-      sheetName,
-      exportName,
-    },
-    responseType: 'blob',
-    returnBinaryMeta: true,
-  });
-}
-
-/**
- * 物料-机种-价格推移分析
- * @param {MaterialMovingPriceMonthlyTrendQuery} queryDto 查询条件
- * @returns {Promise<MaterialMovingPriceModelTrendResult>} 分析结果
- */
-export function getMaterialMovingPriceModelTrendAnalysis(
-  queryDto: MaterialMovingPriceMonthlyTrendQuery
-): Promise<MaterialMovingPriceModelTrendResult> {
-  return request<MaterialMovingPriceModelTrendResult>({
-    url: `${MATERIAL_MOVING_PRICE_API_BASE}/model-trend-analysis`,
-    method: 'get',
-    params: queryDto,
-    timeout: 120000,
-  });
-}
-
-/**
- * 导出物料-机种-价格推移分析
- * @param {MaterialMovingPriceMonthlyTrendQuery} query 查询条件
- * @param {string} [sheetName] 工作表名
- * @param {string} [exportName] 导出文件名
- * @returns {Promise<Blob>} Excel 文件
- */
-export function exportMaterialMovingPriceModelTrendAnalysis(
-  query: MaterialMovingPriceMonthlyTrendQuery,
-  sheetName?: string,
-  exportName?: string
-): Promise<Blob> {
-  return request<Blob>({
-    url: `${MATERIAL_MOVING_PRICE_API_BASE}/model-trend-analysis/export`,
-    method: 'get',
-    params: {
-      ...query,
-      sheetName,
-      exportName,
-    },
-    responseType: 'blob',
-    returnBinaryMeta: true,
-    timeout: 300000,
   });
 }

@@ -343,14 +343,15 @@ public class TaktEcHinkanService : TaktServiceBase, ITaktEcHinkanService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EcnDetailId).Contains(keywords)
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || SqlFunc.ToString(x.IsImplemented).Contains(keywords)
                 || (x.ExecContent != null && x.ExecContent.Contains(keywords))
                 || (x.ProductionTeam != null && x.ProductionTeam.Contains(keywords))
                 || (x.InspectionBatch != null && x.InspectionBatch.Contains(keywords))
-                || (x.SamplingNo != null && x.SamplingNo.Contains(keywords))
+                || (x.SamplingCode != null && x.SamplingCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
@@ -363,9 +364,9 @@ public class TaktEcHinkanService : TaktServiceBase, ITaktEcHinkanService
             exp = exp.And(x => x.EcnDetailId == queryDto.EcnDetailId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -398,9 +399,14 @@ public class TaktEcHinkanService : TaktServiceBase, ITaktEcHinkanService
             exp = exp.And(x => x.InspectionBatch != null && x.InspectionBatch.Contains(queryDto.InspectionBatch));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SamplingNo))
+        if (!string.IsNullOrEmpty(queryDto?.SamplingCode))
         {
-            exp = exp.And(x => x.SamplingNo != null && x.SamplingNo.Contains(queryDto.SamplingNo));
+            exp = exp.And(x => x.SamplingCode != null && x.SamplingCode.Contains(queryDto.SamplingCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -432,6 +438,12 @@ public class TaktEcHinkanService : TaktServiceBase, ITaktEcHinkanService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

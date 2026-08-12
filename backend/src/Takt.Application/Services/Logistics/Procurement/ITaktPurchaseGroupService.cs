@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchaseGroupService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购组主数据应用服务接口
 // 
@@ -75,7 +75,7 @@ public interface ITaktPurchaseGroupService
     /// </summary>
     /// <param name="dto">状态DTO</param>
     /// <returns>DTO</returns>
-    Task<TaktPurchaseGroupDto> UpdateGroupStatusAsync(TaktGroupStatusDto dto);
+    Task<TaktPurchaseGroupDto> UpdatePurchaseGroupStatusAsync(TaktPurchaseGroupStatusDto dto);
 
     /// <summary>
     /// 更新采购组主数据排序

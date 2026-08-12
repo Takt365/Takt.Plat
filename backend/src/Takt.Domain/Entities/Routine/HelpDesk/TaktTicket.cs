@@ -21,7 +21,7 @@ namespace Takt.Domain.Entities.Routine.HelpDesk;
 [SugarTable("takt_routine_help_desk_ticket", "工单表")]
 [SugarIndex("ix_ticket_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ticket_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_ticket_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TicketNo), OrderByType.Asc, true)]
+[SugarIndex("ix_ticket_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TicketCode), OrderByType.Asc, true)]
 [SugarIndex("ix_ticket_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TicketStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_ticket_parent_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ParentTicketId), OrderByType.Asc, false)]
 [SugarIndex("ix_ticket_source", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TicketSource), OrderByType.Asc, false)]
@@ -31,8 +31,8 @@ public class TaktTicket : TaktCompanyEntityBase
     /// <summary>
     /// 工单编码（唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "ticket_no", ColumnDescription = "工单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string TicketNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ticket_code", ColumnDescription = "工单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string TicketCode { get; set; } = string.Empty;
     /// <summary>
     /// 工单标题
     /// </summary>

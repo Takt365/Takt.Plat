@@ -32,7 +32,7 @@ export default {
       quantity: "必要数量",
       maxLevel: "最大階層",
       includeLevelZero: "親行を含む",
-      summary: "BOM {bomCode} · 親 {parentMaterialCode} {parentMaterialName} · 数量 {quantity}",
+      summary: "BOM {bomCode} · 親 {parentMaterialCode} {parentMaterialDescription} · 数量 {quantity}",
       column: {
         level: "階層",
         immediateParent: "直接親",

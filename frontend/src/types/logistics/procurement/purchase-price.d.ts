@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-price.d.ts
-// 创建时间：2026-07-21
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -23,115 +23,6 @@ import type {
  * @description 对应后端 TaktPurchasePriceDto
  */
 export interface PurchasePrice extends CompanyDtoBase {
-  /**
-   * PurchasePriceID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  purchasePriceId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 定价记录号（唯一索引；长度 20）
-   */
-  purchasePriceCode: string;
-
-  /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
-   */
-  priceType: string;
-
-  /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
-   */
-  supplierCode: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
-   */
-  materialCode: string;
-
-  /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
-   */
-  purchaseGroup?: string;
-
-  /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
-   */
-  taxCode?: string;
-
-  /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
-   */
-  grBasedInvoiceInspection: number;
-
-  /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
-   */
-  pricingDateControl: number;
-
-  /**
-   * 有效起始日
-   */
-  validFrom: string;
-
-  /**
-   * 有效截至日
-   */
-  validTo: string;
-
-  /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
-   */
-  purchaseInquiryId?: string;
-
-  /**
-   * 来源采购询价 名称（填充字段）
-   */
-  purchaseInquiryName?: string;
-
-  /**
-   * 来源采购询价编码（冗余）
-   */
-  purchaseInquiryCode?: string;
-
-  /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 定价条件行列表（主子表关系） （子表：TaktPurchasePriceItem）
-   */
-  items?: PurchasePriceItem[];
-
-}
-
-
-/**
- * PurchasePrice 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 PurchasePriceQuery
- * @description 对应后端 TaktPurchasePriceQueryDto
- */
-export interface PurchasePriceQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
 
   /**
    * 定价记录号（唯一索引；长度 20）
@@ -144,275 +35,32 @@ export interface PurchasePriceQuery extends TaktPagedQuery {
   priceType?: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 物料描述（回填：随物料）
+   */
+  materialDescription?: string;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
    */
   taxCode?: string;
 
   /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
-   */
-  grBasedInvoiceInspection?: number;
-
-  /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
-   */
-  pricingDateControl?: number;
-
-  /**
-   * 有效起始日（范围查询-开始）
-   */
-  validFromStart?: string;
-
-  /**
-   * 有效起始日（范围查询-结束）
-   */
-  validFromEnd?: string;
-
-  /**
-   * 有效截至日（范围查询-开始）
-   */
-  validToStart?: string;
-
-  /**
-   * 有效截至日（范围查询-结束）
-   */
-  validToEnd?: string;
-
-  /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
-   */
-  purchaseInquiryId?: string;
-
-  /**
-   * 来源采购询价编码（冗余）
-   */
-  purchaseInquiryCode?: string;
-
-  /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建PurchasePrice DTO
- * 对应前端 PurchasePriceCreate
- * @description 对应后端 TaktPurchasePriceCreateDto
- */
-export interface PurchasePriceCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 定价记录号（唯一索引；长度 20）
-   */
-  purchasePriceCode: string;
-
-  /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
-   */
-  priceType: string;
-
-  /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
-   */
-  supplierCode: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
-   */
-  materialCode: string;
-
-  /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
-   */
-  purchaseGroup?: string;
-
-  /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
-   */
-  taxCode?: string;
-
-  /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
-   */
-  grBasedInvoiceInspection: number;
-
-  /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
-   */
-  pricingDateControl: number;
-
-  /**
-   * 有效起始日
-   */
-  validFrom: string;
-
-  /**
-   * 有效截至日
-   */
-  validTo: string;
-
-  /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
-   */
-  purchaseInquiryId?: string;
-
-  /**
-   * 来源采购询价编码（冗余）
-   */
-  purchaseInquiryCode?: string;
-
-  /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 定价条件行列表（主子表关系）（子表，级联保存）
-   */
-  items?: PurchasePriceItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新PurchasePrice DTO
- * 继承 TaktPurchasePriceCreateDto，添加 PurchasePriceId 字段
- * 对应前端 PurchasePriceUpdate
- * @description 对应后端 TaktPurchasePriceUpdateDto
- */
-export interface PurchasePriceUpdate extends PurchasePriceCreate {
-  /**
-   * PurchasePriceID（标识要更新的实体）
-   */
-  purchasePriceId: string;
-
-  /**
-   * 定价条件行列表（主子表关系）（子表，级联保存）
-   */
-  items?: any;
-
-}
-
-
-/**
- * PurchasePrice 导入模板行 DTO
- * 对应前端 PurchasePriceTemplate
- * @description 对应后端 TaktPurchasePriceTemplateDto
- */
-export interface PurchasePriceTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 定价记录号（唯一索引；长度 20）
-   */
-  purchasePriceCode?: string;
-
-  /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
-   */
-  priceType?: string;
-
-  /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
-   */
-  supplierCode?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
-   */
-  purchaseGroup?: string;
-
-  /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
-   */
-  taxCode?: string;
-
-  /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
    */
   grBasedInvoiceInspection?: number;
 
@@ -432,7 +80,7 @@ export interface PurchasePriceTemplate {
   validTo?: string;
 
   /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 
@@ -462,116 +110,6 @@ export interface PurchasePriceTemplate {
   remark?: string;
 
 }
-
-
-/**
- * PurchasePrice 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 PurchasePriceImport
- * @description 对应后端 TaktPurchasePriceImportDto
- */
-export interface PurchasePriceImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 定价记录号（唯一索引；长度 20）
-   */
-  purchasePriceCode?: string;
-
-  /**
-   * 条件类型（字典 logistics_price_type；PB00=采购总价 Gross Price，PR00=基本价格 Base Price，MWST=销项税/增值税，MWRK=不可抵扣进项税，NLXV=购置税）
-   */
-  priceType?: string;
-
-  /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
-   */
-  supplierCode?: string;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
-   */
-  purchaseGroup?: string;
-
-  /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
-   */
-  taxCode?: string;
-
-  /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
-   */
-  grBasedInvoiceInspection?: number;
-
-  /**
-   * 定价日期控制（字典 logistics_pricing_date_control；1=采购订单日期，2=交货日期，3=当前日期，4=手动，5=收货日期；默认 1）
-   */
-  pricingDateControl?: number;
-
-  /**
-   * 有效起始日
-   */
-  validFrom?: string;
-
-  /**
-   * 有效截至日
-   */
-  validTo?: string;
-
-  /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
-   */
-  purchaseInquiryId?: string;
-
-  /**
-   * 来源采购询价编码（冗余）
-   */
-  purchaseInquiryCode?: string;
-
-  /**
-   * 可变关键字
-   */
-  variableKey?: string;
-
-  /**
-   * 定价条件行列表（主子表关系）（子表，级联保存）
-   */
-  items?: PurchasePriceItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * PurchasePrice 导出 DTO（独立实现，不继承响应 Dto）
@@ -590,7 +128,7 @@ export interface PurchasePriceExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -605,27 +143,32 @@ export interface PurchasePriceExport {
   priceType: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+   * 物料描述（回填：随物料）
+   */
+  materialDescription: string;
+
+  /**
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
    */
   purchaseGroup?: string;
 
   /**
-   * 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+   * 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
    */
   taxCode?: string;
 
   /**
-   * 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+   * 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
    */
   grBasedInvoiceInspection: number;
 
@@ -645,7 +188,7 @@ export interface PurchasePriceExport {
   validTo: string;
 
   /**
-   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+   * 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
    */
   purchaseInquiryId?: string;
 

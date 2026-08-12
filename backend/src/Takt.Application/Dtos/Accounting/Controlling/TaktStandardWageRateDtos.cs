@@ -35,75 +35,6 @@ public class TaktStandardWageRateDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long StandardWageRateId { get; set; }
 
-    /// <summary>
-    /// 年月（yyyyMM）
-    /// </summary>
-    public string YearMonth { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工作天数
-    /// </summary>
-    public decimal WorkingDays { get; set; }
-
-    /// <summary>
-    /// 销售额
-    /// </summary>
-    public decimal SalesAmount { get; set; }
-
-    /// <summary>
-    /// 直接人数
-    /// </summary>
-    public int DirectLaborCount { get; set; } = 0;
-
-    /// <summary>
-    /// 直接工资
-    /// </summary>
-    public decimal DirectLaborWage { get; set; }
-
-    /// <summary>
-    /// 直接加班小时
-    /// </summary>
-    public decimal DirectOvertimeHours { get; set; }
-
-    /// <summary>
-    /// 直接加班总额
-    /// </summary>
-    public decimal DirectOvertimeTotal { get; set; }
-
-    /// <summary>
-    /// 直接工资率
-    /// </summary>
-    public decimal DirectWageRate { get; set; }
-
-    /// <summary>
-    /// 间接人数
-    /// </summary>
-    public int IndirectLaborCount { get; set; } = 0;
-
-    /// <summary>
-    /// 间接工资
-    /// </summary>
-    public decimal IndirectLaborWage { get; set; }
-
-    /// <summary>
-    /// 间接加班小时
-    /// </summary>
-    public decimal IndirectOvertimeHours { get; set; }
-
-    /// <summary>
-    /// 间接加班总额
-    /// </summary>
-    public decimal IndirectOvertimeTotal { get; set; }
-
-    /// <summary>
-    /// 间接工资率
-    /// </summary>
-    public decimal IndirectWageRate { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -126,6 +57,11 @@ public class TaktStandardWageRateQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 年月（yyyyMM）
@@ -195,7 +131,7 @@ public class TaktStandardWageRateQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -238,9 +174,10 @@ public class TaktStandardWageRateCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 年月（yyyyMM）
@@ -312,7 +249,7 @@ public class TaktStandardWageRateCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -366,6 +303,11 @@ public class TaktStandardWageRateTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 年月（yyyyMM）
     /// </summary>
     public string? YearMonth { get; set; } = string.Empty;
@@ -433,7 +375,7 @@ public class TaktStandardWageRateTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -463,9 +405,10 @@ public class TaktStandardWageRateImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 年月（yyyyMM）
@@ -535,7 +478,7 @@ public class TaktStandardWageRateImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -638,7 +581,7 @@ public class TaktStandardWageRateExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

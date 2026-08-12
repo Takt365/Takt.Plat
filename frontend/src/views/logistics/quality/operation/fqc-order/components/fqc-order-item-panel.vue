@@ -153,22 +153,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -250,11 +250,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sampleSerialNo')">
-      <a-form-item :label="pi.queryLabel('sampleSerialNo')">
+      <div v-show="isFieldVisible('sampleSerialCode')">
+      <a-form-item :label="pi.queryLabel('sampleSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sampleSerialNo"
-          :placeholder="pi.queryPh('sampleSerialNo', 'required')"
+          v-model:value="advancedQueryForm.sampleSerialCode"
+          :placeholder="pi.queryPh('sampleSerialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -663,24 +663,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: FqcOrderItem }) =>
-      String(getFqcOrderItemField(record, 'materialName') ?? ''),
+      String(getFqcOrderItemField(record, 'materialDescription') ?? ''),
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: FqcOrderItem }) =>
-      String(getFqcOrderItemField(record, 'batchNo') ?? ''),
+      String(getFqcOrderItemField(record, 'batchCode') ?? ''),
   },
   {
     title: pi.label('warehouseQuantity'),
@@ -763,14 +763,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getFqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''),
   },
   {
-    title: pi.label('sampleSerialNo'),
-    dataIndex: 'sampleSerialNo',
-    key: 'sampleSerialNo',
+    title: pi.label('sampleSerialCode'),
+    dataIndex: 'sampleSerialCode',
+    key: 'sampleSerialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: FqcOrderItem }) =>
-      String(getFqcOrderItemField(record, 'sampleSerialNo') ?? ''),
+      String(getFqcOrderItemField(record, 'sampleSerialCode') ?? ''),
   },
   {
     title: pi.label('inspectionDescription'),
@@ -839,10 +839,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:operation:fqc:order:delete',
         onClick: (record: FqcOrderItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

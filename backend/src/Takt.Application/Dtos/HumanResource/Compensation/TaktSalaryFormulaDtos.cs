@@ -35,71 +35,6 @@ public class TaktSalaryFormulaDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalaryFormulaId { get; set; }
 
-    /// <summary>
-    /// 公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）
-    /// </summary>
-    public string SetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 公式方案名称
-    /// </summary>
-    public string SetName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联薪酬体系 ID（可选；同 set_code 各行取值应一致）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? PayrollId { get; set; }
-
-    /// <summary>
-    /// 关联薪酬体系 名称（填充字段）
-    /// </summary>
-    public string? PayrollName { get; set; }
-
-    /// <summary>
-    /// 步骤编码（同方案内唯一，如 GROSS、SS_EMP、HF_EMP、TAX、NET）
-    /// </summary>
-    public string FormulaCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 步骤名称（如：应发合计、社保个人、公积金个人、个税、实发）
-    /// </summary>
-    public string FormulaName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 公式步骤类型（字典 hr_salary_formula_step_type：应发/社保个人/公积金个人/个税/实发）
-    /// </summary>
-    public int FormulaStep { get; set; } = 0;
-
-    /// <summary>
-    /// 结果写入字段（与 TaktPayslip 列名一致，如 gross_amount、net_amount）
-    /// </summary>
-    public string TargetField { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计算公式表达式（引擎解析；支持 + - * / 及 CUMULATIVE_TAX 等内置函数）
-    /// </summary>
-    public string FormulaExpression { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 步骤说明（可读描述，如「应发=基本+绩效+加班费+补贴」）
-    /// </summary>
-    public string? StepDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 方案生效日期（同 set_code 各行应一致）
-    /// </summary>
-    public DateTime EffectiveDate { get; set; }
-
-    /// <summary>
-    /// 方案失效日期
-    /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
@@ -132,6 +67,11 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）
@@ -202,7 +142,7 @@ public class TaktSalaryFormulaQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）
@@ -255,9 +195,10 @@ public class TaktSalaryFormulaCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）
@@ -325,7 +266,7 @@ public class TaktSalaryFormulaCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -432,6 +373,11 @@ public class TaktSalaryFormulaTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）
     /// </summary>
     public string? SetCode { get; set; } = string.Empty;
@@ -490,7 +436,7 @@ public class TaktSalaryFormulaTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -525,9 +471,10 @@ public class TaktSalaryFormulaImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 公式方案编码（同编码多行=一套完整核算步骤，租户+公司内业务唯一标识）
@@ -588,7 +535,7 @@ public class TaktSalaryFormulaImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -687,7 +634,7 @@ public class TaktSalaryFormulaExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 执行顺序（同一 set_code 内从小到大；应发=1 … 实发=5）

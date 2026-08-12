@@ -421,7 +421,7 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
                 || (x.CompanyManager != null && x.CompanyManager.Contains(keywords))
                 || SqlFunc.ToString(x.RegisteredCapital).Contains(keywords)
                 || SqlFunc.ToString(x.CompanyExistence).Contains(keywords)
-                || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
                 || (x.BankCode != null && x.BankCode.Contains(keywords))
                 || (x.BankAccount != null && x.BankAccount.Contains(keywords))
@@ -581,9 +581,9 @@ public class TaktCompanyService : TaktServiceBase, ITaktCompanyService
             exp = exp.And(x => x.CompanyExistence == queryDto.CompanyExistence);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.CodeAlias))

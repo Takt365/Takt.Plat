@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktCustomerValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Customer 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCustomer 生成，请按需审阅）
 // 
@@ -35,12 +35,15 @@ public class TaktCustomerCreateValidator : AbstractValidator<TaktCustomerCreateD
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(20).WithMessage("客户编码长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("客户编码长度不能超过10个字符");
         RuleFor(x => x.CustomerName1)
             .NotEmpty().WithMessage("客户名称1不能为空")
             .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
@@ -50,9 +53,6 @@ public class TaktCustomerCreateValidator : AbstractValidator<TaktCustomerCreateD
         RuleFor(x => x.IndustryAttribute)
             .NotEmpty().WithMessage("行业属性不能为空")
             .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
-        RuleFor(x => x.DefaultCulture)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
-            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
@@ -76,7 +76,7 @@ public class TaktCustomerCreateValidator : AbstractValidator<TaktCustomerCreateD
             .MaximumLength(2).WithMessage("帐户分配组长度不能超过2个字符");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商不能为空")
-            .MaximumLength(20).WithMessage("供应商长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("供应商长度不能超过10个字符");
         RuleFor(x => x.NielsenIndicator)
             .NotEmpty().WithMessage("尼尔森标识不能为空")
             .MaximumLength(2).WithMessage("尼尔森标识长度不能超过2个字符");
@@ -133,12 +133,15 @@ public class TaktCustomerUpdateValidator : AbstractValidator<TaktCustomerUpdateD
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(20).WithMessage("客户编码长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("客户编码长度不能超过10个字符");
         RuleFor(x => x.CustomerName1)
             .NotEmpty().WithMessage("客户名称1不能为空")
             .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
@@ -148,9 +151,6 @@ public class TaktCustomerUpdateValidator : AbstractValidator<TaktCustomerUpdateD
         RuleFor(x => x.IndustryAttribute)
             .NotEmpty().WithMessage("行业属性不能为空")
             .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
-        RuleFor(x => x.DefaultCulture)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
-            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
@@ -174,7 +174,7 @@ public class TaktCustomerUpdateValidator : AbstractValidator<TaktCustomerUpdateD
             .MaximumLength(2).WithMessage("帐户分配组长度不能超过2个字符");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商不能为空")
-            .MaximumLength(20).WithMessage("供应商长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("供应商长度不能超过10个字符");
         RuleFor(x => x.NielsenIndicator)
             .NotEmpty().WithMessage("尼尔森标识不能为空")
             .MaximumLength(2).WithMessage("尼尔森标识长度不能超过2个字符");
@@ -227,12 +227,13 @@ public class TaktCustomerImportValidator : AbstractValidator<TaktCustomerImportD
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.CustomerCode)
             .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(20).WithMessage("客户编码长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("客户编码长度不能超过10个字符");
         RuleFor(x => x.CustomerName1)
             .NotEmpty().WithMessage("客户名称1不能为空")
             .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
@@ -242,9 +243,6 @@ public class TaktCustomerImportValidator : AbstractValidator<TaktCustomerImportD
         RuleFor(x => x.IndustryAttribute)
             .NotEmpty().WithMessage("行业属性不能为空")
             .MaximumLength(4).WithMessage("行业属性长度不能超过4个字符");
-        RuleFor(x => x.DefaultCulture)
-            .NotEmpty().WithMessage("区域文化编码不能为空")
-            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("结算币种代码不能为空")
             .MaximumLength(3).WithMessage("结算币种代码长度不能超过3个字符");
@@ -268,7 +266,7 @@ public class TaktCustomerImportValidator : AbstractValidator<TaktCustomerImportD
             .MaximumLength(2).WithMessage("帐户分配组长度不能超过2个字符");
         RuleFor(x => x.SupplierCode)
             .NotEmpty().WithMessage("供应商不能为空")
-            .MaximumLength(20).WithMessage("供应商长度不能超过20个字符");
+            .MaximumLength(10).WithMessage("供应商长度不能超过10个字符");
         RuleFor(x => x.NielsenIndicator)
             .NotEmpty().WithMessage("尼尔森标识不能为空")
             .MaximumLength(2).WithMessage("尼尔森标识长度不能超过2个字符");

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     }
 
     /// <summary>
-    /// 获取销售发票明细列表（分页）
+    /// 获取销售发票明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSalesInvoiceItemDto>> GetSalesInvoiceItemListAsync(TaktSalesInvoiceItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSalesInvoiceItemDto>.Create(
+                new List<TaktSalesInvoiceItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _salesInvoiceItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,12 +109,12 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
         EnsureThreeLayerContext();
         var list = await _salesInvoiceItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
-            x => x.ModelName ?? string.Empty,
+            x => x.BillingDocumentCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.AccountingDocumentCode,
-            DictLabel = e.ModelName ?? e.AccountingDocumentCode,
+            DictValue = e.BillingDocumentCode,
+            DictLabel = e.BillingDocumentCode,
         }).ToList();
     }
 
@@ -311,7 +319,15 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesInvoiceItemAsync(TaktSalesInvoiceItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSalesInvoiceItemQueryDto());
+        var queryDto = query ?? new TaktSalesInvoiceItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSalesInvoiceItemExportDto>(),
+                sheetName ?? "销售发票明细数据",
+                fileName ?? "销售发票明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _salesInvoiceItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -372,161 +388,698 @@ public class TaktSalesInvoiceItemService : TaktServiceBase, ITaktSalesInvoiceIte
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.SalesInvoiceId).Contains(keywords)
-                || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.ModelName != null && x.ModelName.Contains(keywords))
-                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialType != null && x.MaterialType.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
-                || (x.AccountTitle != null && x.AccountTitle.Contains(keywords))
-                || SqlFunc.ToString(x.Quantity).Contains(keywords)
-                || (x.Unit != null && x.Unit.Contains(keywords))
-                || SqlFunc.ToString(x.LocalCurrencyAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TransactionCurrencyAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxIncludedPrice).Contains(keywords)
-                || SqlFunc.ToString(x.UntaxedPrice).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || (x.DocumentType != null && x.DocumentType.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(keywords))
+                || (x.SalesUnit != null && x.SalesUnit.Contains(keywords))
+                || (x.BaseUnit != null && x.BaseUnit.Contains(keywords))
+                || (x.WeightUnit != null && x.WeightUnit.Contains(keywords))
+                || (x.BusinessAreaCode != null && x.BusinessAreaCode.Contains(keywords))
                 || (x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(keywords))
-                || SqlFunc.ToString(x.ReferenceDocumentItem).Contains(keywords)
+                || (x.ReferenceDocumentCategory != null && x.ReferenceDocumentCategory.Contains(keywords))
+                || (x.SalesDocumentCode != null && x.SalesDocumentCode.Contains(keywords))
+                || (x.SalesDocumentReferenceFlag != null && x.SalesDocumentReferenceFlag.Contains(keywords))
+                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
+                || (x.PricingReferenceMaterialCode != null && x.PricingReferenceMaterialCode.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
+                || (x.MaterialGroup != null && x.MaterialGroup.Contains(keywords))
+                || (x.SalesItemCategory != null && x.SalesItemCategory.Contains(keywords))
+                || (x.ProductHierarchy != null && x.ProductHierarchy.Contains(keywords))
+                || (x.ShippingPoint != null && x.ShippingPoint.Contains(keywords))
+                || (x.Division != null && x.Division.Contains(keywords))
+                || (x.DepartureCountry != null && x.DepartureCountry.Contains(keywords))
+                || (x.PlantRegion != null && x.PlantRegion.Contains(keywords))
+                || (x.PricingFlag != null && x.PricingFlag.Contains(keywords))
+                || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
+                || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
+                || (x.CustomerGroupSalesOrder != null && x.CustomerGroupSalesOrder.Contains(keywords))
+                || (x.DestinationCountryOrder != null && x.DestinationCountryOrder.Contains(keywords))
+                || (x.RegionOrder != null && x.RegionOrder.Contains(keywords))
+                || (x.SalesOrganizationOrder != null && x.SalesOrganizationOrder.Contains(keywords))
+                || (x.DistributionChannelOrder != null && x.DistributionChannelOrder.Contains(keywords))
+                || (x.DocumentCategory != null && x.DocumentCategory.Contains(keywords))
+                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.PostingDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
         if (queryDto?.SalesInvoiceId.HasValue == true)
         {
-            exp = exp.And(x => x.SalesInvoiceId == queryDto.SalesInvoiceId);
+            var salesInvoiceId = queryDto.SalesInvoiceId;
+            exp = exp.And(x => x.SalesInvoiceId == salesInvoiceId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountingDocumentCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(queryDto.AccountingDocumentCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BillingDocumentCode))
+        {
+            var billingDocumentCode = queryDto.BillingDocumentCode;
+            exp = exp.And(x => x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(billingDocumentCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            var lineNumber = queryDto.LineNumber;
+            exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ModelName))
+        if (queryDto?.BillingQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.ModelName != null && x.ModelName.Contains(queryDto.ModelName));
+            var billingQuantity = queryDto.BillingQuantity;
+            exp = exp.And(x => x.BillingQuantity == billingQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesUnit))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var salesUnit = queryDto.SalesUnit;
+            exp = exp.And(x => x.SalesUnit != null && x.SalesUnit.Contains(salesUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BaseUnit))
         {
-            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
+            var baseUnit = queryDto.BaseUnit;
+            exp = exp.And(x => x.BaseUnit != null && x.BaseUnit.Contains(baseUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (queryDto?.ScaleQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            var scaleQuantity = queryDto.ScaleQuantity;
+            exp = exp.And(x => x.ScaleQuantity == scaleQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProfitCenterCode))
+        if (queryDto?.BillingQuantitySku.HasValue == true)
         {
-            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(queryDto.ProfitCenterCode));
+            var billingQuantitySku = queryDto.BillingQuantitySku;
+            exp = exp.And(x => x.BillingQuantitySku == billingQuantitySku);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountTitle))
+        if (queryDto?.NetWeight.HasValue == true)
         {
-            exp = exp.And(x => x.AccountTitle != null && x.AccountTitle.Contains(queryDto.AccountTitle));
+            var netWeight = queryDto.NetWeight;
+            exp = exp.And(x => x.NetWeight == netWeight);
         }
 
-        if (queryDto?.Quantity.HasValue == true)
+        if (queryDto?.GrossWeight.HasValue == true)
         {
-            exp = exp.And(x => x.Quantity == queryDto.Quantity);
+            var grossWeight = queryDto.GrossWeight;
+            exp = exp.And(x => x.GrossWeight == grossWeight);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Unit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WeightUnit))
         {
-            exp = exp.And(x => x.Unit != null && x.Unit.Contains(queryDto.Unit));
+            var weightUnit = queryDto.WeightUnit;
+            exp = exp.And(x => x.WeightUnit != null && x.WeightUnit.Contains(weightUnit));
         }
 
-        if (queryDto?.LocalCurrencyAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.BusinessAreaCode))
         {
-            exp = exp.And(x => x.LocalCurrencyAmount == queryDto.LocalCurrencyAmount);
+            var businessAreaCode = queryDto.BusinessAreaCode;
+            exp = exp.And(x => x.BusinessAreaCode != null && x.BusinessAreaCode.Contains(businessAreaCode));
         }
 
-        if (queryDto?.TransactionCurrencyAmount.HasValue == true)
+        if (queryDto?.PricingExchangeRate.HasValue == true)
         {
-            exp = exp.And(x => x.TransactionCurrencyAmount == queryDto.TransactionCurrencyAmount);
+            var pricingExchangeRate = queryDto.PricingExchangeRate;
+            exp = exp.And(x => x.PricingExchangeRate == pricingExchangeRate);
         }
 
-        if (queryDto?.TaxIncludedPrice.HasValue == true)
+        if (queryDto?.NetAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TaxIncludedPrice == queryDto.TaxIncludedPrice);
+            var netAmount = queryDto.NetAmount;
+            exp = exp.And(x => x.NetAmount == netAmount);
         }
 
-        if (queryDto?.UntaxedPrice.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceDocumentCode))
         {
-            exp = exp.And(x => x.UntaxedPrice == queryDto.UntaxedPrice);
-        }
-
-        if (queryDto?.TaxAmount.HasValue == true)
-        {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DocumentType))
-        {
-            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(queryDto.DocumentType));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ReferenceDocumentCode))
-        {
-            exp = exp.And(x => x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(queryDto.ReferenceDocumentCode));
+            var referenceDocumentCode = queryDto.ReferenceDocumentCode;
+            exp = exp.And(x => x.ReferenceDocumentCode != null && x.ReferenceDocumentCode.Contains(referenceDocumentCode));
         }
 
         if (queryDto?.ReferenceDocumentItem.HasValue == true)
         {
-            exp = exp.And(x => x.ReferenceDocumentItem == queryDto.ReferenceDocumentItem);
+            var referenceDocumentItem = queryDto.ReferenceDocumentItem;
+            exp = exp.And(x => x.ReferenceDocumentItem == referenceDocumentItem);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceDocumentCategory))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var referenceDocumentCategory = queryDto.ReferenceDocumentCategory;
+            exp = exp.And(x => x.ReferenceDocumentCategory != null && x.ReferenceDocumentCategory.Contains(referenceDocumentCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesDocumentCode))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var salesDocumentCode = queryDto.SalesDocumentCode;
+            exp = exp.And(x => x.SalesDocumentCode != null && x.SalesDocumentCode.Contains(salesDocumentCode));
         }
 
-        if (queryDto?.PostingDateStart.HasValue == true)
+        if (queryDto?.SalesDocumentItem.HasValue == true)
         {
-            exp = exp.And(x => x.PostingDate >= queryDto.PostingDateStart);
+            var salesDocumentItem = queryDto.SalesDocumentItem;
+            exp = exp.And(x => x.SalesDocumentItem == salesDocumentItem);
         }
 
-        if (queryDto?.PostingDateEnd.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesDocumentReferenceFlag))
         {
-            exp = exp.And(x => x.PostingDate <= queryDto.PostingDateEnd);
+            var salesDocumentReferenceFlag = queryDto.SalesDocumentReferenceFlag;
+            exp = exp.And(x => x.SalesDocumentReferenceFlag != null && x.SalesDocumentReferenceFlag.Contains(salesDocumentReferenceFlag));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
+        {
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
+        {
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingReferenceMaterialCode))
+        {
+            var pricingReferenceMaterialCode = queryDto.PricingReferenceMaterialCode;
+            exp = exp.And(x => x.PricingReferenceMaterialCode != null && x.PricingReferenceMaterialCode.Contains(pricingReferenceMaterialCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BatchCode))
+        {
+            var batchCode = queryDto.BatchCode;
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(batchCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroup))
+        {
+            var materialGroup = queryDto.MaterialGroup;
+            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(materialGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesItemCategory))
+        {
+            var salesItemCategory = queryDto.SalesItemCategory;
+            exp = exp.And(x => x.SalesItemCategory != null && x.SalesItemCategory.Contains(salesItemCategory));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductHierarchy))
+        {
+            var productHierarchy = queryDto.ProductHierarchy;
+            exp = exp.And(x => x.ProductHierarchy != null && x.ProductHierarchy.Contains(productHierarchy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShippingPoint))
+        {
+            var shippingPoint = queryDto.ShippingPoint;
+            exp = exp.And(x => x.ShippingPoint != null && x.ShippingPoint.Contains(shippingPoint));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Division))
+        {
+            var division = queryDto.Division;
+            exp = exp.And(x => x.Division != null && x.Division.Contains(division));
+        }
+
+        if (queryDto?.PartnerItem.HasValue == true)
+        {
+            var partnerItem = queryDto.PartnerItem;
+            exp = exp.And(x => x.PartnerItem == partnerItem);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DepartureCountry))
+        {
+            var departureCountry = queryDto.DepartureCountry;
+            exp = exp.And(x => x.DepartureCountry != null && x.DepartureCountry.Contains(departureCountry));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantRegion))
+        {
+            var plantRegion = queryDto.PlantRegion;
+            exp = exp.And(x => x.PlantRegion != null && x.PlantRegion.Contains(plantRegion));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingFlag))
+        {
+            var pricingFlag = queryDto.PricingFlag;
+            exp = exp.And(x => x.PricingFlag != null && x.PricingFlag.Contains(pricingFlag));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseCode))
+        {
+            var warehouseCode = queryDto.WarehouseCode;
+            exp = exp.And(x => x.WarehouseCode != null && x.WarehouseCode.Contains(warehouseCode));
+        }
+
+        if (queryDto?.CostAmount.HasValue == true)
+        {
+            var costAmount = queryDto.CostAmount;
+            exp = exp.And(x => x.CostAmount == costAmount);
+        }
+
+        if (queryDto?.Subtotal1.HasValue == true)
+        {
+            var subtotal1 = queryDto.Subtotal1;
+            exp = exp.And(x => x.Subtotal1 == subtotal1);
+        }
+
+        if (queryDto?.Subtotal2.HasValue == true)
+        {
+            var subtotal2 = queryDto.Subtotal2;
+            exp = exp.And(x => x.Subtotal2 == subtotal2);
+        }
+
+        if (queryDto?.Subtotal3.HasValue == true)
+        {
+            var subtotal3 = queryDto.Subtotal3;
+            exp = exp.And(x => x.Subtotal3 == subtotal3);
+        }
+
+        if (queryDto?.Subtotal4.HasValue == true)
+        {
+            var subtotal4 = queryDto.Subtotal4;
+            exp = exp.And(x => x.Subtotal4 == subtotal4);
+        }
+
+        if (queryDto?.Subtotal5.HasValue == true)
+        {
+            var subtotal5 = queryDto.Subtotal5;
+            exp = exp.And(x => x.Subtotal5 == subtotal5);
+        }
+
+        if (queryDto?.Subtotal6.HasValue == true)
+        {
+            var subtotal6 = queryDto.Subtotal6;
+            exp = exp.And(x => x.Subtotal6 == subtotal6);
+        }
+
+        if (queryDto?.StatisticsExchangeRate.HasValue == true)
+        {
+            var statisticsExchangeRate = queryDto.StatisticsExchangeRate;
+            exp = exp.And(x => x.StatisticsExchangeRate == statisticsExchangeRate);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProfitCenterCode))
+        {
+            var profitCenterCode = queryDto.ProfitCenterCode;
+            exp = exp.And(x => x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(profitCenterCode));
+        }
+
+        if (queryDto?.CreditPrice.HasValue == true)
+        {
+            var creditPrice = queryDto.CreditPrice;
+            exp = exp.And(x => x.CreditPrice == creditPrice);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerGroupSalesOrder))
+        {
+            var customerGroupSalesOrder = queryDto.CustomerGroupSalesOrder;
+            exp = exp.And(x => x.CustomerGroupSalesOrder != null && x.CustomerGroupSalesOrder.Contains(customerGroupSalesOrder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DestinationCountryOrder))
+        {
+            var destinationCountryOrder = queryDto.DestinationCountryOrder;
+            exp = exp.And(x => x.DestinationCountryOrder != null && x.DestinationCountryOrder.Contains(destinationCountryOrder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegionOrder))
+        {
+            var regionOrder = queryDto.RegionOrder;
+            exp = exp.And(x => x.RegionOrder != null && x.RegionOrder.Contains(regionOrder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrganizationOrder))
+        {
+            var salesOrganizationOrder = queryDto.SalesOrganizationOrder;
+            exp = exp.And(x => x.SalesOrganizationOrder != null && x.SalesOrganizationOrder.Contains(salesOrganizationOrder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DistributionChannelOrder))
+        {
+            var distributionChannelOrder = queryDto.DistributionChannelOrder;
+            exp = exp.And(x => x.DistributionChannelOrder != null && x.DistributionChannelOrder.Contains(distributionChannelOrder));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentCategory))
+        {
+            var documentCategory = queryDto.DocumentCategory;
+            exp = exp.And(x => x.DocumentCategory != null && x.DocumentCategory.Contains(documentCategory));
+        }
+
+        if (queryDto?.TaxAmount.HasValue == true)
+        {
+            var taxAmount = queryDto.TaxAmount;
+            exp = exp.And(x => x.TaxAmount == taxAmount);
+        }
+
+        if (queryDto?.GrossAmount.HasValue == true)
+        {
+            var grossAmount = queryDto.GrossAmount;
+            exp = exp.And(x => x.GrossAmount == grossAmount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        {
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.PricingDateStart.HasValue == true)
+        {
+            var pricingDateStart = queryDto.PricingDateStart;
+            exp = exp.And(x => x.PricingDate >= pricingDateStart);
+        }
+
+        if (queryDto?.PricingDateEnd.HasValue == true)
+        {
+            var pricingDateEnd = queryDto.PricingDateEnd;
+            exp = exp.And(x => x.PricingDate <= pricingDateEnd);
+        }
+
+        if (queryDto?.ServiceRenderedDateStart.HasValue == true)
+        {
+            var serviceRenderedDateStart = queryDto.ServiceRenderedDateStart;
+            exp = exp.And(x => x.ServiceRenderedDate >= serviceRenderedDateStart);
+        }
+
+        if (queryDto?.ServiceRenderedDateEnd.HasValue == true)
+        {
+            var serviceRenderedDateEnd = queryDto.ServiceRenderedDateEnd;
+            exp = exp.And(x => x.ServiceRenderedDate <= serviceRenderedDateEnd);
+        }
+
+        if (queryDto?.ExchangeRateDateStart.HasValue == true)
+        {
+            var exchangeRateDateStart = queryDto.ExchangeRateDateStart;
+            exp = exp.And(x => x.ExchangeRateDate >= exchangeRateDateStart);
+        }
+
+        if (queryDto?.ExchangeRateDateEnd.HasValue == true)
+        {
+            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd;
+            exp = exp.And(x => x.ExchangeRateDate <= exchangeRateDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSalesInvoiceItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (queryDto.SalesInvoiceId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BillingDocumentCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BillingQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BaseUnit))
+        {
+            return true;
+        }
+        if (queryDto.ScaleQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BillingQuantitySku.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NetWeight.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GrossWeight.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WeightUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BusinessAreaCode))
+        {
+            return true;
+        }
+        if (queryDto.PricingExchangeRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.NetAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceDocumentCode))
+        {
+            return true;
+        }
+        if (queryDto.ReferenceDocumentItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceDocumentCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesDocumentCode))
+        {
+            return true;
+        }
+        if (queryDto.SalesDocumentItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesDocumentReferenceFlag))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingReferenceMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BatchCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesItemCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductHierarchy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ShippingPoint))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Division))
+        {
+            return true;
+        }
+        if (queryDto.PartnerItem.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DepartureCountry))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantRegion))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingFlag))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WarehouseCode))
+        {
+            return true;
+        }
+        if (queryDto.CostAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal1.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal2.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal3.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal4.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal5.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Subtotal6.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StatisticsExchangeRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProfitCenterCode))
+        {
+            return true;
+        }
+        if (queryDto.CreditPrice.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerGroupSalesOrder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DestinationCountryOrder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegionOrder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrganizationOrder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DistributionChannelOrder))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DocumentCategory))
+        {
+            return true;
+        }
+        if (queryDto.TaxAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GrossAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PricingDateStart.HasValue || queryDto.PricingDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ServiceRenderedDateStart.HasValue || queryDto.ServiceRenderedDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExchangeRateDateStart.HasValue || queryDto.ExchangeRateDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

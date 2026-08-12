@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepairDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -135,23 +135,23 @@ public class TaktPcbaRepairDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbarepairdetail.prodactualqty
             new TranslationSeedItem("entity.pcbarepairdetail.prodactualqty", "zh-HK", "生产实绩_hk", "生产实绩"),
 
-            // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepairdetail.prodteam
-            new TranslationSeedItem("entity.pcbarepairdetail.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepairdetail.teamcode
+            new TranslationSeedItem("entity.pcbarepairdetail.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepairdetail.teamcode
+            new TranslationSeedItem("entity.pcbarepairdetail.teamcode", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepairdetail.teamcode
+            new TranslationSeedItem("entity.pcbarepairdetail.teamcode", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepairdetail.teamcode
+            new TranslationSeedItem("entity.pcbarepairdetail.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
-            // entity.pcbarepairdetail.cardno
-            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "en-US", "卡号_us", "卡号"),
-            // entity.pcbarepairdetail.cardno
-            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "ja-JP", "卡号_jp", "卡号"),
-            // entity.pcbarepairdetail.cardno
-            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "zh-CN", "卡号", "卡号"),
-            // entity.pcbarepairdetail.cardno
-            new TranslationSeedItem("entity.pcbarepairdetail.cardno", "zh-HK", "卡号_hk", "卡号"),
+            // entity.pcbarepairdetail.cardcode
+            new TranslationSeedItem("entity.pcbarepairdetail.cardcode", "en-US", "卡号_us", "卡号"),
+            // entity.pcbarepairdetail.cardcode
+            new TranslationSeedItem("entity.pcbarepairdetail.cardcode", "ja-JP", "卡号_jp", "卡号"),
+            // entity.pcbarepairdetail.cardcode
+            new TranslationSeedItem("entity.pcbarepairdetail.cardcode", "zh-CN", "卡号", "卡号"),
+            // entity.pcbarepairdetail.cardcode
+            new TranslationSeedItem("entity.pcbarepairdetail.cardcode", "zh-HK", "卡号_hk", "卡号"),
 
             // entity.pcbarepairdetail.defectsymptom
             new TranslationSeedItem("entity.pcbarepairdetail.defectsymptom", "en-US", "不良症状_us", "不良症状"),

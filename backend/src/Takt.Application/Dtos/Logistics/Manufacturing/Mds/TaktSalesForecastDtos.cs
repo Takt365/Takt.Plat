@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesForecast 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesForecast 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Mds;
 // ========================================
 
 /// <summary>
-/// Takt销售预测实体（公司级；MDS 独立需求源头，可下达生产计划或销售订单）
+/// Takt销售预测实体（公司级；客户发给我方的销售预测，可进 MDS；同编码多版靠接收版本号）
 /// 对应前端 TaktSalesForecastDto
 /// 继承 TaktApprovalDtoBase
 /// </summary>
@@ -35,30 +35,56 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesForecastId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）
     /// </summary>
     public DateTime PlanDate { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期
+    /// 接收日期（我方收到该版客户销售预测的日期）
     /// </summary>
-    public DateTime PlanPeriodStart { get; set; }
+    public DateTime ReceiveDate { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime PlanPeriodEnd { get; set; }
+    public int ReceiveVersionNo { get; set; } = 0;
+
+    /// <summary>
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
+    /// </summary>
+    public string SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    public string ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -87,7 +113,7 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal TotalQuantity { get; set; }
 
@@ -122,7 +148,7 @@ public class TaktSalesForecastDto : TaktApprovalDtoBase
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测明细列表（主子表关系）
+    /// 销售预测明细列表（主子表；一行=财年×月计划量 001/002/增减；维度在主表）
     /// （子表：TaktSalesForecastItem）
     /// </summary>
     public List<TaktSalesForecastItemDto>? Items { get; set; }
@@ -150,44 +176,74 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期（范围查询-开始）
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）（范围查询-开始）
     /// </summary>
     public DateTime? PlanDateStart { get; set; }
 
     /// <summary>
-    /// 计划编制日期（范围查询-结束）
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）（范围查询-结束）
     /// </summary>
     public DateTime? PlanDateEnd { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期（范围查询-开始）
+    /// 接收日期（我方收到该版客户销售预测的日期）（范围查询-开始）
     /// </summary>
-    public DateTime? PlanPeriodStartStart { get; set; }
+    public DateTime? ReceiveDateStart { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期（范围查询-结束）
+    /// 接收日期（我方收到该版客户销售预测的日期）（范围查询-结束）
     /// </summary>
-    public DateTime? PlanPeriodStartEnd { get; set; }
+    public DateTime? ReceiveDateEnd { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期（范围查询-开始）
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime? PlanPeriodEndStart { get; set; }
+    public int? ReceiveVersionNo { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期（范围查询-结束）
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
     /// </summary>
-    public DateTime? PlanPeriodEndEnd { get; set; }
+    public string? SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    public string? ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -211,7 +267,7 @@ public class TaktSalesForecastQueryDto : TaktPagedQuery
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal? TotalQuantity { get; set; }
 
@@ -329,9 +385,9 @@ public class TaktSalesForecastCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -340,25 +396,59 @@ public class TaktSalesForecastCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
-    [Required(ErrorMessage = "销售预测编码（租户+公司+工厂内业务唯一）不能为空")]
+    [Required(ErrorMessage = "销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）不能为空")]
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）
     /// </summary>
     public DateTime PlanDate { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期
+    /// 接收日期（我方收到该版客户销售预测的日期）
     /// </summary>
-    public DateTime PlanPeriodStart { get; set; }
+    public DateTime ReceiveDate { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime PlanPeriodEnd { get; set; }
+    public int ReceiveVersionNo { get; set; } = 0;
+
+    /// <summary>
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
+    /// </summary>
+    [Required(ErrorMessage = "产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）不能为空")]
+    public string SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    [Required(ErrorMessage = "产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）不能为空")]
+    public string ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -383,7 +473,7 @@ public class TaktSalesForecastCreateDto
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal TotalQuantity { get; set; }
 
@@ -418,7 +508,7 @@ public class TaktSalesForecastCreateDto
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测明细列表（主子表关系）（子表，级联保存）
+    /// 销售预测明细列表（主子表；一行=财年×月计划量 001/002/增减；维度在主表）（子表，级联保存）
     /// </summary>
     public List<TaktSalesForecastItemCreateDto>? Items { get; set; }
 
@@ -453,7 +543,7 @@ public class TaktSalesForecastUpdateDto : TaktSalesForecastCreateDto
     public long SalesForecastId { get; set; }
 
     /// <summary>
-    /// 销售预测明细列表（主子表关系）（子表，级联保存）
+    /// 销售预测明细列表（主子表；一行=财年×月计划量 001/002/增减；维度在主表）（子表，级联保存）
     /// </summary>
     public new List<TaktSalesForecastItemUpdateDto>? Items { get; set; }
 
@@ -503,29 +593,64 @@ public class TaktSalesForecastTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）
     /// </summary>
     public DateTime? PlanDate { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期
+    /// 接收日期（我方收到该版客户销售预测的日期）
     /// </summary>
-    public DateTime? PlanPeriodStart { get; set; }
+    public DateTime? ReceiveDate { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime? PlanPeriodEnd { get; set; }
+    public int? ReceiveVersionNo { get; set; }
+
+    /// <summary>
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
+    /// </summary>
+    public string? SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    public string? ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -549,7 +674,7 @@ public class TaktSalesForecastTemplateDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal? TotalQuantity { get; set; }
 
@@ -584,7 +709,7 @@ public class TaktSalesForecastTemplateDto
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测明细列表（主子表关系）（子表，级联保存）
+    /// 销售预测明细列表（主子表；一行=财年×月计划量 001/002/增减；维度在主表）（子表，级联保存）
     /// </summary>
     public List<TaktSalesForecastItemCreateDto>? Items { get; set; }
 
@@ -616,9 +741,9 @@ public class TaktSalesForecastImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -626,24 +751,54 @@ public class TaktSalesForecastImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）
     /// </summary>
     public DateTime? PlanDate { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期
+    /// 接收日期（我方收到该版客户销售预测的日期）
     /// </summary>
-    public DateTime? PlanPeriodStart { get; set; }
+    public DateTime? ReceiveDate { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime? PlanPeriodEnd { get; set; }
+    public int? ReceiveVersionNo { get; set; }
+
+    /// <summary>
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
+    /// </summary>
+    public string? SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    public string? ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -667,7 +822,7 @@ public class TaktSalesForecastImportDto
     public string? PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal? TotalQuantity { get; set; }
 
@@ -702,7 +857,7 @@ public class TaktSalesForecastImportDto
     public string? PlanDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测明细列表（主子表关系）（子表，级联保存）
+    /// 销售预测明细列表（主子表；一行=财年×月计划量 001/002/增减；维度在主表）（子表，级联保存）
     /// </summary>
     public List<TaktSalesForecastItemCreateDto>? Items { get; set; }
 
@@ -740,24 +895,54 @@ public class TaktSalesForecastExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售预测编码（租户+公司+工厂内业务唯一）
+    /// 销售预测编码（租户+公司+工厂内与接收版本号组合业务唯一）
     /// </summary>
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划编制日期
+    /// 计划编制日期（客户侧业务计划日；与接收日期分离）
     /// </summary>
     public DateTime PlanDate { get; set; }
 
     /// <summary>
-    /// 计划周期开始日期
+    /// 接收日期（我方收到该版客户销售预测的日期）
     /// </summary>
-    public DateTime PlanPeriodStart { get; set; }
+    public DateTime ReceiveDate { get; set; }
 
     /// <summary>
-    /// 计划周期结束日期
+    /// 接收版本号（同工厂+预测编码下递增；从 1 起）
     /// </summary>
-    public DateTime PlanPeriodEnd { get; set; }
+    public int ReceiveVersionNo { get; set; } = 0;
+
+    /// <summary>
+    /// 产品（四阶第 1 层；仅允许固定字面量 Product，长度固定 7；服务层写入强制覆盖）
+    /// </summary>
+    public string SalesProduct { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品类别（字典 logistics_mds_product_category；DictValue=CAD/ISD/PAD；四阶第 2 层）
+    /// </summary>
+    public string ProductCategoryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode；四阶第 3 层）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 机种编码（关联 TaktModelDestination.ModelCode；四阶第 4 层）
+    /// </summary>
+    public string? ModelCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）
@@ -781,7 +966,7 @@ public class TaktSalesForecastExportDto
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划总数量（基本单位数量）
+    /// 计划总数量（基本单位数量；通常汇总版本 002）
     /// </summary>
     public decimal TotalQuantity { get; set; }
 

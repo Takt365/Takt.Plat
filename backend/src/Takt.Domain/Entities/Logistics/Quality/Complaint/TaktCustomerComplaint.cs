@@ -21,8 +21,8 @@ namespace Takt.Domain.Entities.Logistics.Quality.Complaint;
 [SugarTable("takt_logistics_quality_customer_complaint", "客诉主表")]
 [SugarIndex("ix_customer_complaint_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_customer_complaint_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(CustomerComplaintCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_quality_customer_complaint_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(CustomerComplaintCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_quality_customer_complaint_related_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_complaint_complaint_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ComplaintStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_customer_complaint_customer_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerId), OrderByType.Asc, false)]
 public class TaktCustomerComplaint : TaktCompanyEntityBase
@@ -30,7 +30,7 @@ public class TaktCustomerComplaint : TaktCompanyEntityBase
     /// <summary>
     /// 客诉单号（组合唯一索引）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerComplaintCode { get; set; } = string.Empty;
     /// <summary>
     /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
@@ -46,7 +46,7 @@ public class TaktCustomerComplaint : TaktCompanyEntityBase
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? CustomerCode { get; set; }
     /// <summary>
     /// 投诉日期
@@ -103,7 +103,7 @@ public class TaktCustomerComplaint : TaktCompanyEntityBase
     /// <summary>
     /// 客诉描述
     /// </summary>
-    [SugarColumn(ColumnName = "complaint_description", ColumnDescription = "客诉描述", ColumnDataType = "nvarchar", Length = 2000, IsNullable = false)]
+    [SugarColumn(ColumnName = "complaint_description", ColumnDescription = "客诉描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string ComplaintDescription { get; set; } = string.Empty;
     /// <summary>
     /// 处理结果/回复内容
@@ -120,11 +120,6 @@ public class TaktCustomerComplaint : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "attachments", ColumnDescription = "附件JSON", ColumnDataType = "nvarchar", Length = -1, IsNullable = true)]
     public string? Attachments { get; set; }
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>

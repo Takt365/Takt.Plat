@@ -125,11 +125,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         var entity = dto.Adapt<TaktSupplierEvaluation>();
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
         if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
         {
-            throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
+            throw new TaktBusinessException("供应商评价考核的PlantCode、SupplierEvaluationCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -159,12 +159,12 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
             _supplierEvaluationRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.SupplierEvaluationCode == entity.SupplierEvaluationCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
         {
-            throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
+            throw new TaktBusinessException("供应商评价考核的PlantCode、SupplierEvaluationCode已存在");
         }
         await _supplierEvaluationRepository.UpdateAsync(entity);
                 await SaveSupplierEvaluationChildrenAsync(entity, dto);
@@ -279,18 +279,18 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             try
             {
                 var entity = rows[i].Adapt<TaktSupplierEvaluation>();
-                var importKey = $"{entity.RelatedPlant}|{entity.SupplierEvaluationCode}";
+                var importKey = $"{entity.PlantCode}|{entity.SupplierEvaluationCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、SupplierEvaluationCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、SupplierEvaluationCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique = await _uniqueValidator.IsUniqueAsync(
                     _supplierEvaluationRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.SupplierEvaluationCode == entity.SupplierEvaluationCode);
                 if (!isUnique_ix_takt_logistics_quality_supplier_evaluation_evaluation_unique)
                 {
-                    throw new TaktBusinessException("供应商评价考核的RelatedPlant、SupplierEvaluationCode已存在");
+                    throw new TaktBusinessException("供应商评价考核的PlantCode、SupplierEvaluationCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -534,9 +534,10 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
                 || SqlFunc.ToString(x.EvaluationConclusion).Contains(keywords)
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationStatus).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.RectificationStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EvaluationDate).Contains(keywords)
@@ -650,9 +651,9 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
             exp = exp.And(x => x.EvaluationStatus == queryDto.EvaluationStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -663,6 +664,11 @@ public class TaktSupplierEvaluationService : TaktServiceBase, ITaktSupplierEvalu
         if (queryDto?.RectificationStatus.HasValue == true)
         {
             exp = exp.And(x => x.RectificationStatus == queryDto.RectificationStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

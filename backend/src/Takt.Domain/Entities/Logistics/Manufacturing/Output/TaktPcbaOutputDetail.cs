@@ -38,7 +38,7 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     /// <summary>
     /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -56,14 +56,14 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string ProdTeam { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    [SugarColumn(ColumnName = "production_equipment_code", ColumnDescription = "生产设备", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "prod_equip_code", ColumnDescription = "生产设备", Length = 18, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -146,8 +146,8 @@ public class TaktPcbaOutputDetail : TaktCompanyEntityBase
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", Length = 80, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string SerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "serial_code", ColumnDescription = "序列号", Length = 80, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数

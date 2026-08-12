@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSopRevisionId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="sopRevisionId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:manufacturing:sop:doc:create"
       update-permission="logistics:manufacturing:sop:doc:update"
       delete-permission="logistics:manufacturing:sop:doc:delete"
@@ -50,53 +70,31 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSopRevisionId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="sopRevisionId"
-      :master-visible-column-keys="visibleColumnKeys"
-      master-table-mode="masterDetailMaster"
-      master-scroll-layout="masterDetailLr"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'isLocked'">
           <TaktDictTag
-            :value="getSopRevisionField(record, 'isLocked')"
+            :value="getSopRevisionDictValue(record, 'isLocked')"
             dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'forceLeaderAck'">
           <TaktDictTag
-            :value="getSopRevisionField(record, 'forceLeaderAck')"
+            :value="getSopRevisionDictValue(record, 'forceLeaderAck')"
             dict-type="sys_yes_no_type"
           />
         </template>
         <template v-else-if="column.key === 'revisionStatus'">
           <TaktDictTag
-            :value="getSopRevisionField(record, 'revisionStatus')"
+            :value="getSopRevisionDictValue(record, 'revisionStatus')"
             dict-type="sys_lifecycle_status"
           />
         </template>
         <template v-else-if="column.key === 'effectiveRule'">
           <TaktDictTag
-            :value="getSopRevisionField(record, 'effectiveRule')"
+            :value="getSopRevisionDictValue(record, 'effectiveRule')"
             dict-type="logistics_sop_effective_rule"
           />
         </template>
@@ -137,22 +135,41 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('sopId')">
-      <a-form-item :label="t('entity.soprevision.sopid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('sopId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.sopId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.sopid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSopDocs/options"
+          :placeholder="pi.queryPh('sopId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('revision')">
-      <a-form-item :label="t('entity.soprevision.revision')">
+      <a-form-item :label="pi.queryLabel('revision')">
         <a-input
           v-model:value="advancedQueryForm.revision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.revision') })"
+          :placeholder="pi.queryPh('revision', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -160,10 +177,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('fileUrl')">
-      <a-form-item :label="t('entity.soprevision.fileurl')">
+      <a-form-item :label="pi.queryLabel('fileUrl')">
         <a-input
           v-model:value="advancedQueryForm.fileUrl"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.fileurl') })"
+          :placeholder="pi.queryPh('fileUrl', 'required')"
           show-count
           :maxlength="500"
           allow-clear
@@ -171,10 +188,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('changeDesc')">
-      <a-form-item :label="t('entity.soprevision.changedesc')">
+      <a-form-item :label="pi.queryLabel('changeDesc')">
         <a-input
           v-model:value="advancedQueryForm.changeDesc"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.changedesc') })"
+          :placeholder="pi.queryPh('changeDesc', 'required')"
           show-count
           :maxlength="1000"
           allow-clear
@@ -182,61 +199,60 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('ecnId')">
-      <a-form-item :label="t('entity.soprevision.ecnid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('ecnId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.ecnId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.ecnid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEcs/options"
+          :placeholder="pi.queryPh('ecnId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isLocked')">
-      <a-form-item :label="t('entity.soprevision.islocked')">
+      <a-form-item :label="pi.queryLabel('isLocked')">
         <TaktSelect
           v-model:value="advancedQueryForm.isLocked"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.islocked') })"
+          :placeholder="pi.queryPh('isLocked', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('forceLeaderAck')">
-      <a-form-item :label="t('entity.soprevision.forceleaderack')">
+      <a-form-item :label="pi.queryLabel('forceLeaderAck')">
         <TaktSelect
           v-model:value="advancedQueryForm.forceLeaderAck"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.forceleaderack') })"
+          :placeholder="pi.queryPh('forceLeaderAck', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('revisionStatus')">
-      <a-form-item :label="t('entity.soprevision.revisionstatus')">
+      <a-form-item :label="pi.queryLabel('revisionStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.revisionStatus"
           dict-type="sys_lifecycle_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.revisionstatus') })"
+          :placeholder="pi.queryPh('revisionStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('effectiveRule')">
-      <a-form-item :label="t('entity.soprevision.effectiverule')">
+      <a-form-item :label="pi.queryLabel('effectiveRule')">
         <TaktSelect
           v-model:value="advancedQueryForm.effectiveRule"
           dict-type="logistics_sop_effective_rule"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.effectiverule') })"
+          :placeholder="pi.queryPh('effectiveRule', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -244,10 +260,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -269,7 +285,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -283,10 +299,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -300,7 +316,7 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.soprevision._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
@@ -308,7 +324,7 @@
     >
       <TaktImportFile
         v-if="importVisible"
-        entity-i18n-key="entity.soprevision._self"
+        :entity-i18n-key="SOPREVISION_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -347,7 +363,7 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SopRevisionForm from './components/revision-form.vue'
 import SopContentPanel from './components/content-panel.vue'
-import { provideSopRevisionMasterContext } from './composables/use-revision-master-context'
+import { provideSopRevisionMasterContext, type SopRevisionRowRecord } from './composables/use-revision-master-context'
 import { getSopRevisionList, getSopRevisionById, createSopRevision, updateSopRevision, deleteSopRevisionById, deleteSopRevisionBatch, getSopRevisionTemplate, importSopRevision, exportSopRevision, updateSopRevisionStatus } from '@/api/logistics/manufacturing/sop/revision'
 import type { SopRevision, SopRevisionQuery } from '@/types/logistics/manufacturing/sop/revision'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -356,13 +372,24 @@ import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useSopRevisionI18n,
+  SOPREVISION_LIST_FIELDS,
+  SOPREVISION_QUERY_STRING_FIELDS,
+  SOPREVISION_QUERY_FIELDS,
+  SOPREVISION_SELF_I18N_KEY,
+} from './composables/use-revision-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSopRevisionI18n()
+
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktSopRevision')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.soprevision._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -378,9 +405,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SopRevision | null>(null)
+const selectedRow = ref<SopRevisionRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SopRevision[]>([])
+const selectedRows = ref<SopRevisionRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -397,38 +424,58 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SOPREVISION_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.isLocked !== undefined && form.isLocked !== null) {
+    return true
+  }
+  if (form.forceLeaderAck !== undefined && form.forceLeaderAck !== null) {
+    return true
+  }
+  if (form.revisionStatus !== undefined && form.revisionStatus !== null) {
+    return true
+  }
+  if (form.effectiveRule !== undefined && form.effectiveRule !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SOPREVISION_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SOPREVISION_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    isLocked: undefined as number | undefined,
+    forceLeaderAck: undefined as number | undefined,
+    revisionStatus: undefined as number | undefined,
+    effectiveRule: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  sopId: '',
-  revision: '',
-  fileUrl: '',
-  changeDesc: '',
-  ecnId: '',
-  isLocked: undefined as number | undefined,
-  forceLeaderAck: undefined as number | undefined,
-  revisionStatus: undefined as number | undefined,
-  effectiveRule: undefined as number | undefined,
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'sopId', label: t('entity.soprevision.sopid') },
-  { key: 'revision', label: t('entity.soprevision.revision') },
-  { key: 'fileUrl', label: t('entity.soprevision.fileurl') },
-  { key: 'changeDesc', label: t('entity.soprevision.changedesc') },
-  { key: 'ecnId', label: t('entity.soprevision.ecnid') },
-  { key: 'isLocked', label: t('entity.soprevision.islocked') },
-  { key: 'forceLeaderAck', label: t('entity.soprevision.forceleaderack') },
-  { key: 'revisionStatus', label: t('entity.soprevision.revisionstatus') },
-  { key: 'effectiveRule', label: t('entity.soprevision.effectiverule') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SOPREVISION_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -451,7 +498,7 @@ const { selectedMasterRow } = provideSopRevisionMasterContext()
 const sopContentPanelRef = ref<InstanceType<typeof SopContentPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SopRevisionQuery} 查询 DTO
  */
@@ -472,11 +519,9 @@ function buildListQuery(overrides?: Partial<SopRevisionQuery>): SopRevisionQuery
       query[key] = v as never
     }
   }
-  assignTrimmed('sopId', form.sopId)
-  assignTrimmed('revision', form.revision)
-  assignTrimmed('fileUrl', form.fileUrl)
-  assignTrimmed('changeDesc', form.changeDesc)
-  assignTrimmed('ecnId', form.ecnId)
+  for (const key of SOPREVISION_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.isLocked !== undefined && form.isLocked !== null) {
     query.isLocked = form.isLocked
   }
@@ -489,13 +534,9 @@ function buildListQuery(overrides?: Partial<SopRevisionQuery>): SopRevisionQuery
   if (form.effectiveRule !== undefined && form.effectiveRule !== null) {
     query.effectiveRule = form.effectiveRule
   }
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
@@ -507,7 +548,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SopRevision | null) {
+function syncMasterSelection(record: SopRevisionRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSopRevisionId(record) : ''
 }
@@ -517,7 +558,7 @@ function syncMasterSelection(record: SopRevision | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SopRevision
+  const row = record as unknown as SopRevisionRowRecord
   const key = getSopRevisionId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -535,7 +576,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSopRevisionDetail(record: SopRevision): Promise<SopRevision | null> {
+async function loadSopRevisionDetail(record: SopRevisionRowRecord): Promise<SopRevision | null> {
   const id = getSopRevisionId(record)
   if (!id) {
     return null
@@ -566,7 +607,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'sopRevisionId') ?? ''
   },
   {
-    title: t('entity.soprevision.sopid'),
+    title: pi.label('sopId'),
     dataIndex: 'sopId',
     key: 'sopId',
     width: 120,
@@ -575,7 +616,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'sopId') ?? ''
   },
   {
-    title: t('entity.soprevision.revision'),
+    title: pi.label('revision'),
     dataIndex: 'revision',
     key: 'revision',
     width: 120,
@@ -584,7 +625,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'revision') ?? ''
   },
   {
-    title: t('entity.soprevision.fileurl'),
+    title: pi.label('fileUrl'),
     dataIndex: 'fileUrl',
     key: 'fileUrl',
     width: 120,
@@ -593,7 +634,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'fileUrl') ?? ''
   },
   {
-    title: t('entity.soprevision.changedesc'),
+    title: pi.label('changeDesc'),
     dataIndex: 'changeDesc',
     key: 'changeDesc',
     width: 120,
@@ -602,7 +643,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'changeDesc') ?? ''
   },
   {
-    title: t('entity.soprevision.ecnid'),
+    title: pi.label('ecnId'),
     dataIndex: 'ecnId',
     key: 'ecnId',
     width: 120,
@@ -611,7 +652,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'ecnId') ?? ''
   },
   {
-    title: t('entity.soprevision.islocked'),
+    title: pi.label('isLocked'),
     dataIndex: 'isLocked',
     key: 'isLocked',
     width: 120,
@@ -619,7 +660,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.soprevision.forceleaderack'),
+    title: pi.label('forceLeaderAck'),
     dataIndex: 'forceLeaderAck',
     key: 'forceLeaderAck',
     width: 120,
@@ -627,7 +668,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.soprevision.revisionstatus'),
+    title: pi.label('revisionStatus'),
     dataIndex: 'revisionStatus',
     key: 'revisionStatus',
     width: 120,
@@ -635,21 +676,12 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.soprevision.effectiverule'),
+    title: pi.label('effectiveRule'),
     dataIndex: 'effectiveRule',
     key: 'effectiveRule',
     width: 120,
     resizable: true,
     ellipsis: true,
-  },
-  {
-    title: t('entity.soprevision.sopdoc'),
-    dataIndex: 'sopDoc',
-    key: 'sopDoc',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopRevisionField(record, 'sopDoc') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -659,7 +691,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:sop:doc:update',
-        onClick: (record: SopRevision) => handleEdit(record)
+        onClick: (record: SopRevisionRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -667,26 +699,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:sop:doc:delete',
-        onClick: (record: SopRevision) => handleDeleteOne(record)
+        onClick: (record: SopRevisionRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSopRevisionId = (record: any): string => record?.[entityIdName] ?? ''
+const getSopRevisionId = (record: SopRevisionRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSopRevisionField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSopRevisionDictValue = (
+  record: SopRevisionRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SopRevision[]) => {
+  onChange: (keys: (string | number)[], rows: SopRevisionRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -696,7 +746,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SopRevision, selected: boolean) => {
+  onSelect: (record: SopRevisionRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -705,7 +755,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SopRevision[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SopRevisionRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -715,6 +765,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSopRevisionList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -741,6 +796,8 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   sopId: '',
   revision: '',
   fileUrl: '',
@@ -761,14 +818,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.soprevision._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SopRevision) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.soprevision._self') })
+async function handleEdit(record: SopRevisionRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSopRevisionDetail(record)
@@ -784,7 +841,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.soprevision._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -802,10 +859,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSopRevision(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.soprevision._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSopRevision(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.soprevision._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -862,6 +919,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSopRevision(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -885,24 +945,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.soprevision._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SopRevision] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.soprevision._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SopRevision) {
+async function handleDeleteOne(record: SopRevisionRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.soprevision._self'), name: t('common.tip.this.target', { target: t('entity.soprevision._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSopRevisionById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.soprevision._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -914,18 +974,18 @@ async function handleDeleteOne(record: SopRevision) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.soprevision._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.soprevision._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSopRevisionBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.soprevision._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -948,6 +1008,8 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   sopId: '',
   revision: '',
   fileUrl: '',

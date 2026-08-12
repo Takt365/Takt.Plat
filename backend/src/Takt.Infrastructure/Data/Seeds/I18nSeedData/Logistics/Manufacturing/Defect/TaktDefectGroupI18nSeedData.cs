@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDefectGroup 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktDefectGroupI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.defectgroup._self", "zh-CN", "不良组主数据信息", "实体名称"),
             // entity.defectgroup._self
             new TranslationSeedItem("entity.defectgroup._self", "zh-HK", "不良组主数据信息_hk", "实体名称"),
-
-            // entity.defectgroup.plantcode
-            new TranslationSeedItem("entity.defectgroup.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.defectgroup.plantcode
-            new TranslationSeedItem("entity.defectgroup.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.defectgroup.plantcode
-            new TranslationSeedItem("entity.defectgroup.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.defectgroup.plantcode
-            new TranslationSeedItem("entity.defectgroup.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.defectgroup.defectcategory
             new TranslationSeedItem("entity.defectgroup.defectcategory", "en-US", "不良类别_us", "不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）"),

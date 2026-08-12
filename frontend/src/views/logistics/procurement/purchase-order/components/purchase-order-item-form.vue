@@ -210,6 +210,18 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('purchaseAmount')"
+                name="purchaseAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.purchaseAmount"
+                  :placeholder="pi.ph('purchaseAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('deliveryStatus')"
                 name="deliveryStatus"
               >
@@ -229,6 +241,19 @@
                   v-model:value="formState.isObsolete"
                   dict-type="sys_yes_no_type"
                   :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  :disabled="!!formData?.purchaseOrderItemId"
                 />
               </a-form-item>
             </a-col>
@@ -263,9 +288,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","requestCode","requestLineNumber","materialCode","purchaseUnit","orderQuantity","receivedQuantity","purchasePerUnit","purchaseUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","deliveryStatus","isObsolete"]
-
-
+const formFields = ["lineNumber","requestCode","requestLineNumber","materialCode","purchaseUnit","orderQuantity","receivedQuantity","purchasePerUnit","purchaseUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","purchaseAmount","deliveryStatus","isObsolete","cultureCode"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -290,7 +313,8 @@ const formState = reactive<Record<string, any>>({})
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   purchasePerUnit: 1000,
   discountRate: 0,
-  deliveryStatus: 0
+  deliveryStatus: 0,
+  cultureCode: "ZH-CN"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -467,6 +491,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  purchaseAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('purchaseAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('purchaseAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   deliveryStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -493,6 +530,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  cultureCode: [
+    {
+      required: true,
+      message: pi.ph('cultureCode'),
+      trigger: 'change'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -547,6 +591,10 @@ function getValues(): Record<string, any> {
   if ('taxAmount' in payload) {
     const rawtaxAmount = payload.taxAmount
     payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('purchaseAmount' in payload) {
+    const rawpurchaseAmount = payload.purchaseAmount
+    payload.purchaseAmount = typeof rawpurchaseAmount === 'number' ? rawpurchaseAmount : Number(rawpurchaseAmount)
   }
   if ('deliveryStatus' in payload) {
     const rawdeliveryStatus = payload.deliveryStatus

@@ -22,7 +22,7 @@ export const WORKCENTER_SELF_I18N_KEY = buildEntitySelfI18nKey(WORKCENTER_ENTITY
 export const WORKCENTER_LIST_FIELDS = [
   'plantCode',
   'workCenterCode',
-  'workCenterName',
+  'workCenterDescription',
   'workCenterStatus',
 ] as const
 
@@ -33,7 +33,7 @@ export const WORKCENTER_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   plantCode: 'select',
   workCenterCode: 'required',
-  workCenterName: 'required',
+  workCenterDescription: 'optional',
   workCenterStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -46,7 +46,7 @@ export type WorkCenterField = keyof typeof WORKCENTER_PLACEHOLDER
 export const WORKCENTER_QUERY_STRING_FIELDS = [
   'plantCode',
   'workCenterCode',
-  'workCenterName',
+  'workCenterDescription',
   'createdAtStart',
   'createdAtEnd',
   'extField',

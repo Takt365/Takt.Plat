@@ -55,7 +55,7 @@ public class TaktSopExecScan : TaktCompanyEntityBase
     /// <summary>
     /// 期望物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "expected_material_code", ColumnDescription = "期望物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "expected_material_code", ColumnDescription = "期望物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ExpectedMaterialCode { get; set; }
 
     /// <summary>

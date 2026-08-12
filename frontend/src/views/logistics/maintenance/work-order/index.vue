@@ -190,11 +190,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="pi.queryLabel('equipmentCode')">
+      <div v-show="isFieldVisible('EquipCode')">
+      <a-form-item :label="pi.queryLabel('EquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="pi.queryPh('equipmentCode', 'required')"
+          v-model:value="advancedQueryForm.EquipCode"
+          :placeholder="pi.queryPh('EquipCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -1025,7 +1025,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -1134,13 +1133,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipmentId') ?? ''
   },
   {
-    title: pi.label('equipmentCode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    title: pi.label('EquipCode'),
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'equipmentCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaintenanceWorkOrderField(record, 'EquipCode') ?? ''
   },
   {
     title: pi.label('equipmentName'),
@@ -1501,8 +1500,6 @@ const getMaintenanceWorkOrderDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1566,7 +1563,7 @@ function handleReset() {
   maintenanceNotificationId: '',
   notificationCode: '',
   equipmentId: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   maintenanceType: undefined as number | undefined,
@@ -1821,7 +1818,7 @@ function handleAdvancedQueryReset() {
   maintenanceNotificationId: '',
   notificationCode: '',
   equipmentId: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   maintenanceType: undefined as number | undefined,

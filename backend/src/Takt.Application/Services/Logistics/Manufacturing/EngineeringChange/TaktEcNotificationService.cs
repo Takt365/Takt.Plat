@@ -115,12 +115,12 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
     {
         var entity = dto.Adapt<TaktEcNotification>();
         await StampEcNotificationEcGijutsuAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
             _ecNotificationRepository,
-            x => x.EcNotificationNo == entity.EcNotificationNo);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique)
+            x => x.EcNotificationCode == entity.EcNotificationCode);
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique)
         {
-            throw new TaktBusinessException("工程变更通知单的EcNotificationNo已存在");
+            throw new TaktBusinessException("工程变更通知单的EcNotificationCode已存在");
         }
         entity = await _ecNotificationRepository.CreateAsync(entity);
         return await GetEcNotificationByIdAsync(entity.Id) ?? entity.Adapt<TaktEcNotificationDto>();
@@ -141,13 +141,13 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
         }
         dto.Adapt(entity);
         await StampEcNotificationEcGijutsuAsync(entity, dto);
-        var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
             _ecNotificationRepository,
-            x => x.EcNotificationNo == entity.EcNotificationNo,
+            x => x.EcNotificationCode == entity.EcNotificationCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique)
         {
-            throw new TaktBusinessException("工程变更通知单的EcNotificationNo已存在");
+            throw new TaktBusinessException("工程变更通知单的EcNotificationCode已存在");
         }
         await _ecNotificationRepository.UpdateAsync(entity);
         return await GetEcNotificationByIdAsync(id) ?? throw new TaktBusinessException("工程变更通知单不存在");
@@ -240,17 +240,17 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
                 var entity = rows[i].Adapt<TaktEcNotification>();
                 var importDto = rows[i].Adapt<TaktEcNotificationCreateDto>();
                 await StampEcNotificationEcGijutsuAsync(entity, importDto);
-                var importKey = $"{entity.EcNotificationNo}";
+                var importKey = $"{entity.EcNotificationCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（EcNotificationNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（EcNotificationCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _ecNotificationRepository,
-                    x => x.EcNotificationNo == entity.EcNotificationNo);
-                if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_no_unique)
+                    x => x.EcNotificationCode == entity.EcNotificationCode);
+                if (!isUnique_ix_takt_logistics_manufacturing_ec_notification_code_unique)
                 {
-                    throw new TaktBusinessException("工程变更通知单的EcNotificationNo已存在");
+                    throw new TaktBusinessException("工程变更通知单的EcNotificationCode已存在");
                 }
                 await _ecNotificationRepository.CreateAsync(entity);
                 success += 1;
@@ -330,9 +330,9 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.EcNotificationNo != null && x.EcNotificationNo.Contains(keywords))
+                || (x.EcNotificationCode != null && x.EcNotificationCode.Contains(keywords))
                 || SqlFunc.ToString(x.EcId).Contains(keywords)
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcTitle != null && x.EcTitle.Contains(keywords))
                 || (x.EcNotificationDeptCodes != null && x.EcNotificationDeptCodes.Contains(keywords))
                 || (x.EcNotificationDeptNames != null && x.EcNotificationDeptNames.Contains(keywords))
@@ -340,6 +340,7 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
                 || (x.EcNotificationNotifierName != null && x.EcNotificationNotifierName.Contains(keywords))
                 || SqlFunc.ToString(x.EcNotificationMethod).Contains(keywords)
                 || SqlFunc.ToString(x.EcNotificationStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcNotificationDate).Contains(keywords)
@@ -352,9 +353,9 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNotificationNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcNotificationCode))
         {
-            exp = exp.And(x => x.EcNotificationNo != null && x.EcNotificationNo.Contains(queryDto.EcNotificationNo));
+            exp = exp.And(x => x.EcNotificationCode != null && x.EcNotificationCode.Contains(queryDto.EcNotificationCode));
         }
 
         if (queryDto?.EcId.HasValue == true)
@@ -362,9 +363,9 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
             exp = exp.And(x => x.EcId == queryDto.EcId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EcTitle))
@@ -400,6 +401,11 @@ public class TaktEcNotificationService : TaktServiceBase, ITaktEcNotificationSer
         if (queryDto?.EcNotificationStatus.HasValue == true)
         {
             exp = exp.And(x => x.EcNotificationStatus == queryDto.EcNotificationStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

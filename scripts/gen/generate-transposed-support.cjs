@@ -21,7 +21,6 @@ const TRANSPOSABLE_ENTITY_CONFIG = {
     masterTable: {
       entity: 'TaktCulture',
       short: 'Culture',
-      statusField: 'LanguageStatus',
       sortField: 'SortOrder',
       codeField: 'CultureCode',
       idField: 'CultureId',
@@ -30,8 +29,8 @@ const TRANSPOSABLE_ENTITY_CONFIG = {
     groupKeyFields: ['I18nKey', 'ResourceGroup', 'ResourceType'],
     rowFields: [
       { name: 'I18nKey', type: 'string', summary: '翻译键（转置行键）', required: true },
-      { name: 'ResourceGroup', type: 'int', summary: '资源分组（TaktModule 字典码 int）' },
-      { name: 'ResourceType', type: 'int', summary: '资源类别（TaktAppSide 字典码 int，0=前端）' },
+      { name: 'ResourceGroup', type: 'string', summary: '资源分组（关联 TaktMenu.Id）' },
+      { name: 'ResourceType', type: 'string', summary: '资源类别（字典 sys_resource_type）' },
       { name: 'ContextNote', type: 'string?', summary: '上下文注释' },
     ],
     queryFields: [
@@ -39,8 +38,8 @@ const TRANSPOSABLE_ENTITY_CONFIG = {
       { name: 'CultureCode', type: 'string?', summary: '文化编码' },
       { name: 'I18nKey', type: 'string?', summary: '翻译键' },
       { name: 'TranslationText', type: 'string?', summary: '翻译文本' },
-      { name: 'ResourceGroup', type: 'int?', summary: '资源分组（TaktModule 字典码 int）' },
-      { name: 'ResourceType', type: 'int?', summary: '资源类别（TaktAppSide 字典码 int）' },
+      { name: 'ResourceGroup', type: 'string?', summary: '资源分组' },
+      { name: 'ResourceType', type: 'string?', summary: '资源类别' },
       { name: 'ContextNote', type: 'string?', summary: '上下文注释' },
     ],
     batchScopeFields: [],
@@ -204,8 +203,8 @@ function buildTransposedQueryExpressionBody(entityShort, dtoBase, cfg) {
   lines.push(`                    && (string.IsNullOrEmpty(queryDto.CultureCode) || (${v}.CultureCode != null && ${v}.CultureCode.Contains(queryDto.CultureCode)))`);
   lines.push(`                    && (string.IsNullOrEmpty(queryDto.I18nKey) || (${v}.I18nKey != null && ${v}.I18nKey.Contains(queryDto.I18nKey)))`);
   lines.push(`                    && (string.IsNullOrEmpty(queryDto.TranslationText) || (${v}.TranslationText != null && ${v}.TranslationText.Contains(queryDto.TranslationText)))`);
-  lines.push(`                    && (!queryDto.ResourceGroup.HasValue || ${v}.ResourceGroup == queryDto.ResourceGroup.Value)`);
-  lines.push(`                    && (!queryDto.ResourceType.HasValue || ${v}.ResourceType == queryDto.ResourceType.Value)`);
+  lines.push(`                    && (string.IsNullOrEmpty(queryDto.ResourceGroup) || (${v}.ResourceGroup != null && ${v}.ResourceGroup.Contains(queryDto.ResourceGroup)))`);
+  lines.push(`                    && (string.IsNullOrEmpty(queryDto.ResourceType) || (${v}.ResourceType != null && ${v}.ResourceType.Contains(queryDto.ResourceType)))`);
   lines.push(`                    && (string.IsNullOrEmpty(queryDto.ContextNote) || (${v}.ContextNote != null && ${v}.ContextNote.Contains(queryDto.ContextNote)));`);
   return lines.join('\n');
 }
@@ -238,7 +237,7 @@ function generateTransposedServiceImplementation(entityShort, desc, repoField, e
 
   const transposedQueryExpr = buildTransposedQueryExpressionBody(entityShort, dtoBase, cfg);
 
-  const cultureListPredicate = `x => x.TenantCode == CurrentTenantCode && x.${master.statusField} == 1`;
+  const cultureListPredicate = 'x => x.TenantCode == CurrentTenantCode';
 
   const fillRowFromGroup = `            var first = g.First();
             var row = new ${names.row}

@@ -35,7 +35,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     /// <summary>
     /// 客诉单号（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_complaint_code", ColumnDescription = "客诉单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerComplaintCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -45,7 +45,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     /// <summary>
     /// 产品编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? ProductCode { get; set; }
     /// <summary>
     /// 产品名称
@@ -55,8 +55,8 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     /// <summary>
     /// 批次号
     /// </summary>
-    [SugarColumn(ColumnName = "batch_no", ColumnDescription = "批次号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? BatchNo { get; set; }
+    [SugarColumn(ColumnName = "batch_code", ColumnDescription = "批次号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    public string? BatchCode { get; set; }
     /// <summary>
     /// 不良项目类型（字典 logistics_quality_complaint_item_type）
     /// </summary>
@@ -65,7 +65,7 @@ public class TaktCustomerComplaintItem : TaktCompanyEntityBase
     /// <summary>
     /// 不良现象描述
     /// </summary>
-    [SugarColumn(ColumnName = "defect_description", ColumnDescription = "不良现象描述", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
+    [SugarColumn(ColumnName = "defect_description", ColumnDescription = "不良现象描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string DefectDescription { get; set; } = string.Empty;
     /// <summary>
     /// 缺点等级（字典 logistics_quality_defect_severity_code；DictValue=CR/MA/MI）

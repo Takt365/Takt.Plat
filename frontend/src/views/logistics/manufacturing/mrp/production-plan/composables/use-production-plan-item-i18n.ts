@@ -28,7 +28,7 @@ export const PRODUCTIONPLANITEM_LIST_FIELDS = [
   'salesForecastLineNumber',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',
@@ -52,7 +52,7 @@ export const PRODUCTIONPLANITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'salesForecastLineNumber',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',
@@ -88,7 +88,7 @@ export const PRODUCTIONPLANITEM_PLACEHOLDER = {
   salesForecastLineNumber: 'optional',
   materialRequirementsPlanningItemId: 'optional',
   materialCode: 'select',
-  materialName: 'required',
+  materialDescription: 'required',
   materialSpecification: 'optional',
   modelCode: 'optional',
   modelName: 'optional',
@@ -100,6 +100,7 @@ export const PRODUCTIONPLANITEM_PLACEHOLDER = {
   estimatedUnitCost: 'select',
   estimatedAmount: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -112,7 +113,7 @@ export const PRODUCTIONPLANITEM_QUERY_STRING_FIELDS = [
   'salesForecastCode',
   'materialRequirementsPlanningItemId',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',

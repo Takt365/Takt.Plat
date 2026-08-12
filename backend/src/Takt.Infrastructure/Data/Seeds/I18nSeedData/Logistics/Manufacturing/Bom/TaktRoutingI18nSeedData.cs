@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktRouting 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktRoutingI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.routing._self", "zh-CN", "工艺路线主表信息", "实体名称"),
             // entity.routing._self
             new TranslationSeedItem("entity.routing._self", "zh-HK", "工艺路线主表信息_hk", "实体名称"),
-
-            // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.routing.plantcode
-            new TranslationSeedItem("entity.routing.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.routing.workcenter
             new TranslationSeedItem("entity.routing.workcenter", "en-US", "工作中心_us", "工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）"),

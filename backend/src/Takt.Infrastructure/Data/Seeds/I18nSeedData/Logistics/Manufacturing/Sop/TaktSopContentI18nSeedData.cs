@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopContentI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopContent 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -107,15 +107,6 @@ public class TaktSopContentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcontent.sopid", "zh-CN", "SOP主档ID", "SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）"),
             // entity.sopcontent.sopid
             new TranslationSeedItem("entity.sopcontent.sopid", "zh-HK", "SOP主档ID_hk", "SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）"),
-
-            // entity.sopcontent.contentlang
-            new TranslationSeedItem("entity.sopcontent.contentlang", "en-US", "正文语言_us", "正文语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopcontent.contentlang
-            new TranslationSeedItem("entity.sopcontent.contentlang", "ja-JP", "正文语言_jp", "正文语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopcontent.contentlang
-            new TranslationSeedItem("entity.sopcontent.contentlang", "zh-CN", "正文语言", "正文语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopcontent.contentlang
-            new TranslationSeedItem("entity.sopcontent.contentlang", "zh-HK", "正文语言_hk", "正文语言（选项 TaktCultures/options；DictValue=CultureCode）"),
 
             // entity.sopcontent.contenttitle
             new TranslationSeedItem("entity.sopcontent.contenttitle", "en-US", "正文标题_us", "正文标题"),

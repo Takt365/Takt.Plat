@@ -30,7 +30,6 @@ export interface DatabaseInfo {
 
 }
 
-
 /**
  * 数据库表摘要（指定租户库下物理表 introspect 结果，用于选表导入）
  * 对应前端 DatabaseTableInfo

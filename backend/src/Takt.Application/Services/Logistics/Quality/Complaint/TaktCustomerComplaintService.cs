@@ -125,11 +125,11 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         var entity = dto.Adapt<TaktCustomerComplaint>();
         var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CustomerComplaintCode == entity.CustomerComplaintCode);
         if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
         {
-            throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
+            throw new TaktBusinessException("客诉主的PlantCode、CustomerComplaintCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -159,12 +159,12 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
             _customerComplaintRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CustomerComplaintCode == entity.CustomerComplaintCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
         {
-            throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
+            throw new TaktBusinessException("客诉主的PlantCode、CustomerComplaintCode已存在");
         }
         await _customerComplaintRepository.UpdateAsync(entity);
                 await SaveCustomerComplaintChildrenAsync(entity, dto);
@@ -279,18 +279,18 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             try
             {
                 var entity = rows[i].Adapt<TaktCustomerComplaint>();
-                var importKey = $"{entity.RelatedPlant}|{entity.CustomerComplaintCode}";
+                var importKey = $"{entity.PlantCode}|{entity.CustomerComplaintCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、CustomerComplaintCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、CustomerComplaintCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique = await _uniqueValidator.IsUniqueAsync(
                     _customerComplaintRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.CustomerComplaintCode == entity.CustomerComplaintCode);
                 if (!isUnique_ix_takt_logistics_quality_customer_complaint_complaint_unique)
                 {
-                    throw new TaktBusinessException("客诉主的RelatedPlant、CustomerComplaintCode已存在");
+                    throw new TaktBusinessException("客诉主的PlantCode、CustomerComplaintCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -528,9 +528,10 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
                 || (x.HandlingResult != null && x.HandlingResult.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerSatisfaction).Contains(keywords)
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ComplaintStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintDate).Contains(keywords)
@@ -615,9 +616,9 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
             exp = exp.And(x => x.Attachments != null && x.Attachments.Contains(queryDto.Attachments));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -628,6 +629,11 @@ public class TaktCustomerComplaintService : TaktServiceBase, ITaktCustomerCompla
         if (queryDto?.ComplaintStatus.HasValue == true)
         {
             exp = exp.And(x => x.ComplaintStatus == queryDto.ComplaintStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

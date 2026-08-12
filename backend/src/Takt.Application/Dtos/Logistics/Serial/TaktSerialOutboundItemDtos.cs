@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialOutboundItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialOutboundItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialOutboundItem 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     public long SerialOutboundItemId { get; set; }
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OutboundId { get; set; }
@@ -49,7 +49,7 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    public string OutboundNo { get; set; } = string.Empty;
+    public string OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -59,10 +59,10 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    public string OutboundSerialNo { get; set; } = string.Empty;
+    public string OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
@@ -73,9 +73,9 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     public string? ReferenceInboundName { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    public string ReferenceInboundNo { get; set; } = string.Empty;
+    public string ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -83,7 +83,7 @@ public class TaktSerialOutboundItemDto : TaktCompanyDtoBase
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -116,7 +116,17 @@ public class TaktSerialOutboundItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OutboundId { get; set; }
@@ -124,7 +134,7 @@ public class TaktSerialOutboundItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    public string? OutboundNo { get; set; } = string.Empty;
+    public string? OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -134,18 +144,18 @@ public class TaktSerialOutboundItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    public string? OutboundSerialNo { get; set; } = string.Empty;
+    public string? OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReferenceInboundId { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    public string? ReferenceInboundNo { get; set; } = string.Empty;
+    public string? ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -153,7 +163,7 @@ public class TaktSerialOutboundItemQueryDto : TaktPagedQuery
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -198,12 +208,17 @@ public class TaktSerialOutboundItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OutboundId { get; set; }
@@ -212,7 +227,7 @@ public class TaktSerialOutboundItemCreateDto
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
     [Required(ErrorMessage = "出库单号（冗余字段，便于查询）不能为空")]
-    public string OutboundNo { get; set; } = string.Empty;
+    public string OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -223,19 +238,19 @@ public class TaktSerialOutboundItemCreateDto
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
     [Required(ErrorMessage = "出库序列号（租户+公司内唯一）不能为空")]
-    public string OutboundSerialNo { get; set; } = string.Empty;
+    public string OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    [Required(ErrorMessage = "关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）不能为空")]
-    public string ReferenceInboundNo { get; set; } = string.Empty;
+    [Required(ErrorMessage = "关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）不能为空")]
+    public string ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -243,7 +258,7 @@ public class TaktSerialOutboundItemCreateDto
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -257,6 +272,11 @@ public class TaktSerialOutboundItemCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+    /// <summary>
+    /// SerialOutboundItemId
+    /// </summary>
+    public long SerialOutboundItemId { get; set; }
 }
 
 // ========================================
@@ -275,7 +295,7 @@ public class TaktSerialOutboundItemUpdateDto : TaktSerialOutboundItemCreateDto
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long SerialOutboundItemId { get; set; }
+    public new long SerialOutboundItemId { get; set; }
 
 }
 
@@ -322,7 +342,17 @@ public class TaktSerialOutboundItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OutboundId { get; set; }
@@ -330,7 +360,7 @@ public class TaktSerialOutboundItemTemplateDto
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    public string? OutboundNo { get; set; } = string.Empty;
+    public string? OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -340,18 +370,18 @@ public class TaktSerialOutboundItemTemplateDto
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    public string? OutboundSerialNo { get; set; } = string.Empty;
+    public string? OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReferenceInboundId { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    public string? ReferenceInboundNo { get; set; } = string.Empty;
+    public string? ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -359,7 +389,7 @@ public class TaktSerialOutboundItemTemplateDto
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -391,12 +421,17 @@ public class TaktSerialOutboundItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? OutboundId { get; set; }
@@ -404,7 +439,7 @@ public class TaktSerialOutboundItemImportDto
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    public string? OutboundNo { get; set; } = string.Empty;
+    public string? OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -414,18 +449,18 @@ public class TaktSerialOutboundItemImportDto
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    public string? OutboundSerialNo { get; set; } = string.Empty;
+    public string? OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ReferenceInboundId { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    public string? ReferenceInboundNo { get; set; } = string.Empty;
+    public string? ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -433,7 +468,7 @@ public class TaktSerialOutboundItemImportDto
     public int? ReferenceInboundLineNumber { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -471,7 +506,7 @@ public class TaktSerialOutboundItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
+    /// 出库主表 ID（选项 TaktSerialOutbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long OutboundId { get; set; }
@@ -479,7 +514,7 @@ public class TaktSerialOutboundItemExportDto
     /// <summary>
     /// 出库单号（冗余字段，便于查询）
     /// </summary>
-    public string OutboundNo { get; set; } = string.Empty;
+    public string OutboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -489,18 +524,18 @@ public class TaktSerialOutboundItemExportDto
     /// <summary>
     /// 出库序列号（租户+公司内唯一）
     /// </summary>
-    public string OutboundSerialNo { get; set; } = string.Empty;
+    public string OutboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
+    /// 关联入库主表 ID（选项 TaktSerialInbounds/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ReferenceInboundId { get; set; }
 
     /// <summary>
-    /// 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+    /// 关联入库单号（选项 TaktSerialInbounds/options；DictValue=InboundCode）
     /// </summary>
-    public string ReferenceInboundNo { get; set; } = string.Empty;
+    public string ReferenceInboundCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -508,7 +543,7 @@ public class TaktSerialOutboundItemExportDto
     public int ReferenceInboundLineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

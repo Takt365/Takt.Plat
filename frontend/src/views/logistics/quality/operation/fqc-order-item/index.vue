@@ -169,22 +169,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'required')"
           show-count
           :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -266,11 +266,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sampleSerialNo')">
-      <a-form-item :label="pi.queryLabel('sampleSerialNo')">
+      <div v-show="isFieldVisible('sampleSerialCode')">
+      <a-form-item :label="pi.queryLabel('sampleSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sampleSerialNo"
-          :placeholder="pi.queryPh('sampleSerialNo', 'required')"
+          v-model:value="advancedQueryForm.sampleSerialCode"
+          :placeholder="pi.queryPh('sampleSerialCode', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -623,7 +623,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -723,22 +722,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'materialCode') ?? ''
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'materialName') ?? ''
+    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'materialDescription') ?? ''
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'batchCode') ?? ''
   },
   {
     title: pi.label('warehouseQuantity'),
@@ -812,13 +811,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''
   },
   {
-    title: pi.label('sampleSerialNo'),
-    dataIndex: 'sampleSerialNo',
-    key: 'sampleSerialNo',
+    title: pi.label('sampleSerialCode'),
+    dataIndex: 'sampleSerialCode',
+    key: 'sampleSerialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'sampleSerialNo') ?? ''
+    customRender: ({ record }: { record: any }) => getFqcOrderItemField(record, 'sampleSerialCode') ?? ''
   },
   {
     title: pi.label('inspectionDescription'),
@@ -911,8 +910,6 @@ const getFqcOrderItemDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -975,8 +972,8 @@ function handleReset() {
   fqcOrderCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
-  batchNo: '',
+  materialDescription: '',
+  batchCode: '',
   warehouseQuantity: undefined as number | undefined,
   standardCode: '',
   samplingSchemeCode: '',
@@ -985,7 +982,7 @@ function handleReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
+  sampleSerialCode: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
@@ -1194,8 +1191,8 @@ function handleAdvancedQueryReset() {
   fqcOrderCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
-  batchNo: '',
+  materialDescription: '',
+  batchCode: '',
   warehouseQuantity: undefined as number | undefined,
   standardCode: '',
   samplingSchemeCode: '',
@@ -1204,7 +1201,7 @@ function handleAdvancedQueryReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
+  sampleSerialCode: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',

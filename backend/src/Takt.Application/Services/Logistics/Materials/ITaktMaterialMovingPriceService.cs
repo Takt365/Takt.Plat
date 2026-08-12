@@ -94,44 +94,4 @@ public interface ITaktMaterialMovingPriceService
     /// <param name="fileName">文件名</param>
     /// <returns>Excel 文件</returns>
     Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceAsync(TaktMaterialMovingPriceQueryDto? query = null, string? sheetName = null, string? fileName = null);
-
-    /// <summary>
-    /// 物料月移动价格推移分析（分页）
-    /// </summary>
-    /// <param name="queryDto">查询条件</param>
-    /// <returns>转置分析结果</returns>
-    Task<TaktMaterialMovingPriceMonthlyTrendResultDto> GetMaterialMovingPriceMonthlyTrendAnalysisAsync(
-        TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto);
-
-    /// <summary>
-    /// 导出物料月移动价格推移分析（全量，不受列表 MaxPageSize 限制）
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(
-        TaktMaterialMovingPriceMonthlyTrendQueryDto query,
-        string? sheetName = null,
-        string? fileName = null);
-
-    /// <summary>
-    /// 物料-机种-价格推移分析（物料清单 + BOM 产品/机种组 + 月单价转置）
-    /// </summary>
-    /// <param name="queryDto">查询条件（同月推移）</param>
-    /// <returns>分析结果</returns>
-    Task<TaktMaterialMovingPriceModelTrendResultDto> GetMaterialMovingPriceModelTrendAnalysisAsync(
-        TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto);
-
-    /// <summary>
-    /// 导出物料-机种-价格推移分析（全量）
-    /// </summary>
-    /// <param name="query">查询条件</param>
-    /// <param name="sheetName">工作表名称</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns>Excel 文件</returns>
-    Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceModelTrendAnalysisAsync(
-        TaktMaterialMovingPriceMonthlyTrendQueryDto query,
-        string? sheetName = null,
-        string? fileName = null);
 }

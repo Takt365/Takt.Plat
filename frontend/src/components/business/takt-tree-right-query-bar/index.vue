@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:右树查询栏,宽度为视口的4/5,用于树表布局右侧的关键字查询
+功能描述:右树查询栏,栏宽对齐右表；关键字输入框宽度=右表栏宽减去查询/重置按钮
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -16,6 +16,7 @@
   >
     <a-input
       v-model:value="keyword"
+      class="takt-tree-right-query-bar__keyword"
       :placeholder="placeholder ?? defaultPlaceholder"
       :size="size"
       :allow-clear="allowClear"
@@ -86,7 +87,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'middle',
   allowClear: true,
   loading: false,
-  maxLength: undefined
+  maxLength: undefined,
 })
 
 const emit = defineEmits<{
@@ -98,12 +99,10 @@ const emit = defineEmits<{
 
 const keyword = ref(props.modelValue)
 
-// 监听 props 变化
 watch(() => props.modelValue, (val) => {
   keyword.value = val
 })
 
-// 监听内部值变化
 watch(keyword, (val) => {
   emit('update:modelValue', val)
 })
@@ -123,7 +122,6 @@ const handleChange = (e: Event) => {
   emit('change', value)
 }
 
-// 暴露方法供父组件调用
 defineExpose({
   keyword,
   clear: handleReset,
@@ -132,22 +130,23 @@ defineExpose({
 </script>
 
 <style scoped>
-/* 宽度：内容视口的 4/5（80%）；右边距 0（左侧栏已有 4px 右外边距） */
+/* 栏宽：与右表一致（80%）；关键字 flex:1 = 右表栏宽 − 查询/重置按钮 */
 .takt-query-bar {
   flex: 0 0 80%;
   width: 80%;
   min-width: 200px;
   max-width: 80%;
-  /*margin: 4px 0 4px 4px; */
   padding: 4px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   gap: 8px;
-  /* 输入框宽度：当前栏（内容视口 4/5）的 1/3 */
+
+  :deep(.takt-tree-right-query-bar__keyword.ant-input-affix-wrapper),
   :deep(.ant-input-affix-wrapper) {
-    flex: 0 0 33.333%;
-    width: 33.333%;
+    flex: 1 1 auto;
+    width: auto;
+    max-width: none;
     min-width: 0;
 
     .ant-input-prefix {
@@ -161,6 +160,7 @@ defineExpose({
   }
 
   .query-actions {
+    flex: 0 0 auto;
     flex-shrink: 0;
 
     :deep(.ant-btn) {

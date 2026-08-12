@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-price-trend -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：采购价格推移 / 机种价格推移（BOM 机种产品组 + 月单价转置） -->
+<!-- 功能描述：采购价格推移（物料×月份转置；机种推移见 model-purchase-trend） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,6 +12,7 @@
     <purchase-price-trend-query-form
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
+      v-model:material-type="materialType"
       v-model:supplier-code="supplierCode"
       v-model:material-code="materialCode"
       v-model:price-type="priceType"
@@ -19,19 +20,6 @@
       @search="handleSearch"
       @reset="handleReset"
     />
-    <a-tabs
-      v-model:activeKey="activeTab"
-      class="purchase-price-trend-tabs mb-1 shrink-0"
-    >
-      <a-tab-pane
-        key="price"
-        :tab="t(`${localePrefix}.tabs.price`)"
-      />
-      <a-tab-pane
-        key="model"
-        :tab="t(`${localePrefix}.tabs.model`)"
-      />
-    </a-tabs>
     <TaktToolsBar
       :show-create="false"
       :show-update="false"
@@ -57,9 +45,10 @@
       v-model:has-rows="hasRows"
       class="min-h-0 flex-1"
       :trend-filter="trendFilter"
-      :active-tab="activeTab"
+      active-tab="price"
       :plant-code="plantCode"
       :period-range="periodRange"
+      :material-type="materialType"
       :supplier-code="supplierCode"
       :material-code="materialCode"
       :price-type="priceType"
@@ -69,7 +58,7 @@
 
 <script setup lang="ts">
 /**
- * 采购价格推移 / 机种价格推移（Tabs：price | model）
+ * 采购价格推移（仅物料价格；机种见独立菜单）
  */
 import { message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
@@ -79,10 +68,8 @@ import {
   RiArrowUpDownLine,
   RiArrowUpLine,
   RiListCheck,
-  RiTrophyLine,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import PurchasePriceTrendQueryForm from './components/purchase-price-trend-query-form.vue'
@@ -93,12 +80,12 @@ const { t } = useI18n()
 const localePrefix = 'logistics.procurement.purchase-price-trend.page'
 const tenantStore = useTenantStore()
 
-/** 当前 Tab：price=采购价格推移；model=机种价格推移 */
-const activeTab = ref<'price' | 'model'>('price')
 /** 工厂 */
 const plantCode = ref<string | undefined>()
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(null)
+/** 产品物料类型（必选） */
+const materialType = ref<string | undefined>()
 /** 供应商编码 */
 const supplierCode = ref<string | undefined>()
 /** 物料编码 */
@@ -111,54 +98,38 @@ const panelLoading = ref(false)
 const exportLoading = ref(false)
 /** 是否有数据行 */
 const hasRows = ref(false)
-/** 涨跌筛选：price 默认空=全部；model 默认 leading=领涨领跌各 50 */
+/** 涨跌筛选：默认空=全部 */
 const trendFilter = ref('')
-/** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => {
-  const actions: ToolBarAction[] = []
-  if (activeTab.value === 'model') {
-    actions.push({
-      key: 'trend-leading',
-      icon: RiTrophyLine,
-      tooltip: t(`${localePrefix}.filter.leading`),
-      active: trendFilter.value === 'leading' || trendFilter.value === '',
-      onClick: () => setTrendFilter('leading'),
-    })
-  }
-  actions.push(
-    {
-      key: 'trend-all',
-      icon: RiListCheck,
-      tooltip: t(`${localePrefix}.filter.all`),
-      active: activeTab.value === 'model'
-        ? trendFilter.value === 'all'
-        : trendFilter.value === '',
-      onClick: () => setTrendFilter(activeTab.value === 'model' ? 'all' : ''),
-    },
-    {
-      key: 'trend-changed',
-      icon: RiArrowUpDownLine,
-      tooltip: t(`${localePrefix}.filter.changed`),
-      active: trendFilter.value === 'changed',
-      onClick: () => setTrendFilter('changed'),
-    },
-    {
-      key: 'trend-up',
-      icon: RiArrowUpLine,
-      tooltip: t(`${localePrefix}.trend.up`),
-      active: trendFilter.value === 'up',
-      onClick: () => setTrendFilter('up'),
-    },
-    {
-      key: 'trend-down',
-      icon: RiArrowDownLine,
-      tooltip: t(`${localePrefix}.trend.down`),
-      active: trendFilter.value === 'down',
-      onClick: () => setTrendFilter('down'),
-    },
-  )
-  return actions
-})
+/** 右侧涨跌筛选 */
+const trendFilterActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'trend-all',
+    icon: RiListCheck,
+    tooltip: t(`${localePrefix}.filter.all`),
+    active: trendFilter.value === '',
+    onClick: () => setTrendFilter(''),
+  },
+  {
+    key: 'trend-changed',
+    icon: RiArrowUpDownLine,
+    tooltip: t(`${localePrefix}.filter.changed`),
+    active: trendFilter.value === 'changed',
+    onClick: () => setTrendFilter('changed'),
+  },
+  {
+    key: 'trend-up',
+    icon: RiArrowUpLine,
+    tooltip: t(`${localePrefix}.trend.up`),
+    active: trendFilter.value === 'up',
+    onClick: () => setTrendFilter('up'),
+  },
+  {
+    key: 'trend-down',
+    icon: RiArrowDownLine,
+    tooltip: t(`${localePrefix}.trend.down`),
+    active: trendFilter.value === 'down',
+    onClick: () => setTrendFilter('down'),
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -172,8 +143,20 @@ function handleSearch() {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
     return
   }
+  if (!materialType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
+    return
+  }
   if (!periodRange.value?.[0]) {
     message.warning(t(`${localePrefix}.selectPeriodRequired`))
+    return
+  }
+  if (!priceType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectPriceTypeRequired`))
+    return
+  }
+  if (!supplierCode.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectSupplierRequired`))
     return
   }
   void panelRef.value?.reload?.()
@@ -187,22 +170,6 @@ function setTrendFilter(value: string) {
   trendFilter.value = value
 }
 
-/**
- * 按当前 Tab 归一化默认涨跌筛选
- * @param {string} tab 当前 Tab
- */
-function applyDefaultTrendFilterForTab(tab: 'price' | 'model') {
-  if (tab === 'model') {
-    if (trendFilter.value === '' || trendFilter.value === 'all') {
-      trendFilter.value = 'leading'
-    }
-    return
-  }
-  if (trendFilter.value === 'leading') {
-    trendFilter.value = ''
-  }
-}
-
 /** 刷新 */
 function handleRefresh() {
   void panelRef.value?.reload?.()
@@ -213,20 +180,20 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
+/** 清空工厂及下游级联 */
+function clearPlantCascade() {
+  plantCode.value = undefined
+  materialType.value = undefined
+  priceType.value = undefined
+  supplierCode.value = undefined
+  materialCode.value = undefined
 }
 
 /** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
-  supplierCode.value = undefined
-  materialCode.value = undefined
-  priceType.value = undefined
+function handleReset() {
+  clearPlantCascade()
   applyDefaultPeriodRange()
-  trendFilter.value = activeTab.value === 'model' ? 'leading' : ''
+  trendFilter.value = ''
   hasRows.value = false
   panelRef.value?.clear?.()
 }
@@ -249,27 +216,18 @@ async function handleExport() {
   }
 }
 
-watch(activeTab, (tab) => {
-  applyDefaultTrendFilterForTab(tab)
-})
-
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    clearPlantCascade()
+    hasRows.value = false
+    panelRef.value?.clear?.()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
   void getTaktDefaultPageSize()
 })
 </script>
-
-<style scoped>
-:deep(.purchase-price-trend-tabs .ant-tabs-nav) {
-  margin-bottom: 0;
-}
-</style>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP作业参数应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
     }
 
     /// <summary>
-    /// 获取SOP作业参数列表（分页）
+    /// 获取SOP作业参数列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopArgumentDto>> GetSopArgumentListAsync(TaktSopArgumentQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopArgumentDto>.Create(
+                new List<TaktSopArgumentDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopArgumentRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,8 +109,8 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ParamCode ?? e.Id.ToString(),
+            DictValue = e.ParamCode,
+            DictLabel = e.ParamCode,
         }).ToList();
     }
 
@@ -228,7 +236,15 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopArgumentAsync(TaktSopArgumentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopArgumentQueryDto());
+        var queryDto = query ?? new TaktSopArgumentQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopArgumentExportDto>(),
+                sheetName ?? "SOP作业参数数据",
+                fileName ?? "SOP作业参数导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopArgumentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -280,83 +296,168 @@ public class TaktSopArgumentService : TaktServiceBase, ITaktSopArgumentService
     {
         var exp = Expressionable.Create<TaktSopArgument>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ExecId).Contains(keywords)
-                || SqlFunc.ToString(x.ExecStepId).Contains(keywords)
-                || SqlFunc.ToString(x.RoutingItemParameterId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ParamCode != null && x.ParamCode.Contains(keywords))
-                || SqlFunc.ToString(x.ActualValue).Contains(keywords)
-                || SqlFunc.ToString(x.IsOutOfRange).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.RecordedAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.ExecId.HasValue == true)
         {
-            exp = exp.And(x => x.ExecId == queryDto.ExecId);
+            var execId = queryDto.ExecId;
+            exp = exp.And(x => x.ExecId == execId);
         }
 
         if (queryDto?.ExecStepId.HasValue == true)
         {
-            exp = exp.And(x => x.ExecStepId == queryDto.ExecStepId);
+            var execStepId = queryDto.ExecStepId;
+            exp = exp.And(x => x.ExecStepId == execStepId);
         }
 
         if (queryDto?.RoutingItemParameterId.HasValue == true)
         {
-            exp = exp.And(x => x.RoutingItemParameterId == queryDto.RoutingItemParameterId);
+            var routingItemParameterId = queryDto.RoutingItemParameterId;
+            exp = exp.And(x => x.RoutingItemParameterId == routingItemParameterId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ParamCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ParamCode))
         {
-            exp = exp.And(x => x.ParamCode != null && x.ParamCode.Contains(queryDto.ParamCode));
+            var paramCode = queryDto.ParamCode;
+            exp = exp.And(x => x.ParamCode != null && x.ParamCode.Contains(paramCode));
         }
 
         if (queryDto?.ActualValue.HasValue == true)
         {
-            exp = exp.And(x => x.ActualValue == queryDto.ActualValue);
+            var actualValue = queryDto.ActualValue;
+            exp = exp.And(x => x.ActualValue == actualValue);
         }
 
         if (queryDto?.IsOutOfRange.HasValue == true)
         {
-            exp = exp.And(x => x.IsOutOfRange == queryDto.IsOutOfRange);
+            var isOutOfRange = queryDto.IsOutOfRange;
+            exp = exp.And(x => x.IsOutOfRange == isOutOfRange);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.RecordedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.RecordedAt >= queryDto.RecordedAtStart);
+            var recordedAtStart = queryDto.RecordedAtStart;
+            exp = exp.And(x => x.RecordedAt >= recordedAtStart);
         }
 
         if (queryDto?.RecordedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.RecordedAt <= queryDto.RecordedAtEnd);
+            var recordedAtEnd = queryDto.RecordedAtEnd;
+            exp = exp.And(x => x.RecordedAt <= recordedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopArgumentQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ExecId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExecStepId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RoutingItemParameterId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ParamCode))
+        {
+            return true;
+        }
+        if (queryDto.ActualValue.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsOutOfRange.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.RecordedAtStart.HasValue || queryDto.RecordedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

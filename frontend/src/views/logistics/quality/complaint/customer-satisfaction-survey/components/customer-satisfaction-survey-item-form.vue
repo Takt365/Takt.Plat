@@ -233,8 +233,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["surveyId","lineNumber","categoryType","itemName","itemDescription","weight","score","satisfactionLevel","customerFeedback","improvementSuggestion","followUpAction","followUpStatus","isObsolete"]
 
-
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<CustomerSatisfactionSurveyItemCreate & { customerSatisfactionSurveyItemId?: string }> | null

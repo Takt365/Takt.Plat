@@ -247,10 +247,10 @@ public class TaktEcExecPersistence
             case TaktEcKoubai mp:
                 mp.PurchaseOrderIssueDate = dto.PurchaseOrderIssueDate;
                 mp.Supplier = dto.Supplier;
-                mp.PurchaseOrderNo = dto.PurchaseOrderNo;
+                mp.PurchaseOrderCode = dto.PurchaseOrderCode;
                 break;
             case TaktEcUkeken iqc:
-                iqc.IqcOrderNo = dto.IqcOrderNo;
+                iqc.IqcOrderCode = dto.IqcOrderCode;
                 iqc.InspectionDate = dto.InspectionDate;
                 break;
             case TaktEcBukan mc:
@@ -261,7 +261,7 @@ public class TaktEcExecPersistence
                 pcba.ProductionDate = dto.ProductionDate;
                 pcba.ProductionBatch = dto.ProductionBatch;
                 pcba.ProductionTeam = dto.ProductionTeam;
-                pcba.OutboundOrderNo = dto.OutboundOrderNo;
+                pcba.OutboundOrderCode = dto.OutboundOrderCode;
                 break;
             case TaktEcSeizouikka assy:
                 assy.ProductionTeam = dto.ProductionTeam;
@@ -272,7 +272,7 @@ public class TaktEcExecPersistence
                 qa.ProductionTeam = dto.ProductionTeam;
                 qa.InspectionDate = dto.InspectionDate;
                 qa.InspectionBatch = dto.InspectionBatch;
-                qa.SamplingNo = dto.SamplingNo;
+                qa.SamplingCode = dto.SamplingCode;
                 break;
             case TaktEcSeizougijutsu te:
                 te.ConfirmationDate = dto.ConfirmationDate;
@@ -342,14 +342,14 @@ public class TaktEcExecPersistence
     private static object CreateConcreteExec(TaktEcDetail detail, string deptCode, object? existing, int lineNumber) =>
         existing ?? deptCode switch
         {
-            TaktEcDeptCodes.Pmc => new TaktEcSeikan { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Mp => new TaktEcKoubai { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Iqc => new TaktEcUkeken { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Mc => new TaktEcBukan { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Pcba => new TaktEcSeizounika { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Assy => new TaktEcSeizouikka { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Qa => new TaktEcHinkan { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
-            TaktEcDeptCodes.Te => new TaktEcSeizougijutsu { EcnDetailId = detail.Id, EcNo = detail.EcNo, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Pmc => new TaktEcSeikan { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Mp => new TaktEcKoubai { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Iqc => new TaktEcUkeken { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Mc => new TaktEcBukan { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Pcba => new TaktEcSeizounika { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Assy => new TaktEcSeizouikka { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Qa => new TaktEcHinkan { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
+            TaktEcDeptCodes.Te => new TaktEcSeizougijutsu { EcnDetailId = detail.Id, EcCode = detail.EcCode, DeptCode = deptCode, LineNumber = lineNumber },
             _ => throw new InvalidOperationException($"不支持的部门编码：{deptCode}")
         };
 

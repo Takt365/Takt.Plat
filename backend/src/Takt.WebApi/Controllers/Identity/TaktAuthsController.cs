@@ -561,11 +561,11 @@ public class TaktAuthsController : TaktControllerBase
     }
 
     /// <summary>
-    /// 登录前预览：用户默认公司、用户 DefaultCulture 与公司 DefaultCulture（未签发 OAuth 访问令牌）
+    /// 登录前预览：用户默认公司与用户 CultureCode（未签发 OAuth 访问令牌）
     /// </summary>
     /// <param name="tenantCode">租户编码（与 X-Tenant-Code、登录页输入一致）</param>
     /// <param name="username">登录用户名</param>
-    /// <returns>公司编码、用户/公司默认语言</returns>
+    /// <returns>公司编码、用户区域文化代码</returns>
     [AllowAnonymous]
     [HttpGet("session/login-preview-locale")]
     public async Task<IActionResult> GetLoginPreviewLocaleAsync([FromQuery] string tenantCode, [FromQuery] string username)
@@ -582,11 +582,10 @@ public class TaktAuthsController : TaktControllerBase
             var response = new TaktLoginPreviewLocaleResponseDto();
             if (result.UserFound)
             {
-                response.DefaultCulture = result.DefaultCulture;
+                response.CultureCode = (result.CultureCode ?? string.Empty).Trim();
                 if (result.DefaultCompanyFound)
                 {
                     response.CompanyCode = result.CompanyCode;
-                    response.CompanyDefaultCulture = result.CompanyDefaultCulture;
                 }
             }
 

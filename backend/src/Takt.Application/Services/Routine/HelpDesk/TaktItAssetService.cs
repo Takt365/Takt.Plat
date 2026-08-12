@@ -322,6 +322,7 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
                 || (x.ServiceHotline != null && x.ServiceHotline.Contains(keywords))
                 || (x.ServiceEmail != null && x.ServiceEmail.Contains(keywords))
                 || (x.WarrantyRemark != null && x.WarrantyRemark.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.WarrantyStartDate).Contains(keywords)
@@ -366,6 +367,11 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
         if (!string.IsNullOrEmpty(queryDto?.WarrantyRemark))
         {
             exp = exp.And(x => x.WarrantyRemark != null && x.WarrantyRemark.Contains(queryDto.WarrantyRemark));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -437,6 +443,12 @@ public class TaktItAssetService : TaktServiceBase, ITaktItAssetService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

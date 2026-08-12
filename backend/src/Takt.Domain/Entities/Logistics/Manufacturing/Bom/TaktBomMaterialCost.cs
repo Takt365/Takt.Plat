@@ -29,26 +29,32 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 [SugarIndex("ix_takt_logistics_manufacturing_bom_material_cost_costing_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CostingDate), OrderByType.Asc, false)]
 public class TaktBomMaterialCost : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode）
+    /// <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
-    [SugarColumn(ColumnName = "model_monthly_average_cost", ColumnDescription = "机种月平均成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "model_monthly_average_cost", ColumnDescription = "机种月成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ModelMonthlyAverageCost { get; set; } = 0;
 
     /// <summary>
-    /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码）
+    /// <para>CRUD 表单：字典 logistics_material_type。</para>
+    /// <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    [SugarColumn(ColumnName = "material_type", ColumnDescription = "物料类型", ColumnDataType = "nvarchar", Length = 4, IsNullable = false, DefaultValue = "FERT")]
+    public string MaterialType { get; set; } = "FERT";
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一）
+    /// <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para>
+    /// <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     [SugarColumn(ColumnName = "product_code", ColumnDescription = "产品编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ProductCode { get; set; } = string.Empty;

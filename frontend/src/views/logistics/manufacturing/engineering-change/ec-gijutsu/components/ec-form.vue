@@ -27,48 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.ec.plantcode')"
@@ -86,10 +56,10 @@
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.ec.no')"
-                name="ecNo"
+                name="ecCode"
               >
                 <a-input
-                  v-model:value="formState.ecNo"
+                  v-model:value="formState.ecCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.no') })"
                   show-count
                   :maxlength="10"
@@ -408,16 +378,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","ecNo","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","ecCode","ecIssueDate","changeStatus","ecTitle","ecContent","ecLeader","ecLossAmount","ecDistinction","ecEntryDate","ecStatus","extField","remark"]
 
 const childEcDetailRows = ref<Record<string, unknown>[]>([])
 const childEcAttachmentRows = ref<Record<string, unknown>[]>([])
@@ -455,12 +429,12 @@ const attachmentDeleteDisabled = computed(() => attachmentSelectedRows.value.len
 /** 明细子表列（只读展示） */
 const ecDetailTableColumns = computed<TableColumnsType>(() => [
   {
-    title: t('entity.ecdetail.ecno'),
-    dataIndex: 'ecNo',
-    key: 'ecNo',
+    title: t('entity.ecdetail.ecCode'),
+    dataIndex: 'ecCode',
+    key: 'ecCode',
     width: 140,
     ellipsis: true,
-    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecNo'),
+    customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecCode'),
   },
   {
     title: t('entity.ecdetail.linenumber'),
@@ -493,8 +467,7 @@ const ecDetailTableColumns = computed<TableColumnsType>(() => [
     width: 140,
     ellipsis: true,
     customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'ecBomSubItem'),
-  },
-])
+  }])
 
 /** 附件子表列（只读展示 + 操作列） */
 const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
@@ -519,12 +492,12 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       }),
     },
     {
-      title: t('entity.ecattachment.docno'),
-      dataIndex: 'docNo',
-      key: 'docNo',
+      title: t('entity.ecattachment.docCode'),
+      dataIndex: 'docCode',
+      key: 'docCode',
       width: 140,
       ellipsis: true,
-      customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'docNo'),
+      customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'docCode'),
     },
     {
       title: t('entity.ecattachment.filename'),
@@ -541,8 +514,7 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       width: 200,
       ellipsis: true,
       customRender: ({ record }) => formatSubTableCell(record as Record<string, unknown>, 'accessUrl'),
-    },
-  ]
+    }]
   const actions = [
     {
       key: 'update',
@@ -559,8 +531,7 @@ const ecAttachmentTableColumns = computed<TableColumnsType>(() => {
       icon: RiDeleteBinLine,
       permission: 'logistics:manufacturing:engineering:change:gijutsu:delete',
       onClick: (record: Record<string, unknown>) => void handleAttachmentDeleteOne(record),
-    },
-  ]
+    }]
   cols.push(CreateActionColumn({ actions }))
   return cols
 })
@@ -696,7 +667,7 @@ function onAttachmentClickRow(record: Record<string, unknown>) {
 /** 打开新增附件弹窗 */
 function handleAttachmentCreate() {
   attachmentFormTitle.value = t('common.dialog.title.create', { entity: t('entity.ecattachment._self') })
-  attachmentFormData.value = { ecNo: String(formState.ecNo ?? '') }
+  attachmentFormData.value = { ecCode: String(formState.ecCode ?? '') }
   attachmentFormVisible.value = true
 }
 
@@ -765,9 +736,8 @@ async function handleAttachmentFormSubmit() {
           __rowKey: `client-${crypto.randomUUID()}`,
           ...values,
           lineNumber,
-          ecNo: String(formState.ecNo ?? ''),
-        },
-      ]
+          ecCode: String(formState.ecCode ?? ''),
+        }]
     }
     attachmentFormVisible.value = false
     attachmentFormData.value = {}
@@ -852,16 +822,16 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       ecId: masterId,
     })),
     attachments: childEcAttachmentRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       ecId: masterId,
-      ecNo: formState.ecNo,
+      ecCode: formState.ecCode,
     })),
   }
   return payload
@@ -875,7 +845,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 ecId 才视为编辑） */
 watch(
@@ -931,7 +900,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  ecNo: [
+  ecCode: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.ec.no') }),
@@ -1042,8 +1011,8 @@ async function validate() {
     const url = String(row.accessUrl ?? '').trim()
     const fileName = String(row.fileName ?? '').trim()
     const attachmentType = String(row.attachmentType ?? '').trim()
-    const docNo = String(row.docNo ?? '').trim()
-    if (!props.sourceImportMode && (!attachmentType || !docNo)) {
+    const docCode = String(row.docCode ?? '').trim()
+    if (!props.sourceImportMode && (!attachmentType || !docCode)) {
       activeTab.value = 'tab-3'
       const msg = t('common.page.form.placeholder.required', { field: t('entity.ecattachment._self') })
       message.warning(msg)

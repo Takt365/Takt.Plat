@@ -338,7 +338,7 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
                 || (x.PlantName2 != null && x.PlantName2.Contains(keywords))
                 || (x.PlantShortName != null && x.PlantShortName.Contains(keywords))
                 || (x.CodeAlias != null && x.CodeAlias.Contains(keywords))
-                || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
                 || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
                 || (x.EnterpriseScale != null && x.EnterpriseScale.Contains(keywords))
@@ -414,9 +414,9 @@ public class TaktPlantService : TaktServiceBase, ITaktPlantService
             exp = exp.And(x => x.CodeAlias != null && x.CodeAlias.Contains(queryDto.CodeAlias));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EnterpriseNature))

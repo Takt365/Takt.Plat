@@ -459,7 +459,6 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
         {
             exp = exp.And(x => x.DictType != null && x.DictType.Contains(queryDto.DictType));
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -479,6 +478,12 @@ public class TaktGenTableColumnService : TaktServiceBase, ITaktGenTableColumnSer
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

@@ -42,6 +42,15 @@ public interface ITaktStandardOperationRateService
     Task<List<TaktSelectOption>> GetStandardOperationRateOptionsAsync();
 
     /// <summary>
+    /// 按生产日期解析有效标准生产稼动率（%）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <param name="operationType">稼动率类型（默认 1=人员）</param>
+    /// <returns>稼动率(%)</returns>
+    Task<decimal> GetEffectiveStandardOperationRatePercentAsync(string plantCode, DateTime prodDate, int operationType = 1);
+
+    /// <summary>
     /// 创建标准生产稼动率
     /// </summary>
     /// <param name="dto">创建DTO</param>

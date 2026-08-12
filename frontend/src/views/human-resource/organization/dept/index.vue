@@ -530,8 +530,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 导入对话框是否打开 */
@@ -764,7 +763,7 @@ function buildDeptUpdateDto(
     deptId: String(dept.deptId),
     tenantCode: dept.tenantCode,
     companyCode: dept.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     deptCode: dept.deptCode,
     deptName: dept.deptName,
     parentId: overrides.parentId,
@@ -1076,8 +1075,7 @@ watchEffect(() => {
         onClick: (record: Dept) => handleDeleteOne(record)
       }
     ],
-  }),
-  ]
+  })]
 })
 
 /** 行选择配置 */

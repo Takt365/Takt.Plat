@@ -331,11 +331,12 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
                 || SqlFunc.ToString(x.Priority).Contains(keywords)
                 || (x.WorkCenter != null && x.WorkCenter.Contains(keywords))
                 || (x.ProdBatch != null && x.ProdBatch.Contains(keywords))
-                || (x.SerialNo != null && x.SerialNo.Contains(keywords))
+                || (x.SerialCode != null && x.SerialCode.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedOrderId).Contains(keywords)
                 || SqlFunc.ToString(x.ApsOrderId).Contains(keywords)
                 || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ActualStartDate).Contains(keywords)
@@ -396,9 +397,9 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
             exp = exp.And(x => x.ProdBatch != null && x.ProdBatch.Contains(queryDto.ProdBatch));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.SerialCode))
         {
-            exp = exp.And(x => x.SerialNo != null && x.SerialNo.Contains(queryDto.SerialNo));
+            exp = exp.And(x => x.SerialCode != null && x.SerialCode.Contains(queryDto.SerialCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.RoutingCode))
@@ -419,6 +420,11 @@ public class TaktProductionOrderService : TaktServiceBase, ITaktProductionOrderS
         if (queryDto?.OrderStatus.HasValue == true)
         {
             exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

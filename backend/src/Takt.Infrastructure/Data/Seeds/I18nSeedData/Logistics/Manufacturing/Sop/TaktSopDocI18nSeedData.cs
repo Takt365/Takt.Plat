@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopDocI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopDoc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktSopDocI18nSeedData : ITaktSeedDataCoordinator
             // entity.sopdoc._self
             new TranslationSeedItem("entity.sopdoc._self", "zh-HK", "SOP 文档头信息_hk", "实体名称"),
 
-            // entity.sopdoc.plantcode
-            new TranslationSeedItem("entity.sopdoc.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopdoc.plantcode
-            new TranslationSeedItem("entity.sopdoc.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopdoc.plantcode
-            new TranslationSeedItem("entity.sopdoc.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopdoc.plantcode
-            new TranslationSeedItem("entity.sopdoc.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.sopdoc.sopcode
             new TranslationSeedItem("entity.sopdoc.sopcode", "en-US", "SOP编码_us", "SOP 编码"),
             // entity.sopdoc.sopcode
@@ -152,15 +143,6 @@ public class TaktSopDocI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopdoc.currentrevisionid", "zh-CN", "当前版本ID", "当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）"),
             // entity.sopdoc.currentrevisionid
             new TranslationSeedItem("entity.sopdoc.currentrevisionid", "zh-HK", "当前版本ID_hk", "当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）"),
-
-            // entity.sopdoc.defaultlang
-            new TranslationSeedItem("entity.sopdoc.defaultlang", "en-US", "默认语言_us", "默认语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopdoc.defaultlang
-            new TranslationSeedItem("entity.sopdoc.defaultlang", "ja-JP", "默认语言_jp", "默认语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopdoc.defaultlang
-            new TranslationSeedItem("entity.sopdoc.defaultlang", "zh-CN", "默认语言", "默认语言（选项 TaktCultures/options；DictValue=CultureCode）"),
-            // entity.sopdoc.defaultlang
-            new TranslationSeedItem("entity.sopdoc.defaultlang", "zh-HK", "默认语言_hk", "默认语言（选项 TaktCultures/options；DictValue=CultureCode）"),
 
             // entity.sopdoc.sopstatus
             new TranslationSeedItem("entity.sopdoc.sopstatus", "en-US", "文档状态_us", "状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）"),

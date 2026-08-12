@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：step-media.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopStepMedia extends CompanyDtoBase {
   sopStepMediaId: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -84,7 +84,17 @@ export interface SopStepMediaQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -148,12 +158,17 @@ export interface SopStepMediaCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -236,7 +251,17 @@ export interface SopStepMediaTemplate {
   companyCode?: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -285,12 +310,17 @@ export interface SopStepMediaImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -339,7 +369,12 @@ export interface SopStepMediaExport {
   companyCode: string;
 
   /**
-   * 工步 ID（关联 TaktSopStep.Id，选项 TaktSopSteps/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 

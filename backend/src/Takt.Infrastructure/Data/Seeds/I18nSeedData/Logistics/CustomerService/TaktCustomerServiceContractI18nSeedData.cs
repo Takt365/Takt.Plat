@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceContractI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCustomerServiceContract 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktCustomerServiceContractI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.customerservicecontract._self", "zh-CN", "服务合同信息", "实体名称"),
             // entity.customerservicecontract._self
             new TranslationSeedItem("entity.customerservicecontract._self", "zh-HK", "服务合同信息_hk", "实体名称"),
-
-            // entity.customerservicecontract.plantcode
-            new TranslationSeedItem("entity.customerservicecontract.plantcode", "en-US", "工厂代码_us", "工厂代码"),
-            // entity.customerservicecontract.plantcode
-            new TranslationSeedItem("entity.customerservicecontract.plantcode", "ja-JP", "工厂代码_jp", "工厂代码"),
-            // entity.customerservicecontract.plantcode
-            new TranslationSeedItem("entity.customerservicecontract.plantcode", "zh-CN", "工厂代码", "工厂代码"),
-            // entity.customerservicecontract.plantcode
-            new TranslationSeedItem("entity.customerservicecontract.plantcode", "zh-HK", "工厂代码_hk", "工厂代码"),
 
             // entity.customerservicecontract.servicecontractcode
             new TranslationSeedItem("entity.customerservicecontract.servicecontractcode", "en-US", "服务合同编码_us", "服务合同编码（组合唯一索引）"),

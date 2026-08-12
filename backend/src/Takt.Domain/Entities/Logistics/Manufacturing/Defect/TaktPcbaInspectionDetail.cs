@@ -34,7 +34,7 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     /// <summary>
     /// 工单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
     
     /// <summary>
@@ -106,8 +106,8 @@ public class TaktPcbaInspectionDetail : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? ProdTeam { get; set; }
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? TeamCode { get; set; }
 
     /// <summary>
     /// 检查工数

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopCallI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSopCall 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktSopCallI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.sopcall._self", "zh-CN", "SOP 安灯呼叫信息", "实体名称"),
             // entity.sopcall._self
             new TranslationSeedItem("entity.sopcall._self", "zh-HK", "SOP 安灯呼叫信息_hk", "实体名称"),
-
-            // entity.sopcall.plantcode
-            new TranslationSeedItem("entity.sopcall.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopcall.plantcode
-            new TranslationSeedItem("entity.sopcall.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopcall.plantcode
-            new TranslationSeedItem("entity.sopcall.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.sopcall.plantcode
-            new TranslationSeedItem("entity.sopcall.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.sopcall.workstationid
             new TranslationSeedItem("entity.sopcall.workstationid", "en-US", "工位ID_us", "工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）"),

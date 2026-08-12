@@ -94,11 +94,6 @@ public class TaktPerfCycle : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "perf_cycle_description", ColumnDescription = "周期说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string PerfCycleDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 状态（字典 hr_perf_cycle_schedule_status；0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
     /// </summary>
     [SugarColumn(ColumnName = "cycle_schedule_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

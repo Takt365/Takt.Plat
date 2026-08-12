@@ -32,7 +32,7 @@ public class TaktIpqcOrderItem : TaktCompanyEntityBase
     /// <summary>
     /// IPQC检验单编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "ipqc_order_code", ColumnDescription = "IPQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "ipqc_order_code", ColumnDescription = "IPQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string IpqcOrderCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -45,15 +45,15 @@ public class TaktIpqcOrderItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
     /// <summary>
     /// 批次号
     /// </summary>
-    [SugarColumn(ColumnName = "batch_no", ColumnDescription = "批次号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
-    public string? BatchNo { get; set; }
+    [SugarColumn(ColumnName = "batch_code", ColumnDescription = "批次号", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    public string? BatchCode { get; set; }
     /// <summary>
     /// 生产数量
     /// </summary>
@@ -62,12 +62,12 @@ public class TaktIpqcOrderItem : TaktCompanyEntityBase
     /// <summary>
     /// 检验标准编码（选项 TaktInspectionStandards/options；DictValue=StandardCode）
     /// </summary>
-    [SugarColumn(ColumnName = "standard_code", ColumnDescription = "检验标准编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "standard_code", ColumnDescription = "检验标准编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string StandardCode { get; set; } = string.Empty;
     /// <summary>
     /// 抽样方案编码（选项 TaktSamplingSchemes/options；DictValue=SamplingSchemeCode）
     /// </summary>
-    [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "sampling_scheme_code", ColumnDescription = "抽样方案编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SamplingSchemeCode { get; set; } = string.Empty;
     /// <summary>
     /// 检验方式（0=免检，1=减量，2=正常，3=加严，4=全检）
@@ -97,12 +97,12 @@ public class TaktIpqcOrderItem : TaktCompanyEntityBase
     /// <summary>
     /// 抽检序列号
     /// </summary>
-    [SugarColumn(ColumnName = "sample_serial_no", ColumnDescription = "抽检序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? SampleSerialNo { get; set; }
+    [SugarColumn(ColumnName = "sample_serial_code", ColumnDescription = "抽检序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? SampleSerialCode { get; set; }
     /// <summary>
     /// 检验说明
     /// </summary>
-    [SugarColumn(ColumnName = "inspection_description", ColumnDescription = "检验说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    [SugarColumn(ColumnName = "inspection_description", ColumnDescription = "检验说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? InspectionDescription { get; set; }
     /// <summary>
     /// 检验员（人员代码）

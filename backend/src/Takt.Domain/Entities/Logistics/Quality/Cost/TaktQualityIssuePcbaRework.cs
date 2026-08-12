@@ -36,7 +36,7 @@ public class TaktQualityIssuePcbaRework : TaktCompanyEntityBase
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -108,8 +108,8 @@ public class TaktQualityIssuePcbaRework : TaktCompanyEntityBase
     /// <summary>
     /// PCBA Debit Note No
     /// </summary>
-    [SugarColumn(ColumnName = "pcba_debit_note_no", ColumnDescription = "PCBA Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? PcbaDebitNoteNo { get; set; }
+    [SugarColumn(ColumnName = "pcba_debit_note_code", ColumnDescription = "PCBA Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? PcbaDebitNoteCode { get; set; }
 
     /// <summary>
     /// PCBA其他费用（元）

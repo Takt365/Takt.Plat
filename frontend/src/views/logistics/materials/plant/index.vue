@@ -79,9 +79,9 @@
             @change="(checked: unknown) => handlePlantStatusChange(record, Boolean(checked))"
           />
         </template>
-        <template v-else-if="column.key === 'defaultCulture'">
+        <template v-else-if="column.key === 'cultureCode'">
           <TaktDictTag
-            :value="getPlantDictValue(record, 'defaultCulture')"
+            :value="getPlantDictValue(record, 'cultureCode')"
             dict-type="sys_culture_code"
           />
         </template>
@@ -217,12 +217,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('defaultCulture')">
-      <a-form-item :label="pi.queryLabel('defaultCulture')">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.defaultCulture"
+          v-model:value="advancedQueryForm.cultureCode"
           api-url="TaktCultures/options"
-          :placeholder="pi.queryPh('defaultCulture', 'select')"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -908,7 +908,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -951,7 +950,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -1027,8 +1025,6 @@ const toPlantNumber = (value: string | number | undefined | null): number => {
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

@@ -81,9 +81,9 @@ public static class TaktEcDetailMaterialPlantMapper
     private static string ResolveMaterialText(TaktMaterialPlant material)
     {
         ArgumentNullException.ThrowIfNull(material);
-        if (!string.IsNullOrWhiteSpace(material.MaterialName))
+        if (!string.IsNullOrWhiteSpace(material.MaterialDescription))
         {
-            return material.MaterialName.Trim();
+            return material.MaterialDescription.Trim();
         }
         if (!string.IsNullOrWhiteSpace(material.MaterialDescription))
         {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktStorageLocationI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktStorageLocation 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -98,15 +98,6 @@ public class TaktStorageLocationI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-CN", "仓库ID", "仓库 ID（选项 TaktWarehouses/options；DictValue=Id）"),
             // entity.storagelocation.warehouseid
             new TranslationSeedItem("entity.storagelocation.warehouseid", "zh-HK", "仓库ID_hk", "仓库 ID（选项 TaktWarehouses/options；DictValue=Id）"),
-
-            // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "en-US", "工厂代码_us", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-CN", "工厂代码", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
-            // entity.storagelocation.plantcode
-            new TranslationSeedItem("entity.storagelocation.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）"),
 
             // entity.storagelocation.warehousecode
             new TranslationSeedItem("entity.storagelocation.warehousecode", "en-US", "存货地点编码_us", "仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）"),

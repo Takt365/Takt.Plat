@@ -302,19 +302,19 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
     }
 
     /// <summary>
-    /// 获取当前登录 UI 语言下全部字典数据（CultureCode eo=全局通用，或匹配 Accept-Language）
+    /// 获取租户下全部字典数据（含各 CultureCode；前端按下拉区域文化或 Accept-Language 再过滤）
     /// </summary>
     /// <returns>全部字典数据 DTO</returns>
     public async Task<TaktDataDictAllDto> GetDataDictAllAsync()
     {
-        var cultureCode = ResolveCurrentRequestCultureCode();
+        // 区域专用字典（如 accounting_tax_code 的 zh-CN/ja-JP）须全量下发，由前端按业务 DefaultCulture 过滤显示
         var list = await _dictDataRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
+            x => x.TenantCode == CurrentTenantCode,
             x => x.SortOrder,
             false);
         var items = list
             .OrderBy(x => x.DictTypeCode)
+            .ThenBy(x => x.CultureCode)
             .ThenBy(x => x.SortOrder)
             .Select(MapToSelectOption)
             .ToList();
@@ -611,6 +611,12 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

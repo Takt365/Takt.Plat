@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BillOfMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBillOfMaterial 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BillOfMaterialId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM编码（业务单据号，便于检索，非唯一键）
@@ -51,20 +47,14 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    public string ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -77,7 +67,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
     public string AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -97,7 +87,7 @@ public class TaktBillOfMaterialDto : TaktCompanyDtoBase
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal ParentMaterialQuantity { get; set; }
 
@@ -145,7 +135,12 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -160,20 +155,14 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    public string? ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -186,7 +175,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -216,7 +205,7 @@ public class TaktBillOfMaterialQueryDto : TaktPagedQuery
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal? ParentMaterialQuantity { get; set; }
 
@@ -276,14 +265,14 @@ public class TaktBillOfMaterialCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -299,22 +288,15 @@ public class TaktBillOfMaterialCreateDto
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
-    /// </summary>
-    [Required(ErrorMessage = "父物料编码（父项物料编码 item_code，冗余）不能为空")]
+    [Required(ErrorMessage = "父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "父物料名称（冗余）不能为空")]
-    public string ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -328,9 +310,9 @@ public class TaktBillOfMaterialCreateDto
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
-    [Required(ErrorMessage = "备选BOM编码（对应SAP Alternative BOM，如01/02）不能为空")]
+    [Required(ErrorMessage = "备选BOM编码（对应，如01/02）不能为空")]
     public string AlternativeBomNumber { get; set; } = string.Empty;
 
     /// <summary>
@@ -350,7 +332,7 @@ public class TaktBillOfMaterialCreateDto
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal ParentMaterialQuantity { get; set; }
 
@@ -367,7 +349,7 @@ public class TaktBillOfMaterialCreateDto
     /// <summary>
     /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
     /// </summary>
-    public List<TaktBillOfMaterialItemUpdateDto>? Items { get; set; }
+    public List<TaktBillOfMaterialItemCreateDto>? Items { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -398,6 +380,11 @@ public class TaktBillOfMaterialUpdateDto : TaktBillOfMaterialCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BillOfMaterialId { get; set; }
+
+    /// <summary>
+    /// BOM组成件明细（扁平单层；多层通过子件物料关联其BOM头递归展开）（子表，级联保存）
+    /// </summary>
+    public new List<TaktBillOfMaterialItemUpdateDto>? Items { get; set; }
 
 }
 
@@ -469,7 +456,12 @@ public class TaktBillOfMaterialTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -484,20 +476,14 @@ public class TaktBillOfMaterialTemplateDto
     public string? BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    public string? ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -510,7 +496,7 @@ public class TaktBillOfMaterialTemplateDto
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -530,7 +516,7 @@ public class TaktBillOfMaterialTemplateDto
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal? ParentMaterialQuantity { get; set; }
 
@@ -577,12 +563,12 @@ public class TaktBillOfMaterialImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -597,20 +583,14 @@ public class TaktBillOfMaterialImportDto
     public string? BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    public string? ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -623,7 +603,7 @@ public class TaktBillOfMaterialImportDto
     public int? BomType { get; set; }
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
     public string? AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -643,7 +623,7 @@ public class TaktBillOfMaterialImportDto
     public string? ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal? ParentMaterialQuantity { get; set; }
 
@@ -696,7 +676,7 @@ public class TaktBillOfMaterialExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -711,20 +691,14 @@ public class TaktBillOfMaterialExportDto
     public string BomName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentMaterialId { get; set; }
-
-    /// <summary>
-    /// 父物料编码（父项物料编码 item_code，冗余）
+    /// 父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料名称（冗余）
+    /// 父物料描述（回填：随物料）
     /// </summary>
-    public string ParentMaterialName { get; set; } = string.Empty;
+    public string? ParentMaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// BOM版本号
@@ -737,7 +711,7 @@ public class TaktBillOfMaterialExportDto
     public int BomType { get; set; } = 0;
 
     /// <summary>
-    /// 备选BOM编码（对应SAP Alternative BOM，如01/02）
+    /// 备选BOM编码（对应，如01/02）
     /// </summary>
     public string AlternativeBomNumber { get; set; } = string.Empty;
 
@@ -757,7 +731,7 @@ public class TaktBillOfMaterialExportDto
     public string ParentMaterialUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基本数量（BOM基数，对应SAP Base quantity）
+    /// 基本数量（BOM基数，对应）
     /// </summary>
     public decimal ParentMaterialQuantity { get; set; }
 

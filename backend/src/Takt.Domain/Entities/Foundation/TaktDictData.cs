@@ -18,7 +18,8 @@ namespace Takt.Domain.Entities.Foundation;
 /// <summary>
 /// 字典数据实体
 /// 字典类型的具体数据项，如：订单状态下的“待支付”、“已完成”等
-/// 租户级实体：字典数据在租户内共享；CultureCode eo=全局通用（各语言均加载），非空为区域专用（如 zh-CN、ja-JP，与 TaktCulture.CultureCode / Accept-Language 一致）；前端字典缓存加载「eo + 当前登录 UI 语言」项
+/// 租户级实体：字典数据在租户内共享；基类 CultureCode 空串=全局通用（各语言均加载），非空为区域专用（如 zh-CN、ja-JP，与 TaktCulture.CultureCode 一致）；GetDataDictAll 下发全量区域项，前端按业务实体基类 CultureCode（公司/工厂映射）或 Accept-Language 过滤显示
+/// 注意：全局项须显式赋 CultureCode=""（基类默认 en-US，TaktTenantScopeFillHelper 不对 DictData 回填公司码）
 /// </summary>
 [SugarTable("takt_foundation_dict_data", "字典数据表")]
 [SugarIndex("ix_dict_data_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -83,11 +84,6 @@ public class TaktDictData : TaktTenantEntityBase
     [SugarColumn(ColumnName = "css_class", ColumnDescription = "CSS类名", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int CssClass { get; set; } = 0;
 
-    /// <summary>
-    /// 区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，仅当前 Accept-Language 匹配时与全局项一并加载）
-    /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "eo")]
-    public string CultureCode { get; set; } = "eo";
 
     /// <summary>
     /// 是否默认项（1=是，0=否）

@@ -16,11 +16,12 @@ using Takt.Domain.Entities.Logistics.Manufacturing.Output;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.Output;
 
 /// <summary>
-/// 月生产推移转置分析服务
+/// 月生产推移转置分析服务（读组立/PCBA 产出本表；与 CRUD 服务分离）
 /// </summary>
 public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductionMonthlyTrendService
 {
@@ -54,6 +55,117 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
     _assyOutputDetailRepository = assyOutputDetailRepository;
     _pcbaOutputRepository = pcbaOutputRepository;
     _pcbaOutputDetailRepository = pcbaOutputDetailRepository;
+  }
+
+  /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendPlantOptionsAsync()
+  {
+    EnsureThreeLayerContext();
+    var assyList = await _assyOutputRepository.GetListAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode != null
+            && x.PlantCode != string.Empty);
+    var pcbaList = await _pcbaOutputRepository.GetListAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode != null
+            && x.PlantCode != string.Empty);
+    return assyList.Select(e => e.PlantCode.Trim())
+        .Concat(pcbaList.Select(e => e.PlantCode.Trim()))
+        .Where(c => !string.IsNullOrEmpty(c))
+        .GroupBy(c => c, StringComparer.OrdinalIgnoreCase)
+        .OrderBy(g => g.Key, StringComparer.Ordinal)
+        .Select(g => new TaktSelectOption
+        {
+          DictValue = g.Key,
+          DictLabel = g.Key,
+        })
+        .ToList();
+  }
+
+  /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendOutputCategoryOptionsAsync(string plantCode)
+  {
+    EnsureThreeLayerContext();
+    var plant = plantCode?.Trim() ?? string.Empty;
+    if (string.IsNullOrEmpty(plant))
+    {
+      return new List<TaktSelectOption>();
+    }
+    var options = new List<TaktSelectOption>();
+    var assyCount = await _assyOutputRepository.CountAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == plant);
+    if (assyCount > 0)
+    {
+      options.Add(new TaktSelectOption
+      {
+        DictValue = CategoryAssy,
+        DictLabel = "组立",
+      });
+    }
+    var pcbaCount = await _pcbaOutputRepository.CountAsync(
+        x => x.TenantCode == CurrentTenantCode
+            && x.CompanyCode == CurrentCompanyCode
+            && x.PlantCode == plant);
+    if (pcbaCount > 0)
+    {
+      options.Add(new TaktSelectOption
+      {
+        DictValue = CategoryPcba,
+        DictLabel = "PCBA",
+      });
+    }
+    return options;
+  }
+
+  /// <inheritdoc />
+  public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendModelOptionsAsync(
+      string plantCode,
+      string? outputCategory = null)
+  {
+    EnsureThreeLayerContext();
+    var plant = plantCode?.Trim() ?? string.Empty;
+    if (string.IsNullOrEmpty(plant))
+    {
+      return new List<TaktSelectOption>();
+    }
+    var category = outputCategory?.Trim().ToLowerInvariant() ?? string.Empty;
+    var modelCodes = new List<string>();
+    var includeAssy = string.IsNullOrEmpty(category) || category == CategoryAssy;
+    var includePcba = string.IsNullOrEmpty(category) || category == CategoryPcba;
+    if (includeAssy)
+    {
+      var assyList = await _assyOutputRepository.GetListAsync(
+          x => x.TenantCode == CurrentTenantCode
+              && x.CompanyCode == CurrentCompanyCode
+              && x.PlantCode == plant
+              && x.ModelCode != null
+              && x.ModelCode != string.Empty);
+      modelCodes.AddRange(assyList.Select(e => e.ModelCode.Trim()));
+    }
+    if (includePcba)
+    {
+      var pcbaList = await _pcbaOutputRepository.GetListAsync(
+          x => x.TenantCode == CurrentTenantCode
+              && x.CompanyCode == CurrentCompanyCode
+              && x.PlantCode == plant
+              && x.ModelCode != null
+              && x.ModelCode != string.Empty);
+      modelCodes.AddRange(pcbaList.Select(e => e.ModelCode.Trim()));
+    }
+    return modelCodes
+        .Where(c => !string.IsNullOrEmpty(c))
+        .GroupBy(c => c, StringComparer.OrdinalIgnoreCase)
+        .OrderBy(g => g.Key, StringComparer.Ordinal)
+        .Select(g => new TaktSelectOption
+        {
+          DictValue = g.Key,
+          DictLabel = g.Key,
+        })
+        .ToList();
   }
 
   /// <inheritdoc />

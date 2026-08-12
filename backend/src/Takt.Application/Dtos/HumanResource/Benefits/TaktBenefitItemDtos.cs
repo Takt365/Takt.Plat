@@ -35,60 +35,6 @@ public class TaktBenefitItemDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BenefitItemId { get; set; }
 
-    /// <summary>
-    /// 福利项目编码（租户+公司内唯一）
-    /// </summary>
-    public string ItemCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 福利项目名称
-    /// </summary>
-    public string ItemName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 福利大类（字典 hr_benefit_category：保险/补贴/休假/其他）
-    /// </summary>
-    public int BenefitCategory { get; set; } = 0;
-
-    /// <summary>
-    /// 福利类型（字典 hr_benefit_type：社保/公积金/商业保险/年假额度/餐补/培训补贴/员工折扣等）
-    /// </summary>
-    public int BenefitType { get; set; } = 0;
-
-    /// <summary>
-    /// 发放周期（字典 hr_benefit_payment_cycle_type）
-    /// </summary>
-    public int PaymentCycle { get; set; } = 0;
-
-    /// <summary>
-    /// 默认金额或补贴标准（元）
-    /// </summary>
-    public decimal DefaultAmount { get; set; }
-
-    /// <summary>
-    /// 金额上限（元，0 表示不限制）
-    /// </summary>
-    public decimal MaxAmount { get; set; }
-
-    /// <summary>
-    /// 公司承担比例（%，如公积金单位缴存比例）
-    /// </summary>
-    public decimal EmployerRatio { get; set; }
-
-    /// <summary>
-    /// 个人承担比例（%，如公积金个人缴存比例）
-    /// </summary>
-    public decimal EmployeeRatio { get; set; }
-
-    /// <summary>
-    /// 是否强制福利（字典 sys_yes_no_type）
-    /// </summary>
-    public int IsMandatory { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -121,6 +67,11 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 福利项目编码（租户+公司内唯一）
@@ -175,7 +126,7 @@ public class TaktBenefitItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -228,9 +179,10 @@ public class TaktBenefitItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 福利项目编码（租户+公司内唯一）
@@ -288,7 +240,7 @@ public class TaktBenefitItemCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -395,6 +347,11 @@ public class TaktBenefitItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 福利项目编码（租户+公司内唯一）
     /// </summary>
     public string? ItemCode { get; set; } = string.Empty;
@@ -447,7 +404,7 @@ public class TaktBenefitItemTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -482,9 +439,10 @@ public class TaktBenefitItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 福利项目编码（租户+公司内唯一）
@@ -539,7 +497,7 @@ public class TaktBenefitItemImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -632,7 +590,7 @@ public class TaktBenefitItemExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

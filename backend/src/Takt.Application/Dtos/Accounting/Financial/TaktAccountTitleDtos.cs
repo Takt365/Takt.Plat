@@ -35,86 +35,6 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AccountTitleId { get; set; }
 
-    /// <summary>
-    /// 科目编码
-    /// </summary>
-    public string AccountTitleCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 科目名称
-    /// </summary>
-    public string AccountTitleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 父级 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentId { get; set; }
-
-    /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
-    /// </summary>
-    public string AccountTitleType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 余额方向（0=借方，1=贷方）
-    /// </summary>
-    public int BalanceDirection { get; set; } = 0;
-
-    /// <summary>
-    /// 科目层级
-    /// </summary>
-    public int AccountTitleLevel { get; set; } = 0;
-
-    /// <summary>
-    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsLeaf { get; set; } = 0;
-
-    /// <summary>
-    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsAuxiliary { get; set; } = 0;
-
-    /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
-    /// </summary>
-    public string AuxiliaryType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsQuantity { get; set; } = 0;
-
-    /// <summary>
-    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsCurrency { get; set; } = 0;
-
-    /// <summary>
-    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsCash { get; set; } = 0;
-
-    /// <summary>
-    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
-    /// </summary>
-    public int IsBank { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -162,6 +82,11 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目编码
@@ -252,7 +177,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -305,9 +230,10 @@ public class TaktAccountTitleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 科目编码
@@ -386,7 +312,7 @@ public class TaktAccountTitleCreateDto
     /// 关联工厂（关联 TaktPlant.PlantCode）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（关联 TaktPlant.PlantCode）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -491,6 +417,11 @@ public class TaktAccountTitleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 科目编码
     /// </summary>
     public string? AccountTitleCode { get; set; } = string.Empty;
@@ -564,7 +495,7 @@ public class TaktAccountTitleTemplateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -597,9 +528,10 @@ public class TaktAccountTitleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 科目编码
@@ -675,7 +607,7 @@ public class TaktAccountTitleImportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -792,7 +724,7 @@ public class TaktAccountTitleExportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

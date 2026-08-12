@@ -23,378 +23,6 @@ import type {
  * @description 对应后端 TaktAssyOutputDto
  */
 export interface AssyOutput extends CompanyDtoBase {
-  /**
-   * AssyOutputID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  assyOutputId: string;
-
-  /**
-   * 工厂代码（回填：随工单）
-   */
-  plantCode: string;
-
-  /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
-   */
-  prodCategory: string;
-
-  /**
-   * 生产日期
-   */
-  prodDate: string;
-
-  /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-   */
-  prodTeam: string;
-
-  /**
-   * 直接人员
-   */
-  directLabor: number;
-
-  /**
-   * 间接人员
-   */
-  indirectLabor: number;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo: number;
-
-  /**
-   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
-   */
-  prodOrderType?: string;
-
-  /**
-   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
-   */
-  prodOrderCode: string;
-
-  /**
-   * 机种
-   */
-  modelCode: string;
-
-  /**
-   * 物料编码
-   */
-  materialCode: string;
-
-  /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 订单数量
-   */
-  prodOrderQty: number;
-
-  /**
-   * 序列号（回填：随工单）
-   */
-  serialNo?: string;
-
-  /**
-   * 标准工时(分钟)
-   */
-  stdMinutes: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity: number;
-
-  /**
-   * 组立日报明细列表 （子表：TaktAssyOutputDetail）
-   */
-  assyOutputDetails?: AssyOutputDetail[];
-
-}
-
-
-/**
- * AssyOutput 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 AssyOutputQuery
- * @description 对应后端 TaktAssyOutputQueryDto
- */
-export interface AssyOutputQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（回填：随工单）
-   */
-  plantCode?: string;
-
-  /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
-   */
-  prodCategory?: string;
-
-  /**
-   * 生产日期（范围查询-开始）
-   */
-  prodDateStart?: string;
-
-  /**
-   * 生产日期（范围查询-结束）
-   */
-  prodDateEnd?: string;
-
-  /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-   */
-  prodTeam?: string;
-
-  /**
-   * 直接人员
-   */
-  directLabor?: number;
-
-  /**
-   * 间接人员
-   */
-  indirectLabor?: number;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo?: number;
-
-  /**
-   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
-   */
-  prodOrderType?: string;
-
-  /**
-   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
-   */
-  prodOrderCode?: string;
-
-  /**
-   * 机种
-   */
-  modelCode?: string;
-
-  /**
-   * 物料编码
-   */
-  materialCode?: string;
-
-  /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 订单数量
-   */
-  prodOrderQty?: number;
-
-  /**
-   * 序列号（回填：随工单）
-   */
-  serialNo?: string;
-
-  /**
-   * 标准工时(分钟)
-   */
-  stdMinutes?: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建AssyOutput DTO
- * 对应前端 AssyOutputCreate
- * @description 对应后端 TaktAssyOutputCreateDto
- */
-export interface AssyOutputCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码（回填：随工单）
-   */
-  plantCode: string;
-
-  /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
-   */
-  prodCategory: string;
-
-  /**
-   * 生产日期
-   */
-  prodDate: string;
-
-  /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-   */
-  prodTeam: string;
-
-  /**
-   * 直接人员
-   */
-  directLabor: number;
-
-  /**
-   * 间接人员
-   */
-  indirectLabor: number;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo: number;
-
-  /**
-   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
-   */
-  prodOrderType?: string;
-
-  /**
-   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
-   */
-  prodOrderCode: string;
-
-  /**
-   * 机种
-   */
-  modelCode: string;
-
-  /**
-   * 物料编码
-   */
-  materialCode: string;
-
-  /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 订单数量
-   */
-  prodOrderQty: number;
-
-  /**
-   * 序列号（回填：随工单）
-   */
-  serialNo?: string;
-
-  /**
-   * 标准工时(分钟)
-   */
-  stdMinutes: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity: number;
-
-  /**
-   * 组立日报明细列表（子表，级联保存）
-   */
-  assyOutputDetails?: AssyOutputDetailCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新AssyOutput DTO
- * 继承 TaktAssyOutputCreateDto，添加 AssyOutputId 字段
- * 对应前端 AssyOutputUpdate
- * @description 对应后端 TaktAssyOutputUpdateDto
- */
-export interface AssyOutputUpdate extends AssyOutputCreate {
-  /**
-   * AssyOutputID（标识要更新的实体）
-   */
-  assyOutputId: string;
-
-}
-
-
-/**
- * AssyOutput 导入模板行 DTO
- * 对应前端 AssyOutputTemplate
- * @description 对应后端 TaktAssyOutputTemplateDto
- */
-export interface AssyOutputTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（回填：随工单）
-   */
-  plantCode?: string;
 
   /**
    * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
@@ -409,7 +37,7 @@ export interface AssyOutputTemplate {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam?: string;
+  TeamCode?: string;
 
   /**
    * 直接人员
@@ -449,7 +77,7 @@ export interface AssyOutputTemplate {
   /**
    * 批次
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 订单数量
@@ -459,7 +87,7 @@ export interface AssyOutputTemplate {
   /**
    * 序列号（回填：随工单）
    */
-  serialNo?: string;
+  serialCode?: string;
 
   /**
    * 标准工时(分钟)
@@ -487,126 +115,6 @@ export interface AssyOutputTemplate {
   remark?: string;
 
 }
-
-
-/**
- * AssyOutput 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 AssyOutputImport
- * @description 对应后端 TaktAssyOutputImportDto
- */
-export interface AssyOutputImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（回填：随工单）
-   */
-  plantCode?: string;
-
-  /**
-   * 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
-   */
-  prodCategory?: string;
-
-  /**
-   * 生产日期
-   */
-  prodDate?: string;
-
-  /**
-   * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
-   */
-  prodTeam?: string;
-
-  /**
-   * 直接人员
-   */
-  directLabor?: number;
-
-  /**
-   * 间接人员
-   */
-  indirectLabor?: number;
-
-  /**
-   * 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
-   */
-  shiftNo?: number;
-
-  /**
-   * 订单类别（选项 TaktProductionOrders/options 的 ExtLabel，随工单回填）
-   */
-  prodOrderType?: string;
-
-  /**
-   * 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
-   */
-  prodOrderCode?: string;
-
-  /**
-   * 机种
-   */
-  modelCode?: string;
-
-  /**
-   * 物料编码
-   */
-  materialCode?: string;
-
-  /**
-   * 批次
-   */
-  batchNo?: string;
-
-  /**
-   * 订单数量
-   */
-  prodOrderQty?: number;
-
-  /**
-   * 序列号（回填：随工单）
-   */
-  serialNo?: string;
-
-  /**
-   * 标准工时(分钟)
-   */
-  stdMinutes?: number;
-
-  /**
-   * 标准产能
-   */
-  stdCapacity?: number;
-
-  /**
-   * 组立日报明细列表（子表，级联保存）
-   */
-  assyOutputDetails?: AssyOutputDetailCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * AssyOutput 导出 DTO（独立实现，不继承响应 Dto）
@@ -642,7 +150,7 @@ export interface AssyOutputExport {
   /**
    * 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
    */
-  prodTeam: string;
+  TeamCode: string;
 
   /**
    * 直接人员
@@ -682,7 +190,7 @@ export interface AssyOutputExport {
   /**
    * 批次
    */
-  batchNo?: string;
+  batchCode?: string;
 
   /**
    * 订单数量
@@ -692,7 +200,7 @@ export interface AssyOutputExport {
   /**
    * 序列号（回填：随工单）
    */
-  serialNo?: string;
+  serialCode?: string;
 
   /**
    * 标准工时(分钟)

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktMasterDemandScheduleLineDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MasterDemandScheduleLine 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMasterDemandScheduleLine 生成，请按需审阅）
 // 
@@ -94,7 +94,7 @@ public class TaktMasterDemandScheduleLineDto : TaktCompanyDtoBase
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -114,12 +114,12 @@ public class TaktMasterDemandScheduleLineDto : TaktCompanyDtoBase
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -145,6 +145,16 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// MDS 头表 ID（主子表关系）
     /// </summary>
@@ -189,7 +199,7 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -219,9 +229,14 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -242,11 +257,6 @@ public class TaktMasterDemandScheduleLineQueryDto : TaktPagedQuery
     /// 备注（模糊查询）
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是）
-    /// </summary>
-    public int? IsObsolete { get; set; }
 }
 
 // ========================================
@@ -269,10 +279,15 @@ public class TaktMasterDemandScheduleLineCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// MDS 头表 ID（主子表关系）
     /// </summary>
@@ -318,9 +333,9 @@ public class TaktMasterDemandScheduleLineCreateDto
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -339,10 +354,15 @@ public class TaktMasterDemandScheduleLineCreateDto
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -353,11 +373,6 @@ public class TaktMasterDemandScheduleLineCreateDto
     /// 备注
     /// </summary>
     public string? Remark { get; set; }
-
-    /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是）
-    /// </summary>
-    public int? IsObsolete { get; set; }
 
 }
 
@@ -382,6 +397,29 @@ public class TaktMasterDemandScheduleLineUpdateDto : TaktMasterDemandScheduleLin
 }
 
 // ========================================
+// MasterDemandScheduleLine 作废 DTO
+// ========================================
+
+/// <summary>
+/// MasterDemandScheduleLine 作废/撤销作废 DTO
+/// </summary>
+public class TaktMasterDemandScheduleLineObsoleteDto
+{
+    /// <summary>
+    /// MasterDemandScheduleLineID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long MasterDemandScheduleLineId { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; }
+}
+
+// ========================================
 // 导入 DTO
 // ========================================
 
@@ -401,6 +439,16 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// MDS 头表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -410,6 +458,11 @@ public class TaktMasterDemandScheduleLineTemplateDto
     /// MDS 编码（冗余）
     /// </summary>
     public string? MdsCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
@@ -439,7 +492,7 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -459,9 +512,14 @@ public class TaktMasterDemandScheduleLineTemplateDto
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -491,10 +549,15 @@ public class TaktMasterDemandScheduleLineImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// MDS 头表 ID（主子表关系）
     /// </summary>
@@ -505,6 +568,11 @@ public class TaktMasterDemandScheduleLineImportDto
     /// MDS 编码（冗余）
     /// </summary>
     public string? MdsCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 需求来源（字典 mds_demand_source_type；0=销售订单，1=预测，2=手工）
@@ -534,7 +602,7 @@ public class TaktMasterDemandScheduleLineImportDto
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -554,9 +622,14 @@ public class TaktMasterDemandScheduleLineImportDto
     public decimal? DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int? IsObsolete { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -635,7 +708,7 @@ public class TaktMasterDemandScheduleLineExportDto
     public int? SalesForecastLineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -655,9 +728,14 @@ public class TaktMasterDemandScheduleLineExportDto
     public decimal DemandQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+    /// </summary>
+    public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

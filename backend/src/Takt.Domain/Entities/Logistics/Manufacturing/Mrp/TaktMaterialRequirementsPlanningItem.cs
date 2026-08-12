@@ -35,7 +35,7 @@ public class TaktMaterialRequirementsPlanningItem : TaktCompanyEntityBase
     /// <summary>
     /// MRP 编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "MRP编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "MRP编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialRequirementsPlanningCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -51,15 +51,15 @@ public class TaktMaterialRequirementsPlanningItem : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
 
     /// <summary>

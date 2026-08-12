@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/engineering-change/ec-monthly-trend/components -->
 <!-- 文件名称：ec-monthly-trend-query-form.vue -->
-<!-- 功能描述：月设变/月实施推移查询栏（工厂/期间 + Tab 条件筛选） -->
+<!-- 功能描述：月设变/月实施推移查询栏（工厂→部门→设变号级联 + Tab 条件筛选） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,9 +12,10 @@
     <div class="ec-monthly-trend-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
       <TaktSelect
         v-model:value="plantCode"
-        api-url="TaktPlants/options"
+        :api-url="plantOptionsUrl"
         class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--plant"
         allow-clear
+        show-search
         :placeholder="t('entity.ecgijutsu.plantcode')"
       />
       <a-range-picker
@@ -25,21 +26,28 @@
         class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
+      />
+      <TaktSelect
+        v-model:value="deptCode"
+        :api-url="deptOptionsUrl"
+        :api-params="deptApiParams"
+        :disabled="!plantCode?.trim()"
+        class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
+        allow-clear
+        show-search
+        :placeholder="t(`${localePrefix}.deptCode`)"
       />
       <template v-if="props.activeTab === 'issue'">
-        <a-input
-          v-model:value="ecNo"
+        <TaktSelect
+          v-model:value="ecCode"
+          :api-url="ecCodeOptionsUrl"
+          :api-params="ecCodeApiParams"
+          :disabled="!plantCode?.trim()"
           class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--ec-no"
           allow-clear
-          :placeholder="t(`${localePrefix}.ecNo`)"
-        />
-        <a-input
-          v-model:value="deptCode"
-          class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
-          allow-clear
-          :placeholder="t(`${localePrefix}.deptCode`)"
+          show-search
+          :placeholder="t(`${localePrefix}.ecCode`)"
         />
         <TaktSelect
           v-model:value="ecDistinction"
@@ -63,13 +71,6 @@
           :placeholder="t('entity.ecgijutsu.ecstatus')"
         />
       </template>
-      <a-input
-        v-else
-        v-model:value="deptCode"
-        class="ec-monthly-trend-query-bar__control ec-monthly-trend-query-bar__control--dept"
-        allow-clear
-        :placeholder="t(`${localePrefix}.deptCode`)"
-      />
     </div>
     <a-space class="query-actions">
       <a-button
@@ -98,25 +99,30 @@
 
 <script setup lang="ts">
 /**
- * 月设变/月实施推移查询栏：工厂 + 期间 + Tab 条件筛选
+ * 月设变/月实施推移查询栏：工厂 → 部门 → 设变单号（本表级联）
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
+import {
+  getEcMonthlyTrendDeptOptionsUrl,
+  getEcMonthlyTrendEcCodeOptionsUrl,
+  getEcMonthlyTrendPlantOptionsUrl,
+} from '@/api/logistics/manufacturing/engineering-change/ec-monthly-trend'
 
-/** 工厂代码 */
+/** 工厂代码（第 1 级） */
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
-/** 设变单号 */
-const ecNo = defineModel<string>('ecNo', { default: '' })
+/** 部门编码（第 2 级，可空） */
+const deptCode = defineModel<string | undefined>('deptCode')
+/** 设变单号（第 3 级，可空；仅 issue Tab） */
+const ecCode = defineModel<string | undefined>('ecCode')
 /** 区分 */
 const ecDistinction = defineModel<number | undefined>('ecDistinction')
 /** 变更状态 */
 const changeStatus = defineModel<number | undefined>('changeStatus')
 /** 设变状态 */
 const ecStatus = defineModel<number | undefined>('ecStatus')
-/** 部门编码 */
-const deptCode = defineModel<string>('deptCode', { default: '' })
 const props = defineProps<{
   /** 当前 Tab */
   activeTab: 'issue' | 'implement'
@@ -131,6 +137,46 @@ const emit = defineEmits<{
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.engineering-change.ec-monthly-trend.page'
+/** 推移本表级联选项 URL（TaktEcMonthlyTrends） */
+const plantOptionsUrl = getEcMonthlyTrendPlantOptionsUrl()
+const deptOptionsUrl = getEcMonthlyTrendDeptOptionsUrl()
+const ecCodeOptionsUrl = getEcMonthlyTrendEcCodeOptionsUrl()
+
+/** 第 2 级：工厂 → 部门 */
+const deptApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  return { plantCode: plant }
+})
+
+/** 第 3 级：工厂 + 部门 → 设变单号（部门可空） */
+const ecCodeApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  const dept = deptCode.value?.trim()
+  return dept ? { plantCode: plant, deptCode: dept } : { plantCode: plant }
+})
+
+/** 工厂变更：清空第 2～3 级 */
+watch(
+  () => plantCode.value,
+  () => {
+    deptCode.value = undefined
+    ecCode.value = undefined
+  },
+)
+
+/** 部门变更：清空第 3 级 */
+watch(
+  () => deptCode.value,
+  () => {
+    ecCode.value = undefined
+  },
+)
 </script>
 
 <style scoped>

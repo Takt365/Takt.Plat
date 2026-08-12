@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamEquipmentDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeamEquipment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeamEquipment 生成，请按需审阅）
 // 
@@ -35,21 +35,17 @@ public class TaktProductionTeamEquipmentDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionTeamEquipmentId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionTeamId { get; set; }
+    public long ProdTeamId { get; set; }
 
     /// <summary>
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
-    public string? ProductionTeamName { get; set; }
+    public string? ProdTeamName { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -65,30 +61,30 @@ public class TaktProductionTeamEquipmentDto : TaktCompanyDtoBase
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionEquipmentId { get; set; }
+    public long ProdEquipId { get; set; }
 
     /// <summary>
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
-    public string? ProductionEquipmentName { get; set; }
+    public string? ProdEquipName { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int EquipmentQuantity { get; set; } = 0;
+    public int EquipQuantity { get; set; } = 0;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int TeamEquipmentStatus { get; set; } = 0;
+    public int TeamEquipStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -115,7 +111,12 @@ public class TaktProductionTeamEquipmentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -123,7 +124,7 @@ public class TaktProductionTeamEquipmentQueryDto : TaktPagedQuery
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionTeamId { get; set; }
+    public long? ProdTeamId { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -139,25 +140,25 @@ public class TaktProductionTeamEquipmentQueryDto : TaktPagedQuery
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionEquipmentId { get; set; }
+    public long? ProdEquipId { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int? EquipmentQuantity { get; set; }
+    public int? EquipQuantity { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? TeamEquipmentStatus { get; set; }
+    public int? TeamEquipStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -202,21 +203,21 @@ public class TaktProductionTeamEquipmentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionTeamId { get; set; }
+    public long ProdTeamId { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -233,26 +234,26 @@ public class TaktProductionTeamEquipmentCreateDto
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionEquipmentId { get; set; }
+    public long ProdEquipId { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    [Required(ErrorMessage = "生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）不能为空")]
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）不能为空")]
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int EquipmentQuantity { get; set; } = 0;
+    public int EquipQuantity { get; set; } = 0;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int TeamEquipmentStatus { get; set; } = 0;
+    public int TeamEquipStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -309,7 +310,7 @@ public class TaktProductionTeamEquipmentStatusDto
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
     [Required(ErrorMessage = "状态（字典 sys_normal_disable；1=启用，0=禁用）不能为空")]
-    public int TeamEquipmentStatus { get; set; } = 0;
+    public int TeamEquipStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -355,7 +356,12 @@ public class TaktProductionTeamEquipmentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -363,7 +369,7 @@ public class TaktProductionTeamEquipmentTemplateDto
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionTeamId { get; set; }
+    public long? ProdTeamId { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -379,25 +385,25 @@ public class TaktProductionTeamEquipmentTemplateDto
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionEquipmentId { get; set; }
+    public long? ProdEquipId { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int? EquipmentQuantity { get; set; }
+    public int? EquipQuantity { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? TeamEquipmentStatus { get; set; }
+    public int? TeamEquipStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -429,12 +435,12 @@ public class TaktProductionTeamEquipmentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -442,7 +448,7 @@ public class TaktProductionTeamEquipmentImportDto
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionTeamId { get; set; }
+    public long? ProdTeamId { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -458,25 +464,25 @@ public class TaktProductionTeamEquipmentImportDto
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ProductionEquipmentId { get; set; }
+    public long? ProdEquipId { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int? EquipmentQuantity { get; set; }
+    public int? EquipQuantity { get; set; }
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? TeamEquipmentStatus { get; set; }
+    public int? TeamEquipStatus { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -514,7 +520,7 @@ public class TaktProductionTeamEquipmentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -522,7 +528,7 @@ public class TaktProductionTeamEquipmentExportDto
     /// 生产班组主键（主子表关系，关联 TaktProductionTeam.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionTeamId { get; set; }
+    public long ProdTeamId { get; set; }
 
     /// <summary>
     /// 班组编码（冗余快照，与 TaktProductionTeam.TeamCode 一致）
@@ -538,25 +544,25 @@ public class TaktProductionTeamEquipmentExportDto
     /// 生产设备主键（关联 TaktProductionEquipment.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long ProductionEquipmentId { get; set; }
+    public long ProdEquipId { get; set; }
 
     /// <summary>
-    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProductionEquipmentCode 一致）
+    /// 生产设备编码（冗余快照，与 TaktProductionEquipment.ProdEquipCode 一致）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备台数（同型号多台时 &gt;1）
     /// </summary>
-    public int EquipmentQuantity { get; set; } = 0;
+    public int EquipQuantity { get; set; } = 0;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int TeamEquipmentStatus { get; set; } = 0;
+    public int TeamEquipStatus { get; set; } = 0;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

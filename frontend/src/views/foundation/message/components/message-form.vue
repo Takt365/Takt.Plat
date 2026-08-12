@@ -633,8 +633,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve()
       },
       trigger: 'change',
-    },
-  ],
+    }],
   messageContent: needsFileUpload.value
     ? []
     : [
@@ -642,8 +641,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
           required: true,
           message: t('common.page.form.placeholder.required', { field: t('entity.message.content') }),
           trigger: 'blur',
-        },
-      ],
+        }],
   attachments: needsFileUpload.value
     ? [
         {
@@ -654,8 +652,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
             return Promise.reject(t('foundation.message.page.upload.required'))
           },
           trigger: 'change',
-        },
-      ]
+        }]
     : [],
   messageType: [
     {

@@ -89,9 +89,9 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
                 CompanyCode = CurrentCompanyCode,
                 DeliveryId = delivery.Id,
                 EcNotificationId = notification.Id,
-                EcNotificationNo = notification.EcNotificationNo,
+                EcNotificationCode = notification.EcNotificationCode,
                 EcId = notification.EcId,
-                EcNo = notification.EcNo,
+                EcCode = notification.EcCode,
                 EcTitle = notification.EcTitle,
                 DeptCode = deptCode,
                 Priority = priority,
@@ -167,7 +167,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         {
             CompanyCode = CurrentCompanyCode,
             TaskId = task.Id,
-            EcNo = task.EcNo,
+            EcCode = task.EcCode,
             DeptCode = task.DeptCode,
             TaskStatus = task.TaskStatus,
             ProgressPercent = task.ProgressPercent,
@@ -182,10 +182,10 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             {
                 CompanyCode = CurrentCompanyCode,
                 TaskId = task.Id,
-                EcNo = task.EcNo,
+                EcCode = task.EcCode,
                 DeptCode = task.DeptCode,
                 AlertType = "blocked",
-                Message = task.LastProgressRemark ?? $"设变 {task.EcNo} 部门 {task.DeptCode} 任务阻塞"
+                Message = task.LastProgressRemark ?? $"设变 {task.EcCode} 部门 {task.DeptCode} 任务阻塞"
             });
         }
         if (task.TaskStatus == TaktEcFlowConstants.TaskStatusCompleted)
@@ -222,10 +222,10 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             {
                 CompanyCode = companyCode,
                 TaskId = task.Id,
-                EcNo = task.EcNo,
+                EcCode = task.EcCode,
                 DeptCode = task.DeptCode,
                 AlertType = "overdue",
-                Message = $"设变 {task.EcNo} 部门 {task.DeptCode} 任务已超时"
+                Message = $"设变 {task.EcCode} 部门 {task.DeptCode} 任务已超时"
             });
             count++;
         }
@@ -300,9 +300,9 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         var delivery = new TaktEcNotificationDelivery
         {
             EcNotificationId = notification.Id,
-            EcNotificationNo = notification.EcNotificationNo,
+            EcNotificationCode = notification.EcNotificationCode,
             EcId = notification.EcId,
-            EcNo = notification.EcNo,
+            EcCode = notification.EcCode,
             DeptCode = deptCode,
             DeptName = deptName,
             Priority = priority,
@@ -360,7 +360,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             new
             {
                 EcNotificationId = notification.Id.ToString(),
-                EcNo = notification.EcNo,
+                EcCode = notification.EcCode,
                 DeptCode = delivery.DeptCode,
                 ConfirmedByUserName = delivery.ConfirmedByUserName,
                 ConfirmedAt = delivery.ConfirmedAt
@@ -381,17 +381,17 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
             return;
         }
         var ec = await _ecEngRepository.GetByIdAsync(notification.EcId);
-        var ecExec = await _ecExecDeptAccess.FirstBaseByEcNoAndDeptAsync(notification.EcNo, deptCode);
+        var ecExec = await _ecExecDeptAccess.FirstBaseByEcCodeAndDeptAsync(notification.EcCode, deptCode);
         var dueDate = ec?.EcEntryDate ?? ec?.EcIssueDate ?? DateTime.Now.AddDays(7);
         var task = new TaktEcExecutionTask
         {
             EcNotificationId = notification.Id,
             EcId = notification.EcId,
-            EcNo = notification.EcNo,
+            EcCode = notification.EcCode,
             EcExecId = ecExec?.Id,
             EcnDetailId = ecExec?.EcnDetailId,
             DeptCode = deptCode,
-            TaskTitle = $"设变实施-{notification.EcNo}-{deptCode}",
+            TaskTitle = $"设变实施-{notification.EcCode}-{deptCode}",
             TaskStatus = TaktEcFlowConstants.TaskStatusPending,
             DueDate = dueDate
         };
@@ -400,7 +400,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         {
             CompanyCode = CurrentCompanyCode,
             TaskId = task.Id,
-            EcNo = task.EcNo,
+            EcCode = task.EcCode,
             DeptCode = task.DeptCode,
             TaskTitle = task.TaskTitle,
             DueDate = task.DueDate
@@ -429,7 +429,7 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         {
             CompanyCode = CurrentCompanyCode,
             EcId = notification.EcId,
-            EcNo = notification.EcNo,
+            EcCode = notification.EcCode,
             EcNotificationId = notification.Id,
             ClosedAt = DateTime.Now
         };

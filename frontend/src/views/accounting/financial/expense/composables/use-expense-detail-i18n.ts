@@ -29,7 +29,7 @@ export const EXPENSEDETAIL_LIST_FIELDS = [
   'itemQuantity',
   'itemAmount',
   'accountTitle',
-  'invoiceNo',
+  'invoiceCode',
   'expenseDetailDate',
   'isObsolete',
 ] as const
@@ -45,7 +45,7 @@ export const EXPENSEDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'itemQuantity',
   'itemAmount',
   'accountTitle',
-  'invoiceNo',
+  'invoiceCode',
   'expenseDetailDate',
   'isObsolete',
   'action',
@@ -70,9 +70,10 @@ export const EXPENSEDETAIL_PLACEHOLDER = {
   itemQuantity: 'select',
   itemAmount: 'select',
   accountTitle: 'optional',
-  invoiceNo: 'optional',
+  invoiceCode: 'optional',
   expenseDetailDate: 'optional',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -85,7 +86,7 @@ export const EXPENSEDETAIL_QUERY_STRING_FIELDS = [
   'itemName',
   'itemDescription',
   'accountTitle',
-  'invoiceNo',
+  'invoiceCode',
   'expenseDetailDateStart',
   'expenseDetailDateEnd',
   'createdAtStart',

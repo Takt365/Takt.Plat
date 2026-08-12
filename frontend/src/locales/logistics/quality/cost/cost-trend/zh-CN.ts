@@ -15,7 +15,7 @@ export default {
     title: '质量成本推移',
     periodRange: '期间年月',
     costCategory: '成本类别',
-    costCurrency: '成本币种',
+    currencyCode: '成本币种',
     selectPlantRequired: '请选择工厂代码',
     selectPeriodRequired: '请选择期间年月',
     summary: '成本类别行 {count} 条（按月汇总品质保证/问题/事故成本）',

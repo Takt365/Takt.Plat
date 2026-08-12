@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktVendorI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktVendor 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             // entity.vendor._self
             new TranslationSeedItem("entity.vendor._self", "zh-HK", "Takt经销商信息_hk", "实体名称"),
 
-            // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.vendor.plantcode
-            new TranslationSeedItem("entity.vendor.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.vendor.code
             new TranslationSeedItem("entity.vendor.code", "en-US", "经销商编码_us", "经销商编码（唯一索引）"),
             // entity.vendor.code
@@ -162,15 +153,6 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             // entity.vendor.industryattribute
             new TranslationSeedItem("entity.vendor.industryattribute", "zh-HK", "行业属性_hk", "行业属性（字典 sys_industry_attribute_type）"),
 
-            // entity.vendor.defaultculture
-            new TranslationSeedItem("entity.vendor.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.vendor.defaultculture
-            new TranslationSeedItem("entity.vendor.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.vendor.defaultculture
-            new TranslationSeedItem("entity.vendor.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.vendor.defaultculture
-            new TranslationSeedItem("entity.vendor.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-
             // entity.vendor.taxnumber
             new TranslationSeedItem("entity.vendor.taxnumber", "en-US", "经销商标识_us", "经销商标识（税务登记证号/统一社会信用代码）"),
             // entity.vendor.taxnumber
@@ -180,14 +162,23 @@ public class TaktVendorI18nSeedData : ITaktSeedDataCoordinator
             // entity.vendor.taxnumber
             new TranslationSeedItem("entity.vendor.taxnumber", "zh-HK", "经销商标识_hk", "经销商标识（税务登记证号/统一社会信用代码）"),
 
+            // entity.vendor.taxcode
+            new TranslationSeedItem("entity.vendor.taxcode", "en-US", "税码_us", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.vendor.taxcode
+            new TranslationSeedItem("entity.vendor.taxcode", "ja-JP", "税码_jp", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.vendor.taxcode
+            new TranslationSeedItem("entity.vendor.taxcode", "zh-CN", "税码", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.vendor.taxcode
+            new TranslationSeedItem("entity.vendor.taxcode", "zh-HK", "税码_hk", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+
             // entity.vendor.taxrate
-            new TranslationSeedItem("entity.vendor.taxrate", "en-US", "税率_us", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            new TranslationSeedItem("entity.vendor.taxrate", "en-US", "税率_us", "税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.vendor.taxrate
-            new TranslationSeedItem("entity.vendor.taxrate", "ja-JP", "税率_jp", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            new TranslationSeedItem("entity.vendor.taxrate", "ja-JP", "税率_jp", "税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.vendor.taxrate
-            new TranslationSeedItem("entity.vendor.taxrate", "zh-CN", "税率", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            new TranslationSeedItem("entity.vendor.taxrate", "zh-CN", "税率", "税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.vendor.taxrate
-            new TranslationSeedItem("entity.vendor.taxrate", "zh-HK", "税率_hk", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）"),
+            new TranslationSeedItem("entity.vendor.taxrate", "zh-HK", "税率_hk", "税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
 
             // entity.vendor.registrationcountry
             new TranslationSeedItem("entity.vendor.registrationcountry", "en-US", "注册国家_us", "注册国家（字典 sys_country_code；DictValue=ISO alpha-2）"),

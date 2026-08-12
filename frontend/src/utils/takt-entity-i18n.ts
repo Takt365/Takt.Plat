@@ -14,6 +14,7 @@ export const COMMON_ENTITY_FIELD_I18N_KEYS: Readonly<Record<string, string>> = {
   extField: 'common.page.entity.extfield',
   tenantCode: 'common.page.entity.tenantcode',
   companyCode: 'common.page.entity.companycode',
+  cultureCode: 'common.page.entity.culturecode',
   companyDefaultCulture: 'common.page.entity.companydefaultculture',
   createdAtStart: 'common.page.entity.createdatstart',
   createdAtEnd: 'common.page.entity.createdatend',

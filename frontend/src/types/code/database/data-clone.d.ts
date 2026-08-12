@@ -10,7 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-
 /**
  * 公司级数据克隆请求 DTO（一次仅一个源公司、一张源表 → 一个目标公司、一张目标表）
  * 对应前端 DataClone
@@ -69,7 +68,6 @@ export interface DataClone {
 
 }
 
-
 /**
  * 公司级数据克隆备份预览 DTO（备份窗口）
  * 对应前端 DataClonePreview
@@ -117,7 +115,6 @@ export interface DataClonePreview {
   confirmHint: string;
 
 }
-
 
 /**
  * 公司级数据克隆结果 DTO

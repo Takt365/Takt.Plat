@@ -790,7 +790,6 @@ const columns = computed<TableColumnsType>(() => [
   })
 ])
 
-
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
   onChange: (keys: (string | number)[], rows: Menu[]) => {

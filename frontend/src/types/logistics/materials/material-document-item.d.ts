@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-document-item.d.ts
-// 创建时间：2026-07-15
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,187 +16,58 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt物料凭证行项目实体
+ * Takt物料凭证行项目实体（公司级；主子表关系见 MaterialDocumentId）
  * 对应前端 TaktMaterialDocumentItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 MaterialDocumentItem
  * @description 对应后端 TaktMaterialDocumentItemDto
  */
 export interface MaterialDocumentItem extends CompanyDtoBase {
-  /**
-   * MaterialDocumentItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  materialDocumentItemId: string;
 
   /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
-   */
-  materialDocumentId: string;
-
-  /**
-   * 物料凭证 名称（填充字段）
-   */
-  materialDocumentName?: string;
-
-  /**
-   * 物料凭证号（冗余）
-   */
-  materialDocumentCode: string;
-
-  /**
-   * 行号（固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
-   */
-  warehouseCode: string;
-
-  /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
-   */
-  movementType: string;
-
-  /**
-   * 过账日期
-   */
-  postingDate: string;
-
-  /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
-   */
-  quantity: number;
-
-  /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
-   */
-  specialStock?: string;
-
-  /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 生产订单
-   */
-  productionOrderCode?: string;
-
-  /**
-   * 项目编码（WBS 元素）
-   */
-  projectCode?: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount: number;
-
-  /**
-   * 凭证日期
-   */
-  documentDate: string;
-
-  /**
-   * 收货/发货单编码
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
-   */
-  customerCode?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 物料凭证主表 （主表：TaktMaterialDocument）
-   */
-  materialTransaction?: MaterialDocument;
-
-}
-
-
-/**
- * MaterialDocumentItem 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 MaterialDocumentItemQuery
- * @description 对应后端 TaktMaterialDocumentItemQueryDto
- */
-export interface MaterialDocumentItemQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
-   */
-  materialDocumentId?: string;
-
-  /**
-   * 物料凭证号（冗余）
-   */
-  materialDocumentCode?: string;
-
-  /**
-   * 行号（固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   * 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
    */
   warehouseCode?: string;
 
   /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
+   * 批次
    */
-  movementType?: string;
+  batchCode?: string;
 
   /**
-   * 过账日期（范围查询-开始）
+   * 库存类型（字典 logistics_stock_type）
    */
-  postingDateStart?: string;
+  stockType?: string;
 
   /**
-   * 过账日期（范围查询-结束）
+   * 批次限制
    */
-  postingDateEnd?: string;
+  restrictedStockFlag?: string;
 
   /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
-   */
-  quantity?: number;
-
-  /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
+   * 特殊库存（字典 logistics_special_stock_type）
    */
   specialStock?: string;
 
   /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
-  purchaseOrderCode?: string;
+  supplierCode?: string;
 
   /**
-   * 生产订单
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
-  productionOrderCode?: string;
+  customerCode?: string;
 
   /**
-   * 项目编码（WBS 元素）
+   * 借/贷标识
    */
-  projectCode?: string;
+  debitCreditIndicator?: string;
+
+  /**
+   * 货币（字典 accounting_currency_code）
+   */
+  currencyCode?: string;
 
   /**
    * 本位币金额
@@ -204,294 +75,252 @@ export interface MaterialDocumentItemQuery extends TaktPagedQuery {
   localCurrencyAmount?: number;
 
   /**
-   * 凭证日期（范围查询-开始）
+   * 金额
    */
-  documentDateStart?: string;
+  alternativeAmount?: number;
 
   /**
-   * 凭证日期（范围查询-结束）
-   */
-  documentDateEnd?: string;
-
-  /**
-   * 收货/发货单编码
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
-   */
-  customerCode?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建MaterialDocumentItem DTO
- * 对应前端 MaterialDocumentItemCreate
- * @description 对应后端 TaktMaterialDocumentItemCreateDto
- */
-export interface MaterialDocumentItemCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
-   */
-  materialDocumentId: string;
-
-  /**
-   * 物料凭证号（冗余）
-   */
-  materialDocumentCode: string;
-
-  /**
-   * 行号（固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
-   */
-  warehouseCode: string;
-
-  /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
-   */
-  movementType: string;
-
-  /**
-   * 过账日期
-   */
-  postingDate: string;
-
-  /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
-   */
-  quantity: number;
-
-  /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
-   */
-  specialStock?: string;
-
-  /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 生产订单
-   */
-  productionOrderCode?: string;
-
-  /**
-   * 项目编码（WBS 元素）
-   */
-  projectCode?: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount: number;
-
-  /**
-   * 凭证日期
-   */
-  documentDate: string;
-
-  /**
-   * 收货/发货单编码
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
-   */
-  customerCode?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新MaterialDocumentItem DTO
- * 继承 TaktMaterialDocumentItemCreateDto，添加 MaterialDocumentItemId 字段
- * 对应前端 MaterialDocumentItemUpdate
- * @description 对应后端 TaktMaterialDocumentItemUpdateDto
- */
-export interface MaterialDocumentItemUpdate extends MaterialDocumentItemCreate {
-  /**
-   * MaterialDocumentItemID（标识要更新的实体）
-   */
-  materialDocumentItemId: string;
-
-}
-
-
-/**
- * MaterialDocumentItem 作废/撤销作废 DTO
- * 对应前端 MaterialDocumentItemObsolete
- * @description 对应后端 TaktMaterialDocumentItemObsoleteDto
- */
-export interface MaterialDocumentItemObsolete {
-  /**
-   * MaterialDocumentItemID
-   */
-  materialDocumentItemId: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * MaterialDocumentItem 导入模板行 DTO
- * 对应前端 MaterialDocumentItemTemplate
- * @description 对应后端 TaktMaterialDocumentItemTemplateDto
- */
-export interface MaterialDocumentItemTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
-   */
-  materialDocumentId?: string;
-
-  /**
-   * 物料凭证号（冗余）
-   */
-  materialDocumentCode?: string;
-
-  /**
-   * 行号（固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
-   */
-  warehouseCode?: string;
-
-  /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
-   */
-  movementType?: string;
-
-  /**
-   * 过账日期
-   */
-  postingDate?: string;
-
-  /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
+   * 数量（基本计量单位）
    */
   quantity?: number;
 
   /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
+   * 基本计量单位（字典 logistics_unit_of_measure_code）
    */
-  specialStock?: string;
+  baseUnit?: string;
 
   /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
+   * 输入单位数量
+   */
+  entryQuantity?: number;
+
+  /**
+   * 条目单位
+   */
+  entryUnit?: string;
+
+  /**
+   * 订单价格单位数量
+   */
+  poPriceQuantity?: number;
+
+  /**
+   * 订单价格单位
+   */
+  poPriceUnit?: string;
+
+  /**
+   * 采购订单
    */
   purchaseOrderCode?: string;
 
   /**
-   * 生产订单
+   * 采购订单项目
    */
-  productionOrderCode?: string;
+  purchaseOrderItem?: number;
 
   /**
-   * 项目编码（WBS 元素）
+   * 参考凭证会计年度
    */
-  projectCode?: string;
+  referenceDocumentYear?: string;
 
   /**
-   * 本位币金额
-   */
-  localCurrencyAmount?: number;
-
-  /**
-   * 凭证日期
-   */
-  documentDate?: string;
-
-  /**
-   * 收货/发货单编码
+   * 参考凭证
    */
   referenceDocumentCode?: string;
 
   /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
+   * 参考凭证项目
    */
-  customerCode?: string;
+  referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 冲销物料凭证的年份
+   */
+  originalMaterialDocumentYear?: string;
+
+  /**
+   * 冲销物料凭证
+   */
+  originalMaterialDocumentCode?: string;
+
+  /**
+   * 冲销物料凭证项目
+   */
+  originalLineNumber?: number;
+
+  /**
+   * 交货已完成
+   */
+  deliveryCompletedFlag?: string;
+
+  /**
+   * 文本（项目文本最长 50，故 Length=50）
+   */
+  itemText?: string;
+
+  /**
+   * 设备
+   */
+  equipmentCode?: string;
+
+  /**
+   * 收货方（最长 12，故 Length=12）
+   */
+  goodsRecipient?: string;
+
+  /**
+   * 卸货点（最长 25，故 Length=25）
+   */
+  unloadingPoint?: string;
+
+  /**
+   * 业务范围
+   */
+  businessAreaCode?: string;
+
+  /**
+   * 成本控制域
+   */
+  controllingAreaCode?: string;
+
+  /**
+   * 伙伴业务范围
+   */
+  tradingPartnerBusinessArea?: string;
+
+  /**
+   * 订单
+   */
+  productionOrderCode?: string;
+
+  /**
+   * 资产
+   */
+  assetCode?: string;
+
+  /**
+   * 次级编号
+   */
+  assetSubCode?: string;
+
+  /**
+   * 会计年度
+   */
+  fiscalYear?: string;
+
+  /**
+   * 允许前期记帐
+   */
+  postToPreviousPeriodFlag?: string;
+
+  /**
+   * 上年度记帐
+   */
+  postToPreviousYearFlag?: string;
+
+  /**
+   * 会计凭证编号
+   */
+  accountingDocumentCode?: string;
+
+  /**
+   * 会计凭证行项目
+   */
+  accountingDocumentItem?: number;
+
+  /**
+   * 再评估凭证编号
+   */
+  revaluationDocumentCode?: string;
+
+  /**
+   * 再评估凭证行项目
+   */
+  revaluationDocumentItem?: string;
+
+  /**
+   * 预留编号
+   */
+  reservationCode?: string;
+
+  /**
+   * 项目编号库存转储预留
+   */
+  reservationItem?: number;
+
+  /**
+   * 最终发货标识
+   */
+  finalIssueFlag?: string;
+
+  /**
+   * 预留已处理数量
+   */
+  reservationQuantity?: number;
+
+  /**
+   * 接收物料
+   */
+  receivingMaterialCode?: string;
+
+  /**
+   * 收货工厂
+   */
+  receivingPlantCode?: string;
+
+  /**
+   * 收货库存地点
+   */
+  receivingWarehouseCode?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
+
+  /**
+   * 过帐前总计估价库存
+   */
+  valuatedStockQuantity?: number;
+
+  /**
+   * 过帐前总计评估的库存的价值
+   */
+  totalValuatedStockValue?: number;
+
+  /**
+   * 价格控制
+   */
+  priceControl?: string;
+
+  /**
+   * 制造商物料编码
+   */
+  manufacturerPartMaterialCode?: string;
+
+  /**
+   * 参考（最长 32，故 Length=32）
+   */
+  mkpfReferenceCode?: string;
+
+  /**
+   * 交货
+   */
+  imDeliveryCode?: string;
+
+  /**
+   * 交货项目
+   */
+  imDeliveryItem?: number;
+
+  /**
+   * 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -506,121 +335,6 @@ export interface MaterialDocumentItemTemplate {
   remark?: string;
 
 }
-
-
-/**
- * MaterialDocumentItem 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 MaterialDocumentItemImport
- * @description 对应后端 TaktMaterialDocumentItemImportDto
- */
-export interface MaterialDocumentItemImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
-   */
-  materialDocumentId?: string;
-
-  /**
-   * 物料凭证号（冗余）
-   */
-  materialDocumentCode?: string;
-
-  /**
-   * 行号（固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
-   */
-  warehouseCode?: string;
-
-  /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
-   */
-  movementType?: string;
-
-  /**
-   * 过账日期
-   */
-  postingDate?: string;
-
-  /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
-   */
-  quantity?: number;
-
-  /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
-   */
-  specialStock?: string;
-
-  /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 生产订单
-   */
-  productionOrderCode?: string;
-
-  /**
-   * 项目编码（WBS 元素）
-   */
-  projectCode?: string;
-
-  /**
-   * 本位币金额
-   */
-  localCurrencyAmount?: number;
-
-  /**
-   * 凭证日期
-   */
-  documentDate?: string;
-
-  /**
-   * 收货/发货单编码
-   */
-  referenceDocumentCode?: string;
-
-  /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
-   */
-  customerCode?: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * MaterialDocumentItem 导出 DTO（独立实现，不继承响应 Dto）
@@ -639,59 +353,99 @@ export interface MaterialDocumentItemExport {
   companyCode: string;
 
   /**
-   * 物料凭证 ID（关联 TaktMaterialDocument.Id，选项 TaktMaterialDocuments/options）
+   * 物料凭证ID（选项 TaktMaterialDocuments/options；DictValue=Id）
    */
   materialDocumentId: string;
 
   /**
-   * 物料凭证号（冗余）
+   * 物料凭证（冗余；年份见主表 MaterialDocumentYear）
    */
   materialDocumentCode: string;
 
   /**
-   * 行号（固定步长=10）
+   * 物料凭证项目（行号步长生成器用 int，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 库存地点（关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
+   * 行标识
    */
-  warehouseCode: string;
+  lineId?: string;
 
   /**
-   * 移动类型（字典 logistics_movement_type，如 101=收货）
+   * 上级行 ID
+   */
+  parentLineId?: string;
+
+  /**
+   * 层次结构级别
+   */
+  lineDepth?: string;
+
+  /**
+   * 移动类型（字典 logistics_movement_type）
    */
   movementType: string;
 
   /**
-   * 过账日期
+   * 项目自动创建
    */
-  postingDate: string;
+  autoCreatedFlag?: string;
 
   /**
-   * 数量（基本单位数量，出库为负由移动类型决定）
+   * 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
-  quantity: number;
+  materialCode: string;
 
   /**
-   * 特殊库存（字典 logistics_special_stock_type，空=非特殊库存）
+   * 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+   */
+  warehouseCode?: string;
+
+  /**
+   * 批次
+   */
+  batchCode?: string;
+
+  /**
+   * 库存类型（字典 logistics_stock_type）
+   */
+  stockType?: string;
+
+  /**
+   * 批次限制
+   */
+  restrictedStockFlag?: string;
+
+  /**
+   * 特殊库存（字典 logistics_special_stock_type）
    */
   specialStock?: string;
 
   /**
-   * 采购订单（关联 TaktPurchaseOrder.PurchaseOrderCode）
+   * 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
-  purchaseOrderCode?: string;
+  supplierCode?: string;
 
   /**
-   * 生产订单
+   * 客户（选项 TaktCustomers/options；DictValue=CustomerCode）
    */
-  productionOrderCode?: string;
+  customerCode?: string;
 
   /**
-   * 项目编码（WBS 元素）
+   * 借/贷标识
    */
-  projectCode?: string;
+  debitCreditIndicator?: string;
+
+  /**
+   * 货币（字典 accounting_currency_code）
+   */
+  currencyCode?: string;
 
   /**
    * 本位币金额
@@ -699,22 +453,252 @@ export interface MaterialDocumentItemExport {
   localCurrencyAmount: number;
 
   /**
-   * 凭证日期
+   * 金额
    */
-  documentDate: string;
+  alternativeAmount?: number;
 
   /**
-   * 收货/发货单编码
+   * 数量（基本计量单位）
+   */
+  quantity: number;
+
+  /**
+   * 基本计量单位（字典 logistics_unit_of_measure_code）
+   */
+  baseUnit?: string;
+
+  /**
+   * 输入单位数量
+   */
+  entryQuantity?: number;
+
+  /**
+   * 条目单位
+   */
+  entryUnit?: string;
+
+  /**
+   * 订单价格单位数量
+   */
+  poPriceQuantity?: number;
+
+  /**
+   * 订单价格单位
+   */
+  poPriceUnit?: string;
+
+  /**
+   * 采购订单
+   */
+  purchaseOrderCode?: string;
+
+  /**
+   * 采购订单项目
+   */
+  purchaseOrderItem?: number;
+
+  /**
+   * 参考凭证会计年度
+   */
+  referenceDocumentYear?: string;
+
+  /**
+   * 参考凭证
    */
   referenceDocumentCode?: string;
 
   /**
-   * 客户（关联 TaktCustomer.CustomerCode，选项 TaktCustomers/options）
+   * 参考凭证项目
    */
-  customerCode?: string;
+  referenceDocumentItem?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 冲销物料凭证的年份
+   */
+  originalMaterialDocumentYear?: string;
+
+  /**
+   * 冲销物料凭证
+   */
+  originalMaterialDocumentCode?: string;
+
+  /**
+   * 冲销物料凭证项目
+   */
+  originalLineNumber?: number;
+
+  /**
+   * 交货已完成
+   */
+  deliveryCompletedFlag?: string;
+
+  /**
+   * 文本（项目文本最长 50，故 Length=50）
+   */
+  itemText?: string;
+
+  /**
+   * 设备
+   */
+  equipmentCode?: string;
+
+  /**
+   * 收货方（最长 12，故 Length=12）
+   */
+  goodsRecipient?: string;
+
+  /**
+   * 卸货点（最长 25，故 Length=25）
+   */
+  unloadingPoint?: string;
+
+  /**
+   * 业务范围
+   */
+  businessAreaCode?: string;
+
+  /**
+   * 成本控制域
+   */
+  controllingAreaCode?: string;
+
+  /**
+   * 伙伴业务范围
+   */
+  tradingPartnerBusinessArea?: string;
+
+  /**
+   * 订单
+   */
+  productionOrderCode?: string;
+
+  /**
+   * 资产
+   */
+  assetCode?: string;
+
+  /**
+   * 次级编号
+   */
+  assetSubCode?: string;
+
+  /**
+   * 会计年度
+   */
+  fiscalYear?: string;
+
+  /**
+   * 允许前期记帐
+   */
+  postToPreviousPeriodFlag?: string;
+
+  /**
+   * 上年度记帐
+   */
+  postToPreviousYearFlag?: string;
+
+  /**
+   * 会计凭证编号
+   */
+  accountingDocumentCode?: string;
+
+  /**
+   * 会计凭证行项目
+   */
+  accountingDocumentItem?: number;
+
+  /**
+   * 再评估凭证编号
+   */
+  revaluationDocumentCode?: string;
+
+  /**
+   * 再评估凭证行项目
+   */
+  revaluationDocumentItem?: string;
+
+  /**
+   * 预留编号
+   */
+  reservationCode?: string;
+
+  /**
+   * 项目编号库存转储预留
+   */
+  reservationItem?: number;
+
+  /**
+   * 最终发货标识
+   */
+  finalIssueFlag?: string;
+
+  /**
+   * 预留已处理数量
+   */
+  reservationQuantity?: number;
+
+  /**
+   * 接收物料
+   */
+  receivingMaterialCode?: string;
+
+  /**
+   * 收货工厂
+   */
+  receivingPlantCode?: string;
+
+  /**
+   * 收货库存地点
+   */
+  receivingWarehouseCode?: string;
+
+  /**
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+   */
+  profitCenterCode?: string;
+
+  /**
+   * 过帐前总计估价库存
+   */
+  valuatedStockQuantity?: number;
+
+  /**
+   * 过帐前总计评估的库存的价值
+   */
+  totalValuatedStockValue?: number;
+
+  /**
+   * 价格控制
+   */
+  priceControl?: string;
+
+  /**
+   * 制造商物料编码
+   */
+  manufacturerPartMaterialCode?: string;
+
+  /**
+   * 参考（最长 32，故 Length=32）
+   */
+  mkpfReferenceCode?: string;
+
+  /**
+   * 交货
+   */
+  imDeliveryCode?: string;
+
+  /**
+   * 交货项目
+   */
+  imDeliveryItem?: number;
+
+  /**
+   * 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+   */
+  postedBy?: string;
+
+  /**
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

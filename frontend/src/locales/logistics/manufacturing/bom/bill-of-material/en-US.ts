@@ -32,7 +32,7 @@ export default {
       quantity: "Demand quantity",
       maxLevel: "Max level",
       includeLevelZero: "Include parent row",
-      summary: "BOM {bomCode} · Parent {parentMaterialCode} {parentMaterialName} · Qty {quantity}",
+      summary: "BOM {bomCode} · Parent {parentMaterialCode} {parentMaterialDescription} · Qty {quantity}",
       column: {
         level: "Level",
         immediateParent: "Immediate parent",

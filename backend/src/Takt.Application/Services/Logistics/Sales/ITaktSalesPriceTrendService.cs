@@ -11,14 +11,48 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Sales;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
 /// <summary>
-/// 销售价格月推移 / 机种推移分析服务
+/// 销售价格月推移 / 机种推移分析服务（读销售价格本表；与 CRUD 服务分离）
 /// </summary>
 public interface ITaktSalesPriceTrendService
 {
+    /// <summary>
+    /// 推移查询栏：销售价格本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync();
+
+    /// <summary>
+    /// 推移查询栏：按工厂去重条件类型（级联第 2 级）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string plantCode);
+
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型去重客户（级联第 3 级）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(string plantCode, string? priceType = null);
+
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型+客户去重物料（级联第 4 级，查询时可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <param name="customerCode">客户编码</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(
+        string plantCode,
+        string? priceType = null,
+        string? customerCode = null);
+
     /// <summary>
     /// 销售价格月推移转置分析（工厂×物料×客户×月份）
     /// </summary>

@@ -121,14 +121,13 @@ const total = ref(0)
 const selectedSourceEcId = ref('')
 /** 默认可见列（弹窗内嵌列表，不含主键列） */
 const visibleColumnKeys = ref<string[]>([
-  'sourceEcNo',
+  'sourceEcCode',
   'sourceModel',
   'sourceTitle',
   'sourceStatus',
   'sourceIssueDate',
   'sourceTcjOwner',
-  'detailCount',
-])
+  'detailCount'])
 
 /**
  * 读取行字段值
@@ -143,14 +142,14 @@ function getSourceEcField(record: EcGijutsuSourceEcInputItem, field: keyof EcGij
 const columns = computed<TableColumnsType>(() => [
   {
     title: t('entity.sourceec.no'),
-    dataIndex: 'sourceEcNo',
-    key: 'sourceEcNo',
+    dataIndex: 'sourceEcCode',
+    key: 'sourceEcCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     sorter: (a: EcGijutsuSourceEcInputItem, b: EcGijutsuSourceEcInputItem) =>
-      String(getSourceEcField(a, 'sourceEcNo') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcNo') ?? '')),
-    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceEcNo') ?? '',
+      String(getSourceEcField(a, 'sourceEcCode') ?? '').localeCompare(String(getSourceEcField(b, 'sourceEcCode') ?? '')),
+    customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'sourceEcCode') ?? '',
   },
   {
     title: t('entity.sourceec.sourcemodel'),
@@ -208,8 +207,7 @@ const columns = computed<TableColumnsType>(() => [
     resizable: true,
     align: 'right',
     customRender: ({ record }: { record: EcGijutsuSourceEcInputItem }) => getSourceEcField(record, 'detailCount') ?? '',
-  },
-])
+  }])
 
 /** 行选择配置（单选） */
 const rowSelection = computed(() => ({
@@ -332,7 +330,7 @@ async function handleLoadToForm(): Promise<void> {
     const draft = await getEcGijutsuDraftFromSourceEc({
       plantCode: mappedPlantCode.value,
       sourceEcId: selectedSourceEcId.value,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     })
     const formDraft: EcGijutsuFormData = {
       ...draft,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Personnel
 // 文件名称：TaktEmployeeI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEmployee 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,14 +126,14 @@ public class TaktEmployeeI18nSeedData : ITaktSeedDataCoordinator
             // entity.employee.birthdate
             new TranslationSeedItem("entity.employee.birthdate", "zh-HK", "出生日期_hk", "出生日期（人事档案必填）"),
 
-            // entity.employee.idcardno
-            new TranslationSeedItem("entity.employee.idcardno", "en-US", "身份证号_us", "身份证号（人事档案必填）"),
-            // entity.employee.idcardno
-            new TranslationSeedItem("entity.employee.idcardno", "ja-JP", "身份证号_jp", "身份证号（人事档案必填）"),
-            // entity.employee.idcardno
-            new TranslationSeedItem("entity.employee.idcardno", "zh-CN", "身份证号", "身份证号（人事档案必填）"),
-            // entity.employee.idcardno
-            new TranslationSeedItem("entity.employee.idcardno", "zh-HK", "身份证号_hk", "身份证号（人事档案必填）"),
+            // entity.employee.idcardcode
+            new TranslationSeedItem("entity.employee.idcardcode", "en-US", "身份证号_us", "身份证号（人事档案必填）"),
+            // entity.employee.idcardcode
+            new TranslationSeedItem("entity.employee.idcardcode", "ja-JP", "身份证号_jp", "身份证号（人事档案必填）"),
+            // entity.employee.idcardcode
+            new TranslationSeedItem("entity.employee.idcardcode", "zh-CN", "身份证号", "身份证号（人事档案必填）"),
+            // entity.employee.idcardcode
+            new TranslationSeedItem("entity.employee.idcardcode", "zh-HK", "身份证号_hk", "身份证号（人事档案必填）"),
 
             // entity.employee.mobile
             new TranslationSeedItem("entity.employee.mobile", "en-US", "手机号码_us", "手机号码（人事档案必填）"),

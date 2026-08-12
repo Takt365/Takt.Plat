@@ -21,7 +21,7 @@ export const SERIALINBOUND_SELF_I18N_KEY = buildEntitySelfI18nKey(SERIALINBOUND_
 /** 列表业务列（不含主键） */
 export const SERIALINBOUND_LIST_FIELDS = [
   'plantCode',
-  'inboundNo',
+  'inboundCode',
   'inboundDate',
   'inboundType',
   'warehouseCode',
@@ -35,7 +35,7 @@ export const SERIALINBOUND_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   plantCode: 'select',
-  inboundNo: 'required',
+  inboundCode: 'required',
   inboundDate: 'select',
   inboundType: 'select',
   warehouseCode: 'select',
@@ -51,7 +51,7 @@ export type SerialInboundField = keyof typeof SERIALINBOUND_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALINBOUND_QUERY_STRING_FIELDS = [
   'plantCode',
-  'inboundNo',
+  'inboundCode',
   'inboundDateStart',
   'inboundDateEnd',
   'warehouseCode',

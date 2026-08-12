@@ -36,7 +36,7 @@ export interface SerialInbound extends CompanyDtoBase {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 入库日期
@@ -96,7 +96,7 @@ export interface SerialInboundQuery extends TaktPagedQuery {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 入库日期（范围查询-开始）
@@ -170,7 +170,10 @@ export interface SerialInboundCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -180,7 +183,7 @@ export interface SerialInboundCreate {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 入库日期
@@ -264,7 +267,7 @@ export interface SerialInboundTemplate {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 入库日期
@@ -328,7 +331,10 @@ export interface SerialInboundImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -338,7 +344,7 @@ export interface SerialInboundImport {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 入库日期
@@ -407,7 +413,7 @@ export interface SerialInboundExport {
   /**
    * 入库单号（租户+公司+工厂内唯一）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 入库日期

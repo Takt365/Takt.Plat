@@ -16,6 +16,8 @@ export default {
     periodRange: '期間年月',
     materialCode: '品目コード',
     selectPlantRequired: '工場を選択してください',
+    selectMaterialTypeRequired: '品目タイプを選択してください',
+    selectValuationRequired: '評価クラスを選択してください',
     selectPeriodRequired: '期間年月を選択してください',
     summary: '品目行 {count} 件（欠月/無価は直近有価月を継承；* にマウスオーバーで出典月）',
     summaryModel: '品目行 {count} 件（機種/製品グループは BOM：構成→製品→機種）',

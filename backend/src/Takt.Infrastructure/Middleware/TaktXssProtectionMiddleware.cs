@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Takt.Infrastructure.Extensions;
 using Takt.Shared.Enums;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
@@ -110,7 +111,7 @@ public partial class TaktXssProtectionMiddleware
         var path = context.Request.Path.Value ?? string.Empty;
         if (path.StartsWith("/connect", StringComparison.OrdinalIgnoreCase)
             || path.StartsWith("/hubs", StringComparison.OrdinalIgnoreCase)
-            || path.Equals("/health", StringComparison.OrdinalIgnoreCase))
+            || TaktObservabilityCollectionExtensions.IsObservabilityProbePath(context.Request.Path))
         {
             return true;
         }

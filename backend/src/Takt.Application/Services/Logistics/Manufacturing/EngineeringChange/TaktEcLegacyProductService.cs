@@ -67,7 +67,7 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var rows = new List<TaktEcLegacyProductDto>();
         foreach (var detail in details)
@@ -117,7 +117,7 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
             pmc = new TaktEcSeikan
             {
                 EcnDetailId = detail.Id,
-                EcNo = detail.EcNo,
+                EcCode = detail.EcCode,
                 DeptCode = TaktEcDeptCodes.Pmc,
             };
             var maxLine = await pmcRepo.GetMaxIntAsync(
@@ -187,14 +187,14 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcOldItem != null && x.EcOldItem.Contains(keywords))
                 || (x.EcOldText != null && x.EcOldText.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcModel))
         {
@@ -204,6 +204,12 @@ public class TaktEcLegacyProductService : TaktServiceBase, ITaktEcLegacyProductS
         {
             exp = exp.And(x => x.EcOldItem != null && x.EcOldItem.Contains(queryDto.EcOldItem));
         }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         return exp.ToExpression();
     }
 }

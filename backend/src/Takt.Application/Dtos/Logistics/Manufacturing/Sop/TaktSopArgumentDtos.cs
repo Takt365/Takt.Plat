@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopArgumentDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopArgument 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopArgument 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktSopArgumentDto : TaktCompanyDtoBase
     public long SopArgumentId { get; set; }
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
@@ -47,7 +47,7 @@ public class TaktSopArgumentDto : TaktCompanyDtoBase
     public string? ExecName { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
@@ -58,7 +58,7 @@ public class TaktSopArgumentDto : TaktCompanyDtoBase
     public string? ExecStepName { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -79,7 +79,7 @@ public class TaktSopArgumentDto : TaktCompanyDtoBase
     public decimal ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOutOfRange { get; set; } = 0;
 
@@ -117,19 +117,29 @@ public class TaktSopArgumentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -145,7 +155,7 @@ public class TaktSopArgumentQueryDto : TaktPagedQuery
     public decimal? ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOutOfRange { get; set; }
 
@@ -200,24 +210,29 @@ public class TaktSopArgumentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -234,7 +249,7 @@ public class TaktSopArgumentCreateDto
     public decimal ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOutOfRange { get; set; } = 0;
 
@@ -295,19 +310,29 @@ public class TaktSopArgumentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -323,7 +348,7 @@ public class TaktSopArgumentTemplateDto
     public decimal? ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOutOfRange { get; set; }
 
@@ -360,24 +385,29 @@ public class TaktSopArgumentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -393,7 +423,7 @@ public class TaktSopArgumentImportDto
     public decimal? ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsOutOfRange { get; set; }
 
@@ -436,19 +466,24 @@ public class TaktSopArgumentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ExecId { get; set; }
 
     /// <summary>
-    /// 工步执行明细 ID（序列化为 string 以避免 Javascript 精度问题）
+    /// 工步执行明细 ID（选项 TaktSopExecSteps/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ExecStepId { get; set; }
 
     /// <summary>
-    /// 工序参数定义 ID（关联 TaktRoutingItemArgument，序列化为 string 以避免 Javascript 精度问题）
+    /// 工序参数定义 ID（选项 TaktRoutingItemArguments/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RoutingItemParameterId { get; set; }
@@ -464,7 +499,7 @@ public class TaktSopArgumentExportDto
     public decimal ActualValue { get; set; }
 
     /// <summary>
-    /// 是否超差（字典 sys_yes_no_type，0=否，1=是）
+    /// 是否超差（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsOutOfRange { get; set; } = 0;
 

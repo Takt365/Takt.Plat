@@ -21,19 +21,21 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_source", "设变来源主表")]
 [SugarIndex("ix_source_ec_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_source_ec_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_source_ec_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SourceEcNo), OrderByType.Asc, true)]
+[SugarIndex("ix_source_ec_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SourceEcCode), OrderByType.Asc, true)]
+[SugarIndex("ix_source_ec_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSourceEc : TaktCompanyEntityBase
 {
+
     /// <summary>
     /// 设变号码
     /// </summary>
-    [SugarColumn(ColumnName = "source_ec_no", ColumnDescription = "设变号码", Length = 6, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string SourceEcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "source_ec_code", ColumnDescription = "设变号码", Length = 6, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string SourceEcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种
     /// </summary>
-    [SugarColumn(ColumnName = "source_model", ColumnDescription = "机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "ALL")]
+    [SugarColumn(ColumnName = "source_model", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "ALL")]
     public string SourceModel { get; set; } = "ALL";
 
     /// <summary>
@@ -75,14 +77,14 @@ public class TaktSourceEc : TaktCompanyEntityBase
     /// <summary>
     /// PP番号
     /// </summary>
-    [SugarColumn(ColumnName = "source_pp_no", ColumnDescription = "PP番号", Length = 10, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourcePpNo { get; set; }
+    [SugarColumn(ColumnName = "source_pp_code", ColumnDescription = "PP番号", Length = 10, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourcePpCode { get; set; }
 
     /// <summary>
     /// 技联书
     /// </summary>
-    [SugarColumn(ColumnName = "source_technical_notice_no", ColumnDescription = "技联书", Length = 10, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? SourceTechnicalNoticeNo { get; set; }
+    [SugarColumn(ColumnName = "source_technical_notice_code", ColumnDescription = "技联书", Length = 10, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? SourceTechnicalNoticeCode { get; set; }
 
     /// <summary>
     /// 实施

@@ -293,9 +293,10 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
   }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -303,8 +304,6 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","countryCode","divisionCode","divisionName","divisionPath","postalCode","cultureCode","currencyCode","phoneCode","isBuiltIn","divisionStatus","extField","remark"]
-
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -329,7 +328,6 @@ const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   currencyCode: "CNY",
   isBuiltIn: 0
 }
-
 
 /** 树表 parentId：空值归一为根节点 0（string，与后端 ParentId=0 一致） */
 function normalizeTreeParentId(target: Record<string, unknown>) {

@@ -38,7 +38,7 @@ public class TaktInspectionStandardItem : TaktCompanyEntityBase
     /// <summary>
     /// 检验项目编码
     /// </summary>
-    [SugarColumn(ColumnName = "item_code", ColumnDescription = "检验项目编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "item_code", ColumnDescription = "检验项目编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string ItemCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -92,7 +92,7 @@ public class TaktInspectionStandardItem : TaktCompanyEntityBase
     /// <summary>
     /// 检验方法说明
     /// </summary>
-    [SugarColumn(ColumnName = "inspection_method_description", ColumnDescription = "检验方法说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    [SugarColumn(ColumnName = "inspection_method_description", ColumnDescription = "检验方法说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string InspectionMethodDescription { get; set; } = string.Empty;
 
     /// <summary>

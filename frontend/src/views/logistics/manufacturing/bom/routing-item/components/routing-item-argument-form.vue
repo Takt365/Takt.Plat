@@ -28,12 +28,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.paramcode')"
+                :label="pi.label('paramCode')"
                 name="paramCode"
               >
                 <a-input
                   v-model:value="formState.paramCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.paramcode') })"
+                  :placeholder="pi.ph('paramCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -43,12 +43,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.paramname')"
+                :label="pi.label('paramName')"
                 name="paramName"
               >
                 <a-input
                   v-model:value="formState.paramName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.paramname') })"
+                  :placeholder="pi.ph('paramName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -57,92 +57,49 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.paramunit')"
+                :label="pi.label('paramUnit')"
                 name="paramUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.paramUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.paramunit') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('paramUnit')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.standardvalue')"
+                :label="pi.label('standardValue')"
                 name="standardValue"
               >
                 <a-input-number
                   v-model:value="formState.standardValue"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.standardvalue') })"
+                  :placeholder="pi.ph('standardValue')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.lowerlimit')"
+                :label="pi.label('lowerLimit')"
                 name="lowerLimit"
               >
                 <a-input-number
                   v-model:value="formState.lowerLimit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.lowerlimit') })"
+                  :placeholder="pi.ph('lowerLimit')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.routingitemargument.upperlimit')"
+                :label="pi.label('upperLimit')"
                 name="upperLimit"
               >
                 <a-input-number
                   v-model:value="formState.upperLimit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.upperlimit') })"
+                  :placeholder="pi.ph('upperLimit')"
                   style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -158,11 +115,17 @@
  * 工艺路线明细表实体子表 routingItemArgument 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/bom/routing-item/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useRoutingItemArgumentI18n } from '../composables/use-routing-item-argument-i18n'
+
+/** 实体字段 i18n */
+const pi = useRoutingItemArgumentI18n()
+
 import type { RoutingItemArgumentCreate } from '@/types/logistics/manufacturing/bom/routing-item-argument'
-import { RiQuestionLine } from '@remixicon/vue'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -171,7 +134,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["paramCode","paramName","paramUnit","standardValue","lowerLimit","upperLimit","extField","remark"]
+const formFields = ["paramCode","paramName","paramUnit","standardValue","lowerLimit","upperLimit"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -198,6 +162,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 routingItemArgumentId 才视为编辑） */
 watch(
@@ -226,14 +197,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   paramCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.paramcode') }),
+      message: pi.ph('paramCode'),
       trigger: 'blur'
     }
   ],
   paramName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.routingitemargument.paramname') }),
+      message: pi.ph('paramName'),
       trigger: 'blur'
     }
   ],

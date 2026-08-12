@@ -10,7 +10,7 @@
 <template>
   <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldcheck')"><TaktSelect v-model:value="formState.isOldCheck" dict-type="sys_yes_no" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isoldprocurement')"><TaktSelect v-model:value="formState.isOldProcurement" dict-type="sys_yes_no" /></a-form-item></a-col>
@@ -27,7 +27,7 @@ import type { EcKakunin, EcKakuninUpdate } from '@/types/logistics/manufacturing
 const props = defineProps<{ formData?: EcKakunin | null; loading?: boolean }>();
 const { t } = useI18n();
 const formRef = ref();
-const formState = reactive<EcKakuninUpdate & { ecNo?: string; ecModel?: string }>({
+const formState = reactive<EcKakuninUpdate & { ecCode?: string; ecModel?: string }>({
   ecDetailId: '',
   isOldProcurement: 0,
   isOldCheck: 0,
@@ -39,7 +39,7 @@ watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
-    ecNo: val.ecNo,
+    ecCode: val.ecCode,
     ecModel: val.ecModel,
     isOldProcurement: val.isOldProcurement ?? 0,
     isOldCheck: val.isOldCheck ?? 0,
@@ -50,7 +50,7 @@ watch(() => props.formData, (val) => {
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcKakuninUpdate {
-  const { ecNo, ecModel, ...rest } = formState;
+  const { ecCode, ecModel, ...rest } = formState;
   return rest;
 }
 function resetFields() {
@@ -60,7 +60,7 @@ function resetFields() {
     isOldCheck: 0,
     isNewProcurement: 0,
     isNewCheck: 0,
-    ecNo: '',
+    ecCode: '',
     ecModel: '',
   });
 }

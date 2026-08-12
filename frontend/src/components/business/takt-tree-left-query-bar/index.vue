@@ -4,7 +4,7 @@
 文件名称:index.vue
 创建时间:2025-01-20
 创建人:Takt365(Cursor AI)
-功能描述:左树查询栏,宽度为视口的1/4,用于树表布局左侧的树关键字查询
+功能描述:左树查询栏,栏宽对齐左表；无查询/重置按钮时关键字输入框占满左表栏宽
 
 版权信息:Copyright (c) 2025 Takt  All rights reserved.
 免责声明:此软件使用 MIT License,作者不承担任何使用风险。
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: 'middle',
   allowClear: true,
   loading: false,
-  maxLength: undefined
+  maxLength: undefined,
 })
 
 const emit = defineEmits<{
@@ -109,21 +109,22 @@ defineExpose({
 </script>
 
 <style scoped>
-/* 宽度：内容视口的 1/5（20%），与左侧树/工具栏统一 */
+/* 栏宽：与左侧树一致（20%）；无查询/重置按钮，输入框占满左表栏宽 */
 .takt-tree-left-query-bar {
   flex: 0 0 20%;
   width: 20%;
   min-width: 160px;
   max-width: 20%;
-  /*margin: 4px; */
-  padding: 0px;
+  padding: 0;
   display: flex;
   align-items: center;
   gap: 8px;
   box-sizing: border-box;
 
   :deep(.ant-input-affix-wrapper) {
-    flex: 1;
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
     min-width: 0;
 
     .ant-input-prefix {

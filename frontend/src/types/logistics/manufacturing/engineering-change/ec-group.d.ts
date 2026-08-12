@@ -23,15 +23,6 @@ import type {
  * @description 对应后端 TaktEcGroupDto
  */
 export interface EcGroup extends CompanyDtoBase {
-  /**
-   * EcGroupID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  ecGroupId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
 
   /**
    * 设变组编码（3）
@@ -195,7 +186,10 @@ export interface EcGroupCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -401,7 +395,10 @@ export interface EcGroupImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）

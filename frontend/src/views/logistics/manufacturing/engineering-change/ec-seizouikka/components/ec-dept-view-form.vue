@@ -10,7 +10,7 @@
 <template>
   <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecmodel')"><a-input v-model:value="formState.ecModel" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.isimplemented')"><TaktSelect v-model:value="formState.isImplemented" dict-type="sys_yes_no" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.productionteam')"><a-input v-model:value="formState.productionTeam" /></a-form-item></a-col>
@@ -28,7 +28,7 @@ import type { EcDeptView, EcDeptViewUpdate } from '@/types/logistics/manufacturi
 const props = defineProps<{ formData?: EcDeptView | null; loading?: boolean }>();
 const { t } = useI18n();
 const formRef = ref();
-const formState = reactive<EcDeptViewUpdate & { ecNo?: string; ecModel?: string }>({
+const formState = reactive<EcDeptViewUpdate & { ecCode?: string; ecModel?: string }>({
   ecDetailId: '',
   isImplemented: 0,
   isSopUpdated: 0,
@@ -39,7 +39,7 @@ watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
-    ecNo: val.ecNo,
+    ecCode: val.ecCode,
     ecModel: val.ecModel,
     isImplemented: val.isImplemented ?? 0,
     content: val.content ?? '',
@@ -47,25 +47,25 @@ watch(() => props.formData, (val) => {
     scheduledProductionDate: val.scheduledProductionDate,
     scheduledBatch: val.scheduledBatch,
     supplier: val.supplier,
-    purchaseOrderNo: val.purchaseOrderNo,
-    iqcOrderNo: val.iqcOrderNo,
+    purchaseOrderCode: val.purchaseOrderCode,
+    iqcOrderCode: val.iqcOrderCode,
     outboundBatch: val.outboundBatch,
     productionBatch: val.productionBatch,
     productionTeam: val.productionTeam,
     productionDate: val.productionDate,
     implementationBatch: val.implementationBatch,
     inspectionBatch: val.inspectionBatch,
-    samplingNo: val.samplingNo,
+    samplingCode: val.samplingCode,
   });
 }, { immediate: true });
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcDeptViewUpdate {
-  const { ecNo, ecModel, ...rest } = formState;
+  const { ecCode, ecModel, ...rest } = formState;
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', isImplemented: 0, isSopUpdated: 0, content: '', ecNo: '', ecModel: '' });
+  Object.assign(formState, { ecDetailId: '', isImplemented: 0, isSopUpdated: 0, content: '', ecCode: '', ecModel: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

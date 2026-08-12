@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyDefect 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyDefect 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktAssyDefectDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyDefectId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（回填：随工单）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -51,9 +47,9 @@ public class TaktAssyDefectDto : TaktCompanyDtoBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -83,7 +79,7 @@ public class TaktAssyDefectDto : TaktCompanyDtoBase
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -129,12 +125,17 @@ public class TaktAssyDefectQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -149,9 +150,9 @@ public class TaktAssyDefectQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -181,7 +182,7 @@ public class TaktAssyDefectQueryDto : TaktPagedQuery
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -239,9 +240,9 @@ public class TaktAssyDefectCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -250,9 +251,9 @@ public class TaktAssyDefectCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -261,10 +262,10 @@ public class TaktAssyDefectCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）不能为空")]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -296,7 +297,7 @@ public class TaktAssyDefectCreateDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -317,7 +318,7 @@ public class TaktAssyDefectCreateDto
     /// <summary>
     /// 组立不良明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktAssyDefectDetailUpdateDto>? AssyDefectDetails { get; set; }
+    public List<TaktAssyDefectDetailCreateDto>? AssyDefectDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -349,6 +350,11 @@ public class TaktAssyDefectUpdateDto : TaktAssyDefectCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyDefectId { get; set; }
 
+    /// <summary>
+    /// 组立不良明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktAssyDefectDetailUpdateDto>? AssyDefectDetails { get; set; }
+
 }
 
 // ========================================
@@ -371,12 +377,17 @@ public class TaktAssyDefectTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -386,9 +397,9 @@ public class TaktAssyDefectTemplateDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -418,7 +429,7 @@ public class TaktAssyDefectTemplateDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -468,9 +479,9 @@ public class TaktAssyDefectImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -478,7 +489,7 @@ public class TaktAssyDefectImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -488,9 +499,9 @@ public class TaktAssyDefectImportDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -520,7 +531,7 @@ public class TaktAssyDefectImportDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -581,7 +592,7 @@ public class TaktAssyDefectExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -591,9 +602,9 @@ public class TaktAssyDefectExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -623,7 +634,7 @@ public class TaktAssyDefectExportDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码

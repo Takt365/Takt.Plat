@@ -526,6 +526,7 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
                 || (x.JudgeBy != null && x.JudgeBy.Contains(keywords))
                 || (x.JudgeDescription != null && x.JudgeDescription.Contains(keywords))
                 || SqlFunc.ToString(x.JudgeStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionDate).Contains(keywords)
@@ -597,6 +598,12 @@ public class TaktIpqcOrderService : TaktServiceBase, ITaktIpqcOrderService
         if (queryDto?.JudgeStatus.HasValue == true)
         {
             exp = exp.And(x => x.JudgeStatus == queryDto.JudgeStatus);
+        }
+
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

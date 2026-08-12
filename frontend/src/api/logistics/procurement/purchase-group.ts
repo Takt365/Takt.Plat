@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/procurement
 // 文件名称：purchase-group.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -19,7 +19,7 @@ import type {
   PurchaseGroup,
   PurchaseGroupCreate,
   PurchaseGroupSort,
-  GroupStatus,
+  PurchaseGroupStatus,
   PurchaseGroupUpdate
 } from '@/types/logistics/procurement/purchase-group';
 
@@ -112,10 +112,10 @@ export function deletePurchaseGroupBatch(ids: string[]): Promise<void> {
 
 /**
  * 更新采购组主数据状态
- * @param {GroupStatus} dto 状态 DTO
+ * @param {PurchaseGroupStatus} dto 状态 DTO
  * @returns {Promise<PurchaseGroup>} 采购组主数据DTO
  */
-export function updateGroupStatus(dto: GroupStatus): Promise<PurchaseGroup> {
+export function updatePurchaseGroupStatus(dto: PurchaseGroupStatus): Promise<PurchaseGroup> {
   return request<PurchaseGroup>({
     url: `${PURCHASE_GROUP_API_BASE}/status`,
     method: 'put',

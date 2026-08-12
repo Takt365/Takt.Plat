@@ -27,278 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('employeeCode')"
-                name="employeeCode"
-              >
-                <a-input
-                  v-model:value="formState.employeeCode"
-                  :placeholder="pi.ph('employeeCode')"
-                  show-count
-                  :maxlength="6"
-                  allow-clear
-                  :disabled="!!formData?.employeeId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('employeeName')"
-                name="employeeName"
-              >
-                <a-input
-                  v-model:value="formState.employeeName"
-                  :placeholder="pi.ph('employeeName')"
-                  show-count
-                  :maxlength="80"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('gender')"
-                name="gender"
-              >
-                <TaktSelect
-                  v-model:value="formState.gender"
-                  dict-type="sys_user_gender_category"
-                  :placeholder="pi.ph('gender')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('birthDate')"
-                name="birthDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.birthDate"
-                  :placeholder="pi.ph('birthDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('idCardNo')"
-                name="idCardNo"
-              >
-                <a-input
-                  v-model:value="formState.idCardNo"
-                  :placeholder="pi.ph('idCardNo')"
-                  show-count
-                  :maxlength="18"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mobile')"
-                name="mobile"
-              >
-                <a-input
-                  v-model:value="formState.mobile"
-                  :placeholder="pi.ph('mobile')"
-                  show-count
-                  :maxlength="11"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('email')"
-                name="email"
-              >
-                <a-input
-                  v-model:value="formState.email"
-                  :placeholder="pi.ph('email')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('nativePlace')"
-                name="nativePlace"
-              >
-                <TaktSelect
-                  v-model:value="formState.nativePlace"
-                  dict-type="hr_native_place_code"
-                  :placeholder="pi.ph('nativePlace')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ethnicity')"
-                name="ethnicity"
-              >
-                <TaktSelect
-                  v-model:value="formState.ethnicity"
-                  dict-type="hr_ethnic_code"
-                  :placeholder="pi.ph('ethnicity')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('politicalAffiliation')"
-                name="politicalAffiliation"
-              >
-                <TaktSelect
-                  v-model:value="formState.politicalAffiliation"
-                  dict-type="hr_political_affiliation"
-                  :placeholder="pi.ph('politicalAffiliation')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('maritalStatus')"
-                name="maritalStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.maritalStatus"
-                  dict-type="hr_marital_status"
-                  :placeholder="pi.ph('maritalStatus')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('employeeStatus')"
-                name="employeeStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.employeeStatus"
-                  dict-type="hr_employee_status"
-                  :placeholder="pi.ph('employeeStatus')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('isBuiltIn')"
-                name="isBuiltIn"
-              >
-                <TaktSelect
-                  v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('isBuiltIn')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('avatar')"
-                name="avatar"
-              >
-                <a-input
-                  v-model:value="formState.avatar"
-                  :placeholder="pi.ph('avatar')"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('employeeDeptIds')"
-                name="employeeDeptIds"
-              >
-                <a-input
-                  v-model:value="formState.employeeDeptIds"
-                  :placeholder="pi.ph('employeeDeptIds')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('employeePostIds')"
-                name="employeePostIds"
-              >
-                <a-input
-                  v-model:value="formState.employeePostIds"
-                  :placeholder="pi.ph('employeePostIds')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -457,17 +197,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","employeeCode","employeeName","gender","birthDate","idCardNo","mobile","email","nativePlace","ethnicity","politicalAffiliation","maritalStatus","employeeStatus","isBuiltIn","avatar","employeeDeptIds","employeePostIds","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","employeeCode","employeeName","gender","birthDate","idCardCode","mobile","email","nativePlace","ethnicity","politicalAffiliation","maritalStatus","employeeStatus","isBuiltIn","avatar","employeeDeptIds","employeePostIds","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { useEmployeeAddressI18n } from '../composables/use-employee-address-i18n'
@@ -534,8 +277,7 @@ const employeeAddressFormColumns = computed<TaktEditableTableColumn[]>(() => [
     rows: 1,
     placeholder: employeeAddressPi.ph('address2'),
     width: 180,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<EmployeeCreate & { employeeId?: string }> | null | undefined) {
@@ -566,7 +308,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       employeeId: masterId,
     })),
   }
@@ -678,10 +420,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  idCardNo: [
+  idCardCode: [
     {
       required: true,
-      message: pi.ph('idCardNo'),
+      message: pi.ph('idCardCode'),
       trigger: 'blur'
     }
   ],

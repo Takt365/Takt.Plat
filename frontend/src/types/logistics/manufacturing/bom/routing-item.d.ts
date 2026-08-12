@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing-item.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -49,7 +49,7 @@ export interface RoutingItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -64,7 +64,7 @@ export interface RoutingItem extends CompanyDtoBase {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -74,7 +74,7 @@ export interface RoutingItem extends CompanyDtoBase {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
@@ -124,7 +124,7 @@ export interface RoutingItem extends CompanyDtoBase {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -159,6 +159,16 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   routingId?: string;
@@ -174,7 +184,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -189,7 +199,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -199,7 +209,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
@@ -249,7 +259,7 @@ export interface RoutingItemQuery extends TaktPagedQuery {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -293,9 +303,14 @@ export interface RoutingItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -313,7 +328,7 @@ export interface RoutingItemCreate {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -328,7 +343,7 @@ export interface RoutingItemCreate {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -338,7 +353,7 @@ export interface RoutingItemCreate {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
@@ -383,14 +398,14 @@ export interface RoutingItemCreate {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
   /**
    * 工序参数定义（子表，级联保存）
    */
-  arguments?: RoutingItemArgumentUpdate[];
+  arguments?: RoutingItemArgumentCreate[];
 
   /**
    * 扩展字段JSON
@@ -416,6 +431,11 @@ export interface RoutingItemUpdate extends RoutingItemCreate {
    * RoutingItemID（标识要更新的实体）
    */
   routingItemId: string;
+
+  /**
+   * 工序参数定义（子表，级联保存）
+   */
+  arguments?: any;
 
 }
 
@@ -475,6 +495,16 @@ export interface RoutingItemTemplate {
   companyCode?: string;
 
   /**
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   routingId?: string;
@@ -490,7 +520,7 @@ export interface RoutingItemTemplate {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -505,7 +535,7 @@ export interface RoutingItemTemplate {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -515,7 +545,7 @@ export interface RoutingItemTemplate {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
@@ -560,7 +590,7 @@ export interface RoutingItemTemplate {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -599,9 +629,14 @@ export interface RoutingItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -619,7 +654,7 @@ export interface RoutingItemImport {
   lineNumber?: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit?: string;
 
@@ -634,7 +669,7 @@ export interface RoutingItemImport {
   standardMinutes?: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit?: string;
 
@@ -644,7 +679,7 @@ export interface RoutingItemImport {
   standardShorts?: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit?: string;
 
@@ -689,7 +724,7 @@ export interface RoutingItemImport {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -743,7 +778,7 @@ export interface RoutingItemExport {
   lineNumber: number;
 
   /**
-   * 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+   * 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
    */
   baseUnit: string;
 
@@ -758,7 +793,7 @@ export interface RoutingItemExport {
   standardMinutes: number;
 
   /**
-   * 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+   * 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
    */
   timeUnit: string;
 
@@ -768,7 +803,7 @@ export interface RoutingItemExport {
   standardShorts: number;
 
   /**
-   * 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+   * 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
    */
   pointsUnit: string;
 
@@ -818,7 +853,7 @@ export interface RoutingItemExport {
   extJson?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

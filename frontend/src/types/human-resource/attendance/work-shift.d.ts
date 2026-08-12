@@ -23,45 +23,6 @@ import type {
  * @description 对应后端 TaktWorkShiftDto
  */
 export interface WorkShift extends CompanyDtoBase {
-  /**
-   * WorkShiftID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  workShiftId: string;
-
-  /**
-   * 班次编码（租户+公司内唯一）
-   */
-  shiftCode: string;
-
-  /**
-   * 班次名称
-   */
-  shiftName: string;
-
-  /**
-   * 当班开始时间（HH:mm）
-   */
-  startTime: string;
-
-  /**
-   * 当班结束时间（HH:mm）
-   */
-  endTime: string;
-
-  /**
-   * 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
-   */
-  crossMidnight: number;
-
-  /**
-   * 排序号
-   */
-  sortOrder: number;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant?: string;
 
 }
 
@@ -116,7 +77,7 @@ export interface WorkShiftQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -160,7 +121,10 @@ export interface WorkShiftCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 班次编码（租户+公司内唯一）
@@ -190,7 +154,7 @@ export interface WorkShiftCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -283,7 +247,7 @@ export interface WorkShiftTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -317,7 +281,10 @@ export interface WorkShiftImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 班次编码（租户+公司内唯一）
@@ -347,7 +314,7 @@ export interface WorkShiftImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -411,7 +378,7 @@ export interface WorkShiftExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON

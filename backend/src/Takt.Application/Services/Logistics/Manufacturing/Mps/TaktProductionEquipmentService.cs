@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionEquipmentService.cs
-// 创建时间：2026-07-14
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：生产设备应用服务实现
 // 
@@ -97,12 +97,12 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
         EnsureThreeLayerContext();
         var list = await _productionEquipmentRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.EquipmentRunStatus == 1,
-            x => x.ProductionEquipmentName ?? string.Empty,
+            x => x.ProdEquipName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ProductionEquipmentName ?? e.Id.ToString(),
+            DictValue = e.ProdEquipCode,
+            DictLabel = e.ProdEquipName ?? e.ProdEquipCode,
         }).ToList();
     }
 
@@ -114,14 +114,14 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
     public async Task<TaktProductionEquipmentDto> CreateProductionEquipmentAsync(TaktProductionEquipmentCreateDto dto)
     {
         var entity = dto.Adapt<TaktProductionEquipment>();
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
             _productionEquipmentRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.StorageLocation == entity.StorageLocation
-                && x.ProductionEquipmentCode == entity.ProductionEquipmentCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique)
+                && x.ProdEquipCode == entity.ProdEquipCode);
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique)
         {
-            throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProductionEquipmentCode已存在");
+            throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProdEquipCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -148,15 +148,15 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             throw new TaktBusinessException("生产设备不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
             _productionEquipmentRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.StorageLocation == entity.StorageLocation
-                && x.ProductionEquipmentCode == entity.ProductionEquipmentCode,
+                && x.ProdEquipCode == entity.ProdEquipCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique)
         {
-            throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProductionEquipmentCode已存在");
+            throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProdEquipCode已存在");
         }
         await _productionEquipmentRepository.UpdateAsync(entity);
         return await GetProductionEquipmentByIdAsync(id) ?? throw new TaktBusinessException("生产设备不存在");
@@ -267,19 +267,19 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             try
             {
                 var entity = rows[i].Adapt<TaktProductionEquipment>();
-                var importKey = $"{entity.PlantCode}|{entity.StorageLocation}|{entity.ProductionEquipmentCode}";
+                var importKey = $"{entity.PlantCode}|{entity.StorageLocation}|{entity.ProdEquipCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、StorageLocation、ProductionEquipmentCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、StorageLocation、ProdEquipCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique = await _uniqueValidator.IsUniqueAsync(
                     _productionEquipmentRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.StorageLocation == entity.StorageLocation
-                        && x.ProductionEquipmentCode == entity.ProductionEquipmentCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_planning_production_equipment_unique)
+                        && x.ProdEquipCode == entity.ProdEquipCode);
+                if (!isUnique_ix_takt_logistics_manufacturing_mps_production_equipment_unique)
                 {
-                    throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProductionEquipmentCode已存在");
+                    throw new TaktBusinessException("生产设备的PlantCode、StorageLocation、ProdEquipCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -341,21 +341,21 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || SqlFunc.ToString(x.EquipmentCategory).Contains(keywords)
-                || (x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(keywords))
-                || (x.ProductionEquipmentName != null && x.ProductionEquipmentName.Contains(keywords))
+                || SqlFunc.ToString(x.EquipCategory).Contains(keywords)
+                || (x.ProdEquipCode != null && x.ProdEquipCode.Contains(keywords))
+                || (x.ProdEquipName != null && x.ProdEquipName.Contains(keywords))
                 || (x.Manufacturer != null && x.Manufacturer.Contains(keywords))
-                || (x.EquipmentBrand != null && x.EquipmentBrand.Contains(keywords))
+                || (x.EquipBrand != null && x.EquipBrand.Contains(keywords))
                 || (x.MachineType != null && x.MachineType.Contains(keywords))
-                || (x.ModelNo != null && x.ModelNo.Contains(keywords))
-                || (x.SerialNo != null && x.SerialNo.Contains(keywords))
-                || (x.EquipmentSpecification != null && x.EquipmentSpecification.Contains(keywords))
+                || (x.ModelCode != null && x.ModelCode.Contains(keywords))
+                || (x.SerialCode != null && x.SerialCode.Contains(keywords))
+                || (x.EquipSpecification != null && x.EquipSpecification.Contains(keywords))
                 || SqlFunc.ToString(x.StdCycleTimeSeconds).Contains(keywords)
                 || SqlFunc.ToString(x.StdMinutesPerUnit).Contains(keywords)
                 || SqlFunc.ToString(x.StdMinutesPerCycle).Contains(keywords)
                 || SqlFunc.ToString(x.TheoreticalSpm).Contains(keywords)
                 || SqlFunc.ToString(x.TheoreticalCycleTimeSeconds).Contains(keywords)
-                || SqlFunc.ToString(x.StdEquipmentHourlyCapacity).Contains(keywords)
+                || SqlFunc.ToString(x.StdEquipHourlyCapacity).Contains(keywords)
                 || SqlFunc.ToString(x.AvailabilityRate).Contains(keywords)
                 || SqlFunc.ToString(x.PerformanceRate).Contains(keywords)
                 || SqlFunc.ToString(x.SetupMinutes).Contains(keywords)
@@ -400,11 +400,17 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
                 || SqlFunc.ToString(x.MaintenanceIntervalHours).Contains(keywords)
                 || SqlFunc.ToString(x.CumulativeRunHours).Contains(keywords)
                 || (x.InterfaceType != null && x.InterfaceType.Contains(keywords))
-                || (x.EquipmentAdministrator != null && x.EquipmentAdministrator.Contains(keywords))
+                || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
+                || (x.EquipAdministrator != null && x.EquipAdministrator.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.ProductionEquipmentStatus).Contains(keywords)
+                || SqlFunc.ToString(x.ProdEquipStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
+                || SqlFunc.ToString(x.ManufacturingDate).Contains(keywords)
+                || SqlFunc.ToString(x.CommissioningDate).Contains(keywords)
+                || SqlFunc.ToString(x.DecommissioningDate).Contains(keywords)
+                || SqlFunc.ToString(x.ScrapDate).Contains(keywords)
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
@@ -414,19 +420,19 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (queryDto?.EquipmentCategory.HasValue == true)
+        if (queryDto?.EquipCategory.HasValue == true)
         {
-            exp = exp.And(x => x.EquipmentCategory == queryDto.EquipmentCategory);
+            exp = exp.And(x => x.EquipCategory == queryDto.EquipCategory);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionEquipmentCode))
+        if (!string.IsNullOrEmpty(queryDto?.ProdEquipCode))
         {
-            exp = exp.And(x => x.ProductionEquipmentCode != null && x.ProductionEquipmentCode.Contains(queryDto.ProductionEquipmentCode));
+            exp = exp.And(x => x.ProdEquipCode != null && x.ProdEquipCode.Contains(queryDto.ProdEquipCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionEquipmentName))
+        if (!string.IsNullOrEmpty(queryDto?.ProdEquipName))
         {
-            exp = exp.And(x => x.ProductionEquipmentName != null && x.ProductionEquipmentName.Contains(queryDto.ProductionEquipmentName));
+            exp = exp.And(x => x.ProdEquipName != null && x.ProdEquipName.Contains(queryDto.ProdEquipName));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Manufacturer))
@@ -434,9 +440,9 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.Manufacturer != null && x.Manufacturer.Contains(queryDto.Manufacturer));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentBrand))
+        if (!string.IsNullOrEmpty(queryDto?.EquipBrand))
         {
-            exp = exp.And(x => x.EquipmentBrand != null && x.EquipmentBrand.Contains(queryDto.EquipmentBrand));
+            exp = exp.And(x => x.EquipBrand != null && x.EquipBrand.Contains(queryDto.EquipBrand));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MachineType))
@@ -444,19 +450,19 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.MachineType != null && x.MachineType.Contains(queryDto.MachineType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ModelNo))
+        if (!string.IsNullOrEmpty(queryDto?.ModelCode))
         {
-            exp = exp.And(x => x.ModelNo != null && x.ModelNo.Contains(queryDto.ModelNo));
+            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.SerialCode))
         {
-            exp = exp.And(x => x.SerialNo != null && x.SerialNo.Contains(queryDto.SerialNo));
+            exp = exp.And(x => x.SerialCode != null && x.SerialCode.Contains(queryDto.SerialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentSpecification))
+        if (!string.IsNullOrEmpty(queryDto?.EquipSpecification))
         {
-            exp = exp.And(x => x.EquipmentSpecification != null && x.EquipmentSpecification.Contains(queryDto.EquipmentSpecification));
+            exp = exp.And(x => x.EquipSpecification != null && x.EquipSpecification.Contains(queryDto.EquipSpecification));
         }
 
         if (queryDto?.StdCycleTimeSeconds.HasValue == true)
@@ -484,9 +490,9 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.TheoreticalCycleTimeSeconds == queryDto.TheoreticalCycleTimeSeconds);
         }
 
-        if (queryDto?.StdEquipmentHourlyCapacity.HasValue == true)
+        if (queryDto?.StdEquipHourlyCapacity.HasValue == true)
         {
-            exp = exp.And(x => x.StdEquipmentHourlyCapacity == queryDto.StdEquipmentHourlyCapacity);
+            exp = exp.And(x => x.StdEquipHourlyCapacity == queryDto.StdEquipHourlyCapacity);
         }
 
         if (queryDto?.AvailabilityRate.HasValue == true)
@@ -709,9 +715,14 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.InterfaceType != null && x.InterfaceType.Contains(queryDto.InterfaceType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EquipmentAdministrator))
+        if (!string.IsNullOrEmpty(queryDto?.StorageLocation))
         {
-            exp = exp.And(x => x.EquipmentAdministrator != null && x.EquipmentAdministrator.Contains(queryDto.EquipmentAdministrator));
+            exp = exp.And(x => x.StorageLocation != null && x.StorageLocation.Contains(queryDto.StorageLocation));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.EquipAdministrator))
+        {
+            exp = exp.And(x => x.EquipAdministrator != null && x.EquipAdministrator.Contains(queryDto.EquipAdministrator));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -719,9 +730,14 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
 
-        if (queryDto?.ProductionEquipmentStatus.HasValue == true)
+        if (queryDto?.ProdEquipStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ProductionEquipmentStatus == queryDto.ProductionEquipmentStatus);
+            exp = exp.And(x => x.ProdEquipStatus == queryDto.ProdEquipStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -732,6 +748,46 @@ public class TaktProductionEquipmentService : TaktServiceBase, ITaktProductionEq
         if (!string.IsNullOrEmpty(queryDto?.Remark))
         {
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+        }
+
+        if (queryDto?.ManufacturingDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.ManufacturingDate >= queryDto.ManufacturingDateStart);
+        }
+
+        if (queryDto?.ManufacturingDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.ManufacturingDate <= queryDto.ManufacturingDateEnd);
+        }
+
+        if (queryDto?.CommissioningDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.CommissioningDate >= queryDto.CommissioningDateStart);
+        }
+
+        if (queryDto?.CommissioningDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.CommissioningDate <= queryDto.CommissioningDateEnd);
+        }
+
+        if (queryDto?.DecommissioningDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.DecommissioningDate >= queryDto.DecommissioningDateStart);
+        }
+
+        if (queryDto?.DecommissioningDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.DecommissioningDate <= queryDto.DecommissioningDateEnd);
+        }
+
+        if (queryDto?.ScrapDateStart.HasValue == true)
+        {
+            exp = exp.And(x => x.ScrapDate >= queryDto.ScrapDateStart);
+        }
+
+        if (queryDto?.ScrapDateEnd.HasValue == true)
+        {
+            exp = exp.And(x => x.ScrapDate <= queryDto.ScrapDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)

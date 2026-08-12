@@ -481,7 +481,6 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         {
             exp = exp.And(x => x.DictStatus == queryDto.DictStatus);
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -501,6 +500,12 @@ public class TaktDictTypeService : TaktServiceBase, ITaktDictTypeService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

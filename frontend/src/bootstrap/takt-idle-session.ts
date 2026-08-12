@@ -331,7 +331,7 @@ function handleIdleTimeout(): void {
     elapsedSec: Math.round(getIdleElapsedMs() / 1000),
   });
 
-  const message = translateLocaleMessage('common.tip.session.idle.logout');
+  const message = translateLocaleMessage('layouts.page.session.idlelogout');
   clearPersistedLastActivityAt();
   executeIdleLogoutNow(message);
 

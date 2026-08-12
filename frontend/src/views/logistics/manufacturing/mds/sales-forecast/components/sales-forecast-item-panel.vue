@@ -129,7 +129,7 @@
           v-model:value="advancedQueryForm.salesForecastCode"
           :placeholder="pi.queryPh('salesForecastCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -143,95 +143,48 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="pi.queryLabel('materialCode')">
+      <div v-show="isFieldVisible('fiscalYear')">
+      <a-form-item :label="pi.queryLabel('fiscalYear')">
         <TaktSelect
-          v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterialPlants/options"
-          :placeholder="pi.queryPh('materialCode', 'select')"
+          v-model:value="advancedQueryForm.fiscalYear"
+          api-url="TaktFinancialPeriods/options"
+          :placeholder="pi.queryPh('fiscalYear', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
-        <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('materialSpecification')">
-      <a-form-item :label="pi.queryLabel('materialSpecification')">
-        <a-input
-          v-model:value="advancedQueryForm.materialSpecification"
-          :placeholder="pi.queryPh('materialSpecification', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('modelCode')">
-      <a-form-item :label="pi.queryLabel('modelCode')">
-        <a-input
-          v-model:value="advancedQueryForm.modelCode"
-          :placeholder="pi.queryPh('modelCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('modelName')">
-      <a-form-item :label="pi.queryLabel('modelName')">
-        <a-input
-          v-model:value="advancedQueryForm.modelName"
-          :placeholder="pi.queryPh('modelName', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planUnit')">
-      <a-form-item :label="pi.queryLabel('planUnit')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.planUnit"
-          dict-type="logistics_unit_of_measure_code"
-          :placeholder="pi.queryPh('planUnit', 'select')"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('planQuantity')">
-      <a-form-item :label="pi.queryLabel('planQuantity')">
+      <div v-show="isFieldVisible('planMonth')">
+      <a-form-item :label="pi.queryLabel('planMonth')">
         <a-input-number
-          v-model:value="advancedQueryForm.planQuantity"
-          :placeholder="pi.queryPh('planQuantity', 'required')"
+          v-model:value="advancedQueryForm.planMonth"
+          :placeholder="pi.queryPh('planMonth', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('plannedDeliveryDateStart')">
-      <a-form-item :label="pi.queryLabel('plannedDeliveryDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedDeliveryDateStart"
-          :placeholder="pi.queryPh('plannedDeliveryDateStart', 'select')"
-          value-format="YYYY-MM-DD"
+      <div v-show="isFieldVisible('planQuantity001')">
+      <a-form-item :label="pi.queryLabel('planQuantity001')">
+        <a-input-number
+          v-model:value="advancedQueryForm.planQuantity001"
+          :placeholder="pi.queryPh('planQuantity001', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('plannedDeliveryDateEnd')">
-      <a-form-item :label="pi.queryLabel('plannedDeliveryDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.plannedDeliveryDateEnd"
-          :placeholder="pi.queryPh('plannedDeliveryDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
+      <div v-show="isFieldVisible('planQuantity002')">
+      <a-form-item :label="pi.queryLabel('planQuantity002')">
+        <a-input-number
+          v-model:value="advancedQueryForm.planQuantity002"
+          :placeholder="pi.queryPh('planQuantity002', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('planQuantityDelta')">
+      <a-form-item :label="pi.queryLabel('planQuantityDelta')">
+        <a-input-number
+          v-model:value="advancedQueryForm.planQuantityDelta"
+          :placeholder="pi.queryPh('planQuantityDelta', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -497,7 +450,10 @@ function createEmptyAdvancedQueryForm() {
   return {
     ...form,
     lineNumber: undefined as number | undefined,
-    planQuantity: undefined as number | undefined,
+    planMonth: undefined as number | undefined,
+    planQuantity001: undefined as number | undefined,
+    planQuantity002: undefined as number | undefined,
+    planQuantityDelta: undefined as number | undefined,
     convertedQuantity: undefined as number | undefined,
     estimatedUnitPrice: undefined as number | undefined,
     estimatedAmount: undefined as number | undefined,
@@ -602,84 +558,54 @@ const columns = computed<TableColumnsType>(() => [
       String(getSalesForecastItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('materialCode'),
-    dataIndex: 'materialCode',
-    key: 'materialCode',
+    title: pi.label('fiscalYear'),
+    dataIndex: 'fiscalYear',
+    key: 'fiscalYear',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'materialCode') ?? ''),
+      String(getSalesForecastItemField(record, 'fiscalYear') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('planMonth'),
+    dataIndex: 'planMonth',
+    key: 'planMonth',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'materialName') ?? ''),
+      String(getSalesForecastItemField(record, 'planMonth') ?? ''),
   },
   {
-    title: pi.label('materialSpecification'),
-    dataIndex: 'materialSpecification',
-    key: 'materialSpecification',
+    title: pi.label('planQuantity001'),
+    dataIndex: 'planQuantity001',
+    key: 'planQuantity001',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'materialSpecification') ?? ''),
+      String(getSalesForecastItemField(record, 'planQuantity001') ?? ''),
   },
   {
-    title: pi.label('modelCode'),
-    dataIndex: 'modelCode',
-    key: 'modelCode',
+    title: pi.label('planQuantity002'),
+    dataIndex: 'planQuantity002',
+    key: 'planQuantity002',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'modelCode') ?? ''),
+      String(getSalesForecastItemField(record, 'planQuantity002') ?? ''),
   },
   {
-    title: pi.label('modelName'),
-    dataIndex: 'modelName',
-    key: 'modelName',
+    title: pi.label('planQuantityDelta'),
+    dataIndex: 'planQuantityDelta',
+    key: 'planQuantityDelta',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'modelName') ?? ''),
-  },
-  {
-    title: pi.label('planUnit'),
-    dataIndex: 'planUnit',
-    key: 'planUnit',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'planUnit') ?? ''),
-  },
-  {
-    title: pi.label('planQuantity'),
-    dataIndex: 'planQuantity',
-    key: 'planQuantity',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'planQuantity') ?? ''),
-  },
-  {
-    title: pi.label('plannedDeliveryDate'),
-    dataIndex: 'plannedDeliveryDate',
-    key: 'plannedDeliveryDate',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: SalesForecastItem }) =>
-      String(getSalesForecastItemField(record, 'plannedDeliveryDate') ?? ''),
+      String(getSalesForecastItemField(record, 'planQuantityDelta') ?? ''),
   },
   {
     title: pi.label('convertedQuantity'),
@@ -738,10 +664,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mds:sales:forecast:delete',
         onClick: (record: SalesForecastItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -878,8 +802,17 @@ function buildListQuery(overrides?: Partial<SalesForecastItemQuery>): SalesForec
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  if (form.planQuantity !== undefined && form.planQuantity !== null) {
-    query.planQuantity = form.planQuantity
+  if (form.planMonth !== undefined && form.planMonth !== null) {
+    query.planMonth = form.planMonth
+  }
+  if (form.planQuantity001 !== undefined && form.planQuantity001 !== null) {
+    query.planQuantity001 = form.planQuantity001
+  }
+  if (form.planQuantity002 !== undefined && form.planQuantity002 !== null) {
+    query.planQuantity002 = form.planQuantity002
+  }
+  if (form.planQuantityDelta !== undefined && form.planQuantityDelta !== null) {
+    query.planQuantityDelta = form.planQuantityDelta
   }
   if (form.convertedQuantity !== undefined && form.convertedQuantity !== null) {
     query.convertedQuantity = form.convertedQuantity

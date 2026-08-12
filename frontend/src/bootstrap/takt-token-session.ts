@@ -78,7 +78,7 @@ function startTokenWatchInterval(): void {
  */
 function emitTokenSessionExpired(): void {
   EventBus.emit('auth:session-expired', {
-    message: translateLocaleMessage('common.tip.session.expired'),
+    message: translateLocaleMessage('layouts.page.session.expired'),
   });
 }
 

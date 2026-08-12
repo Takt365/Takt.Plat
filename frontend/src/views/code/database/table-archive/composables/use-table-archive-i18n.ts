@@ -44,6 +44,7 @@ export const TABLE_ARCHIVE_PLACEHOLDER = {
   archiveStatus: 'select',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 export type TableArchiveField = keyof typeof TABLE_ARCHIVE_PLACEHOLDER

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：ITaktBillOfMaterialService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单应用服务接口
 // 
@@ -110,10 +110,10 @@ public interface ITaktBillOfMaterialService
     Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialAsync(TaktBillOfMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null);
 
     /// <summary>
-    /// BOM 多层递归展开（运行时计算，不落库）
+    /// BOM 递归展开（单层存储、运行时多层展开；供 MRP 等按需求量累计子件）
     /// </summary>
     /// <param name="queryDto">展开查询参数</param>
-    /// <returns>展开结果；根 BOM 不存在时返回 null</returns>
+    /// <returns>展开结果；BOM 不存在或无权访问时返回 null</returns>
     Task<TaktBillOfMaterialExplosionDto?> GetBillOfMaterialExplosionAsync(TaktBillOfMaterialExplosionQueryDto queryDto);
 
 }

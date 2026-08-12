@@ -444,7 +444,6 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
         {
             exp = exp.And(x => x.PathCode != null && x.PathCode.Contains(queryDto.PathCode));
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -464,6 +463,12 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

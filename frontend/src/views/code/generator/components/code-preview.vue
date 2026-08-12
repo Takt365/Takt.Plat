@@ -269,20 +269,17 @@ const TAB_CATEGORY_ORDER: Record<PreviewTab, PreviewCategory[]> = {
     'backendService',
     'backendController',
     'backendValidators',
-    'backendOther',
-  ],
+    'backendOther'],
   frontend: [
     'frontendApi',
     'frontendType',
     'frontendView',
     'frontendComponent',
-    'frontendOther',
-  ],
+    'frontendOther'],
   script: [
     'scriptTranslationSql',
     'scriptMenuSql',
-    'scriptOther',
-  ],
+    'scriptOther'],
 }
 
 /** 组件入参 */

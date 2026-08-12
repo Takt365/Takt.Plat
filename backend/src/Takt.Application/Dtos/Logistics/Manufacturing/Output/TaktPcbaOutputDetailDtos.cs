@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutputDetail 生成，请按需审阅）
 // 
@@ -62,14 +62,14 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -107,12 +107,12 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -139,7 +139,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -152,7 +152,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -197,7 +197,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -222,7 +222,7 @@ public class TaktPcbaOutputDetailDto : TaktCompanyDtoBase
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -255,6 +255,16 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -276,14 +286,14 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -321,12 +331,12 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -353,7 +363,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -366,7 +376,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -411,7 +421,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -436,7 +446,7 @@ public class TaktPcbaOutputDetailQueryDto : TaktPagedQuery
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -481,10 +491,15 @@ public class TaktPcbaOutputDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -509,16 +524,16 @@ public class TaktPcbaOutputDetailCreateDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）不能为空")]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）不能为空")]
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）不能为空")]
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -556,15 +571,15 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
-    [Required(ErrorMessage = "PCB板别（字典 logistics_pcba_function_category，存 DictValue）不能为空")]
+    [Required(ErrorMessage = "PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）不能为空")]
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
-    [Required(ErrorMessage = "面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）不能为空")]
+    [Required(ErrorMessage = "面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）不能为空")]
     public string PanelSide { get; set; } = string.Empty;
 
     /// <summary>
@@ -591,7 +606,7 @@ public class TaktPcbaOutputDetailCreateDto
     /// 序列号（明细级）
     /// </summary>
     [Required(ErrorMessage = "序列号（明细级）不能为空")]
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -604,7 +619,7 @@ public class TaktPcbaOutputDetailCreateDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -649,7 +664,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -674,7 +689,7 @@ public class TaktPcbaOutputDetailCreateDto
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -777,6 +792,16 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -798,14 +823,14 @@ public class TaktPcbaOutputDetailTemplateDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -843,12 +868,12 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -875,7 +900,7 @@ public class TaktPcbaOutputDetailTemplateDto
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -888,7 +913,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -933,7 +958,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -958,7 +983,7 @@ public class TaktPcbaOutputDetailTemplateDto
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -990,10 +1015,15 @@ public class TaktPcbaOutputDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// PCBA日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -1016,14 +1046,14 @@ public class TaktPcbaOutputDetailImportDto
     public string? TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -1061,12 +1091,12 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string? PanelSide { get; set; } = string.Empty;
 
@@ -1093,7 +1123,7 @@ public class TaktPcbaOutputDetailImportDto
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -1106,7 +1136,7 @@ public class TaktPcbaOutputDetailImportDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -1151,7 +1181,7 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -1176,7 +1206,7 @@ public class TaktPcbaOutputDetailImportDto
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -1235,14 +1265,14 @@ public class TaktPcbaOutputDetailExportDto
     public string TimePeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备编码（关联 TaktProductionEquipment.ProductionEquipmentCode，选项 TaktProductionEquipments/options）
+    /// 生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -1280,12 +1310,12 @@ public class TaktPcbaOutputDetailExportDto
     public decimal StdEquipmentCapacity { get; set; }
 
     /// <summary>
-    /// PCB板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCB板别（存 DictLabel；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string PcbBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 面板别（字典 logistics_pcba_side_category，存 DictValue：b= B面 t= T面）
+    /// 面板别（字典 logistics_pcba_side_category；存 DictValue：b= B面 t= T面）
     /// </summary>
     public string PanelSide { get; set; } = string.Empty;
 
@@ -1312,7 +1342,7 @@ public class TaktPcbaOutputDetailExportDto
     /// <summary>
     /// 序列号（明细级）
     /// </summary>
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良台数
@@ -1325,7 +1355,7 @@ public class TaktPcbaOutputDetailExportDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -1370,7 +1400,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal TotalMinutes { get; set; }
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -1395,7 +1425,7 @@ public class TaktPcbaOutputDetailExportDto
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

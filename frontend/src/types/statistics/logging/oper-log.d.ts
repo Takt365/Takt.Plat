@@ -24,218 +24,9 @@ import type {
  */
 export interface OperLog extends CompanyDtoBase {
   /**
-   * OperLogID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入）
    */
-  operLogId: string;
-
-  /**
-   * 用户名（登录账号）
-   */
-  userName: string;
-
-  /**
-   * 操作模块（如：用户管理、部门管理）
-   */
-  operModule?: string;
-
-  /**
-   * 操作类型（HTTP 审计推导）
-   */
-  operType: string;
-
-  /**
-   * 操作方法（如：TaktUserService.CreateUserAsync）
-   */
-  operMethod?: string;
-
-  /**
-   * 请求方式（GET、POST、PUT、DELETE 等）
-   */
-  requestMethod?: string;
-
-  /**
-   * 操作 URL（含查询字符串）
-   */
-  operUrl?: string;
-
-  /**
-   * 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
-   */
-  requestParam?: string;
-
-  /**
-   * 返回结果 JSON（当前操作出参/响应摘要）
-   */
-  jsonResult?: string;
-
-  /**
-   * 操作状态（0=失败，1=成功）
-   */
-  operStatus: number;
-
-  /**
-   * 错误消息（失败时）
-   */
-  errorMsg?: string;
-
-  /**
-   * 操作 IP
-   */
-  operIp?: string;
-
-  /**
-   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
-   */
-  operLocation?: string;
-
-  /**
-   * 操作时间（业务操作发生时刻）
-   */
-  operTime: string;
-
-  /**
-   * 执行耗时（毫秒）
-   */
-  elapsedTime: number;
-
-}
-
-
-/**
- * OperLog 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 OperLogQuery
- * @description 对应后端 TaktOperLogQueryDto
- */
-export interface OperLogQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 用户名（登录账号）
-   */
-  userName?: string;
-
-  /**
-   * 操作模块（如：用户管理、部门管理）
-   */
-  operModule?: string;
-
-  /**
-   * 操作类型（HTTP 审计推导）
-   */
-  operType?: string;
-
-  /**
-   * 操作方法（如：TaktUserService.CreateUserAsync）
-   */
-  operMethod?: string;
-
-  /**
-   * 请求方式（GET、POST、PUT、DELETE 等）
-   */
-  requestMethod?: string;
-
-  /**
-   * 操作 URL（含查询字符串）
-   */
-  operUrl?: string;
-
-  /**
-   * 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
-   */
-  requestParam?: string;
-
-  /**
-   * 返回结果 JSON（当前操作出参/响应摘要）
-   */
-  jsonResult?: string;
-
-  /**
-   * 操作状态（0=失败，1=成功）
-   */
-  operStatus?: number;
-
-  /**
-   * 错误消息（失败时）
-   */
-  errorMsg?: string;
-
-  /**
-   * 操作 IP
-   */
-  operIp?: string;
-
-  /**
-   * 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
-   */
-  operLocation?: string;
-
-  /**
-   * 操作时间（业务操作发生时刻）（范围查询-开始）
-   */
-  operTimeStart?: string;
-
-  /**
-   * 操作时间（业务操作发生时刻）（范围查询-结束）
-   */
-  operTimeEnd?: string;
-
-  /**
-   * 执行耗时（毫秒）
-   */
-  elapsedTime?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  ExtField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建OperLog DTO
- * 对应前端 OperLogCreate
- * @description 对应后端 TaktOperLogCreateDto
- */
-export interface OperLogCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
+  cultureCode: string
 
   /**
    * 用户名（登录账号）
@@ -319,7 +110,6 @@ export interface OperLogCreate {
 
 }
 
-
 /**
  * 更新OperLog DTO
  * 继承 TaktOperLogCreateDto，添加 OperLogId 字段
@@ -333,7 +123,6 @@ export interface OperLogUpdate extends OperLogCreate {
   operLogId: string;
 
 }
-
 
 /**
  * OperLog 状态更新 DTO
@@ -352,7 +141,6 @@ export interface OperLogStatus {
   operStatus: number;
 
 }
-
 
 /**
  * OperLog 导出 DTO（独立实现，不继承响应 Dto）

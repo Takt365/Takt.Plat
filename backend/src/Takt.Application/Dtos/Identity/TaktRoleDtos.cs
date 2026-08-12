@@ -111,6 +111,11 @@ public class TaktRoleQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -181,6 +186,11 @@ public class TaktRoleCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -346,6 +356,11 @@ public class TaktRoleTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -413,6 +428,11 @@ public class TaktRoleImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>

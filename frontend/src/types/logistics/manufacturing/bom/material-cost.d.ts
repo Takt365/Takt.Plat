@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：material-cost.d.ts
-// 创建时间：2026-07-14
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,22 +29,27 @@ export interface BomMaterialCost extends CompanyDtoBase {
   bomMaterialCostId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 
@@ -59,7 +64,7 @@ export interface BomMaterialCost extends CompanyDtoBase {
   productMonthlyCost: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode: string;
 
@@ -69,7 +74,7 @@ export interface BomMaterialCost extends CompanyDtoBase {
   costingPeriod: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
    */
   costingDate: string;
 
@@ -94,22 +99,32 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost?: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType?: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -124,7 +139,7 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   productMonthlyCost?: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode?: string;
 
@@ -134,12 +149,12 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   costingPeriod?: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）（范围查询-开始）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）（范围查询-开始）
    */
   costingDateStart?: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）（范围查询-结束）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）（范围查询-结束）
    */
   costingDateEnd?: string;
 
@@ -183,27 +198,32 @@ export interface BomMaterialCostCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 
@@ -218,7 +238,7 @@ export interface BomMaterialCostCreate {
   productMonthlyCost: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode: string;
 
@@ -228,7 +248,7 @@ export interface BomMaterialCostCreate {
   costingPeriod: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
    */
   costingDate: string;
 
@@ -277,22 +297,32 @@ export interface BomMaterialCostTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost?: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType?: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -307,7 +337,7 @@ export interface BomMaterialCostTemplate {
   productMonthlyCost?: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode?: string;
 
@@ -317,7 +347,7 @@ export interface BomMaterialCostTemplate {
   costingPeriod?: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
    */
   costingDate?: string;
 
@@ -351,27 +381,32 @@ export interface BomMaterialCostImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode?: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost?: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType?: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode?: string;
 
@@ -386,7 +421,7 @@ export interface BomMaterialCostImport {
   productMonthlyCost?: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode?: string;
 
@@ -396,7 +431,7 @@ export interface BomMaterialCostImport {
   costingPeriod?: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
    */
   costingDate?: string;
 
@@ -430,22 +465,27 @@ export interface BomMaterialCostExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 机种编码（关联 TaktModelDestination.ModelCode）
+   * 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
    */
   modelCode: string;
 
   /**
-   * 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+   * 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
    */
   modelMonthlyAverageCost: number;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+   */
+  materialType: string;
+
+  /**
+   * 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
    */
   productCode: string;
 
@@ -460,7 +500,7 @@ export interface BomMaterialCostExport {
   productMonthlyCost: number;
 
   /**
-   * 币种（字典 accounting_currency_code，如 CNY/USD）
+   * 币种（字典 accounting_currency_code；如 CNY/USD）
    */
   currencyCode: string;
 
@@ -470,7 +510,7 @@ export interface BomMaterialCostExport {
   costingPeriod: string;
 
   /**
-   * 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+   * 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
    */
   costingDate: string;
 
@@ -491,52 +531,20 @@ export interface BomMaterialCostExport {
 
 }
 
-
 /**
- * BOM 物料成本机种维度展示行（同一物理表按工厂+机种+核算期间去重聚合；非独立实体）
- * 对应前端 BomMaterialCostModelGroup
- * @description 对应后端 TaktBomMaterialCostModelGroupDto
+ * BOM 物料成本机种维度展示行（工厂+物料类型+机种+核算期间聚合）
+ * @description 对应后端 TaktBomMaterialCostModelGroupDto（分析/三层浏览用；非 CRUD 实体）
  */
 export interface BomMaterialCostModelGroup {
-  /**
-   * 分组键（plant|model|period，供前端 row-key）
-   */
+  /** 分组键（plant|materialType|model|period） */
   groupKey: string;
-
-  /**
-   * 工厂代码
-   */
   plantCode: string;
-
-  /**
-   * 机种编码
-   */
+  materialType: string;
   modelCode: string;
-
-  /**
-   * 机种月平均材料成本
-   */
   modelMonthlyAverageCost: number;
-
-  /**
-   * 币种
-   */
   currencyCode: string;
-
-  /**
-   * 核算期间（yyyy-MM）
-   */
   costingPeriod: string;
-
-  /**
-   * 核算日期（组内代表行，通常为同月最后核算日）
-   */
   costingDate: string;
-
-  /**
-   * 组内产品行数
-   */
   productRowCount: number;
-
 }
 

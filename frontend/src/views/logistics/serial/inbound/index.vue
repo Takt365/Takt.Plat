@@ -129,11 +129,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('inboundNo')">
-      <a-form-item :label="pi.queryLabel('inboundNo')">
+      <div v-show="isFieldVisible('inboundCode')">
+      <a-form-item :label="pi.queryLabel('inboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.inboundNo"
-          :placeholder="pi.queryPh('inboundNo', 'required')"
+          v-model:value="advancedQueryForm.inboundCode"
+          :placeholder="pi.queryPh('inboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -457,7 +457,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -530,13 +529,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'plantCode') ?? ''
   },
   {
-    title: pi.label('inboundNo'),
-    dataIndex: 'inboundNo',
-    key: 'inboundNo',
+    title: pi.label('inboundCode'),
+    dataIndex: 'inboundCode',
+    key: 'inboundCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'inboundNo') ?? ''
+    customRender: ({ record }: { record: any }) => getSerialInboundField(record, 'inboundCode') ?? ''
   },
   {
     title: pi.label('inboundDate'),
@@ -630,8 +629,6 @@ const getSerialInboundDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -691,7 +688,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   plantCode: '',
-  inboundNo: '',
+  inboundCode: '',
   inboundDateStart: '',
   inboundDateEnd: '',
   inboundType: undefined as number | undefined,
@@ -897,7 +894,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
-  inboundNo: '',
+  inboundCode: '',
   inboundDateStart: '',
   inboundDateEnd: '',
   inboundType: undefined as number | undefined,

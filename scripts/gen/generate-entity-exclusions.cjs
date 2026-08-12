@@ -41,22 +41,28 @@ const MANUAL_STANDALONE_SERVICE_ENTITY_NAMES = new Set([
  * 手工维护 DTO 的实体（含脚本无法生成的附加 DTO 类，禁止 generate-dtos-from-entity 覆盖）
  * TaktHoliday：TaktHolidayThemeDto（登录前假日主题预览，与实体字段并列但非实体映射）
  * TableArchive / DatabaseBackup：数据归档与备份编排（CRUD 外另有 preview/execute/run/schedule，禁止流水线覆盖）
+ * QuartzTask：CRUD 外挂接 ITaktQuartzSchedulerManager（Schedule/Remove/Start/Pause/RunNow），禁止流水线覆盖
  */
 const MANUAL_DTO_ENTITY_SHORT_NAMES = new Set([
   'Holiday',
   'TableArchive',
   'DatabaseBackup',
+  'QuartzTask',
 ]);
 
 /**
- * OneToMany 从实体但仍保留独立 CRUD 菜单页（不因 masterDetailChildRegistry 跳过 Vue 生成）
- * 例：TaktQuartzTask.QuartzLogs 与 statistics/logging/quartz-log 独立页并存
+ * OneToMany 从实体、但业务上为「独立菜单 CRUD」的明细（非主表内嵌级联）
+ * - Vue：不因 masterDetailChildRegistry 跳过；主表 master-detail 规划会 filterStandaloneMenuChildren
+ * - DTO/服务：主表 Create/Update/Fill/Save **不**再级联该子表（子表自行 generate-all）
+ * 例：QuartzLog；ManufacturerMaterial（Vendor+Supplier）；SellerMaterial（Customer+Client）
  */
 const STANDALONE_CHILD_VUE_ENTITY_SHORT_NAMES = new Set([
   'QuartzLog',
   'CustomerServiceRequest',
   'CustomerServiceOrder',
   'CustomerServiceTicket',
+  'ManufacturerMaterial',
+  'SellerMaterial',
 ]);
 
 /**

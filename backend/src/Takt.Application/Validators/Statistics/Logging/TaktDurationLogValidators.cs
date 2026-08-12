@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Statistics.Logging
 // 文件名称：TaktDurationLogValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DurationLog 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktDurationLog 生成，请按需审阅）
 // 
@@ -35,6 +35,12 @@ public class TaktDurationLogCreateValidator : AbstractValidator<TaktDurationLogC
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");
@@ -69,6 +75,12 @@ public class TaktDurationLogUpdateValidator : AbstractValidator<TaktDurationLogU
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.UserName)
             .NotEmpty().WithMessage("用户名不能为空")
             .MaximumLength(20).WithMessage("用户名长度不能超过20个字符");

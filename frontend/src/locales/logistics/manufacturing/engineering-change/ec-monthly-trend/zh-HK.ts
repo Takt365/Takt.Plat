@@ -23,7 +23,7 @@ export default {
     summary: '設變號×部門行 {count} 條（按完成時間按月匯總各部门完成件數）',
     summaryImplement: '部門行 {count} 條（按完成時間按月匯總實施件數）',
     deptCode: '部門編碼',
-    ecNo: '設變單號',
+    ecCode: '設變單號',
     trendSummary: '環比 {base} → {compare}：漲 {up} · 跌 {down} · 平 {flat}',
     exportSuccess: '清單匯出成功',
     exportFailed: '清單匯出失敗',

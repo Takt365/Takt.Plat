@@ -108,7 +108,7 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateProductionTeamAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     plantCode,
                     template);
                 insertCount += inserted;
@@ -163,6 +163,7 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktProductionTeam> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string plantCode,
         ProductionTeamSeedItem seed)
     {
@@ -184,6 +185,7 @@ public class TaktProductionTeamSeedData : ITaktSeedDataCoordinator
                 TeamCategory = seed.TeamCategory,
                 ShiftNo = DefaultShiftNo,
                 TeamStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             team = await repository.CreateAsync(team);
             return (team, 1, 0);

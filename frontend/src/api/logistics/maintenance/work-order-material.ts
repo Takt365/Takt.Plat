@@ -27,7 +27,7 @@ import type {
  * API 路径前缀（相对 request baseURL，对应后端 [controller]）
  * @description TaktMaintenanceWorkOrderMaterials
  */
-const MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE = 'TaktMaintenanceWorkOrderMaterials';
+const MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE = 'TaktMaintenanceWorkOrderMaterials';
 
 // ========================================
 // 基础 CRUD
@@ -40,7 +40,7 @@ const MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE = 'TaktMaintenanceWorkOrderMateri
  */
 export function getMaintenanceWorkOrderMaterialList(queryDto: any): Promise<TaktPagedResult<MaintenanceWorkOrderMaterial>> {
   return request<TaktPagedResult<MaintenanceWorkOrderMaterial>>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/list`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/list`,
     method: 'get',
     params: queryDto,
   });
@@ -53,7 +53,7 @@ export function getMaintenanceWorkOrderMaterialList(queryDto: any): Promise<Takt
  */
 export function getMaintenanceWorkOrderMaterialById(id: string): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/${id}`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/${id}`,
     method: 'get',
   });
 }
@@ -65,7 +65,7 @@ export function getMaintenanceWorkOrderMaterialById(id: string): Promise<Mainten
  */
 export function createMaintenanceWorkOrderMaterial(dto: MaintenanceWorkOrderMaterialCreate): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}`,
     method: 'post',
     data: dto,
   });
@@ -79,7 +79,7 @@ export function createMaintenanceWorkOrderMaterial(dto: MaintenanceWorkOrderMate
  */
 export function updateMaintenanceWorkOrderMaterial(id: string, dto: MaintenanceWorkOrderMaterialUpdate): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/${id}`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/${id}`,
     method: 'put',
     data: dto,
   });
@@ -92,7 +92,7 @@ export function updateMaintenanceWorkOrderMaterial(id: string, dto: MaintenanceW
  */
 export function deleteMaintenanceWorkOrderMaterialById(id: string): Promise<void> {
   return request({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/${id}`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/${id}`,
     method: 'delete',
   });
 }
@@ -104,7 +104,7 @@ export function deleteMaintenanceWorkOrderMaterialById(id: string): Promise<void
  */
 export function deleteMaintenanceWorkOrderMaterialBatch(ids: string[]): Promise<void> {
   return request({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/batch`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/batch`,
     method: 'delete',
     data: ids,
   });
@@ -117,7 +117,7 @@ export function deleteMaintenanceWorkOrderMaterialBatch(ids: string[]): Promise<
  */
 export function updateMaintenanceWorkOrderMaterialStatus(dto: MaintenanceWorkOrderMaterialStatus): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/status`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/status`,
     method: 'put',
     data: dto,
   });
@@ -130,7 +130,7 @@ export function updateMaintenanceWorkOrderMaterialStatus(dto: MaintenanceWorkOrd
  */
 export function updateMaintenanceWorkOrderMaterialObsolete(dto: MaintenanceWorkOrderMaterialObsolete): Promise<MaintenanceWorkOrderMaterial> {
   return request<MaintenanceWorkOrderMaterial>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/obsolete`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/obsolete`,
     method: 'put',
     data: dto,
   });
@@ -146,7 +146,7 @@ export function updateMaintenanceWorkOrderMaterialObsolete(dto: MaintenanceWorkO
  */
 export function getMaintenanceWorkOrderMaterialOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/options`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/options`,
     method: 'get',
   });
 }
@@ -163,7 +163,7 @@ export function getMaintenanceWorkOrderMaterialOptions(): Promise<TaktSelectOpti
  */
 export function getMaintenanceWorkOrderMaterialTemplate(sheetName?: string, templateName?: string): Promise<Blob> {
   return request<Blob>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/template`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/template`,
     method: 'get',
     params: {
       sheetName,
@@ -184,7 +184,7 @@ export function importMaintenanceWorkOrderMaterial(file: globalThis.File, sheetN
   formData.append('file', file);
   
   return request({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/import`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/import`,
     method: 'post',
     data: formData,
     headers: {
@@ -209,7 +209,7 @@ export function exportMaintenanceWorkOrderMaterial(
   exportName?: string
 ): Promise<Blob> {
   return request<Blob>({
-    url: `${MAINTENANCE_WORK_ORDER_MATERIAL_API_BASE}/export`,
+    url: `${MAINTENANCE_WORK_ORDER_GENERAL_MATERIAL_API_BASE}/export`,
     method: 'get',
     params: {
       ...query,

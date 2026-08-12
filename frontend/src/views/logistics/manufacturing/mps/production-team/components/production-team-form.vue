@@ -27,148 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.productionTeamId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('teamCode')"
-                name="teamCode"
-              >
-                <a-input
-                  v-model:value="formState.teamCode"
-                  :placeholder="pi.ph('teamCode')"
-                  show-count
-                  :maxlength="32"
-                  allow-clear
-                  :disabled="!!formData?.productionTeamId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('teamName')"
-                name="teamName"
-              >
-                <a-input
-                  v-model:value="formState.teamName"
-                  :placeholder="pi.ph('teamName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('teamCategory')"
-                name="teamCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.teamCategory"
-                  dict-type="logistics_team_category"
-                  :placeholder="pi.ph('teamCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('teamLeaderName')"
-                name="teamLeaderName"
-              >
-                <TaktSelect
-                  v-model:value="formState.teamLeaderName"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('teamLeaderName')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('shiftNo')"
-                name="shiftNo"
-              >
-                <TaktSelect
-                  v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
-                  :placeholder="pi.ph('shiftNo')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('teamStatus')"
-                name="teamStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.teamStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="pi.ph('teamStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -239,13 +109,13 @@
           allow-clear
         />
       </template>
-      <template #cell-teamEquipmentStatus="{ record }">
+      <template #cell-teamEquipStatus="{ record }">
         <TaktSelect
-          v-model:value="record.teamEquipmentStatus"
+          v-model:value="record.teamEquipStatus"
           dict-type="sys_normal_disable"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="productionTeamEquipmentPi.ph('teamEquipmentStatus')"
+          :placeholder="productionTeamEquipmentPi.ph('teamEquipStatus')"
           :disabled="loading"
           allow-clear
         />
@@ -305,17 +175,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","teamCode","teamName","teamCategory","teamLeaderName","shiftNo","teamStatus","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","teamCode","teamName","teamCategory","teamLeaderName","shiftNo","teamStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -369,33 +242,32 @@ const productionTeamEquipmentFormColumns = computed<TaktEditableTableColumn[]>((
     width: 140,
   },
   {
-    key: 'productionEquipmentId',
-    title: productionTeamEquipmentPi.label('productionEquipmentId'),
+    key: 'prodEquipId',
+    title: productionTeamEquipmentPi.label('prodEquipId'),
     editor: 'input',
     width: 140,
   },
   {
-    key: 'productionEquipmentCode',
-    title: productionTeamEquipmentPi.label('productionEquipmentCode'),
+    key: 'prodEquipCode',
+    title: productionTeamEquipmentPi.label('prodEquipCode'),
     editor: 'input',
     width: 140,
   },
   {
-    key: 'equipmentQuantity',
-    title: productionTeamEquipmentPi.label('equipmentQuantity'),
+    key: 'equipQuantity',
+    title: productionTeamEquipmentPi.label('equipQuantity'),
     width: 140,
   },
   {
-    key: 'teamEquipmentStatus',
-    title: productionTeamEquipmentPi.label('teamEquipmentStatus'),
+    key: 'teamEquipStatus',
+    title: productionTeamEquipmentPi.label('teamEquipStatus'),
     width: 140,
   },
   {
     key: 'isObsolete',
     title: productionTeamEquipmentPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ProductionTeamCreate & { productionTeamId?: string }> | null | undefined) {
@@ -408,10 +280,10 @@ function createDefaultProductionTeamEquipmentRow(): Record<string, unknown> {
     plantCode: '',
     teamCode: '',
     lineNumber: allocateNextProductionTeamEquipmentLineNumber(),
-    productionEquipmentId: '',
-    productionEquipmentCode: '',
-    equipmentQuantity: 0,
-    teamEquipmentStatus: 0,
+    prodEquipId: '',
+    prodEquipCode: '',
+    equipQuantity: 0,
+    teamEquipStatus: 0,
     isObsolete: 0,
   }
 }
@@ -427,8 +299,8 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
-        productionTeamId: masterId,
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+        prodTeamId: masterId,
       }
       if (isUpdate && isPersistedProductionTeamEquipmentRow(row)) {
         normalized.productionTeamEquipmentId = row.productionTeamEquipmentId

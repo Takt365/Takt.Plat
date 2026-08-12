@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionOrderDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionOrder 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionOrderId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string ProdOrderType { get; set; } = string.Empty;
 
@@ -51,9 +47,14 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -66,7 +67,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -86,7 +87,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -98,7 +99,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -106,7 +107,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
@@ -117,7 +118,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public string? PlannedOrderName { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
@@ -165,12 +166,17 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -180,9 +186,14 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -195,7 +206,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -225,7 +236,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -237,7 +248,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -245,13 +256,13 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
@@ -322,20 +333,20 @@ public class TaktProductionOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
-    [Required(ErrorMessage = "工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）不能为空")]
+    [Required(ErrorMessage = "工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）不能为空")]
     public string ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
@@ -345,10 +356,16 @@ public class TaktProductionOrderCreateDto
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -361,9 +378,9 @@ public class TaktProductionOrderCreateDto
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code，存 DictValue）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；存 DictValue）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
@@ -382,7 +399,7 @@ public class TaktProductionOrderCreateDto
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -394,7 +411,7 @@ public class TaktProductionOrderCreateDto
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -402,13 +419,13 @@ public class TaktProductionOrderCreateDto
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
@@ -504,12 +521,17 @@ public class TaktProductionOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -519,9 +541,14 @@ public class TaktProductionOrderTemplateDto
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -534,7 +561,7 @@ public class TaktProductionOrderTemplateDto
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -554,7 +581,7 @@ public class TaktProductionOrderTemplateDto
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -566,7 +593,7 @@ public class TaktProductionOrderTemplateDto
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -574,13 +601,13 @@ public class TaktProductionOrderTemplateDto
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
@@ -628,17 +655,17 @@ public class TaktProductionOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string? ProdOrderType { get; set; } = string.Empty;
 
@@ -648,9 +675,14 @@ public class TaktProductionOrderImportDto
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -663,7 +695,7 @@ public class TaktProductionOrderImportDto
     public decimal? ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
@@ -683,7 +715,7 @@ public class TaktProductionOrderImportDto
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -695,7 +727,7 @@ public class TaktProductionOrderImportDto
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -703,13 +735,13 @@ public class TaktProductionOrderImportDto
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }
@@ -763,12 +795,12 @@ public class TaktProductionOrderExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单类别（字典 logistics_prod_order_type，存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
+    /// 工单类别（字典 logistics_prod_order_type；存 DictValue，如 ZDTA/ZDTB/ZDTC/ZDTD/ZDTE/ZDTF）
     /// </summary>
     public string ProdOrderType { get; set; } = string.Empty;
 
@@ -778,9 +810,14 @@ public class TaktProductionOrderExportDto
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量
@@ -793,7 +830,7 @@ public class TaktProductionOrderExportDto
     public decimal ProducedQty { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，存 DictValue）
+    /// 计量单位（字典 logistics_unit_of_measure_code；存 DictValue）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
@@ -813,7 +850,7 @@ public class TaktProductionOrderExportDto
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（选项 TaktWorkCenters/options，存 WorkCenterCode，ExtValue=PlantCode 过滤）
+    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -825,7 +862,7 @@ public class TaktProductionOrderExportDto
     /// <summary>
     /// 序列号
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工艺路线编码
@@ -833,13 +870,13 @@ public class TaktProductionOrderExportDto
     public string? RoutingCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 来源计划订单 ID（关联 TaktPlannedOrder.Id，选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源计划订单 ID（选项 TaktPlannedOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannedOrderId { get; set; }
 
     /// <summary>
-    /// 来源 APS 订单 ID（关联 TaktApsOrder.Id，选项 TaktApsOrders/options，ExtValue=PlantCode 过滤）
+    /// 来源 APS 订单 ID（选项 TaktApsOrders/options，ExtValue=PlantCode 过滤，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOrderId { get; set; }

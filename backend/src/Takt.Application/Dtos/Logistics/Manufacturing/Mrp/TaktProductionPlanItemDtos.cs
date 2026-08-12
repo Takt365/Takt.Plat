@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanItemDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionPlanItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionPlanItem 生成，请按需审阅）
 // 
@@ -89,17 +89,17 @@ public class TaktProductionPlanItemDto : TaktCompanyDtoBase
     public string? MaterialRequirementsPlanningItemName { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -114,7 +114,7 @@ public class TaktProductionPlanItemDto : TaktCompanyDtoBase
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -149,7 +149,7 @@ public class TaktProductionPlanItemDto : TaktCompanyDtoBase
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -175,6 +175,16 @@ public class TaktProductionPlanItemQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产计划ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -214,17 +224,17 @@ public class TaktProductionPlanItemQueryDto : TaktPagedQuery
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -239,7 +249,7 @@ public class TaktProductionPlanItemQueryDto : TaktPagedQuery
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -284,7 +294,7 @@ public class TaktProductionPlanItemQueryDto : TaktPagedQuery
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -329,10 +339,15 @@ public class TaktProductionPlanItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产计划ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -373,19 +388,19 @@ public class TaktProductionPlanItemCreateDto
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -400,9 +415,9 @@ public class TaktProductionPlanItemCreateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string PlanUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -436,7 +451,7 @@ public class TaktProductionPlanItemCreateDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -515,6 +530,16 @@ public class TaktProductionPlanItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 生产计划ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -553,17 +578,17 @@ public class TaktProductionPlanItemTemplateDto
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -578,7 +603,7 @@ public class TaktProductionPlanItemTemplateDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -613,7 +638,7 @@ public class TaktProductionPlanItemTemplateDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -645,10 +670,15 @@ public class TaktProductionPlanItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 生产计划ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -688,17 +718,17 @@ public class TaktProductionPlanItemImportDto
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -713,7 +743,7 @@ public class TaktProductionPlanItemImportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? PlanUnit { get; set; } = string.Empty;
 
@@ -748,7 +778,7 @@ public class TaktProductionPlanItemImportDto
     public decimal? EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -824,17 +854,17 @@ public class TaktProductionPlanItemExportDto
     public long? MaterialRequirementsPlanningItemId { get; set; }
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料规格
+    /// 物料规格（回填：随物料）
     /// </summary>
     public string? MaterialSpecification { get; set; } = string.Empty;
 
@@ -849,7 +879,7 @@ public class TaktProductionPlanItemExportDto
     public string? ModelName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string PlanUnit { get; set; } = string.Empty;
 
@@ -884,7 +914,7 @@ public class TaktProductionPlanItemExportDto
     public decimal EstimatedAmount { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

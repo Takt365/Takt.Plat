@@ -260,12 +260,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('TeamCode')">
+      <a-form-item :label="pi.queryLabel('TeamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.TeamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('TeamCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -781,14 +781,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaInspectionDetailField(record, 'inspectionStatus') ?? ''),
   },
   {
-    title: pi.label('prodTeam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
+    title: pi.label('TeamCode'),
+    dataIndex: 'TeamCode',
+    key: 'TeamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaInspectionDetail }) =>
-      String(getPcbaInspectionDetailField(record, 'prodTeam') ?? ''),
+      String(getPcbaInspectionDetailField(record, 'TeamCode') ?? ''),
   },
   {
     title: pi.label('inspectionWorkHours'),
@@ -887,10 +887,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:defect:pcba:inspection:delete',
         onClick: (record: PcbaInspectionDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

@@ -19,9 +19,11 @@ namespace Takt.Domain.Entities.Workflow;
 /// </summary>
 [SugarTable("takt_workflow_scheme", "流程定义表")]
 [SugarIndex("ix_flow_scheme_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_flow_scheme_key_version_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessKey), OrderByType.Asc, nameof(DefinitionVersion), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_scheme_key_version_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProcessKey), OrderByType.Asc, nameof(DefinitionVersion), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_scheme_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktFlowScheme : TaktCompanyEntityBase
-{    /// <summary>
+{
+    /// <summary>
     /// 流程键（公司内业务唯一标识，如 leave）
     /// </summary>
     [SugarColumn(ColumnName = "process_key", ColumnDescription = "流程键", ColumnDataType = "varchar", Length = 64, IsNullable = false)]

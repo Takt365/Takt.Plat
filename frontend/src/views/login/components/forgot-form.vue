@@ -280,8 +280,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
 }));
 
 /**

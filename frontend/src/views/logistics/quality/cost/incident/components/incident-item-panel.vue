@@ -137,11 +137,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.qualityincidentitem.materialname')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="t('entity.qualityincidentitem.materialdescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialname') })"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialdescription') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -396,7 +396,7 @@ const advancedQueryForm = ref({
   qualityIncidentCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
+  materialDescription: '',
   scrapCost: undefined as number | undefined,
   scrapSize: undefined as number | undefined,
   partPrice: undefined as number | undefined,
@@ -419,7 +419,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'qualityIncidentCode', label: t('entity.qualityincidentitem.qualityincidentcode') },
   { key: 'lineNumber', label: t('entity.qualityincidentitem.linenumber') },
   { key: 'materialCode', label: t('entity.qualityincidentitem.materialcode') },
-  { key: 'materialName', label: t('entity.qualityincidentitem.materialname') },
+  { key: 'materialDescription', label: t('entity.qualityincidentitem.materialdescription') },
   { key: 'scrapCost', label: t('entity.qualityincidentitem.scrapcost') },
   { key: 'scrapSize', label: t('entity.qualityincidentitem.scrapsize') },
   { key: 'partPrice', label: t('entity.qualityincidentitem.partprice') },
@@ -433,8 +433,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -459,7 +458,7 @@ function handleAdvancedQueryReset() {
   qualityIncidentCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
+  materialDescription: '',
   scrapCost: undefined as number | undefined,
   scrapSize: undefined as number | undefined,
   partPrice: undefined as number | undefined,
@@ -549,14 +548,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getQualityIncidentItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: t('entity.qualityincidentitem.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: t('entity.qualityincidentitem.materialdescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: QualityIncidentItem }) =>
-      String(getQualityIncidentItemField(record, 'materialName') ?? ''),
+      String(getQualityIncidentItemField(record, 'materialDescription') ?? ''),
   },
   {
     title: t('entity.qualityincidentitem.scrapcost'),
@@ -615,10 +614,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:quality:cost:incident:delete',
         onClick: (record: QualityIncidentItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -685,7 +682,7 @@ function buildListQuery(overrides?: Partial<QualityIncidentItemQuery>): QualityI
     query.lineNumber = form.lineNumber
   }
   assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
+  assignTrimmed('materialDescription', form.materialDescription)
   if (form.scrapCost !== undefined && form.scrapCost !== null) {
     query.scrapCost = form.scrapCost
   }

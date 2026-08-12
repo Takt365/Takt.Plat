@@ -464,6 +464,7 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
                 || SqlFunc.ToString(x.WarehouseStatus).Contains(keywords)
                 || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -533,6 +534,11 @@ public class TaktWarehouseService : TaktServiceBase, ITaktWarehouseService
         if (queryDto?.SortOrder.HasValue == true)
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

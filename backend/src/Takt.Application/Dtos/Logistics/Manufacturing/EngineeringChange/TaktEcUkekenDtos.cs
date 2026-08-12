@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcUkekenDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcUkeken 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcUkeken 生成，请按需审阅）
 // 
@@ -49,7 +49,7 @@ public class TaktEcUkekenDto : TaktCompanyDtoBase
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -74,7 +74,7 @@ public class TaktEcUkekenDto : TaktCompanyDtoBase
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -82,7 +82,7 @@ public class TaktEcUkekenDto : TaktCompanyDtoBase
     public DateTime? InspectionDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -109,6 +109,16 @@ public class TaktEcUkekenQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcUkeken 导航）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -117,7 +127,7 @@ public class TaktEcUkekenQueryDto : TaktPagedQuery
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -142,7 +152,7 @@ public class TaktEcUkekenQueryDto : TaktPagedQuery
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期（范围查询-开始）
@@ -155,7 +165,7 @@ public class TaktEcUkekenQueryDto : TaktPagedQuery
     public DateTime? InspectionDateEnd { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -200,10 +210,15 @@ public class TaktEcUkekenCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcUkeken 导航）
     /// </summary>
@@ -214,7 +229,7 @@ public class TaktEcUkekenCreateDto
     /// 设变单号（冗余，便于查询）
     /// </summary>
     [Required(ErrorMessage = "设变单号（冗余，便于查询）不能为空")]
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -240,7 +255,7 @@ public class TaktEcUkekenCreateDto
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -248,7 +263,7 @@ public class TaktEcUkekenCreateDto
     public DateTime? InspectionDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -327,6 +342,16 @@ public class TaktEcUkekenTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcUkeken 导航）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -335,7 +360,7 @@ public class TaktEcUkekenTemplateDto
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -360,7 +385,7 @@ public class TaktEcUkekenTemplateDto
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -368,7 +393,7 @@ public class TaktEcUkekenTemplateDto
     public DateTime? InspectionDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -400,10 +425,15 @@ public class TaktEcUkekenImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcUkeken 导航）
     /// </summary>
@@ -413,7 +443,7 @@ public class TaktEcUkekenImportDto
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -438,7 +468,7 @@ public class TaktEcUkekenImportDto
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -446,7 +476,7 @@ public class TaktEcUkekenImportDto
     public DateTime? InspectionDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -492,7 +522,7 @@ public class TaktEcUkekenExportDto
     /// <summary>
     /// 设变单号（冗余，便于查询）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -517,7 +547,7 @@ public class TaktEcUkekenExportDto
     /// <summary>
     /// 受检单号
     /// </summary>
-    public string? IqcOrderNo { get; set; } = string.Empty;
+    public string? IqcOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检验日期
@@ -525,7 +555,7 @@ public class TaktEcUkekenExportDto
     public DateTime? InspectionDate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

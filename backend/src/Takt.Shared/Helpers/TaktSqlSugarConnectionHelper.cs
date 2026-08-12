@@ -4,7 +4,7 @@
 // 文件名称：TaktSqlSugarConnectionHelper.cs
 // 创建时间：2026-06-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SqlSugar 租户连接配置统一工厂（DbType 由调用方一次解析后传入）
+// 功能描述：SqlSugar 租户连接配置统一工厂；全局开启 CodeFirst IsCreateTableFiledSort，使基类 CreateTableFieldSort（Id=-2、PlantCode/RelatedPlant=-1）在建表时生效
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -47,12 +47,30 @@ public static class TaktSqlSugarConnectionHelper
                 SqlServerCodeFirstNvarchar = true,
             },
         };
+        ApplyCreateTableFieldSort(config);
         if (registerRepositorySqlFunc)
         {
             TaktSqlFuncRegistrationHelper.ApplyRepositorySqlFuncExtensions(config);
         }
 
         return config;
+    }
+
+    /// <summary>
+    /// 全局开启建表字段排序（SqlSugar 默认关闭；未开启时 CreateTableFieldSort 无效）
+    /// </summary>
+    /// <param name="config">SqlSugar 连接配置</param>
+    private static void ApplyCreateTableFieldSort(ConnectionConfig config)
+    {
+        ArgumentNullException.ThrowIfNull(config);
+        config.ConfigureExternalServices ??= new ConfigureExternalServices();
+        var previous = config.ConfigureExternalServices.EntityNameService;
+        config.ConfigureExternalServices.EntityNameService = (type, entity) =>
+        {
+            previous?.Invoke(type, entity);
+            // SqlSugar 属性名拼写为 Filed（非 Field）
+            entity.IsCreateTableFiledSort = true;
+        };
     }
 
     /// <summary>

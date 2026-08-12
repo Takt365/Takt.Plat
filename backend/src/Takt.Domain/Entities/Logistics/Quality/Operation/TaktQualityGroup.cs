@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 public class TaktQualityGroup : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 检查类别（字典 logistics_quality_group_inspection_category；0=IQC，1=QA，2=IPQC）
     /// </summary>
     [SugarColumn(ColumnName = "inspection_category", ColumnDescription = "检查类别", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
@@ -39,7 +34,7 @@ public class TaktQualityGroup : TaktCompanyEntityBase
     /// <summary>
     /// 质量组编码（3）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_group_code", ColumnDescription = "质量组编码", ColumnDataType = "nvarchar", Length = 3, IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_group_code", ColumnDescription = "质量组编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string QualityGroupCode { get; set; } = string.Empty;
     /// <summary>
     /// 质量组名称
@@ -49,7 +44,7 @@ public class TaktQualityGroup : TaktCompanyEntityBase
     /// <summary>
     /// 质量组描述
     /// </summary>
-    [SugarColumn(ColumnName = "quality_group_description", ColumnDescription = "质量组描述", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    [SugarColumn(ColumnName = "quality_group_description", ColumnDescription = "质量组描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? QualityGroupDescription { get; set; }
     /// <summary>
     /// 质量组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）

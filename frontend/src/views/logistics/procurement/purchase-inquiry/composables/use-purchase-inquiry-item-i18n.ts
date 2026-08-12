@@ -25,7 +25,7 @@ export const PURCHASEINQUIRYITEM_LIST_FIELDS = [
   'lineNumber',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'inquiryUnit',
   'inquiryQuantity',
@@ -44,7 +44,7 @@ export const PURCHASEINQUIRYITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'lineNumber',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'inquiryUnit',
   'inquiryQuantity',
@@ -76,7 +76,7 @@ export const PURCHASEINQUIRYITEM_PLACEHOLDER = {
   lineNumber: 'select',
   allocationCategory: 'select',
   materialCode: 'optional',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   inquiryUnit: 'select',
   inquiryQuantity: 'select',
@@ -86,6 +86,7 @@ export const PURCHASEINQUIRYITEM_PLACEHOLDER = {
   untaxedAmount: 'select',
   taxAmount: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -96,7 +97,7 @@ export const PURCHASEINQUIRYITEM_QUERY_STRING_FIELDS = [
   'purchaseInquiryCode',
   'allocationCategory',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'inquiryUnit',
   'createdAtStart',

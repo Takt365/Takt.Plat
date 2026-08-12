@@ -15,6 +15,7 @@ using Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 using Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.EngineeringChange;
 
@@ -34,6 +35,76 @@ public class TaktEcMonthlyTrendsController : TaktControllerBase
     public TaktEcMonthlyTrendsController(ITaktEcMonthlyTrendService ecMonthlyTrendService)
     {
         _ecMonthlyTrendService = ecMonthlyTrendService;
+    }
+
+    /// <summary>
+    /// 推移查询栏：工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移工厂选项")]
+    [HttpGet("plant-options")]
+    public async Task<IActionResult> GetEcMonthlyTrendPlantOptionsAsync()
+    {
+        try
+        {
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendPlantOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂去重部门
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移部门选项")]
+    [HttpGet("dept-options")]
+    public async Task<IActionResult> GetEcMonthlyTrendDeptOptionsAsync([FromQuery] string plantCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendDeptOptionsAsync(plantCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂+部门去重设变单号（部门可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="deptCode">部门编码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:manufacturing:engineering:change:monthly:trend:list", "月设变推移设变单号选项")]
+    [HttpGet("ec-code-options")]
+    public async Task<IActionResult> GetEcMonthlyTrendEcCodeOptionsAsync(
+        [FromQuery] string plantCode,
+        [FromQuery] string? deptCode = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _ecMonthlyTrendService.GetEcMonthlyTrendEcCodeOptionsAsync(plantCode, deptCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 
     /// <summary>

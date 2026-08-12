@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Maintenance
 // 文件名称：TaktMaintenanceNotificationDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaintenanceNotification 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaintenanceNotification 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktMaintenanceNotificationDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaintenanceNotificationId { get; set; }
 
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 通知单号
@@ -54,7 +50,7 @@ public class TaktMaintenanceNotificationDto : TaktApprovalDtoBase
     /// <summary>
     /// 设备编码（冗余，便于查询）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -70,6 +66,11 @@ public class TaktMaintenanceNotificationDto : TaktApprovalDtoBase
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int NotificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 异常/故障描述
@@ -134,11 +135,6 @@ public class TaktMaintenanceNotificationDto : TaktApprovalDtoBase
     public string? NotificationImages { get; set; } = string.Empty;
 
     /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int NotificationStatus { get; set; } = 0;
-
-    /// <summary>
     /// 设备（主数据）
     /// （主表：TaktEquipment）
     /// </summary>
@@ -173,6 +169,11 @@ public class TaktMaintenanceNotificationQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -191,7 +192,7 @@ public class TaktMaintenanceNotificationQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备编码（冗余，便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -207,6 +208,11 @@ public class TaktMaintenanceNotificationQueryDto : TaktPagedQuery
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 异常/故障描述
@@ -274,11 +280,6 @@ public class TaktMaintenanceNotificationQueryDto : TaktPagedQuery
     /// 通知图片（JSON格式，存储图片URL列表）
     /// </summary>
     public string? NotificationImages { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
@@ -364,9 +365,9 @@ public class TaktMaintenanceNotificationCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -390,7 +391,7 @@ public class TaktMaintenanceNotificationCreateDto
     /// 设备编码（冗余，便于查询）
     /// </summary>
     [Required(ErrorMessage = "设备编码（冗余，便于查询）不能为空")]
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -407,6 +408,11 @@ public class TaktMaintenanceNotificationCreateDto
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int NotificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 异常/故障描述
@@ -460,11 +466,6 @@ public class TaktMaintenanceNotificationCreateDto
     /// 通知图片（JSON格式，存储图片URL列表）
     /// </summary>
     public string? NotificationImages { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int NotificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -542,6 +543,11 @@ public class TaktMaintenanceNotificationTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -560,7 +566,7 @@ public class TaktMaintenanceNotificationTemplateDto
     /// <summary>
     /// 设备编码（冗余，便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -576,6 +582,11 @@ public class TaktMaintenanceNotificationTemplateDto
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 异常/故障描述
@@ -628,11 +639,6 @@ public class TaktMaintenanceNotificationTemplateDto
     /// 通知图片（JSON格式，存储图片URL列表）
     /// </summary>
     public string? NotificationImages { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -662,9 +668,9 @@ public class TaktMaintenanceNotificationImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -685,7 +691,7 @@ public class TaktMaintenanceNotificationImportDto
     /// <summary>
     /// 设备编码（冗余，便于查询）
     /// </summary>
-    public string? EquipmentCode { get; set; } = string.Empty;
+    public string? EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -701,6 +707,11 @@ public class TaktMaintenanceNotificationImportDto
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int? Priority { get; set; }
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 异常/故障描述
@@ -753,11 +764,6 @@ public class TaktMaintenanceNotificationImportDto
     /// 通知图片（JSON格式，存储图片URL列表）
     /// </summary>
     public string? NotificationImages { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int? NotificationStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -806,7 +812,7 @@ public class TaktMaintenanceNotificationExportDto
     /// <summary>
     /// 设备编码（冗余，便于查询）
     /// </summary>
-    public string EquipmentCode { get; set; } = string.Empty;
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称（冗余）
@@ -822,6 +828,11 @@ public class TaktMaintenanceNotificationExportDto
     /// 优先级（1=低，2=中，3=高，4=紧急）
     /// </summary>
     public int Priority { get; set; } = 0;
+
+    /// <summary>
+    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
+    /// </summary>
+    public int NotificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 异常/故障描述
@@ -874,11 +885,6 @@ public class TaktMaintenanceNotificationExportDto
     /// 通知图片（JSON格式，存储图片URL列表）
     /// </summary>
     public string? NotificationImages { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 通知单状态（0=新建，1=已转工单，2=已关闭，3=已取消）
-    /// </summary>
-    public int NotificationStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

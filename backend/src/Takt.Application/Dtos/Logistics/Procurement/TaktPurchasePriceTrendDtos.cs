@@ -188,6 +188,11 @@ public class TaktPurchasePriceMonthlyTrendQueryDto : TaktPagedQuery
     /// 涨跌筛选：空=采购价格推移全部 / 机种推移默认领涨领跌各 50；leading=领涨领跌各 50；all=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
+
+    /// <summary>
+    /// /// 物料类型（存 ROH/HALB/FERT 等码） /// <para>CRUD 表单：字典 logistics_material_type。</para> /// <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para> ///
+    /// </summary>
+    public string MaterialType { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -264,6 +269,16 @@ public class TaktPurchasePriceMonthlyTrendDto
     /// 环比变动率（小数比率，保留 4 位；如 0.2978 表示 29.78%）
     /// </summary>
     public decimal? VariancePercent { get; set; }
+
+    /// <summary>
+    /// MaterialDescription
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// CurrencyCode
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
 }
 
 /// <summary>

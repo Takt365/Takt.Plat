@@ -357,12 +357,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="pi.queryLabel('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -647,7 +647,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -869,13 +868,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'attachments') ?? ''
   },
   {
-    title: pi.label('relatedPlant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getCustomerComplaintField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('complaintStatus'),
@@ -932,8 +931,6 @@ const getCustomerComplaintDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1014,7 +1011,7 @@ function handleReset() {
   handlingResult: '',
   customerSatisfaction: undefined as number | undefined,
   attachments: '',
-  relatedPlant: '',
+  plantCode: '',
   complaintStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -1235,7 +1232,7 @@ function handleAdvancedQueryReset() {
   handlingResult: '',
   customerSatisfaction: undefined as number | undefined,
   attachments: '',
-  relatedPlant: '',
+  plantCode: '',
   complaintStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

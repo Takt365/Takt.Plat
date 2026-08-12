@@ -110,6 +110,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
@@ -289,7 +299,7 @@
           v-model:value="advancedQueryForm.currencyCode"
           :placeholder="pi.queryPh('currencyCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="3"
           allow-clear
         />
       </a-form-item>
@@ -501,6 +511,7 @@ import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaul
 import CustomerServiceOrderForm from './components/order-form.vue'
 import { getCustomerServiceOrderList, getCustomerServiceOrderById, createCustomerServiceOrder, updateCustomerServiceOrder, deleteCustomerServiceOrderById, deleteCustomerServiceOrderBatch, getCustomerServiceOrderTemplate, importCustomerServiceOrder, exportCustomerServiceOrder, updateCustomerServiceOrderStatus } from '@/api/logistics/customer-service/order'
 import type { CustomerServiceOrder, CustomerServiceOrderQuery } from '@/types/logistics/customer-service/order'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
@@ -560,7 +571,43 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of CUSTOMERSERVICEORDER_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.orderType !== undefined && form.orderType !== null) {
+    return true
+  }
+  if (form.orderStatus !== undefined && form.orderStatus !== null) {
+    return true
+  }
+  if (form.totalAmount !== undefined && form.totalAmount !== null) {
+    return true
+  }
+  if (form.discountAmount !== undefined && form.discountAmount !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.actualAmount !== undefined && form.actualAmount !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -575,8 +622,7 @@ function createEmptyAdvancedQueryForm() {
     totalAmount: undefined as number | undefined,
     discountAmount: undefined as number | undefined,
     taxAmount: undefined as number | undefined,
-    actualAmount: undefined as number | undefined,
-  }
+    actualAmount: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -599,10 +645,12 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+/** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
+const dictDataStore = useDictDataStore()
 
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {CustomerServiceOrderQuery} 查询 DTO
  */
@@ -646,9 +694,10 @@ function buildListQuery(overrides?: Partial<CustomerServiceOrderQuery>): Custome
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
+  void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
@@ -751,6 +800,11 @@ const onClickRow = (record: CustomerServiceOrderRowRecord) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getCustomerServiceOrderList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -883,6 +937,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportCustomerServiceOrder(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

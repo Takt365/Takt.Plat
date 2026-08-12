@@ -104,6 +104,11 @@ export interface OvertimeItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId?: string;
@@ -198,9 +203,17 @@ export interface OvertimeItemCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 加班申请单（关联 TaktOvertime.Id，主子表关系）
@@ -311,6 +324,11 @@ export interface OvertimeItemTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 加班申请单（关联 TaktOvertime.Id，主子表关系）
    */
   overtimeId?: string;
@@ -385,9 +403,17 @@ export interface OvertimeItemImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 加班申请单（关联 TaktOvertime.Id，主子表关系）

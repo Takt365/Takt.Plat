@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktKnowledgeDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Knowledge 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktKnowledge 生成，请按需审阅）
 // 
@@ -76,7 +76,7 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -101,14 +101,15 @@ public class TaktKnowledgeDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int KnowledgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
+
 }
 
 // ========================================
@@ -131,6 +132,16 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 知识标题
     /// </summary>
@@ -172,7 +183,7 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -207,12 +218,12 @@ public class TaktKnowledgeQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int? KnowledgeStatus { get; set; }
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -257,10 +268,15 @@ public class TaktKnowledgeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 知识标题
     /// </summary>
@@ -303,7 +319,7 @@ public class TaktKnowledgeCreateDto
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -323,12 +339,12 @@ public class TaktKnowledgeCreateDto
     public DateTime? RevisedAt { get; set; }
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int KnowledgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -382,9 +398,9 @@ public class TaktKnowledgeStatusDto
     public long KnowledgeId { get; set; }
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
-    [Required(ErrorMessage = "知识状态（0=草稿，1=已发布，2=已下架）不能为空")]
+    [Required(ErrorMessage = "知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）不能为空")]
     public int KnowledgeStatus { get; set; } = 0;
 }
 
@@ -432,6 +448,16 @@ public class TaktKnowledgeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 知识标题
     /// </summary>
     public string? KnowledgeTitle { get; set; } = string.Empty;
@@ -472,7 +498,7 @@ public class TaktKnowledgeTemplateDto
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -492,12 +518,12 @@ public class TaktKnowledgeTemplateDto
     public DateTime? RevisedAt { get; set; }
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int? KnowledgeStatus { get; set; }
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -529,10 +555,15 @@ public class TaktKnowledgeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 知识标题
     /// </summary>
@@ -574,7 +605,7 @@ public class TaktKnowledgeImportDto
     public int? UnhelpfulCount { get; set; }
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? KnowledgeIsPublished { get; set; }
 
@@ -594,12 +625,12 @@ public class TaktKnowledgeImportDto
     public DateTime? RevisedAt { get; set; }
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int? KnowledgeStatus { get; set; }
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -677,7 +708,7 @@ public class TaktKnowledgeExportDto
     public int UnhelpfulCount { get; set; } = 0;
 
     /// <summary>
-    /// 是否已发布（0=否，1=是）
+    /// 是否已发布（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int KnowledgeIsPublished { get; set; } = 0;
 
@@ -702,12 +733,12 @@ public class TaktKnowledgeExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 知识状态（0=草稿，1=已发布，2=已下架）
+    /// 知识状态（字典 routine_knowledge_status；0=草稿 1=已发布 2=已下架）
     /// </summary>
     public int KnowledgeStatus { get; set; } = 0;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 

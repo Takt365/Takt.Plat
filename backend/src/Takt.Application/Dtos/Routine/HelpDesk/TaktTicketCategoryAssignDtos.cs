@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketCategoryAssignDtos.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TicketCategoryAssign 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicketCategoryAssign 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktTicketCategoryAssignDto : TaktCompanyDtoBase
     public string CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeId { get; set; }
@@ -79,12 +79,22 @@ public class TaktTicketCategoryAssignQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 分类编码（与 TaktTicket.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -140,10 +150,15 @@ public class TaktTicketCategoryAssignCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 分类编码（与 TaktTicket.CategoryCode 对应）
     /// </summary>
@@ -151,7 +166,7 @@ public class TaktTicketCategoryAssignCreateDto
     public string CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeId { get; set; }
@@ -237,12 +252,22 @@ public class TaktTicketCategoryAssignTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 分类编码（与 TaktTicket.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -280,17 +305,22 @@ public class TaktTicketCategoryAssignImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 分类编码（与 TaktTicket.CategoryCode 对应）
     /// </summary>
     public string? CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AssigneeId { get; set; }
@@ -339,7 +369,7 @@ public class TaktTicketCategoryAssignExportDto
     public string CategoryCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 默认处理人 ID
+    /// 默认处理人 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssigneeId { get; set; }

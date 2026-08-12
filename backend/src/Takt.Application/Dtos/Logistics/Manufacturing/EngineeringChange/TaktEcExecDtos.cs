@@ -29,6 +29,13 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 public class TaktEcExecDto : TaktCompanyDtoBase
 {
     /// <summary>
+    /// EcExecID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcExecId { get; set; }
+
+    /// <summary>
     /// 设变部门执行 ID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
@@ -218,6 +225,11 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变明细ID（TaktEcDetail 主键）
@@ -451,9 +463,10 @@ public class TaktEcExecCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 设变明细ID（TaktEcDetail 主键）
@@ -618,6 +631,12 @@ public class TaktEcExecCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -843,9 +862,10 @@ public class TaktEcExecImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 设变明细ID（TaktEcDetail 主键）
@@ -1013,6 +1033,12 @@ public class TaktEcExecImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -1247,6 +1273,11 @@ public class TaktEcExecTransposedDto
     public string? EcNewItem { get; set; }
     /// <summary>各部门单元格；键为 DeptCode</summary>
     public Dictionary<string, TaktEcExecTransposedCellDto> DeptCells { get; set; } = new();
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -1270,6 +1301,16 @@ public class TaktEcExecTransposedQueryDto : TaktPagedQuery
     public string? DeptCode { get; set; }
     /// <summary>是否实施（须配合 DeptCode）</summary>
     public int? IsImplemented { get; set; }
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string? EcCode { get; set; }
 }
 
 /// <summary>
@@ -1300,6 +1341,11 @@ public class TaktEcExecBatchTransposedStageDto
     public string? BatchNo { get; set; }
     /// <summary>日期展示文本（yyyyMMdd）</summary>
     public string? DateDisplayText { get; set; }
+
+    /// <summary>
+    /// BatchCode
+    /// </summary>
+    public string BatchCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -1333,6 +1379,11 @@ public class TaktEcExecBatchTransposedDto
     public DateTime EcEntryDate { get; set; }
     /// <summary>各批次阶段单元格；键为 StageCode</summary>
     public Dictionary<string, TaktEcExecBatchTransposedStageDto> StageCells { get; set; } = new();
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -1352,6 +1403,16 @@ public class TaktEcExecBatchTransposedQueryDto : TaktPagedQuery
     public DateTime? EcIssueDateEnd { get; set; }
     /// <summary>批次号（预定/出库/生产批次模糊）</summary>
     public string? BatchNo { get; set; }
+
+    /// <summary>
+    /// 批次号（预定/出库/生产批次模糊）
+    /// </summary>
+    public string BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>

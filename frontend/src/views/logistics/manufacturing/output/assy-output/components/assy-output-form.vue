@@ -35,313 +35,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-                :required="formItemRequired('plantCode')"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodCategory')"
-                name="prodCategory"
-                :required="formItemRequired('prodCategory')"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodCategory"
-                  dict-type="logistics_prod_category"
-                  :placeholder="pi.ph('prodCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodDate')"
-                name="prodDate"
-                :required="formItemRequired('prodDate')"
-              >
-                <a-date-picker
-                  v-model:value="formState.prodDate"
-                  :placeholder="pi.ph('prodDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                  :disabled-date="prodDatePickerDisabledDate"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodTeam')"
-                name="prodTeam"
-                :required="formItemRequired('prodTeam')"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodTeam"
-                  api-url="TaktProductionTeams/options"
-                  :placeholder="pi.ph('prodTeam')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('directLabor')"
-                name="directLabor"
-                :required="formItemRequired('directLabor')"
-              >
-                <a-input-number
-                  v-model:value="formState.directLabor"
-                  :placeholder="pi.ph('directLabor')"
-                  :min="0"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('indirectLabor')"
-                name="indirectLabor"
-                :required="formItemRequired('indirectLabor')"
-              >
-                <a-input-number
-                  v-model:value="formState.indirectLabor"
-                  :placeholder="pi.ph('indirectLabor')"
-                  :min="0"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('shiftNo')"
-                name="shiftNo"
-                :required="formItemRequired('shiftNo')"
-              >
-                <TaktSelect
-                  v-model:value="formState.shiftNo"
-                  dict-type="logistics_shift_category"
-                  :placeholder="pi.ph('shiftNo')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderType')"
-                name="prodOrderType"
-                :required="formItemRequired('prodOrderType')"
-              >
-                <a-input
-                  v-model:value="formState.prodOrderType"
-                  :placeholder="pi.ph('prodOrderType')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
-                :required="formItemRequired('prodOrderCode')"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodOrderCode"
-                  api-url="TaktProductionOrders/options"
-                  :api-params="prodOrderSelectApiParams"
-                  remote-search
-                  virtual
-                  :placeholder="pi.ph('prodOrderCode')"
-                  :disabled="!!formData?.assyOutputId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('modelCode')"
-                name="modelCode"
-                :required="formItemRequired('modelCode')"
-              >
-                <a-input
-                  v-model:value="formState.modelCode"
-                  :placeholder="pi.ph('modelCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-                :required="formItemRequired('materialCode')"
-              >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="pi.ph('materialCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('batchNo')"
-                name="batchNo"
-                :required="formItemRequired('batchNo')"
-              >
-                <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="pi.ph('batchNo')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderQty')"
-                name="prodOrderQty"
-                :required="formItemRequired('prodOrderQty')"
-              >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="pi.ph('prodOrderQty')"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serialNo')"
-                name="serialNo"
-                :required="formItemRequired('serialNo')"
-              >
-                <a-input
-                  v-model:value="formState.serialNo"
-                  :placeholder="pi.ph('serialNo')"
-                  show-count
-                  :maxlength="80"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stdMinutes')"
-                name="stdMinutes"
-                :required="formItemRequired('stdMinutes')"
-              >
-                <a-input-number
-                  v-model:value="formState.stdMinutes"
-                  :placeholder="pi.ph('stdMinutes')"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                name="stdCapacity"
-                :required="formItemRequired('stdCapacity')"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="pi.stdCapacityHint()"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ pi.label('stdCapacity') }}</span>
-                  </span>
-                </template>
-                <a-input-number
-                  v-model:value="formState.stdCapacity"
-                  :placeholder="pi.ph('stdCapacity')"
-                  :precision="2"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-                :required="formItemRequired('tenantCode')"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-                :required="formItemRequired('companyCode')"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-                :required="formItemRequired('companyDefaultCulture')"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -507,16 +201,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodDate","prodTeam","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchNo","prodOrderQty","serialNo","stdMinutes","stdCapacity","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","prodCategory","prodDate","TeamCode","directLabor","indirectLabor","shiftNo","prodOrderType","prodOrderCode","modelCode","materialCode","batchCode","prodOrderQty","serialCode","stdMinutes","stdCapacity","extField","remark"]
 
 /** 非必填主表字段（不显示红 *） */
 const OPTIONAL_FORM_FIELDS = new Set(['extField', 'remark'])
@@ -814,8 +512,8 @@ async function backfillFromProductionOrder() {
     formState.prodOrderType = order.prodOrderType ?? ''
     formState.materialCode = order.materialCode ?? ''
     formState.prodOrderQty = order.prodOrderQty ?? 0
-    formState.batchNo = order.prodBatch ?? ''
-    formState.serialNo = order.serialNo ?? ''
+    formState.batchCode = order.prodBatch ?? ''
+    formState.serialCode = order.serialCode ?? ''
     if (order.materialCode) {
       const model = await getModelDestinationByMaterial(order.materialCode)
       if (model?.modelCode) {
@@ -839,13 +537,13 @@ function buildSubmitPayload() {
     ...formState,
     tenantCode: tenantStore.tenantCode,
     companyCode: tenantStore.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
   }
   const rawRows = assyOutputDetailTableRef.value?.getRows?.() ?? childAssyOutputDetailRows.value
   const detailScope = {
     tenantCode: tenantStore.tenantCode,
     companyCode: tenantStore.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     assyOutputId: isUpdate ? masterId : 0,
   }
   if (isUpdate) {
@@ -1136,11 +834,11 @@ function prodDateEditableRule(): Rule {
 const rules = computed<Record<string, Rule[]>>(() => ({
   tenantCode: [requiredStringRule('tenantCode')],
   companyCode: [requiredStringRule('companyCode')],
-  companyDefaultCulture: [requiredStringRule('companyDefaultCulture')],
+  companyDefaultCulture: [requiredStringRule()],
   plantCode: [requiredStringRule('plantCode', 'change')],
   prodCategory: [requiredStringRule('prodCategory', 'change')],
   prodDate: [requiredStringRule('prodDate', 'change'), prodDateEditableRule()],
-  prodTeam: [requiredStringRule('prodTeam', 'change')],
+  TeamCode: [requiredStringRule('TeamCode', 'change')],
   directLabor: [requiredPositiveNumberRule('directLabor')],
   indirectLabor: [requiredPositiveNumberRule('indirectLabor')],
   shiftNo: [requiredNumberRule('shiftNo')],
@@ -1148,9 +846,9 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   prodOrderCode: [requiredStringRule('prodOrderCode', 'change')],
   modelCode: [requiredStringRule('modelCode', 'change')],
   materialCode: [requiredStringRule('materialCode', 'change')],
-  batchNo: [requiredStringRule('batchNo')],
+  batchCode: [requiredStringRule('batchCode')],
   prodOrderQty: [requiredPositiveNumberRule('prodOrderQty')],
-  serialNo: [requiredStringRule('serialNo')],
+  serialCode: [requiredStringRule('serialCode')],
   stdMinutes: [requiredPositiveNumberRule('stdMinutes')],
   stdCapacity: [requiredPositiveNumberRule('stdCapacity')],
 }))

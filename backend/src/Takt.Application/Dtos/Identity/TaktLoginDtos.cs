@@ -336,12 +336,17 @@ public class TaktUserInfoResponseDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户区域文化 BCP47（takt_identity_user.default_culture）
+    /// 当前公司关联工厂（takt_company.related_plant，如 2300→C100）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户区域文化 BCP47（takt_identity_user.culture_code，UI 偏好）
     /// </summary>
     public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（takt_company.default_culture）
+    /// 当前公司区域文化 BCP47（takt_company.culture_code，业务行戳记与界面语言）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
@@ -455,6 +460,11 @@ public class TaktLoginPreviewLocaleDto
     /// 公司区域文化 BCP47（takt_company.default_culture，用于业务数据 CRUD 语言校验）
     /// </summary>
     public string CompanyDefaultCulture { get; set; } = string.Empty;
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
 }
 
 /// <summary>
@@ -505,17 +515,12 @@ public class TaktLoginCredentialResult
 public class TaktLoginPreviewLocaleResponseDto
 {
     /// <summary>
-    /// 用户默认登录公司代码
+    /// 用户默认登录公司代码（takt_identity_user_company.is_default）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户区域文化 BCP47
+    /// 用户区域文化代码（takt_identity_user.culture_code；登录页 UI 语言仅用此字段）
     /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 公司区域文化 BCP47
-    /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 }

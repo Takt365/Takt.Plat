@@ -22,958 +22,23 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/7)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/8)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.productionEquipmentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('equipmentCategory')"
-                name="equipmentCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.equipmentCategory"
-                  dict-type="logistics_equipment_category"
-                  :placeholder="pi.ph('equipmentCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionEquipmentCode')"
-                name="productionEquipmentCode"
-              >
-                <a-input
-                  v-model:value="formState.productionEquipmentCode"
-                  :placeholder="pi.ph('productionEquipmentCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.productionEquipmentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionEquipmentName')"
-                name="productionEquipmentName"
-              >
-                <a-input
-                  v-model:value="formState.productionEquipmentName"
-                  :placeholder="pi.ph('productionEquipmentName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('manufacturer')"
-                name="manufacturer"
-              >
-                <a-input
-                  v-model:value="formState.manufacturer"
-                  :placeholder="pi.ph('manufacturer')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('equipmentBrand')"
-                name="equipmentBrand"
-              >
-                <a-input
-                  v-model:value="formState.equipmentBrand"
-                  :placeholder="pi.ph('equipmentBrand')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('machineType')"
-                name="machineType"
-              >
-                <a-input
-                  v-model:value="formState.machineType"
-                  :placeholder="pi.ph('machineType')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('modelNo')"
-                name="modelNo"
-              >
-                <a-input
-                  v-model:value="formState.modelNo"
-                  :placeholder="pi.ph('modelNo')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serialNo')"
-                name="serialNo"
-              >
-                <a-input
-                  v-model:value="formState.serialNo"
-                  :placeholder="pi.ph('serialNo')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('manufacturingDate')"
-                name="manufacturingDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.manufacturingDate"
-                  :placeholder="pi.ph('manufacturingDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('equipmentSpecification')"
-                name="equipmentSpecification"
-              >
-                <a-input
-                  v-model:value="formState.equipmentSpecification"
-                  :placeholder="pi.ph('equipmentSpecification')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stdCycleTimeSeconds')"
-                name="stdCycleTimeSeconds"
-              >
-                <a-input-number
-                  v-model:value="formState.stdCycleTimeSeconds"
-                  :placeholder="pi.ph('stdCycleTimeSeconds')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stdMinutesPerUnit')"
-                name="stdMinutesPerUnit"
-              >
-                <a-input-number
-                  v-model:value="formState.stdMinutesPerUnit"
-                  :placeholder="pi.ph('stdMinutesPerUnit')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stdMinutesPerCycle')"
-                name="stdMinutesPerCycle"
-              >
-                <a-input-number
-                  v-model:value="formState.stdMinutesPerCycle"
-                  :placeholder="pi.ph('stdMinutesPerCycle')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('theoreticalSpm')"
-                name="theoreticalSpm"
-              >
-                <a-input-number
-                  v-model:value="formState.theoreticalSpm"
-                  :placeholder="pi.ph('theoreticalSpm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('theoreticalCycleTimeSeconds')"
-                name="theoreticalCycleTimeSeconds"
-              >
-                <a-input-number
-                  v-model:value="formState.theoreticalCycleTimeSeconds"
-                  :placeholder="pi.ph('theoreticalCycleTimeSeconds')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stdEquipmentHourlyCapacity')"
-                name="stdEquipmentHourlyCapacity"
-              >
-                <a-input-number
-                  v-model:value="formState.stdEquipmentHourlyCapacity"
-                  :placeholder="pi.ph('stdEquipmentHourlyCapacity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('availabilityRate')"
-                name="availabilityRate"
-              >
-                <a-input-number
-                  v-model:value="formState.availabilityRate"
-                  :placeholder="pi.ph('availabilityRate')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('performanceRate')"
-                name="performanceRate"
-              >
-                <a-input-number
-                  v-model:value="formState.performanceRate"
-                  :placeholder="pi.ph('performanceRate')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('setupMinutes')"
-                name="setupMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.setupMinutes"
-                  :placeholder="pi.ph('setupMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('moldChangeMinutes')"
-                name="moldChangeMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.moldChangeMinutes"
-                  :placeholder="pi.ph('moldChangeMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialChangeMinutes')"
-                name="materialChangeMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.materialChangeMinutes"
-                  :placeholder="pi.ph('materialChangeMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mtbfHours')"
-                name="mtbfHours"
-              >
-                <a-input-number
-                  v-model:value="formState.mtbfHours"
-                  :placeholder="pi.ph('mtbfHours')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('mttrHours')"
-                name="mttrHours"
-              >
-                <a-input-number
-                  v-model:value="formState.mttrHours"
-                  :placeholder="pi.ph('mttrHours')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('repeatabilityAccuracy')"
-                name="repeatabilityAccuracy"
-              >
-                <a-input-number
-                  v-model:value="formState.repeatabilityAccuracy"
-                  :placeholder="pi.ph('repeatabilityAccuracy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('shutHeightAccuracy')"
-                name="shutHeightAccuracy"
-              >
-                <a-input-number
-                  v-model:value="formState.shutHeightAccuracy"
-                  :placeholder="pi.ph('shutHeightAccuracy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('injectionAccuracy')"
-                name="injectionAccuracy"
-              >
-                <a-input-number
-                  v-model:value="formState.injectionAccuracy"
-                  :placeholder="pi.ph('injectionAccuracy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('temperatureControlAccuracy')"
-                name="temperatureControlAccuracy"
-              >
-                <a-input-number
-                  v-model:value="formState.temperatureControlAccuracy"
-                  :placeholder="pi.ph('temperatureControlAccuracy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('pressureControlAccuracy')"
-                name="pressureControlAccuracy"
-              >
-                <a-input-number
-                  v-model:value="formState.pressureControlAccuracy"
-                  :placeholder="pi.ph('pressureControlAccuracy')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('processCapabilityCpk')"
-                name="processCapabilityCpk"
-              >
-                <a-input-number
-                  v-model:value="formState.processCapabilityCpk"
-                  :placeholder="pi.ph('processCapabilityCpk')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('maxDimensionalTolerance')"
-                name="maxDimensionalTolerance"
-              >
-                <a-input-number
-                  v-model:value="formState.maxDimensionalTolerance"
-                  :placeholder="pi.ph('maxDimensionalTolerance')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('maxMoldDimension')"
-                name="maxMoldDimension"
-              >
-                <a-input
-                  v-model:value="formState.maxMoldDimension"
-                  :placeholder="pi.ph('maxMoldDimension')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('minMoldDimension')"
-                name="minMoldDimension"
-              >
-                <a-input
-                  v-model:value="formState.minMoldDimension"
-                  :placeholder="pi.ph('minMoldDimension')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('maxMoldWeightTon')"
-                name="maxMoldWeightTon"
-              >
-                <a-input-number
-                  v-model:value="formState.maxMoldWeightTon"
-                  :placeholder="pi.ph('maxMoldWeightTon')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('moldHeightRange')"
-                name="moldHeightRange"
-              >
-                <a-input
-                  v-model:value="formState.moldHeightRange"
-                  :placeholder="pi.ph('moldHeightRange')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ejectionType')"
-                name="ejectionType"
-              >
-                <TaktSelect
-                  v-model:value="formState.ejectionType"
-                  dict-type="logistics_ejection_type"
-                  :placeholder="pi.ph('ejectionType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ejectionStrokeMm')"
-                name="ejectionStrokeMm"
-              >
-                <a-input-number
-                  v-model:value="formState.ejectionStrokeMm"
-                  :placeholder="pi.ph('ejectionStrokeMm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('cavityCount')"
-                name="cavityCount"
-              >
-                <a-input-number
-                  v-model:value="formState.cavityCount"
-                  :placeholder="pi.ph('cavityCount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('quickMoldChange')"
-                name="quickMoldChange"
-              >
-                <TaktSelect
-                  v-model:value="formState.quickMoldChange"
-                  dict-type="sys_yes_no"
-                  :placeholder="pi.ph('quickMoldChange')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('moldCode')"
-                name="moldCode"
-              >
-                <a-input
-                  v-model:value="formState.moldCode"
-                  :placeholder="pi.ph('moldCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.productionEquipmentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ratedTonnage')"
-                name="ratedTonnage"
-              >
-                <a-input-number
-                  v-model:value="formState.ratedTonnage"
-                  :placeholder="pi.ph('ratedTonnage')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('clampingForceKn')"
-                name="clampingForceKn"
-              >
-                <a-input-number
-                  v-model:value="formState.clampingForceKn"
-                  :placeholder="pi.ph('clampingForceKn')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('maxStrokeMm')"
-                name="maxStrokeMm"
-              >
-                <a-input-number
-                  v-model:value="formState.maxStrokeMm"
-                  :placeholder="pi.ph('maxStrokeMm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-4"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (5/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('openStrokeMm')"
-                name="openStrokeMm"
-              >
-                <a-input-number
-                  v-model:value="formState.openStrokeMm"
-                  :placeholder="pi.ph('openStrokeMm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('platenSize')"
-                name="platenSize"
-              >
-                <a-input
-                  v-model:value="formState.platenSize"
-                  :placeholder="pi.ph('platenSize')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ratedVoltage')"
-                name="ratedVoltage"
-              >
-                <a-input-number
-                  v-model:value="formState.ratedVoltage"
-                  :placeholder="pi.ph('ratedVoltage')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ratedPowerKw')"
-                name="ratedPowerKw"
-              >
-                <a-input-number
-                  v-model:value="formState.ratedPowerKw"
-                  :placeholder="pi.ph('ratedPowerKw')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('airConsumptionLpm')"
-                name="airConsumptionLpm"
-              >
-                <a-input-number
-                  v-model:value="formState.airConsumptionLpm"
-                  :placeholder="pi.ph('airConsumptionLpm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('coolingWaterFlowLpm')"
-                name="coolingWaterFlowLpm"
-              >
-                <a-input-number
-                  v-model:value="formState.coolingWaterFlowLpm"
-                  :placeholder="pi.ph('coolingWaterFlowLpm')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('operatorCount')"
-                name="operatorCount"
-              >
-                <a-input-number
-                  v-model:value="formState.operatorCount"
-                  :placeholder="pi.ph('operatorCount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('isCriticalResource')"
-                name="isCriticalResource"
-              >
-                <TaktSelect
-                  v-model:value="formState.isCriticalResource"
-                  dict-type="sys_yes_no"
-                  :placeholder="pi.ph('isCriticalResource')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('parallelCapacity')"
-                name="parallelCapacity"
-              >
-                <a-input-number
-                  v-model:value="formState.parallelCapacity"
-                  :placeholder="pi.ph('parallelCapacity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('allowRushOrder')"
-                name="allowRushOrder"
-              >
-                <TaktSelect
-                  v-model:value="formState.allowRushOrder"
-                  dict-type="sys_yes_no"
-                  :placeholder="pi.ph('allowRushOrder')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-5"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (6/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('warmupMinutes')"
-                name="warmupMinutes"
-              >
-                <a-input-number
-                  v-model:value="formState.warmupMinutes"
-                  :placeholder="pi.ph('warmupMinutes')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('operatingTempRange')"
-                name="operatingTempRange"
-              >
-                <a-input
-                  v-model:value="formState.operatingTempRange"
-                  :placeholder="pi.ph('operatingTempRange')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('operatingHumidityRange')"
-                name="operatingHumidityRange"
-              >
-                <a-input
-                  v-model:value="formState.operatingHumidityRange"
-                  :placeholder="pi.ph('operatingHumidityRange')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('noiseLevelDb')"
-                name="noiseLevelDb"
-              >
-                <a-input-number
-                  v-model:value="formState.noiseLevelDb"
-                  :placeholder="pi.ph('noiseLevelDb')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('equipmentRunStatus')"
-                name="equipmentRunStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.equipmentRunStatus"
-                  dict-type="logistics_equipment_run_status"
-                  :placeholder="pi.ph('equipmentRunStatus')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('maintenanceIntervalHours')"
-                name="maintenanceIntervalHours"
-              >
-                <a-input-number
-                  v-model:value="formState.maintenanceIntervalHours"
-                  :placeholder="pi.ph('maintenanceIntervalHours')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('cumulativeRunHours')"
-                name="cumulativeRunHours"
-              >
-                <a-input-number
-                  v-model:value="formState.cumulativeRunHours"
-                  :placeholder="pi.ph('cumulativeRunHours')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('interfaceType')"
-                name="interfaceType"
-              >
-                <a-input
-                  v-model:value="formState.interfaceType"
-                  :placeholder="pi.ph('interfaceType')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('commissioningDate')"
-                name="commissioningDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.commissioningDate"
-                  :placeholder="pi.ph('commissioningDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('decommissioningDate')"
-                name="decommissioningDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.decommissioningDate"
-                  :placeholder="pi.ph('decommissioningDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('scrapDate')"
-                name="scrapDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.scrapDate"
-                  :placeholder="pi.ph('scrapDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('storageLocation')"
-                name="storageLocation"
-              >
-                <a-input
-                  v-model:value="formState.storageLocation"
-                  :placeholder="pi.ph('storageLocation')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('equipmentAdministrator')"
-                name="equipmentAdministrator"
-              >
-                <TaktSelect
-                  v-model:value="formState.equipmentAdministrator"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('equipmentAdministrator')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('productionEquipmentStatus')"
-                name="productionEquipmentStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.productionEquipmentStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="pi.ph('productionEquipmentStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-6"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (7/7)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -1061,15 +126,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -1089,7 +157,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  productionEquipmentStatus: 1
+  prodEquipStatus: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -1148,30 +216,30 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  equipmentCategory: [{
+  equipCategory: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('equipmentCategory'))
+        return Promise.reject(pi.ph('equipCategory'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('equipmentCategory'))
+        return Promise.reject(pi.ph('equipCategory'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  productionEquipmentCode: [
+  prodEquipCode: [
     {
       required: true,
-      message: pi.ph('productionEquipmentCode'),
+      message: pi.ph('prodEquipCode'),
       trigger: 'blur'
     }
   ],
-  productionEquipmentName: [
+  prodEquipName: [
     {
       required: true,
-      message: pi.ph('productionEquipmentName'),
+      message: pi.ph('prodEquipName'),
       trigger: 'blur'
     }
   ],
@@ -1247,14 +315,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  stdEquipmentHourlyCapacity: [{
+  stdEquipHourlyCapacity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('stdEquipmentHourlyCapacity'))
+        return Promise.reject(pi.ph('stdEquipHourlyCapacity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('stdEquipmentHourlyCapacity'))
+        return Promise.reject(pi.ph('stdEquipHourlyCapacity'))
       }
       return Promise.resolve()
     },
@@ -1481,14 +549,21 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  productionEquipmentStatus: [{
+  storageLocation: [
+    {
+      required: true,
+      message: pi.ph('storageLocation'),
+      trigger: 'blur'
+    }
+  ],
+  prodEquipStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('productionEquipmentStatus'))
+        return Promise.reject(pi.ph('prodEquipStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('productionEquipmentStatus'))
+        return Promise.reject(pi.ph('prodEquipStatus'))
       }
       return Promise.resolve()
     },
@@ -1505,9 +580,9 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('equipmentCategory' in payload) {
-    const rawequipmentCategory = payload.equipmentCategory
-    payload.equipmentCategory = typeof rawequipmentCategory === 'number' ? rawequipmentCategory : Number(rawequipmentCategory)
+  if ('equipCategory' in payload) {
+    const rawequipCategory = payload.equipCategory
+    payload.equipCategory = typeof rawequipCategory === 'number' ? rawequipCategory : Number(rawequipCategory)
   }
   if ('stdCycleTimeSeconds' in payload) {
     const rawstdCycleTimeSeconds = payload.stdCycleTimeSeconds
@@ -1529,9 +604,9 @@ function getValues(): Record<string, any> {
     const rawtheoreticalCycleTimeSeconds = payload.theoreticalCycleTimeSeconds
     payload.theoreticalCycleTimeSeconds = typeof rawtheoreticalCycleTimeSeconds === 'number' ? rawtheoreticalCycleTimeSeconds : Number(rawtheoreticalCycleTimeSeconds)
   }
-  if ('stdEquipmentHourlyCapacity' in payload) {
-    const rawstdEquipmentHourlyCapacity = payload.stdEquipmentHourlyCapacity
-    payload.stdEquipmentHourlyCapacity = typeof rawstdEquipmentHourlyCapacity === 'number' ? rawstdEquipmentHourlyCapacity : Number(rawstdEquipmentHourlyCapacity)
+  if ('stdEquipHourlyCapacity' in payload) {
+    const rawstdEquipHourlyCapacity = payload.stdEquipHourlyCapacity
+    payload.stdEquipHourlyCapacity = typeof rawstdEquipHourlyCapacity === 'number' ? rawstdEquipHourlyCapacity : Number(rawstdEquipHourlyCapacity)
   }
   if ('availabilityRate' in payload) {
     const rawavailabilityRate = payload.availabilityRate
@@ -1677,9 +752,9 @@ function getValues(): Record<string, any> {
     const rawcumulativeRunHours = payload.cumulativeRunHours
     payload.cumulativeRunHours = typeof rawcumulativeRunHours === 'number' ? rawcumulativeRunHours : Number(rawcumulativeRunHours)
   }
-  if ('productionEquipmentStatus' in payload) {
-    const rawproductionEquipmentStatus = payload.productionEquipmentStatus
-    payload.productionEquipmentStatus = typeof rawproductionEquipmentStatus === 'number' ? rawproductionEquipmentStatus : Number(rawproductionEquipmentStatus)
+  if ('prodEquipStatus' in payload) {
+    const rawprodEquipStatus = payload.prodEquipStatus
+    payload.prodEquipStatus = typeof rawprodEquipStatus === 'number' ? rawprodEquipStatus : Number(rawprodEquipStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

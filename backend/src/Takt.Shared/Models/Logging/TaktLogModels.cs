@@ -55,9 +55,14 @@ public class TaktLogContext
     public string? Route { get; set; }
 
     /// <summary>
-    /// 请求追踪 ID
+    /// 请求追踪 ID（短 RequestId，中间件生成）
     /// </summary>
     public string? RequestId { get; set; }
+
+    /// <summary>
+    /// OpenTelemetry TraceId（Activity.Current；无活动时为空）
+    /// </summary>
+    public string? TraceId { get; set; }
 
     /// <summary>
     /// 客户端 IP

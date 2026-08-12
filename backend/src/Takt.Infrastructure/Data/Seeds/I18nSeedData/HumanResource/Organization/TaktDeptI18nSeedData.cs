@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktDeptI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -235,22 +235,22 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.status", "zh-HK", "状态_hk", "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）"),
 
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "en-US", "角色数据权限关联该部门_us", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "en-US", "角色数据权限关联该部门_us", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "ja-JP", "角色数据权限关联该部门_jp", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "ja-JP", "角色数据权限关联该部门_jp", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "zh-CN", "角色数据权限关联该部门", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "zh-CN", "角色数据权限关联该部门", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
             // entity.dept.roledepts
-            new TranslationSeedItem("entity.dept.roledepts", "zh-HK", "角色数据权限关联该部门_hk", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_role_dept）"),
+            new TranslationSeedItem("entity.dept.roledepts", "zh-HK", "角色数据权限关联该部门_hk", "角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）"),
 
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "en-US", "员工部门关联_us", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "ja-JP", "员工部门关联_jp", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "zh-CN", "员工部门关联", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
             // entity.dept.employeedepts
-            new TranslationSeedItem("entity.dept.employeedepts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employee_dept）"),
+            new TranslationSeedItem("entity.dept.employeedepts", "zh-HK", "员工部门关联_hk", "员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）"),
         };
     }
 

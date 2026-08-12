@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktTenantDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Tenant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTenant 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Identity;
 
@@ -67,20 +66,14 @@ public class TaktTenantDto : TaktTenantDtoBase
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public int TenantStatus { get; set; }
-
-    /// <summary>
-    /// 可访问该租户的用户关联（RBAC，表 takt_identity_user_tenant）
-    /// （子表：TaktUserTenant）
-    /// </summary>
-    public List<TaktUserTenantDto>? UserTenants { get; set; }
+    public int TenantStatus { get; set; } = 0;
 
 }
 
@@ -99,6 +92,11 @@ public class TaktTenantQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
@@ -140,12 +138,12 @@ public class TaktTenantQueryDto : TaktPagedQuery
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? TenantStatus { get; set; }
 
@@ -184,6 +182,11 @@ public class TaktTenantCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
@@ -217,14 +220,14 @@ public class TaktTenantCreateDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public int TenantStatus { get; set; }
+    public int TenantStatus { get; set; } = 0;
 
     /// <summary>
     /// 可访问该租户的用户 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
@@ -281,10 +284,10 @@ public class TaktTenantStatusDto
     public long TenantId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
-    public int TenantStatus { get; set; }
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
+    public int TenantStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -301,10 +304,25 @@ public class TaktTenantTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
     public string? TenantName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订阅开始时间
+    /// </summary>
+    public DateTime? SubscriptionStartTime { get; set; }
+
+    /// <summary>
+    /// 订阅结束时间（9999/12/31 23:59:59表示长期有效）
+    /// </summary>
+    public DateTime? SubscriptionEndTime { get; set; }
 
     /// <summary>
     /// 联系人姓名
@@ -322,14 +340,19 @@ public class TaktTenantTemplateDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? TenantStatus { get; set; }
+
+    /// <summary>
+    /// 可访问该租户的用户 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? UserIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -353,10 +376,25 @@ public class TaktTenantImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
     public string? TenantName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订阅开始时间
+    /// </summary>
+    public DateTime? SubscriptionStartTime { get; set; }
+
+    /// <summary>
+    /// 订阅结束时间（9999/12/31 23:59:59表示长期有效）
+    /// </summary>
+    public DateTime? SubscriptionEndTime { get; set; }
 
     /// <summary>
     /// 联系人姓名
@@ -374,14 +412,19 @@ public class TaktTenantImportDto
     public string? ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? TenantStatus { get; set; }
+
+    /// <summary>
+    /// 可访问该租户的用户 ID 列表（RBAC 反向合并，分配走 ITaktRbacService）
+    /// </summary>
+    public long[]? UserIds { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -442,14 +485,14 @@ public class TaktTenantExportDto
     public string ContactEmail { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子租户（000/500/100）为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子租户 000/500/100 为内置，不允许删除）
     /// </summary>
-    public int IsBuiltIn { get; set; }
+    public int IsBuiltIn { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    public int TenantStatus { get; set; }
+    public int TenantStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

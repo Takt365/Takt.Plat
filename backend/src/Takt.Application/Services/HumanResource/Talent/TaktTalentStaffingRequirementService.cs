@@ -115,12 +115,12 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
     public async Task<TaktTalentStaffingRequirementDto> CreateTalentStaffingRequirementAsync(TaktTalentStaffingRequirementCreateDto dto)
     {
         var entity = dto.Adapt<TaktTalentStaffingRequirement>();
-        var isUnique_ix_talent_staffing_requirement_req_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_talent_staffing_requirement_req_code_unique = await _uniqueValidator.IsUniqueAsync(
             _talentStaffingRequirementRepository,
-            x => x.ReqNo == entity.ReqNo);
-        if (!isUnique_ix_talent_staffing_requirement_req_no_unique)
+            x => x.ReqCode == entity.ReqCode);
+        if (!isUnique_ix_talent_staffing_requirement_req_code_unique)
         {
-            throw new TaktBusinessException("用人需求的ReqNo已存在");
+            throw new TaktBusinessException("用人需求的ReqCode已存在");
         }
         entity = await _talentStaffingRequirementRepository.CreateAsync(entity);
                 await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
@@ -141,13 +141,13 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             throw new TaktBusinessException("用人需求不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_talent_staffing_requirement_req_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_talent_staffing_requirement_req_code_unique = await _uniqueValidator.IsUniqueAsync(
             _talentStaffingRequirementRepository,
-            x => x.ReqNo == entity.ReqNo,
+            x => x.ReqCode == entity.ReqCode,
             id);
-        if (!isUnique_ix_talent_staffing_requirement_req_no_unique)
+        if (!isUnique_ix_talent_staffing_requirement_req_code_unique)
         {
-            throw new TaktBusinessException("用人需求的ReqNo已存在");
+            throw new TaktBusinessException("用人需求的ReqCode已存在");
         }
         await _talentStaffingRequirementRepository.UpdateAsync(entity);
                 await SaveTalentStaffingRequirementChildrenAsync(entity, dto);
@@ -228,17 +228,17 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             try
             {
                 var entity = rows[i].Adapt<TaktTalentStaffingRequirement>();
-                var importKey = $"{entity.ReqNo}";
+                var importKey = $"{entity.ReqCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ReqNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ReqCode）");
                 }
-                var isUnique_ix_talent_staffing_requirement_req_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_talent_staffing_requirement_req_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _talentStaffingRequirementRepository,
-                    x => x.ReqNo == entity.ReqNo);
-                if (!isUnique_ix_talent_staffing_requirement_req_no_unique)
+                    x => x.ReqCode == entity.ReqCode);
+                if (!isUnique_ix_talent_staffing_requirement_req_code_unique)
                 {
-                    throw new TaktBusinessException("用人需求的ReqNo已存在");
+                    throw new TaktBusinessException("用人需求的ReqCode已存在");
                 }
                 await _talentStaffingRequirementRepository.CreateAsync(entity);
                 success += 1;
@@ -359,7 +359,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.ReqNo != null && x.ReqNo.Contains(keywords))
+                (x.ReqCode != null && x.ReqCode.Contains(keywords))
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || SqlFunc.ToString(x.PostId).Contains(keywords)
                 || (x.JobGrade != null && x.JobGrade.Contains(keywords))
@@ -372,6 +372,7 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
                 || (x.JobDesc != null && x.JobDesc.Contains(keywords))
                 || (x.Qualification != null && x.Qualification.Contains(keywords))
                 || (x.BudgetYear != null && x.BudgetYear.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ExpectedOnboardDate).Contains(keywords)
@@ -379,9 +380,9 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReqNo))
+        if (!string.IsNullOrEmpty(queryDto?.ReqCode))
         {
-            exp = exp.And(x => x.ReqNo != null && x.ReqNo.Contains(queryDto.ReqNo));
+            exp = exp.And(x => x.ReqCode != null && x.ReqCode.Contains(queryDto.ReqCode));
         }
 
         if (queryDto?.DeptId.HasValue == true)
@@ -444,6 +445,11 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
             exp = exp.And(x => x.BudgetYear != null && x.BudgetYear.Contains(queryDto.BudgetYear));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -473,6 +479,12 @@ public class TaktTalentStaffingRequirementService : TaktServiceBase, ITaktTalent
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

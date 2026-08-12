@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_execution_task", "工程变更执行任务表")]
 [SugarIndex("ix_ec_execution_task_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_execution_task_notification_dept", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationId), OrderByType.Asc, nameof(DeptCode), OrderByType.Asc, true)]
+[SugarIndex("ix_ec_execution_task_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_execution_task_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TaskStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_execution_task_due_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DueDate), OrderByType.Asc, false)]
 public class TaktEcExecutionTask : TaktCompanyEntityBase
@@ -31,6 +32,7 @@ public class TaktEcExecutionTask : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_notification_id", ColumnDescription = "通知单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcNotificationId { get; set; }
+
     /// <summary>
     /// 设变 ID
     /// </summary>
@@ -40,8 +42,8 @@ public class TaktEcExecutionTask : TaktCompanyEntityBase
     /// <summary>
     /// 设变单号（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联设变部门行 ID（TaktEcSeikan/Mp 等 8 张部门执行表主键）
     /// </summary>

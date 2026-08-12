@@ -57,30 +57,6 @@ public class TaktStandardOperationRatesController : TaktControllerBase
     }
 
     /// <summary>
-    /// 根据ID获取标准生产稼动率
-    /// </summary>
-    /// <param name="id">标准生产稼动率ID</param>
-    /// <returns>标准生产稼动率DTO</returns>
-    [TaktPermission("logistics:manufacturing:mps:standard:operation:rate:query", "标准生产稼动率详情")]
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetStandardOperationRateByIdAsync(long id)
-    {
-        try
-        {
-            var result = await _standardOperationRateService.GetStandardOperationRateByIdAsync(id);
-            if (result == null)
-            {
-                return NotFound("标准生产稼动率不存在");
-            }
-            return Success(result, "查询成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
     /// 获取标准生产稼动率选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
@@ -91,6 +67,59 @@ public class TaktStandardOperationRatesController : TaktControllerBase
         try
         {
             var result = await _standardOperationRateService.GetStandardOperationRateOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 按生产日期解析有效标准生产稼动率（%）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <param name="operationType">稼动率类型（默认 1=人员）</param>
+    /// <returns>稼动率(%)</returns>
+    [TaktPermission("logistics:manufacturing:mps:standard:operation:rate:query", "有效标准生产稼动率")]
+    [HttpGet("effective-rate")]
+    public async Task<IActionResult> GetEffectiveStandardOperationRatePercentAsync(
+        [FromQuery] string plantCode,
+        [FromQuery] DateTime prodDate,
+        [FromQuery] int operationType = 1)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode))
+            {
+                return BadRequest("工厂代码不能为空");
+            }
+            var result = await _standardOperationRateService.GetEffectiveStandardOperationRatePercentAsync(plantCode, prodDate, operationType);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 根据ID获取标准生产稼动率
+    /// </summary>
+    /// <param name="id">标准生产稼动率ID</param>
+    /// <returns>标准生产稼动率DTO</returns>
+    [TaktPermission("logistics:manufacturing:mps:standard:operation:rate:query", "标准生产稼动率详情")]
+    [HttpGet("{id:long}")]
+    public async Task<IActionResult> GetStandardOperationRateByIdAsync(long id)
+    {
+        try
+        {
+            var result = await _standardOperationRateService.GetStandardOperationRateByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound("标准生产稼动率不存在");
+            }
             return Success(result, "查询成功");
         }
         catch (Exception ex)

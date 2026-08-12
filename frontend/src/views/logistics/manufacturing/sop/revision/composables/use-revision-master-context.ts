@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SopRevision } from '@/types/logistics/manufacturing/sop/revision'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SopRevisionRowRecord = SopRevision | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SopRevisionMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SopRevision | null>
+  selectedMasterRow: Ref<SopRevisionRowRecord | null>
 }
 
 const sopRevisionMasterContextKey: InjectionKey<SopRevisionMasterContext> = Symbol('revisionMasterContext')
@@ -22,7 +25,7 @@ const sopRevisionMasterContextKey: InjectionKey<SopRevisionMasterContext> = Symb
  * @returns {SopRevisionMasterContext} 主表上下文
  */
 export function provideSopRevisionMasterContext(): SopRevisionMasterContext {
-  const selectedMasterRow = ref<SopRevision | null>(null)
+  const selectedMasterRow = ref<SopRevisionRowRecord | null>(null)
   const ctx: SopRevisionMasterContext = { selectedMasterRow }
   provide(sopRevisionMasterContextKey, ctx)
   return ctx

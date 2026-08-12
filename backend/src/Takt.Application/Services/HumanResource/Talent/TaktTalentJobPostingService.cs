@@ -365,6 +365,7 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
                 || SqlFunc.ToString(x.PostingStatus).Contains(keywords)
                 || SqlFunc.ToString(x.PublishChannel).Contains(keywords)
                 || (x.Reason != null && x.Reason.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PublishDate).Contains(keywords)
@@ -402,6 +403,11 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
         if (!string.IsNullOrEmpty(queryDto?.Reason))
         {
             exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -453,6 +459,12 @@ public class TaktTalentJobPostingService : TaktServiceBase, ITaktTalentJobPostin
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

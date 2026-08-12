@@ -244,9 +244,13 @@ function applyScopeDefaults(target: Record<string, unknown>, _force = false) {
   if (formFields.includes('companyCode') && !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && !target.companyDefaultCulture) {
+  if (formFields.includes() && !target.companyDefaultCulture) {
     target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
   }
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -347,36 +351,31 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   tenantName: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.tenant.name') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   subscriptionStartTime: [
     {
       required: true,
       message: t('common.page.form.placeholder.select', { field: t('entity.tenant.subscriptionstarttime') }),
       trigger: 'change',
-    },
-  ],
+    }],
   subscriptionEndTime: [
     {
       required: true,
       message: t('common.page.form.placeholder.select', { field: t('entity.tenant.subscriptionendtime') }),
       trigger: 'change',
-    },
-  ],
+    }],
   contactEmail: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.tenant.contactemail') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   isBuiltIn: [dictIntRule('entity.tenant.isbuiltin')],
   tenantStatus: [dictIntRule('entity.tenant.status')],
 }))

@@ -28,11 +28,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarIndex("ix_takt_logistics_manufacturing_sop_doc_flow_instance_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FlowInstanceId), OrderByType.Asc, false)]
 public class TaktSopDoc : TaktApprovalEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// SOP 编码
@@ -49,7 +44,7 @@ public class TaktSopDoc : TaktApprovalEntityBase
     /// <summary>
     /// 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -72,12 +67,6 @@ public class TaktSopDoc : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "current_revision_id", ColumnDescription = "当前版本ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CurrentRevisionId { get; set; }
-
-    /// <summary>
-    /// 默认语言（选项 TaktCultures/options；DictValue=CultureCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_lang", ColumnDescription = "默认语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
-    public string DefaultLang { get; set; } = "zh-CN";
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）

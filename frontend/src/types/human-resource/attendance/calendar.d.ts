@@ -16,52 +16,13 @@ import type {
 } from '@/types/common';
 
 /**
- * 工厂日历（公司级；按 RelatedPlant 区分工厂维度）
+ * 工厂日历（公司级；按 PlantCode 区分工厂维度）
  * 对应前端 TaktCalendarDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 Calendar
  * @description 对应后端 TaktCalendarDto
  */
 export interface Calendar extends CompanyDtoBase {
-  /**
-   * CalendarID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  calendarId: string;
-
-  /**
-   * 日历日期
-   */
-  calendarDate: string;
-
-  /**
-   * 是否工作日（字典 hr_holiday_working_day_type；0=非工作日 1=工作日 2=半天等）
-   */
-  isWorkingDay: number;
-
-  /**
-   * 关联假日（关联 TaktHoliday.Id，选项 TaktHolidays/options）
-   */
-  holidayId?: string;
-
-  /**
-   * 关联假日 名称（填充字段）
-   */
-  holidayName?: string;
-
-  /**
-   * 关联班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
-   */
-  shiftId?: string;
-
-  /**
-   * 关联班次 名称（填充字段）
-   */
-  shiftName?: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant?: string;
 
 }
 
@@ -111,7 +72,7 @@ export interface CalendarQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -155,7 +116,10 @@ export interface CalendarCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 日历日期
@@ -180,7 +144,7 @@ export interface CalendarCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -249,7 +213,7 @@ export interface CalendarTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -283,7 +247,10 @@ export interface CalendarImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 日历日期
@@ -308,7 +275,7 @@ export interface CalendarImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -362,7 +329,7 @@ export interface CalendarExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON

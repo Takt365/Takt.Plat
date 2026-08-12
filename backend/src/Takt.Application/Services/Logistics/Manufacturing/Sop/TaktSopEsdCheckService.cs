@@ -292,6 +292,7 @@ public class TaktSopEsdCheckService : TaktServiceBase, ITaktSopEsdCheckService
                 || SqlFunc.ToString(x.ResistanceValue).Contains(keywords)
                 || SqlFunc.ToString(x.IsCompliant).Contains(keywords)
                 || SqlFunc.ToString(x.LockScreenTriggered).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CheckedAt).Contains(keywords)
@@ -337,6 +338,11 @@ public class TaktSopEsdCheckService : TaktServiceBase, ITaktSopEsdCheckService
         if (queryDto?.LockScreenTriggered.HasValue == true)
         {
             exp = exp.And(x => x.LockScreenTriggered == queryDto.LockScreenTriggered);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

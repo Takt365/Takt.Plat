@@ -81,7 +81,6 @@ import {
   RiListCheck,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import SalesPriceTrendQueryForm from './components/sales-price-trend-query-form.vue'
@@ -141,8 +140,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -150,7 +148,7 @@ const panelRef = ref<{
   clear?: () => void
 } | null>(null)
 
-/** 查询 */
+/** 查询（工厂/期间/条件类型/客户必选，物料可空） */
 function handleSearch() {
   if (!plantCode.value?.trim()) {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
@@ -158,6 +156,14 @@ function handleSearch() {
   }
   if (!periodRange.value?.[0]) {
     message.warning(t(`${localePrefix}.selectPeriodRequired`))
+    return
+  }
+  if (!priceType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectPriceTypeRequired`))
+    return
+  }
+  if (!customerCode.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectCustomerRequired`))
     return
   }
   void panelRef.value?.reload?.()
@@ -181,18 +187,17 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
+/** 清空工厂及下游级联（工厂选项来自销售价格本表 plant-options，不写公司关联工厂） */
+function clearPlantCascade() {
+  plantCode.value = undefined
+  priceType.value = undefined
+  customerCode.value = undefined
+  materialCode.value = undefined
 }
 
 /** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
-  customerCode.value = undefined
-  materialCode.value = undefined
-  priceType.value = undefined
+function handleReset() {
+  clearPlantCascade()
   applyDefaultPeriodRange()
   trendFilter.value = ''
   hasRows.value = false
@@ -220,14 +225,15 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    clearPlantCascade()
+    hasRows.value = false
+    panelRef.value?.clear?.()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
   void getTaktDefaultPageSize()
 })
 </script>

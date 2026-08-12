@@ -27,250 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesPriceCode')"
-                name="salesPriceCode"
-              >
-                <a-input
-                  v-model:value="formState.salesPriceCode"
-                  :placeholder="pi.ph('salesPriceCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('priceType')"
-                name="priceType"
-              >
-                <TaktSelect
-                  v-model:value="formState.priceType"
-                  dict-type="logistics_price_type"
-                  :placeholder="pi.ph('priceType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('customerCode')"
-                name="customerCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.customerCode"
-                  api-url="TaktCustomers/options"
-                  :placeholder="pi.ph('customerCode')"
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('salesGroup')"
-                name="salesGroup"
-              >
-                <TaktSelect
-                  v-model:value="formState.salesGroup"
-                  api-url="TaktSalesGroups/options"
-                  :placeholder="pi.ph('salesGroup')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxCode')"
-                name="taxCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.taxCode"
-                  dict-type="accounting_tax_code"
-                  :placeholder="pi.ph('taxCode')"
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('grBasedInvoiceInspection')"
-                name="grBasedInvoiceInspection"
-              >
-                <TaktSelect
-                  v-model:value="formState.grBasedInvoiceInspection"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('grBasedInvoiceInspection')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('pricingDateControl')"
-                name="pricingDateControl"
-              >
-                <TaktSelect
-                  v-model:value="formState.pricingDateControl"
-                  dict-type="logistics_pricing_date_control"
-                  :placeholder="pi.ph('pricingDateControl')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('validFrom')"
-                name="validFrom"
-              >
-                <a-date-picker
-                  v-model:value="formState.validFrom"
-                  :placeholder="pi.ph('validFrom')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('validTo')"
-                name="validTo"
-              >
-                <a-date-picker
-                  v-model:value="formState.validTo"
-                  :placeholder="pi.ph('validTo')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('salesQuotationId')"
-                name="salesQuotationId"
-              >
-                <TaktSelect
-                  v-model:value="formState.salesQuotationId"
-                  api-url="TaktSalesQuotations/options"
-                  :placeholder="pi.ph('salesQuotationId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('salesQuotationCode')"
-                name="salesQuotationCode"
-              >
-                <a-input
-                  v-model:value="formState.salesQuotationCode"
-                  :placeholder="pi.ph('salesQuotationCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.salesPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('variableKey')"
-                name="variableKey"
-              >
-                <a-input
-                  v-model:value="formState.variableKey"
-                  :placeholder="pi.ph('variableKey')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -374,13 +142,13 @@
           allow-clear
         />
       </template>
-      <template #cell-scaleCurrency="{ record }">
+      <template #cell-scaleCurrencyCode="{ record }">
         <TaktSelect
-          v-model:value="record.scaleCurrency"
+          v-model:value="record.scaleCurrencyCode"
           dict-type="accounting_currency_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesPriceItemPi.ph('scaleCurrency')"
+          :placeholder="salesPriceItemPi.ph('scaleCurrencyCode')"
           :disabled="loading"
           allow-clear
         />
@@ -396,13 +164,13 @@
           allow-clear
         />
       </template>
-      <template #cell-conditionCurrency="{ record }">
+      <template #cell-conditionCurrencyCode="{ record }">
         <TaktSelect
-          v-model:value="record.conditionCurrency"
+          v-model:value="record.conditionCurrencyCode"
           dict-type="accounting_currency_code"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="salesPriceItemPi.ph('conditionCurrency')"
+          :placeholder="salesPriceItemPi.ph('conditionCurrencyCode')"
           :disabled="loading"
           allow-clear
         />
@@ -484,8 +252,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -493,8 +261,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","salesPriceCode","priceType","customerCode","materialCode","salesGroup","taxCode","grBasedInvoiceInspection","pricingDateControl","validFrom","validTo","salesQuotationId","salesQuotationCode","variableKey","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","salesPriceCode","priceType","customerCode","materialCode","materialDescription","salesGroup","taxCode","grBasedInvoiceInspection","pricingDateControl","validFrom","validTo","salesQuotationId","salesQuotationCode","variableKey","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { useSalesPriceItemI18n } from '../composables/use-price-item-i18n'
@@ -551,8 +318,8 @@ const salesPriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'scaleCurrency',
-    title: salesPriceItemPi.label('scaleCurrency'),
+    key: 'scaleCurrencyCode',
+    title: salesPriceItemPi.label('scaleCurrencyCode'),
     width: 140,
   },
   {
@@ -581,8 +348,8 @@ const salesPriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'conditionCurrency',
-    title: salesPriceItemPi.label('conditionCurrency'),
+    key: 'conditionCurrencyCode',
+    title: salesPriceItemPi.label('conditionCurrencyCode'),
     width: 140,
   },
   {
@@ -626,8 +393,7 @@ const salesPriceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
     title: salesPriceItemPi.label('scaleValues'),
     editor: 'input',
     width: 140, allowClear: true, placeholder: salesPriceItemPi.ph('scaleValues'),
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SalesPriceCreate & { salesPriceId?: string }> | null | undefined) {
@@ -644,13 +410,13 @@ function createDefaultSalesPriceItemRow(): Record<string, unknown> {
     scaleQuantity: 0,
     scaleUnit: '',
     scaleValue: 0,
-    scaleCurrency: '',
+    scaleCurrencyCode: '',
     calculationType: '',
     price: 0,
     untaxedPrice: 0,
     taxIncludedPrice: 0,
     taxAmount: 0,
-    conditionCurrency: '',
+    conditionCurrencyCode: '',
     priceUnit: 0,
     unitOfMeasure: '',
     minOrderQuantity: 0,
@@ -672,7 +438,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       salesPriceId: masterId,
     })),
   }

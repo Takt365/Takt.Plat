@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：bill-of-material-substitute.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -64,7 +64,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId: string;
 
@@ -119,7 +119,7 @@ export interface BillOfMaterialSubstitute extends CompanyDtoBase {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -154,6 +154,16 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialItemId?: string;
@@ -179,7 +189,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId?: string;
 
@@ -239,7 +249,7 @@ export interface BillOfMaterialSubstituteQuery extends TaktPagedQuery {
   expiryDateEnd?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -283,9 +293,14 @@ export interface BillOfMaterialSubstituteCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -313,7 +328,7 @@ export interface BillOfMaterialSubstituteCreate {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId: string;
 
@@ -363,7 +378,7 @@ export interface BillOfMaterialSubstituteCreate {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 
@@ -431,6 +446,16 @@ export interface BillOfMaterialSubstituteTemplate {
   companyCode?: string;
 
   /**
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   billOfMaterialItemId?: string;
@@ -456,7 +481,7 @@ export interface BillOfMaterialSubstituteTemplate {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId?: string;
 
@@ -506,7 +531,7 @@ export interface BillOfMaterialSubstituteTemplate {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -540,9 +565,14 @@ export interface BillOfMaterialSubstituteImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * 物料清单明细ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -570,7 +600,7 @@ export interface BillOfMaterialSubstituteImport {
   lineNumber?: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId?: string;
 
@@ -620,7 +650,7 @@ export interface BillOfMaterialSubstituteImport {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete?: number;
 
@@ -679,7 +709,7 @@ export interface BillOfMaterialSubstituteExport {
   lineNumber: number;
 
   /**
-   * 替代物料ID（关联工厂物料 TaktMaterialPlant.Id，选项 TaktMaterialPlants/options）
+   * 替代物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
    */
   substituteMaterialId: string;
 
@@ -729,7 +759,7 @@ export interface BillOfMaterialSubstituteExport {
   expiryDate?: string;
 
   /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
    */
   isObsolete: number;
 

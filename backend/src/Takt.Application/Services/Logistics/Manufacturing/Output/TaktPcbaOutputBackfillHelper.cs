@@ -67,8 +67,8 @@ internal static class TaktPcbaOutputBackfillHelper
             entity.MaterialCode = order.MaterialCode;
         }
         entity.ProdOrderQty = order.ProdOrderQty;
-        entity.BatchNo = order.ProdBatch;
-        entity.SerialNo = order.SerialNo;
+        entity.BatchCode = order.ProdBatch;
+        entity.SerialCode = order.SerialCode;
         if (!string.IsNullOrWhiteSpace(entity.MaterialCode))
         {
             var model = await modelDestinationRepository.FirstAsync(x =>

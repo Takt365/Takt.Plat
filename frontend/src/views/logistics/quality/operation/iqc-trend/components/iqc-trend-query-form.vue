@@ -25,8 +25,7 @@
         class="inspection-trend-query-bar__control inspection-trend-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
       />
       <TaktSelect
         v-model:value="supplierCode"

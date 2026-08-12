@@ -8,10 +8,10 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+  <div class="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
     <div
       ref="tableWrapRef"
-      class="min-h-0 flex-1 overflow-hidden"
+      class="min-h-0 min-w-0 flex-1 overflow-hidden"
     >
       <TaktSingleTable
         class="h-full min-h-0"
@@ -32,12 +32,6 @@
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
             {{ formatPeriodCost(record as BomMaterialCostItemComponentMovingPrice, String(column.key)) }}
-          </template>
-          <template v-else-if="column.key === 'currency'">
-            <TaktDictTag
-              :value="(record as BomMaterialCostItemComponentMovingPrice).currency"
-              dict-type="accounting_currency_code"
-            />
           </template>
           <template v-else-if="column.key === 'trend'">
             <span :class="trendClass((record as BomMaterialCostItemComponentMovingPrice).trend || 'none')">
@@ -146,14 +140,7 @@ const columns = computed<TableColumnsType>(() => {
       key: 'productDescription',
       width: 160,
       ellipsis: true,
-    },
-    {
-      title: t('entity.bommaterialcostitem.movingpricecurrency'),
-      dataIndex: 'currency',
-      key: 'currency',
-      width: 80,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,

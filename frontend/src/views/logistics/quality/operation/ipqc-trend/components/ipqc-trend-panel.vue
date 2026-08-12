@@ -178,8 +178,7 @@ const columns = computed<TableColumnsType>(() => {
       key: 'processName',
       width: 160,
       ellipsis: true,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcDetailDtos.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SourceEcDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSourceEcDetail 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 // ========================================
 
 /// <summary>
-/// 设变来源子表实体。
+/// 设变来源主表
 /// 对应前端 TaktSourceEcDetailDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -59,7 +59,7 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -79,7 +79,7 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -99,25 +99,25 @@ public class TaktSourceEcDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 
@@ -150,6 +150,21 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 主ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -168,7 +183,7 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -188,7 +203,7 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -208,25 +223,25 @@ public class TaktSourceEcDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 
@@ -276,6 +291,21 @@ public class TaktSourceEcDetailCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 主ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -296,7 +326,7 @@ public class TaktSourceEcDetailCreateDto
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -316,7 +346,7 @@ public class TaktSourceEcDetailCreateDto
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -336,25 +366,25 @@ public class TaktSourceEcDetailCreateDto
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 
@@ -410,6 +440,21 @@ public class TaktSourceEcDetailTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 主ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -428,7 +473,7 @@ public class TaktSourceEcDetailTemplateDto
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -448,7 +493,7 @@ public class TaktSourceEcDetailTemplateDto
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -468,25 +513,25 @@ public class TaktSourceEcDetailTemplateDto
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 
@@ -518,6 +563,21 @@ public class TaktSourceEcDetailImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 主ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -536,7 +596,7 @@ public class TaktSourceEcDetailImportDto
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -556,7 +616,7 @@ public class TaktSourceEcDetailImportDto
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -576,25 +636,25 @@ public class TaktSourceEcDetailImportDto
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 
@@ -632,6 +692,11 @@ public class TaktSourceEcDetailExportDto
     public long SourceEcDetailId { get; set; }
 
     /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 主ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -650,7 +715,7 @@ public class TaktSourceEcDetailExportDto
     /// <summary>
     /// 旧物料号
     /// </summary>
-    public string? SourceLegacyPartNo { get; set; } = string.Empty;
+    public string? SourceLegacyPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 旧物料
@@ -670,7 +735,7 @@ public class TaktSourceEcDetailExportDto
     /// <summary>
     /// 新物料
     /// </summary>
-    public string? SourceReplacementPartNo { get; set; } = string.Empty;
+    public string? SourceReplacementPartCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 新物料
@@ -690,25 +755,25 @@ public class TaktSourceEcDetailExportDto
     /// <summary>
     /// BOM番号
     /// </summary>
-    public string? SourceBomNo { get; set; } = string.Empty;
+    public string? SourceBomCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 兼容性
+    /// 兼容性（字典 logistics_ec_source_compatibility；A=兼容，B=单向兼容（新替旧），C=单向兼容（旧替新），D=不兼容）
     /// </summary>
     public string? SourceCompatibility { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区分
+    /// 区分（字典 logistics_ec_source_distinction；1=有，2=优先，3=无）
     /// </summary>
     public string? SourceDistinction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 安排指示
+    /// 安排指示（字典 logistics_ec_source_instruction；1=已出货成品，2=在线半成品，3=库存零件，4=外协在制品，5=新下达订单，9=未定）
     /// </summary>
     public string? SourceInstruction { get; set; } = string.Empty;
 
     /// <summary>
-    /// 旧物料处理
+    /// 旧物料处理（字典 logistics_ec_legacy_part_disposition；1=转用，2=废弃，3=返工，4=消耗，5=无处理，9=未定）
     /// </summary>
     public string? SourceLegacyPartDisposition { get; set; } = string.Empty;
 

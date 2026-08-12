@@ -23,15 +23,10 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarTable("takt_accounting_financial_budget_actual", "预算实绩表")]
 [SugarIndex("ix_budget_actual_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_budget_actual_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_budget_actual_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(CostCenterCode), OrderByType.Asc, nameof(BudgetItemCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_accounting_financial_budget_actual_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(CostCenterCode), OrderByType.Asc, nameof(BudgetItemCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_accounting_financial_budget_actual_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Desc, false)]
 public class TaktBudgetActual : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 会计期间编码（YYYYMM）
     /// </summary>

@@ -22,6 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarIndex("ix_ec_detail_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_detail_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_detail_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_detail_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktEcDetail : TaktCompanyEntityBase
 {
     /// <summary>
@@ -31,11 +32,12 @@ public class TaktEcDetail : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcId { get; set; }
 
+
     /// <summary>
     /// 设变单号（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -46,13 +48,13 @@ public class TaktEcDetail : TaktCompanyEntityBase
     /// <summary>
     /// BOM行号（Ec_bom_line_no）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_bom_line_no", ColumnDescription = "BOM行号", Length = 8, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? EcBomLineNo { get; set; }
+    [SugarColumn(ColumnName = "ec_bom_line_code", ColumnDescription = "BOM行号", Length = 8, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? EcBomLineCode { get; set; }
 
     /// <summary>
     /// 机种（Ec_model）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_model", ColumnDescription = "机种", Length = 50, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "ec_model", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string EcModel { get; set; } = string.Empty;
 
     /// <summary>

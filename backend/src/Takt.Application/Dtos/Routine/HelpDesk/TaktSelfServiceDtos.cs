@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktSelfServiceDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SelfService 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSelfService 生成，请按需审阅）
 // 
@@ -41,7 +41,7 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     public string ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int ServiceType { get; set; } = 0;
 
@@ -61,7 +61,7 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -71,7 +71,7 @@ public class TaktSelfServiceDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 
@@ -98,12 +98,22 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 自助服务名称
     /// </summary>
     public string? ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int? ServiceType { get; set; }
 
@@ -123,7 +133,7 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -133,7 +143,7 @@ public class TaktSelfServiceQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -178,10 +188,15 @@ public class TaktSelfServiceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 自助服务名称
     /// </summary>
@@ -189,7 +204,7 @@ public class TaktSelfServiceCreateDto
     public string ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int ServiceType { get; set; } = 0;
 
@@ -209,12 +224,12 @@ public class TaktSelfServiceCreateDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 
@@ -268,9 +283,9 @@ public class TaktSelfServiceStatusDto
     public long SelfServiceId { get; set; }
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
-    [Required(ErrorMessage = "自助服务状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
     public int SelfServiceStatus { get; set; } = 0;
 }
 
@@ -318,12 +333,22 @@ public class TaktSelfServiceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 自助服务名称
     /// </summary>
     public string? ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int? ServiceType { get; set; }
 
@@ -343,12 +368,12 @@ public class TaktSelfServiceTemplateDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -380,17 +405,22 @@ public class TaktSelfServiceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 自助服务名称
     /// </summary>
     public string? ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int? ServiceType { get; set; }
 
@@ -410,12 +440,12 @@ public class TaktSelfServiceImportDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int? SelfServiceStatus { get; set; }
 
@@ -458,7 +488,7 @@ public class TaktSelfServiceExportDto
     public string ServiceName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务类型（0=链接，1=表单，2=知识引导）
+    /// 服务类型（字典 routine_self_service_type；0=链接 1=表单 2=知识引导）
     /// </summary>
     public int ServiceType { get; set; } = 0;
 
@@ -478,7 +508,7 @@ public class TaktSelfServiceExportDto
     public string? IconUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
+    /// 附件（JSON 列表形式，由 TaktFile 统一上传到服务器）
     /// </summary>
     public string? Attachments { get; set; } = string.Empty;
 
@@ -488,7 +518,7 @@ public class TaktSelfServiceExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 自助服务状态（1=启用，0=禁用）
+    /// 自助服务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     public int SelfServiceStatus { get; set; } = 0;
 

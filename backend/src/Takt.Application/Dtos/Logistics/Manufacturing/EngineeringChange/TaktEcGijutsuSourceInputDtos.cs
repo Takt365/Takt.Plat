@@ -77,6 +77,11 @@ public class TaktEcGijutsuSourceEcInputItemDto
     /// 来源明细行数
     /// </summary>
     public int DetailCount { get; set; }
+
+    /// <summary>
+    /// 设变号码
+    /// </summary>
+    public string SourceEcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -98,6 +103,11 @@ public class TaktEcGijutsuSourceEcInputQueryDto : TaktPagedQuery
     /// 标题（模糊）
     /// </summary>
     public string? SourceTitle { get; set; }
+
+    /// <summary>
+    /// 设变号码（模糊）
+    /// </summary>
+    public string SourceEcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -119,6 +129,11 @@ public class TaktEcGijutsuImportFromSourceDto
     /// 待导入来源设变 ID 列表（前端 string，逐项解析为 long）
     /// </summary>
     public List<string> SourceEcIds { get; set; } = [];
+
+    /// <summary>
+    /// CultureCode
+    /// </summary>
+    public string? CultureCode { get; set; }
 }
 
 /// <summary>
@@ -141,6 +156,11 @@ public class TaktEcGijutsuDraftFromSourceDto
     /// 公司默认文化
     /// </summary>
     public string? CompanyDefaultCulture { get; set; }
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
 }
 
 /// <summary>

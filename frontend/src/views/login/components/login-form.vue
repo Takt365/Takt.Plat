@@ -473,8 +473,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: ['blur', 'change'],
-    },
-  ],
+    }],
   username: [
     {
       required: true,
@@ -493,8 +492,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
   password: [
     {
       required: true,
@@ -513,8 +511,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
 }));
 
 /**
@@ -579,8 +576,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     'common.permission.tenant.no.access',
     '当前用户无权登录所选租户',
     'You do not have permission to sign in to the selected tenant',
-    '選択したテナントにログインする権限がありません',
-  ] as const;
+    '選択したテナントにログインする権限がありません'] as const;
 
   if (tenantNoAccessHints.some((hint) => msg.includes(hint))) {
     return t('login.page.message.tenant.no.access');
@@ -592,8 +588,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     '密码传输密文',
     'Encrypted password payload',
     'パスワード暗号文',
-    '密碼傳輸密文',
-  ] as const;
+    '密碼傳輸密文'] as const;
 
   if (passwordCipherHints.some((hint) => msg.toLowerCase().includes(hint.toLowerCase()))) {
     return t('login.page.message.passwordCipherInvalid');
@@ -608,8 +603,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     'Incorrect username or password',
     'Incorrect user or password',
     'ユーザーまたはパスワードが正しくありません',
-    'ユーザー名またはパスワードが正しくありません',
-  ] as const;
+    'ユーザー名またはパスワードが正しくありません'] as const;
 
   if (invalidCredentialsHints.some((hint) => msg.includes(hint))) {
     return t('login.page.message.credentials.incorrect');
@@ -620,8 +614,7 @@ function resolveLoginErrorMessage(error: unknown, fallback: string): string {
     'login.page.message.account.locked',
     '账户已锁定',
     'account is locked',
-    'アカウントがロック',
-  ] as const;
+    'アカウントがロック'] as const;
 
   if (accountLockedHints.some((hint) => msg.toLowerCase().includes(hint.toLowerCase()))) {
     return t('login.page.message.account.locked');

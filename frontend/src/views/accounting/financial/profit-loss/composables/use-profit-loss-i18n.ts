@@ -20,7 +20,7 @@ export const PROFITLOSS_SELF_I18N_KEY = buildEntitySelfI18nKey(PROFITLOSS_ENTITY
 
 /** 列表业务列（不含主键） */
 export const PROFITLOSS_LIST_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'statementLineCode',
   'statementLineName',
@@ -41,7 +41,7 @@ export const PROFITLOSS_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   periodCode: 'required',
   statementLineCode: 'required',
   statementLineName: 'required',
@@ -64,7 +64,7 @@ export type ProfitLossField = keyof typeof PROFITLOSS_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const PROFITLOSS_QUERY_STRING_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'statementLineCode',
   'statementLineName',

@@ -380,6 +380,7 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
                 || SqlFunc.ToString(x.AgreementLineNumber).Contains(keywords)
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.SourceStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ValidFrom).Contains(keywords)
@@ -461,6 +462,11 @@ public class TaktSourceOfSupplyService : TaktServiceBase, ITaktSourceOfSupplySer
         if (queryDto?.SourceStatus.HasValue == true)
         {
             exp = exp.And(x => x.SourceStatus == queryDto.SourceStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

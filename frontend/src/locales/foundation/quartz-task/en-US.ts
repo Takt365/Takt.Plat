@@ -13,6 +13,22 @@
 export default {
   page: {
     executeSubmitted: 'Submitted for background execution; you will be notified when finished',
+    executeMonth: {
+      modalTitle: 'Select costing month',
+      costingMonth: 'Costing month',
+      costingMonthPlaceholder: 'Select costing month',
+      costingMonthRequired: 'Please select a costing month',
+      hint: 'Defaults to the current month. Cron runs without params also use the current month.',
+    },
+    executeDb: {
+      modalTitle: 'Select sync databases',
+      sourceDatabase: 'Source database',
+      targetDatabase: 'Target database',
+      sourceRequired: 'Please select a source database',
+      targetRequired: 'Please select a target database',
+      hintTargetOnly: 'Source is fixed (Sap_Data or in-DB backfill). Choose the target tenant database.',
+      hintSourceTarget: 'Choose staging source and target tenant DB. Cron tasks need the same keys in ExecuteParams.',
+    },
     signalr: {
       executeSucceeded: 'Task {code} succeeded ({duration}ms)',
       executeFailed: 'Task {code} failed ({duration}ms)',

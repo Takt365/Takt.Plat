@@ -46,19 +46,19 @@ export interface SalesPriceMonthlyTrend {
   plantCode: string;
   /** 物料编码 */
   materialCode: string;
-  /** 物料名称 */
-  materialName?: string;
+  /** 物料描述 */
+  materialDescription?: string;
   /** 客户编码（空串表示通用价） */
   customerCode: string;
   /** 客户名称 */
   customerName?: string;
   /** 币种 */
-  currency?: string;
+  currencyCode?: string;
   /** 销售单位 */
   unit?: string;
   /** 各期间单价 */
   periodUnitPrices?: Record<string, number>;
-  /** 各期间单价来源月 */
+  /** 各期间单价来源（当月=yyyy-MM；回填=最近价格日期 yyyy-MM-dd） */
   periodPriceSourcePeriods?: Record<string, string>;
   /** 环比涨跌 */
   trend?: string;

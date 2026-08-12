@@ -25,11 +25,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarIndex("ix_takt_logistics_manufacturing_sop_esd_check_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
 public class TaktSopEsdCheck : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
@@ -55,7 +50,7 @@ public class TaktSopEsdCheck : TaktCompanyEntityBase
     /// <summary>
     /// 监测设备编码
     /// </summary>
-    [SugarColumn(ColumnName = "device_code", ColumnDescription = "监测设备编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "device_code", ColumnDescription = "监测设备编码", ColumnDataType = "nvarchar", Length = 18, IsNullable = true)]
     public string? DeviceCode { get; set; }
 
     /// <summary>

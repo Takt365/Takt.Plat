@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Accounting.Controlling;
 [SugarTable("takt_accounting_controlling_standard_wage_rate", "标准工资率表")]
 [SugarIndex("ix_standard_wage_rate_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_standard_wage_rate_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_standard_wage_rate_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(YearMonth), OrderByType.Asc, true)]
+[SugarIndex("ix_standard_wage_rate_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(YearMonth), OrderByType.Asc, true)]
 public class TaktStandardWageRate : TaktCompanyEntityBase
 {
     /// <summary>
@@ -92,9 +92,4 @@ public class TaktStandardWageRate : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "indirect_wage_rate", ColumnDescription = "间接工资率", ColumnDataType = "decimal", Length = 18, DecimalDigits = 4, IsNullable = false, DefaultValue = "0")]
     public decimal IndirectWageRate { get; set; }
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
 }

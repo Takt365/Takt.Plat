@@ -43,9 +43,9 @@
               {{ formatPeriodPrice(record as MaterialMovingPriceMonthlyTrend, String(column.key)) }}
             </template>
           </template>
-          <template v-else-if="column.key === 'currency'">
+          <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as MaterialMovingPriceMonthlyTrend).currency"
+              :value="(record as MaterialMovingPriceMonthlyTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
@@ -118,7 +118,7 @@ import {
   exportMaterialMovingPriceMonthlyTrendAnalysis,
   getMaterialMovingPriceModelTrendAnalysis,
   getMaterialMovingPriceMonthlyTrendAnalysis,
-} from '@/api/logistics/materials/material-moving-price'
+} from '@/api/logistics/materials/material-moving-trend'
 import type {
   MaterialMovingPriceModelTrend,
   MaterialMovingPriceMonthlyTrend,
@@ -141,6 +141,8 @@ const props = defineProps<{
   plantCode?: string
   /** 期间年月 */
   periodRange?: [string, string] | null
+  /** 产品物料类型（机种推移必填） */
+  materialType?: string
   /** 评估类别 */
   valuation?: string
   /** 物料编码 */
@@ -225,8 +227,7 @@ const columns = computed<TableColumnsType>(() => {
         key: 'materialText',
         width: 180,
         ellipsis: true,
-      },
-    ]
+      }]
     for (const period of periodOrder.value) {
       cols.push({
         title: period,
@@ -273,9 +274,9 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.material.name'),
-      dataIndex: 'materialName',
-      key: 'materialName',
+      title: t('entity.materialdescription.materialdescription'),
+      dataIndex: 'materialDescription',
+      key: 'materialDescription',
       width: 160,
       ellipsis: true,
     },
@@ -286,12 +287,11 @@ const columns = computed<TableColumnsType>(() => {
       width: 100,
     },
     {
-      title: t('entity.materialmovingprice.currency'),
-      dataIndex: 'currency',
-      key: 'currency',
+      title: t('entity.materialmovingprice.currencycode'),
+      dataIndex: 'currencyCode',
+      key: 'currencyCode',
       width: 80,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -433,7 +433,7 @@ function carriedPeriodTooltip(record: MaterialMovingPriceMonthlyTrend, columnKey
 }
 
 /**
- * 期间区间 → API 参数
+ * 期间区间 → API 参数（与销售价格推移一致：periodDateStart/End 为当月首日，供后端 DateTime? 绑定）
  * @param {[string, string] | null | undefined} range 年月区间
  * @returns periodDateStart / periodDateEnd / focusPeriod
  */
@@ -458,12 +458,18 @@ function periodRangeToQuery(range: [string, string] | null | undefined) {
  */
 function buildQuery() {
   const plant = props.plantCode?.trim()
-  if (!plant) {
+  const val = props.valuation?.trim()
+  const type = props.materialType?.trim()
+  if (!plant || !val) {
+    return null
+  }
+  if (props.activeTab === 'model' && !type) {
     return null
   }
   return {
     plantCode: plant,
-    valuation: props.valuation || undefined,
+    materialType: type || undefined,
+    valuation: val,
     materialCode: props.materialCode?.trim() || undefined,
     trendFilter: props.trendFilter || undefined,
     pageIndex: pageIndex.value,

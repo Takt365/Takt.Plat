@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopRevisionService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP版本应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
     }
 
     /// <summary>
-    /// 获取SOP版本列表（分页）
+    /// 获取SOP版本列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopRevisionDto>> GetSopRevisionListAsync(TaktSopRevisionQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopRevisionDto>.Create(
+                new List<TaktSopRevisionDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopRevisionRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -102,8 +110,8 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.Revision ?? e.Id.ToString(),
+            DictValue = e.Revision,
+            DictLabel = e.Revision,
         }).ToList();
     }
 
@@ -281,7 +289,15 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopRevisionAsync(TaktSopRevisionQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopRevisionQueryDto());
+        var queryDto = query ?? new TaktSopRevisionQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopRevisionExportDto>(),
+                sheetName ?? "SOP版本数据",
+                fileName ?? "SOP版本导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopRevisionRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -319,7 +335,7 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
     }
 
     /// <summary>
-    /// 保存SOP版本子表级联（SOP多语言正文；Create/Update 后按主表 Id 先删后插）
+    /// 保存SOP版本子表级联（SOP多语言正文；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -327,40 +343,65 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
     private async Task SaveSopRevisionChildrenAsync(TaktSopRevision entity, TaktSopRevisionCreateDto dto)
     {
         // SOP多语言正文（Contents）
-        if (dto.Contents is not { Count: > 0 })
+        List<TaktSopContentUpdateDto>? contentsForSave;
+        if (dto is TaktSopRevisionUpdateDto updateDtoForContents && updateDtoForContents.Contents != null)
+        {
+            contentsForSave = updateDtoForContents.Contents;
+        }
+        else if (dto.Contents != null)
+        {
+            contentsForSave = dto.Contents.Adapt<List<TaktSopContentUpdateDto>>();
+        }
+        else
+        {
+            contentsForSave = null;
+        }
+        if (contentsForSave is not { Count: > 0 })
         {
             await _sopContentRepository.DeleteAsync(x => x.RevisionId == entity.Id);
         }
         else
         {
-            var contents = dto.Contents.Adapt<List<TaktSopContent>>();
-            foreach (var child in contents)
+            var existingList = await _sopContentRepository.GetListAsync(x => x.RevisionId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktSopContent>();
+            for (var i = 0; i < contentsForSave.Count; i++)
             {
-                child.RevisionId = entity.Id;
+                var childDto = contentsForSave[i];
+                childDto.RevisionId = entity.Id;
+                if (childDto.SopContentId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.SopContentId, out var target))
+                    {
+                        throw new TaktBusinessException("SOP多语言正文不存在（SopContentId={childDto.SopContentId}）");
+                    }
+                    if (target.RevisionId != entity.Id)
+                    {
+                        throw new TaktBusinessException("SOP多语言正文不属于当前主表（SopContentId={childDto.SopContentId}）");
+                    }
+                    submittedIds.Add(childDto.SopContentId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.SopContentId;
+                    target.RevisionId = entity.Id;
+                    await _sopContentRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var child = childDto.Adapt<TaktSopContent>();
+                    child.Id = 0;
+                    child.RevisionId = entity.Id;
+                    toCreate.Add(child);
+                }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < contents.Count; i++)
-                        {
-                            var key = $"{contents[i].CompanyCode}|{contents[i].RevisionId}|{contents[i].ContentLang}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"SOP多语言正文第{i + 1}项与本次提交的其他项重复（CompanyCode、RevisionId、ContentLang）");
-                            }
-                        }
-            await _sopContentRepository.DeleteAsync(x => x.RevisionId == entity.Id);
-            foreach (var child in contents)
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-            var isUnique_ix_takt_logistics_manufacturing_sop_content_lang_unique = await _uniqueValidator.IsUniqueAsync(
-                _sopContentRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.RevisionId == child.RevisionId
-                    && x.ContentLang == child.ContentLang);
-            if (!isUnique_ix_takt_logistics_manufacturing_sop_content_lang_unique)
+                await _sopContentRepository.DeleteAsync(removed.Id);
+            }
+            if (toCreate.Count > 0)
             {
-                throw new TaktBusinessException("SOP多语言正文的CompanyCode、RevisionId、ContentLang已存在");
+                await _sopContentRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _sopContentRepository.CreateRangeAsync(contents);
         }
     }
     // ========================================
@@ -376,90 +417,184 @@ public class TaktSopRevisionService : TaktServiceBase, ITaktSopRevisionService
     {
         var exp = Expressionable.Create<TaktSopRevision>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.SopId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.Revision != null && x.Revision.Contains(keywords))
                 || (x.FileUrl != null && x.FileUrl.Contains(keywords))
                 || (x.ChangeDesc != null && x.ChangeDesc.Contains(keywords))
-                || SqlFunc.ToString(x.EcnId).Contains(keywords)
-                || SqlFunc.ToString(x.IsLocked).Contains(keywords)
-                || SqlFunc.ToString(x.ForceLeaderAck).Contains(keywords)
-                || SqlFunc.ToString(x.RevisionStatus).Contains(keywords)
-                || SqlFunc.ToString(x.EffectiveRule).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.SopId.HasValue == true)
         {
-            exp = exp.And(x => x.SopId == queryDto.SopId);
+            var sopId = queryDto.SopId;
+            exp = exp.And(x => x.SopId == sopId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Revision))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Revision))
         {
-            exp = exp.And(x => x.Revision != null && x.Revision.Contains(queryDto.Revision));
+            var revision = queryDto.Revision;
+            exp = exp.And(x => x.Revision != null && x.Revision.Contains(revision));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FileUrl))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FileUrl))
         {
-            exp = exp.And(x => x.FileUrl != null && x.FileUrl.Contains(queryDto.FileUrl));
+            var fileUrl = queryDto.FileUrl;
+            exp = exp.And(x => x.FileUrl != null && x.FileUrl.Contains(fileUrl));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ChangeDesc))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ChangeDesc))
         {
-            exp = exp.And(x => x.ChangeDesc != null && x.ChangeDesc.Contains(queryDto.ChangeDesc));
+            var changeDesc = queryDto.ChangeDesc;
+            exp = exp.And(x => x.ChangeDesc != null && x.ChangeDesc.Contains(changeDesc));
         }
 
         if (queryDto?.EcnId.HasValue == true)
         {
-            exp = exp.And(x => x.EcnId == queryDto.EcnId);
+            var ecnId = queryDto.EcnId;
+            exp = exp.And(x => x.EcnId == ecnId);
         }
 
         if (queryDto?.IsLocked.HasValue == true)
         {
-            exp = exp.And(x => x.IsLocked == queryDto.IsLocked);
+            var isLocked = queryDto.IsLocked;
+            exp = exp.And(x => x.IsLocked == isLocked);
         }
 
         if (queryDto?.ForceLeaderAck.HasValue == true)
         {
-            exp = exp.And(x => x.ForceLeaderAck == queryDto.ForceLeaderAck);
+            var forceLeaderAck = queryDto.ForceLeaderAck;
+            exp = exp.And(x => x.ForceLeaderAck == forceLeaderAck);
         }
 
         if (queryDto?.RevisionStatus.HasValue == true)
         {
-            exp = exp.And(x => x.RevisionStatus == queryDto.RevisionStatus);
+            var revisionStatus = queryDto.RevisionStatus;
+            exp = exp.And(x => x.RevisionStatus == revisionStatus);
         }
 
         if (queryDto?.EffectiveRule.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveRule == queryDto.EffectiveRule);
+            var effectiveRule = queryDto.EffectiveRule;
+            exp = exp.And(x => x.EffectiveRule == effectiveRule);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopRevisionQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.SopId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Revision))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.FileUrl))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ChangeDesc))
+        {
+            return true;
+        }
+        if (queryDto.EcnId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsLocked.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ForceLeaderAck.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RevisionStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EffectiveRule.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

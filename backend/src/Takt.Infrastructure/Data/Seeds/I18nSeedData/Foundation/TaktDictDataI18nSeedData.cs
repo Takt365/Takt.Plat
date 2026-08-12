@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -170,15 +170,6 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictdata.cssclass", "zh-CN", "CSS类名", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
             // entity.dictdata.cssclass
             new TranslationSeedItem("entity.dictdata.cssclass", "zh-HK", "CSS类名_hk", "CSS 类名（0=默认, 1=primary, 2=success, 3=warning, 4=danger, 5=info） 用于数据表格中字典值显示的颜色标签"),
-
-            // entity.dictdata.culturecode
-            new TranslationSeedItem("entity.dictdata.culturecode", "en-US", "区域文化编码_us", "区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，仅当前 Accept-Language 匹配时与全局项一并加载）"),
-            // entity.dictdata.culturecode
-            new TranslationSeedItem("entity.dictdata.culturecode", "ja-JP", "区域文化编码_jp", "区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，仅当前 Accept-Language 匹配时与全局项一并加载）"),
-            // entity.dictdata.culturecode
-            new TranslationSeedItem("entity.dictdata.culturecode", "zh-CN", "区域文化编码", "区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，仅当前 Accept-Language 匹配时与全局项一并加载）"),
-            // entity.dictdata.culturecode
-            new TranslationSeedItem("entity.dictdata.culturecode", "zh-HK", "区域文化编码_hk", "区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，仅当前 Accept-Language 匹配时与全局项一并加载）"),
 
             // entity.dictdata.isdefault
             new TranslationSeedItem("entity.dictdata.isdefault", "en-US", "是否默认项_us", "是否默认项（1=是，0=否）"),

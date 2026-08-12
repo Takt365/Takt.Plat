@@ -22,6 +22,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_work_center_resource_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_work_center_resource_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_aps_work_center_resource_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkCenterId), OrderByType.Asc, nameof(ResourceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_work_center_resource_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktWorkCenterResource : TaktCompanyEntityBase
 {
     /// <summary>
@@ -31,10 +32,11 @@ public class TaktWorkCenterResource : TaktCompanyEntityBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkCenterId { get; set; }
 
+
     /// <summary>
     /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，冗余；选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string WorkCenterCode { get; set; } = string.Empty;
 
     /// <summary>

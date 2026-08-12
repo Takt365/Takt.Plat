@@ -21,7 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarTable("takt_logistics_serial_inbound_item", "序列号入库明细表")]
 [SugarIndex("ix_serial_inbound_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_inbound_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_inbound_item_inbound_serial_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundSerialNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_inbound_item_inbound_serial_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundSerialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_serial_inbound_item_inbound_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InboundId), OrderByType.Asc, false)]
 public class TaktSerialInboundItem : TaktCompanyEntityBase
 {
@@ -34,8 +34,8 @@ public class TaktSerialInboundItem : TaktCompanyEntityBase
     /// <summary>
     /// 入库单号（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "inbound_no", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string InboundNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "inbound_code", ColumnDescription = "入库单号", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
+    public string InboundCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
     /// </summary>
@@ -44,8 +44,8 @@ public class TaktSerialInboundItem : TaktCompanyEntityBase
     /// <summary>
     /// 入库序列号（租户+公司内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "inbound_serial_no", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
-    public string InboundSerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "inbound_serial_code", ColumnDescription = "入库序列号", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]
+    public string InboundSerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

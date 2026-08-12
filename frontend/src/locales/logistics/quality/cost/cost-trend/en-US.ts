@@ -15,7 +15,7 @@ export default {
     title: 'Quality Cost Trend',
     periodRange: 'Period',
     costCategory: 'Cost Category',
-    costCurrency: 'Currency',
+    currencyCode: 'Currency',
     selectPlantRequired: 'Please select a plant',
     selectPeriodRequired: 'Please select a period range',
     summary: '{count} cost category row(s) (monthly totals from assurance, issue, and incident)',

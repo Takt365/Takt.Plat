@@ -35,7 +35,7 @@ public class TaktQualityIncidentItem : TaktCompanyEntityBase
     /// <summary>
     /// 品质事故编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_incident_code", ColumnDescription = "品质事故编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_incident_code", ColumnDescription = "品质事故编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIncidentCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -51,10 +51,10 @@ public class TaktQualityIncidentItem : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", Length = 70, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 废弃费用(元)

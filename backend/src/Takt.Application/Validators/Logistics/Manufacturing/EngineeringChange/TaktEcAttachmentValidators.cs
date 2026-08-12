@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcAttachment 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktEcAttachment 生成，请按需审阅）
 // 
@@ -35,15 +35,21 @@ public class TaktEcAttachmentCreateValidator : AbstractValidator<TaktEcAttachmen
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EcId)
             .GreaterThanOrEqualTo(0).WithMessage("设变主表ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
-        RuleFor(x => x.DocNo)
+        RuleFor(x => x.DocCode)
             .NotEmpty().WithMessage("文件编码不能为空")
             .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)
@@ -81,15 +87,21 @@ public class TaktEcAttachmentUpdateValidator : AbstractValidator<TaktEcAttachmen
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.EcId)
             .GreaterThanOrEqualTo(0).WithMessage("设变主表ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
-        RuleFor(x => x.DocNo)
+        RuleFor(x => x.DocCode)
             .NotEmpty().WithMessage("文件编码不能为空")
             .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)
@@ -123,15 +135,19 @@ public class TaktEcAttachmentImportValidator : AbstractValidator<TaktEcAttachmen
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.EcId)
             .GreaterThanOrEqualTo(0).WithMessage("设变主表ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.AttachmentType)
             .NotEmpty().WithMessage("文件类别不能为空")
             .MaximumLength(8).WithMessage("文件类别长度不能超过8个字符");
-        RuleFor(x => x.DocNo)
+        RuleFor(x => x.DocCode)
             .NotEmpty().WithMessage("文件编码不能为空")
             .MaximumLength(50).WithMessage("文件编码长度不能超过50个字符");
         RuleFor(x => x.FileName)

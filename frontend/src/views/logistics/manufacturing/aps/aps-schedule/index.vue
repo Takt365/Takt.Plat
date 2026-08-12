@@ -125,7 +125,7 @@
           v-model:value="advancedQueryForm.materialRequirementsPlanningCode"
           :placeholder="pi.queryPh('materialRequirementsPlanningCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -268,7 +268,7 @@
           v-model:value="advancedQueryForm.productionLineCode"
           :placeholder="pi.queryPh('productionLineCode', 'required')"
           show-count
-          :maxlength="50"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
@@ -662,7 +662,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -974,8 +973,6 @@ const getApsScheduleId = (record: ApsScheduleRowRecord): string => {
  * @param field 字段名
  */
 const getApsScheduleField = (record: any, field: string): any => record?.[field]
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

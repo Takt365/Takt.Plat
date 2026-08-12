@@ -38,7 +38,7 @@ export const CUSTOMERCOMPLAINT_LIST_FIELDS = [
   'handlingResult',
   'customerSatisfaction',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'complaintStatus',
 ] as const
 
@@ -65,7 +65,7 @@ export const CUSTOMERCOMPLAINT_PLACEHOLDER = {
   handlingResult: 'optional',
   customerSatisfaction: 'optional',
   attachments: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   complaintStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -93,7 +93,7 @@ export const CUSTOMERCOMPLAINT_QUERY_STRING_FIELDS = [
   'complaintDescription',
   'handlingResult',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

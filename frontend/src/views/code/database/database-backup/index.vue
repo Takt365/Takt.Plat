@@ -488,10 +488,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiTimerLine,
         permission: 'code:database:backup:schedule',
         onClick: (record: DatabaseBackupRowRecord) => openScheduleModal(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /**
  * 表格 row-key

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostDtos.cs
-// 创建时间：2026-07-14
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BomMaterialCost 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBomMaterialCost 生成，请按需审阅）
 // 
@@ -35,23 +35,24 @@ public class TaktBomMaterialCostDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BomMaterialCostId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    public string MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     public string ProductCode { get; set; } = string.Empty;
 
@@ -66,7 +67,7 @@ public class TaktBomMaterialCostDto : TaktCompanyDtoBase
     public decimal ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -76,7 +77,7 @@ public class TaktBomMaterialCostDto : TaktCompanyDtoBase
     public string CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
     /// </summary>
     public DateTime CostingDate { get; set; }
 
@@ -103,22 +104,32 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal? ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    public string? MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -133,7 +144,7 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public decimal? ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -143,12 +154,12 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public string? CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）（范围查询-开始）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）（范围查询-开始）
     /// </summary>
     public DateTime? CostingDateStart { get; set; }
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）（范围查询-结束）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）（范围查询-结束）
     /// </summary>
     public DateTime? CostingDateEnd { get; set; }
 
@@ -193,31 +204,37 @@ public class TaktBomMaterialCostCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
-    [Required(ErrorMessage = "机种编码（关联 TaktModelDestination.ModelCode）不能为空")]
+    [Required(ErrorMessage = "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>不能为空")]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
     /// </summary>
-    [Required(ErrorMessage = "产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位不能为空")]
+    [Required(ErrorMessage = "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>不能为空")]
+    public string MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
+    /// </summary>
+    [Required(ErrorMessage = "产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>不能为空")]
     public string ProductCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -232,9 +249,9 @@ public class TaktBomMaterialCostCreateDto
     public decimal ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
-    [Required(ErrorMessage = "币种（字典 accounting_currency_code，如 CNY/USD）不能为空")]
+    [Required(ErrorMessage = "币种（字典 accounting_currency_code；如 CNY/USD）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -244,7 +261,7 @@ public class TaktBomMaterialCostCreateDto
     public string CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
     /// </summary>
     public DateTime CostingDate { get; set; }
 
@@ -300,22 +317,32 @@ public class TaktBomMaterialCostTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal? ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    public string? MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -330,7 +357,7 @@ public class TaktBomMaterialCostTemplateDto
     public decimal? ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -340,7 +367,7 @@ public class TaktBomMaterialCostTemplateDto
     public string? CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
     /// </summary>
     public DateTime? CostingDate { get; set; }
 
@@ -372,27 +399,32 @@ public class TaktBomMaterialCostImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal? ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    public string? MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
 
@@ -407,7 +439,7 @@ public class TaktBomMaterialCostImportDto
     public decimal? ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
@@ -417,7 +449,7 @@ public class TaktBomMaterialCostImportDto
     public string? CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
     /// </summary>
     public DateTime? CostingDate { get; set; }
 
@@ -455,22 +487,27 @@ public class TaktBomMaterialCostExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode）
+    /// 机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>
     /// </summary>
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+机种+核算月份下各成品产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
     /// </summary>
     public decimal ModelMonthlyAverageCost { get; set; }
 
     /// <summary>
-    /// 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+    /// 物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>
+    /// </summary>
+    public string MaterialType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品编码（父件物料编码；本表业务主键之一） <para>分析/成本推移查询栏「物料」下拉：须用 TaktBomMaterialCostAnalyses/product-options（本表 ProductCode 去重，可按 PlantCode/MaterialType/ModelCode 过滤），❌ 勿用 TaktMaterialPlants/options 或字典 logistics_material_type。</para> <para>导入时 18 位纯数字自动归一化为后 10 位。</para>
     /// </summary>
     public string ProductCode { get; set; } = string.Empty;
 
@@ -485,7 +522,7 @@ public class TaktBomMaterialCostExportDto
     public decimal ProductMonthlyCost { get; set; }
 
     /// <summary>
-    /// 币种（字典 accounting_currency_code，如 CNY/USD）
+    /// 币种（字典 accounting_currency_code；如 CNY/USD）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
@@ -495,7 +532,7 @@ public class TaktBomMaterialCostExportDto
     public string CostingPeriod { get; set; } = string.Empty;
 
     /// <summary>
-    /// 核算日期（同月最后核算日；明细可能有多日，主表存最后一日的汇总结果）
+    /// 核算日期（必须与本次成本合计/重算所用明细 TaktBomMaterialCostItem.CostingDate 一致；同月多日时取最后核算日）
     /// </summary>
     public DateTime CostingDate { get; set; }
 
@@ -513,50 +550,4 @@ public class TaktBomMaterialCostExportDto
     /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
-}
-
-/// <summary>
-/// BOM 物料成本机种维度展示行（同一物理表按工厂+机种+核算期间去重聚合；非独立实体）
-/// </summary>
-public class TaktBomMaterialCostModelGroupDto
-{
-    /// <summary>
-    /// 分组键（plant|model|period，供前端 row-key）
-    /// </summary>
-    public string GroupKey { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 机种编码
-    /// </summary>
-    public string ModelCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 机种月平均材料成本
-    /// </summary>
-    public decimal ModelMonthlyAverageCost { get; set; }
-
-    /// <summary>
-    /// 币种
-    /// </summary>
-    public string CurrencyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 核算期间（yyyy-MM）
-    /// </summary>
-    public string CostingPeriod { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 核算日期（组内代表行，通常为同月最后核算日）
-    /// </summary>
-    public DateTime CostingDate { get; set; }
-
-    /// <summary>
-    /// 组内产品行数
-    /// </summary>
-    public int ProductRowCount { get; set; }
 }

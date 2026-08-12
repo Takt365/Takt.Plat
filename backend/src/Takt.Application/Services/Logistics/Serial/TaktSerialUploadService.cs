@@ -113,11 +113,11 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
         var isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique = await _uniqueValidator.IsUniqueAsync(
             _serialUploadRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ShippingInvoiceNo == entity.ShippingInvoiceNo
-                && x.SequenceNo == entity.SequenceNo);
+                && x.ShippingInvoiceCode == entity.ShippingInvoiceCode
+                && x.SequenceCode == entity.SequenceCode);
         if (!isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique)
         {
-            throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceNo、SequenceNo已存在");
+            throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceCode、SequenceCode已存在");
         }
         entity = await _serialUploadRepository.CreateAsync(entity);
         return await GetSerialUploadByIdAsync(entity.Id) ?? entity.Adapt<TaktSerialUploadDto>();
@@ -140,12 +140,12 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
         var isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique = await _uniqueValidator.IsUniqueAsync(
             _serialUploadRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ShippingInvoiceNo == entity.ShippingInvoiceNo
-                && x.SequenceNo == entity.SequenceNo,
+                && x.ShippingInvoiceCode == entity.ShippingInvoiceCode
+                && x.SequenceCode == entity.SequenceCode,
             id);
         if (!isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique)
         {
-            throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceNo、SequenceNo已存在");
+            throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceCode、SequenceCode已存在");
         }
         await _serialUploadRepository.UpdateAsync(entity);
         return await GetSerialUploadByIdAsync(id) ?? throw new TaktBusinessException("序列号上传不存在");
@@ -219,19 +219,19 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
             try
             {
                 var entity = rows[i].Adapt<TaktSerialUpload>();
-                var importKey = $"{entity.PlantCode}|{entity.ShippingInvoiceNo}|{entity.SequenceNo}";
+                var importKey = $"{entity.PlantCode}|{entity.ShippingInvoiceCode}|{entity.SequenceCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ShippingInvoiceNo、SequenceNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ShippingInvoiceCode、SequenceCode）");
                 }
                 var isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique = await _uniqueValidator.IsUniqueAsync(
                     _serialUploadRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.ShippingInvoiceNo == entity.ShippingInvoiceNo
-                        && x.SequenceNo == entity.SequenceNo);
+                        && x.ShippingInvoiceCode == entity.ShippingInvoiceCode
+                        && x.SequenceCode == entity.SequenceCode);
                 if (!isUnique_ix_takt_logistics_serial_upload_invoice_seq_unique)
                 {
-                    throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceNo、SequenceNo已存在");
+                    throw new TaktBusinessException("序列号上传的PlantCode、ShippingInvoiceCode、SequenceCode已存在");
                 }
                 await _serialUploadRepository.CreateAsync(entity);
                 success += 1;
@@ -288,14 +288,15 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(keywords))
-                || SqlFunc.ToString(x.SequenceNo).Contains(keywords)
+                || (x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(keywords))
+                || SqlFunc.ToString(x.SequenceCode).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
-                || (x.SerialNo != null && x.SerialNo.Contains(keywords))
+                || (x.SerialCode != null && x.SerialCode.Contains(keywords))
                 || SqlFunc.ToString(x.PackingQuantity).Contains(keywords)
                 || (x.TransportMode != null && x.TransportMode.Contains(keywords))
                 || (x.MaterialText != null && x.MaterialText.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.OutboundDate).Contains(keywords)
@@ -308,14 +309,14 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceNo))
+        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceCode))
         {
-            exp = exp.And(x => x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(queryDto.ShippingInvoiceNo));
+            exp = exp.And(x => x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(queryDto.ShippingInvoiceCode));
         }
 
-        if (queryDto?.SequenceNo.HasValue == true)
+        if (queryDto?.SequenceCode.HasValue == true)
         {
-            exp = exp.And(x => x.SequenceNo == queryDto.SequenceNo);
+            exp = exp.And(x => x.SequenceCode == queryDto.SequenceCode);
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
@@ -328,9 +329,9 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
             exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNo))
+        if (!string.IsNullOrEmpty(queryDto?.SerialCode))
         {
-            exp = exp.And(x => x.SerialNo != null && x.SerialNo.Contains(queryDto.SerialNo));
+            exp = exp.And(x => x.SerialCode != null && x.SerialCode.Contains(queryDto.SerialCode));
         }
 
         if (queryDto?.PackingQuantity.HasValue == true)
@@ -346,6 +347,11 @@ public class TaktSerialUploadService : TaktServiceBase, ITaktSerialUploadService
         if (!string.IsNullOrEmpty(queryDto?.MaterialText))
         {
             exp = exp.And(x => x.MaterialText != null && x.MaterialText.Contains(queryDto.MaterialText));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

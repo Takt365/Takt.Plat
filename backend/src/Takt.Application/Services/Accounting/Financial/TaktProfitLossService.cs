@@ -116,12 +116,12 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
         var entity = dto.Adapt<TaktProfitLoss>();
         var isUnique_ix_takt_accounting_financial_profit_loss_unique = await _uniqueValidator.IsUniqueAsync(
             _profitLossRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.StatementLineCode == entity.StatementLineCode);
         if (!isUnique_ix_takt_accounting_financial_profit_loss_unique)
         {
-            throw new TaktBusinessException("利润的RelatedPlant、PeriodCode、StatementLineCode已存在");
+            throw new TaktBusinessException("利润的PlantCode、PeriodCode、StatementLineCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -151,13 +151,13 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
         dto.Adapt(entity);
         var isUnique_ix_takt_accounting_financial_profit_loss_unique = await _uniqueValidator.IsUniqueAsync(
             _profitLossRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.StatementLineCode == entity.StatementLineCode,
             id);
         if (!isUnique_ix_takt_accounting_financial_profit_loss_unique)
         {
-            throw new TaktBusinessException("利润的RelatedPlant、PeriodCode、StatementLineCode已存在");
+            throw new TaktBusinessException("利润的PlantCode、PeriodCode、StatementLineCode已存在");
         }
         ApplyProfitLossCasMeasurement(entity);
         await _profitLossRepository.UpdateAsync(entity);
@@ -269,19 +269,19 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
             try
             {
                 var entity = rows[i].Adapt<TaktProfitLoss>();
-                var importKey = $"{entity.RelatedPlant}|{entity.PeriodCode}|{entity.StatementLineCode}";
+                var importKey = $"{entity.PlantCode}|{entity.PeriodCode}|{entity.StatementLineCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、PeriodCode、StatementLineCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PeriodCode、StatementLineCode）");
                 }
                 var isUnique_ix_takt_accounting_financial_profit_loss_unique = await _uniqueValidator.IsUniqueAsync(
                     _profitLossRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.PeriodCode == entity.PeriodCode
                         && x.StatementLineCode == entity.StatementLineCode);
                 if (!isUnique_ix_takt_accounting_financial_profit_loss_unique)
                 {
-                    throw new TaktBusinessException("利润的RelatedPlant、PeriodCode、StatementLineCode已存在");
+                    throw new TaktBusinessException("利润的PlantCode、PeriodCode、StatementLineCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -343,7 +343,7 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PeriodCode != null && x.PeriodCode.Contains(keywords))
                 || (x.StatementLineCode != null && x.StatementLineCode.Contains(keywords))
                 || (x.StatementLineName != null && x.StatementLineName.Contains(keywords))
@@ -358,15 +358,16 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.ProfitLossStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PeriodCode))
@@ -437,6 +438,11 @@ public class TaktProfitLossService : TaktServiceBase, ITaktProfitLossService
         if (queryDto?.ProfitLossStatus.HasValue == true)
         {
             exp = exp.And(x => x.ProfitLossStatus == queryDto.ProfitLossStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

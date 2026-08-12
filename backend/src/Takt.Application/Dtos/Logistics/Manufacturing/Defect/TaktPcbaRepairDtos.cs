@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaRepair 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaRepair 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PcbaRepairId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（回填：随工单）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -51,9 +47,9 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -66,7 +62,7 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -83,7 +79,7 @@ public class TaktPcbaRepairDto : TaktCompanyDtoBase
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -119,12 +115,17 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -139,9 +140,9 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -154,7 +155,7 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -171,7 +172,7 @@ public class TaktPcbaRepairQueryDto : TaktPagedQuery
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -219,9 +220,9 @@ public class TaktPcbaRepairCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -230,9 +231,9 @@ public class TaktPcbaRepairCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -241,10 +242,10 @@ public class TaktPcbaRepairCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）不能为空")]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -257,9 +258,9 @@ public class TaktPcbaRepairCreateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -276,7 +277,7 @@ public class TaktPcbaRepairCreateDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -287,7 +288,7 @@ public class TaktPcbaRepairCreateDto
     /// <summary>
     /// PCBA改修明细列表（子表，级联保存）
     /// </summary>
-    public List<TaktPcbaRepairDetailUpdateDto>? PcbaRepairDetails { get; set; }
+    public List<TaktPcbaRepairDetailCreateDto>? PcbaRepairDetails { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -319,6 +320,11 @@ public class TaktPcbaRepairUpdateDto : TaktPcbaRepairCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PcbaRepairId { get; set; }
 
+    /// <summary>
+    /// PCBA改修明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktPcbaRepairDetailUpdateDto>? PcbaRepairDetails { get; set; }
+
 }
 
 // ========================================
@@ -341,12 +347,17 @@ public class TaktPcbaRepairTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -356,9 +367,9 @@ public class TaktPcbaRepairTemplateDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -371,7 +382,7 @@ public class TaktPcbaRepairTemplateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -388,7 +399,7 @@ public class TaktPcbaRepairTemplateDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -428,9 +439,9 @@ public class TaktPcbaRepairImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -438,7 +449,7 @@ public class TaktPcbaRepairImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -448,9 +459,9 @@ public class TaktPcbaRepairImportDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -463,7 +474,7 @@ public class TaktPcbaRepairImportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -480,7 +491,7 @@ public class TaktPcbaRepairImportDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码
@@ -531,7 +542,7 @@ public class TaktPcbaRepairExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -541,9 +552,9 @@ public class TaktPcbaRepairExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）
@@ -556,7 +567,7 @@ public class TaktPcbaRepairExportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -573,7 +584,7 @@ public class TaktPcbaRepairExportDto
     /// <summary>
     /// 批次
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料编码

@@ -55,7 +55,6 @@ export interface Vocabulary extends TenantDtoBase {
 
 }
 
-
 /**
  * Vocabulary 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -67,6 +66,11 @@ export interface VocabularyQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 敏感词文本（租户内唯一）
@@ -115,7 +119,6 @@ export interface VocabularyQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Vocabulary DTO
  * 对应前端 VocabularyCreate
@@ -126,6 +129,11 @@ export interface VocabularyCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 敏感词文本（租户内唯一）
@@ -164,7 +172,6 @@ export interface VocabularyCreate {
 
 }
 
-
 /**
  * 更新Vocabulary DTO
  * 继承 TaktVocabularyCreateDto，添加 VocabularyId 字段
@@ -178,7 +185,6 @@ export interface VocabularyUpdate extends VocabularyCreate {
   vocabularyId: string;
 
 }
-
 
 /**
  * Vocabulary 状态更新 DTO
@@ -198,7 +204,6 @@ export interface VocabularyStatus {
 
 }
 
-
 /**
  * Vocabulary 导入模板行 DTO
  * 对应前端 VocabularyTemplate
@@ -209,6 +214,11 @@ export interface VocabularyTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 敏感词文本（租户内唯一）
@@ -246,7 +256,6 @@ export interface VocabularyTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Vocabulary 导入 DTO（独立实现，不继承 TemplateDto）
@@ -260,6 +269,11 @@ export interface VocabularyImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 敏感词文本（租户内唯一）
    */
   wordText?: string;
@@ -295,7 +309,6 @@ export interface VocabularyImport {
   remark?: string;
 
 }
-
 
 /**
  * Vocabulary 导出 DTO（独立实现，不继承响应 Dto）

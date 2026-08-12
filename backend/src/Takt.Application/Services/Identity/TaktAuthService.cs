@@ -131,7 +131,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     }
 
     /// <summary>
-    /// 登录前预览：解析用户默认公司、用户 DefaultCulture 与公司 DefaultCulture（与假日无关）
+    /// 登录前预览：解析用户默认公司、用户 CultureCode 与公司 CultureCode（与假日无关）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="username">登录用户名</param>
@@ -185,7 +185,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         }
 
         result.UserFound = true;
-        result.DefaultCulture = (user.DefaultCulture ?? string.Empty).Trim();
+        result.CultureCode = (user.CultureCode ?? string.Empty).Trim();
 
         WriteAuthFlowLog(
             TaktAuthLoginPhases.LoginPreviewLocale,
@@ -199,7 +199,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             new Dictionary<string, object?>
             {
                 ["Step"] = "Start",
-                ["UserDefaultCulture"] = result.DefaultCulture,
+                ["UserCultureCode"] = result.CultureCode,
             });
 
         var (companyCode, companyDefaultCulture) = await ResolveDefaultCompanyFromTablesAsync(user.Id, effectiveTenant);
@@ -234,7 +234,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             new Dictionary<string, object?>
             {
                 ["Step"] = "ResolveDefaultCulture",
-                ["UserDefaultCulture"] = result.DefaultCulture,
+                ["UserCultureCode"] = result.CultureCode,
                 ["CompanyDefaultCulture"] = result.CompanyDefaultCulture,
             });
 
@@ -242,11 +242,11 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     }
 
     /// <summary>
-    /// 按 TaktUserCompany.is_default=Yes 与 TaktCompany 启用状态解析默认公司及 DefaultCulture
+    /// 按 TaktUserCompany.is_default=Yes 与 TaktCompany 启用状态解析默认公司及 CultureCode
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">租户编码</param>
-    /// <returns>公司编码与 DefaultCulture；无匹配时返回 (null, null)</returns>
+    /// <returns>公司编码与 CultureCode；无匹配时返回 (null, null)</returns>
     private async Task<(string? CompanyCode, string? DefaultCulture)> ResolveDefaultCompanyFromTablesAsync(
         long userId,
         string tenantCode)
@@ -285,7 +285,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             return (null, null);
         }
 
-        return (company.CompanyCode, (company.DefaultCulture ?? string.Empty).Trim());
+        return (company.CompanyCode, (company.CultureCode ?? string.Empty).Trim());
     }
 
     /// <summary>
@@ -848,12 +848,16 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         }
 
         var companyDefaultCulture = string.Empty;
+        var relatedPlant = string.Empty;
         if (!string.IsNullOrWhiteSpace(companyCode))
         {
             var activeCompany = await _companyRepository.FirstAsync(c =>
                 c.TenantCode == tenantCode && c.CompanyCode == companyCode);
-            companyDefaultCulture = (activeCompany?.DefaultCulture ?? string.Empty).Trim();
+            companyDefaultCulture = (activeCompany?.CultureCode ?? string.Empty).Trim();
+            relatedPlant = (activeCompany?.RelatedPlant ?? string.Empty).Trim();
         }
+
+        var userCulture = (user.CultureCode ?? string.Empty).Trim();
 
         return new TaktUserInfoResponseDto
         {
@@ -869,7 +873,8 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
             Avatar = avatar,
             TenantCode = user.TenantCode,
             CompanyCode = companyCode,
-            DefaultCulture = (user.DefaultCulture ?? string.Empty).Trim(),
+            RelatedPlant = relatedPlant,
+            DefaultCulture = userCulture,
             CompanyDefaultCulture = companyDefaultCulture,
             UserStatus = (int)user.UserStatus,
             Roles = roles,

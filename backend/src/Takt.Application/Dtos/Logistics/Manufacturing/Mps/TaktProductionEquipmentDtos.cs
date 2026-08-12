@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionEquipmentDtos.cs
-// 创建时间：2026-07-14
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionEquipment 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionEquipment 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Mps;
 // ========================================
 
 /// <summary>
-/// 生产设备主数据（排程资源；粗能力 StdEquipmentHourlyCapacity=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate；多穴=(60÷StdMinutesPerCycle)×CavityCount×AvailabilityRate）
+/// 生产设备主数据（排程资源；粗能力 StdEquipHourlyCapacity=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate；多穴=(60÷StdMinutesPerCycle)×CavityCount×AvailabilityRate）
 /// 对应前端 TaktProductionEquipmentDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -35,25 +35,21 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionEquipmentId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int EquipmentCategory { get; set; } = 0;
+    public int EquipCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    public string ProductionEquipmentName { get; set; } = string.Empty;
+    public string ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -61,24 +57,24 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
     public string MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出厂日期（Manufacturing Date）
@@ -88,7 +84,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -118,7 +114,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal StdEquipmentHourlyCapacity { get; set; }
+    public decimal StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -363,7 +359,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -373,7 +369,7 @@ public class TaktProductionEquipmentDto : TaktCompanyDtoBase
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int ProductionEquipmentStatus { get; set; } = 0;
+    public int ProdEquipStatus { get; set; } = 0;
 
 }
 
@@ -398,24 +394,29 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int? EquipmentCategory { get; set; }
+    public int? EquipCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    public string? ProductionEquipmentName { get; set; } = string.Empty;
+    public string? ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -423,34 +424,39 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
     public string? MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 出厂日期（Manufacturing Date）
+    /// 出厂日期（Manufacturing Date）（范围查询-开始）
     /// </summary>
-    public DateTime? ManufacturingDate { get; set; }
+    public DateTime? ManufacturingDateStart { get; set; }
+
+    /// <summary>
+    /// 出厂日期（Manufacturing Date）（范围查询-结束）
+    /// </summary>
+    public DateTime? ManufacturingDateEnd { get; set; }
 
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -480,7 +486,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal? StdEquipmentHourlyCapacity { get; set; }
+    public decimal? StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -703,19 +709,34 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     public string? InterfaceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 投产日期（Commissioning Date；设备正式投产日期）
+    /// 投产日期（Commissioning Date；设备正式投产日期）（范围查询-开始）
     /// </summary>
-    public DateTime? CommissioningDate { get; set; }
+    public DateTime? CommissioningDateStart { get; set; }
 
     /// <summary>
-    /// 停产日期（Decommissioning Date；设备停止生产日期）
+    /// 投产日期（Commissioning Date；设备正式投产日期）（范围查询-结束）
     /// </summary>
-    public DateTime? DecommissioningDate { get; set; }
+    public DateTime? CommissioningDateEnd { get; set; }
 
     /// <summary>
-    /// 报废日期（资产注销 / Scrap Date）
+    /// 停产日期（Decommissioning Date；设备停止生产日期）（范围查询-开始）
     /// </summary>
-    public DateTime? ScrapDate { get; set; }
+    public DateTime? DecommissioningDateStart { get; set; }
+
+    /// <summary>
+    /// 停产日期（Decommissioning Date；设备停止生产日期）（范围查询-结束）
+    /// </summary>
+    public DateTime? DecommissioningDateEnd { get; set; }
+
+    /// <summary>
+    /// 报废日期（资产注销 / Scrap Date）（范围查询-开始）
+    /// </summary>
+    public DateTime? ScrapDateStart { get; set; }
+
+    /// <summary>
+    /// 报废日期（资产注销 / Scrap Date）（范围查询-结束）
+    /// </summary>
+    public DateTime? ScrapDateEnd { get; set; }
 
     /// <summary>
     /// 存放位置（车间/线体/工位等物理位置；与设备编码组合唯一）
@@ -725,7 +746,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -735,7 +756,7 @@ public class TaktProductionEquipmentQueryDto : TaktPagedQuery
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? ProductionEquipmentStatus { get; set; }
+    public int? ProdEquipStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -778,32 +799,32 @@ public class TaktProductionEquipmentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int EquipmentCategory { get; set; } = 0;
+    public int EquipCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    [Required(ErrorMessage = "生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）不能为空")]
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）不能为空")]
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    [Required(ErrorMessage = "生产设备名称不能为空")]
-    public string ProductionEquipmentName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产设备名称（列表展示名）不能为空")]
+    public string ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -811,25 +832,25 @@ public class TaktProductionEquipmentCreateDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
-    [Required(ErrorMessage = "机型名称不能为空")]
+    [Required(ErrorMessage = "机型名称（铭牌 Machine Type，如 SP18P-L）不能为空")]
     public string MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出厂日期（Manufacturing Date）
@@ -839,7 +860,7 @@ public class TaktProductionEquipmentCreateDto
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -869,7 +890,7 @@ public class TaktProductionEquipmentCreateDto
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal StdEquipmentHourlyCapacity { get; set; }
+    public decimal StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -1109,18 +1130,18 @@ public class TaktProductionEquipmentCreateDto
     /// <summary>
     /// 存放位置（车间/线体/工位等物理位置；与设备编码组合唯一）
     /// </summary>
-    [Required(ErrorMessage = "存放位置不能为空")]
+    [Required(ErrorMessage = "存放位置（车间/线体/工位等物理位置；与设备编码组合唯一）不能为空")]
     public string StorageLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int ProductionEquipmentStatus { get; set; } = 0;
+    public int ProdEquipStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -1222,24 +1243,29 @@ public class TaktProductionEquipmentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int? EquipmentCategory { get; set; }
+    public int? EquipCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    public string? ProductionEquipmentName { get; set; } = string.Empty;
+    public string? ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -1247,24 +1273,24 @@ public class TaktProductionEquipmentTemplateDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
     public string? MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出厂日期（Manufacturing Date）
@@ -1274,7 +1300,7 @@ public class TaktProductionEquipmentTemplateDto
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -1304,7 +1330,7 @@ public class TaktProductionEquipmentTemplateDto
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal? StdEquipmentHourlyCapacity { get; set; }
+    public decimal? StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -1549,12 +1575,12 @@ public class TaktProductionEquipmentTemplateDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? ProductionEquipmentStatus { get; set; }
+    public int? ProdEquipStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1584,29 +1610,29 @@ public class TaktProductionEquipmentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int? EquipmentCategory { get; set; }
+    public int? EquipCategory { get; set; }
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    public string? ProductionEquipmentCode { get; set; } = string.Empty;
+    public string? ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    public string? ProductionEquipmentName { get; set; } = string.Empty;
+    public string? ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -1614,24 +1640,24 @@ public class TaktProductionEquipmentImportDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
     public string? MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出厂日期（Manufacturing Date）
@@ -1641,7 +1667,7 @@ public class TaktProductionEquipmentImportDto
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -1671,7 +1697,7 @@ public class TaktProductionEquipmentImportDto
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal? StdEquipmentHourlyCapacity { get; set; }
+    public decimal? StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -1916,12 +1942,12 @@ public class TaktProductionEquipmentImportDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int? ProductionEquipmentStatus { get; set; }
+    public int? ProdEquipStatus { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1957,24 +1983,24 @@ public class TaktProductionEquipmentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备类别（字典 logistics_equipment_category；Press/Injection/DieCasting/SMT/Assembly 等）
+    /// 设备类别（字典 logistics_equip_category；Press/Injection/DieCasting/SMT/Assembly 等）
     /// </summary>
-    public int EquipmentCategory { get; set; } = 0;
+    public int EquipCategory { get; set; } = 0;
 
     /// <summary>
-    /// 生产设备编码（租户+公司+工厂内唯一；EquipmentCode / 资产MES编码）
+    /// 生产设备编码（同一工厂+存放位置内不可重复；EquipCode / 资产MES编码）
     /// </summary>
-    public string ProductionEquipmentCode { get; set; } = string.Empty;
+    public string ProdEquipCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产设备名称
+    /// 生产设备名称（列表展示名）
     /// </summary>
-    public string ProductionEquipmentName { get; set; } = string.Empty;
+    public string ProdEquipName { get; set; } = string.Empty;
 
     /// <summary>
     /// 制造商
@@ -1982,24 +2008,24 @@ public class TaktProductionEquipmentExportDto
     public string? Manufacturer { get; set; } = string.Empty;
 
     /// <summary>
-    /// 设备品牌
+    /// 设备品牌（铭牌 Brand）
     /// </summary>
-    public string? EquipmentBrand { get; set; } = string.Empty;
+    public string? EquipBrand { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机型名称（铭牌 Machine Type）
+    /// 机型名称（铭牌 Machine Type，如 SP18P-L）
     /// </summary>
     public string MachineType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 型号（铭牌 Model No）
+    /// 型号（铭牌 Model No，如 NM-EJP1A）
     /// </summary>
-    public string? ModelNo { get; set; } = string.Empty;
+    public string? ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序列号（铭牌 Serial No）
+    /// 序列号（铭牌 Serial No，如 1P8V0336）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出厂日期（Manufacturing Date）
@@ -2009,7 +2035,7 @@ public class TaktProductionEquipmentExportDto
     /// <summary>
     /// 设备规格
     /// </summary>
-    public string? EquipmentSpecification { get; set; } = string.Empty;
+    public string? EquipSpecification { get; set; } = string.Empty;
 
     /// <summary>
     /// 理论周期时间（秒/模次；StdCycleTime，SPM 倒数）
@@ -2039,7 +2065,7 @@ public class TaktProductionEquipmentExportDto
     /// <summary>
     /// 设备标准小时产能（件/小时；=(60÷StdMinutesPerUnit)×AvailabilityRate×PerformanceRate）
     /// </summary>
-    public decimal StdEquipmentHourlyCapacity { get; set; }
+    public decimal StdEquipHourlyCapacity { get; set; }
 
     /// <summary>
     /// 设备时间稼动率（AvailabilityRate，0–1）
@@ -2284,7 +2310,7 @@ public class TaktProductionEquipmentExportDto
     /// <summary>
     /// 设备管理员（选项 TaktEmployees/options，存员工姓名或工号）
     /// </summary>
-    public string? EquipmentAdministrator { get; set; } = string.Empty;
+    public string? EquipAdministrator { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -2294,7 +2320,7 @@ public class TaktProductionEquipmentExportDto
     /// <summary>
     /// 状态（字典 sys_normal_disable；1=启用，0=禁用）
     /// </summary>
-    public int ProductionEquipmentStatus { get; set; } = 0;
+    public int ProdEquipStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

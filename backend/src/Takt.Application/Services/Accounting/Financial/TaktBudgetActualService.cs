@@ -116,13 +116,13 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
         var entity = dto.Adapt<TaktBudgetActual>();
         var isUnique_ix_takt_accounting_financial_budget_actual_unique = await _uniqueValidator.IsUniqueAsync(
             _budgetActualRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.CostCenterCode == entity.CostCenterCode
                 && x.BudgetItemCode == entity.BudgetItemCode);
         if (!isUnique_ix_takt_accounting_financial_budget_actual_unique)
         {
-            throw new TaktBusinessException("预算实绩的RelatedPlant、PeriodCode、CostCenterCode、BudgetItemCode已存在");
+            throw new TaktBusinessException("预算实绩的PlantCode、PeriodCode、CostCenterCode、BudgetItemCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -152,14 +152,14 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
         dto.Adapt(entity);
         var isUnique_ix_takt_accounting_financial_budget_actual_unique = await _uniqueValidator.IsUniqueAsync(
             _budgetActualRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.PeriodCode == entity.PeriodCode
                 && x.CostCenterCode == entity.CostCenterCode
                 && x.BudgetItemCode == entity.BudgetItemCode,
             id);
         if (!isUnique_ix_takt_accounting_financial_budget_actual_unique)
         {
-            throw new TaktBusinessException("预算实绩的RelatedPlant、PeriodCode、CostCenterCode、BudgetItemCode已存在");
+            throw new TaktBusinessException("预算实绩的PlantCode、PeriodCode、CostCenterCode、BudgetItemCode已存在");
         }
         ApplyBudgetActualCasMeasurement(entity);
         await _budgetActualRepository.UpdateAsync(entity);
@@ -271,20 +271,20 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
             try
             {
                 var entity = rows[i].Adapt<TaktBudgetActual>();
-                var importKey = $"{entity.RelatedPlant}|{entity.PeriodCode}|{entity.CostCenterCode}|{entity.BudgetItemCode}";
+                var importKey = $"{entity.PlantCode}|{entity.PeriodCode}|{entity.CostCenterCode}|{entity.BudgetItemCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、PeriodCode、CostCenterCode、BudgetItemCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、PeriodCode、CostCenterCode、BudgetItemCode）");
                 }
                 var isUnique_ix_takt_accounting_financial_budget_actual_unique = await _uniqueValidator.IsUniqueAsync(
                     _budgetActualRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.PeriodCode == entity.PeriodCode
                         && x.CostCenterCode == entity.CostCenterCode
                         && x.BudgetItemCode == entity.BudgetItemCode);
                 if (!isUnique_ix_takt_accounting_financial_budget_actual_unique)
                 {
-                    throw new TaktBusinessException("预算实绩的RelatedPlant、PeriodCode、CostCenterCode、BudgetItemCode已存在");
+                    throw new TaktBusinessException("预算实绩的PlantCode、PeriodCode、CostCenterCode、BudgetItemCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -346,7 +346,7 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.PeriodCode != null && x.PeriodCode.Contains(keywords))
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
                 || (x.CostCenterName != null && x.CostCenterName.Contains(keywords))
@@ -366,15 +366,16 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.BudgetActualStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PeriodCode))
@@ -470,6 +471,11 @@ public class TaktBudgetActualService : TaktServiceBase, ITaktBudgetActualService
         if (queryDto?.BudgetActualStatus.HasValue == true)
         {
             exp = exp.And(x => x.BudgetActualStatus == queryDto.BudgetActualStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

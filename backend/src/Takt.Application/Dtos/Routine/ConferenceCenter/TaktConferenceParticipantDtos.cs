@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceParticipantDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceParticipant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceParticipant 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public long ConferenceParticipantId { get; set; }
 
     /// <summary>
-    /// 会议 ID
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
@@ -47,7 +47,7 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public string? ConferenceName { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
@@ -58,7 +58,7 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int ParticipantRole { get; set; } = 0;
 
@@ -73,12 +73,12 @@ public class TaktConferenceParticipantDto : TaktCompanyDtoBase
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int AttendanceStatus { get; set; } = 0;
 
@@ -111,13 +111,23 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -128,7 +138,7 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int? ParticipantRole { get; set; }
 
@@ -153,12 +163,12 @@ public class TaktConferenceParticipantQueryDto : TaktPagedQuery
     public DateTime? CheckOutTimeEnd { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
@@ -203,18 +213,23 @@ public class TaktConferenceParticipantCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 会议 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
@@ -226,7 +241,7 @@ public class TaktConferenceParticipantCreateDto
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int ParticipantRole { get; set; } = 0;
 
@@ -241,12 +256,12 @@ public class TaktConferenceParticipantCreateDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int AttendanceStatus { get; set; } = 0;
 
@@ -300,9 +315,9 @@ public class TaktConferenceParticipantStatusDto
     public long ConferenceParticipantId { get; set; }
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
-    [Required(ErrorMessage = "出席状态不能为空")]
+    [Required(ErrorMessage = "出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）不能为空")]
     public int AttendanceStatus { get; set; } = 0;
 }
 
@@ -326,13 +341,23 @@ public class TaktConferenceParticipantTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -343,7 +368,7 @@ public class TaktConferenceParticipantTemplateDto
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int? ParticipantRole { get; set; }
 
@@ -358,12 +383,12 @@ public class TaktConferenceParticipantTemplateDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
@@ -395,18 +420,23 @@ public class TaktConferenceParticipantImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 会议 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ConferenceId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? UserId { get; set; }
@@ -417,7 +447,7 @@ public class TaktConferenceParticipantImportDto
     public string? UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int? ParticipantRole { get; set; }
 
@@ -432,12 +462,12 @@ public class TaktConferenceParticipantImportDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int? CheckInMethod { get; set; }
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int? AttendanceStatus { get; set; }
 
@@ -475,13 +505,13 @@ public class TaktConferenceParticipantExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议 ID
+    /// 会议 ID（选项 TaktConferences/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConferenceId { get; set; }
 
     /// <summary>
-    /// 用户 ID
+    /// 用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long UserId { get; set; }
@@ -492,7 +522,7 @@ public class TaktConferenceParticipantExportDto
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参与角色
+    /// 参与角色（字典 routine_conference_participant_role；0=参会人 1=主持人 2=记录人 3=嘉宾）
     /// </summary>
     public int ParticipantRole { get; set; } = 0;
 
@@ -507,12 +537,12 @@ public class TaktConferenceParticipantExportDto
     public DateTime? CheckOutTime { get; set; }
 
     /// <summary>
-    /// 签到方式（0=手动，1=扫码，2=人脸等）
+    /// 签到方式（字典 routine_conference_check_in_method；0=手动 1=扫码 2=人脸 3=门禁）
     /// </summary>
     public int CheckInMethod { get; set; } = 0;
 
     /// <summary>
-    /// 出席状态
+    /// 出席状态（字典 routine_conference_attendance_status；0=待确认 1=已出席 2=缺席 3=迟到 4=请假）
     /// </summary>
     public int AttendanceStatus { get; set; } = 0;
 

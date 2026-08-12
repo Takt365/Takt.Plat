@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktWorkCenterResourceService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工作中心资源应用服务实现
 // 
@@ -97,8 +97,8 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.ResourceName ?? e.Id.ToString(),
+            DictValue = e.WorkCenterCode,
+            DictLabel = e.ResourceName ?? e.WorkCenterCode,
         }).ToList();
     }
 
@@ -110,11 +110,11 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
     public async Task<TaktWorkCenterResourceDto> CreateWorkCenterResourceAsync(TaktWorkCenterResourceCreateDto dto)
     {
         var entity = dto.Adapt<TaktWorkCenterResource>();
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique = await _uniqueValidator.IsUniqueAsync(
             _workCenterResourceRepository,
             x => x.WorkCenterId == entity.WorkCenterId
                 && x.ResourceCode == entity.ResourceCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique)
         {
             throw new TaktBusinessException("工作中心资源的WorkCenterId、ResourceCode已存在");
         }
@@ -136,12 +136,12 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
             throw new TaktBusinessException("工作中心资源不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique = await _uniqueValidator.IsUniqueAsync(
             _workCenterResourceRepository,
             x => x.WorkCenterId == entity.WorkCenterId
                 && x.ResourceCode == entity.ResourceCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique)
         {
             throw new TaktBusinessException("工作中心资源的WorkCenterId、ResourceCode已存在");
         }
@@ -239,11 +239,11 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（WorkCenterId、ResourceCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique = await _uniqueValidator.IsUniqueAsync(
                     _workCenterResourceRepository,
                     x => x.WorkCenterId == entity.WorkCenterId
                         && x.ResourceCode == entity.ResourceCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_scheduling_wc_resource_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_resource_unique)
                 {
                     throw new TaktBusinessException("工作中心资源的WorkCenterId、ResourceCode已存在");
                 }
@@ -309,6 +309,7 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
                 || SqlFunc.ToString(x.ParallelCapacity).Contains(keywords)
                 || SqlFunc.ToString(x.EfficiencyRate).Contains(keywords)
                 || SqlFunc.ToString(x.ResourceStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -355,6 +356,11 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
             exp = exp.And(x => x.ResourceStatus == queryDto.ResourceStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -374,6 +380,12 @@ public class TaktWorkCenterResourceService : TaktServiceBase, ITaktWorkCenterRes
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

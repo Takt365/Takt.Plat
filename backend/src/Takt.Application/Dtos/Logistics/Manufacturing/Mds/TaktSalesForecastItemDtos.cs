@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastItemDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesForecastItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesForecastItem 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.Mds;
 // ========================================
 
 /// <summary>
-/// Takt销售预测明细实体
+/// Takt销售预测明细（一行 = 主表物料在某财年某月的 001/002 计划量；产品/类别/利润中心/机种/物料在主表）
 /// 对应前端 TaktSalesForecastItemDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -52,49 +52,34 @@ public class TaktSalesForecastItemDto : TaktCompanyDtoBase
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public int PlanMonth { get; set; } = 0;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    public string PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    public DateTime? PlannedDeliveryDate { get; set; }
+    public decimal PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -139,6 +124,16 @@ public class TaktSalesForecastItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 销售预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -150,54 +145,34 @@ public class TaktSalesForecastItemQueryDto : TaktPagedQuery
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public int? PlanMonth { get; set; }
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal? PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    public string? PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal? PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期（范围查询-开始）
-    /// </summary>
-    public DateTime? PlannedDeliveryDateStart { get; set; }
-
-    /// <summary>
-    /// 计划交货日期（范围查询-结束）
-    /// </summary>
-    public DateTime? PlannedDeliveryDateEnd { get; set; }
+    public decimal? PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -260,10 +235,15 @@ public class TaktSalesForecastItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 销售预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -277,52 +257,35 @@ public class TaktSalesForecastItemCreateDto
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）不能为空")]
+    public string FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    public int PlanMonth { get; set; } = 0;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    [Required(ErrorMessage = "计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
-    public string PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    public DateTime? PlannedDeliveryDate { get; set; }
+    public decimal PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -419,6 +382,16 @@ public class TaktSalesForecastItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 销售预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -430,49 +403,34 @@ public class TaktSalesForecastItemTemplateDto
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public int? PlanMonth { get; set; }
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal? PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    public string? PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal? PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    public DateTime? PlannedDeliveryDate { get; set; }
+    public decimal? PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -522,10 +480,15 @@ public class TaktSalesForecastItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 销售预测ID（主子表关系，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -538,49 +501,34 @@ public class TaktSalesForecastItemImportDto
     public string? SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public int? PlanMonth { get; set; }
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal? PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal? PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    public string? PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal? PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    public DateTime? PlannedDeliveryDate { get; set; }
+    public decimal? PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）
@@ -647,49 +595,34 @@ public class TaktSalesForecastItemExportDto
     public string SalesForecastCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项号/序号，固定步长=10）
+    /// 行号（固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 财年（选项 TaktFinancialPeriods/options；DictValue=FinancialYearCode，如 FY2027）
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string FiscalYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 计划月份（1～12）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public int PlanMonth { get; set; } = 0;
 
     /// <summary>
-    /// 物料规格（回填：随物料）
+    /// 计划数量版本001
     /// </summary>
-    public string? MaterialSpecification { get; set; } = string.Empty;
+    public decimal PlanQuantity001 { get; set; }
 
     /// <summary>
-    /// 机种编码（关联 TaktModelDestination.ModelCode，与物料机种主数据对齐）
+    /// 计划数量版本002
     /// </summary>
-    public string? ModelCode { get; set; } = string.Empty;
+    public decimal PlanQuantity002 { get; set; }
 
     /// <summary>
-    /// 机种名称（冗余字段，便于查询展示）
+    /// 计划增减（版本002 − 版本001；可为负表示减量；服务层写入，禁止手改）
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-    /// </summary>
-    public string PlanUnit { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 计划数量（基本单位数量）
-    /// </summary>
-    public decimal PlanQuantity { get; set; }
-
-    /// <summary>
-    /// 计划交货日期
-    /// </summary>
-    public DateTime? PlannedDeliveryDate { get; set; }
+    public decimal PlanQuantityDelta { get; set; }
 
     /// <summary>
     /// 已转生产/销售数量（基本单位数量）

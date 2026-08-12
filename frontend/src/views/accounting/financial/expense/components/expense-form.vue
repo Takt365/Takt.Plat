@@ -27,323 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseCode')"
-                name="expenseCode"
-              >
-                <a-input
-                  v-model:value="formState.expenseCode"
-                  :placeholder="pi.ph('expenseCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.expenseId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseTitle')"
-                name="expenseTitle"
-              >
-                <a-input
-                  v-model:value="formState.expenseTitle"
-                  :placeholder="pi.ph('expenseTitle')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseType')"
-                name="expenseType"
-              >
-                <TaktSelect
-                  v-model:value="formState.expenseType"
-                  dict-type="accounting_expense_type"
-                  :placeholder="pi.ph('expenseType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('supplierCode')"
-                name="supplierCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.supplierCode"
-                  api-url="TaktSuppliers/options"
-                  :placeholder="pi.ph('supplierCode')"
-                  :disabled="!!formData?.expenseId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('supplierName1')"
-                name="supplierName1"
-              >
-                <a-input
-                  v-model:value="formState.supplierName1"
-                  :placeholder="pi.ph('supplierName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('applicantBy')"
-                name="applicantBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.applicantBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('applicantBy')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('applicationDept')"
-                name="applicationDept"
-              >
-                <TaktSelect
-                  v-model:value="formState.applicationDept"
-                  api-url="TaktDepts/tree-options"
-                  :placeholder="pi.ph('applicationDept')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('costBearerDept')"
-                name="costBearerDept"
-              >
-                <TaktSelect
-                  v-model:value="formState.costBearerDept"
-                  api-url="TaktDepts/tree-options"
-                  :placeholder="pi.ph('costBearerDept')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('costCenter')"
-                name="costCenter"
-              >
-                <TaktSelect
-                  v-model:value="formState.costCenter"
-                  api-url="TaktCostCenters/tree-options"
-                  :placeholder="pi.ph('costCenter')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('countersignId')"
-                name="countersignId"
-              >
-                <TaktSelect
-                  v-model:value="formState.countersignId"
-                  api-url="TaktCountersigns/options"
-                  :placeholder="pi.ph('countersignId')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseOrderCode')"
-                name="purchaseOrderCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.purchaseOrderCode"
-                  api-url="TaktPurchaseOrders/options"
-                  :placeholder="pi.ph('purchaseOrderCode')"
-                  :disabled="!!formData?.expenseId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseRequestCode')"
-                name="purchaseRequestCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.purchaseRequestCode"
-                  api-url="TaktPurchaseRequests/options"
-                  :placeholder="pi.ph('purchaseRequestCode')"
-                  :disabled="!!formData?.expenseId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseAmount')"
-                name="expenseAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.expenseAmount"
-                  :placeholder="pi.ph('expenseAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxRate')"
-                name="taxRate"
-              >
-                <TaktSelect
-                  v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_rate_param"
-                  :placeholder="pi.ph('taxRate')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxAmount')"
-                name="taxAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="pi.ph('taxAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseDate')"
-                name="expenseDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.expenseDate"
-                  :placeholder="pi.ph('expenseDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('applicationReason')"
-                name="applicationReason"
-              >
-                <a-input
-                  v-model:value="formState.applicationReason"
-                  :placeholder="pi.ph('applicationReason')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('attachments')"
-                name="attachments"
-              >
-                <a-input
-                  v-model:value="formState.attachments"
-                  :placeholder="pi.ph('attachments')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('expenseStatus')"
-                name="expenseStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.expenseStatus"
-                  dict-type="sys_approval_status"
-                  :placeholder="pi.ph('expenseStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -480,17 +175,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","expenseCode","expenseTitle","expenseType","supplierCode","supplierName1","applicantBy","applicationDept","costBearerDept","costCenter","countersignId","purchaseOrderCode","purchaseRequestCode","expenseAmount","taxRate","taxAmount","expenseDate","applicationReason","attachments","relatedPlant","expenseStatus","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","expenseCode","expenseTitle","expenseType","supplierCode","supplierName1","applicantBy","applicationDept","costBearerDept","costCenter","countersignId","purchaseOrderCode","purchaseRequestCode","expenseAmount","taxRate","taxAmount","expenseDate","applicationReason","attachments","plantCode","expenseStatus","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -567,10 +265,10 @@ const expenseDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     width: 140,
   },
   {
-    key: 'invoiceNo',
-    title: expenseDetailPi.label('invoiceNo'),
+    key: 'invoiceCode',
+    title: expenseDetailPi.label('invoiceCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: expenseDetailPi.ph('invoiceNo'),
+    width: 140, allowClear: true, placeholder: expenseDetailPi.ph('invoiceCode'),
   },
   {
     key: 'expenseDetailDate',
@@ -583,8 +281,7 @@ const expenseDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     key: 'isObsolete',
     title: expenseDetailPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<ExpenseCreate & { expenseId?: string }> | null | undefined) {
@@ -601,7 +298,7 @@ function createDefaultExpenseDetailRow(): Record<string, unknown> {
     itemQuantity: 0,
     itemAmount: 0,
     accountTitle: '',
-    invoiceNo: '',
+    invoiceCode: '',
     expenseDetailDate: '',
     isObsolete: 0,
   }
@@ -618,7 +315,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         expenseId: masterId,
       }
       if (isUpdate && isPersistedExpenseDetailRow(row)) {
@@ -785,10 +482,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  relatedPlant: [
+  plantCode: [
     {
       required: true,
-      message: pi.ph('relatedPlant'),
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],

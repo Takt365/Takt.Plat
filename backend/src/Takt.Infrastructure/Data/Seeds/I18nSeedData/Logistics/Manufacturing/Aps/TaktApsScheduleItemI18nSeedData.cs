@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsScheduleItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsScheduleItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -180,14 +180,14 @@ public class TaktApsScheduleItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.apsscheduleitem.workcentercode
             new TranslationSeedItem("entity.apsscheduleitem.workcentercode", "zh-HK", "工作中心编码_hk", "工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）"),
 
-            // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "en-US", "工作中心名称_us", "工作中心名称"),
-            // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "ja-JP", "工作中心名称_jp", "工作中心名称"),
-            // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "zh-CN", "工作中心名称", "工作中心名称"),
-            // entity.apsscheduleitem.workcentername
-            new TranslationSeedItem("entity.apsscheduleitem.workcentername", "zh-HK", "工作中心名称_hk", "工作中心名称"),
+            // entity.apsscheduleitem.workcenterdescription
+            new TranslationSeedItem("entity.apsscheduleitem.workcenterdescription", "en-US", "工作中心描述_us", "工作中心描述"),
+            // entity.apsscheduleitem.workcenterdescription
+            new TranslationSeedItem("entity.apsscheduleitem.workcenterdescription", "ja-JP", "工作中心描述_jp", "工作中心描述"),
+            // entity.apsscheduleitem.workcenterdescription
+            new TranslationSeedItem("entity.apsscheduleitem.workcenterdescription", "zh-CN", "工作中心描述", "工作中心描述"),
+            // entity.apsscheduleitem.workcenterdescription
+            new TranslationSeedItem("entity.apsscheduleitem.workcenterdescription", "zh-HK", "工作中心描述_hk", "工作中心描述"),
 
             // entity.apsscheduleitem.processcode
             new TranslationSeedItem("entity.apsscheduleitem.processcode", "en-US", "工序编码_us", "工序编码"),

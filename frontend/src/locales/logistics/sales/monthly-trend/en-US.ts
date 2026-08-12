@@ -14,7 +14,6 @@ export default {
   page: {
     title: 'Monthly Sales Trend',
     periodRange: 'Period',
-    customerCode: 'Customer',
     selectPlantRequired: 'Please select a plant',
     selectPeriodRequired: 'Please select a period',
     summary: '{count} customer row(s) (monthly actual sales amount)',

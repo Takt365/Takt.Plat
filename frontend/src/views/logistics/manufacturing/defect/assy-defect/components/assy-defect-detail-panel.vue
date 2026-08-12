@@ -188,11 +188,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('randomCardNo')">
-      <a-form-item :label="pi.queryLabel('randomCardNo')">
+      <div v-show="isFieldVisible('randomCardCode')">
+      <a-form-item :label="pi.queryLabel('randomCardCode')">
         <a-input
-          v-model:value="advancedQueryForm.randomCardNo"
-          :placeholder="pi.queryPh('randomCardNo', 'required')"
+          v-model:value="advancedQueryForm.randomCardCode"
+          :placeholder="pi.queryPh('randomCardCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -631,14 +631,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getAssyDefectDetailField(record, 'cumulativeDefectQty') ?? ''),
   },
   {
-    title: pi.label('randomCardNo'),
-    dataIndex: 'randomCardNo',
-    key: 'randomCardNo',
+    title: pi.label('randomCardCode'),
+    dataIndex: 'randomCardCode',
+    key: 'randomCardCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: AssyDefectDetail }) =>
-      String(getAssyDefectDetailField(record, 'randomCardNo') ?? ''),
+      String(getAssyDefectDetailField(record, 'randomCardCode') ?? ''),
   },
   {
     title: pi.label('occurrenceEngineering'),
@@ -727,10 +727,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:defect:assy:delete',
         onClick: (record: AssyDefectDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

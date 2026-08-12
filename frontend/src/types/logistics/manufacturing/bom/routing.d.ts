@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：routing.d.ts
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -23,18 +23,9 @@ import type {
  * @description 对应后端 TaktRoutingDto
  */
 export interface Routing extends ApprovalDtoBase {
-  /**
-   * RoutingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  routingId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter: string;
 
@@ -54,7 +45,7 @@ export interface Routing extends ApprovalDtoBase {
   purpose: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
@@ -109,12 +100,17 @@ export interface RoutingQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter?: string;
 
@@ -134,7 +130,7 @@ export interface RoutingQuery extends TaktPagedQuery {
   purpose?: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -253,17 +249,17 @@ export interface RoutingCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter: string;
 
@@ -283,7 +279,7 @@ export interface RoutingCreate {
   purpose: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
@@ -315,7 +311,7 @@ export interface RoutingCreate {
   /**
    * 工艺路线明细列表（主子表关系）（子表，级联保存）
    */
-  items?: RoutingItemUpdate[];
+  items?: RoutingItemCreate[];
 
   /**
    * 扩展字段JSON
@@ -341,6 +337,11 @@ export interface RoutingUpdate extends RoutingCreate {
    * RoutingID（标识要更新的实体）
    */
   routingId: string;
+
+  /**
+   * 工艺路线明细列表（主子表关系）（子表，级联保存）
+   */
+  items?: any;
 
 }
 
@@ -381,12 +382,17 @@ export interface RoutingTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter?: string;
 
@@ -406,7 +412,7 @@ export interface RoutingTemplate {
   purpose?: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -470,17 +476,17 @@ export interface RoutingImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter?: string;
 
@@ -500,7 +506,7 @@ export interface RoutingImport {
   purpose?: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
@@ -559,12 +565,12 @@ export interface RoutingExport {
   routingId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
   /**
-   * 工作中心（选项 TaktWorkCenters/options，按工厂 ExtValue 过滤）
+   * 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode，ExtValue=PlantCode）
    */
   workCenter: string;
 
@@ -584,7 +590,7 @@ export interface RoutingExport {
   purpose: number;
 
   /**
-   * 适用物料编码（选项 TaktMaterials/options）
+   * 适用物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 

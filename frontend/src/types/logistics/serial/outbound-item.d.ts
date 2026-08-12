@@ -41,7 +41,7 @@ export interface SerialOutboundItem extends CompanyDtoBase {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -51,7 +51,7 @@ export interface SerialOutboundItem extends CompanyDtoBase {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo: string;
+  outboundSerialCode: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -64,9 +64,9 @@ export interface SerialOutboundItem extends CompanyDtoBase {
   referenceInboundName?: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo: string;
+  referenceInboundCode: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -111,7 +111,7 @@ export interface SerialOutboundItemQuery extends TaktPagedQuery {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -121,7 +121,7 @@ export interface SerialOutboundItemQuery extends TaktPagedQuery {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo?: string;
+  outboundSerialCode?: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -129,9 +129,9 @@ export interface SerialOutboundItemQuery extends TaktPagedQuery {
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo?: string;
+  referenceInboundCode?: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -185,7 +185,10 @@ export interface SerialOutboundItemCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
@@ -195,7 +198,7 @@ export interface SerialOutboundItemCreate {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -205,7 +208,7 @@ export interface SerialOutboundItemCreate {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo: string;
+  outboundSerialCode: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -213,9 +216,9 @@ export interface SerialOutboundItemCreate {
   referenceInboundId: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo: string;
+  referenceInboundCode: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -298,7 +301,7 @@ export interface SerialOutboundItemTemplate {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -308,7 +311,7 @@ export interface SerialOutboundItemTemplate {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo?: string;
+  outboundSerialCode?: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -316,9 +319,9 @@ export interface SerialOutboundItemTemplate {
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo?: string;
+  referenceInboundCode?: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -362,7 +365,10 @@ export interface SerialOutboundItemImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 出库主表 ID（关联 TaktSerialOutbound.Id，选项 TaktSerialOutbounds/options）
@@ -372,7 +378,7 @@ export interface SerialOutboundItemImport {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -382,7 +388,7 @@ export interface SerialOutboundItemImport {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo?: string;
+  outboundSerialCode?: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -390,9 +396,9 @@ export interface SerialOutboundItemImport {
   referenceInboundId?: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo?: string;
+  referenceInboundCode?: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）
@@ -441,7 +447,7 @@ export interface SerialOutboundItemExport {
   /**
    * 出库单号（冗余字段，便于查询）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -451,7 +457,7 @@ export interface SerialOutboundItemExport {
   /**
    * 出库序列号（租户+公司内唯一）
    */
-  outboundSerialNo: string;
+  outboundSerialCode: string;
 
   /**
    * 关联入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -459,9 +465,9 @@ export interface SerialOutboundItemExport {
   referenceInboundId: string;
 
   /**
-   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundNo）
+   * 关联入库单号（选项 TaktSerialInbounds/options，DictValue=InboundCode）
    */
-  referenceInboundNo: string;
+  referenceInboundCode: string;
 
   /**
    * 关联入库行号（对应 TaktSerialInboundItem.LineNumber）

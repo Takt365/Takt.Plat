@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyOrderDefectDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOrderDefect 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOrderDefect 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktAssyOrderDefectDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyOrderDefectId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
@@ -68,7 +64,7 @@ public class TaktAssyOrderDefectDto : TaktCompanyDtoBase
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）
@@ -138,6 +134,11 @@ public class TaktAssyOrderDefectQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -170,7 +171,7 @@ public class TaktAssyOrderDefectQueryDto : TaktPagedQuery
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）
@@ -263,9 +264,9 @@ public class TaktAssyOrderDefectCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
@@ -305,7 +306,7 @@ public class TaktAssyOrderDefectCreateDto
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）
@@ -428,6 +429,11 @@ public class TaktAssyOrderDefectTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -460,7 +466,7 @@ public class TaktAssyOrderDefectTemplateDto
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）
@@ -535,9 +541,9 @@ public class TaktAssyOrderDefectImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（取最近日报，关联 TaktPlant.PlantCode）
@@ -572,7 +578,7 @@ public class TaktAssyOrderDefectImportDto
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）
@@ -685,7 +691,7 @@ public class TaktAssyOrderDefectExportDto
     /// <summary>
     /// 批次（一工单一批次，取最近日报）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（取最近日报）

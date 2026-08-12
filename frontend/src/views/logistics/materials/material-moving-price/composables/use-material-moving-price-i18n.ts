@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/materials/material-moving-price/composables
 // 文件名称：use-material-moving-price-i18n.ts
-// 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别字段清单 + useMaterialMovingPriceI18n（字段名映射一次，文案由 entity.materialmovingprice.* 种子动态解析）
+// 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别字段清单 + useMaterialMovingPriceI18n（字段名映射一次，文案由 entity.materialmovingprice.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -21,7 +21,7 @@ export const MATERIALMOVINGPRICE_SELF_I18N_KEY = buildEntitySelfI18nKey(MATERIAL
 /** 列表业务列（不含主键） */
 export const MATERIALMOVINGPRICE_LIST_FIELDS = [
   'plantCode',
-  'periodDate',
+  'valuationPeriod',
   'materialCode',
   'valuation',
   'stockQuantity',
@@ -29,7 +29,7 @@ export const MATERIALMOVINGPRICE_LIST_FIELDS = [
   'priceControl',
   'movingPrice',
   'priceUnit',
-  'currency',
+  'currencyCode',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -38,15 +38,15 @@ export const MATERIALMOVINGPRICE_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   plantCode: 'select',
-  periodDate: 'select',
-  materialCode: 'required',
+  valuationPeriod: 'required',
+  materialCode: 'select',
   valuation: 'select',
   stockQuantity: 'select',
   stockAmount: 'select',
   priceControl: 'select',
   movingPrice: 'select',
   priceUnit: 'select',
-  currency: 'select',
+  currencyCode: 'select',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -57,12 +57,11 @@ export type MaterialMovingPriceField = keyof typeof MATERIALMOVINGPRICE_PLACEHOL
 /** 高级查询可 trim 的字符串字段 */
 export const MATERIALMOVINGPRICE_QUERY_STRING_FIELDS = [
   'plantCode',
-  'periodDateStart',
-  'periodDateEnd',
+  'valuationPeriod',
   'materialCode',
   'valuation',
   'priceControl',
-  'currency',
+  'currencyCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -83,7 +82,7 @@ export const MATERIALMOVINGPRICE_QUERY_FIELDS: readonly MaterialMovingPriceQuery
 ]
 
 /**
- * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别字段 i18n：index / material-moving-price-form 统一入口
+ * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别字段 i18n：index / material-moving-price-form 统一入口
  */
 export function useMaterialMovingPriceI18n() {
   const ef = useEntityFieldI18n(MATERIALMOVINGPRICE_ENTITY_SLUG)

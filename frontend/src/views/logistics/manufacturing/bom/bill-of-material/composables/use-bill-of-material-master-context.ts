@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { BillOfMaterial } from '@/types/logistics/manufacturing/bom/bill-of-material'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type BillOfMaterialRowRecord = BillOfMaterial | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface BillOfMaterialMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<BillOfMaterial | null>
+  selectedMasterRow: Ref<BillOfMaterialRowRecord | null>
 }
 
 const billOfMaterialMasterContextKey: InjectionKey<BillOfMaterialMasterContext> = Symbol('bill-of-materialMasterContext')
@@ -22,7 +25,7 @@ const billOfMaterialMasterContextKey: InjectionKey<BillOfMaterialMasterContext> 
  * @returns {BillOfMaterialMasterContext} 主表上下文
  */
 export function provideBillOfMaterialMasterContext(): BillOfMaterialMasterContext {
-  const selectedMasterRow = ref<BillOfMaterial | null>(null)
+  const selectedMasterRow = ref<BillOfMaterialRowRecord | null>(null)
   const ctx: BillOfMaterialMasterContext = { selectedMasterRow }
   provide(billOfMaterialMasterContextKey, ctx)
   return ctx

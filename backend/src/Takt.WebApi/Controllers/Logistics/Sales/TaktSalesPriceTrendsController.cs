@@ -15,11 +15,12 @@ using Takt.Application.Dtos.Logistics.Sales;
 using Takt.Application.Services.Logistics.Sales;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Sales;
 
 /// <summary>
-/// 销售价格月推移 / 机种推移转置分析控制器
+/// 销售价格月推移 / 机种推移转置分析控制器（与 TaktSalesPrices CRUD 分离）
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "销售价格推移")]
@@ -34,6 +35,108 @@ public class TaktSalesPriceTrendsController : TaktControllerBase
     public TaktSalesPriceTrendsController(ITaktSalesPriceTrendService salesPriceTrendService)
     {
         _salesPriceTrendService = salesPriceTrendService;
+    }
+
+    /// <summary>
+    /// 推移查询栏：销售价格本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:price:trend:list", "销售价格推移工厂选项")]
+    [HttpGet("plant-options")]
+    public async Task<IActionResult> GetSalesPriceTrendPlantOptionsAsync()
+    {
+        try
+        {
+            var result = await _salesPriceTrendService.GetSalesPriceTrendPlantOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂去重条件类型
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:price:trend:list", "销售价格推移条件类型选项")]
+    [HttpGet("price-type-options")]
+    public async Task<IActionResult> GetSalesPriceTrendPriceTypeOptionsAsync([FromQuery] string plantCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _salesPriceTrendService.GetSalesPriceTrendPriceTypeOptionsAsync(plantCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型去重客户
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:price:trend:list", "销售价格推移客户选项")]
+    [HttpGet("customer-options")]
+    public async Task<IActionResult> GetSalesPriceTrendCustomerOptionsAsync(
+        [FromQuery] string plantCode,
+        [FromQuery] string? priceType = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(priceType))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _salesPriceTrendService.GetSalesPriceTrendCustomerOptionsAsync(plantCode, priceType);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型+客户去重物料
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <param name="customerCode">客户编码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:price:trend:list", "销售价格推移物料选项")]
+    [HttpGet("material-options")]
+    public async Task<IActionResult> GetSalesPriceTrendMaterialOptionsAsync(
+        [FromQuery] string plantCode,
+        [FromQuery] string? priceType = null,
+        [FromQuery] string? customerCode = null)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode)
+                || string.IsNullOrWhiteSpace(priceType)
+                || string.IsNullOrWhiteSpace(customerCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _salesPriceTrendService.GetSalesPriceTrendMaterialOptionsAsync(
+                plantCode, priceType, customerCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 
     /// <summary>

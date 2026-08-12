@@ -116,11 +116,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('outboundNo')">
-      <a-form-item :label="pi.queryLabel('outboundNo')">
+      <div v-show="isFieldVisible('outboundCode')">
+      <a-form-item :label="pi.queryLabel('outboundCode')">
         <a-input
-          v-model:value="advancedQueryForm.outboundNo"
-          :placeholder="pi.queryPh('outboundNo', 'required')"
+          v-model:value="advancedQueryForm.outboundCode"
+          :placeholder="pi.queryPh('outboundCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -136,11 +136,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('outboundSerialNo')">
-      <a-form-item :label="pi.queryLabel('outboundSerialNo')">
+      <div v-show="isFieldVisible('outboundSerialCode')">
+      <a-form-item :label="pi.queryLabel('outboundSerialCode')">
         <a-input
-          v-model:value="advancedQueryForm.outboundSerialNo"
-          :placeholder="pi.queryPh('outboundSerialNo', 'required')"
+          v-model:value="advancedQueryForm.outboundSerialCode"
+          :placeholder="pi.queryPh('outboundSerialCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -157,12 +157,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('referenceInboundNo')">
-      <a-form-item :label="pi.queryLabel('referenceInboundNo')">
+      <div v-show="isFieldVisible('referenceInboundCode')">
+      <a-form-item :label="pi.queryLabel('referenceInboundCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.referenceInboundNo"
+          v-model:value="advancedQueryForm.referenceInboundCode"
           api-url="TaktSerialInbounds/options"
-          :placeholder="pi.queryPh('referenceInboundNo', 'select')"
+          :placeholder="pi.queryPh('referenceInboundCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -436,14 +436,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialOutboundItemField(record, 'outboundId') ?? ''),
   },
   {
-    title: pi.label('outboundNo'),
-    dataIndex: 'outboundNo',
-    key: 'outboundNo',
+    title: pi.label('outboundCode'),
+    dataIndex: 'outboundCode',
+    key: 'outboundCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialOutboundItem }) =>
-      String(getSerialOutboundItemField(record, 'outboundNo') ?? ''),
+      String(getSerialOutboundItemField(record, 'outboundCode') ?? ''),
   },
   {
     title: pi.label('lineNumber'),
@@ -456,14 +456,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialOutboundItemField(record, 'lineNumber') ?? ''),
   },
   {
-    title: pi.label('outboundSerialNo'),
-    dataIndex: 'outboundSerialNo',
-    key: 'outboundSerialNo',
+    title: pi.label('outboundSerialCode'),
+    dataIndex: 'outboundSerialCode',
+    key: 'outboundSerialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialOutboundItem }) =>
-      String(getSerialOutboundItemField(record, 'outboundSerialNo') ?? ''),
+      String(getSerialOutboundItemField(record, 'outboundSerialCode') ?? ''),
   },
   {
     title: pi.label('referenceInboundId'),
@@ -476,14 +476,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSerialOutboundItemField(record, 'referenceInboundId') ?? ''),
   },
   {
-    title: pi.label('referenceInboundNo'),
-    dataIndex: 'referenceInboundNo',
-    key: 'referenceInboundNo',
+    title: pi.label('referenceInboundCode'),
+    dataIndex: 'referenceInboundCode',
+    key: 'referenceInboundCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SerialOutboundItem }) =>
-      String(getSerialOutboundItemField(record, 'referenceInboundNo') ?? ''),
+      String(getSerialOutboundItemField(record, 'referenceInboundCode') ?? ''),
   },
   {
     title: pi.label('referenceInboundLineNumber'),
@@ -522,10 +522,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:serial:outbound:delete',
         onClick: (record: SerialOutboundItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,

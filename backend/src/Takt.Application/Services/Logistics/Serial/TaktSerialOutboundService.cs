@@ -122,10 +122,10 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         var isUnique_ix_takt_logistics_serial_outbound_outbound_unique = await _uniqueValidator.IsUniqueAsync(
             _serialOutboundRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.OutboundNo == entity.OutboundNo);
+                && x.OutboundCode == entity.OutboundCode);
         if (!isUnique_ix_takt_logistics_serial_outbound_outbound_unique)
         {
-            throw new TaktBusinessException("序列号出库的PlantCode、OutboundNo已存在");
+            throw new TaktBusinessException("序列号出库的PlantCode、OutboundCode已存在");
         }
         entity = await _serialOutboundRepository.CreateAsync(entity);
                 await SaveSerialOutboundChildrenAsync(entity, dto);
@@ -149,11 +149,11 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         var isUnique_ix_takt_logistics_serial_outbound_outbound_unique = await _uniqueValidator.IsUniqueAsync(
             _serialOutboundRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.OutboundNo == entity.OutboundNo,
+                && x.OutboundCode == entity.OutboundCode,
             id);
         if (!isUnique_ix_takt_logistics_serial_outbound_outbound_unique)
         {
-            throw new TaktBusinessException("序列号出库的PlantCode、OutboundNo已存在");
+            throw new TaktBusinessException("序列号出库的PlantCode、OutboundCode已存在");
         }
         await _serialOutboundRepository.UpdateAsync(entity);
                 await SaveSerialOutboundChildrenAsync(entity, dto);
@@ -234,18 +234,18 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             try
             {
                 var entity = rows[i].Adapt<TaktSerialOutbound>();
-                var importKey = $"{entity.PlantCode}|{entity.OutboundNo}";
+                var importKey = $"{entity.PlantCode}|{entity.OutboundCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、OutboundNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、OutboundCode）");
                 }
                 var isUnique_ix_takt_logistics_serial_outbound_outbound_unique = await _uniqueValidator.IsUniqueAsync(
                     _serialOutboundRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.OutboundNo == entity.OutboundNo);
+                        && x.OutboundCode == entity.OutboundCode);
                 if (!isUnique_ix_takt_logistics_serial_outbound_outbound_unique)
                 {
-                    throw new TaktBusinessException("序列号出库的PlantCode、OutboundNo已存在");
+                    throw new TaktBusinessException("序列号出库的PlantCode、OutboundCode已存在");
                 }
                 await _serialOutboundRepository.CreateAsync(entity);
                 success += 1;
@@ -430,14 +430,15 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.OutboundNo != null && x.OutboundNo.Contains(keywords))
-                || (x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(keywords))
+                || (x.OutboundCode != null && x.OutboundCode.Contains(keywords))
+                || (x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(keywords))
                 || (x.Destination != null && x.Destination.Contains(keywords))
                 || (x.DestinationPort != null && x.DestinationPort.Contains(keywords))
                 || SqlFunc.ToString(x.OutboundType).Contains(keywords)
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.LocationCode != null && x.LocationCode.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.OutboundDate).Contains(keywords)
@@ -450,14 +451,14 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OutboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.OutboundCode))
         {
-            exp = exp.And(x => x.OutboundNo != null && x.OutboundNo.Contains(queryDto.OutboundNo));
+            exp = exp.And(x => x.OutboundCode != null && x.OutboundCode.Contains(queryDto.OutboundCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceNo))
+        if (!string.IsNullOrEmpty(queryDto?.ShippingInvoiceCode))
         {
-            exp = exp.And(x => x.ShippingInvoiceNo != null && x.ShippingInvoiceNo.Contains(queryDto.ShippingInvoiceNo));
+            exp = exp.And(x => x.ShippingInvoiceCode != null && x.ShippingInvoiceCode.Contains(queryDto.ShippingInvoiceCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Destination))
@@ -488,6 +489,11 @@ public class TaktSerialOutboundService : TaktServiceBase, ITaktSerialOutboundSer
         if (queryDto?.TotalQuantity.HasValue == true)
         {
             exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

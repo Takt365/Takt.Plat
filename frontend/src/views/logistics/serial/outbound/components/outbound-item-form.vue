@@ -40,12 +40,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('outboundNo')"
-                name="outboundNo"
+                :label="pi.label('outboundCode')"
+                name="outboundCode"
               >
                 <a-input
-                  v-model:value="formState.outboundNo"
-                  :placeholder="pi.ph('outboundNo')"
+                  v-model:value="formState.outboundCode"
+                  :placeholder="pi.ph('outboundCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -66,12 +66,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('outboundSerialNo')"
-                name="outboundSerialNo"
+                :label="pi.label('outboundSerialCode')"
+                name="outboundSerialCode"
               >
                 <a-input
-                  v-model:value="formState.outboundSerialNo"
-                  :placeholder="pi.ph('outboundSerialNo')"
+                  v-model:value="formState.outboundSerialCode"
+                  :placeholder="pi.ph('outboundSerialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -92,13 +92,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('referenceInboundNo')"
-                name="referenceInboundNo"
+                :label="pi.label('referenceInboundCode')"
+                name="referenceInboundCode"
               >
                 <TaktSelect
-                  v-model:value="formState.referenceInboundNo"
+                  v-model:value="formState.referenceInboundCode"
                   api-url="TaktSerialInbounds/options"
-                  :placeholder="pi.ph('referenceInboundNo')"
+                  :placeholder="pi.ph('referenceInboundCode')"
                 />
               </a-form-item>
             </a-col>
@@ -170,9 +170,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["outboundId","outboundNo","lineNumber","outboundSerialNo","referenceInboundId","referenceInboundNo","referenceInboundLineNumber","extField"]
-
-
+const formFields = ["outboundId","outboundCode","lineNumber","outboundSerialCode","referenceInboundId","referenceInboundCode","referenceInboundLineNumber","extField"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -197,7 +195,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 serialOutboundItemId 才视为编辑） */
 watch(
@@ -230,10 +227,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  outboundNo: [
+  outboundCode: [
     {
       required: true,
-      message: pi.ph('outboundNo'),
+      message: pi.ph('outboundCode'),
       trigger: 'blur'
     }
   ],
@@ -250,10 +247,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  outboundSerialNo: [
+  outboundSerialCode: [
     {
       required: true,
-      message: pi.ph('outboundSerialNo'),
+      message: pi.ph('outboundSerialCode'),
       trigger: 'blur'
     }
   ],
@@ -264,10 +261,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  referenceInboundNo: [
+  referenceInboundCode: [
     {
       required: true,
-      message: pi.ph('referenceInboundNo'),
+      message: pi.ph('referenceInboundCode'),
       trigger: 'change'
     }
   ],

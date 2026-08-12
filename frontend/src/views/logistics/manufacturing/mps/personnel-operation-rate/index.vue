@@ -195,21 +195,21 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('TeamCode')">
+      <a-form-item :label="pi.queryLabel('TeamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.TeamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('TeamCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeamName')">
-      <a-form-item :label="pi.queryLabel('prodTeamName')">
+      <div v-show="isFieldVisible('TeamCodeName')">
+      <a-form-item :label="pi.queryLabel('TeamCodeName')">
         <a-input
-          v-model:value="advancedQueryForm.prodTeamName"
-          :placeholder="pi.queryPh('prodTeamName', 'required')"
+          v-model:value="advancedQueryForm.TeamCodeName"
+          :placeholder="pi.queryPh('TeamCodeName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -653,7 +653,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -754,7 +753,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /**
  * 构建列表标准文本列
  * @param key 列 key / dataIndex
@@ -822,8 +820,6 @@ const getPersonnelOperationRateDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

@@ -229,10 +229,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.leave.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.leave.relatedplant') })"
           show-count
           :maxlength="4"
@@ -563,7 +563,7 @@ const advancedQueryForm = ref({
   endDateStart: '',
   endDateEnd: '',
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   Attachments: '',
   handlingBy: '',
   handlingAtStart: '',
@@ -595,7 +595,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'endDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.leave.enddate')) },
   { key: 'endDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.leave.enddate')) },
   { key: 'reason', label: t('entity.leave.reason') },
-  { key: 'relatedPlant', label: t('entity.leave.relatedplant') },
+  { key: 'plantCode', label: t('entity.leave.relatedplant') },
   { key: 'Attachments', label: t('entity.leave.Attachments') },
   { key: 'handlingBy', label: t('entity.leave.handlingby') },
   { key: 'handlingAtStart', label: t('entity.leave.handlingatstart') },
@@ -613,8 +613,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -666,7 +665,7 @@ function buildListQuery(overrides?: Partial<LeaveQuery>): LeaveQuery {
   assignTrimmed('endDateStart', form.endDateStart)
   assignTrimmed('endDateEnd', form.endDateEnd)
   assignTrimmed('reason', form.reason)
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('Attachments', form.Attachments)
   assignTrimmed('handlingBy', form.handlingBy)
   assignTrimmed('handlingAtStart', form.handlingAtStart)
@@ -789,12 +788,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.leave.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getLeaveField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getLeaveField(record, 'plantCode') ?? ''
   },
   {
     title: t('entity.leave.Attachments'),
@@ -950,7 +949,7 @@ function handleReset() {
   endDateStart: '',
   endDateEnd: '',
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   Attachments: '',
   handlingBy: '',
   handlingAtStart: '',
@@ -1149,7 +1148,7 @@ function handleAdvancedQueryReset() {
   endDateStart: '',
   endDateEnd: '',
   reason: '',
-  relatedPlant: '',
+  plantCode: '',
   Attachments: '',
   handlingBy: '',
   handlingAtStart: '',

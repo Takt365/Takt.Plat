@@ -26,11 +26,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarIndex("ix_takt_logistics_manufacturing_sop_workstation_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkstationStatus), OrderByType.Asc, false)]
 public class TaktSopWorkstation : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工位编码（工厂内唯一）
@@ -47,13 +42,13 @@ public class TaktSopWorkstation : TaktCompanyEntityBase
     /// <summary>
     /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? WorkCenter { get; set; }
 
     /// <summary>
     /// 生产班组
     /// </summary>
-    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
+    [SugarColumn(ColumnName = "production_line", ColumnDescription = "生产班组", ColumnDataType = "nvarchar", Length = 8, IsNullable = true)]
     public string? ProductionLine { get; set; }
 
     /// <summary>

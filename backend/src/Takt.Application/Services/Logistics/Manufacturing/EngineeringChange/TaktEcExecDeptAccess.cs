@@ -28,7 +28,7 @@ public sealed class TaktEcExecBaseRow
     /// <summary>设变明细 ID</summary>
     public long EcnDetailId { get; init; }
     /// <summary>设变单号</summary>
-    public string EcNo { get; init; } = string.Empty;
+    public string EcCode { get; init; } = string.Empty;
     /// <summary>部门编码</summary>
     public string DeptCode { get; init; } = string.Empty;
     /// <summary>行号</summary>
@@ -89,23 +89,23 @@ public class TaktEcExecDeptAccess
     /// <summary>
     /// 按设变单号与部门取首条执行记录（公共字段）
     /// </summary>
-    /// <param name="ecNo">设变单号</param>
+    /// <param name="ecCode">设变单号</param>
     /// <param name="deptCode">部门编码</param>
     /// <returns>公共字段快照；不存在时 null</returns>
-    public async Task<TaktEcExecBaseRow?> FirstBaseByEcNoAndDeptAsync(string ecNo, string deptCode)
+    public async Task<TaktEcExecBaseRow?> FirstBaseByEcCodeAndDeptAsync(string ecCode, string deptCode)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(ecNo);
+        ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(deptCode);
         return deptCode switch
         {
-            TaktEcDeptCodes.Pmc => ToBaseRow(await _pmcRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Pcba => ToBaseRow(await _pcbaRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
-            TaktEcDeptCodes.Te => ToBaseRow(await _teRepository.FirstAsync(x => x.EcNo == ecNo && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Pmc => ToBaseRow(await _pmcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Mp => ToBaseRow(await _mpRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Iqc => ToBaseRow(await _iqcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Mc => ToBaseRow(await _mcRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Pcba => ToBaseRow(await _pcbaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Assy => ToBaseRow(await _assyRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Qa => ToBaseRow(await _qaRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
+            TaktEcDeptCodes.Te => ToBaseRow(await _teRepository.FirstAsync(x => x.EcCode == ecCode && x.IsDeleted == 0)),
             _ => null
         };
     }
@@ -248,7 +248,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -260,7 +260,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -272,7 +272,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -284,7 +284,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -296,7 +296,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -308,7 +308,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -320,7 +320,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,
@@ -332,7 +332,7 @@ public class TaktEcExecDeptAccess
         {
             Id = e.Id,
             EcnDetailId = e.EcnDetailId,
-            EcNo = e.EcNo,
+            EcCode = e.EcCode,
             DeptCode = e.DeptCode,
             LineNumber = e.LineNumber,
             IsImplemented = e.IsImplemented,

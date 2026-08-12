@@ -23,65 +23,6 @@ import type {
  * @description 对应后端 TaktChangeoverMatrixDto
  */
 export interface ChangeoverMatrix extends CompanyDtoBase {
-  /**
-   * ChangeoverMatrixID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  changeoverMatrixId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
-   */
-  workCenterCode: string;
-
-  /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  fromMaterialCode: string;
-
-  /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  toMaterialCode: string;
-
-  /**
-   * 换型时间（分钟）
-   */
-  changeoverMinutes: number;
-
-  /**
-   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
-   */
-  matrixStatus: number;
-
-}
-
-
-/**
- * ChangeoverMatrix 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 ChangeoverMatrixQuery
- * @description 对应后端 TaktChangeoverMatrixQueryDto
- */
-export interface ChangeoverMatrixQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
 
   /**
    * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
@@ -89,179 +30,12 @@ export interface ChangeoverMatrixQuery extends TaktPagedQuery {
   workCenterCode?: string;
 
   /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 换型前物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   fromMaterialCode?: string;
 
   /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  toMaterialCode?: string;
-
-  /**
-   * 换型时间（分钟）
-   */
-  changeoverMinutes?: number;
-
-  /**
-   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
-   */
-  matrixStatus?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建ChangeoverMatrix DTO
- * 对应前端 ChangeoverMatrixCreate
- * @description 对应后端 TaktChangeoverMatrixCreateDto
- */
-export interface ChangeoverMatrixCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
-   */
-  workCenterCode: string;
-
-  /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  fromMaterialCode: string;
-
-  /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  toMaterialCode: string;
-
-  /**
-   * 换型时间（分钟）
-   */
-  changeoverMinutes: number;
-
-  /**
-   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
-   */
-  matrixStatus: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新ChangeoverMatrix DTO
- * 继承 TaktChangeoverMatrixCreateDto，添加 ChangeoverMatrixId 字段
- * 对应前端 ChangeoverMatrixUpdate
- * @description 对应后端 TaktChangeoverMatrixUpdateDto
- */
-export interface ChangeoverMatrixUpdate extends ChangeoverMatrixCreate {
-  /**
-   * ChangeoverMatrixID（标识要更新的实体）
-   */
-  changeoverMatrixId: string;
-
-}
-
-
-/**
- * ChangeoverMatrix 状态更新 DTO
- * 对应前端 ChangeoverMatrixStatus
- * @description 对应后端 TaktChangeoverMatrixStatusDto
- */
-export interface ChangeoverMatrixStatus {
-  /**
-   * ChangeoverMatrixID
-   */
-  changeoverMatrixId: string;
-
-  /**
-   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
-   */
-  matrixStatus: number;
-
-}
-
-
-/**
- * ChangeoverMatrix 导入模板行 DTO
- * 对应前端 ChangeoverMatrixTemplate
- * @description 对应后端 TaktChangeoverMatrixTemplateDto
- */
-export interface ChangeoverMatrixTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
-   */
-  workCenterCode?: string;
-
-  /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  fromMaterialCode?: string;
-
-  /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 换型后物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   toMaterialCode?: string;
 
@@ -286,71 +60,6 @@ export interface ChangeoverMatrixTemplate {
   remark?: string;
 
 }
-
-
-/**
- * ChangeoverMatrix 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 ChangeoverMatrixImport
- * @description 对应后端 TaktChangeoverMatrixImportDto
- */
-export interface ChangeoverMatrixImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
-   */
-  workCenterCode?: string;
-
-  /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  fromMaterialCode?: string;
-
-  /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
-   */
-  toMaterialCode?: string;
-
-  /**
-   * 换型时间（分钟）
-   */
-  changeoverMinutes?: number;
-
-  /**
-   * 状态（字典 sys_normal_disable；1=启用，0=禁用）
-   */
-  matrixStatus?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * ChangeoverMatrix 导出 DTO（独立实现，不继承响应 Dto）
@@ -379,12 +88,12 @@ export interface ChangeoverMatrixExport {
   workCenterCode: string;
 
   /**
-   * 换型前物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 换型前物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   fromMaterialCode: string;
 
   /**
-   * 换型后物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 换型后物料编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   toMaterialCode: string;
 

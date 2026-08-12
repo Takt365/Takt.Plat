@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyDefectDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyDefectDetail 生成，请按需审阅）
 // 
@@ -67,7 +67,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -84,7 +84,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -102,7 +102,7 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -112,12 +112,12 @@ public class TaktAssyDefectDetailDto : TaktCompanyDtoBase
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -150,6 +150,16 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -176,7 +186,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -193,7 +203,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -211,7 +221,7 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -221,12 +231,12 @@ public class TaktAssyDefectDetailQueryDto : TaktPagedQuery
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -271,10 +281,15 @@ public class TaktAssyDefectDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -303,7 +318,7 @@ public class TaktAssyDefectDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -320,7 +335,7 @@ public class TaktAssyDefectDetailCreateDto
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -338,7 +353,7 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -348,12 +363,12 @@ public class TaktAssyDefectDetailCreateDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -367,6 +382,11 @@ public class TaktAssyDefectDetailCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+    /// <summary>
+    /// AssyDefectDetailId
+    /// </summary>
+    public long AssyDefectDetailId { get; set; }
 }
 
 // ========================================
@@ -385,7 +405,7 @@ public class TaktAssyDefectDetailUpdateDto : TaktAssyDefectDetailCreateDto
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long AssyDefectDetailId { get; set; }
+    public new long AssyDefectDetailId { get; set; }
 
 }
 
@@ -432,6 +452,16 @@ public class TaktAssyDefectDetailTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -458,7 +488,7 @@ public class TaktAssyDefectDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -475,7 +505,7 @@ public class TaktAssyDefectDetailTemplateDto
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -493,7 +523,7 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -503,12 +533,12 @@ public class TaktAssyDefectDetailTemplateDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -540,10 +570,15 @@ public class TaktAssyDefectDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 组立不良日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -571,7 +606,7 @@ public class TaktAssyDefectDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -588,7 +623,7 @@ public class TaktAssyDefectDetailImportDto
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -606,7 +641,7 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -616,12 +651,12 @@ public class TaktAssyDefectDetailImportDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -685,7 +720,7 @@ public class TaktAssyDefectDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 不良区分（字典 logistics_defect_category，存 DictValue）
+    /// 不良区分（字典 logistics_defect_category；存 DictValue）
     /// </summary>
     public string? DefectCategory { get; set; } = string.Empty;
 
@@ -702,7 +737,7 @@ public class TaktAssyDefectDetailExportDto
     /// <summary>
     /// 随机卡号
     /// </summary>
-    public string? RandomCardNo { get; set; } = string.Empty;
+    public string? RandomCardCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发生工程
@@ -720,7 +755,7 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectSymptom { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_assy_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_assy_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
@@ -730,12 +765,12 @@ public class TaktAssyDefectDetailExportDto
     public string? DefectReason { get; set; } = string.Empty;
 
     /// <summary>
-    /// 修理员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 修理员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? RepairOperator { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

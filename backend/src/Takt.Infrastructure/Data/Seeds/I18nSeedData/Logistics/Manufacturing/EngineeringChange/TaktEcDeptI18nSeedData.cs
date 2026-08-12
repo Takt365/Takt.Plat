@@ -99,14 +99,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.ecndetailid
             new TranslationSeedItem("entity.ecdept.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细ID（TaktEcDetail 主键）"),
 
-            // entity.ecdept.ecno
-            new TranslationSeedItem("entity.ecdept.ecno", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdept.ecno
-            new TranslationSeedItem("entity.ecdept.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdept.ecno
-            new TranslationSeedItem("entity.ecdept.ecno", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdept.ecno
-            new TranslationSeedItem("entity.ecdept.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdept.ecCode
+            new TranslationSeedItem("entity.ecdept.ecCode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdept.ecCode
+            new TranslationSeedItem("entity.ecdept.ecCode", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdept.ecCode
+            new TranslationSeedItem("entity.ecdept.ecCode", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdept.ecCode
+            new TranslationSeedItem("entity.ecdept.ecCode", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
 
             // entity.ecdept.linenumber
             new TranslationSeedItem("entity.ecdept.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -225,23 +225,23 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.supplier
             new TranslationSeedItem("entity.ecdept.supplier", "zh-HK", "供应商_hk", "供应商"),
 
-            // entity.ecdept.purchaseorderno
-            new TranslationSeedItem("entity.ecdept.purchaseorderno", "en-US", "采购订单号码_us", "采购订单号码"),
-            // entity.ecdept.purchaseorderno
-            new TranslationSeedItem("entity.ecdept.purchaseorderno", "ja-JP", "采购订单号码_jp", "采购订单号码"),
-            // entity.ecdept.purchaseorderno
-            new TranslationSeedItem("entity.ecdept.purchaseorderno", "zh-CN", "采购订单号码", "采购订单号码"),
-            // entity.ecdept.purchaseorderno
-            new TranslationSeedItem("entity.ecdept.purchaseorderno", "zh-HK", "采购订单号码_hk", "采购订单号码"),
+            // entity.ecdept.purchaseorderCode
+            new TranslationSeedItem("entity.ecdept.purchaseorderCode", "en-US", "采购订单号码_us", "采购订单号码"),
+            // entity.ecdept.purchaseorderCode
+            new TranslationSeedItem("entity.ecdept.purchaseorderCode", "ja-JP", "采购订单号码_jp", "采购订单号码"),
+            // entity.ecdept.purchaseorderCode
+            new TranslationSeedItem("entity.ecdept.purchaseorderCode", "zh-CN", "采购订单号码", "采购订单号码"),
+            // entity.ecdept.purchaseorderCode
+            new TranslationSeedItem("entity.ecdept.purchaseorderCode", "zh-HK", "采购订单号码_hk", "采购订单号码"),
 
-            // entity.ecdept.iqcorderno
-            new TranslationSeedItem("entity.ecdept.iqcorderno", "en-US", "受检单号_us", "受检单号"),
-            // entity.ecdept.iqcorderno
-            new TranslationSeedItem("entity.ecdept.iqcorderno", "ja-JP", "受检单号_jp", "受检单号"),
-            // entity.ecdept.iqcorderno
-            new TranslationSeedItem("entity.ecdept.iqcorderno", "zh-CN", "受检单号", "受检单号"),
-            // entity.ecdept.iqcorderno
-            new TranslationSeedItem("entity.ecdept.iqcorderno", "zh-HK", "受检单号_hk", "受检单号"),
+            // entity.ecdept.iqcorderCode
+            new TranslationSeedItem("entity.ecdept.iqcorderCode", "en-US", "受检单号_us", "受检单号"),
+            // entity.ecdept.iqcorderCode
+            new TranslationSeedItem("entity.ecdept.iqcorderCode", "ja-JP", "受检单号_jp", "受检单号"),
+            // entity.ecdept.iqcorderCode
+            new TranslationSeedItem("entity.ecdept.iqcorderCode", "zh-CN", "受检单号", "受检单号"),
+            // entity.ecdept.iqcorderCode
+            new TranslationSeedItem("entity.ecdept.iqcorderCode", "zh-HK", "受检单号_hk", "受检单号"),
 
             // entity.ecdept.inspectiondate
             new TranslationSeedItem("entity.ecdept.inspectiondate", "en-US", "检验日期_us", "检验/检查日期"),
@@ -288,14 +288,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.productionbatch
             new TranslationSeedItem("entity.ecdept.productionbatch", "zh-HK", "生产批次_hk", "生产批次"),
 
-            // entity.ecdept.outboundorderno
-            new TranslationSeedItem("entity.ecdept.outboundorderno", "en-US", "出库单号_us", "出库单号"),
-            // entity.ecdept.outboundorderno
-            new TranslationSeedItem("entity.ecdept.outboundorderno", "ja-JP", "出库单号_jp", "出库单号"),
-            // entity.ecdept.outboundorderno
-            new TranslationSeedItem("entity.ecdept.outboundorderno", "zh-CN", "出库单号", "出库单号"),
-            // entity.ecdept.outboundorderno
-            new TranslationSeedItem("entity.ecdept.outboundorderno", "zh-HK", "出库单号_hk", "出库单号"),
+            // entity.ecdept.outboundorderCode
+            new TranslationSeedItem("entity.ecdept.outboundorderCode", "en-US", "出库单号_us", "出库单号"),
+            // entity.ecdept.outboundorderCode
+            new TranslationSeedItem("entity.ecdept.outboundorderCode", "ja-JP", "出库单号_jp", "出库单号"),
+            // entity.ecdept.outboundorderCode
+            new TranslationSeedItem("entity.ecdept.outboundorderCode", "zh-CN", "出库单号", "出库单号"),
+            // entity.ecdept.outboundorderCode
+            new TranslationSeedItem("entity.ecdept.outboundorderCode", "zh-HK", "出库单号_hk", "出库单号"),
 
             // entity.ecdept.productionteam
             new TranslationSeedItem("entity.ecdept.productionteam", "en-US", "生产班组_us", "生产班组"),
@@ -333,14 +333,14 @@ public class TaktEcDeptI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdept.inspectionbatch
             new TranslationSeedItem("entity.ecdept.inspectionbatch", "zh-HK", "检验批次_hk", "检验批次"),
 
-            // entity.ecdept.samplingno
-            new TranslationSeedItem("entity.ecdept.samplingno", "en-US", "抽样号码_us", "抽样号码"),
-            // entity.ecdept.samplingno
-            new TranslationSeedItem("entity.ecdept.samplingno", "ja-JP", "抽样号码_jp", "抽样号码"),
-            // entity.ecdept.samplingno
-            new TranslationSeedItem("entity.ecdept.samplingno", "zh-CN", "抽样号码", "抽样号码"),
-            // entity.ecdept.samplingno
-            new TranslationSeedItem("entity.ecdept.samplingno", "zh-HK", "抽样号码_hk", "抽样号码"),
+            // entity.ecdept.samplingCode
+            new TranslationSeedItem("entity.ecdept.samplingCode", "en-US", "抽样号码_us", "抽样号码"),
+            // entity.ecdept.samplingCode
+            new TranslationSeedItem("entity.ecdept.samplingCode", "ja-JP", "抽样号码_jp", "抽样号码"),
+            // entity.ecdept.samplingCode
+            new TranslationSeedItem("entity.ecdept.samplingCode", "zh-CN", "抽样号码", "抽样号码"),
+            // entity.ecdept.samplingCode
+            new TranslationSeedItem("entity.ecdept.samplingCode", "zh-HK", "抽样号码_hk", "抽样号码"),
 
             // entity.ecdept.confirmationdate
             new TranslationSeedItem("entity.ecdept.confirmationdate", "en-US", "确认日期_us", "确认日期"),

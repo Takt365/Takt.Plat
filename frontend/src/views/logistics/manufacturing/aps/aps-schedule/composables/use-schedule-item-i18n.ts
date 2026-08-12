@@ -30,7 +30,7 @@ export const APSSCHEDULEITEM_LIST_FIELDS = [
   'productCode',
   'productName',
   'workCenterCode',
-  'workCenterName',
+  'workCenterDescription',
   'processCode',
   'processName',
   'processSequence',
@@ -59,7 +59,7 @@ export const APSSCHEDULEITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'productCode',
   'productName',
   'workCenterCode',
-  'workCenterName',
+  'workCenterDescription',
   'processCode',
   'processName',
   'processSequence',
@@ -102,7 +102,7 @@ export const APSSCHEDULEITEM_PLACEHOLDER = {
   productCode: 'select',
   productName: 'required',
   workCenterCode: 'optional',
-  workCenterName: 'optional',
+  workCenterDescription: 'optional',
   processCode: 'required',
   processName: 'required',
   processSequence: 'select',
@@ -117,6 +117,7 @@ export const APSSCHEDULEITEM_PLACEHOLDER = {
   processStatus: 'select',
   priority: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -132,7 +133,7 @@ export const APSSCHEDULEITEM_QUERY_STRING_FIELDS = [
   'productCode',
   'productName',
   'workCenterCode',
-  'workCenterName',
+  'workCenterDescription',
   'processCode',
   'processName',
   'planStartTimeStart',

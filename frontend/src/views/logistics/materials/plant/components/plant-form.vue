@@ -100,13 +100,13 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('defaultCulture')"
-                name="defaultCulture"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.defaultCulture"
+                  v-model:value="formState.cultureCode"
                   api-url="TaktCultures/options"
-                  :placeholder="pi.ph('defaultCulture')"
+                  :placeholder="pi.ph('cultureCode')"
                 />
               </a-form-item>
             </a-col>
@@ -815,7 +815,6 @@ const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<PlantCreate & { plantId?: string }> | null
@@ -834,7 +833,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  defaultCulture: "ZH-CN",
+  cultureCode: "zh-CN",
   enterpriseNature: "150",
   industryAttribute: "C",
   enterpriseScale: "M",
@@ -921,10 +920,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  defaultCulture: [
+  cultureCode: [
     {
       required: true,
-      message: pi.ph('defaultCulture'),
+      message: pi.ph('cultureCode'),
       trigger: 'change'
     }
   ],

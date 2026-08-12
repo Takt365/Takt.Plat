@@ -39,7 +39,7 @@ public class TaktCountersign : TaktApprovalEntityBase
     /// <summary>
     /// 来源采购询价编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "purchase_inquiry_code", ColumnDescription = "来源采购询价编码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "purchase_inquiry_code", ColumnDescription = "来源采购询价编码", ColumnDataType = "varchar", Length = 20, IsNullable = true)]
     public string? PurchaseInquiryCode { get; set; }
     /// <summary>
     /// 会签业务类型（字典 logistics_countersign_business_type：inquiry/pr/expense/standalone）

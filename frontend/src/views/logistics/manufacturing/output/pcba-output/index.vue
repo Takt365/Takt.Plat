@@ -117,6 +117,16 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="pi.queryLabel('plantCode')">
         <a-input
@@ -164,7 +174,7 @@
           v-model:value="advancedQueryForm.prodOrderType"
           :placeholder="pi.queryPh('prodOrderType', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -185,7 +195,7 @@
           v-model:value="advancedQueryForm.modelCode"
           :placeholder="pi.queryPh('modelCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="40"
           allow-clear
         />
       </a-form-item>
@@ -201,11 +211,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -221,11 +231,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'required')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="80"
           allow-clear
@@ -409,7 +419,28 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PCBAOUTPUT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.prodOrderQty !== undefined && form.prodOrderQty !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -419,8 +450,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-    prodOrderQty: undefined as number | undefined,
-  }
+    prodOrderQty: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -450,7 +480,7 @@ const { selectedMasterRow } = providePcbaOutputMasterContext()
 const pcbaOutputDetailPanelRef = ref<InstanceType<typeof PcbaOutputDetailPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PcbaOutputQuery} 查询 DTO
  */
@@ -479,13 +509,12 @@ function buildListQuery(overrides?: Partial<PcbaOutputQuery>): PcbaOutputQuery {
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -612,13 +641,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'materialCode') ?? ''
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'batchCode') ?? ''
   },
   {
     title: pi.label('prodOrderQty'),
@@ -630,13 +659,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'prodOrderQty') ?? ''
   },
   {
-    title: pi.label('serialNo'),
-    dataIndex: 'serialNo',
-    key: 'serialNo',
+    title: pi.label('serialCode'),
+    dataIndex: 'serialCode',
+    key: 'serialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'serialNo') ?? ''
+    customRender: ({ record }: { record: any }) => getPcbaOutputField(record, 'serialCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -686,8 +715,6 @@ const getPcbaOutputDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -720,6 +747,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPcbaOutputList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -746,6 +778,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
@@ -754,9 +787,9 @@ function handleReset() {
   prodOrderCode: '',
   modelCode: '',
   materialCode: '',
-  batchNo: '',
+  batchCode: '',
   prodOrderQty: undefined as number | undefined,
-  serialNo: '',
+  serialCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -869,6 +902,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPcbaOutput(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -955,6 +991,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
   plantCode: '',
   prodCategory: '',
   prodDateStart: '',
@@ -963,9 +1000,9 @@ function handleAdvancedQueryReset() {
   prodOrderCode: '',
   modelCode: '',
   materialCode: '',
-  batchNo: '',
+  batchCode: '',
   prodOrderQty: undefined as number | undefined,
-  serialNo: '',
+  serialCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

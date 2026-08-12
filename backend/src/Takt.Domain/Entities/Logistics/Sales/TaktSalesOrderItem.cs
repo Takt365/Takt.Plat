@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Logistics.Sales
 // 文件名称：TaktSalesOrderItem.cs
@@ -34,7 +34,7 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     /// <summary>
     /// 销售订单编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "sales_order_code", ColumnDescription = "销售订单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "sales_order_code", ColumnDescription = "销售订单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -50,15 +50,15 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_name", ColumnDescription = "物料名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string MaterialName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
     /// </summary>
-    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_specification", ColumnDescription = "物料规格", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? MaterialSpecification { get; set; }
 
     /// <summary>
@@ -118,6 +118,12 @@ public class TaktSalesOrderItem : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "tax_amount", ColumnDescription = "税费", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal TaxAmount { get; set; } = 0;
+
+    /// <summary>
+    /// 销售金额
+    /// </summary>
+    [SugarColumn(ColumnName = "sales_amount", ColumnDescription = "销售金额", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal SalesAmount { get; set; } = 0;
 
     /// <summary>
     /// 行交货状态（字典 logistics_delivery_status；0=未交货 1=部分交货 2=全部交货）

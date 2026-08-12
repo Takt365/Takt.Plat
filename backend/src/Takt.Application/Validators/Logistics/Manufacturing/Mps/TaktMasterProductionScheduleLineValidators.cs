@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Mps
 // 文件名称：TaktMasterProductionScheduleLineValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MasterProductionScheduleLine 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMasterProductionScheduleLine 生成，请按需审阅）
 // 
@@ -35,16 +35,22 @@ public class TaktMasterProductionScheduleLineCreateValidator : AbstractValidator
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MasterProductionScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("MPS 头表 ID不能为负数");
         RuleFor(x => x.MpsCode)
             .NotEmpty().WithMessage("MPS 编码不能为空")
-            .MaximumLength(40).WithMessage("MPS 编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("MPS 编码长度不能超过20个字符");
         RuleFor(x => x.MasterDemandScheduleLineId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 行 ID不能为负数");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(40).WithMessage("物料编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.UnitOfMeasure)
             .NotEmpty().WithMessage("计量单位不能为空")
             .MaximumLength(40).WithMessage("计量单位长度不能超过40个字符");
@@ -77,16 +83,22 @@ public class TaktMasterProductionScheduleLineUpdateValidator : AbstractValidator
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MasterProductionScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("MPS 头表 ID不能为负数");
         RuleFor(x => x.MpsCode)
             .NotEmpty().WithMessage("MPS 编码不能为空")
-            .MaximumLength(40).WithMessage("MPS 编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("MPS 编码长度不能超过20个字符");
         RuleFor(x => x.MasterDemandScheduleLineId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 行 ID不能为负数");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(40).WithMessage("物料编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.UnitOfMeasure)
             .NotEmpty().WithMessage("计量单位不能为空")
             .MaximumLength(40).WithMessage("计量单位长度不能超过40个字符");
@@ -115,16 +127,20 @@ public class TaktMasterProductionScheduleLineImportValidator : AbstractValidator
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.MasterProductionScheduleId)
             .GreaterThanOrEqualTo(0).WithMessage("MPS 头表 ID不能为负数");
         RuleFor(x => x.MpsCode)
             .NotEmpty().WithMessage("MPS 编码不能为空")
-            .MaximumLength(40).WithMessage("MPS 编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("MPS 编码长度不能超过20个字符");
         RuleFor(x => x.MasterDemandScheduleLineId)
             .GreaterThanOrEqualTo(0).WithMessage("来源 MDS 行 ID不能为负数");
         RuleFor(x => x.MaterialCode)
             .NotEmpty().WithMessage("物料编码不能为空")
-            .MaximumLength(40).WithMessage("物料编码长度不能超过40个字符");
+            .MaximumLength(20).WithMessage("物料编码长度不能超过20个字符");
         RuleFor(x => x.UnitOfMeasure)
             .NotEmpty().WithMessage("计量单位不能为空")
             .MaximumLength(40).WithMessage("计量单位长度不能超过40个字符");

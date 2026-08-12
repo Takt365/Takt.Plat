@@ -28,107 +28,62 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopcontent.revisionid')"
-                name="revisionId"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.revisionId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopcontent.revisionid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopcontent.sopid')"
+                :label="pi.label('revisionId')"
+                name="revisionId"
+              >
+                <TaktSelect
+                  v-model:value="formState.revisionId"
+                  api-url="TaktSopRevisions/options"
+                  :placeholder="pi.ph('revisionId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('sopId')"
                 name="sopId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.sopId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopcontent.sopid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopDocs/options"
+                  :placeholder="pi.ph('sopId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopcontent.contentlang')"
-                name="contentLang"
-              >
-                <a-textarea
-                  v-model:value="formState.contentLang"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.contentlang') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.sopcontent.contenttitle')"
+                :label="pi.label('contentTitle')"
                 name="contentTitle"
               >
                 <a-textarea
                   v-model:value="formState.contentTitle"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.contenttitle') })"
+                  :placeholder="pi.ph('contentTitle')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopcontent.steps')"
+                :label="pi.label('steps')"
                 name="steps"
               >
                 <a-input
                   v-model:value="formState.steps"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopcontent.steps') })"
+                  :placeholder="pi.ph('steps')"
                   show-count
                   :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                name="extField"
-                class="takt-form-item-ext-field"
-              >
-                <template #label>
-                  <span class="takt-form-ext-field-label">
-                    <a-tooltip
-                      :title="t('common.page.entity.extfieldhint')"
-                      placement="top"
-                    >
-                      <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
-                    </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
-                  </span>
-                </template>
-                <a-textarea
-                  v-model:value="formState.extField"
-                  :placeholder="t('common.page.form.placeholder.extfield')"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('common.page.entity.remark')"
-                name="remark"
-              >
-                <a-textarea
-                  v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
-                  :rows="4"
-                  show-count
-                  :maxlength="400"
                   allow-clear
                 />
               </a-form-item>
@@ -148,8 +103,12 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopContentI18n } from '../composables/use-content-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopContentI18n()
+
 import type { SopContentCreate } from '@/types/logistics/manufacturing/sop/content'
-import { RiQuestionLine } from '@remixicon/vue'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -158,7 +117,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["revisionId","sopId","contentLang","contentTitle","steps","extField","remark"]
+const formFields = ["plantCode","revisionId","sopId","contentTitle","steps"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -210,25 +170,25 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   revisionId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.revisionid') }),
-      trigger: 'blur'
+      message: pi.ph('revisionId'),
+      trigger: 'change'
     }
   ],
   sopId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.sopid') }),
-      trigger: 'blur'
-    }
-  ],
-  contentLang: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.contentlang') }),
-      trigger: 'blur'
+      message: pi.ph('sopId'),
+      trigger: 'change'
     }
   ],
 }))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsScheduleI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktApsSchedule 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -107,15 +107,6 @@ public class TaktApsScheduleI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.apsschedule.materialrequirementsplanningcode", "zh-CN", "来源MRP编码", "来源 MRP 编码（冗余）"),
             // entity.apsschedule.materialrequirementsplanningcode
             new TranslationSeedItem("entity.apsschedule.materialrequirementsplanningcode", "zh-HK", "来源MRP编码_hk", "来源 MRP 编码（冗余）"),
-
-            // entity.apsschedule.plantcode
-            new TranslationSeedItem("entity.apsschedule.plantcode", "en-US", "工厂编码_us", "工厂编码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.apsschedule.plantcode
-            new TranslationSeedItem("entity.apsschedule.plantcode", "ja-JP", "工厂编码_jp", "工厂编码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.apsschedule.plantcode
-            new TranslationSeedItem("entity.apsschedule.plantcode", "zh-CN", "工厂编码", "工厂编码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.apsschedule.plantcode
-            new TranslationSeedItem("entity.apsschedule.plantcode", "zh-HK", "工厂编码_hk", "工厂编码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.apsschedule.schedulecode
             new TranslationSeedItem("entity.apsschedule.schedulecode", "en-US", "排程编码_us", "排程编码（唯一索引）"),

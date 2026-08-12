@@ -275,7 +275,6 @@ export interface GenTable extends TenantDtoBase {
 
 }
 
-
 /**
  * GenTable 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -287,6 +286,11 @@ export interface GenTableQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
@@ -545,7 +549,6 @@ export interface GenTableQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建GenTable DTO
  * 对应前端 GenTableCreate
@@ -556,6 +559,11 @@ export interface GenTableCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
@@ -809,7 +817,6 @@ export interface GenTableCreate {
 
 }
 
-
 /**
  * 更新GenTable DTO
  * 继承 TaktGenTableCreateDto，添加 GenTableId 字段
@@ -824,7 +831,6 @@ export interface GenTableUpdate extends GenTableCreate {
 
 }
 
-
 /**
  * GenTable 导入模板行 DTO
  * 对应前端 GenTableTemplate
@@ -835,6 +841,11 @@ export interface GenTableTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
@@ -907,7 +918,6 @@ export interface GenTableTemplate {
   remark?: string;
 
 }
-
 
 /**
  * GenTable 导入 DTO（独立实现，不继承 TemplateDto）
@@ -921,6 +931,11 @@ export interface GenTableImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
    */
   dataSource?: string;
@@ -991,7 +1006,6 @@ export interface GenTableImport {
   remark?: string;
 
 }
-
 
 /**
  * GenTable 导出 DTO（独立实现，不继承响应 Dto）

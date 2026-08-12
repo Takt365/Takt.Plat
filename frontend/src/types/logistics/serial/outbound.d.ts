@@ -36,12 +36,12 @@ export interface SerialOutbound extends CompanyDtoBase {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo: string;
+  shippingInvoiceCode: string;
 
   /**
    * 装车日期
@@ -111,12 +111,12 @@ export interface SerialOutboundQuery extends TaktPagedQuery {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo?: string;
+  shippingInvoiceCode?: string;
 
   /**
    * 装车日期（范围查询-开始）
@@ -200,7 +200,10 @@ export interface SerialOutboundCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -210,12 +213,12 @@ export interface SerialOutboundCreate {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo: string;
+  shippingInvoiceCode: string;
 
   /**
    * 装车日期
@@ -309,12 +312,12 @@ export interface SerialOutboundTemplate {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo?: string;
+  shippingInvoiceCode?: string;
 
   /**
    * 装车日期
@@ -388,7 +391,10 @@ export interface SerialOutboundImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -398,12 +404,12 @@ export interface SerialOutboundImport {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo?: string;
+  outboundCode?: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo?: string;
+  shippingInvoiceCode?: string;
 
   /**
    * 装车日期
@@ -482,12 +488,12 @@ export interface SerialOutboundExport {
   /**
    * 出库单号（租户+公司+工厂内唯一）
    */
-  outboundNo: string;
+  outboundCode: string;
 
   /**
    * 发货单号
    */
-  shippingInvoiceNo: string;
+  shippingInvoiceCode: string;
 
   /**
    * 装车日期

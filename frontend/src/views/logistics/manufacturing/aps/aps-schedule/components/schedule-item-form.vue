@@ -94,7 +94,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.productCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktMaterialPlants/options"
                   :placeholder="pi.ph('productCode')"
                   :disabled="!!formData?.apsScheduleItemId"
                 />
@@ -127,17 +127,15 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="pi.label('workCenterName')"
-                name="workCenterName"
+                :label="pi.label('workCenterDescription')"
+                name="workCenterDescription"
               >
-                <a-input
-                  v-model:value="formState.workCenterName"
-                  :placeholder="pi.ph('workCenterName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <a-textarea
+                  v-model:value="formState.workCenterDescription"
+                  :placeholder="pi.ph('workCenterDescription')"
+                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -369,9 +367,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["apsOrderId","apsOperationId","routingItemId","lineNumber","workOrderCode","productCode","productName","workCenterCode","workCenterName","processCode","processName","processSequence","processStandardST","processStandardSTUnit","extraMinutes","planQuantity","planStartTime","planEndTime","actualStartTime","actualEndTime","processStatus","priority","isObsolete"]
-
-
+const formFields = ["apsOrderId","apsOperationId","routingItemId","lineNumber","workOrderCode","productCode","productName","workCenterCode","workCenterDescription","processCode","processName","processSequence","processStandardST","processStandardSTUnit","extraMinutes","planQuantity","planStartTime","planEndTime","actualStartTime","actualEndTime","processStatus","priority","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

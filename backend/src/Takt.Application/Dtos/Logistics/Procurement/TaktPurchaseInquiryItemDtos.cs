@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchaseInquiryItemDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchaseInquiryItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchaseInquiryItem 生成，请按需审阅）
 // 
@@ -67,9 +67,9 @@ public class TaktPurchaseInquiryItemDto : TaktCompanyDtoBase
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -112,6 +112,11 @@ public class TaktPurchaseInquiryItemDto : TaktCompanyDtoBase
     public decimal TaxAmount { get; set; }
 
     /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal InquiryAmount { get; set; }
+
+    /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
@@ -139,6 +144,16 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -165,9 +180,9 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -208,6 +223,11 @@ public class TaktPurchaseInquiryItemQueryDto : TaktPagedQuery
     /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal? InquiryAmount { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -255,10 +275,15 @@ public class TaktPurchaseInquiryItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
@@ -288,10 +313,10 @@ public class TaktPurchaseInquiryItemCreateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -333,6 +358,11 @@ public class TaktPurchaseInquiryItemCreateDto
     /// 税费
     /// </summary>
     public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal InquiryAmount { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -414,6 +444,16 @@ public class TaktPurchaseInquiryItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -440,9 +480,9 @@ public class TaktPurchaseInquiryItemTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -483,6 +523,11 @@ public class TaktPurchaseInquiryItemTemplateDto
     /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal? InquiryAmount { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -517,10 +562,15 @@ public class TaktPurchaseInquiryItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
@@ -548,9 +598,9 @@ public class TaktPurchaseInquiryItemImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public string? MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -591,6 +641,11 @@ public class TaktPurchaseInquiryItemImportDto
     /// 税费
     /// </summary>
     public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal? InquiryAmount { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -657,9 +712,9 @@ public class TaktPurchaseInquiryItemExportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 物料描述（回填：随物料）
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料规格（回填：随物料）
@@ -700,6 +755,11 @@ public class TaktPurchaseInquiryItemExportDto
     /// 税费
     /// </summary>
     public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 询价金额
+    /// </summary>
+    public decimal InquiryAmount { get; set; }
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktEmployeePostSeedData.cs
@@ -68,6 +68,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
                     postRepository,
                     tenantCode,
                     company.CompanyCode,
+                    company.CultureCode,
                     EmployeeCode,
                     postCode);
             }
@@ -85,7 +86,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
     /// <returns>员工-岗位模板</returns>
     private static IEnumerable<(string EmployeeCode, string PostCode)> GetEmployeePostTemplates(TaktCompany company)
     {
-        if (string.Equals(company.DefaultCulture, "zh-CN", StringComparison.OrdinalIgnoreCase)
+        if (string.Equals(company.CultureCode, "zh-CN", StringComparison.OrdinalIgnoreCase)
             && string.Equals(company.IndustryAttribute, "C", StringComparison.OrdinalIgnoreCase))
         {
             yield return ("900001", "POST01");
@@ -93,13 +94,13 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
             yield return ("900003", "POST03");
             yield break;
         }
-        if (string.Equals(company.DefaultCulture, "zh-HK", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(company.CultureCode, "zh-HK", StringComparison.OrdinalIgnoreCase))
         {
             yield return ("900001", "POST04");
             yield return ("900002", "POST05");
             yield break;
         }
-        if (string.Equals(company.DefaultCulture, "ja-JP", StringComparison.OrdinalIgnoreCase))
+        if (string.Equals(company.CultureCode, "ja-JP", StringComparison.OrdinalIgnoreCase))
         {
             yield return ("900001", "POST06");
             yield return ("900002", "POST07");
@@ -112,6 +113,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktPost> postRepository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string EmployeeCode,
         string postCode)
     {
@@ -138,6 +140,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                CultureCode = cultureCode,
                 EmployeeId = employee.Id,
                 PostId = post.Id
             });

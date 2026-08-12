@@ -67,7 +67,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var rows = new List<TaktEcBatchDto>();
         foreach (var detail in details)
@@ -184,7 +184,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
             pmc = new TaktEcSeikan
             {
                 EcnDetailId = detail.Id,
-                EcNo = detail.EcNo,
+                EcCode = detail.EcCode,
                 DeptCode = TaktEcDeptCodes.Pmc,
             };
             var maxLine = await pmcRepo.GetMaxIntAsync(
@@ -214,7 +214,7 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
             pcba = new TaktEcSeizounika
             {
                 EcnDetailId = detail.Id,
-                EcNo = detail.EcNo,
+                EcCode = detail.EcCode,
                 DeptCode = TaktEcDeptCodes.Pcba,
             };
             var maxLine = await pcbaRepo.GetMaxIntAsync(
@@ -241,29 +241,35 @@ public class TaktEcBatchService : TaktServiceBase, ITaktEcBatchService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcNewItem != null && x.EcNewItem.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (!string.IsNullOrEmpty(queryDto?.EcModel))
         {
             exp = exp.And(x => x.EcModel != null && x.EcModel.Contains(queryDto.EcModel));
         }
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            var batchNo = queryDto.BatchNo;
+            var batchCode = queryDto.BatchCode;
             exp = exp.And(x =>
                 SqlFunc.Subqueryable<TaktEcSeikan>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.ScheduledBatch != null && d.ScheduledBatch.Contains(batchCode))
                     .Any()
                 || SqlFunc.Subqueryable<TaktEcSeizounika>()
-                    .Where(d => d.EcnDetailId == x.Id && d.ProductionBatch != null && d.ProductionBatch.Contains(batchNo))
+                    .Where(d => d.EcnDetailId == x.Id && d.ProductionBatch != null && d.ProductionBatch.Contains(batchCode))
                     .Any());
         }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         return exp.ToExpression();
     }
 }

@@ -101,12 +101,12 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         EnsureThreeLayerContext();
         var list = await _ecDetailRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.EcNo ?? string.Empty,
+            x => x.EcCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.EcNo ?? e.Id.ToString(),
+            DictLabel = e.EcCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -377,9 +377,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EcId).Contains(keywords)
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || (x.EcBomLineNo != null && x.EcBomLineNo.Contains(keywords))
+                || (x.EcBomLineCode != null && x.EcBomLineCode.Contains(keywords))
                 || (x.EcModel != null && x.EcModel.Contains(keywords))
                 || (x.EcBomItem != null && x.EcBomItem.Contains(keywords))
                 || (x.EcBomItemText != null && x.EcBomItemText.Contains(keywords))
@@ -406,6 +406,7 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
                 || (x.EcSecondDistinction != null && x.EcSecondDistinction.Contains(keywords))
                 || (x.EcInstruction != null && x.EcInstruction.Contains(keywords))
                 || (x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EcBomDate).Contains(keywords)
@@ -418,9 +419,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcId == queryDto.EcId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -428,9 +429,9 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcBomLineNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcBomLineCode))
         {
-            exp = exp.And(x => x.EcBomLineNo != null && x.EcBomLineNo.Contains(queryDto.EcBomLineNo));
+            exp = exp.And(x => x.EcBomLineCode != null && x.EcBomLineCode.Contains(queryDto.EcBomLineCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.EcModel))
@@ -563,6 +564,11 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
             exp = exp.And(x => x.EcLegacyPartDisposition != null && x.EcLegacyPartDisposition.Contains(queryDto.EcLegacyPartDisposition));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -592,6 +598,12 @@ public class TaktEcDetailService : TaktServiceBase, ITaktEcDetailService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

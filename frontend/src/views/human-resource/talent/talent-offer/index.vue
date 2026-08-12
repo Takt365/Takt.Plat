@@ -117,10 +117,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('offerNo')">
+      <div v-show="isFieldVisible('offerCode')">
       <a-form-item :label="t('entity.talentOffer.offerno')">
         <a-input
-          v-model:value="advancedQueryForm.offerNo"
+          v-model:value="advancedQueryForm.offerCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentOffer.offerno') })"
           allow-clear
         />
@@ -388,7 +388,7 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',
@@ -412,7 +412,7 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'jobPostingId', label: t('entity.talentOffer.jobpostingid') },
-  { key: 'offerNo', label: t('entity.talentOffer.offerno') },
+  { key: 'offerCode', label: t('entity.talentOffer.offerno') },
   { key: 'hireDateStart', label: t('entity.talentOffer.hiredatestart') },
   { key: 'hireDateEnd', label: t('entity.talentOffer.hiredateend') },
   { key: 'employeeId', label: t('entity.talentOffer.employeeid') },
@@ -431,8 +431,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'ExtField', label: t('common.page.entity.ExtField') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
@@ -444,11 +443,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 onMounted(() => {
   loadData()
 })
-
-
-
-
-
 
 const columns = computed<TableColumnsType>(() => [
   {
@@ -481,12 +475,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.talentOffer.offerno'),
-    dataIndex: 'offerNo',
-    key: 'offerNo',
+    dataIndex: 'offerCode',
+    key: 'offerCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'offerNo') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'offerCode') ?? ''
   },
   {
     title: t('entity.talentOffer.hiredate'),
@@ -668,7 +662,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',
@@ -844,7 +838,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',

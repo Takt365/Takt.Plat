@@ -30,7 +30,6 @@ namespace Takt.Application.Services.Logistics.Materials;
 public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinationService
 {
     private const int MaxModelDestinationRowsByMaterial = 50;
-    private const int MaxCascadeSelectOptions = 500;
 
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
@@ -122,7 +121,6 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             .Where(e => !string.IsNullOrWhiteSpace(e.ModelCode))
             .GroupBy(e => e.ModelCode, StringComparer.OrdinalIgnoreCase)
             .OrderBy(g => g.Key, StringComparer.Ordinal)
-            .Take(MaxCascadeSelectOptions)
             .Select(g =>
             {
                 var first = g.First();
@@ -156,12 +154,11 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             .Where(e => !string.IsNullOrWhiteSpace(e.MaterialCode))
             .GroupBy(e => e.MaterialCode, StringComparer.OrdinalIgnoreCase)
             .OrderBy(g => g.Key, StringComparer.Ordinal)
-            .Take(MaxCascadeSelectOptions)
             .Select(g =>
             {
                 var first = g.First();
-                var materialName = first.MaterialName?.Trim();
-                var label = string.IsNullOrWhiteSpace(materialName) ? g.Key : $"{g.Key} - {materialName}";
+                var materialDescription = first.MaterialDescription?.Trim();
+                var label = string.IsNullOrWhiteSpace(materialDescription) ? g.Key : $"{g.Key} - {materialDescription}";
                 return new TaktSelectOption
                 {
                     DictValue = g.Key,
@@ -419,7 +416,7 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.ModelName != null && x.ModelName.Contains(keywords))
                 || (x.DestinationCode != null && x.DestinationCode.Contains(keywords))
@@ -436,9 +433,9 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ModelCode))
@@ -465,7 +462,6 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
         {
             exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
         }
-
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -485,6 +481,12 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
+        }
+
 
         return exp.ToExpression();
     }

@@ -19,14 +19,16 @@ import type { TaktPagedQuery, TaktPagedResult } from '@/types/common';
 export interface MaterialMovingPriceMonthlyTrendQuery extends TaktPagedQuery {
   /** 工厂代码（必填） */
   plantCode: string;
-  /** 期间起（当月首日） */
+  /** 期间起（当月首日 yyyy-MM-dd；对应后端 PeriodDateStart） */
   periodDateStart?: string;
-  /** 期间止（当月首日） */
+  /** 期间止（当月首日 yyyy-MM-dd；对应后端 PeriodDateEnd） */
   periodDateEnd?: string;
   /** 关注期间 yyyy-MM */
   focusPeriod?: string;
   /** 评估类别 */
   valuation?: string;
+  /** 产品物料类型（机种推移必填） */
+  materialType?: string;
   /** 物料编码（模糊） */
   materialCode?: string;
   /** 涨跌筛选：空/all=全部；leading=机种推移领涨领跌各 50；up/down/changed */
@@ -47,7 +49,7 @@ export interface MaterialMovingPriceMonthlyTrend {
   /** 评估类别 */
   valuation: string;
   /** 币种 */
-  currency?: string;
+  currencyCode?: string;
   /** 各期间单价 */
   periodUnitPrices?: Record<string, number>;
   /** 各期间单价来源月 */

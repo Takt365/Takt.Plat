@@ -150,11 +150,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.maintenanceworkorder.equipmentcode')">
+      <div v-show="isFieldVisible('EquipCode')">
+      <a-form-item :label="t('entity.maintenanceworkorder.EquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.equipmentcode') })"
+          v-model:value="advancedQueryForm.EquipCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenanceworkorder.EquipCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -851,7 +851,7 @@ const advancedQueryForm = ref({
   workOrderCode: '',
   maintenanceNotificationId: '',
   notificationCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   maintenanceType: undefined as number | undefined,
@@ -916,7 +916,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'workOrderCode', label: t('entity.maintenanceworkorder.workordercode') },
   { key: 'maintenanceNotificationId', label: t('entity.maintenanceworkorder.maintenancenotificationid') },
   { key: 'notificationCode', label: t('entity.maintenanceworkorder.notificationcode') },
-  { key: 'equipmentCode', label: t('entity.maintenanceworkorder.equipmentcode') },
+  { key: 'EquipCode', label: t('entity.maintenanceworkorder.EquipCode') },
   { key: 'equipmentName', label: t('entity.maintenanceworkorder.equipmentname') },
   { key: 'maintenanceCategory', label: t('entity.maintenanceworkorder.maintenancecategory') },
   { key: 'maintenanceType', label: t('entity.maintenanceworkorder.maintenancetype') },
@@ -971,8 +971,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -998,7 +997,7 @@ function handleAdvancedQueryReset() {
   workOrderCode: '',
   maintenanceNotificationId: '',
   notificationCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   maintenanceType: undefined as number | undefined,
@@ -1139,14 +1138,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaintenanceWorkOrderField(record, 'notificationCode') ?? ''),
   },
   {
-    title: t('entity.maintenanceworkorder.equipmentcode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    title: t('entity.maintenanceworkorder.EquipCode'),
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaintenanceWorkOrder }) =>
-      String(getMaintenanceWorkOrderField(record, 'equipmentCode') ?? ''),
+      String(getMaintenanceWorkOrderField(record, 'EquipCode') ?? ''),
   },
   {
     title: t('entity.maintenanceworkorder.equipmentname'),
@@ -1195,10 +1194,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
         onClick: (record: MaintenanceWorkOrder) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1264,7 +1261,7 @@ function buildListQuery(overrides?: Partial<MaintenanceWorkOrderQuery>): Mainten
   assignTrimmed('workOrderCode', form.workOrderCode)
   assignTrimmed('maintenanceNotificationId', form.maintenanceNotificationId)
   assignTrimmed('notificationCode', form.notificationCode)
-  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('EquipCode', form.EquipCode)
   assignTrimmed('equipmentName', form.equipmentName)
   if (form.maintenanceCategory !== undefined && form.maintenanceCategory !== null) {
     query.maintenanceCategory = form.maintenanceCategory

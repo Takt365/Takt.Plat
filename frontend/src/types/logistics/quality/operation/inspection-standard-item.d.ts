@@ -139,6 +139,11 @@ export interface InspectionStandardItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId?: string;
@@ -258,9 +263,17 @@ export interface InspectionStandardItemCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
@@ -406,6 +419,11 @@ export interface InspectionStandardItemTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）
    */
   inspectionStandardId?: string;
@@ -515,9 +533,17 @@ export interface InspectionStandardItemImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 检验标准 ID（关联 TaktInspectionStandard.Id，选项 TaktInspectionStandards/options）

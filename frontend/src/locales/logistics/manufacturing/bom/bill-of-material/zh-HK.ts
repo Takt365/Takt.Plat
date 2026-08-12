@@ -32,7 +32,7 @@ export default {
       quantity: "需求數量",
       maxLevel: "最大層級",
       includeLevelZero: "含父件行",
-      summary: "BOM {bomCode} · 父件 {parentMaterialCode} {parentMaterialName} · 需求 {quantity}",
+      summary: "BOM {bomCode} · 父件 {parentMaterialCode} {parentMaterialDescription} · 需求 {quantity}",
       column: {
         level: "層級",
         immediateParent: "直接父件",

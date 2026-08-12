@@ -27,167 +27,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('prodCategory')"
-                name="prodCategory"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodCategory"
-                  dict-type="logistics_prod_category"
-                  :placeholder="pi.ph('prodCategory')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('prodOrderType')"
-                name="prodOrderType"
-              >
-                <a-input
-                  v-model:value="formState.prodOrderType"
-                  :placeholder="pi.ph('prodOrderType')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.prodOrderCode"
-                  api-url="TaktProductionOrders/options"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  :disabled="!!formData?.pcbaInspectionId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('prodOrderQty')"
-                name="prodOrderQty"
-              >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="pi.ph('prodOrderQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('modelCode')"
-                name="modelCode"
-              >
-                <a-input
-                  v-model:value="formState.modelCode"
-                  :placeholder="pi.ph('modelCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('batchNo')"
-                name="batchNo"
-              >
-                <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="pi.ph('batchNo')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="pi.ph('materialCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.pcbaInspectionId"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -313,13 +153,13 @@
           allow-clear
         />
       </template>
-      <template #cell-prodTeam="{ record }">
+      <template #cell-TeamCode="{ record }">
         <TaktSelect
-          v-model:value="record.prodTeam"
+          v-model:value="record.TeamCode"
           api-url="TaktProductionTeams/options"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="pcbaInspectionDetailPi.queryPh('prodTeam', 'select')"
+          :placeholder="pcbaInspectionDetailPi.queryPh('TeamCode', 'select')"
           :disabled="loading"
           allow-clear
         />
@@ -390,16 +230,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodCategory","prodOrderType","prodOrderCode","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","prodCategory","prodOrderType","prodOrderCode","prodOrderQty","modelCode","batchCode","materialCode","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -503,8 +347,8 @@ const pcbaInspectionDetailFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140,
   },
   {
-    key: 'prodTeam',
-    title: pcbaInspectionDetailPi.label('prodTeam'),
+    key: 'TeamCode',
+    title: pcbaInspectionDetailPi.label('TeamCode'),
     width: 140,
   },
   {
@@ -551,8 +395,7 @@ const pcbaInspectionDetailFormColumns = computed<TaktEditableTableColumn[]>(() =
     key: 'isObsolete',
     title: pcbaInspectionDetailPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PcbaInspectionCreate & { pcbaInspectionId?: string }> | null | undefined) {
@@ -574,7 +417,7 @@ function createDefaultPcbaInspectionDetailRow(): Record<string, unknown> {
     dailyCompletedQty: 0,
     inspectionQty: 0,
     inspectionStatus: 0,
-    prodTeam: '',
+    TeamCode: '',
     inspectionWorkHours: 0,
     aoiWorkHours: 0,
     defectQty: 0,
@@ -597,7 +440,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         pcbaInspectionId: masterId,
       }
       if (isUpdate && isPersistedPcbaInspectionDetailRow(row)) {

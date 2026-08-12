@@ -35,51 +35,6 @@ public class TaktCostElementDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CostElementId { get; set; }
 
-    /// <summary>
-    /// 成本要素编码
-    /// </summary>
-    public string CostElementCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素名称
-    /// </summary>
-    public string CostElementName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级；由 KATYP 推导）
-    /// </summary>
-    public int CostElementType { get; set; } = 0;
-
-    /// <summary>
-    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
-    /// </summary>
-    public int CostElementCategory { get; set; } = 1;
-
-    /// <summary>
-    /// 父级 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ParentId { get; set; }
-
-    /// <summary>
-    /// 成本要素层级
-    /// </summary>
-    public int CostElementLevel { get; set; } = 0;
-
-    /// <summary>
-    /// 生效日期
-    /// </summary>
-    public DateTime ValidFrom { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime ValidTo { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -127,6 +82,11 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本要素编码
@@ -182,7 +142,7 @@ public class TaktCostElementQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -235,9 +195,10 @@ public class TaktCostElementCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 成本要素编码
@@ -286,7 +247,7 @@ public class TaktCostElementCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -391,6 +352,11 @@ public class TaktCostElementTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 成本要素编码
     /// </summary>
     public string? CostElementCode { get; set; } = string.Empty;
@@ -434,7 +400,7 @@ public class TaktCostElementTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -467,9 +433,10 @@ public class TaktCostElementImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 成本要素编码
@@ -515,7 +482,7 @@ public class TaktCostElementImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -597,7 +564,7 @@ public class TaktCostElementExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

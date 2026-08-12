@@ -12,7 +12,7 @@ import type {
   BomMaterialCostItemComponentMovingPriceQuery,
   BomMaterialCostItemMonthlyTrendLine,
   BomMaterialCostItemTransposedQuery,
-} from '@/types/logistics/manufacturing/bom/material-cost-trend';
+} from '@/types/logistics/manufacturing/bom/material-cost-analysis';
 import { useI18n } from 'vue-i18n';
 
 /** 静态 locales 引用键前缀 logistics.manufacturing.bom.material-cost-trend.page */

@@ -21,17 +21,12 @@ namespace Takt.Domain.Entities.Logistics.Serial;
 [SugarTable("takt_logistics_serial_upload", "序列号上传表")]
 [SugarIndex("ix_serial_upload_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_serial_upload_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_serial_upload_invoice_seq_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ShippingInvoiceNo), OrderByType.Asc, nameof(SequenceNo), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_logistics_serial_upload_serial_no", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SerialNo), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_serial_upload_invoice_seq_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ShippingInvoiceCode), OrderByType.Asc, nameof(SequenceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_serial_upload_serial_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(SerialCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_upload_outbound_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OutboundDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_serial_upload_material", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
 public class TaktSerialUpload : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出库日期
@@ -42,14 +37,14 @@ public class TaktSerialUpload : TaktCompanyEntityBase
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    [SugarColumn(ColumnName = "shipping_invoice_no", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 9, IsNullable = false)]
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "shipping_invoice_code", ColumnDescription = "发货单号", ColumnDataType = "nvarchar", Length = 9, IsNullable = false)]
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    [SugarColumn(ColumnName = "sequence_no", ColumnDescription = "序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
-    public int SequenceNo { get; set; }
+    [SugarColumn(ColumnName = "sequence_code", ColumnDescription = "序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    public int SequenceCode { get; set; }
 
     /// <summary>
     /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
@@ -66,8 +61,8 @@ public class TaktSerialUpload : TaktCompanyEntityBase
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 7, IsNullable = false)]
-    public string SerialNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "serial_code", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 7, IsNullable = false)]
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量

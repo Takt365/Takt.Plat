@@ -450,14 +450,15 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.ShiftNo).Contains(keywords)
                 || (x.ProdOrderType != null && x.ProdOrderType.Contains(keywords))
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ProdDate).Contains(keywords)
@@ -475,9 +476,9 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
         if (queryDto?.ShiftNo.HasValue == true)
@@ -505,14 +506,19 @@ public class TaktPcbaRepairService : TaktServiceBase, ITaktPcbaRepairService
             exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
         {
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/output/production-monthly/components -->
 <!-- 文件名称：production-monthly-query-form.vue -->
-<!-- 功能描述：月生产推移查询栏（工厂/期间/机种/产出类别） -->
+<!-- 功能描述：月生产推移查询栏（工厂→产出类别→机种 + 期间） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,9 +12,10 @@
     <div class="production-monthly-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
       <TaktSelect
         v-model:value="plantCode"
-        api-url="TaktPlants/options"
+        :api-url="plantOptionsUrl"
         class="production-monthly-query-bar__control production-monthly-query-bar__control--plant"
         allow-clear
+        show-search
         :placeholder="t('entity.assyoutput.plantcode')"
       />
       <a-range-picker
@@ -25,21 +26,27 @@
         class="production-monthly-query-bar__control production-monthly-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
       />
-      <a-input
-        v-model:value="modelCode"
-        class="production-monthly-query-bar__control production-monthly-query-bar__control--model"
-        allow-clear
-        :placeholder="t(`${localePrefix}.modelCode`)"
-      />
-      <a-select
+      <TaktSelect
         v-model:value="outputCategory"
+        :api-url="outputCategoryOptionsUrl"
+        :api-params="outputCategoryApiParams"
+        :disabled="!plantCode?.trim()"
         class="production-monthly-query-bar__control production-monthly-query-bar__control--category"
         allow-clear
         :placeholder="t(`${localePrefix}.outputCategory`)"
-        :options="outputCategoryOptions"
+      />
+      <TaktSelect
+        :key="modelSelectKey"
+        v-model:value="modelCode"
+        :api-url="modelOptionsUrl"
+        :api-params="modelApiParams"
+        :disabled="!plantCode?.trim()"
+        class="production-monthly-query-bar__control production-monthly-query-bar__control--model"
+        allow-clear
+        show-search
+        :placeholder="t(`${localePrefix}.modelCode`)"
       />
     </div>
     <a-space class="query-actions">
@@ -69,18 +76,23 @@
 
 <script setup lang="ts">
 /**
- * 月生产推移查询栏：工厂 + 期间 + 机种 + 产出类别
+ * 月生产推移查询栏：工厂 → 产出类别 → 机种（机种可空）
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
+import {
+  getProductionMonthlyTrendModelOptionsUrl,
+  getProductionMonthlyTrendOutputCategoryOptionsUrl,
+  getProductionMonthlyTrendPlantOptionsUrl,
+} from '@/api/logistics/manufacturing/output/production-monthly'
 
-/** 工厂代码 */
+/** 工厂代码（第 1 级，必选） */
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
-/** 机种 */
+/** 机种（第 3 级，可空） */
 const modelCode = defineModel<string | undefined>('modelCode')
-/** 产出类别 */
+/** 产出类别（第 2 级，可空） */
 const outputCategory = defineModel<string | undefined>('outputCategory')
 const props = defineProps<{
   /** 查询 loading */
@@ -94,12 +106,53 @@ const emit = defineEmits<{
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.output.production-monthly.page'
+/** 机种下拉刷新键 */
+const modelSelectKey = ref(0)
+/** 推移本表级联选项 URL（TaktProductionMonthlyTrends） */
+const plantOptionsUrl = getProductionMonthlyTrendPlantOptionsUrl()
+const outputCategoryOptionsUrl = getProductionMonthlyTrendOutputCategoryOptionsUrl()
+const modelOptionsUrl = getProductionMonthlyTrendModelOptionsUrl()
 
-/** 产出类别选项 */
-const outputCategoryOptions = computed(() => [
-  { value: 'assy', label: t(`${localePrefix}.outputCategoryOptions.assy`) },
-  { value: 'pcba', label: t(`${localePrefix}.outputCategoryOptions.pcba`) },
-])
+/** 第 2 级：工厂 → 产出类别 */
+const outputCategoryApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  return { plantCode: plant }
+})
+
+/** 第 3 级：工厂 + 产出类别 → 机种（类别可空并集） */
+const modelApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  const category = outputCategory.value?.trim()
+  return {
+    plantCode: plant,
+    ...(category ? { outputCategory: category } : {}),
+  }
+})
+
+/** 工厂变更：清空第 2～3 级 */
+watch(
+  () => plantCode.value,
+  () => {
+    outputCategory.value = undefined
+    modelCode.value = undefined
+    modelSelectKey.value += 1
+  },
+)
+
+/** 产出类别变更：清空第 3 级 */
+watch(
+  () => outputCategory.value,
+  () => {
+    modelCode.value = undefined
+    modelSelectKey.value += 1
+  },
+)
 </script>
 
 <style scoped>

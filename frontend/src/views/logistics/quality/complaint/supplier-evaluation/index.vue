@@ -390,12 +390,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
-      <a-form-item :label="pi.queryLabel('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           api-url="TaktPlants/options"
-          :placeholder="pi.queryPh('relatedPlant', 'select')"
+          :placeholder="pi.queryPh('plantCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -708,7 +708,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -975,13 +974,13 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: pi.label('relatedPlant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    title: pi.label('plantCode'),
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getSupplierEvaluationField(record, 'plantCode') ?? ''
   },
   {
     title: pi.label('rectificationStatus'),
@@ -1038,8 +1037,6 @@ const getSupplierEvaluationDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -1124,7 +1121,7 @@ function handleReset() {
   rectificationDeadlineEnd: '',
   attachments: '',
   evaluationStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   rectificationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -1349,7 +1346,7 @@ function handleAdvancedQueryReset() {
   rectificationDeadlineEnd: '',
   attachments: '',
   evaluationStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   rectificationStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

@@ -377,8 +377,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'ExtField', label: t('common.page.entity.ExtField') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 const visibleQueryFieldKeys = ref<string[]>([])
 const columnSettingVisible = ref(false)
 const importVisible = ref(false)
@@ -390,11 +389,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 onMounted(() => {
   loadData()
 })
-
-
-
-
-
 
 const columns = computed<TableColumnsType>(() => [
   {

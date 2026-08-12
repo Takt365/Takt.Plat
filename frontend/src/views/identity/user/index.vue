@@ -700,7 +700,6 @@ const handleResizeColumn = (w: number, col: any) => {
   }
 }
 
-
 // 新增
 const handleCreate = () => {
   formTitle.value = t('common.dialog.title.create', { entity: t('entity.user._self') })
@@ -1103,7 +1102,7 @@ const handleFormSubmit = async () => {
         nickname: fv.nickName?.trim() ?? '',
         userType: fv.userType ?? 0,
         userStatus: fv.userStatus ?? 1,
-        defaultCulture: currentUser?.defaultCulture?.trim() || resolveRequestLocale(),
+        cultureCode: currentUser?.cultureCode?.trim() || resolveRequestLocale(),
         remark: fv.remark ?? '',
         passwordHash: '',
         roleIds: fv.roleIds?.map((id) => String(id)) ?? []
@@ -1120,7 +1119,7 @@ const handleFormSubmit = async () => {
         userType: fv.userType ?? 0,
         passwordHash: fv.password ?? '',
         userStatus: fv.userStatus ?? 1,
-        defaultCulture: resolveRequestLocale(),
+        cultureCode: resolveRequestLocale(),
         remark: fv.remark ?? '',
         roleIds: fv.roleIds?.map((id) => String(id)) ?? []
       }
@@ -1157,6 +1156,5 @@ const handleFormCancel = () => {
     formRef.value.resetFields()
   }
 }
-
 
 </script>

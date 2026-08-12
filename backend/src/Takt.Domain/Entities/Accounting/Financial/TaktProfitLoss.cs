@@ -23,15 +23,10 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarTable("takt_accounting_financial_profit_loss", "利润表")]
 [SugarIndex("ix_profit_loss_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_profit_loss_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_profit_loss_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(StatementLineCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_accounting_financial_profit_loss_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(StatementLineCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_accounting_financial_profit_loss_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Desc, false)]
 public class TaktProfitLoss : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 会计期间编码（YYYYMM；利润表报告期）
     /// </summary>

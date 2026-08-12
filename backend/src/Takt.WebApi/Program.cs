@@ -193,6 +193,7 @@ try
     });
     builder.Services.AddTaktCaptcha(builder.Configuration);
     builder.Services.AddTaktSecurity(builder.Configuration);
+    builder.Services.AddTaktObservability(builder.Configuration, builder.Environment.EnvironmentName);
     builder.Services.AddControllers(options =>
         {
             options.Filters.Add<TaktValidationFilter>();
@@ -227,6 +228,7 @@ try
     TaktLogger.Information("  ✓ 业务服务已注册（用户上下文、本地化、CORS）");
     TaktLogger.Information("  ✓ 缓存服务已注册（Cache 配置：Memory / Redis）");
     TaktLogger.Information("  ✓ 安全服务已注册（限流、CSRF、XSS）");
+    TaktLogger.Information("  ✓ 可观测性已注册（HealthChecks / Prometheus / OpenTelemetry）");
     TaktLogger.Information("  ✓ OpenIddict 认证已启用");
 
     // ========================================
@@ -274,43 +276,14 @@ try
     app.UseMiddleware<Takt.Infrastructure.Middleware.TaktSignalRTokenMiddleware>();
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseTaktPrometheusHttpMetrics();
     
     // 7.7 路由映射
     app.MapControllers();
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktConnectHub>("/hubs/TaktConnectHub");
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktNotificationHub>("/hubs/TaktNotificationHub");
     app.MapTaktSignalRHub<Takt.Infrastructure.SignalR.TaktEcChangeHub>("/hubs/TaktEcChangeHub");
-
-    // 健康检查 API
-    app.MapGet("/health", () => new
-    {
-        Status = "Healthy",
-        Timestamp = DateTime.UtcNow,
-        Environment = app.Environment.EnvironmentName
-    })
-    .WithName("HealthCheck")
-    .WithOpenApi();
-
-    app.MapGet("/health/ready", (IConfiguration configuration, HttpContext httpContext) =>
-    {
-        var tenantCode = TaktUserContext.TryResolveTenantCode(httpContext)?.Trim();
-        if (string.IsNullOrWhiteSpace(tenantCode))
-        {
-            tenantCode = configuration["Tenant:DefaultTenantCode"]?.Trim() ?? "000";
-        }
-
-        var databaseName = TaktTenantDatabaseHelper.ResolveDatabaseName(configuration, tenantCode);
-        var reachable = TaktTenantDatabaseHelper.TryPingTenantDatabase(configuration, tenantCode);
-        return Results.Json(new
-        {
-            Status = reachable ? "Healthy" : "Unhealthy",
-            TenantCode = tenantCode,
-            DatabaseName = databaseName,
-            Timestamp = DateTime.UtcNow,
-        }, statusCode: reachable ? StatusCodes.Status200OK : StatusCodes.Status503ServiceUnavailable);
-    })
-    .WithName("HealthCheckReady")
-    .WithOpenApi();
+    app.MapTaktObservabilityEndpoints();
 
     // ========================================
     // 8. 输出启动完成信息
@@ -335,6 +308,7 @@ try
     TaktLogger.Information("║  ✓ 请求日志: TaktLoggingMiddleware (带耗时、IP、租户)   ║");
     TaktLogger.Information("║  ✓ 异常处理: TaktExceptionMiddleware (统一错误响应)     ║");
     TaktLogger.Information("║  ✓ 安全防护: 限流 + CSRF + XSS（appsettings Security）  ║");
+    TaktLogger.Information("║  ✓ 可观测性: HealthChecks + Prometheus + OTel Tracing ║");
     TaktLogger.Information("║  ✓ 缓存系统: ITaktCacheService（appsettings Cache）      ║");
     TaktLogger.Information("║  ✓ 认证授权: OpenIddict (OAuth2/OIDC)                    ║");
     TaktLogger.Information("║    - AuthorizationCode + PKCE (SPA 标准)                  ║");
@@ -354,6 +328,8 @@ try
     TaktLogger.Information("║  API 文档: https://localhost:60071/scalar               ║");
     TaktLogger.Information("║    （主页下拉切换模块；/scalar/{{module}} 直达单模块）   ║");
     TaktLogger.Information("║  健康检查: https://localhost:60071/health                ║");
+    TaktLogger.Information("║  就绪探针: https://localhost:60071/health/ready          ║");
+    TaktLogger.Information("║  Prometheus: https://localhost:60071/metrics             ║");
     TaktLogger.Information("║  授权端点: https://localhost:60071/connect/authorize     ║");
     TaktLogger.Information("║  令牌端点: https://localhost:60071/connect/token         ║");
     TaktLogger.Information("╠══════════════════════════════════════════════════════════╣");

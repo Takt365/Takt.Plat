@@ -13,6 +13,8 @@
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Quartz;
+using SqlSugar;
+using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
@@ -194,7 +196,7 @@ public sealed class TaktQuartzJobExecutor
             "assembly" => await ExecuteAssemblyAsync(
                 task, executeParams, userName, cancellationToken),
             "http" => await ExecuteHttpAsync(task, executeParams, cancellationToken),
-            "sql" => await ExecuteSqlAsync(task, seedContext, cancellationToken),
+            "sql" => await ExecuteSqlAsync(task, executeParams, seedContext, cancellationToken),
             _ => throw new InvalidOperationException($"不支持的任务类型：{task.TaskType}"),
         };
     }
@@ -275,50 +277,174 @@ public sealed class TaktQuartzJobExecutor
 
     /// <summary>
     /// 执行 SQL 任务：只读 SELECT → 查询；含 MERGE/DML 的脚本 → ExecuteCommand
+    /// 同步脚本（Quartz/sync_*.sql）须在 ExecuteParams 提供 targetDatabase，并在该库连接上执行
     /// </summary>
     /// <param name="task">定时任务</param>
-    /// <param name="seedContext">租户上下文</param>
+    /// <param name="executeParams">有效执行参数</param>
+    /// <param name="seedContext">任务所属租户上下文（写日志仍用此库）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>执行摘要</returns>
-    private static async Task<string> ExecuteSqlAsync(
+    private async Task<string> ExecuteSqlAsync(
         TaktQuartzTask task,
+        string? executeParams,
         TaktSeedContext seedContext,
         CancellationToken cancellationToken)
     {
+        var (sourceDatabase, targetDatabase) = TaktQuartzSyncExecuteParamsHelper.Parse(executeParams);
+        var isSyncScript = IsQuartzSyncSqlScript(task.SqlScript);
+        if (isSyncScript)
+        {
+            if (string.IsNullOrWhiteSpace(targetDatabase))
+            {
+                throw new InvalidOperationException(
+                    "同步 SQL 任务 ExecuteParams 须提供 targetDatabase（如 {\"targetDatabase\":\"zTakt_000_Dev\"}）");
+            }
+            TaktQuartzSyncExecuteParamsHelper.ValidateDatabaseName(targetDatabase);
+        }
         var sql = await TaktQuartzSqlScriptHelper.ResolveExecutableSqlAsync(
             task.SqlScript,
             task.TenantCode,
             task.CompanyCode,
+            task.CultureCode,
+            sourceDatabase,
+            targetDatabase,
             cancellationToken);
-        TaktQuartzJobExecutionLogger.LogProgress(
-            $"SQL 已解析，路径={task.SqlScript}，SqlLength={sql.Length}",
-            task.Id);
-        if (IsReadOnlySelectScript(sql))
+        var dbHint = string.IsNullOrWhiteSpace(targetDatabase)
+            ? string.Empty
+            : $"，TargetDb={targetDatabase}";
+        if (!string.IsNullOrWhiteSpace(sourceDatabase))
         {
-            TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.ReadOnlyDefault);
-            var rows = await TaktRepositoryReadOnlySql.QueryAsync(seedContext.Db, sql, null, cancellationToken);
-            var message = $"SQL 查询成功，路径={task.SqlScript}，返回 {rows.Count} 行";
-            TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
-            return message;
+            dbHint += $"，SourceDb={sourceDatabase}";
         }
-        TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.NonQueryDefault);
-        var previousTimeout = seedContext.Db.Ado.CommandTimeOut;
-        seedContext.Db.Ado.CommandTimeOut = 1800;
+        TaktQuartzJobExecutionLogger.LogProgress(
+            $"SQL 已解析，路径={task.SqlScript}，SqlLength={sql.Length}{dbHint}",
+            task.Id);
+        ISqlSugarClient executeDb = seedContext.Db;
+        SqlSugarClient? targetClient = null;
         try
         {
-            // SET NOCOUNT 时 ExecuteCommand 影响行数为 -1；改为读取脚本末尾 QUARTZ_SYNC_SUMMARY
-            var message = await TaktQuartzSqlResultReader.ExecuteAndFormatSummaryAsync(
-                seedContext.Db,
-                sql,
-                task.SqlScript,
-                cancellationToken);
-            TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
-            return message;
+            if (isSyncScript && !string.IsNullOrWhiteSpace(targetDatabase))
+            {
+                var (tenantCode, connectionString) = ResolveTenantConnectionByDatabaseName(targetDatabase);
+                targetClient = TaktSqlSugarConnectionHelper.CreateClient(
+                    _configuration.GetSugarDbType(),
+                    tenantCode,
+                    connectionString);
+                executeDb = targetClient;
+            }
+            if (IsReadOnlySelectScript(sql))
+            {
+                TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.ReadOnlyDefault);
+                var rows = await TaktRepositoryReadOnlySql.QueryAsync(executeDb, sql, null, cancellationToken);
+                var message = $"SQL 查询成功，路径={task.SqlScript}，返回 {rows.Count} 行{dbHint}";
+                TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+                return message;
+            }
+            TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.NonQueryDefault);
+            var previousTimeout = executeDb.Ado.CommandTimeOut;
+            executeDb.Ado.CommandTimeOut = 1800;
+            try
+            {
+                var message = await TaktQuartzSqlResultReader.ExecuteAndFormatSummaryAsync(
+                    executeDb,
+                    sql,
+                    task.SqlScript,
+                    cancellationToken);
+                message = string.IsNullOrWhiteSpace(dbHint) ? message : $"{message}{dbHint}";
+                TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+                return message;
+            }
+            finally
+            {
+                executeDb.Ado.CommandTimeOut = previousTimeout;
+            }
         }
         finally
         {
-            seedContext.Db.Ado.CommandTimeOut = previousTimeout;
+            targetClient?.Dispose();
         }
+    }
+
+    /// <summary>
+    /// 是否为 Quartz 同步脚本（Quartz/sync_*.sql，不含 sync_data_create_tables）
+    /// </summary>
+    /// <param name="sqlScript">SqlScript 路径</param>
+    /// <returns>是同步脚本则为 true</returns>
+    private static bool IsQuartzSyncSqlScript(string? sqlScript)
+    {
+        if (string.IsNullOrWhiteSpace(sqlScript))
+        {
+            return false;
+        }
+        var normalized = sqlScript.Trim().Replace('\\', '/');
+        if (!normalized.StartsWith("Quartz/sync_", StringComparison.OrdinalIgnoreCase)
+            || !normalized.EndsWith(".sql", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+        return !normalized.EndsWith("sync_data_create_tables.sql", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 按连接串 Database= 段匹配已配置 Tenant_* 连接
+    /// </summary>
+    /// <param name="databaseName">目标库展示名</param>
+    /// <returns>租户编码与连接字符串</returns>
+    private (string TenantCode, string ConnectionString) ResolveTenantConnectionByDatabaseName(string databaseName)
+    {
+        TaktQuartzSyncExecuteParamsHelper.ValidateDatabaseName(databaseName);
+        var wanted = databaseName.Trim();
+        foreach (var (tenantCode, connectionString) in _configuration.GetTenantConnections())
+        {
+            var displayName = ExtractDatabaseDisplayName(connectionString, tenantCode);
+            if (string.Equals(displayName, wanted, StringComparison.OrdinalIgnoreCase))
+            {
+                return (tenantCode, connectionString);
+            }
+        }
+        // TenantCodes 未含 900 等时，仍允许按 ConnectionStrings:Tenant_* 全量匹配
+        foreach (var child in _configuration.GetSection("ConnectionStrings").GetChildren())
+        {
+            if (!child.Key.StartsWith("Tenant_", StringComparison.OrdinalIgnoreCase)
+                || string.IsNullOrWhiteSpace(child.Value))
+            {
+                continue;
+            }
+            var tenantCode = child.Key["Tenant_".Length..].Trim();
+            if (string.IsNullOrEmpty(tenantCode))
+            {
+                continue;
+            }
+            var displayName = ExtractDatabaseDisplayName(child.Value, tenantCode);
+            if (string.Equals(displayName, wanted, StringComparison.OrdinalIgnoreCase))
+            {
+                return (tenantCode, child.Value);
+            }
+        }
+        throw new InvalidOperationException(
+            $"未找到 Database={wanted} 对应的 ConnectionStrings:Tenant_* 配置");
+    }
+
+    /// <summary>
+    /// 从连接字符串提取 Database= 段
+    /// </summary>
+    /// <param name="connectionString">连接字符串</param>
+    /// <param name="tenantCode">回退展示用租户编码</param>
+    /// <returns>数据库名</returns>
+    private static string ExtractDatabaseDisplayName(string connectionString, string tenantCode)
+    {
+        const string key = "Database=";
+        var idx = connectionString.IndexOf(key, StringComparison.OrdinalIgnoreCase);
+        if (idx < 0)
+        {
+            return $"Takt_{tenantCode}";
+        }
+        var start = idx + key.Length;
+        var end = connectionString.IndexOf(';', start);
+        var dbName = end > start
+            ? connectionString[start..end]
+            : connectionString[start..];
+        return string.IsNullOrWhiteSpace(dbName) ? $"Takt_{tenantCode}" : dbName.Trim();
     }
 
     /// <summary>

@@ -10,7 +10,6 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-
 /**
  * BOM 递归展开查询参数
  * 对应前端 BillOfMaterialExplosionQuery
@@ -39,7 +38,6 @@ export interface BillOfMaterialExplosionQuery {
 
 }
 
-
 /**
  * BOM 递归展开结果
  * 对应前端 BillOfMaterialExplosion
@@ -62,9 +60,9 @@ export interface BillOfMaterialExplosion {
   parentMaterialCode: string;
 
   /**
-   * 父件物料名称
+   * 父件物料描述
    */
-  parentMaterialName: string;
+  parentMaterialDescription: string;
 
   /**
    * 需求数量
@@ -77,7 +75,6 @@ export interface BillOfMaterialExplosion {
   lines: BillOfMaterialExplosionLine[];
 
 }
-
 
 /**
  * BOM 展开行（运行时计算，不落库）
@@ -121,9 +118,9 @@ export interface BillOfMaterialExplosionLine {
   materialCode: string;
 
   /**
-   * 子项物料名称
+   * 子项物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 直接父件物料编码（展开路径上的上一级）

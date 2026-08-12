@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityAssurance 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktQualityAssurance 生成，请按需审阅）
 // 
@@ -35,16 +35,19 @@ public class TaktQualityAssuranceCreateValidator : AbstractValidator<TaktQuality
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.QualityAssuranceCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+            .MaximumLength(20).WithMessage("品质业务编码长度不能超过20个字符");
         RuleFor(x => x.AssuranceMonth)
             .NotEmpty().WithMessage("业务年月不能为空")
             .MaximumLength(7).WithMessage("业务年月长度不能超过7个字符");
-        RuleFor(x => x.CostCurrency)
+        RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("成本币种不能为空")
             .MaximumLength(3).WithMessage("成本币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
@@ -76,16 +79,19 @@ public class TaktQualityAssuranceUpdateValidator : AbstractValidator<TaktQuality
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.QualityAssuranceCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+            .MaximumLength(20).WithMessage("品质业务编码长度不能超过20个字符");
         RuleFor(x => x.AssuranceMonth)
             .NotEmpty().WithMessage("业务年月不能为空")
             .MaximumLength(7).WithMessage("业务年月长度不能超过7个字符");
-        RuleFor(x => x.CostCurrency)
+        RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("成本币种不能为空")
             .MaximumLength(3).WithMessage("成本币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)
@@ -113,16 +119,17 @@ public class TaktQualityAssuranceImportValidator : AbstractValidator<TaktQuality
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.QualityAssuranceCode)
             .NotEmpty().WithMessage("品质业务编码不能为空")
-            .MaximumLength(30).WithMessage("品质业务编码长度不能超过30个字符");
+            .MaximumLength(20).WithMessage("品质业务编码长度不能超过20个字符");
         RuleFor(x => x.AssuranceMonth)
             .NotEmpty().WithMessage("业务年月不能为空")
             .MaximumLength(7).WithMessage("业务年月长度不能超过7个字符");
-        RuleFor(x => x.CostCurrency)
+        RuleFor(x => x.CurrencyCode)
             .NotEmpty().WithMessage("成本币种不能为空")
             .MaximumLength(3).WithMessage("成本币种长度不能超过3个字符");
         RuleFor(x => x.ExtField)

@@ -171,7 +171,7 @@
       <a-form-item :label="pi.queryLabel('materialCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktGeneralMaterials/options"
           :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
@@ -276,11 +276,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('serialNo')">
-      <a-form-item :label="pi.queryLabel('serialNo')">
+      <div v-show="isFieldVisible('serialCode')">
+      <a-form-item :label="pi.queryLabel('serialCode')">
         <a-input
-          v-model:value="advancedQueryForm.serialNo"
-          :placeholder="pi.queryPh('serialNo', 'required')"
+          v-model:value="advancedQueryForm.serialCode"
+          :placeholder="pi.queryPh('serialCode', 'required')"
           show-count
           :maxlength="80"
           allow-clear
@@ -584,7 +584,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -630,7 +629,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -699,8 +697,6 @@ const getProductionOrderDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

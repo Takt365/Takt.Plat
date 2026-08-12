@@ -263,9 +263,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
@@ -369,15 +373,13 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.role.code') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   roleName: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.role.name') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   sortOrder: [
     {
       validator: async (_rule, value) => {
@@ -391,8 +393,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve()
       },
       trigger: 'change',
-    },
-  ],
+    }],
   dataScope: [dictIntRule('entity.role.datascope')],
   isBuiltIn: [dictIntRule('entity.role.isbuiltin')],
   roleStatus: [dictIntRule('entity.role.status')],

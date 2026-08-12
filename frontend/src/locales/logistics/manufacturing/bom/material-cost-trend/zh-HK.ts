@@ -17,6 +17,7 @@ export default {
     selectPlantRequired: '請選擇工廠代碼',
     selectModelRequired: '請選擇機種編碼',
     selectProductRequired: '請選擇產品編碼',
+    selectMaterialTypeRequired: '請選擇物料類型',
     selectPeriodRequired: '請選擇核算期間',
     summary: '{plant} / {model} / {product} — 單個產品明細組件 {componentCount} 行（成本分析報表）',
     trendSummary:

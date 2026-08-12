@@ -18,6 +18,7 @@ using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Manufacturing.EngineeringChange;
 
@@ -47,6 +48,107 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     {
         _ecGijutsuRepository = ecGijutsuRepository;
         _ecExecutionTaskRepository = ecExecutionTaskRepository;
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync()
+    {
+        EnsureThreeLayerContext();
+        // 执行任务无 PlantCode，工厂取自设变主表（与分析 Join 同源）
+        var list = await _ecGijutsuRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode != null
+                && x.PlantCode != string.Empty);
+        return list
+            .GroupBy(e => e.PlantCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string plantCode)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var ecIdList = await LoadEcIdsByPlantAsync(plant);
+        if (ecIdList.Count == 0)
+        {
+            return new List<TaktSelectOption>();
+        }
+        var tasks = await _ecExecutionTaskRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && ecIdList.Contains(x.EcId)
+                && x.DeptCode != null
+                && x.DeptCode != string.Empty);
+        return tasks
+            .GroupBy(e => e.DeptCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(
+        string plantCode,
+        string? deptCode = null)
+    {
+        EnsureThreeLayerContext();
+        var plant = plantCode?.Trim() ?? string.Empty;
+        if (string.IsNullOrEmpty(plant))
+        {
+            return new List<TaktSelectOption>();
+        }
+        var ecIdList = await LoadEcIdsByPlantAsync(plant);
+        if (ecIdList.Count == 0)
+        {
+            return new List<TaktSelectOption>();
+        }
+        var trimmedDept = deptCode?.Trim();
+        var tasks = await _ecExecutionTaskRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && ecIdList.Contains(x.EcId)
+                && (string.IsNullOrWhiteSpace(trimmedDept) || x.DeptCode == trimmedDept)
+                && x.EcCode != null
+                && x.EcCode != string.Empty);
+        return tasks
+            .GroupBy(e => e.EcCode.Trim(), StringComparer.OrdinalIgnoreCase)
+            .OrderBy(g => g.Key, StringComparer.Ordinal)
+            .Select(g => new TaktSelectOption
+            {
+                DictValue = g.Key,
+                DictLabel = g.Key,
+            })
+            .ToList();
+    }
+
+    /// <summary>
+    /// 按工厂加载设变主表 Id 列表（执行任务无工厂列，经 EcId 关联）
+    /// </summary>
+    /// <param name="plantCode">工厂代码（已 Trim）</param>
+    /// <returns>设变 Id 列表</returns>
+    private async Task<List<long>> LoadEcIdsByPlantAsync(string plantCode)
+    {
+        var gijutsuRecords = await _ecGijutsuRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.PlantCode == plantCode);
+        return gijutsuRecords.Select(x => x.Id).Distinct().ToList();
     }
 
     /// <inheritdoc />
@@ -82,7 +184,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     {
         ArgumentNullException.ThrowIfNull(query);
         var built = await BuildEcMonthlyTrendAnalysisAsync(query);
-        var columnKeys = new List<string> { "plantCode", "ecNo", "deptCode" };
+        var columnKeys = new List<string> { "plantCode", "ecCode", "deptCode" };
         var columnLabels = new List<string> { "工厂代码", "设变单号", "部门编码" };
         foreach (var period in built.PeriodOrder)
         {
@@ -96,7 +198,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             var dict = new Dictionary<string, object?>(StringComparer.Ordinal)
             {
                 ["plantCode"] = row.PlantCode,
-                ["ecNo"] = row.EcNo,
+                ["ecCode"] = row.EcCode,
                 ["deptCode"] = row.DeptCode,
                 ["basePeriod"] = row.BasePeriod,
                 ["comparePeriod"] = row.ComparePeriod,
@@ -222,7 +324,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         var tasks = await _ecExecutionTaskRepository.GetListAsync(
             BuildEcExecutionTaskTrendExpression(
                 queryDto.DeptCode,
-                queryDto.EcNo,
+                queryDto.EcCode,
                 rangeStart,
                 rangeEndExclusive));
         if (tasks.Count == 0)
@@ -232,12 +334,12 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         var periodSet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
         var snapshots = tasks
             .Where(t => plantByEcId.ContainsKey(t.EcId))
-            .Select(t => new EcNoDeptTaskSnapshot(
+            .Select(t => new EcCodeDeptTaskSnapshot(
                 plantByEcId[t.EcId],
-                t.EcNo?.Trim() ?? string.Empty,
+                t.EcCode?.Trim() ?? string.Empty,
                 t.DeptCode.Trim(),
                 t.CompletedAt!.Value))
-            .Where(t => !string.IsNullOrWhiteSpace(t.EcNo) && !string.IsNullOrWhiteSpace(t.DeptCode))
+            .Where(t => !string.IsNullOrWhiteSpace(t.EcCode) && !string.IsNullOrWhiteSpace(t.DeptCode))
             .ToList();
         if (snapshots.Count == 0)
         {
@@ -245,7 +347,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         }
         var allRows = snapshots
             .GroupBy(
-                t => new EcMonthlyTrendRowKey(t.PlantCode, t.EcNo, t.DeptCode),
+                t => new EcMonthlyTrendRowKey(t.PlantCode, t.EcCode, t.DeptCode),
                 EcMonthlyTrendRowKeyComparer.Instance)
             .Select(g => BuildEcMonthlyTrendRow(g.Key, g.ToList(), periodSet, focusPeriod))
             .ToList();
@@ -298,7 +400,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         var tasks = await _ecExecutionTaskRepository.GetListAsync(
             BuildEcExecutionTaskTrendExpression(
                 queryDto.DeptCode,
-                ecNoFilter: null,
+                ecCodeFilter: null,
                 rangeStart,
                 rangeEndExclusive));
         if (tasks.Count == 0)
@@ -375,13 +477,13 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// 构建执行任务推移筛选条件
     /// </summary>
     /// <param name="deptCodeFilter">部门编码</param>
-    /// <param name="ecNoFilter">设变单号</param>
+    /// <param name="ecCodeFilter">设变单号</param>
     /// <param name="rangeStart">期间起</param>
     /// <param name="rangeEndExclusive">期间止（不含）</param>
     /// <returns>表达式</returns>
     private Expression<Func<TaktEcExecutionTask, bool>> BuildEcExecutionTaskTrendExpression(
         string? deptCodeFilter,
-        string? ecNoFilter,
+        string? ecCodeFilter,
         DateTime rangeStart,
         DateTime rangeEndExclusive)
     {
@@ -398,10 +500,10 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             var deptCode = deptCodeFilter.Trim();
             exp = exp.And(x => x.DeptCode == deptCode);
         }
-        if (!string.IsNullOrWhiteSpace(ecNoFilter))
+        if (!string.IsNullOrWhiteSpace(ecCodeFilter))
         {
-            var ecNo = ecNoFilter.Trim();
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(ecNo));
+            var ecCode = ecCodeFilter.Trim();
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(ecCode));
         }
         return exp.ToExpression();
     }
@@ -416,14 +518,14 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// <returns>转置行</returns>
     private static TaktEcMonthlyTrendDto BuildEcMonthlyTrendRow(
         EcMonthlyTrendRowKey key,
-        IReadOnlyList<EcNoDeptTaskSnapshot> groupRows,
+        IReadOnlyList<EcCodeDeptTaskSnapshot> groupRows,
         IReadOnlySet<string> periodSet,
         string? focusPeriod)
     {
         var row = new TaktEcMonthlyTrendDto
         {
             PlantCode = key.PlantCode,
-            EcNo = key.EcNo,
+            EcCode = key.EcCode,
             DeptCode = key.DeptCode,
             Trend = "none",
         };
@@ -629,7 +731,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         return rows
             .OrderBy(r => TrendRank(r.Trend))
             .ThenByDescending(r => Math.Abs(r.VarianceAmount ?? 0))
-            .ThenBy(r => r.EcNo, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(r => r.EcCode, StringComparer.OrdinalIgnoreCase)
             .ThenBy(r => r.DeptCode, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }
@@ -752,9 +854,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// 月设变推移行键（工厂+设变号+部门）
     /// </summary>
     /// <param name="PlantCode">工厂代码</param>
-    /// <param name="EcNo">设变单号</param>
+    /// <param name="EcCode">设变单号</param>
     /// <param name="DeptCode">部门编码</param>
-    private sealed record EcMonthlyTrendRowKey(string PlantCode, string EcNo, string DeptCode);
+    private sealed record EcMonthlyTrendRowKey(string PlantCode, string EcCode, string DeptCode);
 
     /// <summary>
     /// 月设变推移行键比较器
@@ -772,7 +874,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
                 return ReferenceEquals(x, y);
             }
             return string.Equals(x.PlantCode, y.PlantCode, StringComparison.OrdinalIgnoreCase)
-                && string.Equals(x.EcNo, y.EcNo, StringComparison.OrdinalIgnoreCase)
+                && string.Equals(x.EcCode, y.EcCode, StringComparison.OrdinalIgnoreCase)
                 && string.Equals(x.DeptCode, y.DeptCode, StringComparison.OrdinalIgnoreCase);
         }
 
@@ -780,7 +882,7 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         public int GetHashCode(EcMonthlyTrendRowKey obj) =>
             HashCode.Combine(
                 obj.PlantCode.ToUpperInvariant(),
-                obj.EcNo.ToUpperInvariant(),
+                obj.EcCode.ToUpperInvariant(),
                 obj.DeptCode.ToUpperInvariant());
     }
 
@@ -788,12 +890,12 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
     /// 设变号×部门任务快照
     /// </summary>
     /// <param name="PlantCode">工厂代码</param>
-    /// <param name="EcNo">设变单号</param>
+    /// <param name="EcCode">设变单号</param>
     /// <param name="DeptCode">部门编码</param>
     /// <param name="CompletedAt">完成时间</param>
-    private sealed record EcNoDeptTaskSnapshot(
+    private sealed record EcCodeDeptTaskSnapshot(
         string PlantCode,
-        string EcNo,
+        string EcCode,
         string DeptCode,
         DateTime CompletedAt);
 

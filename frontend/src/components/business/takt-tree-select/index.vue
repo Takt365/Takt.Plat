@@ -11,9 +11,13 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="takt-tree-select-wrapper">
+  <div
+    class="takt-tree-select-wrapper"
+    :class="treeSelectRootClass"
+  >
     <a-tree-select
       ref="treeSelectRef"
+      class="takt-tree-select"
       :value="internalValue"
       :tree-data="treeData"
       :tree-expanded-keys="expandedKeys"
@@ -135,7 +139,7 @@ interface Props {
   showSearch?: boolean
   /** 树节点过滤属性名(用于搜索) */
   treeNodeFilterProp?: string
-  /** 多选时最多显示多少个标签,超出部分以 +N 形式展示。支持数字或 'responsive'(响应式模式,但不推荐在大表单场景下使用,因为对性能有所消耗) */
+  /** 多选标签上限；未传默认 responsive（按宽度溢出 +N） */
   maxTagCount?: number | 'responsive' | undefined
   /** 是否开启虚拟滚动(大数据量时建议开启,可提升渲染性能)。如果不指定,当节点数量超过 100 个时会自动开启 */
   virtual?: boolean
@@ -233,11 +237,21 @@ const shouldUseVirtual = computed(() => {
   return props.virtual === true || totalNodeCount.value > 100
 })
 
-// 多选时，maxTagCount 只在 multiple 为 true 时生效
-// 多选模式下，如果未设置 maxTagCount，默认显示 3 个标签
+/** 多选根 class（宽=基准×2，见 select-base.css） */
+const treeSelectRootClass = computed(() => {
+  const multiple = !!props.multiple
+  const cls = attrs.class
+  const text = Array.isArray(cls) ? cls.map(String).join(' ') : String(cls ?? '')
+  const fullWidth = /\bw-full\b/.test(text) || /\bmin-w-full\b/.test(text)
+  return [
+    multiple ? 'takt-tree-select--multiple' : null,
+    multiple && !fullWidth ? 'takt-tree-select--multiple-auto-width' : null,
+  ]
+})
+
+// 多选：未指定时默认 responsive
 const effectiveMaxTagCount = computed<number | 'responsive'>(() => {
-  // 仅在 multiple 为 true 时调用，确保始终返回有效值
-  return props.maxTagCount ?? 3
+  return props.maxTagCount ?? 'responsive'
 })
 
 // TreeSelect 组件需要的字段名映射

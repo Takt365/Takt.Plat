@@ -65,7 +65,6 @@ import {
   RiListCheck,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import DefectMonthlyQueryForm from './components/defect-monthly-query-form.vue'
@@ -121,8 +120,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -156,26 +154,20 @@ function handleRefresh() {
   void panelRef.value?.reload?.()
 }
 
-/** 默认核算年月 */
-function applyDefaultPeriodRange() {
-  periodRange.value = buildDefaultCostingPeriodRange(3)
-}
-
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
+/** 清空工厂级联与结果 */
+function clearPlantCascade() {
+  plantCode.value = undefined
+  modelCode.value = undefined
+  defectCategory.value = undefined
+  hasRows.value = false
+  panelRef.value?.clear?.()
 }
 
 /** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
-  modelCode.value = undefined
-  defectCategory.value = undefined
-  applyDefaultPeriodRange()
+function handleReset() {
+  clearPlantCascade()
+  periodRange.value = buildDefaultCostingPeriodRange(3)
   trendFilter.value = ''
-  hasRows.value = false
-  panelRef.value?.clear?.()
 }
 
 /** 导出 */
@@ -199,14 +191,13 @@ async function handleExport() {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void applyDefaultPlantFromCompany()
+    clearPlantCascade()
   },
 )
 
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
-  applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
+  periodRange.value = buildDefaultCostingPeriodRange(3)
   void getTaktDefaultPageSize()
 })
 </script>

@@ -91,10 +91,27 @@ public static class TaktQuartzSqlResultReader
                 scopes.Add(new SyncScopeCounts
                 {
                     Scope = ReadString(reader, "scope"),
-                    SapRawCount = HasColumn(reader, "sap_raw_count")
-                        ? ReadInt(reader, "sap_raw_count")
-                        : null,
+                    SourceRawCount = HasColumn(reader, "source_raw_count")
+                        ? ReadInt(reader, "source_raw_count")
+                        : HasColumn(reader, "sap_raw_count")
+                            ? ReadInt(reader, "sap_raw_count")
+                            : null,
                     SourceCount = ReadInt(reader, "source_count"),
+                    SkippedEmptyCount = HasColumn(reader, "skipped_empty_count")
+                        ? ReadInt(reader, "skipped_empty_count")
+                        : null,
+                    ModelBackfilledCount = HasColumn(reader, "model_backfilled_count")
+                        ? ReadInt(reader, "model_backfilled_count")
+                        : null,
+                    MaterialTypeBackfilledCount = HasColumn(reader, "material_type_backfilled_count")
+                        ? ReadInt(reader, "material_type_backfilled_count")
+                        : null,
+                    AverageUpdatedCount = HasColumn(reader, "average_updated_count")
+                        ? ReadInt(reader, "average_updated_count")
+                        : null,
+                    DedupeDroppedCount = HasColumn(reader, "dedupe_dropped")
+                        ? ReadInt(reader, "dedupe_dropped")
+                        : null,
                     TargetBefore = ReadInt(reader, "target_before"),
                     TargetAfter = ReadInt(reader, "target_after"),
                     TargetPhysical = ReadInt(reader, "target_physical"),
@@ -159,10 +176,10 @@ public static class TaktQuartzSqlResultReader
                 {
                     sb.Append('[').Append(MapScopeLabel(scope.Scope)).Append(']');
                 }
-                // sap_raw=源表物理行；真正更新=业务字段有差；未变=MERGE 未写
-                if (scope.SapRawCount.HasValue)
+                // source_raw=源表物理行；装入=过滤空键+业务键去重后；真正更新=业务字段有差；未变=MERGE 未写
+                if (scope.SourceRawCount.HasValue)
                 {
-                    sb.Append("SAP源表=").Append(scope.SapRawCount.Value.ToString(CultureInfo.InvariantCulture));
+                    sb.Append("源表=").Append(scope.SourceRawCount.Value.ToString(CultureInfo.InvariantCulture));
                     sb.Append("，装入=");
                 }
                 else
@@ -170,6 +187,26 @@ public static class TaktQuartzSqlResultReader
                     sb.Append("装入=");
                 }
                 sb.Append(scope.SourceCount.ToString(CultureInfo.InvariantCulture));
+                if (scope.SkippedEmptyCount is > 0)
+                {
+                    sb.Append("，跳过空键=").Append(scope.SkippedEmptyCount.Value.ToString(CultureInfo.InvariantCulture));
+                }
+                if (scope.ModelBackfilledCount is > 0)
+                {
+                    sb.Append("，回填机种=").Append(scope.ModelBackfilledCount.Value.ToString(CultureInfo.InvariantCulture));
+                }
+                if (scope.MaterialTypeBackfilledCount is > 0)
+                {
+                    sb.Append("，回填物料类型=").Append(scope.MaterialTypeBackfilledCount.Value.ToString(CultureInfo.InvariantCulture));
+                }
+                if (scope.AverageUpdatedCount is > 0)
+                {
+                    sb.Append("，重算月均=").Append(scope.AverageUpdatedCount.Value.ToString(CultureInfo.InvariantCulture));
+                }
+                if (scope.DedupeDroppedCount is > 0)
+                {
+                    sb.Append("，业务键去重=").Append(scope.DedupeDroppedCount.Value.ToString(CultureInfo.InvariantCulture));
+                }
                 sb.Append("，有效行(更新前)=").Append(scope.TargetBefore.ToString(CultureInfo.InvariantCulture));
                 sb.Append("，有效行(更新后)=").Append(scope.TargetAfter.ToString(CultureInfo.InvariantCulture));
                 sb.Append("，物理行=").Append(scope.TargetPhysical.ToString(CultureInfo.InvariantCulture));
@@ -244,8 +281,13 @@ public static class TaktQuartzSqlResultReader
     private sealed class SyncScopeCounts
     {
         public string Scope { get; init; } = string.Empty;
-        public int? SapRawCount { get; init; }
+        public int? SourceRawCount { get; init; }
         public int SourceCount { get; init; }
+        public int? SkippedEmptyCount { get; init; }
+        public int? ModelBackfilledCount { get; init; }
+        public int? MaterialTypeBackfilledCount { get; init; }
+        public int? AverageUpdatedCount { get; init; }
+        public int? DedupeDroppedCount { get; init; }
         public int TargetBefore { get; init; }
         public int TargetAfter { get; init; }
         public int TargetPhysical { get; init; }

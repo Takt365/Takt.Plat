@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableGroupByDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableGroupBy 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableGroupBy 生成，请按需审阅）
 // 
@@ -90,6 +90,16 @@ public class TaktConfigurableGroupByQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -151,10 +161,15 @@ public class TaktConfigurableGroupByCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -174,11 +189,6 @@ public class TaktConfigurableGroupByCreateDto
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（GROUP BY 列顺序）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -188,6 +198,12 @@ public class TaktConfigurableGroupByCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -254,6 +270,16 @@ public class TaktConfigurableGroupByTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -268,11 +294,6 @@ public class TaktConfigurableGroupByTemplateDto
     /// 列名
     /// </summary>
     public string? ColumnName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 排序号（GROUP BY 列顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -302,10 +323,15 @@ public class TaktConfigurableGroupByImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -323,11 +349,6 @@ public class TaktConfigurableGroupByImportDto
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 排序号（GROUP BY 列顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -337,6 +358,12 @@ public class TaktConfigurableGroupByImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================

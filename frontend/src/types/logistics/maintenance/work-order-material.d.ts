@@ -59,9 +59,9 @@ export interface MaintenanceWorkOrderMaterial extends CompanyDtoBase {
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 需求数量
@@ -169,9 +169,9 @@ export interface MaintenanceWorkOrderMaterialQuery extends TaktPagedQuery {
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 需求数量
@@ -270,7 +270,10 @@ export interface MaintenanceWorkOrderMaterialCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 维护工单ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -298,9 +301,9 @@ export interface MaintenanceWorkOrderMaterialCreate {
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 需求数量
@@ -460,9 +463,9 @@ export interface MaintenanceWorkOrderMaterialTemplate {
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 需求数量
@@ -546,7 +549,10 @@ export interface MaintenanceWorkOrderMaterialImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 维护工单ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -574,9 +580,9 @@ export interface MaintenanceWorkOrderMaterialImport {
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 需求数量
@@ -683,9 +689,9 @@ export interface MaintenanceWorkOrderMaterialExport {
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 需求数量

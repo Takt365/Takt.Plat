@@ -21,11 +21,11 @@ export const SERIALOUTBOUNDITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(SERIALOUT
 /** 列表业务列（不含主键） */
 export const SERIALOUTBOUNDITEM_LIST_FIELDS = [
   'outboundId',
-  'outboundNo',
+  'outboundCode',
   'lineNumber',
-  'outboundSerialNo',
+  'outboundSerialCode',
   'referenceInboundId',
-  'referenceInboundNo',
+  'referenceInboundCode',
   'referenceInboundLineNumber',
   'outbound',
 ] as const
@@ -36,11 +36,11 @@ export const SERIALOUTBOUNDITEM_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   outboundId: 'select',
-  outboundNo: 'required',
+  outboundCode: 'required',
   lineNumber: 'select',
-  outboundSerialNo: 'required',
+  outboundSerialCode: 'required',
   referenceInboundId: 'select',
-  referenceInboundNo: 'select',
+  referenceInboundCode: 'select',
   referenceInboundLineNumber: 'select',
   extField: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -51,10 +51,10 @@ export type SerialOutboundItemField = keyof typeof SERIALOUTBOUNDITEM_PLACEHOLDE
 /** 高级查询可 trim 的字符串字段 */
 export const SERIALOUTBOUNDITEM_QUERY_STRING_FIELDS = [
   'outboundId',
-  'outboundNo',
-  'outboundSerialNo',
+  'outboundCode',
+  'outboundSerialCode',
   'referenceInboundId',
-  'referenceInboundNo',
+  'referenceInboundCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

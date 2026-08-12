@@ -27,48 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.maintenancehistory.maintenanceworkorderid')"
@@ -114,12 +84,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.maintenancehistory.equipmentcode')"
-                name="equipmentCode"
+                :label="t('entity.maintenancehistory.EquipCode')"
+                name="EquipCode"
               >
                 <a-input
-                  v-model:value="formState.equipmentCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.equipmentcode') })"
+                  v-model:value="formState.EquipCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.EquipCode') })"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -526,8 +496,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -535,8 +505,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","maintenanceWorkOrderId","workOrderCode","equipmentId","equipmentCode","maintenanceType","maintenanceCategory","maintenanceCompany","maintenanceTechnician","maintenanceDate","maintenanceStartTime","maintenanceEndTime","maintenanceContent","faultDescription","solution","usedParts","maintenanceCost","maintenanceResult","maintenanceStatus","nextMaintenanceDate","maintenanceCycleDays","maintenanceDocuments","maintenanceImages","acceptedSummary","acceptedBy","acceptedAt","archivedAt","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","maintenanceWorkOrderId","workOrderCode","equipmentId","EquipCode","maintenanceType","maintenanceCategory","maintenanceCompany","maintenanceTechnician","maintenanceDate","maintenanceStartTime","maintenanceEndTime","maintenanceContent","faultDescription","solution","usedParts","maintenanceCost","maintenanceResult","maintenanceStatus","nextMaintenanceDate","maintenanceCycleDays","maintenanceDocuments","maintenanceImages","acceptedSummary","acceptedBy","acceptedAt","archivedAt","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -625,10 +594,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  equipmentCode: [
+  EquipCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.equipmentcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.EquipCode') }),
       trigger: 'blur'
     }
   ],

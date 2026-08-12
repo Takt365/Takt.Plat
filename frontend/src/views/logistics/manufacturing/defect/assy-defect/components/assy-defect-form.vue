@@ -27,255 +27,7 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderCode')"
-                name="prodOrderCode"
-              >
-                <TaktSelect
-                  v-if="!formData?.assyDefectId"
-                  v-model:value="selectedAssyOutputId"
-                  api-url="TaktAssyOutputs/prod-order-options"
-                  :api-params="prodOrderOptionsApiParams"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  :disabled="loading"
-                  allow-clear
-                  @change="handleProdOrderSelectChange"
-                />
-                <a-input
-                  v-else
-                  v-model:value="formState.prodOrderCode"
-                  :placeholder="pi.ph('prodOrderCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodActualQty')"
-                name="prodActualQty"
-              >
-                <a-input-number
-                  v-model:value="formState.prodActualQty"
-                  :placeholder="pi.ph('prodActualQty')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('goodQuantity')"
-                name="goodQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.goodQuantity"
-                  :placeholder="pi.ph('goodQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodCategory')"
-                name="prodCategory"
-              >
-                <a-input
-                  v-model:value="formState.prodCategory"
-                  :placeholder="pi.ph('prodCategory')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodDate')"
-                name="prodDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.prodDate"
-                  :placeholder="pi.ph('prodDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodTeam')"
-                name="prodTeam"
-              >
-                <a-input
-                  v-model:value="formState.prodTeam"
-                  :placeholder="pi.ph('prodTeam')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('shiftNo')"
-                name="shiftNo"
-              >
-                <a-input-number
-                  v-model:value="formState.shiftNo"
-                  :placeholder="pi.ph('shiftNo')"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderType')"
-                name="prodOrderType"
-              >
-                <a-input
-                  v-model:value="formState.prodOrderType"
-                  :placeholder="pi.ph('prodOrderType')"
-                  show-count
-                  :maxlength="10"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('prodOrderQty')"
-                name="prodOrderQty"
-              >
-                <a-input-number
-                  v-model:value="formState.prodOrderQty"
-                  :placeholder="pi.ph('prodOrderQty')"
-                  style="width: 100%"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('modelCode')"
-                name="modelCode"
-              >
-                <a-input
-                  v-model:value="formState.modelCode"
-                  :placeholder="pi.ph('modelCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('batchNo')"
-                name="batchNo"
-              >
-                <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="pi.ph('batchNo')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="pi.ph('materialCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -434,16 +186,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","prodOrderCode","prodActualQty","goodQuantity","prodCategory","prodDate","prodTeam","shiftNo","prodOrderType","prodOrderQty","modelCode","batchNo","materialCode","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","prodOrderCode","prodActualQty","goodQuantity","prodCategory","prodDate","TeamCode","shiftNo","prodOrderType","prodOrderQty","modelCode","batchCode","materialCode","extField","remark"]
 
 /** 新增态选中的组立日报 Id（TaktAssyOutputs/prod-order-options DictValue） */
 const selectedAssyOutputId = ref<string | undefined>(undefined)
@@ -458,15 +214,14 @@ const MASTER_BACKFILL_FIELD_KEYS = [
   'plantCode',
   'prodCategory',
   'prodDate',
-  'prodTeam',
+  'TeamCode',
   'shiftNo',
   'prodOrderType',
   'prodOrderCode',
   'prodOrderQty',
   'modelCode',
-  'batchNo',
-  'materialCode',
-] as const
+  'batchCode',
+  'materialCode'] as const
 
 /**
  * 将 API 日期规范为 YYYY-MM-DD
@@ -512,13 +267,13 @@ function applyMasterFromAssyOutput(output: AssyOutput) {
   formState.plantCode = output.plantCode ?? ''
   formState.prodCategory = output.prodCategory ?? ''
   formState.prodDate = normalizeProdDateYmd(output.prodDate)
-  formState.prodTeam = output.prodTeam ?? ''
+  formState.TeamCode = output.TeamCode ?? ''
   formState.shiftNo = output.shiftNo
   formState.prodOrderType = output.prodOrderType ?? ''
   formState.prodOrderCode = output.prodOrderCode ?? ''
   formState.prodOrderQty = output.prodOrderQty ?? 0
   formState.modelCode = output.modelCode ?? ''
-  formState.batchNo = output.batchNo ?? ''
+  formState.batchCode = output.batchCode ?? ''
   formState.materialCode = output.materialCode ?? ''
   const prodActualQty = sumAssyOutputProdActualQty(output)
   formState.prodActualQty = prodActualQty
@@ -613,10 +368,10 @@ const assyDefectDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     summaryPrecision: 3,
   },
   {
-    key: 'randomCardNo',
-    title: assyDefectDetailPi.label('randomCardNo'),
+    key: 'randomCardCode',
+    title: assyDefectDetailPi.label('randomCardCode'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: assyDefectDetailPi.ph('randomCardNo'),
+    width: 140, allowClear: true, placeholder: assyDefectDetailPi.ph('randomCardCode'),
   },
   {
     key: 'occurrenceEngineering',
@@ -677,8 +432,7 @@ const assyDefectDetailFormColumns = computed<TaktEditableTableColumn[]>(() => [
     title: assyDefectDetailPi.label('prodActualQty'),
     readonly: true,
     width: 140,
-  },
-])
+  }])
 
 /** 主表冗余字段（同步至子表各行，只读展示） */
 function resolveMasterRedundantFields() {
@@ -847,7 +601,7 @@ function createDefaultAssyDefectDetailRow(): Record<string, unknown> {
     lineNumber: allocateNextAssyDefectDetailLineNumber(),
     defectQty: 0,
     cumulativeDefectQty: 0,
-    randomCardNo: '',
+    randomCardCode: '',
     occurrenceEngineering: '',
     testStep: '',
     defectSymptom: '',
@@ -865,7 +619,7 @@ function buildSubmitPayload() {
   const detailScope = {
     tenantCode: tenantStore.tenantCode,
     companyCode: tenantStore.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     assyDefectId: masterId,
   }
   const assyDefectDetails = rawRows
@@ -989,8 +743,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('plantCode'),
       trigger: 'blur',
-    },
-  ],
+    }],
   prodOrderCode: [
     {
       validator: async (_rule, value) => {
@@ -1007,8 +760,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.reject(pi.ph('prodOrderCode'))
       },
       trigger: 'change',
-    },
-  ],
+    }],
   prodActualQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1040,22 +792,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('prodCategory'),
       trigger: 'change',
-    },
-  ],
+    }],
   prodDate: [
     {
       required: true,
       message: pi.ph('prodDate'),
       trigger: 'change',
-    },
-  ],
-  prodTeam: [
+    }],
+  TeamCode: [
     {
       required: true,
-      message: pi.ph('prodTeam'),
+      message: pi.ph('TeamCode'),
       trigger: 'change',
-    },
-  ],
+    }],
   shiftNo: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1074,8 +823,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('prodOrderType'),
       trigger: 'blur',
-    },
-  ],
+    }],
   prodOrderQty: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -1094,22 +842,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       required: true,
       message: pi.ph('modelCode'),
       trigger: 'blur',
-    },
-  ],
-  batchNo: [
+    }],
+  batchCode: [
     {
       required: true,
-      message: pi.ph('batchNo'),
+      message: pi.ph('batchCode'),
       trigger: 'blur',
-    },
-  ],
+    }],
   materialCode: [
     {
       required: true,
       message: pi.ph('materialCode'),
       trigger: 'blur',
-    },
-  ],
+    }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */

@@ -1,7 +1,7 @@
 <!-- ======================================== -->
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/maintenance/work-order/components -->
-<!-- 文件名称：work-order-material-form.vue -->
+<!-- 文件名称：work-order-general-material-form.vue -->
 <!-- 功能描述：维护工单实体子表 maintenanceWorkOrderMaterial 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
@@ -84,12 +84,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
+                :label="pi.label('materialDescription')"
+                name="materialDescription"
               >
                 <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
+                  v-model:value="formState.materialDescription"
+                  :placeholder="pi.ph('materialDescription')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -265,9 +265,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["workOrderCode","lineNumber","materialId","materialCode","materialName","requiredQuantity","issuedQuantity","materialUnit","unitPrice","amount","warehouseCode","storageLocation","issueStatus","issueTime","isObsolete"]
-
-
+const formFields = ["workOrderCode","lineNumber","materialId","materialCode","materialDescription","requiredQuantity","issuedQuantity","materialUnit","unitPrice","amount","warehouseCode","storageLocation","issueStatus","issueTime","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -359,10 +357,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialName: [
+  materialDescription: [
     {
       required: true,
-      message: pi.ph('materialName'),
+      message: pi.ph('materialDescription'),
       trigger: 'blur'
     }
   ],

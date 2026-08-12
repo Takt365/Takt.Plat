@@ -15,6 +15,7 @@ export default {
     title: 'BOM cost analysis',
     periodRange: 'Costing period',
     selectPlantRequired: 'Please select a plant',
+    selectMaterialTypeRequired: 'Please select a material type',
     selectPeriodRequired: 'Please select a costing period',
     queryFailed: 'BOM cost analysis query failed',
     exportSuccess: 'BOM cost analysis exported',
@@ -22,6 +23,11 @@ export default {
     filter: {
       all: 'All',
       changed: 'Changed only',
+    },
+    sort: {
+      productCode: 'Product code (all rows)',
+      trend: 'Trend first (all rows)',
+      varianceDesc: 'Abs. variance ↓ (all rows)',
     },
     columns: {
       trend: 'Trend',

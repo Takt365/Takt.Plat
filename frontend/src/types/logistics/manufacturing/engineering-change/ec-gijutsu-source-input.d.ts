@@ -29,7 +29,7 @@ export interface EcGijutsuSourceEcInputItem {
   /** 设变来源主表 ID */
   sourceEcId: string;
   /** 设变号码 */
-  sourceEcNo: string;
+  sourceEcCode: string;
   /** 机种 */
   sourceModel: string;
   /** 标题 */
@@ -51,7 +51,7 @@ export interface EcGijutsuSourceEcInputQuery extends TaktPagedQuery {
   /** 目标工厂代码（可选；服务端按当前公司代码 1:1 映射） */
   plantCode?: string;
   /** 设变号码（模糊） */
-  sourceEcNo?: string;
+  sourceEcCode?: string;
   /** 标题（模糊） */
   sourceTitle?: string;
 }
@@ -63,7 +63,6 @@ export interface EcGijutsuImportFromSource {
   /** 目标工厂代码（可选；服务端按来源设变公司代码 1:1 映射） */
   plantCode?: string;
   /** 公司默认文化 */
-  companyDefaultCulture?: string;
   /** 待导入来源设变 ID 列表 */
   sourceEcIds: string[];
 }
@@ -91,5 +90,4 @@ export interface EcGijutsuDraftFromSource {
   /** 来源设变主表 ID */
   sourceEcId: string;
   /** 公司默认文化 */
-  companyDefaultCulture?: string;
 }

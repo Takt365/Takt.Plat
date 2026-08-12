@@ -4,8 +4,8 @@
 // 文件名称：TaktSeedRepository.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：种子数据专用仓储实现（三个实体基类共用），绕过用户上下文，支持精确租户控制和雪花ID
-// 
+// 功能描述：种子数据专用仓储实现（三个实体基类共用）；创建/更新时补齐 RelatedPlant 或 PlantCode（对齐业务仓储）
+//
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
@@ -15,6 +15,7 @@ using SqlSugar;
 using Takt.Domain.Entities;
 using Takt.Domain.Repositories;
 using Takt.Infrastructure.Data.Context;
+using Takt.Infrastructure.Extensions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Options;
 
@@ -69,6 +70,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
+        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -82,13 +84,12 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     public virtual async Task<int> CreateRangeAsync(List<TEntity> entities)
     {
         if (entities.Count == 0) return 0;
-        
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
             entity.ApplySeedCreate(now);
         }
-
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
@@ -103,9 +104,9 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
             entity.ApplySeedCreate(now);
         }
-
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
     }
 
@@ -120,6 +121,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
+        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -135,6 +137,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
@@ -250,6 +253,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
+        await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+            Db,
+            entity,
+            entity.TenantCode,
+            entity.CompanyCode);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -266,6 +274,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -282,6 +295,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -298,6 +316,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
+        await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+            Db,
+            entity,
+            entity.TenantCode,
+            entity.CompanyCode);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -313,6 +336,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
@@ -416,6 +444,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
+        await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+            Db,
+            entity,
+            entity.TenantCode,
+            entity.CompanyCode);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -432,6 +465,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -448,6 +486,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -464,6 +507,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
+        await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+            Db,
+            entity,
+            entity.TenantCode,
+            entity.CompanyCode);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -479,6 +527,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();

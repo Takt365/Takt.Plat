@@ -50,7 +50,6 @@ export interface MaterialGroup extends TenantDtoBase {
 
 }
 
-
 /**
  * MaterialGroup 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -62,6 +61,11 @@ export interface MaterialGroupQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
@@ -105,7 +109,6 @@ export interface MaterialGroupQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建MaterialGroup DTO
  * 对应前端 MaterialGroupCreate
@@ -116,6 +119,11 @@ export interface MaterialGroupCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
@@ -144,7 +152,6 @@ export interface MaterialGroupCreate {
 
 }
 
-
 /**
  * 更新MaterialGroup DTO
  * 继承 TaktMaterialGroupCreateDto，添加 MaterialGroupId 字段
@@ -158,7 +165,6 @@ export interface MaterialGroupUpdate extends MaterialGroupCreate {
   materialGroupId: string;
 
 }
-
 
 /**
  * MaterialGroup 排序更新 DTO
@@ -178,7 +184,6 @@ export interface MaterialGroupSort {
 
 }
 
-
 /**
  * MaterialGroup 导入模板行 DTO
  * 对应前端 MaterialGroupTemplate
@@ -189,6 +194,11 @@ export interface MaterialGroupTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
@@ -216,7 +226,6 @@ export interface MaterialGroupTemplate {
   remark?: string;
 
 }
-
 
 /**
  * MaterialGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -230,6 +239,11 @@ export interface MaterialGroupImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
    */
   materialGroupCode?: string;
@@ -255,7 +269,6 @@ export interface MaterialGroupImport {
   remark?: string;
 
 }
-
 
 /**
  * MaterialGroup 导出 DTO（独立实现，不继承响应 Dto）

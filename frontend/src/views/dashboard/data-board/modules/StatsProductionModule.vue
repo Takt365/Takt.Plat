@@ -212,8 +212,7 @@ async function loadData(): Promise<void> {
           query,
         ).then((res) => ({ ...EMPTY_PRODUCTION_STAT, ...res })),
         { ...EMPTY_PRODUCTION_STAT },
-      ),
-    ])
+      )])
     productionStats.value = mergeProductionStats(assyStat, pcbaStat)
   } finally {
     loading.value = false

@@ -106,12 +106,12 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
         EnsureThreeLayerContext();
         var list = await _maintenanceWorkOrderMaterialRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IssueStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.MaterialName ?? e.Id.ToString(),
+            DictLabel = e.MaterialDescription ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -429,7 +429,7 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || SqlFunc.ToString(x.MaterialId).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || SqlFunc.ToString(x.RequiredQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.IssuedQuantity).Contains(keywords)
                 || (x.MaterialUnit != null && x.MaterialUnit.Contains(keywords))
@@ -438,6 +438,7 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.StorageLocation != null && x.StorageLocation.Contains(keywords))
                 || SqlFunc.ToString(x.IssueStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.IssueTime).Contains(keywords)
@@ -470,9 +471,9 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (queryDto?.RequiredQuantity.HasValue == true)
@@ -515,6 +516,11 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
             exp = exp.And(x => x.IssueStatus == queryDto.IssueStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -544,6 +550,12 @@ public class TaktMaintenanceWorkOrderMaterialService : TaktServiceBase, ITaktMai
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

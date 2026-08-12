@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/bom
 // 文件名称：material-cost-item.d.ts
-// 创建时间：2026-07-14
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/bom 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,24 +29,9 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   bomMaterialCostItemId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
-
-  /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
-   */
-  productCode: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription: string;
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -54,12 +39,27 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   bomLevel: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo: string;
+  sequenceCode: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode: string;
 
@@ -94,12 +94,12 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice: number;
 
@@ -109,9 +109,9 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency: string;
+  movingPriceCurrencyCode: string;
 
   /**
    * 采购组织
@@ -119,17 +119,17 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   purchaseOrganization: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice: number;
 
@@ -139,9 +139,9 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency: string;
+  purchaseCurrencyCode: string;
 
   /**
    * 核算日期
@@ -169,29 +169,24 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
   /**
-   * 机种编码（成本合计按主表过滤；明细实体本身无此列）
+   * 机种编码（分析/合计查询；回填 productCodes 后用于明细过滤）
    */
   modelCode?: string;
 
   /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 共用产品编码集合（由 modelCode 回填；不显式指定产品时用于缩小范围）
    */
-  productCode?: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo?: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription?: string;
+  productCodes?: string[];
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -199,12 +194,27 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   bomLevel?: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo?: string;
+  sequenceCode?: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode?: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription?: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode?: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode?: string;
 
@@ -239,12 +249,12 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode?: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice?: number;
 
@@ -254,9 +264,9 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency?: string;
+  movingPriceCurrencyCode?: string;
 
   /**
    * 采购组织
@@ -264,17 +274,17 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   purchaseOrganization?: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup?: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice?: number;
 
@@ -284,9 +294,9 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency?: string;
+  purchaseCurrencyCode?: string;
 
   /**
    * 核算日期（范围查询-开始）
@@ -338,29 +348,14 @@ export interface BomMaterialCostItemCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
-
-  /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
-   */
-  productCode: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription: string;
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -368,12 +363,27 @@ export interface BomMaterialCostItemCreate {
   bomLevel: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo: string;
+  sequenceCode: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode: string;
 
@@ -408,12 +418,12 @@ export interface BomMaterialCostItemCreate {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice: number;
 
@@ -423,9 +433,9 @@ export interface BomMaterialCostItemCreate {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency: string;
+  movingPriceCurrencyCode: string;
 
   /**
    * 采购组织
@@ -433,17 +443,17 @@ export interface BomMaterialCostItemCreate {
   purchaseOrganization: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice: number;
 
@@ -453,9 +463,9 @@ export interface BomMaterialCostItemCreate {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency: string;
+  purchaseCurrencyCode: string;
 
   /**
    * 核算日期
@@ -507,24 +517,14 @@ export interface BomMaterialCostItemTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
-
-  /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
-   */
-  productCode?: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo?: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription?: string;
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -532,12 +532,27 @@ export interface BomMaterialCostItemTemplate {
   bomLevel?: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo?: string;
+  sequenceCode?: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode?: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription?: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode?: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode?: string;
 
@@ -572,12 +587,12 @@ export interface BomMaterialCostItemTemplate {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode?: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice?: number;
 
@@ -587,9 +602,9 @@ export interface BomMaterialCostItemTemplate {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency?: string;
+  movingPriceCurrencyCode?: string;
 
   /**
    * 采购组织
@@ -597,17 +612,17 @@ export interface BomMaterialCostItemTemplate {
   purchaseOrganization?: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup?: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice?: number;
 
@@ -617,9 +632,9 @@ export interface BomMaterialCostItemTemplate {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency?: string;
+  purchaseCurrencyCode?: string;
 
   /**
    * 核算日期
@@ -656,29 +671,14 @@ export interface BomMaterialCostItemImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
-
-  /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
-   */
-  productCode?: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo?: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription?: string;
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -686,12 +686,27 @@ export interface BomMaterialCostItemImport {
   bomLevel?: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo?: string;
+  sequenceCode?: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode?: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription?: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode?: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode?: string;
 
@@ -726,12 +741,12 @@ export interface BomMaterialCostItemImport {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode?: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice?: number;
 
@@ -741,9 +756,9 @@ export interface BomMaterialCostItemImport {
   movingPriceUnit?: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency?: string;
+  movingPriceCurrencyCode?: string;
 
   /**
    * 采购组织
@@ -751,17 +766,17 @@ export interface BomMaterialCostItemImport {
   purchaseOrganization?: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup?: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode?: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice?: number;
 
@@ -771,9 +786,9 @@ export interface BomMaterialCostItemImport {
   purchasePriceUnit?: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency?: string;
+  purchaseCurrencyCode?: string;
 
   /**
    * 核算日期
@@ -810,24 +825,9 @@ export interface BomMaterialCostItemExport {
   companyCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
-
-  /**
-   * 产品编码（父件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
-   */
-  productCode: string;
-
-  /**
-   * 序号（展开行序号，如 0010）
-   */
-  sequenceNo: string;
-
-  /**
-   * 产品描述
-   */
-  productDescription: string;
 
   /**
    * 层级（BOM 展开层级，如 01/02）
@@ -835,12 +835,27 @@ export interface BomMaterialCostItemExport {
   bomLevel: string;
 
   /**
-   * BOM 项目号（子件行项目号，如 0010）
+   * 序号（展开行序号，如 0010）
    */
-  bomItemNo: string;
+  sequenceCode: string;
 
   /**
-   * 组件编码（子件物料编码，关联 TaktMaterial.MaterialCode）；导入时 18 位纯数字自动归一化为后 10 位
+   * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
+   */
+  productCode: string;
+
+  /**
+   * 产品描述
+   */
+  productDescription: string;
+
+  /**
+   * BOM 项目号（子件行项目号，如 0010）
+   */
+  bomItemCode: string;
+
+  /**
+   * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
    */
   componentCode: string;
 
@@ -875,12 +890,12 @@ export interface BomMaterialCostItemExport {
   specialProcurementType?: string;
 
   /**
-   * 利润中心（关联 TaktProfitCenter.ProfitCenterCode，选项 TaktProfitCenters/options）
+   * 利润中心（选项 TaktProfitCenters/options；DictValue=Id）
    */
   profitCenterCode: string;
 
   /**
-   * 移动平均价
+   * 移动平均价（5 位小数）
    */
   movingAveragePrice: number;
 
@@ -890,9 +905,9 @@ export interface BomMaterialCostItemExport {
   movingPriceUnit: number;
 
   /**
-   * 移动价格货币（字典 accounting_currency_code，如 CNY/USD）
+   * 移动价格货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  movingPriceCurrency: string;
+  movingPriceCurrencyCode: string;
 
   /**
    * 采购组织
@@ -900,17 +915,17 @@ export interface BomMaterialCostItemExport {
   purchaseOrganization: string;
 
   /**
-   * 采购组（关联 TaktPurchaseGroup.PurchaseGroupCode，选项 TaktPurchaseGroups/options）
+   * 采购组（选项 TaktPurchaseGroups/options；DictValue=Id）
    */
   purchaseGroup: string;
 
   /**
-   * 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+   * 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
    */
   supplierCode: string;
 
   /**
-   * 净价（采购价格）
+   * 净价（采购价格，5 位小数）
    */
   netPurchasePrice: number;
 
@@ -920,9 +935,9 @@ export interface BomMaterialCostItemExport {
   purchasePriceUnit: number;
 
   /**
-   * 采购货币（字典 accounting_currency_code，如 CNY/USD）
+   * 采购货币（字典 accounting_currency_code；如 CNY/USD）
    */
-  purchaseCurrency: string;
+  purchaseCurrencyCode: string;
 
   /**
    * 核算日期
@@ -943,87 +958,6 @@ export interface BomMaterialCostItemExport {
    * 创建时间
    */
   createdAt: string;
-
-}
-
-
-/**
- * 机种月平均重算：规范化后的查询与月份标签
- * 对应前端 BomMaterialCostItemRecalculatePreparedQuery
- * @description 对应后端 TaktBomMaterialCostItemRecalculatePreparedQueryDto
- */
-export interface BomMaterialCostItemRecalculatePreparedQuery {
-  /**
-   * 规范化后的明细查询（单核算月日期范围）
-   */
-  query: BomMaterialCostItemQuery;
-
-  /**
-   * 核算月份（yyyy-MM）
-   */
-  processedMonth: string;
-
-}
-
-
-/**
- * 机种月平均重算任务已提交回执
- * 对应前端 BomMaterialCostItemRecalculateSubmitted
- * @description 对应后端 TaktBomMaterialCostItemRecalculateSubmittedDto
- */
-export interface BomMaterialCostItemRecalculateSubmitted {
-  /**
-   * 核算月份（yyyy-MM）
-   */
-  processedMonth: string;
-
-  /**
-   * 是否强制重算（重置）
-   */
-  forceRecalculate: boolean;
-
-  /**
-   * 处理记录数上限（工厂+产品组；0=全部；默认 5000）
-   */
-  processRecordCount: number;
-}
-
-
-/**
- * 机种月平均重算执行结果（同步或后台完成后）
- * 对应前端 BomMaterialCostItemRecalculateModelAverageResult
- * @description 对应后端 TaktBomMaterialCostItemRecalculateModelAverageResultDto
- */
-export interface BomMaterialCostItemRecalculateModelAverageResult {
-  /**
-   * 扫描明细行数
-   */
-  scannedRowCount: number;
-
-  /**
-   * 刷新汇总组数
-   */
-  refreshedGroupCount: number;
-
-  /**
-   * 跳过组数
-   */
-  skippedGroupCount: number;
-
-  /**
-   * 强制重置涉及组数
-   */
-  resetGroupCount: number;
-
-  /**
-   * 处理月份数
-   */
-  processedMonthCount: number;
-
-  /**
-   * 核算月份（yyyy-MM）
-   */
-  processedMonth: string;
 
 }
 

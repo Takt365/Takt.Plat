@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.ConferenceCenter
 // 文件名称：TaktConferenceRoomDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConferenceRoom 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConferenceRoom 生成，请按需审阅）
 // 
@@ -76,7 +76,7 @@ public class TaktConferenceRoomDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int RoomStatus { get; set; } = 0;
 
@@ -102,6 +102,16 @@ public class TaktConferenceRoomQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 会议室编码（租户+公司内唯一）
     /// </summary>
@@ -143,7 +153,7 @@ public class TaktConferenceRoomQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int? RoomStatus { get; set; }
 
@@ -188,10 +198,15 @@ public class TaktConferenceRoomCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 会议室编码（租户+公司内唯一）
     /// </summary>
@@ -230,7 +245,7 @@ public class TaktConferenceRoomCreateDto
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int RoomStatus { get; set; } = 0;
 
@@ -284,9 +299,9 @@ public class TaktConferenceRoomStatusDto
     public long ConferenceRoomId { get; set; }
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
-    [Required(ErrorMessage = "会议室状态不能为空")]
+    [Required(ErrorMessage = "会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）不能为空")]
     public int RoomStatus { get; set; } = 0;
 }
 
@@ -334,6 +349,16 @@ public class TaktConferenceRoomTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 会议室编码（租户+公司内唯一）
     /// </summary>
     public string? RoomCode { get; set; } = string.Empty;
@@ -369,7 +394,7 @@ public class TaktConferenceRoomTemplateDto
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int? RoomStatus { get; set; }
 
@@ -401,10 +426,15 @@ public class TaktConferenceRoomImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 会议室编码（租户+公司内唯一）
     /// </summary>
@@ -441,7 +471,7 @@ public class TaktConferenceRoomImportDto
     public string? Facilities { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int? RoomStatus { get; set; }
 
@@ -519,7 +549,7 @@ public class TaktConferenceRoomExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 会议室状态
+    /// 会议室状态（字典 routine_conference_room_status；0=可用 1=使用中 2=维护中 3=停用）
     /// </summary>
     public int RoomStatus { get; set; } = 0;
 

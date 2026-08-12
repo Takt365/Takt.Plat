@@ -183,6 +183,18 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('salesAmount')"
+                name="salesAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.salesAmount"
+                  :placeholder="pi.ph('salesAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('deliveryStatus')"
                 name="deliveryStatus"
               >
@@ -236,9 +248,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","salesUnit","orderQuantity","shippedQuantity","salesPerUnit","salesUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","deliveryStatus","isObsolete"]
-
-
+const formFields = ["lineNumber","materialCode","salesUnit","orderQuantity","shippedQuantity","salesPerUnit","salesUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","salesAmount","deliveryStatus","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -446,6 +456,19 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  salesAmount: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('salesAmount'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('salesAmount'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   deliveryStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -522,6 +545,10 @@ function getValues(): Record<string, any> {
   if ('taxAmount' in payload) {
     const rawtaxAmount = payload.taxAmount
     payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  }
+  if ('salesAmount' in payload) {
+    const rawsalesAmount = payload.salesAmount
+    payload.salesAmount = typeof rawsalesAmount === 'number' ? rawsalesAmount : Number(rawsalesAmount)
   }
   if ('deliveryStatus' in payload) {
     const rawdeliveryStatus = payload.deliveryStatus

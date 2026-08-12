@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesQuotationItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesQuotationItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,14 +126,14 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.salesquotationitem.materialcode
             new TranslationSeedItem("entity.salesquotationitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
-            // entity.salesquotationitem.materialname
-            new TranslationSeedItem("entity.salesquotationitem.materialname", "en-US", "物料名称_us", "物料名称（回填：随物料）"),
-            // entity.salesquotationitem.materialname
-            new TranslationSeedItem("entity.salesquotationitem.materialname", "ja-JP", "物料名称_jp", "物料名称（回填：随物料）"),
-            // entity.salesquotationitem.materialname
-            new TranslationSeedItem("entity.salesquotationitem.materialname", "zh-CN", "物料名称", "物料名称（回填：随物料）"),
-            // entity.salesquotationitem.materialname
-            new TranslationSeedItem("entity.salesquotationitem.materialname", "zh-HK", "物料名称_hk", "物料名称（回填：随物料）"),
+            // entity.salesquotationitem.materialdescription
+            new TranslationSeedItem("entity.salesquotationitem.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            // entity.salesquotationitem.materialdescription
+            new TranslationSeedItem("entity.salesquotationitem.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            // entity.salesquotationitem.materialdescription
+            new TranslationSeedItem("entity.salesquotationitem.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            // entity.salesquotationitem.materialdescription
+            new TranslationSeedItem("entity.salesquotationitem.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
 
             // entity.salesquotationitem.materialspecification
             new TranslationSeedItem("entity.salesquotationitem.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),
@@ -224,6 +224,15 @@ public class TaktSalesQuotationItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesquotationitem.taxamount", "zh-CN", "税费", "税费"),
             // entity.salesquotationitem.taxamount
             new TranslationSeedItem("entity.salesquotationitem.taxamount", "zh-HK", "税费_hk", "税费"),
+
+            // entity.salesquotationitem.quotationamount
+            new TranslationSeedItem("entity.salesquotationitem.quotationamount", "en-US", "报价金额_us", "报价金额"),
+            // entity.salesquotationitem.quotationamount
+            new TranslationSeedItem("entity.salesquotationitem.quotationamount", "ja-JP", "报价金额_jp", "报价金额"),
+            // entity.salesquotationitem.quotationamount
+            new TranslationSeedItem("entity.salesquotationitem.quotationamount", "zh-CN", "报价金额", "报价金额"),
+            // entity.salesquotationitem.quotationamount
+            new TranslationSeedItem("entity.salesquotationitem.quotationamount", "zh-HK", "报价金额_hk", "报价金额"),
 
             // entity.salesquotationitem.isobsolete
             new TranslationSeedItem("entity.salesquotationitem.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),

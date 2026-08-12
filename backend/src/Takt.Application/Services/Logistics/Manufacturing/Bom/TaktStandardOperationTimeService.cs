@@ -419,6 +419,7 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
                 || (x.PointsUnit != null && x.PointsUnit.Contains(keywords))
                 || SqlFunc.ToString(x.PointsToMinutesRate).Contains(keywords)
                 || SqlFunc.ToString(x.ConvertedMinutes).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -475,6 +476,11 @@ public class TaktStandardOperationTimeService : TaktServiceBase, ITaktStandardOp
         if (queryDto?.ConvertedMinutes.HasValue == true)
         {
             exp = exp.And(x => x.ConvertedMinutes == queryDto.ConvertedMinutes);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

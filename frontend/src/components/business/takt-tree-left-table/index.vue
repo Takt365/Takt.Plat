@@ -256,7 +256,7 @@ const fieldNames = computed(() => ({
   children: props.treeFieldNames?.children ?? 'children'
 }))
 
-/** 树节点总数（截断计数，用于 ≥5000 自动虚拟化） */
+/** 树节点总数（达阈值即停计，仅用于是否强制 virtual；不截断树数据） */
 const treeNodeCount = computed(() =>
   countTreeNodesForVirtualScroll(
     props.treeData as Record<string, unknown>[] | undefined,

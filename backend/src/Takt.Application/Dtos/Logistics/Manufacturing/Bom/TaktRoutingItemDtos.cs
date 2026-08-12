@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingItemDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：RoutingItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktRoutingItem 生成，请按需审阅）
 // 
@@ -57,7 +57,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -72,7 +72,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -82,7 +82,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
@@ -132,7 +132,7 @@ public class TaktRoutingItemDto : TaktCompanyDtoBase
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -171,6 +171,16 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -187,7 +197,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -202,7 +212,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -212,7 +222,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
@@ -262,7 +272,7 @@ public class TaktRoutingItemQueryDto : TaktPagedQuery
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -307,10 +317,15 @@ public class TaktRoutingItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -329,9 +344,9 @@ public class TaktRoutingItemCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -345,9 +360,9 @@ public class TaktRoutingItemCreateDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
-    [Required(ErrorMessage = "工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）不能为空")]
+    [Required(ErrorMessage = "工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）不能为空")]
     public string TimeUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -356,9 +371,9 @@ public class TaktRoutingItemCreateDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
-    [Required(ErrorMessage = "点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）不能为空")]
+    [Required(ErrorMessage = "点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）不能为空")]
     public string PointsUnit { get; set; } = string.Empty;
 
     /// <summary>
@@ -403,14 +418,14 @@ public class TaktRoutingItemCreateDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
     /// <summary>
     /// 工序参数定义（子表，级联保存）
     /// </summary>
-    public List<TaktRoutingItemArgumentUpdateDto>? Arguments { get; set; }
+    public List<TaktRoutingItemArgumentCreateDto>? Arguments { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -441,6 +456,11 @@ public class TaktRoutingItemUpdateDto : TaktRoutingItemCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RoutingItemId { get; set; }
+
+    /// <summary>
+    /// 工序参数定义（子表，级联保存）
+    /// </summary>
+    public new List<TaktRoutingItemArgumentUpdateDto>? Arguments { get; set; }
 
 }
 
@@ -511,6 +531,16 @@ public class TaktRoutingItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -527,7 +557,7 @@ public class TaktRoutingItemTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -542,7 +572,7 @@ public class TaktRoutingItemTemplateDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -552,7 +582,7 @@ public class TaktRoutingItemTemplateDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
@@ -597,7 +627,7 @@ public class TaktRoutingItemTemplateDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -634,10 +664,15 @@ public class TaktRoutingItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 工艺路线主表ID（主子表关系，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -655,7 +690,7 @@ public class TaktRoutingItemImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? BaseUnit { get; set; } = string.Empty;
 
@@ -670,7 +705,7 @@ public class TaktRoutingItemImportDto
     public decimal? StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string? TimeUnit { get; set; } = string.Empty;
 
@@ -680,7 +715,7 @@ public class TaktRoutingItemImportDto
     public int? StandardShorts { get; set; }
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string? PointsUnit { get; set; } = string.Empty;
 
@@ -725,7 +760,7 @@ public class TaktRoutingItemImportDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -784,7 +819,7 @@ public class TaktRoutingItemExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 作业/工序计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string BaseUnit { get; set; } = string.Empty;
 
@@ -799,7 +834,7 @@ public class TaktRoutingItemExportDto
     public decimal StandardMinutes { get; set; }
 
     /// <summary>
-    /// 工时单位（字典 logistics_time_unit，DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
+    /// 工时单位（字典 logistics_time_unit；DictValue=MIN/H/S；MIN=分钟，H=小时，S=秒；默认 MIN）
     /// </summary>
     public string TimeUnit { get; set; } = string.Empty;
 
@@ -809,7 +844,7 @@ public class TaktRoutingItemExportDto
     public int StandardShorts { get; set; } = 0;
 
     /// <summary>
-    /// 点数单位（字典 logistics_points_unit，DictValue=SHORT；SHORT=点数；默认 SHORT）
+    /// 点数单位（字典 logistics_points_unit；DictValue=SHORT；SHORT=点数；默认 SHORT）
     /// </summary>
     public string PointsUnit { get; set; } = string.Empty;
 
@@ -859,7 +894,7 @@ public class TaktRoutingItemExportDto
     public string? ExtJson { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

@@ -74,8 +74,8 @@ public class TaktExpenseDetail : TaktCompanyEntityBase
     /// <summary>
     /// 发票号码
     /// </summary>
-    [SugarColumn(ColumnName = "invoice_no", ColumnDescription = "发票号码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
-    public string? InvoiceNo { get; set; }
+    [SugarColumn(ColumnName = "invoice_code", ColumnDescription = "发票号码", ColumnDataType = "varchar", Length = 40, IsNullable = true)]
+    public string? InvoiceCode { get; set; }
     /// <summary>
     /// 费用发生日期
     /// </summary>

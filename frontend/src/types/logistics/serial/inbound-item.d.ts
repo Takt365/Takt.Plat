@@ -41,7 +41,7 @@ export interface SerialInboundItem extends CompanyDtoBase {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -51,7 +51,7 @@ export interface SerialInboundItem extends CompanyDtoBase {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo: string;
+  inboundSerialCode: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -91,7 +91,7 @@ export interface SerialInboundItemQuery extends TaktPagedQuery {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -101,7 +101,7 @@ export interface SerialInboundItemQuery extends TaktPagedQuery {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo?: string;
+  inboundSerialCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -150,7 +150,10 @@ export interface SerialInboundItemCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -160,7 +163,7 @@ export interface SerialInboundItemCreate {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -170,7 +173,7 @@ export interface SerialInboundItemCreate {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo: string;
+  inboundSerialCode: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -248,7 +251,7 @@ export interface SerialInboundItemTemplate {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -258,7 +261,7 @@ export interface SerialInboundItemTemplate {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo?: string;
+  inboundSerialCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -297,7 +300,10 @@ export interface SerialInboundItemImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 入库主表 ID（关联 TaktSerialInbound.Id，选项 TaktSerialInbounds/options）
@@ -307,7 +313,7 @@ export interface SerialInboundItemImport {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo?: string;
+  inboundCode?: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -317,7 +323,7 @@ export interface SerialInboundItemImport {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo?: string;
+  inboundSerialCode?: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
@@ -361,7 +367,7 @@ export interface SerialInboundItemExport {
   /**
    * 入库单号（冗余字段，便于查询）
    */
-  inboundNo: string;
+  inboundCode: string;
 
   /**
    * 行号（项号/序号，固定步长=10）
@@ -371,7 +377,7 @@ export interface SerialInboundItemExport {
   /**
    * 入库序列号（租户+公司内唯一）
    */
-  inboundSerialNo: string;
+  inboundSerialCode: string;
 
   /**
    * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）

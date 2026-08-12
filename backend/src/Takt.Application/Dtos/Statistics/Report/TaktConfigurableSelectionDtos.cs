@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableSelectionDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableSelection 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableSelection 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Report;
 
@@ -23,7 +22,7 @@ namespace Takt.Application.Dtos.Statistics.Report;
 // ========================================
 
 /// <summary>
-/// 自定义报表筛选条件（SQVI 运行时筛选项）
+/// 自定义报表 SQVI 筛选条件
 /// 对应前端 TaktConfigurableSelectionDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -58,14 +57,14 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public int FilterOperator { get; set; }
+    public int FilterOperator { get; set; } = 0;
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -80,10 +79,10 @@ public class TaktConfigurableSelectionDto : TaktCompanyDtoBase
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public int IsRequired { get; set; }
+    public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
+    /// 排序号（SQVI 筛选项展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 
@@ -116,6 +115,16 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -132,7 +141,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -157,7 +166,7 @@ public class TaktConfigurableSelectionQueryDto : TaktPagedQuery
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
+    /// 排序号（SQVI 筛选项展示顺序）
     /// </summary>
     public int? SortOrder { get; set; }
 
@@ -202,10 +211,15 @@ public class TaktConfigurableSelectionCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -225,15 +239,15 @@ public class TaktConfigurableSelectionCreateDto
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
-    [Required(ErrorMessage = "显示名称（SQVI 筛选项 标签）不能为空")]
+    [Required(ErrorMessage = "显示名称（SQVI 筛选项标签）不能为空")]
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public int FilterOperator { get; set; }
+    public int FilterOperator { get; set; } = 0;
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -248,12 +262,7 @@ public class TaktConfigurableSelectionCreateDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public int IsRequired { get; set; }
-
-    /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int IsRequired { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -265,6 +274,12 @@ public class TaktConfigurableSelectionCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -305,9 +320,9 @@ public class TaktConfigurableSelectionSortDto
     public long ConfigurableSelectionId { get; set; }
 
     /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
+    /// 排序号（SQVI 筛选项展示顺序）
     /// </summary>
-    [Required(ErrorMessage = "排序号（SQVI 筛选项 展示顺序）不能为空")]
+    [Required(ErrorMessage = "排序号（SQVI 筛选项展示顺序）不能为空")]
     public int SortOrder { get; set; } = 0;
 }
 
@@ -331,6 +346,16 @@ public class TaktConfigurableSelectionTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -347,7 +372,7 @@ public class TaktConfigurableSelectionTemplateDto
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -370,11 +395,6 @@ public class TaktConfigurableSelectionTemplateDto
     /// 是否必填（0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
-
-    /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -404,10 +424,15 @@ public class TaktConfigurableSelectionImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -425,7 +450,7 @@ public class TaktConfigurableSelectionImportDto
     public string? ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     public string? DisplayName { get; set; } = string.Empty;
 
@@ -450,11 +475,6 @@ public class TaktConfigurableSelectionImportDto
     public int? IsRequired { get; set; }
 
     /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -464,6 +484,12 @@ public class TaktConfigurableSelectionImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -504,14 +530,14 @@ public class TaktConfigurableSelectionExportDto
     public string ColumnName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 显示名称（SQVI 筛选项 标签）
+    /// 显示名称（SQVI 筛选项标签）
     /// </summary>
     public string DisplayName { get; set; } = string.Empty;
 
     /// <summary>
     /// 比较运算符
     /// </summary>
-    public int FilterOperator { get; set; }
+    public int FilterOperator { get; set; } = 0;
 
     /// <summary>
     /// 默认值（单值或 IN 列表逗号分隔）
@@ -526,10 +552,10 @@ public class TaktConfigurableSelectionExportDto
     /// <summary>
     /// 是否必填（0=否 1=是）
     /// </summary>
-    public int IsRequired { get; set; }
+    public int IsRequired { get; set; } = 0;
 
     /// <summary>
-    /// 排序号（SQVI 筛选项 展示顺序）
+    /// 排序号（SQVI 筛选项展示顺序）
     /// </summary>
     public int SortOrder { get; set; } = 0;
 

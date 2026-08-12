@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityAssuranceI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityAssurance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktQualityAssuranceI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityassurance._self
             new TranslationSeedItem("entity.qualityassurance._self", "zh-HK", "品质业务主表信息_hk", "实体名称"),
 
-            // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityassurance.plantcode
-            new TranslationSeedItem("entity.qualityassurance.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.qualityassurance.code
             new TranslationSeedItem("entity.qualityassurance.code", "en-US", "品质业务编码_us", "品质业务编码(唯一,如:QO-2026-0001)"),
             // entity.qualityassurance.code
@@ -126,14 +117,14 @@ public class TaktQualityAssuranceI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityassurance.customername1
             new TranslationSeedItem("entity.qualityassurance.customername1", "zh-HK", "客户名称1_hk", "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）"),
 
-            // entity.qualityassurance.debitnoteno
-            new TranslationSeedItem("entity.qualityassurance.debitnoteno", "en-US", "Debit Note No_us", "Debit Note No"),
-            // entity.qualityassurance.debitnoteno
-            new TranslationSeedItem("entity.qualityassurance.debitnoteno", "ja-JP", "Debit Note No_jp", "Debit Note No"),
-            // entity.qualityassurance.debitnoteno
-            new TranslationSeedItem("entity.qualityassurance.debitnoteno", "zh-CN", "Debit Note No", "Debit Note No"),
-            // entity.qualityassurance.debitnoteno
-            new TranslationSeedItem("entity.qualityassurance.debitnoteno", "zh-HK", "Debit Note No_hk", "Debit Note No"),
+            // entity.qualityassurance.debitnotecode
+            new TranslationSeedItem("entity.qualityassurance.debitnotecode", "en-US", "Debit Note No_us", "Debit Note No"),
+            // entity.qualityassurance.debitnotecode
+            new TranslationSeedItem("entity.qualityassurance.debitnotecode", "ja-JP", "Debit Note No_jp", "Debit Note No"),
+            // entity.qualityassurance.debitnotecode
+            new TranslationSeedItem("entity.qualityassurance.debitnotecode", "zh-CN", "Debit Note No", "Debit Note No"),
+            // entity.qualityassurance.debitnotecode
+            new TranslationSeedItem("entity.qualityassurance.debitnotecode", "zh-HK", "Debit Note No_hk", "Debit Note No"),
 
             // entity.qualityassurance.recorder
             new TranslationSeedItem("entity.qualityassurance.recorder", "en-US", "记录者_us", "记录者"),
@@ -153,14 +144,14 @@ public class TaktQualityAssuranceI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityassurance.totalqualitycost
             new TranslationSeedItem("entity.qualityassurance.totalqualitycost", "zh-HK", "质量总成本_hk", "质量总成本(元,自动计算 = 各子表费用合计)"),
 
-            // entity.qualityassurance.costcurrency
-            new TranslationSeedItem("entity.qualityassurance.costcurrency", "en-US", "成本币种_us", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityassurance.costcurrency
-            new TranslationSeedItem("entity.qualityassurance.costcurrency", "ja-JP", "成本币种_jp", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityassurance.costcurrency
-            new TranslationSeedItem("entity.qualityassurance.costcurrency", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
-            // entity.qualityassurance.costcurrency
-            new TranslationSeedItem("entity.qualityassurance.costcurrency", "zh-HK", "成本币种_hk", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityassurance.currencycode
+            new TranslationSeedItem("entity.qualityassurance.currencycode", "en-US", "成本币种_us", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityassurance.currencycode
+            new TranslationSeedItem("entity.qualityassurance.currencycode", "ja-JP", "成本币种_jp", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityassurance.currencycode
+            new TranslationSeedItem("entity.qualityassurance.currencycode", "zh-CN", "成本币种", "成本币种(CNY/USD/JPY等)"),
+            // entity.qualityassurance.currencycode
+            new TranslationSeedItem("entity.qualityassurance.currencycode", "zh-HK", "成本币种_hk", "成本币种(CNY/USD/JPY等)"),
 
             // entity.qualityassurance.incomingitems
             new TranslationSeedItem("entity.qualityassurance.incomingitems", "en-US", "来料检验费用明细列表_us", "来料检验费用明细列表"),

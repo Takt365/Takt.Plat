@@ -111,7 +111,7 @@ public class TaktWorkCenterSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateWorkCenterAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     plantCode,
                     template);
                 insertCount += inserted;
@@ -177,6 +177,7 @@ public class TaktWorkCenterSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktWorkCenter> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string plantCode,
         WorkCenterSeedItem seed)
     {
@@ -193,16 +194,17 @@ public class TaktWorkCenterSeedData : ITaktSeedDataCoordinator
                 CompanyCode = companyCode,
                 PlantCode = plantCode,
                 WorkCenterCode = seed.WorkCenterCode,
-                WorkCenterName = seed.WorkCenterName,
+                WorkCenterDescription = seed.WorkCenterDescription,
                 WorkCenterStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             workCenter = await repository.CreateAsync(workCenter);
             return (workCenter, 1, 0);
         }
         var needUpdate = false;
-        if (workCenter.WorkCenterName != seed.WorkCenterName)
+        if (workCenter.WorkCenterDescription != seed.WorkCenterDescription)
         {
-            workCenter.WorkCenterName = seed.WorkCenterName;
+            workCenter.WorkCenterDescription = seed.WorkCenterDescription;
             needUpdate = true;
         }
         if (workCenter.WorkCenterStatus != StatusEnabled)
@@ -222,8 +224,8 @@ public class TaktWorkCenterSeedData : ITaktSeedDataCoordinator
     /// 工作中心种子项
     /// </summary>
     /// <param name="WorkCenterCode">工作中心编码</param>
-    /// <param name="WorkCenterName">工作中心名称</param>
+    /// <param name="WorkCenterDescription">工作中心描述</param>
     private sealed record WorkCenterSeedItem(
         string WorkCenterCode,
-        string WorkCenterName);
+        string WorkCenterDescription);
 }

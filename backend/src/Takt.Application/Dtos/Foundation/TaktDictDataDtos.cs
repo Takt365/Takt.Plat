@@ -88,11 +88,6 @@ public class TaktDictDataDto : TaktTenantDtoBase
     public int CssClass { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（eo=全局通用/世界语；如 zh-CN、ja-JP 与 TaktCulture.CultureCode 对齐，GetDataDictAll 按 Accept-Language 与全局项一并返回）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
@@ -177,6 +172,11 @@ public class TaktDictDataQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
@@ -278,6 +278,11 @@ public class TaktDictDataCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
@@ -410,6 +415,11 @@ public class TaktDictDataTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>
@@ -494,6 +504,11 @@ public class TaktDictDataImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 是否默认项（1=是，0=否）
     /// </summary>

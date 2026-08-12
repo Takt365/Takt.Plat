@@ -26,7 +26,7 @@ export const PURCHASEORDERITEM_LIST_FIELDS = [
   'requestCode',
   'requestLineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'purchaseUnit',
   'orderQuantity',
@@ -38,6 +38,7 @@ export const PURCHASEORDERITEM_LIST_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'purchaseAmount',
   'deliveryStatus',
   'isObsolete',
 ] as const
@@ -50,7 +51,7 @@ export const PURCHASEORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'requestCode',
   'requestLineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'purchaseUnit',
   'orderQuantity',
@@ -62,6 +63,7 @@ export const PURCHASEORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'purchaseAmount',
   'deliveryStatus',
   'isObsolete',
   'action',
@@ -79,6 +81,7 @@ export const PURCHASEORDERITEM_SUMMARY_SUM_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'purchaseAmount',
   'deliveryStatus',
   'isObsolete',
 ] as const
@@ -92,7 +95,7 @@ export const PURCHASEORDERITEM_PLACEHOLDER = {
   requestCode: 'optional',
   requestLineNumber: 'optional',
   materialCode: 'optional',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   purchaseUnit: 'select',
   orderQuantity: 'select',
@@ -104,8 +107,11 @@ export const PURCHASEORDERITEM_PLACEHOLDER = {
   taxIncludedAmount: 'select',
   untaxedAmount: 'select',
   taxAmount: 'select',
+  purchaseAmount: 'select',
   deliveryStatus: 'select',
   isObsolete: 'select',
+  cultureCode: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -116,18 +122,19 @@ export const PURCHASEORDERITEM_QUERY_STRING_FIELDS = [
   'purchaseOrderCode',
   'requestCode',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'purchaseUnit',
   'createdAtStart',
   'createdAtEnd',
+  'cultureCode',
   'extField',
   'remark',
 ] as const satisfies readonly (keyof PurchaseOrderItemQuery)[]
 
 export type PurchaseOrderItemQueryField =
   | (typeof PURCHASEORDERITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'requestLineNumber' | 'orderQuantity' | 'receivedQuantity' | 'purchasePerUnit' | 'purchaseUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'deliveryStatus' | 'isObsolete'
+  | 'lineNumber' | 'requestLineNumber' | 'orderQuantity' | 'receivedQuantity' | 'purchasePerUnit' | 'purchaseUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'purchaseAmount' | 'deliveryStatus' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PURCHASEORDERITEM_QUERY_FIELDS: readonly PurchaseOrderItemQueryField[] = [
@@ -143,6 +150,7 @@ export const PURCHASEORDERITEM_QUERY_FIELDS: readonly PurchaseOrderItemQueryFiel
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'purchaseAmount',
   'deliveryStatus',
   'isObsolete',
 ]

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Foundation
 // 文件名称：TaktTranslationService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：翻译应用服务实现
 // 
@@ -21,7 +21,6 @@ using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
 using Takt.Shared.Options;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Services.Foundation;
 
@@ -56,12 +55,20 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     }
 
     /// <summary>
-    /// 获取翻译列表（分页）
+    /// 获取翻译列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktTranslationDto>> GetTranslationListAsync(TaktTranslationQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktTranslationDto>.Create(
+                new List<TaktTranslationDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _translationRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,12 +104,12 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     {
         var list = await _translationRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.CultureCode ?? string.Empty,
+            x => x.I18nKey ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.CultureCode ?? e.Id.ToString(),
+            DictValue = e.I18nKey,
+            DictLabel = e.I18nKey,
         }).ToList();
     }
 
@@ -259,7 +266,15 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportTranslationAsync(TaktTranslationQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktTranslationQueryDto());
+        var queryDto = query ?? new TaktTranslationQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktTranslationExportDto>(),
+                sheetName ?? "翻译数据",
+                fileName ?? "翻译导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _translationRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -287,11 +302,11 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// <returns>任务</returns>
     private async Task StampTranslationCultureAsync(TaktTranslation entity, TaktTranslationCreateDto dto)
     {
-        if (string.IsNullOrEmpty(dto.CultureCode))
+        if (dto.CultureId <= 0)
         {
             return;
         }
-        var master = await _cultureRepository.FirstAsync(x => x.CultureCode == dto.CultureCode && x.TenantCode == CurrentTenantCode);
+        var master = await _cultureRepository.FirstAsync(x => x.Id == dto.CultureId && x.TenantCode == CurrentTenantCode);
         if (master == null)
         {
             throw new TaktBusinessException("区域不存在");
@@ -305,12 +320,12 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
 
     /// <summary>
-    /// 获取转置列头主表（区域文化，仅启用项）
+    /// 获取转置列头主表（区域文化）
     /// </summary>
     private async Task<List<TaktCulture>> GetTransposedMasterCulturesAsync()
     {
         return await _cultureRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.LanguageStatus == 1,
+            x => x.TenantCode == CurrentTenantCode,
             x => x.SortOrder,
             false);
     }
@@ -320,11 +335,6 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     /// </summary>
     public async Task<TaktTranslationTransposedResultDto> GetTranslationTransposedListAsync(TaktTranslationTransposedQueryDto queryDto)
     {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        var pageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
-        var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
-        var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
-
         var cultures = await GetTransposedMasterCulturesAsync();
         var cultureCodeOrder = cultures.Select(c => c.CultureCode).ToList();
 
@@ -335,8 +345,8 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
             .ToList();
         var total = grouped.Count;
         var pageGroups = grouped
-            .Skip(skip)
-            .Take(pageSize)
+            .Skip((queryDto.PageIndex - 1) * queryDto.PageSize)
+            .Take(queryDto.PageSize)
             .ToList();
 
         var rows = new List<TaktTranslationTransposedDto>();
@@ -362,7 +372,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
 
         return new TaktTranslationTransposedResultDto
         {
-            Paged = TaktPagedResult<TaktTranslationTransposedDto>.Create(rows, total, pageIndex, pageSize),
+            Paged = TaktPagedResult<TaktTranslationTransposedDto>.Create(rows, total, queryDto.PageIndex, queryDto.PageSize),
             CultureCodeOrder = cultureCodeOrder
         };
     }
@@ -425,33 +435,6 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         return affected;
     }
 
-    /// <summary>
-    /// 获取指定区域文化的前端扁平翻译消息（ResourceType=frontend）
-    /// </summary>
-    /// <param name="cultureCode">文化编码 BCP47</param>
-    /// <returns>扁平键值 DTO</returns>
-    public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
-    {
-        if (string.IsNullOrWhiteSpace(cultureCode))
-        {
-            ThrowBusinessException("文化编码不能为空");
-        }
-        var trimmedCulture = cultureCode.Trim();
-        var list = await _translationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CultureCode == trimmedCulture
-                && x.ResourceType == "frontend");
-        var messages = list
-            .Where(x => !string.IsNullOrWhiteSpace(x.I18nKey))
-            .GroupBy(x => x.I18nKey)
-            .ToDictionary(g => g.Key, g => g.First().TranslationText ?? string.Empty);
-        return new TaktTranslationMessagesDto
-        {
-            CultureCode = trimmedCulture,
-            Messages = messages,
-        };
-    }
-
     // ========================================
     // 查询表达式
     // ========================================
@@ -465,12 +448,11 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
     {
         var exp = Expressionable.Create<TaktTranslation>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.CultureId).Contains(keywords)
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
                 || (x.I18nKey != null && x.I18nKey.Contains(keywords))
                 || (x.TranslationText != null && x.TranslationText.Contains(keywords))
                 || (x.ResourceGroup != null && x.ResourceGroup.Contains(keywords))
@@ -478,120 +460,153 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
                 || (x.ContextNote != null && x.ContextNote.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        {
+            var relatedPlant = queryDto.RelatedPlant;
+            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
         }
 
         if (queryDto?.CultureId.HasValue == true)
         {
-            exp = exp.And(x => x.CultureId == queryDto.CultureId);
+            var cultureId = queryDto.CultureId;
+            exp = exp.And(x => x.CultureId == cultureId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.I18nKey))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            var i18nKey = queryDto.I18nKey;
+            exp = exp.And(x => x.I18nKey != null && x.I18nKey.Contains(i18nKey));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.I18nKey))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TranslationText))
         {
-            exp = exp.And(x => x.I18nKey != null && x.I18nKey.Contains(queryDto.I18nKey));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.TranslationText))
-        {
-            exp = exp.And(x => x.TranslationText != null && x.TranslationText.Contains(queryDto.TranslationText));
+            var translationText = queryDto.TranslationText;
+            exp = exp.And(x => x.TranslationText != null && x.TranslationText.Contains(translationText));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ResourceGroup))
         {
-            exp = exp.And(x => x.ResourceGroup == queryDto.ResourceGroup);
+            var resourceGroup = queryDto.ResourceGroup;
+            exp = exp.And(x => x.ResourceGroup != null && x.ResourceGroup.Contains(resourceGroup));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ResourceType))
         {
-            exp = exp.And(x => x.ResourceType == queryDto.ResourceType);
+            var resourceType = queryDto.ResourceType;
+            exp = exp.And(x => x.ResourceType != null && x.ResourceType.Contains(resourceType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContextNote))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContextNote))
         {
-            exp = exp.And(x => x.ContextNote != null && x.ContextNote.Contains(queryDto.ContextNote));
+            var contextNote = queryDto.ContextNote;
+            exp = exp.And(x => x.ContextNote != null && x.ContextNote.Contains(contextNote));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
     }
 
     /// <summary>
-    /// 构建翻译转置查询表达式（租户过滤由仓储统一追加，勿在表达式内引用 CurrentTenantCode）
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
     /// </summary>
-    private static Expression<Func<TaktTranslation, bool>> TransposedQueryExpression(TaktTranslationTransposedQueryDto? queryDto)
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktTranslationQueryDto? queryDto)
     {
-        var exp = Expressionable.Create<TaktTranslation>();
-
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (queryDto == null)
         {
-            var keywords = queryDto.KeyWords;
-            exp = exp.And(x =>
-                (x.CultureCode != null && x.CultureCode.Contains(keywords))
-                || (x.I18nKey != null && x.I18nKey.Contains(keywords))
-                || (x.TranslationText != null && x.TranslationText.Contains(keywords))
-                || (x.ContextNote != null && x.ContextNote.Contains(keywords)));
+            return false;
         }
-
-        if (queryDto?.CultureId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
         {
-            exp = exp.And(x => x.CultureId == queryDto.CultureId);
+            return true;
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.RelatedPlant))
         {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+            return true;
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.I18nKey))
+        if (queryDto.CultureId.HasValue)
         {
-            exp = exp.And(x => x.I18nKey != null && x.I18nKey.Contains(queryDto.I18nKey));
+            return true;
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.TranslationText))
+        if (!string.IsNullOrWhiteSpace(queryDto.I18nKey))
         {
-            exp = exp.And(x => x.TranslationText != null && x.TranslationText.Contains(queryDto.TranslationText));
+            return true;
         }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.ResourceGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto.TranslationText))
         {
-            exp = exp.And(x => x.ResourceGroup == queryDto.ResourceGroup);
+            return true;
         }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.ResourceType))
+        if (!string.IsNullOrWhiteSpace(queryDto.ResourceGroup))
         {
-            exp = exp.And(x => x.ResourceType == queryDto.ResourceType);
+            return true;
         }
-
-        if (!string.IsNullOrEmpty(queryDto?.ContextNote))
+        if (!string.IsNullOrWhiteSpace(queryDto.ResourceType))
         {
-            exp = exp.And(x => x.ContextNote != null && x.ContextNote.Contains(queryDto.ContextNote));
+            return true;
         }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContextNote))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
+    }
 
-        return exp.ToExpression();
+    /// <summary>
+    /// 构建翻译转置查询表达式
+    /// </summary>
+    private Expression<Func<TaktTranslation, bool>> TransposedQueryExpression(TaktTranslationTransposedQueryDto queryDto)
+    {
+        return translation => translation.TenantCode == CurrentTenantCode
+                    && (string.IsNullOrEmpty(queryDto.KeyWords)
+                        || (translation.CultureCode != null && translation.CultureCode.Contains(queryDto.KeyWords))
+                        || (translation.I18nKey != null && translation.I18nKey.Contains(queryDto.KeyWords))
+                        || (translation.TranslationText != null && translation.TranslationText.Contains(queryDto.KeyWords))
+                        || (translation.ContextNote != null && translation.ContextNote.Contains(queryDto.KeyWords)))
+                    && (!queryDto.CultureId.HasValue || translation.CultureId == queryDto.CultureId.Value)
+                    && (string.IsNullOrEmpty(queryDto.CultureCode) || (translation.CultureCode != null && translation.CultureCode.Contains(queryDto.CultureCode)))
+                    && (string.IsNullOrEmpty(queryDto.I18nKey) || (translation.I18nKey != null && translation.I18nKey.Contains(queryDto.I18nKey)))
+                    && (string.IsNullOrEmpty(queryDto.TranslationText) || (translation.TranslationText != null && translation.TranslationText.Contains(queryDto.TranslationText)))
+                    && (string.IsNullOrEmpty(queryDto.ResourceGroup) || (translation.ResourceGroup != null && translation.ResourceGroup.Contains(queryDto.ResourceGroup)))
+                    && (string.IsNullOrEmpty(queryDto.ResourceType) || (translation.ResourceType != null && translation.ResourceType.Contains(queryDto.ResourceType)))
+                    && (string.IsNullOrEmpty(queryDto.ContextNote) || (translation.ContextNote != null && translation.ContextNote.Contains(queryDto.ContextNote)));
     }
 }

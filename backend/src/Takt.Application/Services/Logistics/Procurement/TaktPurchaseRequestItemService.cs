@@ -97,12 +97,12 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         EnsureThreeLayerContext();
         var list = await _purchaseRequestItemRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialDescription ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.PurchaseRequestCode,
-            DictLabel = e.MaterialName ?? e.PurchaseRequestCode,
+            DictLabel = e.MaterialDescription ?? e.PurchaseRequestCode,
         }).ToList();
     }
 
@@ -354,7 +354,7 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.AllocationCategory != null && x.AllocationCategory.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.RequestUnit != null && x.RequestUnit.Contains(keywords))
                 || SqlFunc.ToString(x.RequestQuantity).Contains(keywords)
@@ -364,6 +364,7 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
                 || SqlFunc.ToString(x.TaxIncludedAmount).Contains(keywords)
                 || SqlFunc.ToString(x.UntaxedAmount).Contains(keywords)
                 || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -400,9 +401,9 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
@@ -450,6 +451,11 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
             exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -469,6 +475,12 @@ public class TaktPurchaseRequestItemService : TaktServiceBase, ITaktPurchaseRequ
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

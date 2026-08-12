@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktEmployeeDeptSeedData.cs
@@ -70,6 +70,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
                     deptRepository,
                     tenantCode,
                     company.CompanyCode,
+                    company.CultureCode,
                     EmployeeCode,
                     deptCode);
             }
@@ -96,6 +97,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string EmployeeCode,
         string deptCode)
     {
@@ -123,7 +125,8 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 EmployeeId = employee.Id,
-                DeptId = dept.Id
+                DeptId = dept.Id,
+                CultureCode = cultureCode
             });
             return 1;
         }

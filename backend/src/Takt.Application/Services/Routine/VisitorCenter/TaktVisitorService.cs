@@ -346,6 +346,7 @@ public class TaktVisitorService : TaktServiceBase, ITaktVisitorService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.VisitorCompanyName != null && x.VisitorCompanyName.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.VisitStartTime).Contains(keywords)
@@ -357,6 +358,11 @@ public class TaktVisitorService : TaktServiceBase, ITaktVisitorService
         if (!string.IsNullOrEmpty(queryDto?.VisitorCompanyName))
         {
             exp = exp.And(x => x.VisitorCompanyName != null && x.VisitorCompanyName.Contains(queryDto.VisitorCompanyName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -398,6 +404,12 @@ public class TaktVisitorService : TaktServiceBase, ITaktVisitorService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

@@ -17,6 +17,7 @@ export default {
     selectPlantRequired: 'Please select a plant',
     selectModelRequired: 'Please select a model',
     selectProductRequired: 'Please select a product',
+    selectMaterialTypeRequired: 'Please select a material type',
     selectPeriodRequired: 'Please select a costing period',
     summary: '{plant} / {model} / {product} — {componentCount} component rows (single-product analysis)',
     trendSummary:
@@ -27,6 +28,11 @@ export default {
     filter: {
       all: 'All',
       changed: 'Changed only',
+    },
+    sort: {
+      bom: 'BOM order (all rows)',
+      trend: 'Trend first (all rows)',
+      varianceDesc: 'Abs. variance ↓ (all rows)',
     },
     trend: {
       none: '—',

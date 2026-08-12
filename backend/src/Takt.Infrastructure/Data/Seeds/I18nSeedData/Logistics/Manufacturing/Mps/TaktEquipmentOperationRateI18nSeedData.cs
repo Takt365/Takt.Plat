@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mps
 // 文件名称：TaktEquipmentOperationRateI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEquipmentOperationRate 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipmentoperationrate._self
             new TranslationSeedItem("entity.equipmentoperationrate._self", "zh-HK", "机器稼动率信息_hk", "实体名称"),
 
-            // entity.equipmentoperationrate.plantcode
-            new TranslationSeedItem("entity.equipmentoperationrate.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.plantcode
-            new TranslationSeedItem("entity.equipmentoperationrate.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.plantcode
-            new TranslationSeedItem("entity.equipmentoperationrate.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.plantcode
-            new TranslationSeedItem("entity.equipmentoperationrate.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=Id）"),
-
             // entity.equipmentoperationrate.timecategory
             new TranslationSeedItem("entity.equipmentoperationrate.timecategory", "en-US", "时间类别_us", "时间类别（1=天，2=周，3=月）"),
             // entity.equipmentoperationrate.timecategory
@@ -144,14 +135,14 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipmentoperationrate.monthnumber
             new TranslationSeedItem("entity.equipmentoperationrate.monthnumber", "zh-HK", "月份_hk", "月份（1-12）"),
 
-            // entity.equipmentoperationrate.equipmentcode
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentcode", "en-US", "设备编码_us", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.equipmentcode
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentcode", "ja-JP", "设备编码_jp", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.equipmentcode
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentcode", "zh-CN", "设备编码", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.equipmentoperationrate.equipmentcode
-            new TranslationSeedItem("entity.equipmentoperationrate.equipmentcode", "zh-HK", "设备编码_hk", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.equipmentoperationrate.equipcode
+            new TranslationSeedItem("entity.equipmentoperationrate.equipcode", "en-US", "设备编码_us", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.equipmentoperationrate.equipcode
+            new TranslationSeedItem("entity.equipmentoperationrate.equipcode", "ja-JP", "设备编码_jp", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.equipmentoperationrate.equipcode
+            new TranslationSeedItem("entity.equipmentoperationrate.equipcode", "zh-CN", "设备编码", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.equipmentoperationrate.equipcode
+            new TranslationSeedItem("entity.equipmentoperationrate.equipcode", "zh-HK", "设备编码_hk", "设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
 
             // entity.equipmentoperationrate.equipmentname
             new TranslationSeedItem("entity.equipmentoperationrate.equipmentname", "en-US", "设备名称_us", "设备名称"),
@@ -171,14 +162,14 @@ public class TaktEquipmentOperationRateI18nSeedData : ITaktSeedDataCoordinator
             // entity.equipmentoperationrate.equipmenttype
             new TranslationSeedItem("entity.equipmentoperationrate.equipmenttype", "zh-HK", "登录设备_hk", "登录设备（字典 logistics_equipment_type；0=生产设备 1=检测设备 2=包装设备 3=物流设备 4=辅助设备）"),
 
-            // entity.equipmentoperationrate.prodteam
-            new TranslationSeedItem("entity.equipmentoperationrate.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.equipmentoperationrate.prodteam
-            new TranslationSeedItem("entity.equipmentoperationrate.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.equipmentoperationrate.prodteam
-            new TranslationSeedItem("entity.equipmentoperationrate.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.equipmentoperationrate.prodteam
-            new TranslationSeedItem("entity.equipmentoperationrate.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.equipmentoperationrate.teamcode
+            new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.equipmentoperationrate.teamcode
+            new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.equipmentoperationrate.teamcode
+            new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.equipmentoperationrate.teamcode
+            new TranslationSeedItem("entity.equipmentoperationrate.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.equipmentoperationrate.shiftno
             new TranslationSeedItem("entity.equipmentoperationrate.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),

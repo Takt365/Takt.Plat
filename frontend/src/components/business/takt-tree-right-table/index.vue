@@ -265,7 +265,13 @@ const rowClassName = computed(() => {
 const userColumns = computed((): TableColumnsType => normalizeUserTableColumns(props.columns))
 
 const mergedColumns = computed(() =>
-  mergeDefaultColumns(userColumns.value, t, props.includeAuditFields, props.entityScope),
+  mergeDefaultColumns(
+    userColumns.value,
+    t,
+    props.includeAuditFields,
+    props.entityScope,
+    props.idColumnKey,
+  ),
 )
 
 const displayColumnSource = computed((): TableColumnsType => {

@@ -13,7 +13,7 @@
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
       v-model:cost-category="costCategory"
-      v-model:cost-currency="costCurrency"
+      v-model:cost-currencyCode="currencyCode"
       :loading="panelLoading"
       @search="handleSearch"
       @reset="handleReset"
@@ -46,7 +46,7 @@
       :plant-code="plantCode"
       :period-range="periodRange"
       :cost-category="costCategory"
-      :cost-currency="costCurrency"
+      :cost-currencyCode="currencyCode"
     />
   </div>
 </template>
@@ -83,7 +83,7 @@ const periodRange = ref<[string, string] | null>(null)
 /** 成本类别 */
 const costCategory = ref<string | undefined>()
 /** 成本币种 */
-const costCurrency = ref<string | undefined>()
+const currencyCode = ref<string | undefined>()
 /** 明细面板 loading */
 const panelLoading = ref(false)
 /** 导出 loading */
@@ -121,8 +121,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -171,7 +170,7 @@ async function applyDefaultPlantFromCompany(): Promise<void> {
 async function handleReset() {
   await applyDefaultPlantFromCompany()
   costCategory.value = undefined
-  costCurrency.value = undefined
+  currencyCode.value = undefined
   applyDefaultPeriodRange()
   trendFilter.value = ''
   hasRows.value = false

@@ -27,6 +27,8 @@ export interface PurchasePriceMonthlyTrendQuery extends TaktPagedQuery {
   focusPeriod?: string;
   /** 物料编码（模糊） */
   materialCode?: string;
+  /** 产品物料类型（机种推移必填） */
+  materialType?: string;
   /** 供应商编码 */
   supplierCode?: string;
   /** 价格类型（字典 logistics_price_type，如 PB00） */
@@ -46,19 +48,19 @@ export interface PurchasePriceMonthlyTrend {
   plantCode: string;
   /** 物料编码 */
   materialCode: string;
-  /** 物料名称 */
-  materialName?: string;
+  /** 物料描述 */
+  materialDescription?: string;
   /** 供应商编码 */
   supplierCode: string;
   /** 供应商名称 */
   supplierName?: string;
   /** 币种 */
-  currency?: string;
+  currencyCode?: string;
   /** 采购单位 */
   unit?: string;
   /** 各期间单价 */
   periodUnitPrices?: Record<string, number>;
-  /** 各期间单价来源月 */
+  /** 各期间单价来源（当月=yyyy-MM；回填=最近价格日期 yyyy-MM-dd） */
   periodPriceSourcePeriods?: Record<string, string>;
   /** 环比涨跌 */
   trend?: string;

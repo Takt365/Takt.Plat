@@ -23,25 +23,6 @@ import type {
  * @description 对应后端 TaktApsScheduleDto
  */
 export interface ApsSchedule extends CompanyDtoBase {
-  /**
-   * ApsScheduleID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  apsScheduleId: string;
-
-  /**
-   * 来源 MRP 头表 ID
-   */
-  materialRequirementsPlanningId?: string;
-
-  /**
-   * 来源 MRP 编码（冗余）
-   */
-  materialRequirementsPlanningCode?: string;
-
-  /**
-   * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
 
   /**
    * 排程编码（唯一索引）
@@ -360,7 +341,10 @@ export interface ApsScheduleCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 来源 MRP 头表 ID
@@ -707,7 +691,10 @@ export interface ApsScheduleImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂编码（选项 TaktPlants/options，DictValue=PlantCode）

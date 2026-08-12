@@ -312,6 +312,7 @@ public class TaktPlannedOrderService : TaktServiceBase, ITaktPlannedOrderService
                 || (x.UnitOfMeasure != null && x.UnitOfMeasure.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -368,6 +369,11 @@ public class TaktPlannedOrderService : TaktServiceBase, ITaktPlannedOrderService
         if (queryDto?.OrderStatus.HasValue == true)
         {
             exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Identity
 // 文件名称：TaktRoleValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Role 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktRole 生成，请按需审阅）
 // 
@@ -32,6 +32,9 @@ public class TaktRoleCreateValidator : AbstractValidator<TaktRoleCreateDto>
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.RoleCode)
             .NotEmpty().WithMessage("角色编码不能为空")
             .MaximumLength(50).WithMessage("角色编码长度不能超过50个字符");
@@ -64,6 +67,9 @@ public class TaktRoleUpdateValidator : AbstractValidator<TaktRoleUpdateDto>
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
+        RuleFor(x => x.RelatedPlant)
+            .NotEmpty().WithMessage("关联工厂不能为空")
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.RoleCode)
             .NotEmpty().WithMessage("角色编码不能为空")
             .MaximumLength(50).WithMessage("角色编码长度不能超过50个字符");
@@ -93,6 +99,8 @@ public class TaktRoleImportValidator : AbstractValidator<TaktRoleImportDto>
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
+        RuleFor(x => x.RelatedPlant)
+            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
         RuleFor(x => x.RoleCode)
             .NotEmpty().WithMessage("角色编码不能为空")
             .MaximumLength(50).WithMessage("角色编码长度不能超过50个字符");

@@ -35,10 +35,6 @@ public class TaktBalanceSheetDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BalanceSheetId { get; set; }
 
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
@@ -148,9 +144,14 @@ public class TaktBalanceSheetQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
@@ -278,15 +279,16 @@ public class TaktBalanceSheetCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
@@ -472,9 +474,14 @@ public class TaktBalanceSheetTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
@@ -584,14 +591,15 @@ public class TaktBalanceSheetImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
@@ -709,7 +717,7 @@ public class TaktBalanceSheetExportDto
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options，DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）

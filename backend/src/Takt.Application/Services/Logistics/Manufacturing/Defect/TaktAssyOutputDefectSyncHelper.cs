@@ -50,7 +50,7 @@ internal static class TaktAssyOutputDefectSyncHelper
             companyCode,
             defect.ProdCategory,
             defect.ProdOrderCode,
-            defect.BatchNo);
+            defect.BatchCode);
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ internal static class TaktAssyOutputDefectSyncHelper
     /// <param name="companyCode">公司编码</param>
     /// <param name="prodCategory">生产类别</param>
     /// <param name="prodOrderCode">工单号</param>
-    /// <param name="batchNo">批次</param>
+    /// <param name="batchCode">批次</param>
     /// <returns>任务</returns>
     public static async Task SyncDefectStatsForDimensionAsync(
         ITaktCompanyRepository<TaktAssyDefect> assyDefectRepository,
@@ -73,7 +73,7 @@ internal static class TaktAssyOutputDefectSyncHelper
         string companyCode,
         string? prodCategory,
         string? prodOrderCode,
-        string? batchNo)
+        string? batchCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
@@ -89,7 +89,7 @@ internal static class TaktAssyOutputDefectSyncHelper
             companyCode,
             prodCategory,
             prodOrderCode,
-            batchNo);
+            batchCode);
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ internal static class TaktAssyOutputDefectSyncHelper
             companyCode,
             output.ProdCategory,
             output.ProdOrderCode,
-            output.BatchNo);
+            output.BatchCode);
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ internal static class TaktAssyOutputDefectSyncHelper
             companyCode,
             output.ProdCategory,
             output.ProdOrderCode,
-            output.BatchNo);
+            output.BatchCode);
     }
 
     /// <summary>
@@ -240,7 +240,7 @@ internal static class TaktAssyOutputDefectSyncHelper
             companyCode,
             defect.ProdCategory,
             defect.ProdOrderCode,
-            defect.BatchNo);
+            defect.BatchCode);
     }
 
     /// <summary>

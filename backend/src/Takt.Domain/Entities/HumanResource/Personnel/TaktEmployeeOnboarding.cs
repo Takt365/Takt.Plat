@@ -31,8 +31,8 @@ public class TaktEmployeeOnboarding : TaktCompanyEntityBase
     /// <summary>
     /// 待办单号（租户+公司内业务编码）
     /// </summary>
-    [SugarColumn(ColumnName = "todo_no", ColumnDescription = "待办单号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string TodoNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "todo_code", ColumnDescription = "待办单号", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string TodoCode { get; set; } = string.Empty;
     /// <summary>
     /// 计划上岗日期（JoinedDate 计划值）
     /// </summary>

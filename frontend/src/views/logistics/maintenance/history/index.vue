@@ -157,11 +157,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.maintenancehistory.equipmentcode')">
+      <div v-show="isFieldVisible('EquipCode')">
+      <a-form-item :label="t('entity.maintenancehistory.EquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.equipmentcode') })"
+          v-model:value="advancedQueryForm.EquipCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.EquipCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -620,7 +620,7 @@ const advancedQueryForm = ref({
   maintenanceWorkOrderId: '',
   workOrderCode: '',
   equipmentId: '',
-  equipmentCode: '',
+  EquipCode: '',
   maintenanceType: undefined as number | undefined,
   maintenanceCategory: undefined as number | undefined,
   maintenanceCompany: '',
@@ -659,7 +659,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'maintenanceWorkOrderId', label: t('entity.maintenancehistory.maintenanceworkorderid') },
   { key: 'workOrderCode', label: t('entity.maintenancehistory.workordercode') },
   { key: 'equipmentId', label: t('entity.maintenancehistory.equipmentid') },
-  { key: 'equipmentCode', label: t('entity.maintenancehistory.equipmentcode') },
+  { key: 'EquipCode', label: t('entity.maintenancehistory.EquipCode') },
   { key: 'maintenanceType', label: t('entity.maintenancehistory.maintenancetype') },
   { key: 'maintenanceCategory', label: t('entity.maintenancehistory.maintenancecategory') },
   { key: 'maintenanceCompany', label: t('entity.maintenancehistory.maintenancecompany') },
@@ -691,8 +691,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -710,7 +709,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -737,7 +735,7 @@ function buildListQuery(overrides?: Partial<MaintenanceHistoryQuery>): Maintenan
   assignTrimmed('maintenanceWorkOrderId', form.maintenanceWorkOrderId)
   assignTrimmed('workOrderCode', form.workOrderCode)
   assignTrimmed('equipmentId', form.equipmentId)
-  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('EquipCode', form.EquipCode)
   if (form.maintenanceType !== undefined && form.maintenanceType !== null) {
     query.maintenanceType = form.maintenanceType
   }
@@ -791,12 +789,6 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -837,13 +829,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getMaintenanceHistoryField(record, 'equipmentId') ?? ''
   },
   {
-    title: t('entity.maintenancehistory.equipmentcode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    title: t('entity.maintenancehistory.EquipCode'),
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaintenanceHistoryField(record, 'equipmentCode') ?? ''
+    customRender: ({ record }: { record: any }) => getMaintenanceHistoryField(record, 'EquipCode') ?? ''
   },
   {
     title: t('entity.maintenancehistory.maintenancetype'),
@@ -1090,7 +1082,6 @@ const getMaintenanceHistoryId = (record: any): string => record?.[entityIdName] 
  */
 const getMaintenanceHistoryField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1162,7 +1153,7 @@ function handleReset() {
   maintenanceWorkOrderId: '',
   workOrderCode: '',
   equipmentId: '',
-  equipmentCode: '',
+  EquipCode: '',
   maintenanceType: undefined as number | undefined,
   maintenanceCategory: undefined as number | undefined,
   maintenanceCompany: '',
@@ -1368,7 +1359,7 @@ function handleAdvancedQueryReset() {
   maintenanceWorkOrderId: '',
   workOrderCode: '',
   equipmentId: '',
-  equipmentCode: '',
+  EquipCode: '',
   maintenanceType: undefined as number | undefined,
   maintenanceCategory: undefined as number | undefined,
   maintenanceCompany: '',

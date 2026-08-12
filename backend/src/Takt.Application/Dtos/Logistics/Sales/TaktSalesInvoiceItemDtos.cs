@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoiceItem 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoiceItem 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt销售发票明细实体
+/// Takt销售发票明细实体（公司级；主子表关系见 SalesInvoiceId）
 /// 对应前端 TaktSalesInvoiceItemDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -35,101 +35,81 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceItemId { get; set; }
 
-    /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 开票凭证（冗余）
     /// </summary>
-    public string? SalesInvoiceName { get; set; }
+    public string BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
-    /// </summary>
-    public string AccountingDocumentCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 过帐日期
+    /// 已出发票数量
     /// </summary>
-    public DateTime PostingDate { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 机种名称
+    /// 销售单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 基本计量单位
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 等级数量
     /// </summary>
-    public string MaterialType { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 库存单位开票数量
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 净重量
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 毛重
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 数量
+    /// 重量单位
     /// </summary>
-    public decimal Quantity { get; set; }
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 业务范围
     /// </summary>
-    public string Unit { get; set; } = string.Empty;
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期
     /// </summary>
-    public decimal LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDate { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期
     /// </summary>
-    public decimal TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDate { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 汇率
     /// </summary>
-    public decimal TaxIncludedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 净价值
     /// </summary>
-    public decimal UntaxedPrice { get; set; }
-
-    /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    public string DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -137,9 +117,199 @@ public class TaktSalesInvoiceItemDto : TaktCompanyDtoBase
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -175,100 +345,105 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 开票凭证（冗余）
+    /// </summary>
+    public string? BillingDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 过帐日期（范围查询-开始）
+    /// 已出发票数量
     /// </summary>
-    public DateTime? PostingDateStart { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 过帐日期（范围查询-结束）
+    /// 销售单位
     /// </summary>
-    public DateTime? PostingDateEnd { get; set; }
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种名称
+    /// 基本计量单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 等级数量
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 库存单位开票数量
     /// </summary>
-    public string? MaterialType { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 净重量
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 毛重
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 重量单位
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 数量
+    /// 业务范围
     /// </summary>
-    public decimal? Quantity { get; set; }
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 定价日期（范围查询-开始）
     /// </summary>
-    public string? Unit { get; set; } = string.Empty;
+    public DateTime? PricingDateStart { get; set; }
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期（范围查询-结束）
     /// </summary>
-    public decimal? LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDateEnd { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期（范围查询-开始）
     /// </summary>
-    public decimal? TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDateStart { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 提供服务日期（范围查询-结束）
     /// </summary>
-    public decimal? TaxIncludedPrice { get; set; }
+    public DateTime? ServiceRenderedDateEnd { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 汇率
     /// </summary>
-    public decimal? UntaxedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
+    /// 净价值
     /// </summary>
-    public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    public string? DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -276,9 +451,204 @@ public class TaktSalesInvoiceItemQueryDto : TaktPagedQuery
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期（范围查询-开始）
+    /// </summary>
+    public DateTime? ExchangeRateDateStart { get; set; }
+
+    /// <summary>
+    /// 换算日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ExchangeRateDateEnd { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -326,106 +696,96 @@ public class TaktSalesInvoiceItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）不能为空")]
-    public string AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 开票凭证（冗余）
+    /// </summary>
+    [Required(ErrorMessage = "开票凭证（冗余）不能为空")]
+    public string BillingDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 过帐日期
+    /// 已出发票数量
     /// </summary>
-    public DateTime PostingDate { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 机种名称
+    /// 销售单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 基本计量单位
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 等级数量
     /// </summary>
-    [Required(ErrorMessage = "物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）不能为空")]
-    public string MaterialType { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 库存单位开票数量
     /// </summary>
-    [Required(ErrorMessage = "物料名称（回填：随物料）不能为空")]
-    public string MaterialName { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 净重量
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 毛重
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 数量
+    /// 重量单位
     /// </summary>
-    public decimal Quantity { get; set; }
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 业务范围
     /// </summary>
-    [Required(ErrorMessage = "单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
-    public string Unit { get; set; } = string.Empty;
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期
     /// </summary>
-    public decimal LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDate { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期
     /// </summary>
-    public decimal TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDate { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 汇率
     /// </summary>
-    public decimal TaxIncludedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 净价值
     /// </summary>
-    public decimal UntaxedPrice { get; set; }
-
-    /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    [Required(ErrorMessage = "凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）不能为空")]
-    public string DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -433,9 +793,200 @@ public class TaktSalesInvoiceItemCreateDto
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    [Required(ErrorMessage = "物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -517,95 +1068,95 @@ public class TaktSalesInvoiceItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 开票凭证（冗余）
+    /// </summary>
+    public string? BillingDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 过帐日期
+    /// 已出发票数量
     /// </summary>
-    public DateTime? PostingDate { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 机种名称
+    /// 销售单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 基本计量单位
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 等级数量
     /// </summary>
-    public string? MaterialType { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 库存单位开票数量
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 净重量
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 毛重
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 数量
+    /// 重量单位
     /// </summary>
-    public decimal? Quantity { get; set; }
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 业务范围
     /// </summary>
-    public string? Unit { get; set; } = string.Empty;
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期
     /// </summary>
-    public decimal? LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDate { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期
     /// </summary>
-    public decimal? TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDate { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 汇率
     /// </summary>
-    public decimal? TaxIncludedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 净价值
     /// </summary>
-    public decimal? UntaxedPrice { get; set; }
-
-    /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
-    /// </summary>
-    public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    public string? DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -613,9 +1164,199 @@ public class TaktSalesInvoiceItemTemplateDto
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -650,100 +1391,95 @@ public class TaktSalesInvoiceItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 开票凭证（冗余）
+    /// </summary>
+    public string? BillingDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// 过帐日期
+    /// 已出发票数量
     /// </summary>
-    public DateTime? PostingDate { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 机种名称
+    /// 销售单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 基本计量单位
     /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 等级数量
     /// </summary>
-    public string? MaterialType { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 库存单位开票数量
     /// </summary>
-    public string? MaterialName { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 净重量
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 毛重
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 数量
+    /// 重量单位
     /// </summary>
-    public decimal? Quantity { get; set; }
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 业务范围
     /// </summary>
-    public string? Unit { get; set; } = string.Empty;
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期
     /// </summary>
-    public decimal? LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDate { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期
     /// </summary>
-    public decimal? TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDate { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 汇率
     /// </summary>
-    public decimal? TaxIncludedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 净价值
     /// </summary>
-    public decimal? UntaxedPrice { get; set; }
-
-    /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
-    /// </summary>
-    public decimal? TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    public string? DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -751,9 +1487,199 @@ public class TaktSalesInvoiceItemImportDto
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -794,95 +1720,90 @@ public class TaktSalesInvoiceItemExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票（选项 TaktSalesInvoices/options；DictValue=Id）
+    /// 销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 会计凭证编码（冗余，与主表 AccountingDocumentCode 一致）
+    /// 工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 行号（项目/序号，固定步长=10）
+    /// 开票凭证（冗余）
+    /// </summary>
+    public string BillingDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目（开票凭证项目；行号步长生成器用 int，固定步长=10）
     /// </summary>
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// 过帐日期
+    /// 已出发票数量
     /// </summary>
-    public DateTime PostingDate { get; set; }
+    public decimal? BillingQuantity { get; set; }
 
     /// <summary>
-    /// 机种名称
+    /// 销售单位
     /// </summary>
-    public string? ModelName { get; set; } = string.Empty;
+    public string? SalesUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// 基本计量单位
     /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
+    public string? BaseUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料类型（字典 logistics_material_type；DictValue=ROH/HALB 等；默认 ROH）
+    /// 等级数量
     /// </summary>
-    public string MaterialType { get; set; } = string.Empty;
+    public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 物料名称（回填：随物料）
+    /// 库存单位开票数量
     /// </summary>
-    public string MaterialName { get; set; } = string.Empty;
+    public decimal? BillingQuantitySku { get; set; }
 
     /// <summary>
-    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// 净重量
     /// </summary>
-    public string? ProfitCenterCode { get; set; } = string.Empty;
+    public decimal? NetWeight { get; set; }
 
     /// <summary>
-    /// 会计科目（选项 TaktAccountTitles/options；DictValue=Id）
+    /// 毛重
     /// </summary>
-    public string? AccountTitle { get; set; } = string.Empty;
+    public decimal? GrossWeight { get; set; }
 
     /// <summary>
-    /// 数量
+    /// 重量单位
     /// </summary>
-    public decimal Quantity { get; set; }
+    public string? WeightUnit { get; set; } = string.Empty;
 
     /// <summary>
-    /// 单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+    /// 业务范围
     /// </summary>
-    public string Unit { get; set; } = string.Empty;
+    public string? BusinessAreaCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 本位币金额
+    /// 定价日期
     /// </summary>
-    public decimal LocalCurrencyAmount { get; set; }
+    public DateTime? PricingDate { get; set; }
 
     /// <summary>
-    /// 业务货币计价的金额
+    /// 提供服务日期
     /// </summary>
-    public decimal TransactionCurrencyAmount { get; set; }
+    public DateTime? ServiceRenderedDate { get; set; }
 
     /// <summary>
-    /// 含税价格（打印用；如 100.00）
+    /// 汇率
     /// </summary>
-    public decimal TaxIncludedPrice { get; set; }
+    public decimal? PricingExchangeRate { get; set; }
 
     /// <summary>
-    /// 未税价格（打印用；如 88.50）
+    /// 净价值
     /// </summary>
-    public decimal UntaxedPrice { get; set; }
-
-    /// <summary>
-    /// 税费（打印用；行税额，如 11.50）
-    /// </summary>
-    public decimal TaxAmount { get; set; }
-
-    /// <summary>
-    /// 凭证类型（字典 logistics_accounting_document_type；DictValue=AA/AB/…）
-    /// </summary>
-    public string DocumentType { get; set; } = string.Empty;
+    public decimal? NetAmount { get; set; }
 
     /// <summary>
     /// 参考凭证
@@ -890,9 +1811,199 @@ public class TaktSalesInvoiceItemExportDto
     public string? ReferenceDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 参考凭证项目（行号）
+    /// 参考项目
     /// </summary>
     public int? ReferenceDocumentItem { get; set; }
+
+    /// <summary>
+    /// 先前凭证类别
+    /// </summary>
+    public string? ReferenceDocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证
+    /// </summary>
+    public string? SalesDocumentCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售凭证项目
+    /// </summary>
+    public int? SalesDocumentItem { get; set; }
+
+    /// <summary>
+    /// 销售凭证参考
+    /// </summary>
+    public string? SalesDocumentReferenceFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+    /// </summary>
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价参考物料
+    /// </summary>
+    public string? PricingReferenceMaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 批次
+    /// </summary>
+    public string? BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料组
+    /// </summary>
+    public string? MaterialGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 项目类别
+    /// </summary>
+    public string? SalesItemCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品层次（最长 18，故 Length=18）
+    /// </summary>
+    public string? ProductHierarchy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运点/接收点
+    /// </summary>
+    public string? ShippingPoint { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 合作伙伴项目
+    /// </summary>
+    public int? PartnerItem { get; set; }
+
+    /// <summary>
+    /// 国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货工厂地区
+    /// </summary>
+    public string? PlantRegion { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价
+    /// </summary>
+    public string? PricingFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 库存地点（选项 TaktWarehouses/options；DictValue=WarehouseCode）
+    /// </summary>
+    public string? WarehouseCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本
+    /// </summary>
+    public decimal? CostAmount { get; set; }
+
+    /// <summary>
+    /// 小计1
+    /// </summary>
+    public decimal? Subtotal1 { get; set; }
+
+    /// <summary>
+    /// 小计2
+    /// </summary>
+    public decimal? Subtotal2 { get; set; }
+
+    /// <summary>
+    /// 小计3
+    /// </summary>
+    public decimal? Subtotal3 { get; set; }
+
+    /// <summary>
+    /// 小计4
+    /// </summary>
+    public decimal? Subtotal4 { get; set; }
+
+    /// <summary>
+    /// 小计5
+    /// </summary>
+    public decimal? Subtotal5 { get; set; }
+
+    /// <summary>
+    /// 小计6
+    /// </summary>
+    public decimal? Subtotal6 { get; set; }
+
+    /// <summary>
+    /// 汇率统计
+    /// </summary>
+    public decimal? StatisticsExchangeRate { get; set; }
+
+    /// <summary>
+    /// 利润中心（选项 TaktProfitCenters/options；DictValue=ProfitCenterCode）
+    /// </summary>
+    public string? ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 信贷价格
+    /// </summary>
+    public decimal? CreditPrice { get; set; }
+
+    /// <summary>
+    /// 客户组销售订单
+    /// </summary>
+    public string? CustomerGroupSalesOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? DestinationCountryOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 地区订单
+    /// </summary>
+    public string? RegionOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单的销售机构
+    /// </summary>
+    public string? SalesOrganizationOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 订单分销渠道
+    /// </summary>
+    public string? DistributionChannelOrder { get; set; } = string.Empty;
+
+    /// <summary>
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 税额
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 总值
+    /// </summary>
+    public decimal? GrossAmount { get; set; }
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

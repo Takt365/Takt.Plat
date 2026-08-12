@@ -291,6 +291,7 @@ public class TaktTicketReplyService : TaktServiceBase, ITaktTicketReplyService
                 || (x.TicketReplyContent != null && x.TicketReplyContent.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.IsInternal).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -332,6 +333,11 @@ public class TaktTicketReplyService : TaktServiceBase, ITaktTicketReplyService
             exp = exp.And(x => x.IsInternal == queryDto.IsInternal);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -351,6 +357,12 @@ public class TaktTicketReplyService : TaktServiceBase, ITaktTicketReplyService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

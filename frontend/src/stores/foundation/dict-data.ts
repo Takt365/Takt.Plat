@@ -105,16 +105,37 @@ export const useDictDataStore = defineStore('dict-data', () => {
   }
 
   /**
+   * 按区域文化过滤字典项：指定 culture 时保留 eo + 该区域；未指定时保留 eo + Accept-Language
+   * @param options 字典项
+   * @param cultureCode 业务区域文化（如表单 DefaultCulture）
+   * @returns 过滤后的选项
+   */
+  function filterDictOptionsByCulture(
+    options: readonly TaktSelectOption[],
+    cultureCode?: string | null,
+  ): TaktSelectOption[] {
+    const target = (cultureCode ?? '').trim().toLowerCase();
+    const uiLocale = resolveRequestLocale().trim().toLowerCase();
+    const matchCulture = target || uiLocale;
+    return options.filter((item) => {
+      const code = (item.cultureCode ?? '').trim().toLowerCase() || 'eo';
+      return code === 'eo' || code === matchCulture;
+    });
+  }
+
+  /**
    * 按字典类型获取下拉选项（供 takt-select 等组件使用）
    * @param dictTypeCode 字典类型编码
    * @param fieldNames label / value 字段映射
+   * @param cultureCode 可选：业务区域文化（税码等按 DefaultCulture 过滤）
    * @returns 含 label、value 的选项列表
    */
   function getDictOptionsForSelect(
     dictTypeCode: string,
-    fieldNames: TaktDictSelectFieldNames
+    fieldNames: TaktDictSelectFieldNames,
+    cultureCode?: string | null,
   ): TaktDictSelectOption[] {
-    const options = dictMap.value[dictTypeCode] ?? [];
+    const options = filterDictOptionsByCulture(dictMap.value[dictTypeCode] ?? [], cultureCode);
     const { labelField, valueField } = fieldNames;
 
     return options.map((item) => {
@@ -134,23 +155,34 @@ export const useDictDataStore = defineStore('dict-data', () => {
   /**
    * 获取字典类型下 IsDefault=1 的默认项
    * @param dictTypeCode 字典类型编码
+   * @param cultureCode 可选区域文化
    * @returns 默认字典项
    */
-  function getDictDefaultOption(dictTypeCode: string): TaktSelectOption | undefined {
-    return resolveDictDefaultOption(dictMap.value[dictTypeCode] ?? []);
+  function getDictDefaultOption(
+    dictTypeCode: string,
+    cultureCode?: string | null,
+  ): TaktSelectOption | undefined {
+    return resolveDictDefaultOption(
+      filterDictOptionsByCulture(dictMap.value[dictTypeCode] ?? [], cultureCode),
+    );
   }
 
   /**
    * 获取字典类型下 IsDefault=1 的默认绑定值
    * @param dictTypeCode 字典类型编码
    * @param valueField 值字段（默认 dictValue）
+   * @param cultureCode 可选区域文化
    * @returns 默认值
    */
   function getDictDefaultValue(
     dictTypeCode: string,
     valueField: TaktDictSelectFieldNames['valueField'] = 'dictValue',
+    cultureCode?: string | null,
   ): string | number | undefined {
-    return resolveDictDefaultValue(dictMap.value[dictTypeCode] ?? [], { valueField });
+    return resolveDictDefaultValue(
+      filterDictOptionsByCulture(dictMap.value[dictTypeCode] ?? [], cultureCode),
+      { valueField },
+    );
   }
 
   /**
@@ -173,7 +205,7 @@ export const useDictDataStore = defineStore('dict-data', () => {
   }
 
   /**
-   * 加载全部字典数据（GET TaktDictDatas/all；后端返回 CultureCode eo + Accept-Language 项）
+   * 加载全部字典数据（GET TaktDictDatas/all；含各 CultureCode，下拉再按区域/UI 语言过滤）
    * @param options.force 为 true 时忽略已加载缓存并强制刷新
    */
   async function loadAllDictDataAsync(options?: { force?: boolean }): Promise<void> {

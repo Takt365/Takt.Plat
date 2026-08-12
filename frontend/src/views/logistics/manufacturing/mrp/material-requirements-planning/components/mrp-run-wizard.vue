@@ -141,8 +141,7 @@ const previewColumns = computed<TableColumnsType<MaterialRequirementsPlanningIte
   { title: t('entity.materialrequirementsplanningitem.onhandquantity'), dataIndex: 'onHandQuantity', key: 'onHandQuantity', width: 100 },
   { title: t('entity.materialrequirementsplanningitem.scheduledreceipts'), dataIndex: 'scheduledReceipts', key: 'scheduledReceipts', width: 100 },
   { title: t('entity.materialrequirementsplanningitem.netrequirement'), dataIndex: 'netRequirement', key: 'netRequirement', width: 100 },
-  { title: t('entity.materialrequirementsplanningitem.projectedonhand'), dataIndex: 'projectedOnHand', key: 'projectedOnHand', width: 100 },
-])
+  { title: t('entity.materialrequirementsplanningitem.projectedonhand'), dataIndex: 'projectedOnHand', key: 'projectedOnHand', width: 100 }])
 
 /** 确认按钮文案 */
 const okText = computed(() => {

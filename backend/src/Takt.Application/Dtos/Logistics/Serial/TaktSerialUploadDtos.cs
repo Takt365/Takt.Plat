@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Serial
 // 文件名称：TaktSerialUploadDtos.cs
-// 创建时间：2026-07-20
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SerialUpload 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSerialUpload 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktSerialUploadDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SerialUploadId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 出库日期
@@ -48,15 +44,15 @@ public class TaktSerialUploadDto : TaktCompanyDtoBase
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int SequenceNo { get; set; } = 0;
+    public int SequenceCode { get; set; } = 0;
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -68,7 +64,7 @@ public class TaktSerialUploadDto : TaktCompanyDtoBase
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量
@@ -108,7 +104,12 @@ public class TaktSerialUploadQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -125,15 +126,15 @@ public class TaktSerialUploadQueryDto : TaktPagedQuery
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    public string? ShippingInvoiceNo { get; set; } = string.Empty;
+    public string? ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int? SequenceNo { get; set; }
+    public int? SequenceCode { get; set; }
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -145,7 +146,7 @@ public class TaktSerialUploadQueryDto : TaktPagedQuery
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量
@@ -203,14 +204,14 @@ public class TaktSerialUploadCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -222,17 +223,17 @@ public class TaktSerialUploadCreateDto
     /// 发货单号（固定 9 位）
     /// </summary>
     [Required(ErrorMessage = "发货单号（固定 9 位）不能为空")]
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int SequenceNo { get; set; } = 0;
+    public int SequenceCode { get; set; } = 0;
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
-    [Required(ErrorMessage = "产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）不能为空")]
+    [Required(ErrorMessage = "产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -244,7 +245,7 @@ public class TaktSerialUploadCreateDto
     /// 序列号（固定 7 位）
     /// </summary>
     [Required(ErrorMessage = "序列号（固定 7 位）不能为空")]
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量
@@ -315,7 +316,12 @@ public class TaktSerialUploadTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -327,15 +333,15 @@ public class TaktSerialUploadTemplateDto
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    public string? ShippingInvoiceNo { get; set; } = string.Empty;
+    public string? ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int? SequenceNo { get; set; }
+    public int? SequenceCode { get; set; }
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -347,7 +353,7 @@ public class TaktSerialUploadTemplateDto
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量
@@ -392,12 +398,12 @@ public class TaktSerialUploadImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -409,15 +415,15 @@ public class TaktSerialUploadImportDto
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    public string? ShippingInvoiceNo { get; set; } = string.Empty;
+    public string? ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int? SequenceNo { get; set; }
+    public int? SequenceCode { get; set; }
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -429,7 +435,7 @@ public class TaktSerialUploadImportDto
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量
@@ -480,7 +486,7 @@ public class TaktSerialUploadExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -492,15 +498,15 @@ public class TaktSerialUploadExportDto
     /// <summary>
     /// 发货单号（固定 9 位）
     /// </summary>
-    public string ShippingInvoiceNo { get; set; } = string.Empty;
+    public string ShippingInvoiceCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 序号（同一工厂+发货单号内唯一）
     /// </summary>
-    public int SequenceNo { get; set; } = 0;
+    public int SequenceCode { get; set; } = 0;
 
     /// <summary>
-    /// 产品物料（选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
+    /// 产品物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；最长 20）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -512,7 +518,7 @@ public class TaktSerialUploadExportDto
     /// <summary>
     /// 序列号（固定 7 位）
     /// </summary>
-    public string SerialNo { get; set; } = string.Empty;
+    public string SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 装箱数量

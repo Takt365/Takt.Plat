@@ -276,11 +276,12 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.LeaveType != null && x.LeaveType.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingBy).Contains(keywords)
                 || (x.HandlingComment != null && x.HandlingComment.Contains(keywords))
                 || SqlFunc.ToString(x.LeaveStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
@@ -320,9 +321,9 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
             exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.Attachments))
@@ -343,6 +344,12 @@ public class TaktLeaveService : TaktServiceBase, ITaktLeaveService
         if (queryDto?.LeaveStatus.HasValue == true)
         {
             exp = exp.And(x => x.LeaveStatus == queryDto.LeaveStatus);
+        }
+
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

@@ -128,11 +128,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.maintenancenotification.equipmentcode')">
+      <div v-show="isFieldVisible('EquipCode')">
+      <a-form-item :label="t('entity.maintenancenotification.EquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.equipmentcode') })"
+          v-model:value="advancedQueryForm.EquipCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.EquipCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -560,7 +560,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   plantCode: '',
   notificationCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   priority: undefined as number | undefined,
@@ -597,7 +597,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 const queryFieldsMeta = computed(() => [
   { key: 'plantCode', label: t('entity.maintenancenotification.plantcode') },
   { key: 'notificationCode', label: t('entity.maintenancenotification.notificationcode') },
-  { key: 'equipmentCode', label: t('entity.maintenancenotification.equipmentcode') },
+  { key: 'EquipCode', label: t('entity.maintenancenotification.EquipCode') },
   { key: 'equipmentName', label: t('entity.maintenancenotification.equipmentname') },
   { key: 'maintenanceCategory', label: t('entity.maintenancenotification.maintenancecategory') },
   { key: 'priority', label: t('entity.maintenancenotification.priority') },
@@ -626,8 +626,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -651,7 +650,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   notificationCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   equipmentName: '',
   maintenanceCategory: undefined as number | undefined,
   priority: undefined as number | undefined,
@@ -746,14 +745,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaintenanceNotificationField(record, 'notificationCode') ?? ''),
   },
   {
-    title: t('entity.maintenancenotification.equipmentcode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    title: t('entity.maintenancenotification.EquipCode'),
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaintenanceNotification }) =>
-      String(getMaintenanceNotificationField(record, 'equipmentCode') ?? ''),
+      String(getMaintenanceNotificationField(record, 'EquipCode') ?? ''),
   },
   {
     title: t('entity.maintenancenotification.equipmentname'),
@@ -822,10 +821,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
         onClick: (record: MaintenanceNotification) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -889,7 +886,7 @@ function buildListQuery(overrides?: Partial<MaintenanceNotificationQuery>): Main
   }
   assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('notificationCode', form.notificationCode)
-  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('EquipCode', form.EquipCode)
   assignTrimmed('equipmentName', form.equipmentName)
   if (form.maintenanceCategory !== undefined && form.maintenanceCategory !== null) {
     query.maintenanceCategory = form.maintenanceCategory

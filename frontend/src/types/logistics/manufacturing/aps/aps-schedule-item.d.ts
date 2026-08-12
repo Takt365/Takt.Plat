@@ -84,7 +84,7 @@ export interface ApsScheduleItem extends CompanyDtoBase {
   workOrderCode: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode: string;
 
@@ -199,6 +199,11 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   apsScheduleId?: string;
@@ -234,7 +239,7 @@ export interface ApsScheduleItemQuery extends TaktPagedQuery {
   workOrderCode?: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode?: string;
 
@@ -383,9 +388,17 @@ export interface ApsScheduleItemCreate {
   companyCode: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -423,7 +436,7 @@ export interface ApsScheduleItemCreate {
   workOrderCode: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode: string;
 
@@ -595,6 +608,11 @@ export interface ApsScheduleItemTemplate {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）
    */
   apsScheduleId?: string;
@@ -630,7 +648,7 @@ export interface ApsScheduleItemTemplate {
   workOrderCode?: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode?: string;
 
@@ -749,9 +767,17 @@ export interface ApsScheduleItemImport {
   companyCode?: string;
 
   /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
+
+  /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * APS排程ID（主子表关系，序列化为string以避免Javascript精度问题）
@@ -789,7 +815,7 @@ export interface ApsScheduleItemImport {
   workOrderCode?: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode?: string;
 
@@ -943,7 +969,7 @@ export interface ApsScheduleItemExport {
   workOrderCode: string;
 
   /**
-   * 产品编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品编码（关联 TaktGeneralMaterial.MaterialCode，选项 TaktGeneralMaterials/options）
    */
   productCode: string;
 

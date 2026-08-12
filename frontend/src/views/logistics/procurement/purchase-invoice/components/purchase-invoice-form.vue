@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-invoice/components -->
 <!-- 文件名称：purchase-invoice-form.vue -->
-<!-- 功能描述：Takt采购发票实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：Takt采购发票主表实体维护弹窗内嵌表单（上主下从级联保存）。由 generate-vue-master-detail-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -22,265 +22,23 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.purchaseInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseInvoiceCode')"
-                name="purchaseInvoiceCode"
-              >
-                <a-input
-                  v-model:value="formState.purchaseInvoiceCode"
-                  :placeholder="pi.ph('purchaseInvoiceCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.purchaseInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('purchaseOrderCode')"
-                name="purchaseOrderCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.purchaseOrderCode"
-                  api-url="TaktPurchaseOrders/options"
-                  :placeholder="pi.ph('purchaseOrderCode')"
-                  :disabled="!!formData?.purchaseInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('supplierCode')"
-                name="supplierCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.supplierCode"
-                  api-url="TaktSuppliers/options"
-                  :placeholder="pi.ph('supplierCode')"
-                  :disabled="!!formData?.purchaseInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('supplierName1')"
-                name="supplierName1"
-              >
-                <a-input
-                  v-model:value="formState.supplierName1"
-                  :placeholder="pi.ph('supplierName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('invoiceDate')"
-                name="invoiceDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.invoiceDate"
-                  :placeholder="pi.ph('invoiceDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('totalAmount')"
-                name="totalAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.totalAmount"
-                  :placeholder="pi.ph('totalAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('currencyCode')"
-                name="currencyCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currencyCode')"
-                  :disabled="!!formData?.purchaseInvoiceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxRate')"
-                name="taxRate"
-              >
-                <TaktSelect
-                  v-model:value="formState.taxRate"
-                  dict-type="accounting_tax_rate_param"
-                  :placeholder="pi.ph('taxRate')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxAmount')"
-                name="taxAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="pi.ph('taxAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('actualAmount')"
-                name="actualAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.actualAmount"
-                  :placeholder="pi.ph('actualAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('paidAmount')"
-                name="paidAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.paidAmount"
-                  :placeholder="pi.ph('paidAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('paymentMethod')"
-                name="paymentMethod"
-              >
-                <TaktSelect
-                  v-model:value="formState.paymentMethod"
-                  dict-type="accounting_payment_method_type"
-                  :placeholder="pi.ph('paymentMethod')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('taxInvoiceNo')"
-                name="taxInvoiceNo"
-              >
-                <a-input
-                  v-model:value="formState.taxInvoiceNo"
-                  :placeholder="pi.ph('taxInvoiceNo')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('invoiceStatus')"
-                name="invoiceStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.invoiceStatus"
-                  dict-type="logistics_invoice_status"
-                  :placeholder="pi.ph('invoiceStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -340,6 +98,28 @@
       section-border
       class="w-full min-w-0"
     >
+      <template #cell-plantCode="{ record }">
+        <TaktSelect
+          v-model:value="record.plantCode"
+          api-url="TaktPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInvoiceItemPi.queryPh('plantCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-purchaseOrderCode="{ record }">
+        <TaktSelect
+          v-model:value="record.purchaseOrderCode"
+          api-url="TaktPurchaseOrders/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="purchaseInvoiceItemPi.queryPh('purchaseOrderCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-materialCode="{ record }">
         <TaktSelect
           v-model:value="record.materialCode"
@@ -347,28 +127,6 @@
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="purchaseInvoiceItemPi.queryPh('materialCode', 'select')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-purchaseUnit="{ record }">
-        <TaktSelect
-          v-model:value="record.purchaseUnit"
-          dict-type="logistics_unit_of_measure_code"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInvoiceItemPi.ph('purchaseUnit')"
-          :disabled="loading"
-          allow-clear
-        />
-      </template>
-      <template #cell-discountRate="{ record }">
-        <TaktSelect
-          v-model:value="record.discountRate"
-          dict-type="logistics_discount_rate_param"
-          class="w-full"
-          :get-popup-container="getSelectPopupContainer"
-          :placeholder="purchaseInvoiceItemPi.ph('discountRate')"
           :disabled="loading"
           allow-clear
         />
@@ -390,7 +148,7 @@
 
 <script setup lang="ts">
 /**
- * Takt采购发票实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
+ * Takt采购发票主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/procurement/purchase-invoice/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -428,17 +186,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","purchaseInvoiceCode","purchaseOrderCode","supplierCode","supplierName1","invoiceDate","totalAmount","currencyCode","taxRate","taxAmount","actualAmount","paidAmount","paymentMethod","taxInvoiceNo","invoiceStatus","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","purchaseInvoiceCode","fiscalYear","documentType","documentDate","postingDate","transactionEventType","referenceCode","supplierCode","currencyCode","exchangeRate","grossAmount","vatAmount","taxJurisdictionCode","cashDiscountDays1","invoiceFlag","headerText","reversalDocumentCode","reversalFiscalYear","taxCode","supplyingCountry","taxExchangeRate","baselineDate","enteredBy","exchangeRateDate","transactionCode","postedBy","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -476,6 +237,11 @@ function allocateNextPurchaseInvoiceItemLineNumber(): number {
 /** 子表 purchaseInvoiceItem 可编辑列 */
 const purchaseInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'plantCode',
+    title: purchaseInvoiceItemPi.label('plantCode'),
+    width: 140,
+  },
+  {
     key: 'lineNumber',
     title: purchaseInvoiceItemPi.label('lineNumber'),
     width: 140,
@@ -483,13 +249,18 @@ const purchaseInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() =>
   {
     key: 'purchaseOrderCode',
     title: purchaseInvoiceItemPi.label('purchaseOrderCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('purchaseOrderCode'),
+    width: 140,
   },
   {
-    key: 'purchaseOrderLineNumber',
-    title: purchaseInvoiceItemPi.label('purchaseOrderLineNumber'),
+    key: 'purchaseOrderItem',
+    title: purchaseInvoiceItemPi.label('purchaseOrderItem'),
     width: 140,
+  },
+  {
+    key: 'accountAssignmentSeq',
+    title: purchaseInvoiceItemPi.label('accountAssignmentSeq'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('accountAssignmentSeq'),
   },
   {
     key: 'materialCode',
@@ -497,51 +268,176 @@ const purchaseInvoiceItemFormColumns = computed<TaktEditableTableColumn[]>(() =>
     width: 140,
   },
   {
-    key: 'purchaseUnit',
-    title: purchaseInvoiceItemPi.label('purchaseUnit'),
+    key: 'valuationArea',
+    title: purchaseInvoiceItemPi.label('valuationArea'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('valuationArea'),
+  },
+  {
+    key: 'amount',
+    title: purchaseInvoiceItemPi.label('amount'),
     width: 140,
   },
   {
-    key: 'invoiceQuantity',
-    title: purchaseInvoiceItemPi.label('invoiceQuantity'),
+    key: 'debitCreditIndicator',
+    title: purchaseInvoiceItemPi.label('debitCreditIndicator'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('debitCreditIndicator'),
+  },
+  {
+    key: 'taxCode',
+    title: purchaseInvoiceItemPi.label('taxCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('taxCode'),
+  },
+  {
+    key: 'quantity',
+    title: purchaseInvoiceItemPi.label('quantity'),
     width: 140,
   },
   {
-    key: 'invoiceUnitPrice',
-    title: purchaseInvoiceItemPi.label('invoiceUnitPrice'),
+    key: 'orderUnit',
+    title: purchaseInvoiceItemPi.label('orderUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('orderUnit'),
+  },
+  {
+    key: 'poPriceQuantity',
+    title: purchaseInvoiceItemPi.label('poPriceQuantity'),
     width: 140,
   },
   {
-    key: 'discountRate',
-    title: purchaseInvoiceItemPi.label('discountRate'),
+    key: 'poPriceUnit',
+    title: purchaseInvoiceItemPi.label('poPriceUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('poPriceUnit'),
+  },
+  {
+    key: 'valuatedStockQuantity',
+    title: purchaseInvoiceItemPi.label('valuatedStockQuantity'),
     width: 140,
   },
   {
-    key: 'discountAmount',
-    title: purchaseInvoiceItemPi.label('discountAmount'),
+    key: 'previousPeriodStock',
+    title: purchaseInvoiceItemPi.label('previousPeriodStock'),
     width: 140,
   },
   {
-    key: 'taxIncludedAmount',
-    title: purchaseInvoiceItemPi.label('taxIncludedAmount'),
+    key: 'baseUnit',
+    title: purchaseInvoiceItemPi.label('baseUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('baseUnit'),
+  },
+  {
+    key: 'valuationClass',
+    title: purchaseInvoiceItemPi.label('valuationClass'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('valuationClass'),
+  },
+  {
+    key: 'updatePoHistoryFlag',
+    title: purchaseInvoiceItemPi.label('updatePoHistoryFlag'),
+    editor: 'datePicker',
+    valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
-    key: 'untaxedAmount',
-    title: purchaseInvoiceItemPi.label('untaxedAmount'),
+    key: 'subsequentDebitCredit',
+    title: purchaseInvoiceItemPi.label('subsequentDebitCredit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('subsequentDebitCredit'),
+  },
+  {
+    key: 'blockReasonPrice',
+    title: purchaseInvoiceItemPi.label('blockReasonPrice'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('blockReasonPrice'),
+  },
+  {
+    key: 'blockReasonQuantity',
+    title: purchaseInvoiceItemPi.label('blockReasonQuantity'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('blockReasonQuantity'),
+  },
+  {
+    key: 'blockReasonQuality',
+    title: purchaseInvoiceItemPi.label('blockReasonQuality'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('blockReasonQuality'),
+  },
+  {
+    key: 'blockReasonEnhanced',
+    title: purchaseInvoiceItemPi.label('blockReasonEnhanced'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('blockReasonEnhanced'),
+  },
+  {
+    key: 'valueString',
+    title: purchaseInvoiceItemPi.label('valueString'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('valueString'),
+  },
+  {
+    key: 'referenceCode',
+    title: purchaseInvoiceItemPi.label('referenceCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('referenceCode'),
+  },
+  {
+    key: 'conditionType',
+    title: purchaseInvoiceItemPi.label('conditionType'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('conditionType'),
+  },
+  {
+    key: 'totalValuatedStockValue',
+    title: purchaseInvoiceItemPi.label('totalValuatedStockValue'),
     width: 140,
   },
   {
-    key: 'taxAmount',
-    title: purchaseInvoiceItemPi.label('taxAmount'),
+    key: 'previousPeriodValue',
+    title: purchaseInvoiceItemPi.label('previousPeriodValue'),
+    width: 140,
+  },
+  {
+    key: 'referenceDocumentCode',
+    title: purchaseInvoiceItemPi.label('referenceDocumentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('referenceDocumentCode'),
+  },
+  {
+    key: 'referenceDocumentYear',
+    title: purchaseInvoiceItemPi.label('referenceDocumentYear'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('referenceDocumentYear'),
+  },
+  {
+    key: 'referenceDocumentItem',
+    title: purchaseInvoiceItemPi.label('referenceDocumentItem'),
+    width: 140,
+  },
+  {
+    key: 'stockManagedMaterialCode',
+    title: purchaseInvoiceItemPi.label('stockManagedMaterialCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('stockManagedMaterialCode'),
+  },
+  {
+    key: 'itemText',
+    title: purchaseInvoiceItemPi.label('itemText'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: purchaseInvoiceItemPi.ph('itemText'),
+  },
+  {
+    key: 'materialDocumentItem',
+    title: purchaseInvoiceItemPi.label('materialDocumentItem'),
     width: 140,
   },
   {
     key: 'isObsolete',
     title: purchaseInvoiceItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<PurchaseInvoiceCreate & { purchaseInvoiceId?: string }> | null | undefined) {
@@ -551,18 +447,41 @@ function syncChildRowsFromFormData(val: Partial<PurchaseInvoiceCreate & { purcha
 
 function createDefaultPurchaseInvoiceItemRow(): Record<string, unknown> {
   return {
+    plantCode: '',
     lineNumber: allocateNextPurchaseInvoiceItemLineNumber(),
     purchaseOrderCode: '',
-    purchaseOrderLineNumber: 0,
+    purchaseOrderItem: 0,
+    accountAssignmentSeq: '',
     materialCode: '',
-    purchaseUnit: '',
-    invoiceQuantity: 0,
-    invoiceUnitPrice: 0,
-    discountRate: 0,
-    discountAmount: 0,
-    taxIncludedAmount: 0,
-    untaxedAmount: 0,
-    taxAmount: 0,
+    valuationArea: '',
+    amount: 0,
+    debitCreditIndicator: '',
+    taxCode: '',
+    quantity: 0,
+    orderUnit: '',
+    poPriceQuantity: 0,
+    poPriceUnit: '',
+    valuatedStockQuantity: 0,
+    previousPeriodStock: 0,
+    baseUnit: '',
+    valuationClass: '',
+    updatePoHistoryFlag: '',
+    subsequentDebitCredit: '',
+    blockReasonPrice: '',
+    blockReasonQuantity: '',
+    blockReasonQuality: '',
+    blockReasonEnhanced: '',
+    valueString: '',
+    referenceCode: '',
+    conditionType: '',
+    totalValuatedStockValue: 0,
+    previousPeriodValue: 0,
+    referenceDocumentCode: '',
+    referenceDocumentYear: '',
+    referenceDocumentItem: 0,
+    stockManagedMaterialCode: '',
+    itemText: '',
+    materialDocumentItem: 0,
     isObsolete: 0,
   }
 }
@@ -578,7 +497,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         purchaseInvoiceId: masterId,
       }
       if (isUpdate && isPersistedPurchaseInvoiceItemRow(row)) {
@@ -610,9 +529,7 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   currencyCode: "CNY",
-  taxRate: 10,
-  paymentMethod: 0,
-  invoiceStatus: 0
+  supplyingCountry: "CN"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -666,18 +583,32 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
   purchaseInvoiceCode: [
     {
       required: true,
       message: pi.ph('purchaseInvoiceCode'),
       trigger: 'blur'
+    }
+  ],
+  fiscalYear: [
+    {
+      required: true,
+      message: pi.ph('fiscalYear'),
+      trigger: 'blur'
+    }
+  ],
+  documentDate: [
+    {
+      required: true,
+      message: pi.ph('documentDate'),
+      trigger: 'change'
+    }
+  ],
+  postingDate: [
+    {
+      required: true,
+      message: pi.ph('postingDate'),
+      trigger: 'change'
     }
   ],
   supplierCode: [
@@ -687,33 +618,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  supplierName1: [
-    {
-      required: true,
-      message: pi.ph('supplierName1'),
-      trigger: 'blur'
-    }
-  ],
-  invoiceDate: [
-    {
-      required: true,
-      message: pi.ph('invoiceDate'),
-      trigger: 'change'
-    }
-  ],
-  totalAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('totalAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   currencyCode: [
     {
       required: true,
@@ -721,79 +625,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  taxRate: [{
+  grossAmount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxRate'))
+        return Promise.reject(pi.ph('grossAmount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  actualAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('actualAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('actualAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paidAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('paidAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('paidAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  paymentMethod: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('paymentMethod'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('paymentMethod'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  invoiceStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('invoiceStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('invoiceStatus'))
+        return Promise.reject(pi.ph('grossAmount'))
       }
       return Promise.resolve()
     },
@@ -811,33 +650,25 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('totalAmount' in payload) {
-    const rawtotalAmount = payload.totalAmount
-    payload.totalAmount = typeof rawtotalAmount === 'number' ? rawtotalAmount : Number(rawtotalAmount)
+  if ('exchangeRate' in payload) {
+    const rawexchangeRate = payload.exchangeRate
+    payload.exchangeRate = typeof rawexchangeRate === 'number' ? rawexchangeRate : Number(rawexchangeRate)
   }
-  if ('taxRate' in payload) {
-    const rawtaxRate = payload.taxRate
-    payload.taxRate = typeof rawtaxRate === 'number' ? rawtaxRate : Number(rawtaxRate)
+  if ('grossAmount' in payload) {
+    const rawgrossAmount = payload.grossAmount
+    payload.grossAmount = typeof rawgrossAmount === 'number' ? rawgrossAmount : Number(rawgrossAmount)
   }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  if ('vatAmount' in payload) {
+    const rawvatAmount = payload.vatAmount
+    payload.vatAmount = typeof rawvatAmount === 'number' ? rawvatAmount : Number(rawvatAmount)
   }
-  if ('actualAmount' in payload) {
-    const rawactualAmount = payload.actualAmount
-    payload.actualAmount = typeof rawactualAmount === 'number' ? rawactualAmount : Number(rawactualAmount)
+  if ('cashDiscountDays1' in payload) {
+    const rawcashDiscountDays1 = payload.cashDiscountDays1
+    payload.cashDiscountDays1 = typeof rawcashDiscountDays1 === 'number' ? rawcashDiscountDays1 : Number(rawcashDiscountDays1)
   }
-  if ('paidAmount' in payload) {
-    const rawpaidAmount = payload.paidAmount
-    payload.paidAmount = typeof rawpaidAmount === 'number' ? rawpaidAmount : Number(rawpaidAmount)
-  }
-  if ('paymentMethod' in payload) {
-    const rawpaymentMethod = payload.paymentMethod
-    payload.paymentMethod = typeof rawpaymentMethod === 'number' ? rawpaymentMethod : Number(rawpaymentMethod)
-  }
-  if ('invoiceStatus' in payload) {
-    const rawinvoiceStatus = payload.invoiceStatus
-    payload.invoiceStatus = typeof rawinvoiceStatus === 'number' ? rawinvoiceStatus : Number(rawinvoiceStatus)
+  if ('taxExchangeRate' in payload) {
+    const rawtaxExchangeRate = payload.taxExchangeRate
+    payload.taxExchangeRate = typeof rawtaxExchangeRate === 'number' ? rawtaxExchangeRate : Number(rawtaxExchangeRate)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

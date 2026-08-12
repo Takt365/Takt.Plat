@@ -30,14 +30,7 @@ public class TaktTranslation : TaktTenantEntityBase
     /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [SugarColumn(ColumnName = "culture_id", ColumnDescription = "文化ID", ColumnDataType = "bigint", IsNullable = false)]
-    public long CultureId { get; set; } 
-
-    /// <summary>
-    /// 文化编码（选项 TaktCultures/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "文化编码", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "")]
-    public string CultureCode { get; set; } = string.Empty;
-
+    public long CultureId { get; set; }
     /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>

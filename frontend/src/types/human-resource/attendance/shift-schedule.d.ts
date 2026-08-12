@@ -23,55 +23,6 @@ import type {
  * @description 对应后端 TaktShiftScheduleDto
  */
 export interface ShiftSchedule extends CompanyDtoBase {
-  /**
-   * ShiftScheduleID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  shiftScheduleId: string;
-
-  /**
-   * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
-   */
-  scheduleType: number;
-
-  /**
-   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
-   */
-  deptId?: string;
-
-  /**
-   * 部门 名称（填充字段）
-   */
-  deptName?: string;
-
-  /**
-   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
-   */
-  employeeId?: string;
-
-  /**
-   * 员工 名称（填充字段）
-   */
-  employeeName?: string;
-
-  /**
-   * 排班日期
-   */
-  scheduleDate: string;
-
-  /**
-   * 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
-   */
-  shiftId: string;
-
-  /**
-   * 班次 名称（填充字段）
-   */
-  shiftName?: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant?: string;
 
 }
 
@@ -126,7 +77,7 @@ export interface ShiftScheduleQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 创建时间（范围查询-开始）
@@ -170,7 +121,10 @@ export interface ShiftScheduleCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
@@ -200,7 +154,7 @@ export interface ShiftScheduleCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -274,7 +228,7 @@ export interface ShiftScheduleTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -308,7 +262,10 @@ export interface ShiftScheduleImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 排班类别（字典 hr_schedule_type；0=部门 1=人员）
@@ -338,7 +295,7 @@ export interface ShiftScheduleImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON
@@ -397,7 +354,7 @@ export interface ShiftScheduleExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 扩展字段JSON

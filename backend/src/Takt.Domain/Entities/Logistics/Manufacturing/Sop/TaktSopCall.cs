@@ -25,11 +25,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarIndex("ix_takt_logistics_manufacturing_sop_call_workstation", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(WorkstationId), OrderByType.Asc, false)]
 public class TaktSopCall : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）

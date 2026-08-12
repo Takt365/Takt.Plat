@@ -21,6 +21,38 @@ import type {
 const SALES_PRICE_TREND_API_BASE = 'TaktSalesPriceTrends';
 
 /**
+ * 推移查询栏：本表工厂去重选项 URL（供 TaktSelect api-url）
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesPriceTrendPlantOptionsUrl(): string {
+  return `${SALES_PRICE_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 推移查询栏：条件类型去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesPriceTrendPriceTypeOptionsUrl(): string {
+  return `${SALES_PRICE_TREND_API_BASE}/price-type-options`;
+}
+
+/**
+ * 推移查询栏：客户去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesPriceTrendCustomerOptionsUrl(): string {
+  return `${SALES_PRICE_TREND_API_BASE}/customer-options`;
+}
+
+/**
+ * 推移查询栏：物料去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getSalesPriceTrendMaterialOptionsUrl(): string {
+  return `${SALES_PRICE_TREND_API_BASE}/material-options`;
+}
+
+/**
  * 销售价格月推移转置分析
  * @param {SalesPriceMonthlyTrendQuery} queryDto 查询条件
  * @returns {Promise<SalesPriceMonthlyTrendResult>} 转置结果

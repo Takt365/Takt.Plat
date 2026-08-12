@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPlantDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -28,6 +28,12 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 /// </summary>
 public class TaktPlantDto : TaktTenantDtoBase
 {
+    /// <summary>
+    /// 关联工厂（工厂主档不使用；语义即 PlantCode）
+    /// </summary>
+    [JsonIgnore]
+    public new string RelatedPlant { get; set; } = string.Empty;
+
     /// <summary>
     /// PlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -59,11 +65,6 @@ public class TaktPlantDto : TaktTenantDtoBase
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -303,6 +304,11 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -326,11 +332,6 @@ public class TaktPlantQueryDto : TaktPagedQuery
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -598,6 +599,11 @@ public class TaktPlantCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
     [Required(ErrorMessage = "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）不能为空")]
@@ -625,12 +631,6 @@ public class TaktPlantCreateDto
     /// </summary>
     [Required(ErrorMessage = "编码代号（如 TKC、TCJ、DTA；前端字典录入）不能为空")]
     public string CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）不能为空")]
-    public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -976,6 +976,11 @@ public class TaktPlantTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -999,11 +1004,6 @@ public class TaktPlantTemplateDto
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1243,6 +1243,11 @@ public class TaktPlantImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -1266,11 +1271,6 @@ public class TaktPlantImportDto
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1539,11 +1539,6 @@ public class TaktPlantExportDto
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string CodeAlias { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）

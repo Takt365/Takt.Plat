@@ -21,20 +21,15 @@ namespace Takt.Domain.Entities.Logistics.Maintenance;
 [SugarTable("takt_logistics_maintenance_equipment", "工厂设备表")]
 [SugarIndex("ix_equipment_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_equipment_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_equipment_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EquipmentCode), OrderByType.Asc, true)]
+[SugarIndex("ix_equipment_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EquipCode), OrderByType.Asc, true)]
 public class TaktEquipment : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（不可空）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备编码（唯一索引：租户+公司+工厂内唯一，见 ix_equipment_code_unique）
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string EquipmentCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "equipment_code", ColumnDescription = "设备编码", ColumnDataType = "nvarchar", Length = 18, IsNullable = false)]
+    public string EquipCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设备名称
@@ -57,14 +52,14 @@ public class TaktEquipment : TaktCompanyEntityBase
     /// <summary>
     /// 设备规格
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_specification", ColumnDescription = "设备规格", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? EquipmentSpecification { get; set; }
+    [SugarColumn(ColumnName = "equip_specification", ColumnDescription = "设备规格", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
+    public string? EquipSpecification { get; set; }
 
     /// <summary>
     /// 设备品牌
     /// </summary>
-    [SugarColumn(ColumnName = "equipment_brand", ColumnDescription = "设备品牌", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
-    public string? EquipmentBrand { get; set; }
+    [SugarColumn(ColumnName = "equip_brand", ColumnDescription = "设备品牌", ColumnDataType = "nvarchar", Length = 100, IsNullable = true)]
+    public string? EquipBrand { get; set; }
 
     /// <summary>
     /// 制造商

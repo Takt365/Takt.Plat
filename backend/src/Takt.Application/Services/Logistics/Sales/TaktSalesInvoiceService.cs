@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSalesInvoiceService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售发票应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     }
 
     /// <summary>
-    /// 获取销售发票列表（分页）
+    /// 获取销售发票列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSalesInvoiceDto>> GetSalesInvoiceListAsync(TaktSalesInvoiceQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSalesInvoiceDto>.Create(
+                new List<TaktSalesInvoiceDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _salesInvoiceRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -119,13 +127,12 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     public async Task<TaktSalesInvoiceDto> CreateSalesInvoiceAsync(TaktSalesInvoiceCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesInvoice>();
-        var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.AccountingDocumentCode == entity.AccountingDocumentCode);
-        if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
+            x => x.BillingDocumentCode == entity.BillingDocumentCode);
+        if (!isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique)
         {
-            throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
+            throw new TaktBusinessException("销售发票的BillingDocumentCode已存在");
         }
         entity = await _salesInvoiceRepository.CreateAsync(entity);
                 await SaveSalesInvoiceChildrenAsync(entity, dto);
@@ -146,14 +153,13 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             throw new TaktBusinessException("销售发票不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _salesInvoiceRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.AccountingDocumentCode == entity.AccountingDocumentCode,
+            x => x.BillingDocumentCode == entity.BillingDocumentCode,
             id);
-        if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
+        if (!isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique)
         {
-            throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
+            throw new TaktBusinessException("销售发票的BillingDocumentCode已存在");
         }
         await _salesInvoiceRepository.UpdateAsync(entity);
                 await SaveSalesInvoiceChildrenAsync(entity, dto);
@@ -199,6 +205,23 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     }
 
     /// <summary>
+    /// 更新销售发票状态
+    /// </summary>
+    /// <param name="dto">状态DTO</param>
+    /// <returns>DTO</returns>
+    public async Task<TaktSalesInvoiceDto> UpdateSalesInvoiceStatusAsync(TaktSalesInvoiceStatusDto dto)
+    {
+        var entity = await _salesInvoiceRepository.GetByIdAsync(dto.SalesInvoiceId);
+        if (entity == null)
+        {
+            throw new TaktBusinessException("销售发票不存在");
+        }
+        entity.PostingStatus = dto.PostingStatus;
+        await _salesInvoiceRepository.UpdateAsync(entity);
+        return await GetSalesInvoiceByIdAsync(dto.SalesInvoiceId) ?? throw new TaktBusinessException("销售发票不存在");
+    }
+
+    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -234,18 +257,17 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
             try
             {
                 var entity = rows[i].Adapt<TaktSalesInvoice>();
-                var importKey = $"{entity.PlantCode}|{entity.AccountingDocumentCode}";
+                var importKey = $"{entity.BillingDocumentCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、AccountingDocumentCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（BillingDocumentCode）");
                 }
-                var isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique = await _uniqueValidator.IsUniqueAsync(
                     _salesInvoiceRepository,
-                    x => x.PlantCode == entity.PlantCode
-                        && x.AccountingDocumentCode == entity.AccountingDocumentCode);
-                if (!isUnique_ix_takt_logistics_sales_invoice_accounting_doc_unique)
+                    x => x.BillingDocumentCode == entity.BillingDocumentCode);
+                if (!isUnique_ix_takt_logistics_sales_invoice_billing_doc_unique)
                 {
-                    throw new TaktBusinessException("销售发票的PlantCode、AccountingDocumentCode已存在");
+                    throw new TaktBusinessException("销售发票的BillingDocumentCode已存在");
                 }
                 await _salesInvoiceRepository.CreateAsync(entity);
                 success += 1;
@@ -268,7 +290,15 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesInvoiceAsync(TaktSalesInvoiceQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSalesInvoiceQueryDto());
+        var queryDto = query ?? new TaktSalesInvoiceQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSalesInvoiceExportDto>(),
+                sheetName ?? "销售发票数据",
+                fileName ?? "销售发票导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _salesInvoiceRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -385,13 +415,12 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
                     submittedIds.Add(childDto.SalesInvoiceItemId);
                     var isUniqueUpdate_ix_takt_logistics_sales_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _salesInvoiceItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesInvoiceId == x.SalesInvoiceId
+                        x => x.SalesInvoiceId == x.SalesInvoiceId
                 && x.LineNumber == x.LineNumber,
                         childDto.SalesInvoiceItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_sales_invoice_item_invoice_line_unique)
                     {
-                        throw new TaktBusinessException("销售发票明细的CompanyCode、SalesInvoiceId、LineNumber已存在");
+                        throw new TaktBusinessException("销售发票明细的SalesInvoiceId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.SalesInvoiceItemId;
@@ -403,12 +432,11 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
                 {
                     var isUniqueCreate_ix_takt_logistics_sales_invoice_item_invoice_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _salesInvoiceItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.SalesInvoiceId == x.SalesInvoiceId
+                        x => x.SalesInvoiceId == x.SalesInvoiceId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_sales_invoice_item_invoice_line_unique)
                     {
-                        throw new TaktBusinessException("销售发票明细的CompanyCode、SalesInvoiceId、LineNumber已存在");
+                        throw new TaktBusinessException("销售发票明细的SalesInvoiceId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktSalesInvoiceItem>();
                     child.Id = 0;
@@ -428,7 +456,7 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
                 var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
                 if (needLine.Count > 0)
                 {
-                    var businessCode = !string.IsNullOrWhiteSpace(entity.CustomerCode) ? entity.CustomerCode : entity.Id.ToString();
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.BillingDocumentCode) ? entity.BillingDocumentCode : entity.Id.ToString();
                     var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
                     var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
                     var lineIdx = 0;
@@ -457,84 +485,507 @@ public class TaktSalesInvoiceService : TaktServiceBase, ITaktSalesInvoiceService
     {
         var exp = Expressionable.Create<TaktSalesInvoice>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.YearMonth != null && x.YearMonth.Contains(keywords))
-                || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
-                || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
+                (x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(keywords))
+                || (x.BillingType != null && x.BillingType.Contains(keywords))
+                || (x.BillingCategory != null && x.BillingCategory.Contains(keywords))
+                || (x.DocumentCategory != null && x.DocumentCategory.Contains(keywords))
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
-                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || (x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(keywords))
+                || (x.SalesOrganization != null && x.SalesOrganization.Contains(keywords))
+                || (x.DistributionChannel != null && x.DistributionChannel.Contains(keywords))
+                || (x.PricingProcedure != null && x.PricingProcedure.Contains(keywords))
+                || (x.ConditionCode != null && x.ConditionCode.Contains(keywords))
+                || (x.ShippingConditions != null && x.ShippingConditions.Contains(keywords))
+                || (x.CustomerGroup != null && x.CustomerGroup.Contains(keywords))
+                || (x.Incoterms1 != null && x.Incoterms1.Contains(keywords))
+                || (x.Incoterms2 != null && x.Incoterms2.Contains(keywords))
+                || (x.PostingStatus != null && x.PostingStatus.Contains(keywords))
+                || (x.PaymentTerms != null && x.PaymentTerms.Contains(keywords))
+                || (x.AccountAssignmentGroup != null && x.AccountAssignmentGroup.Contains(keywords))
+                || (x.CountryCode != null && x.CountryCode.Contains(keywords))
+                || (x.PayerCode != null && x.PayerCode.Contains(keywords))
+                || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
+                || (x.StatisticsCurrencyCode != null && x.StatisticsCurrencyCode.Contains(keywords))
+                || (x.ForeignTradeCode != null && x.ForeignTradeCode.Contains(keywords))
+                || (x.CancelledBillingDocument != null && x.CancelledBillingDocument.Contains(keywords))
+                || (x.InvoiceListType != null && x.InvoiceListType.Contains(keywords))
+                || (x.Division != null && x.Division.Contains(keywords))
+                || (x.HierarchyTypePricing != null && x.HierarchyTypePricing.Contains(keywords))
+                || (x.TradingPartner != null && x.TradingPartner.Contains(keywords))
+                || (x.TaxDepartureCountry != null && x.TaxDepartureCountry.Contains(keywords))
+                || (x.OrganizationSalesTaxNumber != null && x.OrganizationSalesTaxNumber.Contains(keywords))
+                || (x.CountrySalesTaxNumber != null && x.CountrySalesTaxNumber.Contains(keywords))
+                || (x.ReferenceCode != null && x.ReferenceCode.Contains(keywords))
+                || (x.CancelledFlag != null && x.CancelledFlag.Contains(keywords))
+                || (x.PaymentReference != null && x.PaymentReference.Contains(keywords))
+                || (x.ReversalReason != null && x.ReversalReason.Contains(keywords))
+                || (x.PostedBy != null && x.PostedBy.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BillingDocumentCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var billingDocumentCode = queryDto.BillingDocumentCode;
+            exp = exp.And(x => x.BillingDocumentCode != null && x.BillingDocumentCode.Contains(billingDocumentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.YearMonth))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BillingType))
         {
-            exp = exp.And(x => x.YearMonth != null && x.YearMonth.Contains(queryDto.YearMonth));
+            var billingType = queryDto.BillingType;
+            exp = exp.And(x => x.BillingType != null && x.BillingType.Contains(billingType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BillingCategory))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var billingCategory = queryDto.BillingCategory;
+            exp = exp.And(x => x.BillingCategory != null && x.BillingCategory.Contains(billingCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentCategory))
         {
-            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+            var documentCategory = queryDto.DocumentCategory;
+            exp = exp.And(x => x.DocumentCategory != null && x.DocumentCategory.Contains(documentCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (queryDto?.TaxRate.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrganization))
         {
-            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+            var salesOrganization = queryDto.SalesOrganization;
+            exp = exp.And(x => x.SalesOrganization != null && x.SalesOrganization.Contains(salesOrganization));
         }
 
-        if (queryDto?.TaxAmount.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.DistributionChannel))
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            var distributionChannel = queryDto.DistributionChannel;
+            exp = exp.And(x => x.DistributionChannel != null && x.DistributionChannel.Contains(distributionChannel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountingDocumentCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingProcedure))
         {
-            exp = exp.And(x => x.AccountingDocumentCode != null && x.AccountingDocumentCode.Contains(queryDto.AccountingDocumentCode));
+            var pricingProcedure = queryDto.PricingProcedure;
+            exp = exp.And(x => x.PricingProcedure != null && x.PricingProcedure.Contains(pricingProcedure));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ConditionCode))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var conditionCode = queryDto.ConditionCode;
+            exp = exp.And(x => x.ConditionCode != null && x.ConditionCode.Contains(conditionCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShippingConditions))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var shippingConditions = queryDto.ShippingConditions;
+            exp = exp.And(x => x.ShippingConditions != null && x.ShippingConditions.Contains(shippingConditions));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerGroup))
+        {
+            var customerGroup = queryDto.CustomerGroup;
+            exp = exp.And(x => x.CustomerGroup != null && x.CustomerGroup.Contains(customerGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Incoterms1))
+        {
+            var incoterms1 = queryDto.Incoterms1;
+            exp = exp.And(x => x.Incoterms1 != null && x.Incoterms1.Contains(incoterms1));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Incoterms2))
+        {
+            var incoterms2 = queryDto.Incoterms2;
+            exp = exp.And(x => x.Incoterms2 != null && x.Incoterms2.Contains(incoterms2));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostingStatus))
+        {
+            var postingStatus = queryDto.PostingStatus;
+            exp = exp.And(x => x.PostingStatus != null && x.PostingStatus.Contains(postingStatus));
+        }
+
+        if (queryDto?.AccountingExchangeRate.HasValue == true)
+        {
+            var accountingExchangeRate = queryDto.AccountingExchangeRate;
+            exp = exp.And(x => x.AccountingExchangeRate == accountingExchangeRate);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PaymentTerms))
+        {
+            var paymentTerms = queryDto.PaymentTerms;
+            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(paymentTerms));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountAssignmentGroup))
+        {
+            var accountAssignmentGroup = queryDto.AccountAssignmentGroup;
+            exp = exp.And(x => x.AccountAssignmentGroup != null && x.AccountAssignmentGroup.Contains(accountAssignmentGroup));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountryCode))
+        {
+            var countryCode = queryDto.CountryCode;
+            exp = exp.And(x => x.CountryCode != null && x.CountryCode.Contains(countryCode));
+        }
+
+        if (queryDto?.NetAmount.HasValue == true)
+        {
+            var netAmount = queryDto.NetAmount;
+            exp = exp.And(x => x.NetAmount == netAmount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PayerCode))
+        {
+            var payerCode = queryDto.PayerCode;
+            exp = exp.And(x => x.PayerCode != null && x.PayerCode.Contains(payerCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
+        {
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.StatisticsCurrencyCode))
+        {
+            var statisticsCurrencyCode = queryDto.StatisticsCurrencyCode;
+            exp = exp.And(x => x.StatisticsCurrencyCode != null && x.StatisticsCurrencyCode.Contains(statisticsCurrencyCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ForeignTradeCode))
+        {
+            var foreignTradeCode = queryDto.ForeignTradeCode;
+            exp = exp.And(x => x.ForeignTradeCode != null && x.ForeignTradeCode.Contains(foreignTradeCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CancelledBillingDocument))
+        {
+            var cancelledBillingDocument = queryDto.CancelledBillingDocument;
+            exp = exp.And(x => x.CancelledBillingDocument != null && x.CancelledBillingDocument.Contains(cancelledBillingDocument));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.InvoiceListType))
+        {
+            var invoiceListType = queryDto.InvoiceListType;
+            exp = exp.And(x => x.InvoiceListType != null && x.InvoiceListType.Contains(invoiceListType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Division))
+        {
+            var division = queryDto.Division;
+            exp = exp.And(x => x.Division != null && x.Division.Contains(division));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HierarchyTypePricing))
+        {
+            var hierarchyTypePricing = queryDto.HierarchyTypePricing;
+            exp = exp.And(x => x.HierarchyTypePricing != null && x.HierarchyTypePricing.Contains(hierarchyTypePricing));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TradingPartner))
+        {
+            var tradingPartner = queryDto.TradingPartner;
+            exp = exp.And(x => x.TradingPartner != null && x.TradingPartner.Contains(tradingPartner));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxDepartureCountry))
+        {
+            var taxDepartureCountry = queryDto.TaxDepartureCountry;
+            exp = exp.And(x => x.TaxDepartureCountry != null && x.TaxDepartureCountry.Contains(taxDepartureCountry));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.OrganizationSalesTaxNumber))
+        {
+            var organizationSalesTaxNumber = queryDto.OrganizationSalesTaxNumber;
+            exp = exp.And(x => x.OrganizationSalesTaxNumber != null && x.OrganizationSalesTaxNumber.Contains(organizationSalesTaxNumber));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountrySalesTaxNumber))
+        {
+            var countrySalesTaxNumber = queryDto.CountrySalesTaxNumber;
+            exp = exp.And(x => x.CountrySalesTaxNumber != null && x.CountrySalesTaxNumber.Contains(countrySalesTaxNumber));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceCode))
+        {
+            var referenceCode = queryDto.ReferenceCode;
+            exp = exp.And(x => x.ReferenceCode != null && x.ReferenceCode.Contains(referenceCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CancelledFlag))
+        {
+            var cancelledFlag = queryDto.CancelledFlag;
+            exp = exp.And(x => x.CancelledFlag != null && x.CancelledFlag.Contains(cancelledFlag));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PaymentReference))
+        {
+            var paymentReference = queryDto.PaymentReference;
+            exp = exp.And(x => x.PaymentReference != null && x.PaymentReference.Contains(paymentReference));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReversalReason))
+        {
+            var reversalReason = queryDto.ReversalReason;
+            exp = exp.And(x => x.ReversalReason != null && x.ReversalReason.Contains(reversalReason));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        {
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.BillingDateStart.HasValue == true)
+        {
+            var billingDateStart = queryDto.BillingDateStart;
+            exp = exp.And(x => x.BillingDate >= billingDateStart);
+        }
+
+        if (queryDto?.BillingDateEnd.HasValue == true)
+        {
+            var billingDateEnd = queryDto.BillingDateEnd;
+            exp = exp.And(x => x.BillingDate <= billingDateEnd);
+        }
+
+        if (queryDto?.ExchangeRateDateStart.HasValue == true)
+        {
+            var exchangeRateDateStart = queryDto.ExchangeRateDateStart;
+            exp = exp.And(x => x.ExchangeRateDate >= exchangeRateDateStart);
+        }
+
+        if (queryDto?.ExchangeRateDateEnd.HasValue == true)
+        {
+            var exchangeRateDateEnd = queryDto.ExchangeRateDateEnd;
+            exp = exp.And(x => x.ExchangeRateDate <= exchangeRateDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSalesInvoiceQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BillingDocumentCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BillingType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BillingCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DocumentCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrganization))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DistributionChannel))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PricingProcedure))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ConditionCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ShippingConditions))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Incoterms1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Incoterms2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostingStatus))
+        {
+            return true;
+        }
+        if (queryDto.AccountingExchangeRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PaymentTerms))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountAssignmentGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountryCode))
+        {
+            return true;
+        }
+        if (queryDto.NetAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PayerCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StatisticsCurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ForeignTradeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CancelledBillingDocument))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InvoiceListType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Division))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HierarchyTypePricing))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TradingPartner))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TaxDepartureCountry))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OrganizationSalesTaxNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountrySalesTaxNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CancelledFlag))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PaymentReference))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReversalReason))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.BillingDateStart.HasValue || queryDto.BillingDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExchangeRateDateStart.HasValue || queryDto.ExchangeRateDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

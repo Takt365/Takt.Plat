@@ -43,7 +43,7 @@ export const SUPPLIEREVALUATION_LIST_FIELDS = [
   'rectificationDeadline',
   'attachments',
   'evaluationStatus',
-  'relatedPlant',
+  'plantCode',
   'rectificationStatus',
 ] as const
 
@@ -75,7 +75,7 @@ export const SUPPLIEREVALUATION_PLACEHOLDER = {
   rectificationDeadline: 'optional',
   attachments: 'optional',
   evaluationStatus: 'select',
-  relatedPlant: 'select',
+  plantCode: 'select',
   rectificationStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -100,7 +100,7 @@ export const SUPPLIEREVALUATION_QUERY_STRING_FIELDS = [
   'rectificationDeadlineStart',
   'rectificationDeadlineEnd',
   'attachments',
-  'relatedPlant',
+  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

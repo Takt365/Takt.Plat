@@ -33,11 +33,6 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 public class TaktClient : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 客户端编码（唯一索引）
     /// </summary>
     [SugarColumn(ColumnName = "client_code", ColumnDescription = "客户端编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
@@ -73,17 +68,17 @@ public class TaktClient : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "industry_attribute", ColumnDescription = "行业属性", ColumnDataType = "varchar", Length = 4, IsNullable = false, DefaultValue = "C")]
     public string IndustryAttribute { get; set; } = "C";
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
-    /// <summary>
     /// 客户端标识（税务登记证号/统一社会信用代码）
     /// </summary>
     [SugarColumn(ColumnName = "client_tax_number", ColumnDescription = "客户端标识", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
     public string? ClientTaxNumber { get; set; }
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等）
+    /// 税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）
+    /// </summary>
+    [SugarColumn(ColumnName = "tax_code", ColumnDescription = "税码", ColumnDataType = "nvarchar", Length = 4, IsNullable = true)]
+    public string? TaxCode { get; set; }
+    /// <summary>
+    /// 税率（百分比整数；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）
     /// </summary>
     [SugarColumn(ColumnName = "tax_rate", ColumnDescription = "税率", ColumnDataType = "int", IsNullable = false, DefaultValue = "13")]
     public int TaxRate { get; set; } = 13;
@@ -185,7 +180,7 @@ public class TaktClient : TaktCompanyEntityBase
     /// <summary>
     /// 供应商（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商", ColumnDataType = "nvarchar", Length = 20, IsNullable = false, DefaultValue = "")]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供应商", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "")]
     public string SupplierCode { get; set; } = string.Empty;
     /// <summary>
     /// 尼尔森标识

@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form exec-form flex flex-col min-h-0"
+    class="takt-generated-form exec-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -29,12 +29,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,82 +55,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexec.productionorderid')"
+                :label="pi.label('productionOrderId')"
                 name="productionOrderId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.productionOrderId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.productionorderid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktProductionOrders/options"
+                  :placeholder="pi.ph('productionOrderId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexec.workorderno')"
-                name="workOrderNo"
+                :label="pi.label('workOrderCode')"
+                name="workOrderCode"
               >
                 <a-input
-                  v-model:value="formState.workOrderNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexec.serialnumber')"
-                name="serialNumber"
-              >
-                <a-input
-                  v-model:value="formState.serialNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.serialnumber') })"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexec.materialcode')"
-                name="materialCode"
-              >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.materialcode') })"
+                  v-model:value="formState.workOrderCode"
+                  :placeholder="pi.ph('workOrderCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -128,41 +82,76 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexec.routingitemid')"
-                name="routingItemId"
+                :label="pi.label('serialNumber')"
+                name="serialNumber"
               >
                 <a-input
-                  v-model:value="formState.routingItemId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.routingitemid') })"
+                  v-model:value="formState.serialNumber"
+                  :placeholder="pi.ph('serialNumber')"
                   show-count
-                  :maxlength="20"
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexec.processsegmenttype')"
+                :label="pi.label('materialCode')"
+                name="materialCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.materialCode"
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
+                  :disabled="!!formData?.sopExecId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('routingItemId')"
+                name="routingItemId"
+              >
+                <TaktSelect
+                  v-model:value="formState.routingItemId"
+                  api-url="TaktRoutingItems/options"
+                  :placeholder="pi.ph('routingItemId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('processSegmentType')"
                 name="processSegmentType"
               >
                 <TaktSelect
                   v-model:value="formState.processSegmentType"
                   dict-type="logistics_process_segment_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') })"
+                  :placeholder="pi.ph('processSegmentType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexec.workstationid')"
+                :label="pi.label('workstationId')"
                 name="workstationId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.workstationId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workstationid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopWorkstations/options"
+                  :placeholder="pi.ph('workstationId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('employeeId')"
+                name="employeeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.employeeId"
+                  api-url="TaktEmployees/options"
+                  :placeholder="pi.ph('employeeId')"
                 />
               </a-form-item>
             </a-col>
@@ -176,56 +165,38 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.employeeid')"
-                name="employeeId"
-              >
-                <a-input
-                  v-model:value="formState.employeeId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.employeeid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexec.sopid')"
+                :label="pi.label('sopId')"
                 name="sopId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.sopId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.sopid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopDocs/options"
+                  :placeholder="pi.ph('sopId')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.revisionid')"
+                :label="pi.label('revisionId')"
                 name="revisionId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.revisionId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.revisionid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopRevisions/options"
+                  :placeholder="pi.ph('revisionId')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.revision')"
+                :label="pi.label('revision')"
                 name="revision"
               >
                 <a-input
                   v-model:value="formState.revision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.revision') })"
+                  :placeholder="pi.ph('revision')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -234,77 +205,63 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.contentlang')"
-                name="contentLang"
-              >
-                <a-textarea
-                  v-model:value="formState.contentLang"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopexec.contentlang') })"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexec.startedat')"
+                :label="pi.label('startedAt')"
                 name="startedAt"
               >
                 <a-date-picker
                   v-model:value="formState.startedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.startedat') })"
+                  :placeholder="pi.ph('startedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.endedat')"
+                :label="pi.label('endedAt')"
                 name="endedAt"
               >
                 <a-date-picker
                   v-model:value="formState.endedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.endedat') })"
+                  :placeholder="pi.ph('endedAt')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.selfcheckresult')"
+                :label="pi.label('selfCheckResult')"
                 name="selfCheckResult"
               >
                 <TaktSelect
                   v-model:value="formState.selfCheckResult"
                   dict-type="logistics_sop_check_result_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.selfcheckresult') })"
+                  :placeholder="pi.ph('selfCheckResult')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.execstatus')"
+                :label="pi.label('execStatus')"
                 name="execStatus"
               >
                 <TaktSelect
                   v-model:value="formState.execStatus"
                   dict-type="logistics_sop_exec_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') })"
+                  :placeholder="pi.ph('execStatus')"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexec.currentstepid')"
+                :label="pi.label('currentStepId')"
                 name="currentStepId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.currentStepId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.currentstepid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopSteps/options"
+                  :placeholder="pi.ph('currentStepId')"
                 />
               </a-form-item>
             </a-col>
@@ -320,6 +277,34 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -331,7 +316,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -346,12 +331,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -368,13 +353,82 @@
       ref="sopExecStepTableRef"
       v-model="childSopExecStepRows"
       :columns="sopExecStepFormColumns"
-      :title="t('entity.sopexecstep._self')"
-      :add-button-entity="t('entity.sopexecstep._self')"
+      :title="sopExecStepPi.self()"
+      :add-button-entity="sopExecStepPi.self()"
       id-field="sopExecStepId"
       :default-row="createDefaultSopExecStepRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-plantCode="{ record }">
+        <TaktSelect
+          v-model:value="record.plantCode"
+          api-url="TaktPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.queryPh('plantCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-execId="{ record }">
+        <TaktSelect
+          v-model:value="record.execId"
+          api-url="TaktSopExecs/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.queryPh('execId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-stepId="{ record }">
+        <TaktSelect
+          v-model:value="record.stepId"
+          api-url="TaktSopSteps/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.queryPh('stepId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-stepResult="{ record }">
+        <TaktSelect
+          v-model:value="record.stepResult"
+          dict-type="logistics_sop_check_result_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.ph('stepResult')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-confirmedBy="{ record }">
+        <TaktSelect
+          v-model:value="record.confirmedBy"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.queryPh('confirmedBy', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-blockNextStep="{ record }">
+        <TaktSelect
+          v-model:value="record.blockNextStep"
+          dict-type="sys_yes_no_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopExecStepPi.ph('blockNextStep')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -386,6 +440,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopExecI18n } from '../composables/use-exec-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopExecI18n()
+
 import type { SopExecCreate } from '@/types/logistics/manufacturing/sop/exec'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -402,7 +461,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -413,8 +472,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -422,9 +481,18 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","productionOrderId","workOrderNo","serialNumber","materialCode","routingItemId","processSegmentType","workstationId","employeeId","sopId","revisionId","revision","contentLang","startedAt","endedAt","selfCheckResult","execStatus","currentStepId","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","productionOrderId","workOrderCode","serialNumber","materialCode","routingItemId","processSegmentType","workstationId","employeeId","sopId","revisionId","revision","startedAt","endedAt","selfCheckResult","execStatus","currentStepId","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSopExecStepI18n } from '../composables/use-exec-step-i18n'
+
+const sopExecStepPi = useSopExecStepI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSopExecStepRows = ref<Record<string, unknown>[]>([])
 const sopExecStepTableRef = ref<{
@@ -436,65 +504,72 @@ const sopExecStepTableRef = ref<{
 /** 子表 sopExecStep 可编辑列 */
 const sopExecStepFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'plantCode',
+    title: sopExecStepPi.label('plantCode'),
+    width: 140,
+  },
+  {
     key: 'execId',
-    title: t('entity.sopexecstep.execid'),
-    editor: 'input',
+    title: sopExecStepPi.label('execId'),
     width: 140,
   },
   {
     key: 'stepId',
-    title: t('entity.sopexecstep.stepid'),
-    editor: 'input',
+    title: sopExecStepPi.label('stepId'),
     width: 140,
   },
   {
     key: 'stepNo',
-    title: t('entity.sopexecstep.stepno'),
-    editor: 'inputNumber',
+    title: sopExecStepPi.label('stepNo'),
     width: 140,
   },
   {
     key: 'startedAt',
-    title: t('entity.sopexecstep.startedat'),
+    title: sopExecStepPi.label('startedAt'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
     key: 'endedAt',
-    title: t('entity.sopexecstep.endedat'),
+    title: sopExecStepPi.label('endedAt'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
     width: 140,
   },
   {
     key: 'stepResult',
-    title: t('entity.sopexecstep.stepresult'),
-    editor: 'inputNumber',
+    title: sopExecStepPi.label('stepResult'),
     width: 140,
   },
   {
     key: 'confirmedBy',
-    title: t('entity.sopexecstep.confirmedby'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.sopexecstep.confirmedby') }),
+    title: sopExecStepPi.label('confirmedBy'),
+    width: 140,
   },
   {
     key: 'confirmedAt',
-    title: t('entity.sopexecstep.confirmedat'),
+    title: sopExecStepPi.label('confirmedAt'),
     editor: 'datePicker',
     valueFormat: 'YYYY-MM-DD',
+    width: 140,
+  },
+  {
+    key: 'blockNextStep',
+    title: sopExecStepPi.label('blockNextStep'),
     width: 140,
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SopExecCreate & { sopExecId?: string }> | null | undefined) {
-  childSopExecStepRows.value = ((val as any)?.steps ?? []) as Record<string, unknown>[]
+  const rows_sopExecStep = ((val as any)?.steps ?? []) as Record<string, unknown>[]
+  childSopExecStepRows.value = rows_sopExecStep
 }
 
 function createDefaultSopExecStepRow(): Record<string, unknown> {
   return {
+    plantCode: '',
     execId: '',
     stepId: '',
     stepNo: 0,
@@ -503,19 +578,21 @@ function createDefaultSopExecStepRow(): Record<string, unknown> {
     stepResult: 0,
     confirmedBy: '',
     confirmedAt: '',
+    blockNextStep: 0,
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.sopExecId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
     steps: sopExecStepTableRef.value?.getRows?.() ?? childSopExecStepRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       sopExecId: masterId,
     })),
   }
@@ -595,35 +672,42 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  workOrderNo: [
+  plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') }),
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
+  workOrderCode: [
+    {
+      required: true,
+      message: pi.ph('workOrderCode'),
       trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   routingItemId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.routingitemid') }),
-      trigger: 'blur'
+      message: pi.ph('routingItemId'),
+      trigger: 'change'
     }
   ],
   processSegmentType: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') }))
+        return Promise.reject(pi.ph('processSegmentType'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') }))
+        return Promise.reject(pi.ph('processSegmentType'))
       }
       return Promise.resolve()
     },
@@ -632,60 +716,53 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   workstationId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.workstationid') }),
-      trigger: 'blur'
+      message: pi.ph('workstationId'),
+      trigger: 'change'
     }
   ],
   employeeId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.employeeid') }),
-      trigger: 'blur'
+      message: pi.ph('employeeId'),
+      trigger: 'change'
     }
   ],
   sopId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.sopid') }),
-      trigger: 'blur'
+      message: pi.ph('sopId'),
+      trigger: 'change'
     }
   ],
   revisionId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.revisionid') }),
-      trigger: 'blur'
+      message: pi.ph('revisionId'),
+      trigger: 'change'
     }
   ],
   revision: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.revision') }),
-      trigger: 'blur'
-    }
-  ],
-  contentLang: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.contentlang') }),
+      message: pi.ph('revision'),
       trigger: 'blur'
     }
   ],
   startedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.sopexec.startedat') }),
+      message: pi.ph('startedAt'),
       trigger: 'change'
     }
   ],
   execStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') }))
+        return Promise.reject(pi.ph('execStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') }))
+        return Promise.reject(pi.ph('execStatus'))
       }
       return Promise.resolve()
     },

@@ -105,11 +105,6 @@ public class TaktPayslip : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "issue_date", ColumnDescription = "发放日期", ColumnDataType = "date", IsNullable = true)]
     public DateTime? IssueDate { get; set; }
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 发放状态（字典 hr_payslip_issue_status；0=待发放 1=已发放 2=已确认）
     /// </summary>
     [SugarColumn(ColumnName = "issue_status", ColumnDescription = "发放状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]

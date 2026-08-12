@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialDescriptionDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialDescription 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialDescription 生成，请按需审阅）
 // 
@@ -36,31 +36,29 @@ public class TaktMaterialDescriptionDto : TaktTenantDtoBase
     public long MaterialDescriptionId { get; set; }
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料名称（填充字段）
+    /// 物料描述
     /// </summary>
-    public string? MaterialName { get; set; }
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
+    /// 物料规格
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public string? MaterialSpecification { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+    /// 物料型号
     /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
+    public string? MaterialModel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属物料（多对一）
-    /// （主表：TaktMaterial）
+    /// 物料长描述
     /// </summary>
-    public TaktMaterialDto? Material { get; set; }
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
 }
 
@@ -80,20 +78,39 @@ public class TaktMaterialDescriptionQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? MaterialId { get; set; }
-
-    /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+    /// 区域文化编码（字典 sys_culture_code）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料型号
+    /// </summary>
+    public string? MaterialModel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料长描述
+    /// </summary>
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -131,22 +148,41 @@ public class TaktMaterialDescriptionCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
-
-    /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
-    /// </summary>
-    [Required(ErrorMessage = "物料描述（SAP MAKT.MAKTX）不能为空")]
-    public string Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
-    /// </summary>
-    [Required(ErrorMessage = "语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）不能为空")]
     public string CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
+    /// </summary>
+    [Required(ErrorMessage = "物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）不能为空")]
+    public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述
+    /// </summary>
+    [Required(ErrorMessage = "物料描述不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料型号
+    /// </summary>
+    public string? MaterialModel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料长描述
+    /// </summary>
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -195,20 +231,39 @@ public class TaktMaterialDescriptionTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? MaterialId { get; set; }
-
-    /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料型号
+    /// </summary>
+    public string? MaterialModel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料长描述
+    /// </summary>
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -233,20 +288,39 @@ public class TaktMaterialDescriptionImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? MaterialId { get; set; }
-
-    /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
-    /// </summary>
-    public string? Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+    /// <summary>
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
+    /// </summary>
+    public string? MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料描述
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料规格
+    /// </summary>
+    public string? MaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料型号
+    /// </summary>
+    public string? MaterialModel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料长描述
+    /// </summary>
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -277,20 +351,29 @@ public class TaktMaterialDescriptionExportDto
     public long MaterialDescriptionId { get; set; }
 
     /// <summary>
-    /// 物料ID（主子表关系：关联 TaktMaterial.Id；SAP MAKT.MATNR）
+    /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）
     /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
+    public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（SAP MAKT.MAKTX）
+    /// 物料描述
     /// </summary>
-    public string Description { get; set; } = string.Empty;
+    public string MaterialDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言（区域文化编码；选项 TaktCultures/options，DictValue=CultureCode；对齐 SAP MAKT.SPRAS，存 BCP47 如 zh-CN）
+    /// 物料规格
     /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
+    public string? MaterialSpecification { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料型号
+    /// </summary>
+    public string? MaterialModel { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 物料长描述
+    /// </summary>
+    public string? MaterialLongDescription { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

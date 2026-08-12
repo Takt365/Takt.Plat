@@ -223,11 +223,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="t('entity.qualityissue.costcurrency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="t('entity.qualityissue.currencyCode')">
         <a-input
-          v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.costcurrency') })"
+          v-model:value="advancedQueryForm.currencyCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.currencyCode') })"
           show-count
           :maxlength="3"
           allow-clear
@@ -409,7 +409,7 @@ const advancedQueryForm = ref({
   needRework: '',
   totalTimeMinutes: undefined as number | undefined,
   totalCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -428,12 +428,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'needRework', label: t('entity.qualityissue.needrework') },
   { key: 'totalTimeMinutes', label: t('entity.qualityissue.totaltimeminutes') },
   { key: 'totalCost', label: t('entity.qualityissue.totalcost') },
-  { key: 'costCurrency', label: t('entity.qualityissue.costcurrency') },
+  { key: 'currencyCode', label: t('entity.qualityissue.currencyCode') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -490,7 +489,7 @@ function buildListQuery(overrides?: Partial<QualityIssueQuery>): QualityIssueQue
   if (form.totalCost !== undefined && form.totalCost !== null) {
     query.totalCost = form.totalCost
   }
-  assignTrimmed('costCurrency', form.costCurrency)
+  assignTrimmed('currencyCode', form.currencyCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -502,7 +501,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -657,13 +655,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'totalCost') ?? ''
   },
   {
-    title: t('entity.qualityissue.costcurrency'),
-    dataIndex: 'costCurrency',
-    key: 'costCurrency',
+    title: t('entity.qualityissue.currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'costCurrency') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'currencyCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -695,7 +693,6 @@ const getQualityIssueId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getQualityIssueField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -766,7 +763,7 @@ function handleReset() {
   needRework: '',
   totalTimeMinutes: undefined as number | undefined,
   totalCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -969,7 +966,7 @@ function handleAdvancedQueryReset() {
   needRework: '',
   totalTimeMinutes: undefined as number | undefined,
   totalCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

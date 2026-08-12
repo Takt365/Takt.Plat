@@ -45,6 +45,7 @@ description: >-
 | Vue 视图/表单 | `13-vue-view` / `14-vue-form` |
 | 代码生成 | `15-codegen` |
 | 权限/翻译键 | `16-permission-i18n` |
+| 通用字段长度 | `17-field-length` |
 | 溢出 | `06` / `07` / `08` |
 | 工具类 | `04` / `05` |
 | 空行 | `03-format-blank-lines` |
@@ -101,7 +102,7 @@ description: >-
 - [ ] Agent 查找/替换：Grep + StrReplace 或 node scripts/*.cjs；禁止 Shell/PowerShell（00-project §6.2）
 ```
 
-## 规则与 Skill 索引（00~16）
+## 规则与 Skill 索引（00~17）
 
 规则源：`.cursor/rules/`。实现任务优先打开对应 **skill**（检查清单），细则以 **mdc** 为准。
 
@@ -124,6 +125,7 @@ description: >-
 | 14 | `14-vue-form.mdc` | [14-vue-form](../14-vue-form/SKILL.md) | ***-form.vue** 三种表单 |
 | 15 | `15-codegen.mdc` | [15-codegen](../15-codegen/SKILL.md) | **generate-all** 全栈生成 |
 | 16 | `16-permission-i18n.mdc` | [16-permission-i18n](../16-permission-i18n/SKILL.md) | **Permission + I18nKey** 对齐 |
+| 17 | `17-field-length.mdc` | [17-field-length](../17-field-length/SKILL.md) | **通用字段 Length**（编码/描述） |
 
 ## 快速选型
 
@@ -144,6 +146,7 @@ description: >-
 | 列表/导出/大数组 | `06-overflow-csharp` + `07-overflow-vue` + `08-overflow-fullstack` |
 | 审批/流程 | `09-workflow` |
 | 权限/翻译键对齐 | **`16-permission-i18n`** |
+| 实体字段 Length / 统一编码长度 | **`17-field-length`** |
 
 ## 推荐组合
 

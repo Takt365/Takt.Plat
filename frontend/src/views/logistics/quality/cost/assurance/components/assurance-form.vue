@@ -27,166 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.qualityAssuranceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('qualityAssuranceCode')"
-                name="qualityAssuranceCode"
-              >
-                <a-input
-                  v-model:value="formState.qualityAssuranceCode"
-                  :placeholder="pi.ph('qualityAssuranceCode')"
-                  show-count
-                  :maxlength="30"
-                  allow-clear
-                  :disabled="!!formData?.qualityAssuranceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('assuranceMonth')"
-                name="assuranceMonth"
-              >
-                <a-input
-                  v-model:value="formState.assuranceMonth"
-                  :placeholder="pi.ph('assuranceMonth')"
-                  show-count
-                  :maxlength="7"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('customerName1')"
-                name="customerName1"
-              >
-                <a-input
-                  v-model:value="formState.customerName1"
-                  :placeholder="pi.ph('customerName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('debitNoteNo')"
-                name="debitNoteNo"
-              >
-                <a-textarea
-                  v-model:value="formState.debitNoteNo"
-                  :placeholder="pi.ph('debitNoteNo')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('recorder')"
-                name="recorder"
-              >
-                <a-input
-                  v-model:value="formState.recorder"
-                  :placeholder="pi.ph('recorder')"
-                  show-count
-                  :maxlength="30"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('totalQualityCost')"
-                name="totalQualityCost"
-              >
-                <a-input-number
-                  v-model:value="formState.totalQualityCost"
-                  :placeholder="pi.ph('totalQualityCost')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('costCurrency')"
-                name="costCurrency"
-              >
-                <a-input
-                  v-model:value="formState.costCurrency"
-                  :placeholder="pi.ph('costCurrency')"
-                  show-count
-                  :maxlength="3"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -300,8 +152,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -309,8 +161,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","qualityAssuranceCode","assuranceMonth","customerName1","debitNoteNo","recorder","totalQualityCost","costCurrency","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","qualityAssuranceCode","assuranceMonth","customerName1","debitNoteCode","recorder","totalQualityCost","currencyCode","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -389,8 +240,7 @@ const qualityAssuranceIncomingFormColumns = computed<TaktEditableTableColumn[]>(
     key: 'isObsolete',
     title: qualityAssuranceIncomingPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<QualityAssuranceCreate & { qualityAssuranceId?: string }> | null | undefined) {
@@ -422,7 +272,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         qualityAssuranceId: masterId,
       }
       if (isUpdate && isPersistedQualityAssuranceIncomingRow(row)) {
@@ -455,7 +305,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityAssuranceId 才视为编辑） */
 watch(
@@ -529,10 +378,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  costCurrency: [
+  currencyCode: [
     {
       required: true,
-      message: pi.ph('costCurrency'),
+      message: pi.ph('currencyCode'),
       trigger: 'blur'
     }
   ],

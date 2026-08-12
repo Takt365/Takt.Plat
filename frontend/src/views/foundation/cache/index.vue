@@ -174,8 +174,7 @@ const existsResult = ref<boolean | null>(null)
 
 /** 缓存键表单校验 */
 const keyFormRules = computed<Rule[]>(() => [
-  { required: true, message: t('foundation.cache.page.rule.cache.key.required') },
-])
+  { required: true, message: t('foundation.cache.page.rule.cache.key.required') }])
 
 /**
  * 格式化是/否

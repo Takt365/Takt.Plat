@@ -305,10 +305,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.salaryitem.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.salaryitem.relatedplant') })"
           show-count
           :maxlength="4"
@@ -494,7 +494,7 @@ const advancedQueryForm = ref({
   includeSocialSecurityBase: undefined as number | undefined,
   includeHousingFundBase: undefined as number | undefined,
   itemStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -517,12 +517,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'includeSocialSecurityBase', label: t('entity.salaryitem.includesocialsecuritybase') },
   { key: 'includeHousingFundBase', label: t('entity.salaryitem.includehousingfundbase') },
   { key: 'itemStatus', label: t('entity.salaryitem.itemstatus') },
-  { key: 'relatedPlant', label: t('entity.salaryitem.relatedplant') },
+  { key: 'plantCode', label: t('entity.salaryitem.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -540,7 +539,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -601,7 +599,7 @@ function buildListQuery(overrides?: Partial<SalaryItemQuery>): SalaryItemQuery {
   if (form.itemStatus !== undefined && form.itemStatus !== null) {
     query.itemStatus = form.itemStatus
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -614,12 +612,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -763,12 +755,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.salaryitem.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalaryItemField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getSalaryItemField(record, 'plantCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -800,7 +792,6 @@ const getSalaryItemId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getSalaryItemField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -885,7 +876,7 @@ function handleReset() {
   includeSocialSecurityBase: undefined as number | undefined,
   includeHousingFundBase: undefined as number | undefined,
   itemStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -1099,7 +1090,7 @@ function handleAdvancedQueryReset() {
   includeSocialSecurityBase: undefined as number | undefined,
   includeHousingFundBase: undefined as number | undefined,
   itemStatus: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

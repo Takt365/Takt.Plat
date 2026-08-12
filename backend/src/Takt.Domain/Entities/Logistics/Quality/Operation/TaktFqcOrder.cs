@@ -23,15 +23,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Operation;
 [SugarIndex("ix_takt_logistics_quality_fqc_order_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_quality_fqc_order_customer_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, false)]
 public class TaktFqcOrder : TaktCompanyEntityBase
-{    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
+{
     /// <summary>
     /// 来源单号（选项 TaktSalesOrders/options；DictValue=SalesOrderCode）
     /// </summary>
-    [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "source_code", ColumnDescription = "来源单号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SourceCode { get; set; } = string.Empty;
     /// <summary>
     /// 检验日期
@@ -41,12 +37,12 @@ public class TaktFqcOrder : TaktCompanyEntityBase
     /// <summary>
     /// FQC检验单编码（唯一索引，根据来源单号自动生成）
     /// </summary>
-    [SugarColumn(ColumnName = "fqc_order_code", ColumnDescription = "FQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "fqc_order_code", ColumnDescription = "FQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string FqcOrderCode { get; set; } = string.Empty;
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "customer_code", ColumnDescription = "客户编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? CustomerCode { get; set; }
     /// <summary>
     /// 总入库数
@@ -86,7 +82,7 @@ public class TaktFqcOrder : TaktCompanyEntityBase
     /// <summary>
     /// 判定说明
     /// </summary>
-    [SugarColumn(ColumnName = "judge_description", ColumnDescription = "判定说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    [SugarColumn(ColumnName = "judge_description", ColumnDescription = "判定说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? JudgeDescription { get; set; }
     /// <summary>
     /// 判定状态（字典 logistics_quality_judge_status）

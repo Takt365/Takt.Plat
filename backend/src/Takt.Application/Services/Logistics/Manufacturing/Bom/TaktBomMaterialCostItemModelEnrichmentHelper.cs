@@ -26,7 +26,7 @@ public static class TaktBomMaterialCostItemModelEnrichmentHelper
     /// <param name="monthRows">该工厂该月全部 BOM 行</param>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="periodKey">期间键 yyyy-MM</param>
-    /// <returns>机种月平均成本；无有效成品成本时为 0</returns>
+    /// <returns>机种月成本；无有效成品成本时为 0</returns>
     public static decimal ComputeModelMonthlyAverageCost(
         IReadOnlyList<string> catalogProductCodes,
         IReadOnlyList<TaktBomMaterialCostItem> monthRows,
@@ -80,7 +80,7 @@ public static class TaktBomMaterialCostItemModelEnrichmentHelper
     /// 按主表已落库的产品月成本计算机种月平均（仅 ProductMonthlyCost &gt; 0 参与）
     /// </summary>
     /// <param name="productMonthlyCosts">同工厂+机种+核算期间下各成品产品月成本</param>
-    /// <returns>机种月平均成本</returns>
+    /// <returns>机种月成本</returns>
     public static decimal ComputeModelMonthlyAverageFromProductCosts(IReadOnlyList<decimal> productMonthlyCosts)
     {
         ArgumentNullException.ThrowIfNull(productMonthlyCosts);

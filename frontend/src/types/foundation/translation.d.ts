@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：translation.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -34,14 +34,9 @@ export interface Translation extends TenantDtoBase {
   cultureId: string;
 
   /**
-   * 语言名称（填充字段）
+   * 文化名称（填充字段）
    */
   cultureName?: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -89,14 +84,14 @@ export interface TranslationQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode?: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -136,7 +131,7 @@ export interface TranslationQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -158,14 +153,14 @@ export interface TranslationCreate {
   tenantCode: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -195,7 +190,7 @@ export interface TranslationCreate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -232,14 +227,14 @@ export interface TranslationTemplate {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode?: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -269,7 +264,7 @@ export interface TranslationTemplate {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -291,14 +286,14 @@ export interface TranslationImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode?: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -328,7 +323,7 @@ export interface TranslationImport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -350,14 +345,14 @@ export interface TranslationExport {
   translationId: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId: string;
-
-  /**
-   * 文化编码（关联 TaktCulture.CultureCode，选项 TaktCultures/options）
-   */
-  cultureCode: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -387,7 +382,7 @@ export interface TranslationExport {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -419,12 +414,12 @@ export interface TranslationTransposed {
   i18nKey: string;
 
   /**
-   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 资源分组（关联 TaktMenu.Id）
    */
   resourceGroup: string;
 
   /**
-   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
+   * 资源类别（字典 sys_resource_type）
    */
   resourceType: string;
 
@@ -473,12 +468,12 @@ export interface TranslationTransposedQuery extends TaktPagedQuery {
   translationText?: string;
 
   /**
-   * 资源分组（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+   * 资源分组
    */
   resourceGroup?: string;
 
   /**
-   * 资源类别（字典 sys_resource_type；frontend=前端 backend=后端）
+   * 资源类别
    */
   resourceType?: string;
 
@@ -499,12 +494,7 @@ export interface TranslationTransposedResult {
   /**
    * 分页数据
    */
-  paged: {
-    data: TranslationTransposed[];
-    total: number;
-    pageIndex: number;
-    pageSize: number;
-  };
+  paged: number;
 
   /**
    * 语言列顺序（表头从左到右），如 zh-CN、en-US 等
@@ -525,21 +515,5 @@ export interface TranslationTransposedBatch {
    */
   rows: TranslationTransposed[];
 
-}
-
-/**
- * 指定区域文化下的前端扁平翻译消息（供 vue-i18n mergeLocaleMessage）
- * @description 对应后端 TaktTranslationMessagesDto
- */
-export interface TranslationMessages {
-  /**
-   * 文化编码（BCP47，如 zh-CN）
-   */
-  cultureCode: string;
-
-  /**
-   * 扁平 i18n 键值（键为 i18nKey，值为 translationText）
-   */
-  messages: Record<string, string>;
 }
 

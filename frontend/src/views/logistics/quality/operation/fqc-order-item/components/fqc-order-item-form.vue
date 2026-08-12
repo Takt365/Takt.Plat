@@ -27,321 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('fqcOrderId')"
-                name="fqcOrderId"
-              >
-                <TaktSelect
-                  v-model:value="formState.fqcOrderId"
-                  api-url="TaktFqcOrders/options"
-                  :placeholder="pi.ph('fqcOrderId')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('fqcOrderCode')"
-                name="fqcOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.fqcOrderCode"
-                  :placeholder="pi.ph('fqcOrderCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('lineNumber')"
-                name="lineNumber"
-              >
-                <a-input-number
-                  v-model:value="formState.lineNumber"
-                  :placeholder="pi.ph('lineNumber')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialName')"
-                name="materialName"
-              >
-                <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="pi.ph('materialName')"
-                  show-count
-                  :maxlength="40"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('batchNo')"
-                name="batchNo"
-              >
-                <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="pi.ph('batchNo')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('warehouseQuantity')"
-                name="warehouseQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.warehouseQuantity"
-                  :placeholder="pi.ph('warehouseQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('standardCode')"
-                name="standardCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.standardCode"
-                  api-url="TaktInspectionStandards/options"
-                  :placeholder="pi.ph('standardCode')"
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('samplingSchemeCode')"
-                name="samplingSchemeCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.samplingSchemeCode"
-                  api-url="TaktSamplingSchemes/options"
-                  :placeholder="pi.ph('samplingSchemeCode')"
-                  :disabled="!!formData?.fqcOrderItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectionMethod')"
-                name="inspectionMethod"
-              >
-                <TaktSelect
-                  v-model:value="formState.inspectionMethod"
-                  dict-type="logistics_quality_inspection_method"
-                  :placeholder="pi.ph('inspectionMethod')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('sampleQuantity')"
-                name="sampleQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.sampleQuantity"
-                  :placeholder="pi.ph('sampleQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('qualifiedQuantity')"
-                name="qualifiedQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.qualifiedQuantity"
-                  :placeholder="pi.ph('qualifiedQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('unqualifiedQuantity')"
-                name="unqualifiedQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.unqualifiedQuantity"
-                  :placeholder="pi.ph('unqualifiedQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectionReturnQuantity')"
-                name="inspectionReturnQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.inspectionReturnQuantity"
-                  :placeholder="pi.ph('inspectionReturnQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('sampleSerialNo')"
-                name="sampleSerialNo"
-              >
-                <a-input
-                  v-model:value="formState.sampleSerialNo"
-                  :placeholder="pi.ph('sampleSerialNo')"
-                  show-count
-                  :maxlength="100"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('inspectionDescription')"
-                name="inspectionDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.inspectionDescription"
-                  :placeholder="pi.ph('inspectionDescription')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectorBy')"
-                name="inspectorBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.inspectorBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('inspectorBy')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('inspectionDate')"
-                name="inspectionDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.inspectionDate"
-                  :placeholder="pi.ph('inspectionDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('judgeStatus')"
-                name="judgeStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.judgeStatus"
-                  dict-type="logistics_quality_judge_status"
-                  :placeholder="pi.ph('judgeStatus')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('isObsolete')"
-                name="isObsolete"
-              >
-                <TaktSelect
-                  v-model:value="formState.isObsolete"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="pi.ph('isObsolete')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -522,17 +219,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","fqcOrderId","fqcOrderCode","lineNumber","materialCode","materialName","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","fqcOrderId","fqcOrderCode","lineNumber","materialCode","materialDescription","batchCode","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialCode","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -672,8 +372,7 @@ const fqcDefectHandlingFormColumns = computed<TaktEditableTableColumn[]>(() => [
     key: 'isObsolete',
     title: fqcDefectHandlingPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<FqcOrderItemCreate & { fqcOrderItemId?: string }> | null | undefined) {
@@ -715,7 +414,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         fqcOrderItemId: masterId,
       }
       if (isUpdate && isPersistedFqcDefectHandlingRow(row)) {

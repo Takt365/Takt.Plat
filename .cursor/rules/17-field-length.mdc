@@ -1,0 +1,148 @@
+---
+description: Takt 通用字段长度规范（Domain SugarColumn Length；物料/单据/主数据编码与描述）
+alwaysApply: true
+---
+
+# 通用字段长度规范
+
+**权威源**：本章。`01-backend` §六「字符串列黄金长度」仅保留默认兜底与交叉引用，**专项长度以本章为准**。
+
+适用范围：`Takt.Domain/Entities/**` 的 `[SugarColumn(..., Length = N)]`（`varchar`/`nvarchar`）。新建/改实体、代码生成后审阅、批量统一长度时必须对照。
+
+---
+
+## 一、总则（强制）
+
+| 规则 | 说明 |
+|------|------|
+| 默认短字符串 | 无专项约定时 **`Length = 40`** |
+| ❌ 禁止 | 无说明随手写 `50`/`100`；同语义字段在不同实体长度不一致 |
+| 更长字段 | `Remark`、大 JSON、超长说明等须 XML 注释写清理由 |
+| 跨表同义 | 同一业务键（如 `MaterialCode`、`PlantCode`）全库 **同一 Length** |
+| 名称 vs 描述 | 「名称」与「描述」若本章分列，勿混用长度 |
+| **编码后缀** | 业务编码/单号/批次/序列号等字符串标识一律 **`XxxCode` / `xxx_code`**；❌ **禁止** `XxxNo` / `xxx_no` |
+
+整数序号例外（非字符串编码）：`ShiftNo`/`shift_no`（班次）、`StepNo`/`step_no`（工步）、`VersionNo`/`version_no`（版本）可保留 `No`；行号用 `LineNumber`/`line_number`。电话/税号等非业务单据编码可用 `*Number`（如 `PhoneNumber`）。
+
+---
+
+## 二、隔离与组织主数据
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 租户码 | `tenant_code` | **3** |
+| 公司代码 | `company_code` | **4** |
+| 工厂代码 / 关联工厂 | `plant_code`、`related_plant` | **4** |
+| 区域文化 | `culture_code` | **5** |
+| 币种（ISO 4217） | `currency_code`；角色前缀如 `from_currency_code`、`to_currency_code`、`scale_currency_code`、`condition_currency_code`、`moving_price_currency_code`、`purchase_currency_code` | **3** |
+
+属性名：单表结算/报告币种一律 **`CurrencyCode`**；多角色保留前缀且以 **`CurrencyCode` 结尾**（如 `ScaleCurrencyCode`）。❌ 禁止 `Currency`、`CostCurrency`、`ConditionCurrency` 等无 `Code` 后缀。
+
+---
+
+## 三、物料
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 物料编码（本厂/内部业务码；含父项/替代等） | `material_code`、`parent_material_code`、`internal_material_code`、… | **20** |
+| 物料描述（短描述，非长描述） | `material_description`、`parent_material_description` | **40** |
+| 物料规格 | `material_specification` | **70** |
+| 物料型号 | `material_model` | **70** |
+| 物料长描述 | `material_long_description` | **200** |
+
+⚠️ **特例（禁止套用物料编码 20）**：
+
+| 字段语义 | 典型列名 | Length | 说明 |
+|----------|----------|--------|------|
+| **制造商物料编码** | `manufacturer_material_code` | **40** | 制造商侧编码，≠ 本厂 `material_code` |
+| **销售商物料编码** | `seller_material_code` | **40** | 销售商侧编码，≠ 本厂 `material_code` |
+
+❌ 禁止把 `manufacturer_material_code` / `seller_material_code` 写成 20；❌ 禁止把本厂 `material_code` 写成 40。
+
+⚠️ 品质域 `Logistics/Quality` 内物料描述按 §八 可为 **70**（域内覆盖）；新建跨域物料字段仍用上表短描述 **40**。
+
+---
+
+## 四、工作中心 / 工序 / 工艺路线
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 工作中心编码 | `work_center_code`；单码语义的 `work_center` | **10** |
+| 工作中心描述 | `work_center_description` | **70** |
+| 生产工单工作中心汇总（SAP 多值 `code\|\|desc;…`） | `takt_…_production_order.work_center` | **500**（须 XML 注明；≠ 单码 10） |
+| 工序编码 | `process_code` | **4** |
+| 工序名称 | `process_name` | **70** |
+| 工艺路线编码 | `routing_code` | **8** |
+
+---
+
+## 五、生产制造单据与分类
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 生产工单 / APS 订单 / 计划订单编码 | `prod_order_code`、`aps_order_code`、`planned_order_code`、`work_order_code`（生产工单） | **12** |
+| MDS / 销售预测 / MPS / MRP 编码 | `mds_code`、`sales_plan_code`、`mps_code`、`material_requirements_planning_code` | **20** |
+| 生产类别 | `prod_category` | **4** |
+| 生产班组 / 班组编码 | `team_code`、`team_code`、`production_team`、`production_line`、`production_line_code` | **8** |
+| 工单类别 | `prod_order_type` | **4** |
+| 机种（编码/机种值） | `model_code`、`current_model_code`、`changeover_model_code`、`source_model`、`ec_model`、`model`（机种） | **40** |
+
+❌ 维护工单 `work_order_code`（维护）、班组**名称**、机种**名称**不套用上表班组/机种长度，除非另有专项约定。
+
+---
+
+## 六、销售 / 采购单据与价格
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 销售订单编码 | `sales_order_code` | **20** |
+| 采购订单 / 请购（采购申请）编码 | `purchase_order_code`、`purchase_request_code`、`request_code`（请购） | **20** |
+| 采购预测编码 | `purchase_forecast_code` | **20** |
+| 销售报价 / 采购询价编码 | `sales_quotation_code`、`purchase_inquiry_code` | **20** |
+| 销售价格 / 采购价格编码（定价记录号） | `sales_price_code`、`purchase_price_code` | **20** |
+| 客户编码 | `customer_code` | **10** |
+| 供应商编码 | `supplier_code` | **10** |
+
+❌ `client_code`（客户端）、`vendor_code`（经销商）不视为上表客户/供应商。
+
+---
+
+## 七、设备 / 入出库
+
+| 字段语义 | 典型列名 | Length |
+|----------|----------|--------|
+| 设备编码 / 生产设备编码 | `equipment_code`、`prod_equip_code`、`device_code`（监测设备） | **18** |
+| 入库单编码 | `inbound_code`、`reference_inbound_code` | **10** |
+| 出库单编码 | `outbound_code`、`outbound_order_code` | **10** |
+
+---
+
+## 八、品质域（`Logistics/Quality`）
+
+| 字段语义 | Length |
+|----------|--------|
+| 域内业务**编码**（检验单、不良处理、抽样方案、标准、品质业务/客诉等；含来源单号） | **20** |
+| 域内**描述**（`*_description` / ColumnDescription 含「描述」） | **70** |
+
+仍服从全局：`plant_code`=4、`process_code`=4、`customer_code`/`supplier_code`=10、`material_code`=20。
+
+---
+
+## 九、未列专项时的兜底（与 01-backend 对齐）
+
+| 场景 | Length |
+|------|--------|
+| **默认短字符串** | **40** |
+| 名称类（字典标签、一般名称、I18nKey 等） | 100～200 |
+| 长文本（Remark、超长说明、大 JSON） | 500+ / `ntext`；须注释理由 |
+
+---
+
+## 十、Agent 约束
+
+- 新建实体字段：先查本章专项表，再套默认 40
+- 字符串业务编码：**必须** `XxxCode` / `xxx_code`；❌ 禁止 `XxxNo` / `xxx_no`
+- **物料编码特例**：`manufacturer_material_code` / `seller_material_code` = **40**；本厂 `material_code` / `internal_material_code` = **20**——禁止混用
+- 改某一语义长度：必须全库同义列一并改齐（含冗余码、来源码）
+- 生成脚本产出 Length 与本章冲突时，**以本章为准**手工或脚本修正
+- 实现清单：`.cursor/skills/17-field-length/SKILL.md`

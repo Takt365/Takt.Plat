@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyOrderDefectI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyOrderDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktAssyOrderDefectI18nSeedData : ITaktSeedDataCoordinator
             // entity.assyorderdefect._self
             new TranslationSeedItem("entity.assyorderdefect._self", "zh-HK", "组立工单不良统计信息_hk", "实体名称"),
 
-            // entity.assyorderdefect.plantcode
-            new TranslationSeedItem("entity.assyorderdefect.plantcode", "en-US", "工厂代码_us", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assyorderdefect.plantcode
-            new TranslationSeedItem("entity.assyorderdefect.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assyorderdefect.plantcode
-            new TranslationSeedItem("entity.assyorderdefect.plantcode", "zh-CN", "工厂代码", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assyorderdefect.plantcode
-            new TranslationSeedItem("entity.assyorderdefect.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-
             // entity.assyorderdefect.prodcategory
             new TranslationSeedItem("entity.assyorderdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assyorderdefect.prodcategory
@@ -144,14 +135,14 @@ public class TaktAssyOrderDefectI18nSeedData : ITaktSeedDataCoordinator
             // entity.assyorderdefect.materialcode
             new TranslationSeedItem("entity.assyorderdefect.materialcode", "zh-HK", "物料编码_hk", "物料编码（取最近日报）"),
 
-            // entity.assyorderdefect.batchno
-            new TranslationSeedItem("entity.assyorderdefect.batchno", "en-US", "批次_us", "批次（一工单一批次，取最近日报）"),
-            // entity.assyorderdefect.batchno
-            new TranslationSeedItem("entity.assyorderdefect.batchno", "ja-JP", "批次_jp", "批次（一工单一批次，取最近日报）"),
-            // entity.assyorderdefect.batchno
-            new TranslationSeedItem("entity.assyorderdefect.batchno", "zh-CN", "批次", "批次（一工单一批次，取最近日报）"),
-            // entity.assyorderdefect.batchno
-            new TranslationSeedItem("entity.assyorderdefect.batchno", "zh-HK", "批次_hk", "批次（一工单一批次，取最近日报）"),
+            // entity.assyorderdefect.batchcode
+            new TranslationSeedItem("entity.assyorderdefect.batchcode", "en-US", "批次_us", "批次（一工单一批次，取最近日报）"),
+            // entity.assyorderdefect.batchcode
+            new TranslationSeedItem("entity.assyorderdefect.batchcode", "ja-JP", "批次_jp", "批次（一工单一批次，取最近日报）"),
+            // entity.assyorderdefect.batchcode
+            new TranslationSeedItem("entity.assyorderdefect.batchcode", "zh-CN", "批次", "批次（一工单一批次，取最近日报）"),
+            // entity.assyorderdefect.batchcode
+            new TranslationSeedItem("entity.assyorderdefect.batchcode", "zh-HK", "批次_hk", "批次（一工单一批次，取最近日报）"),
 
             // entity.assyorderdefect.prodorderqty
             new TranslationSeedItem("entity.assyorderdefect.prodorderqty", "en-US", "工单数量_us", "工单数量（取最近日报）"),

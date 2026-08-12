@@ -28,16 +28,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 [SugarIndex("ix_takt_logistics_manufacturing_output_pcba_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]
 public class TaktPcbaOutput : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（回填：随工单）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_category", ColumnDescription = "生产类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -49,19 +44,19 @@ public class TaktPcbaOutput : TaktCompanyEntityBase
     /// <summary>
     /// 工单类别（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    [SugarColumn(ColumnName = "prod_order_type", ColumnDescription = "工单类别", Length = 4, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? ProdOrderType { get; set; }
 
     /// <summary>
     /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "prod_order_code", ColumnDescription = "工单号", Length = 12, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 机种（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "model_code", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -73,8 +68,8 @@ public class TaktPcbaOutput : TaktCompanyEntityBase
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "batch_no", ColumnDescription = "批次", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? BatchNo { get; set; }
+    [SugarColumn(ColumnName = "batch_code", ColumnDescription = "批次", Length = 20, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? BatchCode { get; set; }
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -85,8 +80,8 @@ public class TaktPcbaOutput : TaktCompanyEntityBase
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    [SugarColumn(ColumnName = "serial_no", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
-    public string? SerialNo { get; set; }
+    [SugarColumn(ColumnName = "serial_code", ColumnDescription = "序列号", ColumnDataType = "nvarchar", Length = 80, IsNullable = true)]
+    public string? SerialCode { get; set; }
 
     /// <summary>
     /// PCBA明细列表

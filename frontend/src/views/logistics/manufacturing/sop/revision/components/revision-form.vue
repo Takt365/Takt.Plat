@@ -10,7 +10,7 @@
 <template>
   <a-form
     ref="formRef"
-    class="takt-generated-form revision-form flex flex-col min-h-0"
+    class="takt-generated-form revision-form flex flex-col min-h-0 overflow-visible"
     :model="formState"
     :rules="rules"
     layout="horizontal"
@@ -22,19 +22,31 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,54 +55,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.soprevision.sopid')"
+                :label="pi.label('sopId')"
                 name="sopId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.sopId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.sopid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopDocs/options"
+                  :placeholder="pi.ph('sopId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.revision')"
+                :label="pi.label('revision')"
                 name="revision"
               >
                 <a-input
                   v-model:value="formState.revision"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.revision') })"
+                  :placeholder="pi.ph('revision')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -99,12 +81,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.fileurl')"
+                :label="pi.label('fileUrl')"
                 name="fileUrl"
               >
                 <a-input
                   v-model:value="formState.fileUrl"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.fileurl') })"
+                  :placeholder="pi.ph('fileUrl')"
                   show-count
                   :maxlength="500"
                   allow-clear
@@ -113,12 +95,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.changedesc')"
+                :label="pi.label('changeDesc')"
                 name="changeDesc"
               >
                 <a-input
                   v-model:value="formState.changeDesc"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.changedesc') })"
+                  :placeholder="pi.ph('changeDesc')"
                   show-count
                   :maxlength="1000"
                   allow-clear
@@ -127,39 +109,49 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.ecnid')"
+                :label="pi.label('ecnId')"
                 name="ecnId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.ecnId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.soprevision.ecnid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktEcs/options"
+                  :placeholder="pi.ph('ecnId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.islocked')"
+                :label="pi.label('isLocked')"
                 name="isLocked"
               >
                 <TaktSelect
                   v-model:value="formState.isLocked"
                   dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.islocked') })"
+                  :placeholder="pi.ph('isLocked')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.soprevision.forceleaderack')"
+                :label="pi.label('forceLeaderAck')"
                 name="forceLeaderAck"
               >
                 <TaktSelect
                   v-model:value="formState.forceLeaderAck"
                   dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.forceleaderack') })"
+                  :placeholder="pi.ph('forceLeaderAck')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('revisionStatus')"
+                name="revisionStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.revisionStatus"
+                  dict-type="sys_lifecycle_status"
+                  :placeholder="pi.ph('revisionStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -168,32 +160,58 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.soprevision.revisionstatus')"
-                name="revisionStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.revisionStatus"
-                  dict-type="sys_lifecycle_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.revisionstatus') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.soprevision.effectiverule')"
+                :label="pi.label('effectiveRule')"
                 name="effectiveRule"
               >
                 <TaktSelect
                   v-model:value="formState.effectiveRule"
                   dict-type="logistics_sop_effective_rule"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.soprevision.effectiverule') })"
+                  :placeholder="pi.ph('effectiveRule')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -210,7 +228,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -225,12 +243,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -247,13 +265,49 @@
       ref="sopContentTableRef"
       v-model="childSopContentRows"
       :columns="sopContentFormColumns"
-      :title="t('entity.sopcontent._self')"
-      :add-button-entity="t('entity.sopcontent._self')"
+      :title="sopContentPi.self()"
+      :add-button-entity="sopContentPi.self()"
       id-field="sopContentId"
       :default-row="createDefaultSopContentRow"
       :disabled="loading"
+      :enable-vertical-scroll="false"
       section-border
-    />
+      class="w-full min-w-0"
+    >
+      <template #cell-plantCode="{ record }">
+        <TaktSelect
+          v-model:value="record.plantCode"
+          api-url="TaktPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopContentPi.queryPh('plantCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-revisionId="{ record }">
+        <TaktSelect
+          v-model:value="record.revisionId"
+          api-url="TaktSopRevisions/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopContentPi.queryPh('revisionId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-sopId="{ record }">
+        <TaktSelect
+          v-model:value="record.sopId"
+          api-url="TaktSopDocs/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="sopContentPi.queryPh('sopId', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+    </TaktEditableTable>
   </a-form>
 </template>
 
@@ -265,6 +319,11 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopRevisionI18n } from '../composables/use-revision-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopRevisionI18n()
+
 import type { SopRevisionCreate } from '@/types/logistics/manufacturing/sop/revision'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -281,7 +340,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -292,8 +351,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -301,9 +360,18 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","sopId","revision","fileUrl","changeDesc","ecnId","isLocked","forceLeaderAck","revisionStatus","effectiveRule","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","sopId","revision","fileUrl","changeDesc","ecnId","isLocked","forceLeaderAck","revisionStatus","effectiveRule","extField","remark"]
+
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
+import { useSopContentI18n } from '../composables/use-content-i18n'
+
+const sopContentPi = useSopContentI18n()
+
+/** 弹窗/表格内 TaktSelect 下拉挂载容器（避免 overflow 裁剪与表头列错位） */
+function getSelectPopupContainer(triggerNode?: HTMLElement): HTMLElement {
+  return triggerNode?.ownerDocument?.body ?? document.body
+}
 
 const childSopContentRows = ref<Record<string, unknown>[]>([])
 const sopContentTableRef = ref<{
@@ -315,84 +383,63 @@ const sopContentTableRef = ref<{
 /** 子表 sopContent 可编辑列 */
 const sopContentFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
+    key: 'plantCode',
+    title: sopContentPi.label('plantCode'),
+    width: 140,
+  },
+  {
     key: 'revisionId',
-    title: t('entity.sopcontent.revisionid'),
-    editor: 'input',
+    title: sopContentPi.label('revisionId'),
     width: 140,
   },
   {
     key: 'sopId',
-    title: t('entity.sopcontent.sopid'),
-    editor: 'input',
-    width: 140,
-  },
-  {
-    key: 'contentLang',
-    title: t('entity.sopcontent.contentlang'),
-    editor: 'textarea',
-    rows: 1,
-    placeholder: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.contentlang') }),
+    title: sopContentPi.label('sopId'),
     width: 140,
   },
   {
     key: 'contentTitle',
-    title: t('entity.sopcontent.contenttitle'),
+    title: sopContentPi.label('contentTitle'),
     editor: 'textarea',
     rows: 1,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.contenttitle') }),
-    width: 140,
+    placeholder: sopContentPi.ph('contentTitle'),
+    width: 180,
   },
   {
     key: 'steps',
-    title: t('entity.sopcontent.steps'),
+    title: sopContentPi.label('steps'),
     editor: 'input',
-    width: 140, allowClear: true, placeholder: t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.steps') }),
-  },
-  {
-    key: 'extField',
-    title: t('common.page.entity.extfield'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
-    width: 140,
-  },
-  {
-    key: 'remark',
-    title: t('common.page.entity.remark'),
-    editor: 'textarea',
-    rows: 2,
-    placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') }),
-    width: 140,
+    width: 140, allowClear: true, placeholder: sopContentPi.ph('steps'),
   },
 ])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SopRevisionCreate & { sopRevisionId?: string }> | null | undefined) {
-  childSopContentRows.value = ((val as any)?.contents ?? []) as Record<string, unknown>[]
+  const rows_sopContent = ((val as any)?.contents ?? []) as Record<string, unknown>[]
+  childSopContentRows.value = rows_sopContent
 }
 
 function createDefaultSopContentRow(): Record<string, unknown> {
   return {
+    plantCode: '',
     revisionId: '',
     sopId: '',
-    contentLang: '',
     contentTitle: '',
     steps: '',
-    extField: '',
-    remark: '',
   }
 }
 
 /** 组装 Create/Update 载荷（主表 + 子表数组） */
 function buildSubmitPayload() {
   const masterId = props.formData?.sopRevisionId ?? ''
+  const isUpdate = Boolean(masterId)
   return {
     ...formState,
     contents: sopContentTableRef.value?.getRows?.() ?? childSopContentRows.value.map((rest) => ({
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       sopRevisionId: masterId,
     })),
   }
@@ -470,28 +517,35 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   sopId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.soprevision.sopid') }),
-      trigger: 'blur'
+      message: pi.ph('sopId'),
+      trigger: 'change'
     }
   ],
   revision: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.soprevision.revision') }),
+      message: pi.ph('revision'),
       trigger: 'blur'
     }
   ],
   isLocked: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.islocked') }))
+        return Promise.reject(pi.ph('isLocked'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.islocked') }))
+        return Promise.reject(pi.ph('isLocked'))
       }
       return Promise.resolve()
     },
@@ -500,11 +554,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   forceLeaderAck: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.forceleaderack') }))
+        return Promise.reject(pi.ph('forceLeaderAck'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.forceleaderack') }))
+        return Promise.reject(pi.ph('forceLeaderAck'))
       }
       return Promise.resolve()
     },
@@ -513,11 +567,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   revisionStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.revisionstatus') }))
+        return Promise.reject(pi.ph('revisionStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.revisionstatus') }))
+        return Promise.reject(pi.ph('revisionStatus'))
       }
       return Promise.resolve()
     },
@@ -526,11 +580,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   effectiveRule: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.effectiverule') }))
+        return Promise.reject(pi.ph('effectiveRule'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.soprevision.effectiverule') }))
+        return Promise.reject(pi.ph('effectiveRule'))
       }
       return Promise.resolve()
     },

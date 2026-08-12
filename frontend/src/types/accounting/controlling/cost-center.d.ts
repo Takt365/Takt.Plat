@@ -23,70 +23,6 @@ import type {
  * @description 对应后端 TaktCostCenterDto
  */
 export interface CostCenter extends CompanyDtoBase {
-  /**
-   * CostCenterID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  costCenterId: string;
-
-  /**
-   * 成本中心编码（4位，租户+公司内唯一）
-   */
-  costCenterCode: string;
-
-  /**
-   * 成本中心名称
-   */
-  costCenterName: string;
-
-  /**
-   * 父级 ID（0 表示根节点）
-   */
-  parentId: string;
-
-  /**
-   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
-   */
-  costCenterType: number;
-
-  /**
-   * 负责人用户 ID
-   */
-  managerId?: string;
-
-  /**
-   * 负责人姓名
-   */
-  managerName?: string;
-
-  /**
-   * 所属部门 ID
-   */
-  deptId?: string;
-
-  /**
-   * 所属部门名称
-   */
-  deptName?: string;
-
-  /**
-   * 成本中心层级
-   */
-  costCenterLevel: number;
-
-  /**
-   * 生效日期
-   */
-  validFrom: string;
-
-  /**
-   * 失效日期
-   */
-  validTo: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant: string;
 
   /**
    * 排序号
@@ -201,7 +137,7 @@ export interface CostCenterQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 排序号
@@ -255,7 +191,10 @@ export interface CostCenterCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 成本中心编码（4位，租户+公司内唯一）
@@ -315,7 +254,7 @@ export interface CostCenterCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant: string;
+  plantCode: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -462,7 +401,7 @@ export interface CostCenterTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -501,7 +440,10 @@ export interface CostCenterImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 成本中心编码（4位，租户+公司内唯一）
@@ -561,7 +503,7 @@ export interface CostCenterImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
@@ -655,7 +597,7 @@ export interface CostCenterExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant: string;
+  plantCode: string;
 
   /**
    * 排序号

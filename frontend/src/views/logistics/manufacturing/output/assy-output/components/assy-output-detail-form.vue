@@ -348,8 +348,7 @@ watch(
     formState.timePeriod,
     formState.prodActualQty,
     formState.downtimeMinutes,
-    formState.confirmMinutes,
-  ] as const,
+    formState.confirmMinutes] as const,
   () => {
     refreshDerivedDisplayFields()
   }

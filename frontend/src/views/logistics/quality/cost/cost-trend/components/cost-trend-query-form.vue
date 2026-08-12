@@ -25,8 +25,7 @@
         class="cost-trend-query-bar__control cost-trend-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
       />
       <a-select
         v-model:value="costCategory"
@@ -36,11 +35,11 @@
         :options="costCategoryOptions"
       />
       <TaktSelect
-        v-model:value="costCurrency"
+        v-model:value="currencyCode"
         dict-type="accounting_currency_code"
-        class="cost-trend-query-bar__control cost-trend-query-bar__control--currency"
+        class="cost-trend-query-bar__control cost-trend-query-bar__control--currencyCode"
         allow-clear
-        :placeholder="t(`${localePrefix}.costCurrency`)"
+        :placeholder="t(`${localePrefix}.currencyCode`)"
       />
     </div>
     <a-space class="query-actions">
@@ -82,7 +81,7 @@ const periodRange = defineModel<[string, string] | null>('periodRange')
 /** 成本类别 */
 const costCategory = defineModel<string | undefined>('costCategory')
 /** 成本币种 */
-const costCurrency = defineModel<string | undefined>('costCurrency')
+const currencyCode = defineModel<string | undefined>('currencyCode')
 const props = defineProps<{
   /** 查询 loading */
   loading?: boolean
@@ -100,8 +99,7 @@ const localePrefix = 'logistics.quality.cost.cost-trend.page'
 const costCategoryOptions = computed(() => [
   { value: 'assurance', label: t(`${localePrefix}.costCategoryOptions.assurance`) },
   { value: 'issue', label: t(`${localePrefix}.costCategoryOptions.issue`) },
-  { value: 'incident', label: t(`${localePrefix}.costCategoryOptions.incident`) },
-])
+  { value: 'incident', label: t(`${localePrefix}.costCategoryOptions.incident`) }])
 </script>
 
 <style scoped>
@@ -130,7 +128,7 @@ const costCategoryOptions = computed(() => [
   min-width: 9rem;
 }
 
-.cost-trend-query-bar__control--currency {
+.cost-trend-query-bar__control--currencyCode {
   width: 10rem;
   min-width: 8rem;
 }

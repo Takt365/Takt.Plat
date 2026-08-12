@@ -12,7 +12,6 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Domain.Entities.Logistics.Materials;
 
 namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
@@ -22,7 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 [SugarTable("takt_logistics_manufacturing_bom_item", "物料清单明细表")]
 [SugarIndex("ix_bill_of_material_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_bill_of_material_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_bom_item_bom_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BillOfMaterialId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialId), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_bom_item_bom_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BillOfMaterialId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_bom_item_bill_of_material_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BillOfMaterialId), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_bom_item_bom_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BomCode), OrderByType.Asc, false)]
 public class TaktBillOfMaterialItem : TaktCompanyEntityBase
@@ -47,17 +46,16 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     public int LineNumber { get; set; } = 10;
 
     /// <summary>
-    /// 子项物料ID（选项 TaktMaterialPlants/options；DictValue=Id，ExtValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "material_id", ColumnDescription = "子项物料ID", ColumnDataType = "bigint", IsNullable = false)]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialId { get; set; }
-
-    /// <summary>
-    /// 子项物料编码（冗余，component_item_code）
+    /// 子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "子项物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 子项物料描述（回填：随物料）
+    /// </summary>
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "子项物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    public string? MaterialDescription { get; set; }
 
     /// <summary>
     /// 用量（quantity）
@@ -92,7 +90,7 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     /// <summary>
     /// 工作中心（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? WorkCenter { get; set; }
 
     /// <summary>
@@ -136,12 +134,6 @@ public class TaktBillOfMaterialItem : TaktCompanyEntityBase
     /// </summary>
     [Navigate(NavigateType.ManyToOne, nameof(BillOfMaterialId))]
     public TaktBillOfMaterial? Bom { get; set; }
-
-    /// <summary>
-    /// 子项物料（工厂物料主数据）
-    /// </summary>
-    [Navigate(NavigateType.ManyToOne, nameof(MaterialId))]
-    public TaktMaterialPlant? MaterialPlant { get; set; }
 
     /// <summary>
     /// 替代料明细（一行主件可维护多条替代物料）

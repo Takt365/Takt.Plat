@@ -150,7 +150,7 @@ public interface ITaktAuthService
     Task<List<TaktSelectOption>> GetSessionCultureOptionsAsync(string? tenantCode = null);
 
     /// <summary>
-    /// 登录前预览：解析用户默认公司、用户 DefaultCulture 与公司 DefaultCulture（与假日无关）
+    /// 登录前预览：解析用户默认公司、用户 CultureCode 与公司 CultureCode（与假日无关）
     /// </summary>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="username">登录用户名</param>

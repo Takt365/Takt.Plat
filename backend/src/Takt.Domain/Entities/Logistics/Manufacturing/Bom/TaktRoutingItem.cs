@@ -35,7 +35,7 @@ public class TaktRoutingItem : TaktCompanyEntityBase
     /// <summary>
     /// 工艺路线编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
+    [SugarColumn(ColumnName = "routing_code", ColumnDescription = "工艺路线编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string RoutingCode { get; set; } = string.Empty;
 
     /// <summary>

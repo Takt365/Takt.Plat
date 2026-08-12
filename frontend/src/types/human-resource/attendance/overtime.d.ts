@@ -23,65 +23,6 @@ import type {
  * @description 对应后端 TaktOvertimeDto
  */
 export interface Overtime extends ApprovalDtoBase {
-  /**
-   * OvertimeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  overtimeId: string;
-
-  /**
-   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
-   */
-  deptId: string;
-
-  /**
-   * 部门名称
-   */
-  deptName?: string;
-
-  /**
-   * 加班归属日期
-   */
-  overtimeDate: string;
-
-  /**
-   * 计划加班开始时间
-   */
-  plannedStartTime: string;
-
-  /**
-   * 计划加班结束时间
-   */
-  plannedEndTime: string;
-
-  /**
-   * 加班总人数
-   */
-  totalEmployees: number;
-
-  /**
-   * 计划加班总小时数
-   */
-  totalPlannedHours: number;
-
-  /**
-   * 实际加班总小时数
-   */
-  totalActualHours: number;
-
-  /**
-   * 加班类型（字典 hr_overtime_type；0=工作日加班 1=休息日加班 2=法定节假日加班）
-   */
-  overtimeType: number;
-
-  /**
-   * 加班原因
-   */
-  reason?: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -196,7 +137,7 @@ export interface OvertimeQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -305,7 +246,10 @@ export interface OvertimeCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
@@ -360,7 +304,7 @@ export interface OvertimeCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -503,7 +447,7 @@ export interface OvertimeTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -562,7 +506,10 @@ export interface OvertimeImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
@@ -617,7 +564,7 @@ export interface OvertimeImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -721,7 +668,7 @@ export interface OvertimeExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 经办人（关联 TaktEmployee.Id，选项 TaktEmployees/options）

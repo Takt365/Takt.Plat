@@ -16,6 +16,7 @@ using Takt.Domain.Entities;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Infrastructure.Data.Context;
+using Takt.Infrastructure.Extensions;
 using Microsoft.Extensions.Options;
 using Takt.Shared.Enums;
 using Takt.Shared.Helpers;
@@ -283,6 +284,12 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             entity.CompanyCode = CurrentCompanyCode;
         }
 
+        await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+            Db,
+            entity,
+            entity.TenantCode,
+            entity.CompanyCode);
+
         // 自动设置审计字段
         entity.ApplyCreate(CurrentUserId);
 
@@ -309,6 +316,12 @@ public class TaktApprovalRepository<TEntity> : ITaktApprovalRepository<TEntity> 
             {
                 entity.CompanyCode = CurrentCompanyCode;
             }
+
+            await TaktCompanyScopeFillHelper.ApplyCompanyScopeFromMasterAsync(
+                Db,
+                entity,
+                entity.TenantCode,
+                entity.CompanyCode);
 
             entity.ApplyCreate(CurrentUserId, now);
         }

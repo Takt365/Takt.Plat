@@ -119,6 +119,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
     public async Task<TaktSalesQuotationDto> CreateSalesQuotationAsync(TaktSalesQuotationCreateDto dto)
     {
         var entity = dto.Adapt<TaktSalesQuotation>();
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_quotation_code_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationRepository,
             x => x.PlantCode == entity.PlantCode
@@ -146,6 +147,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             throw new TaktBusinessException("销售报价不存在");
         }
         dto.Adapt(entity);
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_quotation_code_unique = await _uniqueValidator.IsUniqueAsync(
             _salesQuotationRepository,
             x => x.PlantCode == entity.PlantCode
@@ -251,6 +253,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
             try
             {
                 var entity = rows[i].Adapt<TaktSalesQuotation>();
+                entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
                 var importKey = $"{entity.PlantCode}|{entity.SalesQuotationCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -492,6 +495,7 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
                 || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
                 || (x.SalesOrderCode != null && x.SalesOrderCode.Contains(keywords))
                 || SqlFunc.ToString(x.QuotationStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.QuotationDate).Contains(keywords)
@@ -568,6 +572,11 @@ public class TaktSalesQuotationService : TaktServiceBase, ITaktSalesQuotationSer
         if (queryDto?.QuotationStatus.HasValue == true)
         {
             exp = exp.And(x => x.QuotationStatus == queryDto.QuotationStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

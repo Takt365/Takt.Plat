@@ -70,7 +70,6 @@ export interface DictType extends TenantDtoBase {
 
 }
 
-
 /**
  * DictType 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -82,6 +81,11 @@ export interface DictTypeQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
@@ -140,7 +144,6 @@ export interface DictTypeQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建DictType DTO
  * 对应前端 DictTypeCreate
@@ -151,6 +154,11 @@ export interface DictTypeCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
@@ -199,7 +207,6 @@ export interface DictTypeCreate {
 
 }
 
-
 /**
  * 更新DictType DTO
  * 继承 TaktDictTypeCreateDto，添加 DictTypeId 字段
@@ -213,7 +220,6 @@ export interface DictTypeUpdate extends DictTypeCreate {
   dictTypeId: string;
 
 }
-
 
 /**
  * DictType 状态更新 DTO
@@ -233,7 +239,6 @@ export interface DictTypeStatus {
 
 }
 
-
 /**
  * DictType 内置更新 DTO
  * 对应前端 DictTypeBuiltIn
@@ -251,7 +256,6 @@ export interface DictTypeBuiltIn {
   isBuiltIn: number;
 
 }
-
 
 /**
  * DictType 排序更新 DTO
@@ -271,7 +275,6 @@ export interface DictTypeSort {
 
 }
 
-
 /**
  * DictType 导入模板行 DTO
  * 对应前端 DictTypeTemplate
@@ -282,6 +285,11 @@ export interface DictTypeTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
@@ -329,7 +337,6 @@ export interface DictTypeTemplate {
   remark?: string;
 
 }
-
 
 /**
  * DictType 导入 DTO（独立实现，不继承 TemplateDto）
@@ -343,6 +350,11 @@ export interface DictTypeImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
    */
   dictTypeCode?: string;
@@ -388,7 +400,6 @@ export interface DictTypeImport {
   remark?: string;
 
 }
-
 
 /**
  * DictType 导出 DTO（独立实现，不继承响应 Dto）

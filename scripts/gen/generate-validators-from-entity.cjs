@@ -18,6 +18,8 @@ const {
   parseAllOnlyGenerateArgs,
   sanitizeXmlDocPlainText,
   parseEntityClassHeaderFromCsContent,
+  isTenantEntityBase,
+  isCompanyOrApprovalEntityBase,
   ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
 const { isRbacJunctionEntity, isManualDtoEntity } = require('./generate-entity-exclusions.cjs');
@@ -33,7 +35,7 @@ const CONFIG = {
   validatorsRoot: path.join(path.resolve(__dirname, '../../backend/src'), 'Takt.Application', 'Validators'),
 };
 
-const EXT_FIELD_JSON_MAX = 4000;
+const ext_field_MAX = 4000;
 const REMARK_MAX = 500;
 const DEFAULT_PASSWORD_MIN = 8;
 
@@ -366,6 +368,9 @@ function parseEntityFile(filePath) {
     'Id',
     'TenantCode',
     'CompanyCode',
+    'CultureCode',
+    'PlantCode',
+    'RelatedPlant',
     'ExtField',
     'Remark',
     'CreatedBy',
@@ -477,7 +482,7 @@ function emitExtFieldAndRemarkRules(mode) {
 
   lines.push(`        RuleFor(x => x.ExtField)`);
   lines.push(
-    `            .MaximumLength(${EXT_FIELD_JSON_MAX}).WithMessage("扩展字段JSON长度不能超过${EXT_FIELD_JSON_MAX}个字符")${extWhen};`
+    `            .MaximumLength(${ext_field_MAX}).WithMessage("扩展字段JSON长度不能超过${ext_field_MAX}个字符")${extWhen};`
   );
   lines.push(`        RuleFor(x => x.Remark)`);
   lines.push(
@@ -493,7 +498,7 @@ function emitExtFieldAndRemarkRules(mode) {
  * @param {Set<string>|null} dtoPropNames
  * @returns {string[]}
  */
-function emitTenantCompanyScopeRules(entityBase, mode, dtoPropNames) {
+function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
   const lines = [];
   const tenantWhen =
     mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.TenantCode))' : '';
@@ -507,7 +512,7 @@ function emitTenantCompanyScopeRules(entityBase, mode, dtoPropNames) {
     lines.push(`            .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符")${tenantWhen};`);
   }
   if (
-    (entityBase === 'TaktCompanyEntityBase' || entityBase === 'TaktApprovalEntityBase') &&
+    isCompanyOrApprovalEntityBase(entityBase) &&
     (!dtoPropNames || dtoPropNames.has('CompanyCode'))
   ) {
     lines.push('        RuleFor(x => x.CompanyCode)');
@@ -515,6 +520,55 @@ function emitTenantCompanyScopeRules(entityBase, mode, dtoPropNames) {
       lines.push('            .NotEmpty().WithMessage("公司代码不能为空")');
     }
     lines.push(`            .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符")${companyWhen};`);
+  }
+  if (
+    isCompanyOrApprovalEntityBase(entityBase) &&
+    (!dtoPropNames || dtoPropNames.has('CultureCode'))
+  ) {
+    const cultureWhen =
+      mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.CultureCode))' : '';
+    lines.push('        RuleFor(x => x.CultureCode)');
+    if (mode === 'create') {
+      lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+    }
+    lines.push(`            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符")${cultureWhen};`);
+  } else if (
+    isTenantEntityBase(entityBase) &&
+    entity.properties.some((p) => p.name === 'CultureCode') &&
+    (!dtoPropNames || dtoPropNames.has('CultureCode'))
+  ) {
+    const cultureWhen =
+      mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.CultureCode))' : '';
+    lines.push('        RuleFor(x => x.CultureCode)');
+    if (mode === 'create') {
+      lines.push('            .NotEmpty().WithMessage("区域文化编码不能为空")');
+    }
+    lines.push(`            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符")${cultureWhen};`);
+  }
+  if (
+    isCompanyOrApprovalEntityBase(entityBase) &&
+    (!dtoPropNames || dtoPropNames.has('PlantCode'))
+  ) {
+    const plantWhen =
+      mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.PlantCode))' : '';
+    lines.push('        RuleFor(x => x.PlantCode)');
+    if (mode === 'create') {
+      lines.push('            .NotEmpty().WithMessage("工厂代码不能为空")');
+    }
+    lines.push(`            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符")${plantWhen};`);
+  }
+  if (
+    isTenantEntityBase(entityBase) &&
+    entity.className !== 'TaktPlant' &&
+    (!dtoPropNames || dtoPropNames.has('RelatedPlant'))
+  ) {
+    const relatedWhen =
+      mode === 'import' ? '.When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant))' : '';
+    lines.push('        RuleFor(x => x.RelatedPlant)');
+    if (mode === 'create') {
+      lines.push('            .NotEmpty().WithMessage("关联工厂不能为空")');
+    }
+    lines.push(`            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符")${relatedWhen};`);
   }
   return lines;
 }
@@ -599,7 +653,7 @@ function generateValidatorFileContent(entity) {
 
   // Create
   const createRules = [];
-  createRules.push(...emitTenantCompanyScopeRules(entity.entityBase, 'create', createDtoPropNames));
+  createRules.push(...emitTenantCompanyScopeRules(entity, entity.entityBase, 'create', createDtoPropNames));
   createProps.forEach((prop) => {
     if (!shouldValidateProperty(prop)) {
       return;
@@ -655,7 +709,7 @@ function generateValidatorFileContent(entity) {
     const updateRules = [
       `        RuleFor(x => x.${idProp})`,
       `            .GreaterThan(0).WithMessage("${entityShort}ID无效");`,
-      ...emitTenantCompanyScopeRules(entity.entityBase, 'create', updateDtoPropNames),
+      ...emitTenantCompanyScopeRules(entity, entity.entityBase, 'create', updateDtoPropNames),
       ...updateFieldRules,
     ];
     if (!updateDtoPropNames || updateDtoPropNames.has('ExtField') || updateDtoPropNames.has('Remark')) {
@@ -695,7 +749,7 @@ function generateValidatorFileContent(entity) {
 
   if (hasImportDtoClass) {
     const importRules = [];
-    importRules.push(...emitTenantCompanyScopeRules(entity.entityBase, 'import', importDtoPropNames));
+    importRules.push(...emitTenantCompanyScopeRules(entity, entity.entityBase, 'import', importDtoPropNames));
     importProps.forEach((prop) => {
       if (!shouldValidateProperty(prop)) {
         return;

@@ -57,12 +57,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcelegacypartno')"
-                name="sourceLegacyPartNo"
+                :label="t('entity.sourceecdetail.sourcelegacypartCode')"
+                name="sourceLegacyPartCode"
               >
                 <a-input
-                  v-model:value="formState.sourceLegacyPartNo"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartno') })"
+                  v-model:value="formState.sourceLegacyPartCode"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcelegacypartCode') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -111,12 +111,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcereplacementpartno')"
-                name="sourceReplacementPartNo"
+                :label="t('entity.sourceecdetail.sourcereplacementpartCode')"
+                name="sourceReplacementPartCode"
               >
                 <a-input
-                  v-model:value="formState.sourceReplacementPartNo"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementpartno') })"
+                  v-model:value="formState.sourceReplacementPartCode"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcereplacementpartCode') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -175,12 +175,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceecdetail.sourcebomno')"
-                name="sourceBomNo"
+                :label="t('entity.sourceecdetail.sourcebomCode')"
+                name="sourceBomCode"
               >
                 <a-input
-                  v-model:value="formState.sourceBomNo"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcebomno') })"
+                  v-model:value="formState.sourceBomCode"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sourceecdetail.sourcebomCode') })"
                   show-count
                   :maxlength="4"
                   allow-clear

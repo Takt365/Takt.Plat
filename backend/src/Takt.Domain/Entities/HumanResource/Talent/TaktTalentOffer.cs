@@ -33,8 +33,8 @@ public class TaktTalentOffer : TaktApprovalEntityBase
     /// <summary>
     /// 录用编码（租户+公司内业务编码）
     /// </summary>
-    [SugarColumn(ColumnName = "offer_no", ColumnDescription = "录用编码", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
-    public string OfferNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "offer_code", ColumnDescription = "录用编码", ColumnDataType = "varchar", Length = 20, IsNullable = false)]
+    public string OfferCode { get; set; } = string.Empty;
     /// <summary>
     /// 录用日期（确认录用/发 offer）
     /// </summary>

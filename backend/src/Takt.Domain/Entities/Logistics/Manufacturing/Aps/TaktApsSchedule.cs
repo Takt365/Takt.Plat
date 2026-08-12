@@ -25,6 +25,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ScheduleStatus), OrderByType.Asc, false)]
 public class TaktApsSchedule : TaktCompanyEntityBase
 {
+
     /// <summary>
     /// 来源 MRP 头表 ID（Planning 层上游，关联 TaktMaterialRequirementsPlanning.Id）
     /// </summary>
@@ -35,14 +36,8 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     /// <summary>
     /// 来源 MRP 编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_requirements_planning_code", ColumnDescription = "来源MRP编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? MaterialRequirementsPlanningCode { get; set; }
-
-    /// <summary>
-    /// 工厂编码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排程编码（唯一索引）
@@ -101,7 +96,7 @@ public class TaktApsSchedule : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组编码
     /// </summary>
-    [SugarColumn(ColumnName = "production_line_code", ColumnDescription = "生产线编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "production_line_code", ColumnDescription = "生产线编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = true)]
     public string? ProductionLineCode { get; set; }
 
     /// <summary>

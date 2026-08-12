@@ -25,7 +25,7 @@ public class TaktIqcDefectHandling : TaktCompanyEntityBase
 {    /// <summary>
     /// IQC不良处理编码
     /// </summary>
-    [SugarColumn(ColumnName = "iqc_defect_handling_code", ColumnDescription = "IQC不良处理编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "iqc_defect_handling_code", ColumnDescription = "IQC不良处理编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string IqcDefectHandlingCode { get; set; } = string.Empty;
     /// <summary>
     /// IQC检验单明细 ID（选项 TaktIqcOrderItems/options；DictValue=Id）
@@ -36,7 +36,7 @@ public class TaktIqcDefectHandling : TaktCompanyEntityBase
     /// <summary>
     /// IQC检验单编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "iqc_order_code", ColumnDescription = "IQC检验单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "iqc_order_code", ColumnDescription = "IQC检验单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string IqcOrderCode { get; set; } = string.Empty;
     /// <summary>
     /// 行号（项号/序号，固定步长=10）
@@ -51,12 +51,12 @@ public class TaktIqcDefectHandling : TaktCompanyEntityBase
     /// <summary>
     /// 不良现象编码
     /// </summary>
-    [SugarColumn(ColumnName = "defect_code", ColumnDescription = "不良现象编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "defect_code", ColumnDescription = "不良现象编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string DefectCode { get; set; } = string.Empty;
     /// <summary>
     /// 不良现象描述
     /// </summary>
-    [SugarColumn(ColumnName = "defect_description", ColumnDescription = "不良现象描述", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
+    [SugarColumn(ColumnName = "defect_description", ColumnDescription = "不良现象描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string DefectDescription { get; set; } = string.Empty;
     /// <summary>
     /// 不良数量
@@ -71,7 +71,7 @@ public class TaktIqcDefectHandling : TaktCompanyEntityBase
     /// <summary>
     /// 处理说明
     /// </summary>
-    [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = true)]
+    [SugarColumn(ColumnName = "handling_description", ColumnDescription = "处理说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? HandlingDescription { get; set; }
     /// <summary>
     /// 责任部门

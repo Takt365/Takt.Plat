@@ -307,7 +307,7 @@ public class TaktAssyOrderDefectService : TaktServiceBase, ITaktAssyOrderDefectS
                 || (x.ProdDateGroup != null && x.ProdDateGroup.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
                 || SqlFunc.ToString(x.GoodQuantity).Contains(keywords)
@@ -316,6 +316,7 @@ public class TaktAssyOrderDefectService : TaktServiceBase, ITaktAssyOrderDefectS
                 || SqlFunc.ToString(x.YieldRatePercent).Contains(keywords)
                 || SqlFunc.ToString(x.ReportCount).Contains(keywords)
                 || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.LastProdDate).Contains(keywords)
@@ -353,9 +354,9 @@ public class TaktAssyOrderDefectService : TaktServiceBase, ITaktAssyOrderDefectS
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (queryDto?.ProdOrderQty.HasValue == true)
@@ -396,6 +397,11 @@ public class TaktAssyOrderDefectService : TaktServiceBase, ITaktAssyOrderDefectS
         if (queryDto?.OrderStatus.HasValue == true)
         {
             exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

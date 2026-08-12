@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SopExec } from '@/types/logistics/manufacturing/sop/exec'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SopExecRowRecord = SopExec | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SopExecMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SopExec | null>
+  selectedMasterRow: Ref<SopExecRowRecord | null>
 }
 
 const sopExecMasterContextKey: InjectionKey<SopExecMasterContext> = Symbol('execMasterContext')
@@ -22,7 +25,7 @@ const sopExecMasterContextKey: InjectionKey<SopExecMasterContext> = Symbol('exec
  * @returns {SopExecMasterContext} 主表上下文
  */
 export function provideSopExecMasterContext(): SopExecMasterContext {
-  const selectedMasterRow = ref<SopExec | null>(null)
+  const selectedMasterRow = ref<SopExecRowRecord | null>(null)
   const ctx: SopExecMasterContext = { selectedMasterRow }
   provide(sopExecMasterContextKey, ctx)
   return ctx

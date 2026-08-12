@@ -28,11 +28,6 @@ namespace Takt.Domain.Entities.Logistics.CustomerService;
 [SugarIndex("ix_takt_logistics_customer_service_order_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(OrderDate), OrderByType.Desc, false)]
 public class TaktCustomerServiceOrder : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务订单编码（组合唯一索引）
@@ -130,7 +125,7 @@ public class TaktCustomerServiceOrder : TaktCompanyEntityBase
     /// <summary>
     /// 结算币种代码
     /// </summary>
-    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种代码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false, DefaultValue = "CNY")]
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "结算币种代码", ColumnDataType = "nvarchar", Length = 3, IsNullable = false, DefaultValue = "CNY")]
     public string CurrencyCode { get; set; } = "CNY";
 
     /// <summary>

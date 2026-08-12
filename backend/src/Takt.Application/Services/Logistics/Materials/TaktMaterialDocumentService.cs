@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialDocumentService.cs
-// 创建时间：2026-07-15
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料凭证应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     }
 
     /// <summary>
-    /// 获取物料凭证列表（分页）
+    /// 获取物料凭证列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaterialDocumentDto>> GetMaterialDocumentListAsync(TaktMaterialDocumentQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaterialDocumentDto>.Create(
+                new List<TaktMaterialDocumentDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _materialDocumentRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,13 +109,13 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     {
         EnsureThreeLayerContext();
         var list = await _materialDocumentRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaterialDocumentStatus == 1,
-            x => x.PlantCode ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.MaterialDocumentCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.MaterialDocumentCode,
+            DictLabel = e.MaterialDocumentCode,
         }).ToList();
     }
 
@@ -121,11 +129,11 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
         var entity = dto.Adapt<TaktMaterialDocument>();
         var isUnique_ix_takt_logistics_materials_material_document_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _materialDocumentRepository,
-            x => x.PlantCode == entity.PlantCode
+            x => x.MaterialDocumentYear == entity.MaterialDocumentYear
                 && x.MaterialDocumentCode == entity.MaterialDocumentCode);
         if (!isUnique_ix_takt_logistics_materials_material_document_doc_unique)
         {
-            throw new TaktBusinessException("物料凭证的PlantCode、MaterialDocumentCode已存在");
+            throw new TaktBusinessException("物料凭证的MaterialDocumentYear、MaterialDocumentCode已存在");
         }
         entity = await _materialDocumentRepository.CreateAsync(entity);
                 await SaveMaterialDocumentChildrenAsync(entity, dto);
@@ -148,12 +156,12 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_materials_material_document_doc_unique = await _uniqueValidator.IsUniqueAsync(
             _materialDocumentRepository,
-            x => x.PlantCode == entity.PlantCode
+            x => x.MaterialDocumentYear == entity.MaterialDocumentYear
                 && x.MaterialDocumentCode == entity.MaterialDocumentCode,
             id);
         if (!isUnique_ix_takt_logistics_materials_material_document_doc_unique)
         {
-            throw new TaktBusinessException("物料凭证的PlantCode、MaterialDocumentCode已存在");
+            throw new TaktBusinessException("物料凭证的MaterialDocumentYear、MaterialDocumentCode已存在");
         }
         await _materialDocumentRepository.UpdateAsync(entity);
                 await SaveMaterialDocumentChildrenAsync(entity, dto);
@@ -199,23 +207,6 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     }
 
     /// <summary>
-    /// 更新物料凭证状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    public async Task<TaktMaterialDocumentDto> UpdateMaterialDocumentStatusAsync(TaktMaterialDocumentStatusDto dto)
-    {
-        var entity = await _materialDocumentRepository.GetByIdAsync(dto.MaterialDocumentId);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("物料凭证不存在");
-        }
-        entity.MaterialDocumentStatus = dto.MaterialDocumentStatus;
-        await _materialDocumentRepository.UpdateAsync(entity);
-        return await GetMaterialDocumentByIdAsync(dto.MaterialDocumentId) ?? throw new TaktBusinessException("物料凭证不存在");
-    }
-
-    /// <summary>
     /// 获取导入模板
     /// </summary>
     /// <param name="sheetName">工作表名称</param>
@@ -251,18 +242,18 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
             try
             {
                 var entity = rows[i].Adapt<TaktMaterialDocument>();
-                var importKey = $"{entity.PlantCode}|{entity.MaterialDocumentCode}";
+                var importKey = $"{entity.MaterialDocumentYear}|{entity.MaterialDocumentCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、MaterialDocumentCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（MaterialDocumentYear、MaterialDocumentCode）");
                 }
                 var isUnique_ix_takt_logistics_materials_material_document_doc_unique = await _uniqueValidator.IsUniqueAsync(
                     _materialDocumentRepository,
-                    x => x.PlantCode == entity.PlantCode
+                    x => x.MaterialDocumentYear == entity.MaterialDocumentYear
                         && x.MaterialDocumentCode == entity.MaterialDocumentCode);
                 if (!isUnique_ix_takt_logistics_materials_material_document_doc_unique)
                 {
-                    throw new TaktBusinessException("物料凭证的PlantCode、MaterialDocumentCode已存在");
+                    throw new TaktBusinessException("物料凭证的MaterialDocumentYear、MaterialDocumentCode已存在");
                 }
                 await _materialDocumentRepository.CreateAsync(entity);
                 success += 1;
@@ -285,7 +276,15 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaterialDocumentAsync(TaktMaterialDocumentQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaterialDocumentQueryDto());
+        var queryDto = query ?? new TaktMaterialDocumentQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaterialDocumentExportDto>(),
+                sheetName ?? "物料凭证数据",
+                fileName ?? "物料凭证导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _materialDocumentRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -356,9 +355,9 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     {
         // 物料凭证行项目（Items）
         List<TaktMaterialDocumentItemUpdateDto>? itemsForSave;
-        if (dto is TaktMaterialDocumentUpdateDto updateDto && updateDto.Items != null)
+        if (dto is TaktMaterialDocumentUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            itemsForSave = updateDto.Items;
+            itemsForSave = updateDtoForItems.Items;
         }
         else if (dto.Items != null)
         {
@@ -402,13 +401,12 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
                     submittedIds.Add(childDto.MaterialDocumentItemId);
                     var isUniqueUpdate_ix_takt_logistics_materials_material_document_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _materialDocumentItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaterialDocumentId == x.MaterialDocumentId
+                        x => x.MaterialDocumentId == x.MaterialDocumentId
                 && x.LineNumber == x.LineNumber,
                         childDto.MaterialDocumentItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_materials_material_document_item_line_unique)
                     {
-                        throw new TaktBusinessException("物料凭证行项目的CompanyCode、MaterialDocumentId、LineNumber已存在");
+                        throw new TaktBusinessException("物料凭证行项目的MaterialDocumentId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.MaterialDocumentItemId;
@@ -420,12 +418,11 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
                 {
                     var isUniqueCreate_ix_takt_logistics_materials_material_document_item_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _materialDocumentItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.MaterialDocumentId == x.MaterialDocumentId
+                        x => x.MaterialDocumentId == x.MaterialDocumentId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_materials_material_document_item_line_unique)
                     {
-                        throw new TaktBusinessException("物料凭证行项目的CompanyCode、MaterialDocumentId、LineNumber已存在");
+                        throw new TaktBusinessException("物料凭证行项目的MaterialDocumentId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktMaterialDocumentItem>();
                     child.Id = 0;
@@ -474,66 +471,234 @@ public class TaktMaterialDocumentService : TaktServiceBase, ITaktMaterialDocumen
     {
         var exp = Expressionable.Create<TaktMaterialDocument>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(keywords))
+                (x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(keywords))
+                || (x.MaterialDocumentYear != null && x.MaterialDocumentYear.Contains(keywords))
+                || (x.TransactionEventType != null && x.TransactionEventType.Contains(keywords))
+                || (x.DocumentType != null && x.DocumentType.Contains(keywords))
+                || (x.RevaluationType != null && x.RevaluationType.Contains(keywords))
+                || (x.ReferenceCode != null && x.ReferenceCode.Contains(keywords))
+                || (x.HeaderText != null && x.HeaderText.Contains(keywords))
+                || (x.BillOfLadingCode != null && x.BillOfLadingCode.Contains(keywords))
+                || (x.DeliveryCode != null && x.DeliveryCode.Contains(keywords))
+                || (x.TransactionCode != null && x.TransactionCode.Contains(keywords))
                 || (x.PostedBy != null && x.PostedBy.Contains(keywords))
-                || SqlFunc.ToString(x.MaterialDocumentStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDocumentCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var materialDocumentCode = queryDto.MaterialDocumentCode;
+            exp = exp.And(x => x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(materialDocumentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDocumentYear))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialDocumentYear = queryDto.MaterialDocumentYear;
+            exp = exp.And(x => x.MaterialDocumentYear != null && x.MaterialDocumentYear.Contains(materialDocumentYear));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialDocumentCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransactionEventType))
         {
-            exp = exp.And(x => x.MaterialDocumentCode != null && x.MaterialDocumentCode.Contains(queryDto.MaterialDocumentCode));
+            var transactionEventType = queryDto.TransactionEventType;
+            exp = exp.And(x => x.TransactionEventType != null && x.TransactionEventType.Contains(transactionEventType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostedBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentType))
         {
-            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(queryDto.PostedBy));
+            var documentType = queryDto.DocumentType;
+            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(documentType));
         }
 
-        if (queryDto?.MaterialDocumentStatus.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.RevaluationType))
         {
-            exp = exp.And(x => x.MaterialDocumentStatus == queryDto.MaterialDocumentStatus);
+            var revaluationType = queryDto.RevaluationType;
+            exp = exp.And(x => x.RevaluationType != null && x.RevaluationType.Contains(revaluationType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReferenceCode))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var referenceCode = queryDto.ReferenceCode;
+            exp = exp.And(x => x.ReferenceCode != null && x.ReferenceCode.Contains(referenceCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HeaderText))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var headerText = queryDto.HeaderText;
+            exp = exp.And(x => x.HeaderText != null && x.HeaderText.Contains(headerText));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BillOfLadingCode))
+        {
+            var billOfLadingCode = queryDto.BillOfLadingCode;
+            exp = exp.And(x => x.BillOfLadingCode != null && x.BillOfLadingCode.Contains(billOfLadingCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeliveryCode))
+        {
+            var deliveryCode = queryDto.DeliveryCode;
+            exp = exp.And(x => x.DeliveryCode != null && x.DeliveryCode.Contains(deliveryCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransactionCode))
+        {
+            var transactionCode = queryDto.TransactionCode;
+            exp = exp.And(x => x.TransactionCode != null && x.TransactionCode.Contains(transactionCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostedBy))
+        {
+            var postedBy = queryDto.PostedBy;
+            exp = exp.And(x => x.PostedBy != null && x.PostedBy.Contains(postedBy));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.DocumentDateStart.HasValue == true)
+        {
+            var documentDateStart = queryDto.DocumentDateStart;
+            exp = exp.And(x => x.DocumentDate >= documentDateStart);
+        }
+
+        if (queryDto?.DocumentDateEnd.HasValue == true)
+        {
+            var documentDateEnd = queryDto.DocumentDateEnd;
+            exp = exp.And(x => x.DocumentDate <= documentDateEnd);
+        }
+
+        if (queryDto?.PostingDateStart.HasValue == true)
+        {
+            var postingDateStart = queryDto.PostingDateStart;
+            exp = exp.And(x => x.PostingDate >= postingDateStart);
+        }
+
+        if (queryDto?.PostingDateEnd.HasValue == true)
+        {
+            var postingDateEnd = queryDto.PostingDateEnd;
+            exp = exp.And(x => x.PostingDate <= postingDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaterialDocumentQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDocumentCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDocumentYear))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransactionEventType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DocumentType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RevaluationType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReferenceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HeaderText))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BillOfLadingCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeliveryCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TransactionCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostedBy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.DocumentDateStart.HasValue || queryDto.DocumentDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PostingDateStart.HasValue || queryDto.PostingDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

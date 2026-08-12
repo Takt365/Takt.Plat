@@ -125,11 +125,11 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
         var entity = dto.Adapt<TaktCustomerSatisfactionSurvey>();
         var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique = await _uniqueValidator.IsUniqueAsync(
             _customerSatisfactionSurveyRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CustomerSatisfactionSurveyCode == entity.CustomerSatisfactionSurveyCode);
         if (!isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique)
         {
-            throw new TaktBusinessException("客户满意度调查的RelatedPlant、CustomerSatisfactionSurveyCode已存在");
+            throw new TaktBusinessException("客户满意度调查的PlantCode、CustomerSatisfactionSurveyCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -159,12 +159,12 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
         dto.Adapt(entity);
         var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique = await _uniqueValidator.IsUniqueAsync(
             _customerSatisfactionSurveyRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CustomerSatisfactionSurveyCode == entity.CustomerSatisfactionSurveyCode,
             id);
         if (!isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique)
         {
-            throw new TaktBusinessException("客户满意度调查的RelatedPlant、CustomerSatisfactionSurveyCode已存在");
+            throw new TaktBusinessException("客户满意度调查的PlantCode、CustomerSatisfactionSurveyCode已存在");
         }
         await _customerSatisfactionSurveyRepository.UpdateAsync(entity);
                 await SaveCustomerSatisfactionSurveyChildrenAsync(entity, dto);
@@ -279,18 +279,18 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             try
             {
                 var entity = rows[i].Adapt<TaktCustomerSatisfactionSurvey>();
-                var importKey = $"{entity.RelatedPlant}|{entity.CustomerSatisfactionSurveyCode}";
+                var importKey = $"{entity.PlantCode}|{entity.CustomerSatisfactionSurveyCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、CustomerSatisfactionSurveyCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、CustomerSatisfactionSurveyCode）");
                 }
                 var isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique = await _uniqueValidator.IsUniqueAsync(
                     _customerSatisfactionSurveyRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.CustomerSatisfactionSurveyCode == entity.CustomerSatisfactionSurveyCode);
                 if (!isUnique_ix_takt_logistics_quality_customer_satisfaction_survey_survey_unique)
                 {
-                    throw new TaktBusinessException("客户满意度调查的RelatedPlant、CustomerSatisfactionSurveyCode已存在");
+                    throw new TaktBusinessException("客户满意度调查的PlantCode、CustomerSatisfactionSurveyCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {
@@ -536,9 +536,10 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
                 || SqlFunc.ToString(x.RelatedComplaintId).Contains(keywords)
                 || (x.Attachments != null && x.Attachments.Contains(keywords))
                 || SqlFunc.ToString(x.SurveyStatus).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || SqlFunc.ToString(x.FollowUpStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.SurveyDate).Contains(keywords)
@@ -661,9 +662,9 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
             exp = exp.And(x => x.SurveyStatus == queryDto.SurveyStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
@@ -674,6 +675,11 @@ public class TaktCustomerSatisfactionSurveyService : TaktServiceBase, ITaktCusto
         if (queryDto?.FollowUpStatus.HasValue == true)
         {
             exp = exp.And(x => x.FollowUpStatus == queryDto.FollowUpStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

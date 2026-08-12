@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Identity
 // 文件名称：TaktUserI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktUser 实体字段国际化种子（已对齐前端 locales：src/locales/identity/user）
 // 
@@ -134,15 +134,6 @@ public class TaktUserI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.user.employeeid", "zh-CN", "员工ID", "关联的员工ID（必须关联人事档案）"),
             // entity.user.employeeid
             new TranslationSeedItem("entity.user.employeeid", "zh-HK", "员工ID_hk", "关联的员工ID（必须关联人事档案）"),
-
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "en-US", "区域文化编码_us", "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "ja-JP", "区域文化编码_jp", "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "zh-CN", "区域文化编码", "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
-            // entity.user.defaultculture
-            new TranslationSeedItem("entity.user.defaultculture", "zh-HK", "区域文化编码_hk", "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）"),
 
             // entity.user.isbuiltin
             new TranslationSeedItem("entity.user.isbuiltin", "en-US", "内置_us", "内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）"),

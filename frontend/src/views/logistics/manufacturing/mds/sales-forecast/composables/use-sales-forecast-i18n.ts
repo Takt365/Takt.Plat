@@ -23,8 +23,14 @@ export const SALESFORECAST_LIST_FIELDS = [
   'plantCode',
   'salesForecastCode',
   'planDate',
-  'planPeriodStart',
-  'planPeriodEnd',
+  'receiveDate',
+  'receiveVersionNo',
+  'salesProduct',
+  'productCategoryCode',
+  'profitCenterCode',
+  'modelCode',
+  'materialCode',
+  'materialDescription',
   'customerCode',
   'customerName1',
   'plannerId',
@@ -46,8 +52,14 @@ export const SALESFORECAST_PLACEHOLDER = {
   plantCode: 'select',
   salesForecastCode: 'required',
   planDate: 'select',
-  planPeriodStart: 'select',
-  planPeriodEnd: 'select',
+  receiveDate: 'select',
+  receiveVersionNo: 'required',
+  salesProduct: 'required',
+  productCategoryCode: 'select',
+  profitCenterCode: 'optional',
+  modelCode: 'optional',
+  materialCode: 'select',
+  materialDescription: 'optional',
   customerCode: 'optional',
   customerName1: 'optional',
   plannerId: 'optional',
@@ -72,10 +84,14 @@ export const SALESFORECAST_QUERY_STRING_FIELDS = [
   'salesForecastCode',
   'planDateStart',
   'planDateEnd',
-  'planPeriodStartStart',
-  'planPeriodStartEnd',
-  'planPeriodEndStart',
-  'planPeriodEndEnd',
+  'receiveDateStart',
+  'receiveDateEnd',
+  'salesProduct',
+  'productCategoryCode',
+  'profitCenterCode',
+  'modelCode',
+  'materialCode',
+  'materialDescription',
   'customerCode',
   'customerName1',
   'plannerId',
@@ -96,7 +112,7 @@ export const SALESFORECAST_QUERY_STRING_FIELDS = [
 
 export type SalesForecastQueryField =
   | (typeof SALESFORECAST_QUERY_STRING_FIELDS)[number]
-  | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus'
+  | 'totalQuantity' | 'totalAmount' | 'convertedQuantity' | 'convertedAmount' | 'planStatus' | 'convertedStatus' | 'approvalStatus' | 'receiveVersionNo'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESFORECAST_QUERY_FIELDS: readonly SalesForecastQueryField[] = [
@@ -108,6 +124,7 @@ export const SALESFORECAST_QUERY_FIELDS: readonly SalesForecastQueryField[] = [
   'planStatus',
   'convertedStatus',
   'approvalStatus',
+  'receiveVersionNo',
 ]
 
 /**

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Identity
 // 文件名称：TaktMenuDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Menu 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMenu 生成，请按需审阅）
 // 
@@ -72,12 +72,12 @@ public class TaktMenuDto : TaktTenantDtoBase
     public string MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 是否叶子节点（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int MenuType { get; set; } = 0;
 
@@ -97,7 +97,7 @@ public class TaktMenuDto : TaktTenantDtoBase
     public string ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int IsExternal { get; set; } = 0;
 
@@ -107,17 +107,17 @@ public class TaktMenuDto : TaktTenantDtoBase
     public string ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int IsCached { get; set; } = 0;
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int IsVisible { get; set; } = 0;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -132,15 +132,9 @@ public class TaktMenuDto : TaktTenantDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int MenuStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 拥有该菜单权限的角色关联（RBAC，表 takt_identity_role_menu）
-    /// （子表：TaktRoleMenu）
-    /// </summary>
-    public List<TaktRoleMenuDto>? RoleMenus { get; set; }
 
 }
 
@@ -175,6 +169,11 @@ public class TaktMenuQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -212,12 +211,12 @@ public class TaktMenuQueryDto : TaktPagedQuery
     public string? MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 是否叶子节点（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int? IsLeaf { get; set; }
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int? MenuType { get; set; }
 
@@ -237,7 +236,7 @@ public class TaktMenuQueryDto : TaktPagedQuery
     public string? ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int? IsExternal { get; set; }
 
@@ -247,17 +246,17 @@ public class TaktMenuQueryDto : TaktPagedQuery
     public string? ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int? IsCached { get; set; }
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int? IsVisible { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -272,7 +271,7 @@ public class TaktMenuQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? MenuStatus { get; set; }
 
@@ -311,6 +310,11 @@ public class TaktMenuCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -348,7 +352,7 @@ public class TaktMenuCreateDto
     public string MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int MenuType { get; set; } = 0;
 
@@ -371,7 +375,7 @@ public class TaktMenuCreateDto
     public string ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int IsExternal { get; set; } = 0;
 
@@ -382,17 +386,17 @@ public class TaktMenuCreateDto
     public string ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int IsCached { get; set; } = 0;
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int IsVisible { get; set; } = 0;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -403,7 +407,7 @@ public class TaktMenuCreateDto
     public string MenuDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int MenuStatus { get; set; } = 0;
 
@@ -462,9 +466,9 @@ public class TaktMenuStatusDto
     public long MenuId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status）不能为空")]
     public int MenuStatus { get; set; } = 0;
 }
 
@@ -506,6 +510,11 @@ public class TaktMenuTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -538,7 +547,7 @@ public class TaktMenuTemplateDto
     public string? MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int? MenuType { get; set; }
 
@@ -558,7 +567,7 @@ public class TaktMenuTemplateDto
     public string? ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int? IsExternal { get; set; }
 
@@ -568,17 +577,17 @@ public class TaktMenuTemplateDto
     public string? ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int? IsCached { get; set; }
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int? IsVisible { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -588,7 +597,7 @@ public class TaktMenuTemplateDto
     public string? MenuDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? MenuStatus { get; set; }
 
@@ -619,6 +628,11 @@ public class TaktMenuImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -651,7 +665,7 @@ public class TaktMenuImportDto
     public string? MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int? MenuType { get; set; }
 
@@ -671,7 +685,7 @@ public class TaktMenuImportDto
     public string? ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int? IsExternal { get; set; }
 
@@ -681,17 +695,17 @@ public class TaktMenuImportDto
     public string? ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int? IsCached { get; set; }
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int? IsVisible { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -701,7 +715,7 @@ public class TaktMenuImportDto
     public string? MenuDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int? MenuStatus { get; set; }
 
@@ -775,12 +789,12 @@ public class TaktMenuExportDto
     public string MenuPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 是否叶子节点（字典 sys_yes_no_type；0=否，1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 菜单类型（与 TaktMenuType 一致：0=目录，1=页面菜单，2=按钮）
+    /// 菜单类型（字典 sys_menu_type；0=目录，1=菜单，2=按钮）
     /// </summary>
     public int MenuType { get; set; } = 0;
 
@@ -800,7 +814,7 @@ public class TaktMenuExportDto
     public string ComponentPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否外部链接
+    /// 是否外部链接（字典 sys_yes_no_type）
     /// </summary>
     public int IsExternal { get; set; } = 0;
 
@@ -810,17 +824,17 @@ public class TaktMenuExportDto
     public string ExternalUrl { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否缓存（前端keep-alive）
+    /// 是否缓存（字典 sys_yes_no_type；前端 keep-alive）
     /// </summary>
     public int IsCached { get; set; } = 0;
 
     /// <summary>
-    /// 是否显示（0=隐藏，1=显示）
+    /// 是否显示（字典 sys_yes_no_type；0=隐藏，1=显示）
     /// </summary>
     public int IsVisible { get; set; } = 0;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子菜单为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；种子菜单为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -835,7 +849,7 @@ public class TaktMenuExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status）
     /// </summary>
     public int MenuStatus { get; set; } = 0;
 

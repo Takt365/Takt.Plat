@@ -25,16 +25,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 [SugarIndex("ix_takt_logistics_manufacturing_mps_master_production_schedule_mds", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(MasterDemandScheduleId), OrderByType.Asc, false)]
 public class TaktMasterProductionSchedule : TaktApprovalEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// MPS 编码
     /// </summary>
-    [SugarColumn(ColumnName = "mps_code", ColumnDescription = "MPS编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "mps_code", ColumnDescription = "MPS编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MpsCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -47,7 +42,7 @@ public class TaktMasterProductionSchedule : TaktApprovalEntityBase
     /// <summary>
     /// 来源 MDS 编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "mds_code", ColumnDescription = "来源MDS编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "mds_code", ColumnDescription = "来源MDS编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? MdsCode { get; set; }
 
     /// <summary>

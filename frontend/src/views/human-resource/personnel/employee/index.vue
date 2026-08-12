@@ -205,11 +205,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('idCardNo')">
-      <a-form-item :label="pi.queryLabel('idCardNo')">
+      <div v-show="isFieldVisible('idCardCode')">
+      <a-form-item :label="pi.queryLabel('idCardCode')">
         <a-input
-          v-model:value="advancedQueryForm.idCardNo"
-          :placeholder="pi.queryPh('idCardNo', 'required')"
+          v-model:value="advancedQueryForm.idCardCode"
+          :placeholder="pi.queryPh('idCardCode', 'required')"
           show-count
           :maxlength="18"
           allow-clear
@@ -583,7 +583,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -682,13 +681,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEmployeeField(record, 'birthDate') ?? ''
   },
   {
-    title: pi.label('idCardNo'),
-    dataIndex: 'idCardNo',
-    key: 'idCardNo',
+    title: pi.label('idCardCode'),
+    dataIndex: 'idCardCode',
+    key: 'idCardCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'idCardNo') ?? ''
+    customRender: ({ record }: { record: any }) => getEmployeeField(record, 'idCardCode') ?? ''
   },
   {
     title: pi.label('mobile'),
@@ -813,8 +812,6 @@ const getEmployeeDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -878,7 +875,7 @@ function handleReset() {
   gender: undefined as number | undefined,
   birthDateStart: '',
   birthDateEnd: '',
-  idCardNo: '',
+  idCardCode: '',
   mobile: '',
   email: '',
   nativePlace: '',
@@ -1091,7 +1088,7 @@ function handleAdvancedQueryReset() {
   gender: undefined as number | undefined,
   birthDateStart: '',
   birthDateEnd: '',
-  idCardNo: '',
+  idCardCode: '',
   mobile: '',
   email: '',
   nativePlace: '',

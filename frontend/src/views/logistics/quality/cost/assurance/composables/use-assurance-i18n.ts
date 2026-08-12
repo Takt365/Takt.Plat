@@ -24,10 +24,10 @@ export const QUALITYASSURANCE_LIST_FIELDS = [
   'qualityAssuranceCode',
   'assuranceMonth',
   'customerName1',
-  'debitNoteNo',
+  'debitNoteCode',
   'recorder',
   'totalQualityCost',
-  'costCurrency',
+  'currencyCode',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
@@ -39,10 +39,10 @@ export const QUALITYASSURANCE_PLACEHOLDER = {
   qualityAssuranceCode: 'required',
   assuranceMonth: 'required',
   customerName1: 'optional',
-  debitNoteNo: 'optional',
+  debitNoteCode: 'optional',
   recorder: 'optional',
   totalQualityCost: 'select',
-  costCurrency: 'required',
+  currencyCode: 'required',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -56,9 +56,9 @@ export const QUALITYASSURANCE_QUERY_STRING_FIELDS = [
   'qualityAssuranceCode',
   'assuranceMonth',
   'customerName1',
-  'debitNoteNo',
+  'debitNoteCode',
   'recorder',
-  'costCurrency',
+  'currencyCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

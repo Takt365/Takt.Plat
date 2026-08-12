@@ -65,7 +65,6 @@ export interface FinancialPeriod extends TenantDtoBase {
 
 }
 
-
 /**
  * FinancialPeriod 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -135,7 +134,6 @@ export interface FinancialPeriodQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建FinancialPeriod DTO
  * 对应前端 FinancialPeriodCreate
@@ -194,7 +192,6 @@ export interface FinancialPeriodCreate {
 
 }
 
-
 /**
  * 更新FinancialPeriod DTO
  * 继承 TaktFinancialPeriodCreateDto，添加 FinancialPeriodId 字段
@@ -208,7 +205,6 @@ export interface FinancialPeriodUpdate extends FinancialPeriodCreate {
   financialPeriodId: string;
 
 }
-
 
 /**
  * FinancialPeriod 导入模板行 DTO
@@ -268,7 +264,6 @@ export interface FinancialPeriodTemplate {
 
 }
 
-
 /**
  * FinancialPeriod 导入 DTO（独立实现，不继承 TemplateDto）
  * 对应前端 FinancialPeriodImport
@@ -326,7 +321,6 @@ export interface FinancialPeriodImport {
   remark?: string;
 
 }
-
 
 /**
  * FinancialPeriod 导出 DTO（独立实现，不继承响应 Dto）

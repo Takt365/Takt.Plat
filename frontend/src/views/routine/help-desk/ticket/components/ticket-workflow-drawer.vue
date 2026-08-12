@@ -18,7 +18,7 @@
     <a-spin :spinning="loading">
       <template v-if="ticket">
         <a-descriptions :column="2" size="small" bordered class="mb-4">
-          <a-descriptions-item :label="t('entity.ticket.no')">{{ ticket.ticketNo }}</a-descriptions-item>
+          <a-descriptions-item :label="t('entity.ticket.no')">{{ ticket.ticketCode }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ticket.status')">
             <a-tag :color="statusColor(ticket.ticketStatus)">{{ statusLabel(ticket.ticketStatus) }}</a-tag>
           </a-descriptions-item>

@@ -47,14 +47,14 @@ public static class TaktEcSourceEcMapper
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
         var culture = companyDefaultCulture ?? string.Empty;
         var today = DateTime.Today;
-        var ecNo = sourceEc.SourceEcNo ?? string.Empty;
+        var ecCode = sourceEc.SourceEcCode ?? string.Empty;
         var createDto = new TaktEcGijutsuCreateDto
         {
             TenantCode = tenantCode,
             CompanyCode = companyCode,
-            CompanyDefaultCulture = culture,
+            CultureCode = culture,
             PlantCode = plantCode,
-            EcNo = ecNo,
+            EcCode = ecCode,
             EcIssueDate = sourceEc.SourceIssueDate,
             EcTitle = sourceEc.SourceTitle ?? string.Empty,
             EcContent = sourceEc.SourceEcContent ?? string.Empty,
@@ -64,7 +64,7 @@ public static class TaktEcSourceEcMapper
             EcEntryDate = today,
             ChangeStatus = TaktEcSourceStatusMapper.MapToChangeStatusOrThrow(sourceEc.SourceStatus),
             EcStatus = 1,
-            EcDetails = MapDetails(sourceDetails, ecNo, tenantCode, companyCode, culture, today, materialsByCode),
+            EcDetails = MapDetails(sourceDetails, ecCode, tenantCode, companyCode, culture, today, materialsByCode),
         };
         return createDto;
     }
@@ -73,7 +73,7 @@ public static class TaktEcSourceEcMapper
     /// 映射设变来源明细为设变明细创建 DTO 列表
     /// </summary>
     /// <param name="sourceDetails">设变来源明细</param>
-    /// <param name="ecNo">设变单号</param>
+    /// <param name="ecCode">设变单号</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司代码</param>
     /// <param name="companyDefaultCulture">公司默认文化</param>
@@ -82,7 +82,7 @@ public static class TaktEcSourceEcMapper
     /// <returns>设变明细更新 DTO 列表</returns>
     private static List<TaktEcDetailUpdateDto> MapDetails(
         IReadOnlyList<TaktSourceEcDetail> sourceDetails,
-        string ecNo,
+        string ecCode,
         string tenantCode,
         string companyCode,
         string companyDefaultCulture,
@@ -104,19 +104,19 @@ public static class TaktEcSourceEcMapper
                 EcDetailId = 0,
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
-                CompanyDefaultCulture = companyDefaultCulture ?? string.Empty,
-                EcNo = ecNo,
+                CultureCode = companyDefaultCulture ?? string.Empty,
+                EcCode = ecCode,
                 LineNumber = lineNumber,
                 EcModel = string.IsNullOrWhiteSpace(detail.SourceFinishedProduct)
                     ? (detail.SourceParentPart ?? string.Empty)
                     : detail.SourceFinishedProduct,
                 EcBomItem = detail.SourceFinishedProduct,
                 EcBomSubItem = detail.SourceParentPart,
-                EcOldItem = detail.SourceLegacyPartNo,
+                EcOldItem = detail.SourceLegacyPartCode,
                 EcOldText = detail.SourceLegacyPartName,
                 EcOldUsage = detail.SourceLegacyUsage,
                 EcOldPosition = detail.SourceLegacyMountingPosition,
-                EcNewItem = detail.SourceReplacementPartNo,
+                EcNewItem = detail.SourceReplacementPartCode,
                 EcNewText = detail.SourceReplacementPartName,
                 EcNewUsage = detail.SourceReplacementUsage,
                 EcNewPosition = detail.SourceReplacementMountingPosition,

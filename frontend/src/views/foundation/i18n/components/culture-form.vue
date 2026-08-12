@@ -64,18 +64,6 @@
         />
       </a-form-item>
       <a-form-item
-        :label="t('entity.culture.languagestatus')"
-        name="languageStatus"
-      >
-        <TaktSelect
-          v-model:value="formState.languageStatus"
-          dict-type="sys_normal_disable_status"
-          allow-clear
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.culture.languagestatus') })"
-          :disabled="props.loading"
-        />
-      </a-form-item>
-      <a-form-item
         :label="t('entity.culture.isdefault')"
         name="isDefault"
       >
@@ -164,7 +152,6 @@ function createEmptyFormState(): CultureFormState {
     cultureCode: '',
     nativeName: '',
     icon: '',
-    languageStatus: 1,
     isDefault: 1,
     remark: ''
   }
@@ -182,7 +169,6 @@ function applyFormData(data: Culture | null | undefined) {
       cultureCode: data.cultureCode || '',
       nativeName: data.nativeName || '',
       icon: data.icon || '',
-      languageStatus: data.languageStatus ?? 1,
       isDefault: data.isDefault ?? 1,
       remark: data.remark || ''
     })
@@ -255,7 +241,6 @@ function getFormData(): CultureCreate | CultureUpdate {
     cultureCode: formState.cultureCode,
     nativeName: formState.nativeName,
     icon: formState.icon || undefined,
-    languageStatus: formState.languageStatus,
     isDefault: formState.isDefault,
     remark: formState.remark || undefined
   } as CultureCreate

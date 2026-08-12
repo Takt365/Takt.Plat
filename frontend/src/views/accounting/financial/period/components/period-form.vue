@@ -231,7 +231,6 @@ const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<FinancialPeriodCreate & { financialPeriodId?: string }> | null

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：exec-step.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopExecStep extends CompanyDtoBase {
   sopExecStepId: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
@@ -39,7 +39,7 @@ export interface SopExecStep extends CompanyDtoBase {
   execName?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -64,12 +64,12 @@ export interface SopExecStep extends CompanyDtoBase {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -79,7 +79,7 @@ export interface SopExecStep extends CompanyDtoBase {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep: number;
 
@@ -109,12 +109,22 @@ export interface SopExecStepQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -144,12 +154,12 @@ export interface SopExecStepQuery extends TaktPagedQuery {
   endedAtEnd?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -164,7 +174,7 @@ export interface SopExecStepQuery extends TaktPagedQuery {
   confirmedAtEnd?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -208,17 +218,22 @@ export interface SopExecStepCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -238,12 +253,12 @@ export interface SopExecStepCreate {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -253,7 +268,7 @@ export interface SopExecStepCreate {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep: number;
 
@@ -302,12 +317,22 @@ export interface SopExecStepTemplate {
   companyCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -327,12 +352,12 @@ export interface SopExecStepTemplate {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -342,7 +367,7 @@ export interface SopExecStepTemplate {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -376,17 +401,22 @@ export interface SopExecStepImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId?: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId?: string;
 
@@ -406,12 +436,12 @@ export interface SopExecStepImport {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -421,7 +451,7 @@ export interface SopExecStepImport {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep?: number;
 
@@ -455,12 +485,17 @@ export interface SopExecStepExport {
   companyCode: string;
 
   /**
-   * 执行追溯 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 执行追溯 ID（选项 TaktSopExecs/options；DictValue=Id）
    */
   execId: string;
 
   /**
-   * 工步 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 工步 ID（选项 TaktSopSteps/options；DictValue=Id）
    */
   stepId: string;
 
@@ -480,12 +515,12 @@ export interface SopExecStepExport {
   endedAt?: string;
 
   /**
-   * 工步结果（1=合格，2=不合格，3=跳过；字典 logistics_sop_check_result_type）
+   * 工步结果（字典 logistics_sop_check_result_type；1=合格，2=不合格，3=不适用/跳过）
    */
   stepResult?: number;
 
   /**
-   * 确认人 ID（序列化为 string 以避免 Javascript 精度问题）
+   * 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
    */
   confirmedBy?: string;
 
@@ -495,7 +530,7 @@ export interface SopExecStepExport {
   confirmedAt?: string;
 
   /**
-   * 是否禁止下一步（字典 sys_yes_no_type，扫码 NG 等）
+   * 是否禁止下一步（字典 sys_yes_no_type；0=否，1=是）
    */
   blockNextStep: number;
 

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：ITaktPurchaseInvoiceService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购发票应用服务接口
 // 
@@ -69,13 +69,6 @@ public interface ITaktPurchaseInvoiceService
     /// <param name="ids">ID列表</param>
     /// <returns>任务</returns>
     Task DeletePurchaseInvoiceBatchAsync(IEnumerable<long> ids);
-
-    /// <summary>
-    /// 更新采购发票状态
-    /// </summary>
-    /// <param name="dto">状态DTO</param>
-    /// <returns>DTO</returns>
-    Task<TaktPurchaseInvoiceDto> UpdatePurchaseInvoiceStatusAsync(TaktPurchaseInvoiceStatusDto dto);
 
     /// <summary>
     /// 获取导入模板

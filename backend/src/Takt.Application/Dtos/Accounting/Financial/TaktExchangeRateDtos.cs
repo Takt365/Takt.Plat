@@ -97,6 +97,11 @@ public class TaktExchangeRateQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -187,6 +192,11 @@ public class TaktExchangeRateCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -305,6 +315,11 @@ public class TaktExchangeRateTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -372,6 +387,11 @@ public class TaktExchangeRateImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>

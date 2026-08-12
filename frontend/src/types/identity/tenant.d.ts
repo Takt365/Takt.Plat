@@ -75,7 +75,6 @@ export interface Tenant extends TenantDtoBase {
 
 }
 
-
 /**
  * Tenant 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -87,6 +86,11 @@ export interface TenantQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 租户名称
@@ -160,7 +164,6 @@ export interface TenantQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Tenant DTO
  * 对应前端 TenantCreate
@@ -171,6 +174,11 @@ export interface TenantCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 租户名称
@@ -229,7 +237,6 @@ export interface TenantCreate {
 
 }
 
-
 /**
  * 更新Tenant DTO
  * 继承 TaktTenantCreateDto，添加 TenantId 字段
@@ -243,7 +250,6 @@ export interface TenantUpdate extends TenantCreate {
   tenantId: string;
 
 }
-
 
 /**
  * Tenant 状态更新 DTO
@@ -263,7 +269,6 @@ export interface TenantStatus {
 
 }
 
-
 /**
  * Tenant 导入模板行 DTO
  * 对应前端 TenantTemplate
@@ -274,6 +279,11 @@ export interface TenantTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 租户名称
@@ -316,7 +326,6 @@ export interface TenantTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Tenant 导入 DTO（独立实现，不继承 TemplateDto）
@@ -330,6 +339,11 @@ export interface TenantImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 租户名称
    */
   tenantName?: string;
@@ -370,7 +384,6 @@ export interface TenantImport {
   remark?: string;
 
 }
-
 
 /**
  * Tenant 导出 DTO（独立实现，不继承响应 Dto）

@@ -16,6 +16,8 @@ export default {
     periodRange: '期间年月',
     materialCode: '物料编码',
     selectPlantRequired: '请选择工厂代码',
+    selectMaterialTypeRequired: '请选择物料类型',
+    selectValuationRequired: '请选择评估类别',
     selectPeriodRequired: '请选择期间年月',
     summary: '物料行 {count} 条（缺月/无价依次向前取最近有价月；* 悬停可查看来源月）',
     summaryModel: '物料行 {count} 条（机种/产品组来自 BOM：组件→产品→机种；缺月回填同左）',

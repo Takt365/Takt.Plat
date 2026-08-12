@@ -27,20 +27,20 @@ public static class TaktEcSourceAttachmentMapper
     /// 将来源设变主表上的文档编码映射为设变附件行（技联书→TL，PP番号→FPP）
     /// </summary>
     /// <param name="sourceEc">来源设变主</param>
-    /// <param name="ecNo">设变单号</param>
+    /// <param name="ecCode">设变单号</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司代码</param>
     /// <param name="companyDefaultCulture">公司默认文化</param>
     /// <returns>附件创建 DTO 列表（无对应编码时为空列表）</returns>
     public static List<TaktEcAttachmentCreateDto> MapAttachments(
         TaktSourceEc sourceEc,
-        string ecNo,
+        string ecCode,
         string tenantCode,
         string companyCode,
         string companyDefaultCulture)
     {
         ArgumentNullException.ThrowIfNull(sourceEc);
-        ArgumentException.ThrowIfNullOrWhiteSpace(ecNo);
+        ArgumentException.ThrowIfNullOrWhiteSpace(ecCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
         var culture = companyDefaultCulture ?? string.Empty;
@@ -49,20 +49,20 @@ public static class TaktEcSourceAttachmentMapper
         AppendIfPresent(
             result,
             ref lineNumber,
-            sourceEc.SourceTechnicalNoticeNo,
+            sourceEc.SourceTechnicalNoticeCode,
             TaktEcAttachmentTypeConstants.Liaison,
             "技联书",
-            ecNo,
+            ecCode,
             tenantCode,
             companyCode,
             culture);
         AppendIfPresent(
             result,
             ref lineNumber,
-            sourceEc.SourcePpNo,
+            sourceEc.SourcePpCode,
             TaktEcAttachmentTypeConstants.Fpp,
             "PP番号",
-            ecNo,
+            ecCode,
             tenantCode,
             companyCode,
             culture);
@@ -75,29 +75,29 @@ public static class TaktEcSourceAttachmentMapper
     private static void AppendIfPresent(
         List<TaktEcAttachmentCreateDto> target,
         ref int lineNumber,
-        string? docNo,
+        string? docCode,
         string attachmentType,
         string defaultFileName,
-        string ecNo,
+        string ecCode,
         string tenantCode,
         string companyCode,
         string companyDefaultCulture)
     {
-        if (string.IsNullOrWhiteSpace(docNo))
+        if (string.IsNullOrWhiteSpace(docCode))
         {
             return;
         }
         lineNumber += 10;
-        var trimmedDocNo = docNo.Trim();
+        var trimmedDocCode = docCode.Trim();
         target.Add(new TaktEcAttachmentCreateDto
         {
             TenantCode = tenantCode,
             CompanyCode = companyCode,
-            CompanyDefaultCulture = companyDefaultCulture,
-            EcNo = ecNo,
+            CultureCode = companyDefaultCulture,
+            EcCode = ecCode,
             LineNumber = lineNumber,
             AttachmentType = attachmentType,
-            DocNo = trimmedDocNo,
+            DocCode = trimmedDocCode,
             FileName = defaultFileName,
             AccessUrl = PlaceholderAccessUrl,
         });

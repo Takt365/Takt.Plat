@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktDefectGroupDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：DefectGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDefectGroup 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DefectGroupId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 不良类别（字典 logistics_manufacturing_defect_group_category；0=Assy，1=Inspection，2=Repair）
@@ -61,7 +57,7 @@ public class TaktDefectGroupDto : TaktCompanyDtoBase
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -119,7 +115,12 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -144,7 +145,7 @@ public class TaktDefectGroupQueryDto : TaktPagedQuery
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -215,14 +216,14 @@ public class TaktDefectGroupCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -248,7 +249,7 @@ public class TaktDefectGroupCreateDto
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -373,7 +374,12 @@ public class TaktDefectGroupTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -398,7 +404,7 @@ public class TaktDefectGroupTemplateDto
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -451,12 +457,12 @@ public class TaktDefectGroupImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -481,7 +487,7 @@ public class TaktDefectGroupImportDto
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }
@@ -540,7 +546,7 @@ public class TaktDefectGroupExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -565,7 +571,7 @@ public class TaktDefectGroupExportDto
     public string? DefectGroupDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良组负责人用户 ID（关联 TaktUser.Id，选项 TaktUsers/options）
+    /// 不良组负责人用户 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ResponsibleUserId { get; set; }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcAttachmentI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcAttachment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecattachment.ecid
             new TranslationSeedItem("entity.ecattachment.ecid", "zh-HK", "设变ID_hk", "设变主表ID"),
 
-            // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
-            // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
-            // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
-            // entity.ecattachment.ecno
-            new TranslationSeedItem("entity.ecattachment.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
+            // entity.ecattachment.eccode
+            new TranslationSeedItem("entity.ecattachment.eccode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
+            // entity.ecattachment.eccode
+            new TranslationSeedItem("entity.ecattachment.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
+            // entity.ecattachment.eccode
+            new TranslationSeedItem("entity.ecattachment.eccode", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
+            // entity.ecattachment.eccode
+            new TranslationSeedItem("entity.ecattachment.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
 
             // entity.ecattachment.linenumber
             new TranslationSeedItem("entity.ecattachment.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -126,14 +126,14 @@ public class TaktEcAttachmentI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecattachment.attachmenttype
             new TranslationSeedItem("entity.ecattachment.attachmenttype", "zh-HK", "文件类别_hk", "文件类别（字典 logistics_ec_attachment_type；TL=联络，EPP=EPP，FPP=FPP，EL=外部联络，TCJ=TCJ，源PDF=源PDF，EC=EC）"),
 
-            // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "en-US", "文件编码_us", "文件编码（如联络编码等）"),
-            // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "ja-JP", "文件编码_jp", "文件编码（如联络编码等）"),
-            // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "zh-CN", "文件编码", "文件编码（如联络编码等）"),
-            // entity.ecattachment.docno
-            new TranslationSeedItem("entity.ecattachment.docno", "zh-HK", "文件编码_hk", "文件编码（如联络编码等）"),
+            // entity.ecattachment.doccode
+            new TranslationSeedItem("entity.ecattachment.doccode", "en-US", "文件编码_us", "文件编码（如联络编码等）"),
+            // entity.ecattachment.doccode
+            new TranslationSeedItem("entity.ecattachment.doccode", "ja-JP", "文件编码_jp", "文件编码（如联络编码等）"),
+            // entity.ecattachment.doccode
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-CN", "文件编码", "文件编码（如联络编码等）"),
+            // entity.ecattachment.doccode
+            new TranslationSeedItem("entity.ecattachment.doccode", "zh-HK", "文件编码_hk", "文件编码（如联络编码等）"),
 
             // entity.ecattachment.filename
             new TranslationSeedItem("entity.ecattachment.filename", "en-US", "文件名称_us", "文件名称"),

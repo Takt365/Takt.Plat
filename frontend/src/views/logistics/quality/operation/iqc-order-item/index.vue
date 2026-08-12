@@ -152,22 +152,22 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="t('entity.iqcorderitem.materialname')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="t('entity.iqcorderitem.materialdescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialname') })"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialdescription') })"
           show-count
           :maxlength="40"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="t('entity.iqcorderitem.batchno')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="t('entity.iqcorderitem.batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.batchno') })"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.batchCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -250,11 +250,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sampleSerialNo')">
-      <a-form-item :label="t('entity.iqcorderitem.sampleserialno')">
+      <div v-show="isFieldVisible('sampleSerialCode')">
+      <a-form-item :label="t('entity.iqcorderitem.sampleserialCode')">
         <a-input
-          v-model:value="advancedQueryForm.sampleSerialNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.sampleserialno') })"
+          v-model:value="advancedQueryForm.sampleSerialCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.sampleserialCode') })"
           show-count
           :maxlength="100"
           allow-clear
@@ -481,8 +481,8 @@ const advancedQueryForm = ref({
   iqcOrderCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
-  batchNo: '',
+  materialDescription: '',
+  batchCode: '',
   purchaseQuantity: undefined as number | undefined,
   standardCode: '',
   samplingSchemeCode: '',
@@ -491,7 +491,7 @@ const advancedQueryForm = ref({
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
+  sampleSerialCode: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
@@ -508,8 +508,8 @@ const queryFieldsMeta = computed(() => [
   { key: 'iqcOrderCode', label: t('entity.iqcorderitem.iqcordercode') },
   { key: 'lineNumber', label: t('entity.iqcorderitem.linenumber') },
   { key: 'materialCode', label: t('entity.iqcorderitem.materialcode') },
-  { key: 'materialName', label: t('entity.iqcorderitem.materialname') },
-  { key: 'batchNo', label: t('entity.iqcorderitem.batchno') },
+  { key: 'materialDescription', label: t('entity.iqcorderitem.materialdescription') },
+  { key: 'batchCode', label: t('entity.iqcorderitem.batchCode') },
   { key: 'purchaseQuantity', label: t('entity.iqcorderitem.purchasequantity') },
   { key: 'standardCode', label: t('entity.iqcorderitem.standardcode') },
   { key: 'samplingSchemeCode', label: t('entity.iqcorderitem.samplingschemecode') },
@@ -518,7 +518,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'qualifiedQuantity', label: t('entity.iqcorderitem.qualifiedquantity') },
   { key: 'unqualifiedQuantity', label: t('entity.iqcorderitem.unqualifiedquantity') },
   { key: 'inspectionReturnQuantity', label: t('entity.iqcorderitem.inspectionreturnquantity') },
-  { key: 'sampleSerialNo', label: t('entity.iqcorderitem.sampleserialno') },
+  { key: 'sampleSerialCode', label: t('entity.iqcorderitem.sampleserialCode') },
   { key: 'inspectionDescription', label: t('entity.iqcorderitem.inspectiondescription') },
   { key: 'inspectorBy', label: t('entity.iqcorderitem.inspectorby') },
   { key: 'inspectionDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.iqcorderitem.inspectiondate')) },
@@ -527,8 +527,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -576,8 +575,8 @@ function buildListQuery(overrides?: Partial<IqcOrderItemQuery>): IqcOrderItemQue
     query.lineNumber = form.lineNumber
   }
   assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('materialName', form.materialName)
-  assignTrimmed('batchNo', form.batchNo)
+  assignTrimmed('materialDescription', form.materialDescription)
+  assignTrimmed('batchCode', form.batchCode)
   if (form.purchaseQuantity !== undefined && form.purchaseQuantity !== null) {
     query.purchaseQuantity = form.purchaseQuantity
   }
@@ -598,7 +597,7 @@ function buildListQuery(overrides?: Partial<IqcOrderItemQuery>): IqcOrderItemQue
   if (form.inspectionReturnQuantity !== undefined && form.inspectionReturnQuantity !== null) {
     query.inspectionReturnQuantity = form.inspectionReturnQuantity
   }
-  assignTrimmed('sampleSerialNo', form.sampleSerialNo)
+  assignTrimmed('sampleSerialCode', form.sampleSerialCode)
   assignTrimmed('inspectionDescription', form.inspectionDescription)
   assignTrimmed('inspectorBy', form.inspectorBy)
   assignTrimmed('inspectionDateStart', form.inspectionDateStart)
@@ -617,7 +616,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -718,22 +716,22 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.iqcorderitem.materialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: t('entity.iqcorderitem.materialdescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'materialName') ?? ''
+    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'materialDescription') ?? ''
   },
   {
-    title: t('entity.iqcorderitem.batchno'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: t('entity.iqcorderitem.batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'batchCode') ?? ''
   },
   {
     title: t('entity.iqcorderitem.purchasequantity'),
@@ -808,13 +806,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'inspectionReturnQuantity') ?? ''
   },
   {
-    title: t('entity.iqcorderitem.sampleserialno'),
-    dataIndex: 'sampleSerialNo',
-    key: 'sampleSerialNo',
+    title: t('entity.iqcorderitem.sampleserialCode'),
+    dataIndex: 'sampleSerialCode',
+    key: 'sampleSerialCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'sampleSerialNo') ?? ''
+    customRender: ({ record }: { record: any }) => getIqcOrderItemField(record, 'sampleSerialCode') ?? ''
   },
   {
     title: t('entity.iqcorderitem.inspectiondescription'),
@@ -892,7 +890,6 @@ const getIqcOrderItemId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getIqcOrderItemField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -955,8 +952,8 @@ function handleReset() {
   iqcOrderCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
-  batchNo: '',
+  materialDescription: '',
+  batchCode: '',
   purchaseQuantity: undefined as number | undefined,
   standardCode: '',
   samplingSchemeCode: '',
@@ -965,7 +962,7 @@ function handleReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
+  sampleSerialCode: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',
@@ -1173,8 +1170,8 @@ function handleAdvancedQueryReset() {
   iqcOrderCode: '',
   lineNumber: undefined as number | undefined,
   materialCode: '',
-  materialName: '',
-  batchNo: '',
+  materialDescription: '',
+  batchCode: '',
   purchaseQuantity: undefined as number | undefined,
   standardCode: '',
   samplingSchemeCode: '',
@@ -1183,7 +1180,7 @@ function handleAdvancedQueryReset() {
   qualifiedQuantity: undefined as number | undefined,
   unqualifiedQuantity: undefined as number | undefined,
   inspectionReturnQuantity: undefined as number | undefined,
-  sampleSerialNo: '',
+  sampleSerialCode: '',
   inspectionDescription: '',
   inspectorBy: '',
   inspectionDateStart: '',

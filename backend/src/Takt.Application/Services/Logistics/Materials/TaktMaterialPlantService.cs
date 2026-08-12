@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialPlantService.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-05
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工厂物料应用服务实现
 // 
@@ -81,9 +81,8 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         {
             return null;
         }
-        var dto = entity.Adapt<TaktMaterialPlantDto>();
-        await FillMaterialPlantDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktMaterialPlantDto>();
+    }
 
     /// <summary>
     /// 获取工厂物料选项列表
@@ -94,16 +93,12 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
         EnsureThreeLayerContext();
         var list = await _materialPlantRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.MaterialStatus == 1,
-            x => x.MaterialName ?? string.Empty,
+            x => x.MaterialCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = string.IsNullOrWhiteSpace(e.MaterialCode)
-                ? (e.MaterialName ?? e.Id.ToString())
-                : $"{e.MaterialCode} - {e.MaterialName}",
-            ExtValue = e.PlantCode,
-            ExtLabel = e.MaterialCode,
+            DictValue = e.MaterialCode,
+            DictLabel = e.MaterialCode,
         }).ToList();
     }
 
@@ -124,7 +119,6 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             throw new TaktBusinessException("工厂物料的PlantCode、MaterialCode已存在");
         }
         entity = await _materialPlantRepository.CreateAsync(entity);
-                await SaveMaterialPlantChildrenAsync(entity, dto);
         return await GetMaterialPlantByIdAsync(entity.Id) ?? entity.Adapt<TaktMaterialPlantDto>();
     }
 
@@ -152,7 +146,6 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             throw new TaktBusinessException("工厂物料的PlantCode、MaterialCode已存在");
         }
         await _materialPlantRepository.UpdateAsync(entity);
-                await SaveMaterialPlantChildrenAsync(entity, dto);
         return await GetMaterialPlantByIdAsync(id) ?? throw new TaktBusinessException("工厂物料不存在");
     }
 
@@ -163,11 +156,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
     /// <returns>任务</returns>
     public async Task DeleteMaterialPlantByIdAsync(long id)
     {
-        var entity = await _materialPlantRepository.GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("工厂物料不存在或已删除");
-        }        var deleted = await _materialPlantRepository.DeleteAsync(id);
+        var deleted = await _materialPlantRepository.DeleteAsync(id);
         if (!deleted)
         {
             throw new TaktBusinessException("工厂物料不存在或已删除");
@@ -296,33 +285,6 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
-    // ========================================
-
-    /// <summary>
-    /// 填充工厂物料详情（加载 OneToMany 子表：工厂物料变更记录）
-    /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
-    /// <returns>任务</returns>
-    private async Task FillMaterialPlantDetailsAsync(TaktMaterialPlantDto dto, TaktMaterialPlant entity)
-    {
-        if (dto == null)
-        {
-            return;
-        }
-    }
-
-    /// <summary>
-    /// 保存工厂物料子表级联（工厂物料变更记录；Create/Update 后按主表 Id 先删后插）
-    /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
-    /// <returns>任务</returns>
-    private async Task SaveMaterialPlantChildrenAsync(TaktMaterialPlant entity, TaktMaterialPlantCreateDto dto)
-    {
-    }
-    // ========================================
     // 查询表达式
     // ========================================
 
@@ -341,9 +303,8 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.MaterialName != null && x.MaterialName.Contains(keywords))
-                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
+                || (x.MaterialSpecification != null && x.MaterialSpecification.Contains(keywords))
                 || (x.IndustrySector != null && x.IndustrySector.Contains(keywords))
                 || (x.MaterialHierarchy != null && x.MaterialHierarchy.Contains(keywords))
                 || (x.MaterialGroup != null && x.MaterialGroup.Contains(keywords))
@@ -359,7 +320,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
                 || SqlFunc.ToString(x.InHouseProductionDays).Contains(keywords)
                 || (x.Manufacturer != null && x.Manufacturer.Contains(keywords))
                 || (x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(keywords))
-                || (x.Currency != null && x.Currency.Contains(keywords))
+                || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.PriceControl != null && x.PriceControl.Contains(keywords))
                 || SqlFunc.ToString(x.PriceUnit).Contains(keywords)
                 || (x.Valuation != null && x.Valuation.Contains(keywords))
@@ -374,6 +335,7 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
                 || SqlFunc.ToString(x.IsBatch).Contains(keywords)
                 || (x.IsEndOfLife != null && x.IsEndOfLife.Contains(keywords))
                 || SqlFunc.ToString(x.MaterialStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -390,19 +352,14 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialName))
+        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialName != null && x.MaterialName.Contains(queryDto.MaterialName));
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.MaterialSpecification))
         {
             exp = exp.And(x => x.MaterialSpecification != null && x.MaterialSpecification.Contains(queryDto.MaterialSpecification));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
-        {
-            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.IndustrySector))
@@ -480,9 +437,9 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.ManufacturerMaterialCode != null && x.ManufacturerMaterialCode.Contains(queryDto.ManufacturerMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Currency))
+        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.Currency != null && x.Currency.Contains(queryDto.Currency));
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.PriceControl))
@@ -555,6 +512,11 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.MaterialStatus == queryDto.MaterialStatus);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -565,16 +527,198 @@ public class TaktMaterialPlantService : TaktServiceBase, ITaktMaterialPlantServi
             exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
         }
 
-        if (queryDto?.CreatedAtStart.HasValue == true)
+        var rangeStart = queryDto?.CreatedAtStart;
+        var rangeEnd = queryDto?.CreatedAtEnd;
+        if (!rangeStart.HasValue && !rangeEnd.HasValue && !HasFiltersBesidesDefaultListScope(queryDto))
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var monthBounds = GetCurrentMonthRangeBounds();
+            rangeStart = monthBounds.Start;
+            rangeEnd = monthBounds.End;
         }
 
-        if (queryDto?.CreatedAtEnd.HasValue == true)
+        if (rangeStart.HasValue)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            exp = exp.And(x => x.CreatedAt >= rangeStart.Value);
+        }
+
+        if (rangeEnd.HasValue)
+        {
+            exp = exp.And(x => x.CreatedAt <= rangeEnd.Value);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 当前自然月起止（含月末最后一刻），用于列表无参默认过滤、避免全表扫描
+    /// </summary>
+    /// <returns>起、止</returns>
+    private static (DateTime Start, DateTime End) GetCurrentMonthRangeBounds()
+    {
+        var today = DateTime.Today;
+        var start = new DateTime(today.Year, today.Month, 1);
+        var end = start.AddMonths(1).AddTicks(-1);
+        return (start, end);
+    }
+    /// <summary>
+    /// 是否存在除默认当前月/当前期间外的查询条件（有参则不强制默认范围）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有其它条件为 true</returns>
+    private static bool HasFiltersBesidesDefaultListScope(TaktMaterialPlantQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialSpecification))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IndustrySector))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialHierarchy))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BaseUnit))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchaseType))
+        {
+            return true;
+        }
+        if (queryDto.SpecialProcurement.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBulk.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.MinOrderQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.RoundingValue.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedDeliveryTimeDays.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.InHouseProductionDays.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Manufacturer))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ManufacturerMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PriceControl))
+        {
+            return true;
+        }
+        if (queryDto.PriceUnit.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Valuation))
+        {
+            return true;
+        }
+        if (queryDto.MovingPrice.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DifferenceCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProfitCenter))
+        {
+            return true;
+        }
+        if (queryDto.CurrentStock.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductionLocation))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchasingLocation))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.StorageLocation))
+        {
+            return true;
+        }
+        if (queryDto.IsInspection.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBatch.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IsEndOfLife))
+        {
+            return true;
+        }
+        if (queryDto.MaterialStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktWorkCenterService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工作中心应用服务实现
 // 
@@ -98,13 +98,12 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
         EnsureThreeLayerContext();
         var list = await _workCenterRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.WorkCenterStatus == 1,
-            x => x.WorkCenterName ?? string.Empty,
+            x => x.WorkCenterCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.WorkCenterCode,
-            DictLabel = e.WorkCenterName ?? e.WorkCenterCode,
-            ExtValue = e.PlantCode,
+            DictLabel = e.WorkCenterCode,
         }).ToList();
     }
 
@@ -116,11 +115,11 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
     public async Task<TaktWorkCenterDto> CreateWorkCenterAsync(TaktWorkCenterCreateDto dto)
     {
         var entity = dto.Adapt<TaktWorkCenter>();
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique = await _uniqueValidator.IsUniqueAsync(
             _workCenterRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.WorkCenterCode == entity.WorkCenterCode);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique)
         {
             throw new TaktBusinessException("工作中心的PlantCode、WorkCenterCode已存在");
         }
@@ -143,12 +142,12 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
             throw new TaktBusinessException("工作中心不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique = await _uniqueValidator.IsUniqueAsync(
             _workCenterRepository,
             x => x.PlantCode == entity.PlantCode
                 && x.WorkCenterCode == entity.WorkCenterCode,
             id);
-        if (!isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique)
+        if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique)
         {
             throw new TaktBusinessException("工作中心的PlantCode、WorkCenterCode已存在");
         }
@@ -253,11 +252,11 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
                 {
                     throw new TaktBusinessException("与Excel中其他行重复（PlantCode、WorkCenterCode）");
                 }
-                var isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique = await _uniqueValidator.IsUniqueAsync(
                     _workCenterRepository,
                     x => x.PlantCode == entity.PlantCode
                         && x.WorkCenterCode == entity.WorkCenterCode);
-                if (!isUnique_ix_takt_logistics_manufacturing_scheduling_work_center_unique)
+                if (!isUnique_ix_takt_logistics_manufacturing_aps_work_center_unique)
                 {
                     throw new TaktBusinessException("工作中心的PlantCode、WorkCenterCode已存在");
                 }
@@ -329,9 +328,9 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
     {
         // 工作中心资源（Resources）
         List<TaktWorkCenterResourceUpdateDto>? resourcesForSave;
-        if (dto is TaktWorkCenterUpdateDto updateDto && updateDto.Resources != null)
+        if (dto is TaktWorkCenterUpdateDto updateDtoForResources && updateDtoForResources.Resources != null)
         {
-            resourcesForSave = updateDto.Resources;
+            resourcesForSave = updateDtoForResources.Resources;
         }
         else if (dto.Resources != null)
         {
@@ -408,8 +407,9 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkCenterCode != null && x.WorkCenterCode.Contains(keywords))
-                || (x.WorkCenterName != null && x.WorkCenterName.Contains(keywords))
+                || (x.WorkCenterDescription != null && x.WorkCenterDescription.Contains(keywords))
                 || SqlFunc.ToString(x.WorkCenterStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -426,14 +426,19 @@ public class TaktWorkCenterService : TaktServiceBase, ITaktWorkCenterService
             exp = exp.And(x => x.WorkCenterCode != null && x.WorkCenterCode.Contains(queryDto.WorkCenterCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenterName))
+        if (!string.IsNullOrEmpty(queryDto?.WorkCenterDescription))
         {
-            exp = exp.And(x => x.WorkCenterName != null && x.WorkCenterName.Contains(queryDto.WorkCenterName));
+            exp = exp.And(x => x.WorkCenterDescription != null && x.WorkCenterDescription.Contains(queryDto.WorkCenterDescription));
         }
 
         if (queryDto?.WorkCenterStatus.HasValue == true)
         {
             exp = exp.And(x => x.WorkCenterStatus == queryDto.WorkCenterStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

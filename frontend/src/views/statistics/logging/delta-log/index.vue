@@ -372,8 +372,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'ExtField', label: t('common.page.entity.ExtField') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -391,16 +390,10 @@ const detailLoading = ref(false)
 /** 详情数据 */
 const detailData = ref<DeltaLog | null>(null)
 
-
 /** 页面挂载后加载分页列表 */
 onMounted(() => {
   loadData()
 })
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [

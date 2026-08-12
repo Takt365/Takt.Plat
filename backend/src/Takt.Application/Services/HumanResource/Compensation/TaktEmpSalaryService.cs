@@ -280,7 +280,8 @@ public class TaktEmpSalaryService : TaktServiceBase, ITaktEmpSalaryService
                 || SqlFunc.ToString(x.SalaryItemId).Contains(keywords)
                 || SqlFunc.ToString(x.EmpSalaryShareCount).Contains(keywords)
                 || SqlFunc.ToString(x.EmpSalaryStatus).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -338,9 +339,14 @@ public class TaktEmpSalaryService : TaktServiceBase, ITaktEmpSalaryService
             exp = exp.And(x => x.EmpSalaryStatus == queryDto.EmpSalaryStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

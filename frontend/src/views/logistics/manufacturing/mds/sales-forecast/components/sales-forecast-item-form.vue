@@ -21,7 +21,7 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo')"
         force-render
       >
         <div :class="formContentClass">
@@ -40,79 +40,60 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
+                :label="pi.label('fiscalYear')"
+                name="fiscalYear"
               >
                 <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterialPlants/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.salesForecastItemId"
+                  v-model:value="formState.fiscalYear"
+                  api-url="TaktFinancialPeriods/options"
+                  :placeholder="pi.ph('fiscalYear')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('modelCode')"
-                name="modelCode"
-              >
-                <a-input
-                  v-model:value="formState.modelCode"
-                  :placeholder="pi.ph('modelCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.salesForecastItemId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('modelName')"
-                name="modelName"
-              >
-                <a-input
-                  v-model:value="formState.modelName"
-                  :placeholder="pi.ph('modelName')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planUnit')"
-                name="planUnit"
-              >
-                <TaktSelect
-                  v-model:value="formState.planUnit"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('planUnit')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('planQuantity')"
-                name="planQuantity"
+                :label="pi.label('planMonth')"
+                name="planMonth"
               >
                 <a-input-number
-                  v-model:value="formState.planQuantity"
-                  :placeholder="pi.ph('planQuantity')"
+                  v-model:value="formState.planMonth"
+                  :placeholder="pi.ph('planMonth')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('plannedDeliveryDate')"
-                name="plannedDeliveryDate"
+                :label="pi.label('planQuantity001')"
+                name="planQuantity001"
               >
-                <a-date-picker
-                  v-model:value="formState.plannedDeliveryDate"
-                  :placeholder="pi.ph('plannedDeliveryDate')"
-                  value-format="YYYY-MM-DD"
+                <a-input-number
+                  v-model:value="formState.planQuantity001"
+                  :placeholder="pi.ph('planQuantity001')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('planQuantity002')"
+                name="planQuantity002"
+              >
+                <a-input-number
+                  v-model:value="formState.planQuantity002"
+                  :placeholder="pi.ph('planQuantity002')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('planQuantityDelta')"
+                name="planQuantityDelta"
+              >
+                <a-input-number
+                  v-model:value="formState.planQuantityDelta"
+                  :placeholder="pi.ph('planQuantityDelta')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -153,16 +134,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('isObsolete')"
@@ -206,9 +177,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","modelCode","modelName","planUnit","planQuantity","plannedDeliveryDate","convertedQuantity","estimatedUnitPrice","estimatedAmount","isObsolete"]
-
-
+const formFields = ["lineNumber","fiscalYear","planMonth","planQuantity001","planQuantity002","planQuantityDelta","convertedQuantity","estimatedUnitPrice","estimatedAmount","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -279,28 +248,60 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  materialCode: [
+  fiscalYear: [
     {
       required: true,
-      message: pi.ph('materialCode'),
+      message: pi.ph('fiscalYear'),
       trigger: 'change'
     }
   ],
-  planUnit: [
-    {
-      required: true,
-      message: pi.ph('planUnit'),
-      trigger: 'change'
-    }
-  ],
-  planQuantity: [{
+  planMonth: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('planQuantity'))
+        return Promise.reject(pi.ph('planMonth'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('planQuantity'))
+        return Promise.reject(pi.ph('planMonth'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  planQuantity001: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('planQuantity001'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('planQuantity001'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  planQuantity002: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('planQuantity002'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('planQuantity002'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  planQuantityDelta: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('planQuantityDelta'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('planQuantityDelta'))
       }
       return Promise.resolve()
     },
@@ -373,9 +374,21 @@ function getValues(): Record<string, any> {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
-  if ('planQuantity' in payload) {
-    const rawplanQuantity = payload.planQuantity
-    payload.planQuantity = typeof rawplanQuantity === 'number' ? rawplanQuantity : Number(rawplanQuantity)
+  if ('planMonth' in payload) {
+    const rawplanMonth = payload.planMonth
+    payload.planMonth = typeof rawplanMonth === 'number' ? rawplanMonth : Number(rawplanMonth)
+  }
+  if ('planQuantity001' in payload) {
+    const rawplanQuantity001 = payload.planQuantity001
+    payload.planQuantity001 = typeof rawplanQuantity001 === 'number' ? rawplanQuantity001 : Number(rawplanQuantity001)
+  }
+  if ('planQuantity002' in payload) {
+    const rawplanQuantity002 = payload.planQuantity002
+    payload.planQuantity002 = typeof rawplanQuantity002 === 'number' ? rawplanQuantity002 : Number(rawplanQuantity002)
+  }
+  if ('planQuantityDelta' in payload) {
+    const rawplanQuantityDelta = payload.planQuantityDelta
+    payload.planQuantityDelta = typeof rawplanQuantityDelta === 'number' ? rawplanQuantityDelta : Number(rawplanQuantityDelta)
   }
   if ('convertedQuantity' in payload) {
     const rawconvertedQuantity = payload.convertedQuantity

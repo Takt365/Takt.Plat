@@ -153,11 +153,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -654,14 +654,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaterialRequirementsPlanningItemField(record, 'materialCode') ?? ''),
   },
   {
-    title: pi.label('materialName'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaterialRequirementsPlanningItem }) =>
-      String(getMaterialRequirementsPlanningItemField(record, 'materialName') ?? ''),
+      String(getMaterialRequirementsPlanningItemField(record, 'materialDescription') ?? ''),
   },
   {
     title: pi.label('materialSpecification'),
@@ -820,10 +820,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:mrp:material:requirements:planning:delete',
         onClick: (record: MaterialRequirementsPlanningItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcKoubaiI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcKoubai 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcKoubaiI18nSeedData : ITaktSeedDataCoordinator
             // entity.eckoubai.ecndetailid
             new TranslationSeedItem("entity.eckoubai.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcKoubai 导航）"),
 
-            // entity.eckoubai.ecno
-            new TranslationSeedItem("entity.eckoubai.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.eckoubai.ecno
-            new TranslationSeedItem("entity.eckoubai.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.eckoubai.ecno
-            new TranslationSeedItem("entity.eckoubai.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.eckoubai.ecno
-            new TranslationSeedItem("entity.eckoubai.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.eckoubai.eccode
+            new TranslationSeedItem("entity.eckoubai.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.eckoubai.eccode
+            new TranslationSeedItem("entity.eckoubai.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.eckoubai.eccode
+            new TranslationSeedItem("entity.eckoubai.eccode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.eckoubai.eccode
+            new TranslationSeedItem("entity.eckoubai.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.eckoubai.linenumber
             new TranslationSeedItem("entity.eckoubai.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -162,14 +162,14 @@ public class TaktEcKoubaiI18nSeedData : ITaktSeedDataCoordinator
             // entity.eckoubai.supplier
             new TranslationSeedItem("entity.eckoubai.supplier", "zh-HK", "供应商_hk", "供应商"),
 
-            // entity.eckoubai.purchaseorderno
-            new TranslationSeedItem("entity.eckoubai.purchaseorderno", "en-US", "采购订单号码_us", "采购订单号码"),
-            // entity.eckoubai.purchaseorderno
-            new TranslationSeedItem("entity.eckoubai.purchaseorderno", "ja-JP", "采购订单号码_jp", "采购订单号码"),
-            // entity.eckoubai.purchaseorderno
-            new TranslationSeedItem("entity.eckoubai.purchaseorderno", "zh-CN", "采购订单号码", "采购订单号码"),
-            // entity.eckoubai.purchaseorderno
-            new TranslationSeedItem("entity.eckoubai.purchaseorderno", "zh-HK", "采购订单号码_hk", "采购订单号码"),
+            // entity.eckoubai.purchaseordercode
+            new TranslationSeedItem("entity.eckoubai.purchaseordercode", "en-US", "采购订单号码_us", "采购订单号码"),
+            // entity.eckoubai.purchaseordercode
+            new TranslationSeedItem("entity.eckoubai.purchaseordercode", "ja-JP", "采购订单号码_jp", "采购订单号码"),
+            // entity.eckoubai.purchaseordercode
+            new TranslationSeedItem("entity.eckoubai.purchaseordercode", "zh-CN", "采购订单号码", "采购订单号码"),
+            // entity.eckoubai.purchaseordercode
+            new TranslationSeedItem("entity.eckoubai.purchaseordercode", "zh-HK", "采购订单号码_hk", "采购订单号码"),
 
             // entity.eckoubai.isobsolete
             new TranslationSeedItem("entity.eckoubai.isobsolete", "en-US", "是否作废_us", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),

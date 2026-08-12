@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：PCBA日报应用服务实现
 // 
@@ -14,10 +14,7 @@ using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Manufacturing.Aps;
-using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Manufacturing.Output;
-using Takt.Domain.Entities.Logistics.Materials;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Shared.Exceptions;
@@ -34,9 +31,6 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
 {
     private readonly ITaktCompanyRepository<TaktPcbaOutput> _pcbaOutputRepository;
     private readonly ITaktCompanyRepository<TaktPcbaOutputDetail> _pcbaOutputDetailRepository;
-    private readonly ITaktApprovalRepository<TaktStandardOperationTime> _standardOperationTimeRepository;
-    private readonly ITaktCompanyRepository<TaktProductionOrder> _productionOrderRepository;
-    private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     private readonly ITaktLineNumberGenerator _lineNumberGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -45,9 +39,6 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     /// </summary>
     /// <param name="pcbaOutputRepository">PCBA日报仓储</param>
     /// <param name="pcbaOutputDetailRepository">PcbaOutputDetail仓储</param>
-    /// <param name="standardOperationTimeRepository">标准工序时间仓储</param>
-    /// <param name="productionOrderRepository">生产工单仓储</param>
-    /// <param name="modelDestinationRepository">型号目的地仓储</param>
     /// <param name="lineNumberGenerator">明细行号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
@@ -55,9 +46,6 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     public TaktPcbaOutputService(
         ITaktCompanyRepository<TaktPcbaOutput> pcbaOutputRepository,
         ITaktCompanyRepository<TaktPcbaOutputDetail> pcbaOutputDetailRepository,
-        ITaktApprovalRepository<TaktStandardOperationTime> standardOperationTimeRepository,
-        ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
-        ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
         ITaktLineNumberGenerator lineNumberGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -66,20 +54,25 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     {
         _pcbaOutputRepository = pcbaOutputRepository;
         _pcbaOutputDetailRepository = pcbaOutputDetailRepository;
-        _standardOperationTimeRepository = standardOperationTimeRepository;
-        _productionOrderRepository = productionOrderRepository;
-        _modelDestinationRepository = modelDestinationRepository;
         _lineNumberGenerator = lineNumberGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取PCBA日报列表（分页）
+    /// 获取PCBA日报列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPcbaOutputDto>> GetPcbaOutputListAsync(TaktPcbaOutputQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPcbaOutputDto>.Create(
+                new List<TaktPcbaOutputDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _pcbaOutputRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -117,12 +110,12 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
         EnsureThreeLayerContext();
         var list = await _pcbaOutputRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.PlantCode ?? string.Empty,
+            x => x.ProdOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PlantCode ?? e.Id.ToString(),
+            DictValue = e.ProdOrderCode,
+            DictLabel = e.ProdOrderCode,
         }).ToList();
     }
 
@@ -133,17 +126,7 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     /// <returns>DTO</returns>
     public async Task<TaktPcbaOutputDto> CreatePcbaOutputAsync(TaktPcbaOutputCreateDto dto)
     {
-        EnsureThreeLayerContext();
         var entity = dto.Adapt<TaktPcbaOutput>();
-        await TaktPcbaOutputBackfillHelper.ApplyMasterFromProductionOrderAsync(
-            _productionOrderRepository,
-            _modelDestinationRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            entity.ProdOrderCode,
-            entity);
-        var operationTimes = await ResolveStandardOperationTimesForMasterAsync(entity);
-        TaktPcbaOutputDetailSeedHelper.EnsureDefaultDetailsOnCreate(dto, operationTimes);
         var isUnique_ix_takt_logistics_manufacturing_output_pcba_unique = await _uniqueValidator.IsUniqueAsync(
             _pcbaOutputRepository,
             x => x.PlantCode == entity.PlantCode
@@ -299,7 +282,15 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPcbaOutputAsync(TaktPcbaOutputQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPcbaOutputQueryDto());
+        var queryDto = query ?? new TaktPcbaOutputQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPcbaOutputExportDto>(),
+                sheetName ?? "PCBA日报数据",
+                fileName ?? "PCBA日报导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _pcbaOutputRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -313,52 +304,6 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
             exportData,
             sheetName ?? "PCBA日报数据",
             fileName ?? "PCBA日报导出.xlsx");
-    }
-
-    /// <summary>
-    /// 按物料编码获取 PCBA 日报默认明细预览
-    /// </summary>
-    /// <param name="materialCode">物料编码</param>
-    /// <param name="plantCode">工厂代码</param>
-    /// <param name="prodDate">生产日期</param>
-    /// <returns>默认明细预览列表</returns>
-    public async Task<List<TaktPcbaOutputDefaultDetailDto>> GetPcbaOutputDefaultDetailsByMaterialAsync(
-        string materialCode,
-        string plantCode,
-        DateTime prodDate)
-    {
-        EnsureThreeLayerContext();
-        ArgumentException.ThrowIfNullOrWhiteSpace(materialCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
-        var operationTimes = await TaktAssyOutputDerivedFieldsHelper.ResolveStandardOperationTimesByMaterialAsync(
-            _standardOperationTimeRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            materialCode.Trim(),
-            plantCode.Trim(),
-            prodDate);
-        return TaktPcbaOutputDetailSeedHelper.BuildDefaultDetailPreview(operationTimes);
-    }
-
-    /// <summary>
-    /// 按主表物料/工厂/生产日期解析标准工序时间
-    /// </summary>
-    /// <param name="entity">PCBA 日报主表</param>
-    /// <returns>标准工序时间列表</returns>
-    private async Task<IReadOnlyList<TaktStandardOperationTime>> ResolveStandardOperationTimesForMasterAsync(TaktPcbaOutput entity)
-    {
-        ArgumentNullException.ThrowIfNull(entity);
-        if (string.IsNullOrWhiteSpace(entity.MaterialCode) || string.IsNullOrWhiteSpace(entity.PlantCode))
-        {
-            return [];
-        }
-        return await TaktAssyOutputDerivedFieldsHelper.ResolveStandardOperationTimesByMaterialAsync(
-            _standardOperationTimeRepository,
-            CurrentTenantCode,
-            CurrentCompanyCode,
-            entity.MaterialCode.Trim(),
-            entity.PlantCode.Trim(),
-            entity.ProdDate);
     }
 
     // ========================================
@@ -416,9 +361,9 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     {
         // PCBA日报明细（PcbaOutputDetails）
         List<TaktPcbaOutputDetailUpdateDto>? pcbaOutputDetailsForSave;
-        if (dto is TaktPcbaOutputUpdateDto updateDto && updateDto.PcbaOutputDetails != null)
+        if (dto is TaktPcbaOutputUpdateDto updateDtoForPcbaOutputDetails && updateDtoForPcbaOutputDetails.PcbaOutputDetails != null)
         {
-            pcbaOutputDetailsForSave = updateDto.PcbaOutputDetails;
+            pcbaOutputDetailsForSave = updateDtoForPcbaOutputDetails.PcbaOutputDetails;
         }
         else if (dto.PcbaOutputDetails != null)
         {
@@ -462,13 +407,12 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                     submittedIds.Add(childDto.PcbaOutputDetailId);
                     var isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _pcbaOutputDetailRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PcbaOutputId == x.PcbaOutputId
+                        x => x.PcbaOutputId == x.PcbaOutputId
                 && x.LineNumber == x.LineNumber,
                         childDto.PcbaOutputDetailId);
                     if (!isUniqueUpdate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
                     {
-                        throw new TaktBusinessException("PCBA日报明细的CompanyCode、PcbaOutputId、LineNumber已存在");
+                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.PcbaOutputDetailId;
@@ -480,12 +424,11 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                 {
                     var isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _pcbaOutputDetailRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.PcbaOutputId == x.PcbaOutputId
+                        x => x.PcbaOutputId == x.PcbaOutputId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_manufacturing_output_pcba_detail_line_unique)
                     {
-                        throw new TaktBusinessException("PCBA日报明细的CompanyCode、PcbaOutputId、LineNumber已存在");
+                        throw new TaktBusinessException("PCBA日报明细的PcbaOutputId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktPcbaOutputDetail>();
                     child.Id = 0;
@@ -534,9 +477,9 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
     {
         var exp = Expressionable.Create<TaktPcbaOutput>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
@@ -544,91 +487,179 @@ public class TaktPcbaOutputService : TaktServiceBase, ITaktPcbaOutputService
                 || (x.ProdOrderCode != null && x.ProdOrderCode.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
-                || SqlFunc.ToString(x.ProdOrderQty).Contains(keywords)
-                || (x.SerialNo != null && x.SerialNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
+                || (x.SerialCode != null && x.SerialCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ProdDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdCategory))
         {
-            exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
+            var prodCategory = queryDto.ProdCategory;
+            exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(prodCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdOrderType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdOrderType))
         {
-            exp = exp.And(x => x.ProdOrderType != null && x.ProdOrderType.Contains(queryDto.ProdOrderType));
+            var prodOrderType = queryDto.ProdOrderType;
+            exp = exp.And(x => x.ProdOrderType != null && x.ProdOrderType.Contains(prodOrderType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProdOrderCode))
         {
-            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(queryDto.ProdOrderCode));
+            var prodOrderCode = queryDto.ProdOrderCode;
+            exp = exp.And(x => x.ProdOrderCode != null && x.ProdOrderCode.Contains(prodOrderCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ModelCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ModelCode))
         {
-            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(queryDto.ModelCode));
+            var modelCode = queryDto.ModelCode;
+            exp = exp.And(x => x.ModelCode != null && x.ModelCode.Contains(modelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            var batchCode = queryDto.BatchCode;
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(batchCode));
         }
 
         if (queryDto?.ProdOrderQty.HasValue == true)
         {
-            exp = exp.And(x => x.ProdOrderQty == queryDto.ProdOrderQty);
+            var prodOrderQty = queryDto.ProdOrderQty;
+            exp = exp.And(x => x.ProdOrderQty == prodOrderQty);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SerialCode))
         {
-            exp = exp.And(x => x.SerialNo != null && x.SerialNo.Contains(queryDto.SerialNo));
+            var serialCode = queryDto.SerialCode;
+            exp = exp.And(x => x.SerialCode != null && x.SerialCode.Contains(serialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.ProdDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ProdDate >= queryDto.ProdDateStart);
+            var prodDateStart = queryDto.ProdDateStart;
+            exp = exp.And(x => x.ProdDate >= prodDateStart);
         }
 
         if (queryDto?.ProdDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ProdDate <= queryDto.ProdDateEnd);
+            var prodDateEnd = queryDto.ProdDateEnd;
+            exp = exp.And(x => x.ProdDate <= prodDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPcbaOutputQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdOrderType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProdOrderCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ModelCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BatchCode))
+        {
+            return true;
+        }
+        if (queryDto.ProdOrderQty.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SerialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ProdDateStart.HasValue || queryDto.ProdDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -23,55 +23,6 @@ import type {
  * @description 对应后端 TaktLeaveDto
  */
 export interface Leave extends ApprovalDtoBase {
-  /**
-   * LeaveID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  leaveId: string;
-
-  /**
-   * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
-   */
-  employeeId: string;
-
-  /**
-   * 员工姓名
-   */
-  employeeName: string;
-
-  /**
-   * 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
-   */
-  deptId?: string;
-
-  /**
-   * 部门名称
-   */
-  deptName?: string;
-
-  /**
-   * 请假类型（字典 sys_leave_type；列存 DictValue）
-   */
-  leaveType: string;
-
-  /**
-   * 开始日期
-   */
-  startDate: string;
-
-  /**
-   * 结束日期
-   */
-  endDate: string;
-
-  /**
-   * 请假事由
-   */
-  reason: string;
-
-  /**
-   * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-   */
-  relatedPlant?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
@@ -171,7 +122,7 @@ export interface LeaveQuery extends TaktPagedQuery {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
@@ -285,7 +236,10 @@ export interface LeaveCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -330,7 +284,7 @@ export interface LeaveCreate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
@@ -463,7 +417,7 @@ export interface LeaveTemplate {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
@@ -522,7 +476,10 @@ export interface LeaveImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options）
@@ -567,7 +524,7 @@ export interface LeaveImport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）
@@ -661,7 +618,7 @@ export interface LeaveExport {
   /**
    * 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
    */
-  relatedPlant?: string;
+  plantCode?: string;
 
   /**
    * 证明附件 JSON（列表形式，由TaktFile 统一上传到服务器）

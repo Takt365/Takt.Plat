@@ -287,19 +287,20 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
                 SqlFunc.ToString(x.SourceEcId).Contains(keywords)
                 || (x.SourceFinishedProduct != null && x.SourceFinishedProduct.Contains(keywords))
                 || (x.SourceParentPart != null && x.SourceParentPart.Contains(keywords))
-                || (x.SourceLegacyPartNo != null && x.SourceLegacyPartNo.Contains(keywords))
+                || (x.SourceLegacyPartCode != null && x.SourceLegacyPartCode.Contains(keywords))
                 || (x.SourceLegacyPartName != null && x.SourceLegacyPartName.Contains(keywords))
                 || SqlFunc.ToString(x.SourceLegacyUsage).Contains(keywords)
                 || (x.SourceLegacyMountingPosition != null && x.SourceLegacyMountingPosition.Contains(keywords))
-                || (x.SourceReplacementPartNo != null && x.SourceReplacementPartNo.Contains(keywords))
+                || (x.SourceReplacementPartCode != null && x.SourceReplacementPartCode.Contains(keywords))
                 || (x.SourceReplacementPartName != null && x.SourceReplacementPartName.Contains(keywords))
                 || SqlFunc.ToString(x.SourceReplacementUsage).Contains(keywords)
                 || (x.SourceReplacementMountingPosition != null && x.SourceReplacementMountingPosition.Contains(keywords))
-                || (x.SourceBomNo != null && x.SourceBomNo.Contains(keywords))
+                || (x.SourceBomCode != null && x.SourceBomCode.Contains(keywords))
                 || (x.SourceCompatibility != null && x.SourceCompatibility.Contains(keywords))
                 || (x.SourceDistinction != null && x.SourceDistinction.Contains(keywords))
                 || (x.SourceInstruction != null && x.SourceInstruction.Contains(keywords))
                 || (x.SourceLegacyPartDisposition != null && x.SourceLegacyPartDisposition.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.SourceBomEffectiveDate).Contains(keywords)
@@ -322,9 +323,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceParentPart != null && x.SourceParentPart.Contains(queryDto.SourceParentPart));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceLegacyPartNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourceLegacyPartCode))
         {
-            exp = exp.And(x => x.SourceLegacyPartNo != null && x.SourceLegacyPartNo.Contains(queryDto.SourceLegacyPartNo));
+            exp = exp.And(x => x.SourceLegacyPartCode != null && x.SourceLegacyPartCode.Contains(queryDto.SourceLegacyPartCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceLegacyPartName))
@@ -342,9 +343,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceLegacyMountingPosition != null && x.SourceLegacyMountingPosition.Contains(queryDto.SourceLegacyMountingPosition));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceReplacementPartNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourceReplacementPartCode))
         {
-            exp = exp.And(x => x.SourceReplacementPartNo != null && x.SourceReplacementPartNo.Contains(queryDto.SourceReplacementPartNo));
+            exp = exp.And(x => x.SourceReplacementPartCode != null && x.SourceReplacementPartCode.Contains(queryDto.SourceReplacementPartCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceReplacementPartName))
@@ -362,9 +363,9 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
             exp = exp.And(x => x.SourceReplacementMountingPosition != null && x.SourceReplacementMountingPosition.Contains(queryDto.SourceReplacementMountingPosition));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceBomNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourceBomCode))
         {
-            exp = exp.And(x => x.SourceBomNo != null && x.SourceBomNo.Contains(queryDto.SourceBomNo));
+            exp = exp.And(x => x.SourceBomCode != null && x.SourceBomCode.Contains(queryDto.SourceBomCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceCompatibility))
@@ -385,6 +386,11 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         if (!string.IsNullOrEmpty(queryDto?.SourceLegacyPartDisposition))
         {
             exp = exp.And(x => x.SourceLegacyPartDisposition != null && x.SourceLegacyPartDisposition.Contains(queryDto.SourceLegacyPartDisposition));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -416,6 +422,12 @@ public class TaktSourceEcDetailService : TaktServiceBase, ITaktSourceEcDetailSer
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

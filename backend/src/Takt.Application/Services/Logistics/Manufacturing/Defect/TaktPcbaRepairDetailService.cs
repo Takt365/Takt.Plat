@@ -381,8 +381,8 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.PcbaBoardType != null && x.PcbaBoardType.Contains(keywords))
                 || SqlFunc.ToString(x.ProdActualQty).Contains(keywords)
-                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
-                || (x.CardNo != null && x.CardNo.Contains(keywords))
+                || (x.TeamCode != null && x.TeamCode.Contains(keywords))
+                || (x.CardCode != null && x.CardCode.Contains(keywords))
                 || (x.DefectSymptom != null && x.DefectSymptom.Contains(keywords))
                 || (x.DefectEngineering != null && x.DefectEngineering.Contains(keywords))
                 || (x.DefectReason != null && x.DefectReason.Contains(keywords))
@@ -390,6 +390,7 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
                 || (x.DefectResponsibility != null && x.DefectResponsibility.Contains(keywords))
                 || (x.DefectNature != null && x.DefectNature.Contains(keywords))
                 || (x.RepairOperator != null && x.RepairOperator.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -421,14 +422,14 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.ProdActualQty == queryDto.ProdActualQty);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CardNo))
+        if (!string.IsNullOrEmpty(queryDto?.CardCode))
         {
-            exp = exp.And(x => x.CardNo != null && x.CardNo.Contains(queryDto.CardNo));
+            exp = exp.And(x => x.CardCode != null && x.CardCode.Contains(queryDto.CardCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.DefectSymptom))
@@ -466,6 +467,11 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
             exp = exp.And(x => x.RepairOperator != null && x.RepairOperator.Contains(queryDto.RepairOperator));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -485,6 +491,12 @@ public class TaktPcbaRepairDetailService : TaktServiceBase, ITaktPcbaRepairDetai
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

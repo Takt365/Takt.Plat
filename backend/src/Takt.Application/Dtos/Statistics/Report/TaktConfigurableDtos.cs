@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Configurable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurable 生成，请按需审阅）
 // 
@@ -149,6 +149,16 @@ public class TaktConfigurableQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
     public string? ReportCode { get; set; } = string.Empty;
@@ -244,10 +254,15 @@ public class TaktConfigurableCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
@@ -360,6 +375,36 @@ public class TaktConfigurableUpdateDto : TaktConfigurableCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ConfigurableId { get; set; }
 
+    /// <summary>
+    /// 数据源表列表（FROM）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableSourceUpdateDto>? Sources { get; set; }
+
+    /// <summary>
+    /// 多表关联列表（JOIN）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableJoinUpdateDto>? Joins { get; set; }
+
+    /// <summary>
+    /// 输出字段列表（SELECT）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableFieldUpdateDto>? Fields { get; set; }
+
+    /// <summary>
+    /// 筛选条件列表（SQVI WHERE）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableSelectionUpdateDto>? Selections { get; set; }
+
+    /// <summary>
+    /// 分组字段列表（GROUP BY）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableGroupByUpdateDto>? GroupBys { get; set; }
+
+    /// <summary>
+    /// 排序字段列表（ORDER BY）（子表，级联保存）
+    /// </summary>
+    public new List<TaktConfigurableOrderByUpdateDto>? OrderBys { get; set; }
+
 }
 
 // ========================================
@@ -429,6 +474,16 @@ public class TaktConfigurableTemplateDto
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>
@@ -537,10 +592,15 @@ public class TaktConfigurableImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 报表编码（租户+公司内唯一）
     /// </summary>

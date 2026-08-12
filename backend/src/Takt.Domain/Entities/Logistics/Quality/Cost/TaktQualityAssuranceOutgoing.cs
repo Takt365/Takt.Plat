@@ -36,7 +36,7 @@ public class TaktQualityAssuranceOutgoing : TaktCompanyEntityBase
     /// <summary>
     /// 品质业务编码（冗余字段,便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", ColumnDataType = "nvarchar", Length = 30, IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_assurance_code", ColumnDescription = "品质业务编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string QualityAssuranceCode { get; set; } = string.Empty;
 
     /// <summary>

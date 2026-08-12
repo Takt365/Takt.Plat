@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOrderService.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-07-24
 // 创建人：Takt365(Cursor AI)
 // 功能描述：APS排程订单应用服务实现
 // 
@@ -102,14 +102,12 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
         EnsureThreeLayerContext();
         var list = await _apsOrderRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.OrderStatus == 1,
-            x => x.PlantCode ?? string.Empty,
+            x => x.ApsOrderCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
+            DictValue = e.ApsOrderCode,
             DictLabel = e.ApsOrderCode,
-            ExtValue = e.PlantCode,
-            ExtLabel = e.PlannedOrderId?.ToString(),
         }).ToList();
     }
 
@@ -358,9 +356,9 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
     {
         // APS工序排程（Operations）
         List<TaktApsOperationUpdateDto>? operationsForSave;
-        if (dto is TaktApsOrderUpdateDto updateDto && updateDto.Operations != null)
+        if (dto is TaktApsOrderUpdateDto updateDtoForOperations && updateDtoForOperations.Operations != null)
         {
-            operationsForSave = updateDto.Operations;
+            operationsForSave = updateDtoForOperations.Operations;
         }
         else if (dto.Operations != null)
         {
@@ -490,6 +488,7 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
                 || SqlFunc.ToString(x.ApsScheduleId).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlannedStartTime).Contains(keywords)
@@ -546,6 +545,11 @@ public class TaktApsOrderService : TaktServiceBase, ITaktApsOrderService
         if (queryDto?.ApsScheduleId.HasValue == true)
         {
             exp = exp.And(x => x.ApsScheduleId == queryDto.ApsScheduleId);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

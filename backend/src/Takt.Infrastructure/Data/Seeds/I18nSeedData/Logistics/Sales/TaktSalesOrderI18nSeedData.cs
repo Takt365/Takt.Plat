@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktSalesOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorder._self", "zh-CN", "Takt销售订单信息", "实体名称"),
             // entity.salesorder._self
             new TranslationSeedItem("entity.salesorder._self", "zh-HK", "Takt销售订单信息_hk", "实体名称"),
-
-            // entity.salesorder.plantcode
-            new TranslationSeedItem("entity.salesorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesorder.plantcode
-            new TranslationSeedItem("entity.salesorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesorder.plantcode
-            new TranslationSeedItem("entity.salesorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.salesorder.plantcode
-            new TranslationSeedItem("entity.salesorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.salesorder.code
             new TranslationSeedItem("entity.salesorder.code", "en-US", "销售订单编码_us", "销售订单编码（唯一索引）"),
@@ -198,14 +189,32 @@ public class TaktSalesOrderI18nSeedData : ITaktSeedDataCoordinator
             // entity.salesorder.currencycode
             new TranslationSeedItem("entity.salesorder.currencycode", "zh-HK", "结算币种_hk", "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）"),
 
+            // entity.salesorder.exchangerate
+            new TranslationSeedItem("entity.salesorder.exchangerate", "en-US", "汇率_us", "汇率"),
+            // entity.salesorder.exchangerate
+            new TranslationSeedItem("entity.salesorder.exchangerate", "ja-JP", "汇率_jp", "汇率"),
+            // entity.salesorder.exchangerate
+            new TranslationSeedItem("entity.salesorder.exchangerate", "zh-CN", "汇率", "汇率"),
+            // entity.salesorder.exchangerate
+            new TranslationSeedItem("entity.salesorder.exchangerate", "zh-HK", "汇率_hk", "汇率"),
+
+            // entity.salesorder.taxcode
+            new TranslationSeedItem("entity.salesorder.taxcode", "en-US", "税码_us", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.salesorder.taxcode
+            new TranslationSeedItem("entity.salesorder.taxcode", "ja-JP", "税码_jp", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.salesorder.taxcode
+            new TranslationSeedItem("entity.salesorder.taxcode", "zh-CN", "税码", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+            // entity.salesorder.taxcode
+            new TranslationSeedItem("entity.salesorder.taxcode", "zh-HK", "税码_hk", "税码（字典 accounting_tax_code；按 CultureCode 匹配 TaktDictData.CultureCode；DictValue 随区域变化）"),
+
             // entity.salesorder.taxrate
-            new TranslationSeedItem("entity.salesorder.taxrate", "en-US", "税率_us", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）"),
+            new TranslationSeedItem("entity.salesorder.taxrate", "en-US", "税率_us", "税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.salesorder.taxrate
-            new TranslationSeedItem("entity.salesorder.taxrate", "ja-JP", "税率_jp", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）"),
+            new TranslationSeedItem("entity.salesorder.taxrate", "ja-JP", "税率_jp", "税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.salesorder.taxrate
-            new TranslationSeedItem("entity.salesorder.taxrate", "zh-CN", "税率", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）"),
+            new TranslationSeedItem("entity.salesorder.taxrate", "zh-CN", "税率", "税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
             // entity.salesorder.taxrate
-            new TranslationSeedItem("entity.salesorder.taxrate", "zh-HK", "税率_hk", "税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）"),
+            new TranslationSeedItem("entity.salesorder.taxrate", "zh-HK", "税率_hk", "税率（百分比整数；一单一税率；由税码 TaxCode / 字典 accounting_tax_code.ExtValue 回填，如 J2→13）"),
 
             // entity.salesorder.taxamount
             new TranslationSeedItem("entity.salesorder.taxamount", "en-US", "税费_us", "税费（精确到分，存储为整数，单位为分）"),

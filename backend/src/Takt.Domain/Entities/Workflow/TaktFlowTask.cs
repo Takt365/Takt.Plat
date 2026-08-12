@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Workflow;
 [SugarTable("takt_workflow_task", "流程用户任务表")]
 [SugarIndex("ix_flow_task_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_task_instance", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_flow_task_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_task_assignee", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(AssigneeUserId), OrderByType.Asc, nameof(TaskStatus), OrderByType.Asc, false)]
 public class TaktFlowTask : TaktCompanyEntityBase
 {    /// <summary>

@@ -4,7 +4,7 @@
 // 文件名称：common.d.ts
 // 创建时间：2026-05-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：通用类型定义（API 响应、分页、实体基类等）
+// 功能描述：通用类型定义（API 响应、分页、实体基类等；实体基类字段序 id → relatedPlant|plantCode → 隔离/审计，对齐 Domain）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -336,8 +336,9 @@ export interface TaktTreeSelectOption extends TaktSelectOption {
 
 /**
  * 租户级实体基类
- * 对应后端 TaktTenantEntityBase
- * 仅包含租户隔离(TenantCode),不包含公司隔离(CompanyCode)
+ * 对应后端 TaktTenantEntityBase / TaktTenantDtoBase
+ * 字段序对齐 Domain CodeFirst：id → relatedPlant → cultureCode → tenantCode …
+ * 仅租户隔离 + RelatedPlant + CultureCode（不含公司隔离）
  * 适用于用户、角色、菜单等跨公司共享的实体
  */
 export interface TaktTenantEntityBase {
@@ -345,6 +346,16 @@ export interface TaktTenantEntityBase {
    * 主键ID（对应后端long型，前端用string）
    */
   id: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；行戳记）
+   */
+  cultureCode: string;
 
   /**
    * 租户编码
@@ -399,8 +410,8 @@ export interface TaktTenantEntityBase {
 
 /**
  * 公司级实体基类
- * 对应后端 TaktCompanyEntityBase
- * 包含租户+公司双重隔离
+ * 对应后端 TaktCompanyEntityBase / TaktCompanyDtoBase
+ * 字段序对齐 Domain CodeFirst：id → plantCode → tenantCode → companyCode → cultureCode …
  * 适用于部门、岗位、员工等业务实体
  */
 export interface TaktCompanyEntityBase {
@@ -408,6 +419,11 @@ export interface TaktCompanyEntityBase {
    * 主键ID（对应后端long型，前端用string）
    */
   id: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 租户编码
@@ -418,6 +434,11 @@ export interface TaktCompanyEntityBase {
    * 公司代码
    */
   companyCode: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致）
+   */
+  cultureCode: string;
 
   /**
    * 扩展字段JSON
@@ -467,8 +488,8 @@ export interface TaktCompanyEntityBase {
 
 /**
  * 审批级实体基类
- * 对应后端 TaktApprovalEntityBase
- * 包含租户+公司双重隔离+审批流程相关字段
+ * 对应后端 TaktApprovalEntityBase / TaktApprovalDtoBase
+ * 字段序对齐 Domain CodeFirst：id → plantCode → tenantCode → companyCode → cultureCode …
  * 适用于需要审批的业务实体，如：请假单、报销单、采购单、合同等
  */
 export interface TaktApprovalEntityBase {
@@ -476,6 +497,11 @@ export interface TaktApprovalEntityBase {
    * 主键ID（对应后端long型，前端用string）
    */
   id: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode: string;
 
   /**
    * 租户编码
@@ -486,6 +512,11 @@ export interface TaktApprovalEntityBase {
    * 公司代码
    */
   companyCode: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致）
+   */
+  cultureCode: string;
 
   /**
    * 扩展字段JSON
@@ -570,20 +601,41 @@ export interface TaktApprovalEntityBase {
 
 /**
  * 租户级 DTO 基类（对应后端 TaktTenantDtoBase，公共字段对齐 TaktTenantEntityBase，不含实体主键 id）
+ * 无 id 时 relatedPlant 仍居首（对齐 Domain：主键后即关联工厂）
  */
-export type TenantDtoBase = Omit<TaktTenantEntityBase, 'id'> & {
+export type TenantDtoBase = {
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+  /**
+   * 租户编码
+   */
+  tenantCode: string;
   /**
    * 公司代码（租户级 DTO 不使用公司隔离，后端固定为空字符串）
    */
   companyCode: string;
-};
+} & Omit<TaktTenantEntityBase, 'id' | 'relatedPlant' | 'tenantCode'>;
 
 /**
  * 公司级 DTO 基类（对应后端 TaktCompanyDtoBase）
+ * 无 id 时 plantCode 仍居首
  */
-export type CompanyDtoBase = Omit<TaktCompanyEntityBase, 'id'>;
+export type CompanyDtoBase = {
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+} & Omit<TaktCompanyEntityBase, 'id' | 'plantCode'>;
 
 /**
  * 审批级 DTO 基类（对应后端 TaktApprovalDtoBase）
+ * 无 id 时 plantCode 仍居首
  */
-export type ApprovalDtoBase = Omit<TaktApprovalEntityBase, 'id'>;
+export type ApprovalDtoBase = {
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+} & Omit<TaktApprovalEntityBase, 'id' | 'plantCode'>;

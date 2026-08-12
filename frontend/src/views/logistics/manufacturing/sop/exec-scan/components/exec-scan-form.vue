@@ -29,12 +29,24 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -43,82 +55,48 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.sopexecscan.execid')"
+                :label="pi.label('execId')"
                 name="execId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.execId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.execid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopExecs/options"
+                  :placeholder="pi.ph('execId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.execstepid')"
+                :label="pi.label('execStepId')"
                 name="execStepId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.execStepId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.execstepid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopExecSteps/options"
+                  :placeholder="pi.ph('execStepId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.stepid')"
+                :label="pi.label('stepId')"
                 name="stepId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.stepId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.stepid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktSopSteps/options"
+                  :placeholder="pi.ph('stepId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.scannedbarcode')"
+                :label="pi.label('scannedBarcode')"
                 name="scannedBarcode"
               >
                 <a-input
                   v-model:value="formState.scannedBarcode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.scannedbarcode') })"
+                  :placeholder="pi.ph('scannedBarcode')"
                   show-count
                   :maxlength="200"
                   allow-clear
@@ -127,42 +105,53 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.expectedmaterialcode')"
+                :label="pi.label('expectedMaterialCode')"
                 name="expectedMaterialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.expectedMaterialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.expectedmaterialcode') })"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('expectedMaterialCode')"
                   :disabled="!!formData?.sopExecScanId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.scanresult')"
+                :label="pi.label('scanResult')"
                 name="scanResult"
               >
                 <TaktSelect
                   v-model:value="formState.scanResult"
                   dict-type="logistics_sop_scan_result_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scanresult') })"
+                  :placeholder="pi.ph('scanResult')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexecscan.matchmessage')"
+                :label="pi.label('matchMessage')"
                 name="matchMessage"
               >
                 <a-input
                   v-model:value="formState.matchMessage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.matchmessage') })"
+                  :placeholder="pi.ph('matchMessage')"
                   show-count
                   :maxlength="500"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scannedAt')"
+                name="scannedAt"
+              >
+                <a-date-picker
+                  v-model:value="formState.scannedAt"
+                  :placeholder="pi.ph('scannedAt')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -178,14 +167,29 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopexecscan.scannedat')"
-                name="scannedAt"
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
               >
-                <a-date-picker
-                  v-model:value="formState.scannedAt"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scannedat') })"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -202,7 +206,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -217,12 +221,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -245,6 +249,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useSopExecScanI18n } from '../composables/use-exec-scan-i18n'
+
+/** 实体字段 i18n */
+const pi = useSopExecScanI18n()
 import type { SopExecScanCreate } from '@/types/logistics/manufacturing/sop/exec-scan'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -255,33 +263,34 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","execId","execStepId","stepId","scannedBarcode","expectedMaterialCode","scanResult","matchMessage","scannedAt","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -344,10 +353,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.sopExecScanId
-    if (isCreate) {
+    if (!props.formData?.sopExecScanId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -355,35 +363,42 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   execId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.execid') }),
-      trigger: 'blur'
+      message: pi.ph('execId'),
+      trigger: 'change'
     }
   ],
   stepId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.stepid') }),
-      trigger: 'blur'
+      message: pi.ph('stepId'),
+      trigger: 'change'
     }
   ],
   scannedBarcode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexecscan.scannedbarcode') }),
+      message: pi.ph('scannedBarcode'),
       trigger: 'blur'
     }
   ],
   scanResult: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scanresult') }))
+        return Promise.reject(pi.ph('scanResult'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scanresult') }))
+        return Promise.reject(pi.ph('scanResult'))
       }
       return Promise.resolve()
     },
@@ -392,7 +407,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   scannedAt: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.sopexecscan.scannedat') }),
+      message: pi.ph('scannedAt'),
       trigger: 'change'
     }
   ],

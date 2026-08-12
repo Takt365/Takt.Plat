@@ -77,7 +77,11 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         int updateCount = 0;
         foreach (var company in orderedCompanies)
         {
-            var (form, fi, fu) = await UpsertFormAsync(formRepository, tenantCode, company.CompanyCode);
+            var (form, fi, fu) = await UpsertFormAsync(
+                formRepository,
+                tenantCode,
+                company.CompanyCode,
+                company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -87,6 +91,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
+                company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -159,7 +164,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
     private static async Task<(TaktFlowForm Form, int InsertCount, int UpdateCount)> UpsertFormAsync(
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
-        string companyCode)
+        string companyCode,
+        string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
             f.TenantCode == tenantCode && f.CompanyCode == companyCode && f.FormCode == FormCode);
@@ -182,7 +188,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedTableName = "takt_logistics_procurement_purchase_inquiry",
                 RelatedFormField = relatedField,
                 SortOrder = 14,
-                FormStatus = 1
+                FormStatus = 1,
+                CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
             return (form, 1, 0);
@@ -202,6 +209,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         TaktFlowForm form,
         string processContent)
     {
@@ -229,7 +237,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 DeploymentId = "purchase-inquiry-v1-seed",
                 FormId = form.Id,
                 FormCode = form.FormCode,
-                SortOrder = 14
+                SortOrder = 14,
+                CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);
             return (scheme, 1, 0);

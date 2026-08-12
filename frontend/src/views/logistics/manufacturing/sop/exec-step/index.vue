@@ -140,11 +140,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('workOrderNo')">
-      <a-form-item :label="t('entity.sopexec.workorderno')">
+      <div v-show="isFieldVisible('workOrderCode')">
+      <a-form-item :label="t('entity.sopexec.workorderCode')">
         <a-input
-          v-model:value="advancedQueryForm.workOrderNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') })"
+          v-model:value="advancedQueryForm.workOrderCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -249,11 +249,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('contentLang')">
-      <a-form-item :label="t('entity.sopexec.contentlang')">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="t('entity.sopexec.culturecode')">
         <a-textarea
-          v-model:value="advancedQueryForm.contentLang"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopexec.contentlang') })"
+          v-model:value="advancedQueryForm.cultureCode"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopexec.culturecode') })"
           :rows="2"
           allow-clear
         />
@@ -498,7 +498,7 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   productionOrderId: '',
-  workOrderNo: '',
+  workOrderCode: '',
   serialNumber: '',
   materialCode: '',
   routingItemId: '',
@@ -508,7 +508,7 @@ const advancedQueryForm = ref({
   sopId: '',
   revisionId: '',
   revision: '',
-  contentLang: '',
+  cultureCode: '',
   startedAtStart: '',
   startedAtEnd: '',
   endedAtStart: '',
@@ -524,7 +524,7 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'productionOrderId', label: t('entity.sopexec.productionorderid') },
-  { key: 'workOrderNo', label: t('entity.sopexec.workorderno') },
+  { key: 'workOrderCode', label: t('entity.sopexec.workorderCode') },
   { key: 'serialNumber', label: t('entity.sopexec.serialnumber') },
   { key: 'materialCode', label: t('entity.sopexec.materialcode') },
   { key: 'routingItemId', label: t('entity.sopexec.routingitemid') },
@@ -534,7 +534,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'sopId', label: t('entity.sopexec.sopid') },
   { key: 'revisionId', label: t('entity.sopexec.revisionid') },
   { key: 'revision', label: t('entity.sopexec.revision') },
-  { key: 'contentLang', label: t('entity.sopexec.contentlang') },
+  { key: 'cultureCode', label: t('entity.sopexec.culturecode') },
   { key: 'startedAtStart', label: t('entity.sopexec.startedatstart') },
   { key: 'startedAtEnd', label: t('entity.sopexec.startedatend') },
   { key: 'endedAtStart', label: t('entity.sopexec.endedatstart') },
@@ -545,8 +545,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -591,7 +590,7 @@ function buildListQuery(overrides?: Partial<SopExecQuery>): SopExecQuery {
     }
   }
   assignTrimmed('productionOrderId', form.productionOrderId)
-  assignTrimmed('workOrderNo', form.workOrderNo)
+  assignTrimmed('workOrderCode', form.workOrderCode)
   assignTrimmed('serialNumber', form.serialNumber)
   assignTrimmed('materialCode', form.materialCode)
   assignTrimmed('routingItemId', form.routingItemId)
@@ -603,7 +602,7 @@ function buildListQuery(overrides?: Partial<SopExecQuery>): SopExecQuery {
   assignTrimmed('sopId', form.sopId)
   assignTrimmed('revisionId', form.revisionId)
   assignTrimmed('revision', form.revision)
-  assignTrimmed('contentLang', form.contentLang)
+  assignTrimmed('cultureCode', form.cultureCode)
   assignTrimmed('startedAtStart', form.startedAtStart)
   assignTrimmed('startedAtEnd', form.startedAtEnd)
   assignTrimmed('endedAtStart', form.endedAtStart)
@@ -627,7 +626,6 @@ onMounted(async () => {
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -701,13 +699,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'productionOrderId') ?? ''
   },
   {
-    title: t('entity.sopexec.workorderno'),
-    dataIndex: 'workOrderNo',
-    key: 'workOrderNo',
+    title: t('entity.sopexec.workorderCode'),
+    dataIndex: 'workOrderCode',
+    key: 'workOrderCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopExecField(record, 'workOrderNo') ?? ''
+    customRender: ({ record }: { record: any }) => getSopExecField(record, 'workOrderCode') ?? ''
   },
   {
     title: t('entity.sopexec.serialnumber'),
@@ -790,13 +788,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'revision') ?? ''
   },
   {
-    title: t('entity.sopexec.contentlang'),
-    dataIndex: 'contentLang',
-    key: 'contentLang',
+    title: t('entity.sopexec.culturecode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopExecField(record, 'contentLang') ?? ''
+    customRender: ({ record }: { record: any }) => getSopExecField(record, 'cultureCode') ?? ''
   },
   {
     title: t('entity.sopexec.startedat'),
@@ -881,7 +879,6 @@ const getSopExecId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getSopExecField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -941,7 +938,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   productionOrderId: '',
-  workOrderNo: '',
+  workOrderCode: '',
   serialNumber: '',
   materialCode: '',
   routingItemId: '',
@@ -951,7 +948,7 @@ function handleReset() {
   sopId: '',
   revisionId: '',
   revision: '',
-  contentLang: '',
+  cultureCode: '',
   startedAtStart: '',
   startedAtEnd: '',
   endedAtStart: '',
@@ -1151,7 +1148,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   productionOrderId: '',
-  workOrderNo: '',
+  workOrderCode: '',
   serialNumber: '',
   materialCode: '',
   routingItemId: '',
@@ -1161,7 +1158,7 @@ function handleAdvancedQueryReset() {
   sopId: '',
   revisionId: '',
   revision: '',
-  contentLang: '',
+  cultureCode: '',
   startedAtStart: '',
   startedAtEnd: '',
   endedAtStart: '',

@@ -88,7 +88,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     var built = await BuildQualityCostMonthlyTrendAnalysisAsync(query);
     var columnKeys = new List<string>
     {
-      "plantCode", "costCategory", "costCategoryName", "costCurrency",
+      "plantCode", "costCategory", "costCategoryName", "currencyCode",
     };
     var columnLabels = new List<string>
     {
@@ -108,7 +108,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         ["plantCode"] = row.PlantCode,
         ["costCategory"] = row.CostCategory,
         ["costCategoryName"] = row.CostCategoryName,
-        ["costCurrency"] = row.CostCurrency,
+        ["currencyCode"] = row.CurrencyCode,
         ["basePeriod"] = row.BasePeriod,
         ["comparePeriod"] = row.ComparePeriod,
         ["varianceAmount"] = row.VarianceAmount,
@@ -144,9 +144,9 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.PlantCode);
     EnsureThreeLayerContext();
     var plantCode = queryDto.PlantCode.Trim();
-    var currencyFilter = string.IsNullOrWhiteSpace(queryDto.CostCurrency)
+    var currencyFilter = string.IsNullOrWhiteSpace(queryDto.CurrencyCode)
         ? null
-        : queryDto.CostCurrency.Trim();
+        : queryDto.CurrencyCode.Trim();
     var categoryFilter = NormalizeCategoryFilter(queryDto.CostCategory);
     var periodOrder = ResolvePeriodOrder(queryDto, out var rangeStart, out var rangeEnd);
     if (periodOrder.Count == 0)
@@ -167,7 +167,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     var periodSet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
     var allRows = sourceRows
         .GroupBy(
-            r => new QualityCostTrendRowKey(r.PlantCode, r.CostCategory, r.CostCurrency),
+            r => new QualityCostTrendRowKey(r.PlantCode, r.CostCategory, r.CurrencyCode),
             QualityCostTrendRowKeyComparer.Instance)
         .Select(g => BuildQualityCostTrendRow(g.Key, g.ToList(), periodSet, focusPeriod))
         .ToList();
@@ -280,7 +280,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         && x.AssuranceMonth.CompareTo(endKey) <= 0);
     if (!string.IsNullOrWhiteSpace(currencyFilter))
     {
-      exp = exp.And(x => x.CostCurrency == currencyFilter);
+      exp = exp.And(x => x.CurrencyCode == currencyFilter);
     }
     return exp.ToExpression();
   }
@@ -309,7 +309,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         && x.IssueDate < rangeEndExclusive);
     if (!string.IsNullOrWhiteSpace(currencyFilter))
     {
-      exp = exp.And(x => x.CostCurrency == currencyFilter);
+      exp = exp.And(x => x.CurrencyCode == currencyFilter);
     }
     return exp.ToExpression();
   }
@@ -338,7 +338,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         && x.IncidentDate < rangeEndExclusive);
     if (!string.IsNullOrWhiteSpace(currencyFilter))
     {
-      exp = exp.And(x => x.CostCurrency == currencyFilter);
+      exp = exp.And(x => x.CurrencyCode == currencyFilter);
     }
     return exp.ToExpression();
   }
@@ -353,7 +353,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
       {
         PlantCode = entity.PlantCode.Trim(),
         CostCategory = CategoryAssurance,
-        CostCurrency = entity.CostCurrency?.Trim() ?? string.Empty,
+        CurrencyCode = entity.CurrencyCode?.Trim() ?? string.Empty,
         Period = entity.AssuranceMonth.Trim(),
         Amount = entity.TotalQualityCost,
       };
@@ -368,7 +368,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
       {
         PlantCode = entity.PlantCode.Trim(),
         CostCategory = CategoryIssue,
-        CostCurrency = entity.CostCurrency?.Trim() ?? string.Empty,
+        CurrencyCode = entity.CurrencyCode?.Trim() ?? string.Empty,
         Period = new DateTime(entity.IssueDate.Year, entity.IssueDate.Month, 1).ToString("yyyy-MM"),
         Amount = entity.TotalCost,
       };
@@ -383,7 +383,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
       {
         PlantCode = entity.PlantCode.Trim(),
         CostCategory = CategoryIncident,
-        CostCurrency = entity.CostCurrency?.Trim() ?? string.Empty,
+        CurrencyCode = entity.CurrencyCode?.Trim() ?? string.Empty,
         Period = new DateTime(entity.IncidentDate.Year, entity.IncidentDate.Month, 1).ToString("yyyy-MM"),
         Amount = entity.TotalScrapCost,
       };
@@ -497,7 +497,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
       PlantCode = key.PlantCode,
       CostCategory = key.CostCategory,
       CostCategoryName = ResolveCategoryName(key.CostCategory),
-      CostCurrency = key.CostCurrency,
+      CurrencyCode = key.CurrencyCode,
       Trend = "none",
     };
     foreach (var period in groupRows
@@ -617,7 +617,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         .OrderBy(r => TrendRank(r.Trend))
         .ThenByDescending(r => Math.Abs(r.VarianceAmount ?? 0m))
         .ThenBy(r => r.CostCategory, StringComparer.Ordinal)
-        .ThenBy(r => r.CostCurrency, StringComparer.Ordinal)
+        .ThenBy(r => r.CurrencyCode, StringComparer.Ordinal)
         .ToList();
   }
 
@@ -641,7 +641,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     public string CostCategory { get; init; } = string.Empty;
 
     /// <summary>成本币种</summary>
-    public string CostCurrency { get; init; } = string.Empty;
+    public string CurrencyCode { get; init; } = string.Empty;
 
     /// <summary>期间 yyyy-MM</summary>
     public string Period { get; init; } = string.Empty;
@@ -655,8 +655,8 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
   /// </summary>
   /// <param name="PlantCode">工厂代码</param>
   /// <param name="CostCategory">成本类别</param>
-  /// <param name="CostCurrency">成本币种</param>
-  private sealed record QualityCostTrendRowKey(string PlantCode, string CostCategory, string CostCurrency);
+  /// <param name="CurrencyCode">成本币种</param>
+  private sealed record QualityCostTrendRowKey(string PlantCode, string CostCategory, string CurrencyCode);
 
   /// <summary>
   /// 质量成本推移行键比较器
@@ -675,7 +675,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
       }
       return string.Equals(x.PlantCode, y.PlantCode, StringComparison.OrdinalIgnoreCase)
           && string.Equals(x.CostCategory, y.CostCategory, StringComparison.OrdinalIgnoreCase)
-          && string.Equals(x.CostCurrency, y.CostCurrency, StringComparison.OrdinalIgnoreCase);
+          && string.Equals(x.CurrencyCode, y.CurrencyCode, StringComparison.OrdinalIgnoreCase);
     }
 
     /// <inheritdoc />
@@ -683,7 +683,7 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
         HashCode.Combine(
             obj.PlantCode.ToUpperInvariant(),
             obj.CostCategory.ToUpperInvariant(),
-            obj.CostCurrency.ToUpperInvariant());
+            obj.CurrencyCode.ToUpperInvariant());
   }
 
   /// <summary>

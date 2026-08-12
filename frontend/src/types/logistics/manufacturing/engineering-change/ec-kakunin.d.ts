@@ -13,7 +13,7 @@ import type { CompanyDtoBase, TaktPagedQuery } from '@/types/common';
 
 export interface EcKakunin extends CompanyDtoBase {
   ecDetailId: string;
-  ecNo: string;
+  ecCode: string;
   lineNumber: number;
   ecModel: string;
   ecOldItem?: string;
@@ -25,7 +25,7 @@ export interface EcKakunin extends CompanyDtoBase {
 }
 
 export interface EcKakuninQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   ecModel?: string;
   isOldCheck?: number;
   isNewCheck?: number;

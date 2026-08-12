@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcGijutsuDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：EcGijutsu 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktEcGijutsu 生成，请按需审阅）
 // 
@@ -35,15 +35,11 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcGijutsuId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期
@@ -66,7 +62,7 @@ public class TaktEcGijutsuDto : TaktCompanyDtoBase
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 
@@ -131,14 +127,19 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期（范围查询-开始）
@@ -166,7 +167,7 @@ public class TaktEcGijutsuQueryDto : TaktPagedQuery
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -236,21 +237,21 @@ public class TaktEcGijutsuCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
     [Required(ErrorMessage = "设变单号（唯一）不能为空")]
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期
@@ -275,9 +276,9 @@ public class TaktEcGijutsuCreateDto
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）不能为空")]
+    [Required(ErrorMessage = "负责人（选项 TaktEmployees/options；DictValue=Id）不能为空")]
     public string EcLeader { get; set; } = string.Empty;
 
     /// <summary>
@@ -313,7 +314,7 @@ public class TaktEcGijutsuCreateDto
     /// <summary>
     /// 设变通知列表（技术阶段一：④，发行通知至各部门）（子表，级联保存）
     /// </summary>
-    public List<TaktEcNotificationUpdateDto>? Notifications { get; set; }
+    public List<TaktEcNotificationCreateDto>? Notifications { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -344,6 +345,21 @@ public class TaktEcGijutsuUpdateDto : TaktEcGijutsuCreateDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcGijutsuId { get; set; }
+
+    /// <summary>
+    /// 设变明细列表（技术阶段一：③，BOM/料号变更行）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEcDetailUpdateDto>? EcDetails { get; set; }
+
+    /// <summary>
+    /// 设变附件列表（技术阶段一：②，联络/EPP/FPP 等文档）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEcAttachmentUpdateDto>? Attachments { get; set; }
+
+    /// <summary>
+    /// 设变通知列表（技术阶段一：④，发行通知至各部门）（子表，级联保存）
+    /// </summary>
+    public new List<TaktEcNotificationUpdateDto>? Notifications { get; set; }
 
 }
 
@@ -391,14 +407,19 @@ public class TaktEcGijutsuTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期
@@ -421,7 +442,7 @@ public class TaktEcGijutsuTemplateDto
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -488,19 +509,19 @@ public class TaktEcGijutsuImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
-    public string? EcNo { get; set; } = string.Empty;
+    public string? EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期
@@ -523,7 +544,7 @@ public class TaktEcGijutsuImportDto
     public string? EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? EcLeader { get; set; } = string.Empty;
 
@@ -596,14 +617,14 @@ public class TaktEcGijutsuExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 设变单号（唯一）
     /// </summary>
-    public string EcNo { get; set; } = string.Empty;
+    public string EcCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 发行日期
@@ -626,7 +647,7 @@ public class TaktEcGijutsuExportDto
     public string EcContent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 负责人（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 负责人（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string EcLeader { get; set; } = string.Empty;
 

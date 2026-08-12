@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcSeizouikkaI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcSeizouikka 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcSeizouikkaI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecseizouikka.ecndetailid
             new TranslationSeedItem("entity.ecseizouikka.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键；关联由 TaktEcDetail.EcSeizouikka 导航）"),
 
-            // entity.ecseizouikka.ecno
-            new TranslationSeedItem("entity.ecseizouikka.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.ecseizouikka.ecno
-            new TranslationSeedItem("entity.ecseizouikka.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.ecseizouikka.ecno
-            new TranslationSeedItem("entity.ecseizouikka.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.ecseizouikka.ecno
-            new TranslationSeedItem("entity.ecseizouikka.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.ecseizouikka.eccode
+            new TranslationSeedItem("entity.ecseizouikka.eccode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.ecseizouikka.eccode
+            new TranslationSeedItem("entity.ecseizouikka.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.ecseizouikka.eccode
+            new TranslationSeedItem("entity.ecseizouikka.eccode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.ecseizouikka.eccode
+            new TranslationSeedItem("entity.ecseizouikka.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.ecseizouikka.linenumber
             new TranslationSeedItem("entity.ecseizouikka.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

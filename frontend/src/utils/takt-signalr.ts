@@ -297,9 +297,9 @@ export function normalizeEcChangeNotification(raw: unknown): EcChangeNotificatio
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
     deliveryId: readSignalRPayloadString(payload, 'deliveryId', 'DeliveryId'),
     ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
-    ecNotificationNo: readSignalRPayloadString(payload, 'ecNotificationNo', 'EcNotificationNo'),
+    ecNotificationCode: readSignalRPayloadString(payload, 'ecNotificationCode', 'EcNotificationCode'),
     ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     ecTitle: readSignalRPayloadString(payload, 'ecTitle', 'EcTitle') || undefined,
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
     priority: readSignalRPayloadNumber(payload, 'priority', 'Priority', 1),
@@ -319,7 +319,7 @@ export function normalizeEcExecutionTaskAssigned(raw: unknown): EcExecutionTaskA
   return {
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
     taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
     taskTitle: readSignalRPayloadString(payload, 'taskTitle', 'TaskTitle'),
     dueDate: readSignalRPayloadString(payload, 'dueDate', 'DueDate') || undefined,
@@ -338,7 +338,7 @@ export function normalizeEcExecutionTaskProgress(raw: unknown): EcExecutionTaskP
   return {
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
     taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
     taskStatus: readSignalRPayloadNumber(payload, 'taskStatus', 'TaskStatus', 0),
     progressPercent: readSignalRPayloadNumber(payload, 'progressPercent', 'ProgressPercent', 0),
@@ -360,7 +360,7 @@ export function normalizeEcChangeClosed(raw: unknown): EcChangeClosedEvent {
   return {
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
     ecId: readSignalRPayloadString(payload, 'ecId', 'EcId'),
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
     closedAt: readSignalRPayloadString(payload, 'closedAt', 'ClosedAt'),
   };
@@ -378,7 +378,7 @@ export function normalizeEcExecutionTaskAlert(raw: unknown): EcExecutionTaskAler
   return {
     companyCode: readSignalRPayloadString(payload, 'companyCode', 'CompanyCode'),
     taskId: readSignalRPayloadString(payload, 'taskId', 'TaskId'),
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo'),
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode'),
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
     alertType: readSignalRPayloadString(payload, 'alertType', 'AlertType'),
     message: readSignalRPayloadString(payload, 'message', 'Message'),
@@ -396,8 +396,8 @@ export function normalizeEcNotificationConfirmed(raw: unknown): EcNotificationCo
     : {};
   return {
     ecNotificationId: readSignalRPayloadString(payload, 'ecNotificationId', 'EcNotificationId'),
-    ecNotificationNo: readSignalRPayloadString(payload, 'ecNotificationNo', 'EcNotificationNo') || undefined,
-    ecNo: readSignalRPayloadString(payload, 'ecNo', 'EcNo') || undefined,
+    ecNotificationCode: readSignalRPayloadString(payload, 'ecNotificationCode', 'EcNotificationCode') || undefined,
+    ecCode: readSignalRPayloadString(payload, 'ecCode', 'EcCode') || undefined,
     deptCode: readSignalRPayloadString(payload, 'deptCode', 'DeptCode'),
     confirmedByUserName: readSignalRPayloadString(payload, 'confirmedByUserName', 'ConfirmedByUserName') || undefined,
     confirmedAt: readSignalRPayloadString(payload, 'confirmedAt', 'ConfirmedAt') || undefined,

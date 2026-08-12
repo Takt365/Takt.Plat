@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.CustomerService;
 [SugarIndex("ix_takt_logistics_customer_service_request_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RequestDate), OrderByType.Desc, false)]
 public class TaktCustomerServiceRequest : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务请求单号（组合唯一索引）

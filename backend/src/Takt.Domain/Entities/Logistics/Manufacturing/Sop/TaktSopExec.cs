@@ -21,16 +21,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Sop;
 [SugarTable("takt_logistics_manufacturing_sop_exec", "SOP工位执行表")]
 [SugarIndex("ix_sop_exec_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_sop_exec_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_sop_exec_work_order", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkOrderNo), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_sop_exec_work_order", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(WorkOrderCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_sop_exec_serial", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SerialNumber), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_sop_exec_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktSopExec : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
@@ -42,8 +37,8 @@ public class TaktSopExec : TaktCompanyEntityBase
     /// <summary>
     /// MES 工单号（冗余，便于追溯查询）
     /// </summary>
-    [SugarColumn(ColumnName = "work_order_no", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string WorkOrderNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "work_order_code", ColumnDescription = "工单号", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品序列号 SN
@@ -54,7 +49,7 @@ public class TaktSopExec : TaktCompanyEntityBase
     /// <summary>
     /// 产品/机种物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -103,12 +98,6 @@ public class TaktSopExec : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "revision", ColumnDescription = "版本号快照", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string Revision { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用语言（选项 TaktCultures/options；DictValue=CultureCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "content_lang", ColumnDescription = "使用语言", ColumnDataType = "varchar", Length = 10, IsNullable = false, DefaultValue = "zh-CN")]
-    public string ContentLang { get; set; } = "zh-CN";
 
     /// <summary>
     /// 开始时间

@@ -11,14 +11,28 @@
 // ========================================
 
 using Takt.Application.Dtos.Logistics.Sales;
+using Takt.Shared.Options;
 
 namespace Takt.Application.Services.Logistics.Sales;
 
 /// <summary>
-/// 月销售推移转置分析服务
+/// 月销售推移转置分析服务（读销售订单本表；与 CRUD 服务分离）
 /// </summary>
 public interface ITaktSalesMonthlyTrendService
 {
+    /// <summary>
+    /// 推移查询栏：销售订单本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesMonthlyTrendPlantOptionsAsync();
+
+    /// <summary>
+    /// 推移查询栏：按工厂去重客户（级联第 2 级，查询时可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    Task<List<TaktSelectOption>> GetSalesMonthlyTrendCustomerOptionsAsync(string plantCode);
+
     /// <summary>
     /// 获取月销售推移转置分析（分页）
     /// </summary>

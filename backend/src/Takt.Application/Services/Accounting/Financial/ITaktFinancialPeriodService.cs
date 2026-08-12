@@ -36,7 +36,7 @@ public interface ITaktFinancialPeriodService
     Task<TaktFinancialPeriodDto?> GetFinancialPeriodByIdAsync(long id);
 
     /// <summary>
-    /// 获取财务期间选项列表
+    /// 获取财务期间选项列表（按 FinancialYearCode 去重；DictValue=FinancialYearCode）
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetFinancialPeriodOptionsAsync();

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktCompanyI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCompany 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -351,15 +351,6 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             // entity.company.existence
             new TranslationSeedItem("entity.company.existence", "zh-HK", "存续状态_hk", "存续状态（字典 sys_entity_existence_status）"),
 
-            // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-            // entity.company.defaultculture
-            new TranslationSeedItem("entity.company.defaultculture", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code；即语言/区域文化）"),
-
             // entity.company.codealias
             new TranslationSeedItem("entity.company.codealias", "en-US", "编码代号_us", "编码代号（如 TKC、TCJ、DTA；前端字典录入）"),
             // entity.company.codealias
@@ -476,15 +467,6 @@ public class TaktCompanyI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.company.financialmanagementarea", "zh-CN", "财务管理范围", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
             // entity.company.financialmanagementarea
             new TranslationSeedItem("entity.company.financialmanagementarea", "zh-HK", "财务管理范围_hk", "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）"),
-
-            // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.company.relatedplant
-            new TranslationSeedItem("entity.company.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.company.sortorder
             new TranslationSeedItem("entity.company.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

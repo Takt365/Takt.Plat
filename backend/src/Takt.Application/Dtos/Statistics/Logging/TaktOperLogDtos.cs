@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktOperLogDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：OperLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktOperLog 生成，请按需审阅）
 // 
@@ -37,7 +37,7 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public long OperLogId { get; set; }
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -47,9 +47,9 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，默认 unknown）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -77,7 +77,7 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误消息（失败时）
+    /// 错误消息（失败时；成功为空串）
     /// </summary>
     public string ErrorMsg { get; set; } = string.Empty;
 
@@ -97,19 +97,19 @@ public class TaktOperLogDto : TaktCompanyDtoBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）
@@ -149,7 +149,17 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string? UserName { get; set; } = string.Empty;
 
@@ -159,9 +169,9 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，默认 unknown）
     /// </summary>
-    public string? OperType { get; set; }
+    public string? OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -189,7 +199,7 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误消息（失败时）
+    /// 错误消息（失败时；成功为空串）
     /// </summary>
     public string? ErrorMsg { get; set; } = string.Empty;
 
@@ -209,19 +219,19 @@ public class TaktOperLogQueryDto : TaktPagedQuery
     public string? UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string? Browser { get; set; }
+    public string? Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string? Os { get; set; }
+    public string? Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string? DeviceType { get; set; }
+    public string? DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）（范围查询-开始）
@@ -284,85 +294,104 @@ public class TaktOperLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    [Required(ErrorMessage = "用户名（登录账号）不能为空")]
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
+    /// </summary>
+    [Required(ErrorMessage = "用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）不能为空")]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作模块（如：用户管理、部门管理）
     /// </summary>
+    [Required(ErrorMessage = "操作模块（如：用户管理、部门管理）不能为空")]
     public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，默认 unknown）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    [Required(ErrorMessage = "操作类型（TaktConstants.OperType，默认 unknown）不能为空")]
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
     /// </summary>
+    [Required(ErrorMessage = "操作方法（如：TaktUserService.CreateUserAsync）不能为空")]
     public string OperMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求方式（GET、POST、PUT、DELETE 等）
     /// </summary>
+    [Required(ErrorMessage = "请求方式（GET、POST、PUT、DELETE 等）不能为空")]
     public string RequestMethod { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 URL（含查询字符串）
     /// </summary>
+    [Required(ErrorMessage = "操作 URL（含查询字符串）不能为空")]
     public string OperUrl { get; set; } = string.Empty;
 
     /// <summary>
     /// 请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）
     /// </summary>
+    [Required(ErrorMessage = "请求参数 JSON（当前操作入参/操作值完整快照；写入方须脱敏密码、Token 等）不能为空")]
     public string RequestParam { get; set; } = string.Empty;
 
     /// <summary>
     /// 返回结果 JSON（当前操作出参/响应摘要）
     /// </summary>
+    [Required(ErrorMessage = "返回结果 JSON（当前操作出参/响应摘要）不能为空")]
     public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误消息（失败时）
+    /// 错误消息（失败时；成功为空串）
     /// </summary>
+    [Required(ErrorMessage = "错误消息（失败时；成功为空串）不能为空")]
     public string ErrorMsg { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作 IP
     /// </summary>
+    [Required(ErrorMessage = "操作 IP不能为空")]
     public string OperIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作地点（由 OperIp 解析，如：中国-广东省-深圳市）
     /// </summary>
+    [Required(ErrorMessage = "操作地点（由 OperIp 解析，如：中国-广东省-深圳市）不能为空")]
     public string OperLocation { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
     /// </summary>
+    [Required(ErrorMessage = "用户代理（User-Agent）不能为空")]
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    [Required(ErrorMessage = "浏览器（TaktConstants.BrowserType，默认 unknown）不能为空")]
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    [Required(ErrorMessage = "操作系统（TaktConstants.OperatingSystem，默认 unknown）不能为空")]
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    [Required(ErrorMessage = "登录设备（TaktConstants.DeviceType，默认 unknown）不能为空")]
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）
@@ -457,7 +486,7 @@ public class TaktOperLogExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户名（登录账号）
+    /// 用户名（登录账号；无法解析时为 TaktConstants.AuditUserName.Unknown）
     /// </summary>
     public string UserName { get; set; } = string.Empty;
 
@@ -467,9 +496,9 @@ public class TaktOperLogExportDto
     public string OperModule { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作类型（TaktConstants.OperType）
+    /// 操作类型（TaktConstants.OperType，默认 unknown）
     /// </summary>
-    public string OperType { get; set; } = "unknown";
+    public string OperType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作方法（如：TaktUserService.CreateUserAsync）
@@ -497,7 +526,7 @@ public class TaktOperLogExportDto
     public string JsonResult { get; set; } = string.Empty;
 
     /// <summary>
-    /// 错误消息（失败时）
+    /// 错误消息（失败时；成功为空串）
     /// </summary>
     public string ErrorMsg { get; set; } = string.Empty;
 
@@ -517,19 +546,19 @@ public class TaktOperLogExportDto
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录设备（TaktConstants.DeviceType）
+    /// 登录设备（TaktConstants.DeviceType，默认 unknown）
     /// </summary>
-    public string DeviceType { get; set; } = "unknown";
+    public string DeviceType { get; set; } = string.Empty;
 
     /// <summary>
     /// 操作时间（业务操作发生时刻）

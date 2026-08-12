@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mrp
 // 文件名称：TaktProductionPlanDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionPlan 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionPlan 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionPlanId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 生产计划编码（租户+公司+工厂内业务唯一）
@@ -93,7 +89,7 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
@@ -104,7 +100,7 @@ public class TaktProductionPlanDto : TaktApprovalDtoBase
     public string? PlannerName { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 
@@ -172,7 +168,12 @@ public class TaktProductionPlanQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -234,13 +235,13 @@ public class TaktProductionPlanQueryDto : TaktPagedQuery
     public DateTime? PlanPeriodEndEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -363,14 +364,14 @@ public class TaktProductionPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -417,15 +418,15 @@ public class TaktProductionPlanCreateDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
-    [Required(ErrorMessage = "计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）不能为空")]
+    [Required(ErrorMessage = "计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）不能为空")]
     public string PlanBy { get; set; } = string.Empty;
 
     /// <summary>
@@ -549,7 +550,12 @@ public class TaktProductionPlanTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -596,13 +602,13 @@ public class TaktProductionPlanTemplateDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -674,12 +680,12 @@ public class TaktProductionPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -726,13 +732,13 @@ public class TaktProductionPlanImportDto
     public DateTime? PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string? PlanBy { get; set; } = string.Empty;
 
@@ -805,7 +811,7 @@ public class TaktProductionPlanExportDto
     public long ProductionPlanId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -852,13 +858,13 @@ public class TaktProductionPlanExportDto
     public DateTime PlanPeriodEnd { get; set; }
 
     /// <summary>
-    /// 计划人员工ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 计划人员工ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PlannerId { get; set; }
 
     /// <summary>
-    /// 计划人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 计划人（选项 TaktEmployees/options；DictValue=EmployeeCode）
     /// </summary>
     public string PlanBy { get; set; } = string.Empty;
 

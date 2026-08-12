@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Aps
 // 文件名称：TaktApsOrderDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ApsOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktApsOrder 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktApsOrderDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApsOrderId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// APS 订单编码
@@ -62,7 +58,7 @@ public class TaktApsOrderDto : TaktCompanyDtoBase
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -72,12 +68,12 @@ public class TaktApsOrderDto : TaktCompanyDtoBase
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 
@@ -136,7 +132,12 @@ public class TaktApsOrderQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -157,7 +158,7 @@ public class TaktApsOrderQueryDto : TaktPagedQuery
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -167,12 +168,12 @@ public class TaktApsOrderQueryDto : TaktPagedQuery
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 
@@ -248,14 +249,14 @@ public class TaktApsOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -276,9 +277,9 @@ public class TaktApsOrderCreateDto
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -287,13 +288,13 @@ public class TaktApsOrderCreateDto
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
-    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）不能为空")]
+    [Required(ErrorMessage = "计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）不能为空")]
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 
@@ -404,7 +405,12 @@ public class TaktApsOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -425,7 +431,7 @@ public class TaktApsOrderTemplateDto
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -435,12 +441,12 @@ public class TaktApsOrderTemplateDto
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 
@@ -498,12 +504,12 @@ public class TaktApsOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -524,7 +530,7 @@ public class TaktApsOrderImportDto
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
@@ -534,12 +540,12 @@ public class TaktApsOrderImportDto
     public decimal? OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string? UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 
@@ -603,7 +609,7 @@ public class TaktApsOrderExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -624,7 +630,7 @@ public class TaktApsOrderExportDto
     public string? PlannedOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
@@ -634,12 +640,12 @@ public class TaktApsOrderExportDto
     public decimal OrderQuantity { get; set; }
 
     /// <summary>
-    /// 计量单位（字典 logistics_unit_of_measure_code，DictValue=PC/EA 等；默认 PC）
+    /// 计量单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
     /// </summary>
     public string UnitOfMeasure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工艺路线编码（关联 TaktRouting.RoutingCode，选项 TaktRoutings/options，DictValue=RoutingCode）
+    /// 工艺路线编码（选项 TaktRoutings/options；DictValue=RoutingCode）
     /// </summary>
     public string? RoutingCode { get; set; } = string.Empty;
 

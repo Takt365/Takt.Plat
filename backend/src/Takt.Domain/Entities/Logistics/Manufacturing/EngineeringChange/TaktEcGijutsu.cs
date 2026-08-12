@@ -22,24 +22,19 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_gijutsu", "设变技术课主表")]
 [SugarIndex("ix_ec_gijutsu_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_gijutsu_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_no_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EcNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_plant_ec_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(EcCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_change_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ChangeStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_ec_entry_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcEntryDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_ec_issue_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcIssueDate), OrderByType.Desc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_ec_gijutsu_ec_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcStatus), OrderByType.Asc, false)]
 public class TaktEcGijutsu : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
   /// 设变单号（唯一）
   /// </summary>
-  [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", Length = 10, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+  [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", Length = 10, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
 
   /// <summary>
   /// 发行日期

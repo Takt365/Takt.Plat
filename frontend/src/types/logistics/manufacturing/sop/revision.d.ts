@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：revision.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,7 +29,7 @@ export interface SopRevision extends CompanyDtoBase {
   sopRevisionId: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
@@ -54,7 +54,7 @@ export interface SopRevision extends CompanyDtoBase {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 
@@ -114,7 +114,17 @@ export interface SopRevisionQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
@@ -134,7 +144,7 @@ export interface SopRevisionQuery extends TaktPagedQuery {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 
@@ -198,12 +208,17 @@ export interface SopRevisionCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
+
+  /**
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
@@ -223,7 +238,7 @@ export interface SopRevisionCreate {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 
@@ -277,6 +292,11 @@ export interface SopRevisionUpdate extends SopRevisionCreate {
    */
   sopRevisionId: string;
 
+  /**
+   * 多语言正文（子表，级联保存）
+   */
+  contents?: any;
+
 }
 
 
@@ -316,7 +336,17 @@ export interface SopRevisionTemplate {
   companyCode?: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
@@ -336,7 +366,7 @@ export interface SopRevisionTemplate {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 
@@ -395,12 +425,17 @@ export interface SopRevisionImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId?: string;
 
@@ -420,7 +455,7 @@ export interface SopRevisionImport {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 
@@ -479,7 +514,12 @@ export interface SopRevisionExport {
   companyCode: string;
 
   /**
-   * SOP 文档头 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * SOP 文档头 ID（选项 TaktSopDocs/options；DictValue=Id）
    */
   sopId: string;
 
@@ -499,7 +539,7 @@ export interface SopRevisionExport {
   changeDesc?: string;
 
   /**
-   * 关联 ECN 主表 ID（关联 TaktEc.Id，选项 TaktEcs/options）
+   * 关联 ECN 主表 ID（选项 TaktEcs/options；DictValue=Id）
    */
   ecnId?: string;
 

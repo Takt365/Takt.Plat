@@ -19,6 +19,8 @@ export default {
     session: {
       canceltext: "Continue",
       content: "You have been inactive. You will be logged out in {minutes} minute(s). Any keyboard or mouse action will extend the session automatically.",
+      expired: "Your session has expired. Please sign in again.",
+      idlelogout: "You have been signed out due to inactivity.",
       oktext: "Logout Now",
       title: "Session Expiring",
     },

@@ -43,9 +43,9 @@
         @resize-column="handleResizeColumn"
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'ecNo'">
+          <template v-if="column.key === 'ecCode'">
             <a-typography-link @click.stop="handleDetail(record as EcExecTransposed)">
-              {{ record.ecNo }}
+              {{ record.ecCode }}
             </a-typography-link>
           </template>
           <template v-else-if="String(column.key ?? '').startsWith('dept_')">
@@ -71,7 +71,7 @@
     >
       <a-spin :spinning="detailLoading">
         <a-descriptions v-if="detailData" bordered :column="2" size="small">
-          <a-descriptions-item :label="t('entity.ec.no')">{{ detailData.ecNo }}</a-descriptions-item>
+          <a-descriptions-item :label="t('entity.ec.no')">{{ detailData.ecCode }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.linenumber')">{{ detailData.lineNumber }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.ecmodel')">{{ detailData.ecModel }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.ecnewitem')">{{ detailData.ecNewItem ?? '—' }}</a-descriptions-item>
@@ -141,10 +141,9 @@ const columns = computed(() => {
   const base: TableColumnsType = [
     { title: t('entity.ec.issuedate'), dataIndex: 'ecIssueDate', key: 'ecIssueDate', width: 100, fixed: 'left' as const },
     { title: t('entity.ec.leader'), dataIndex: 'ecLeader', key: 'ecLeader', width: 90, fixed: 'left' as const },
-    { title: t('entity.ec.no'), dataIndex: 'ecNo', key: 'ecNo', width: 110, fixed: 'left' as const },
+    { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 110, fixed: 'left' as const },
     { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 100 },
-    { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 120 },
-  ];
+    { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 120 }];
   order.forEach((deptCode) => {
     base.push({
       title: deptColumnTitle(deptCode),
@@ -164,8 +163,7 @@ const columns = computed(() => {
           permission: 'logistics:manufacturing:engineering:change:bukan:detail',
           buttonClass: 'takt-button-detail',
           onClick: (record) => handleDetail(record),
-        },
-      ],
+        }],
     }),
   );
   return base;

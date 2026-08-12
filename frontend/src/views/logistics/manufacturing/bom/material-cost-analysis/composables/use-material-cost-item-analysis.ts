@@ -12,7 +12,7 @@ import type {
   BomMaterialCostItemComponentMovingPriceQuery,
   BomMaterialCostItemMonthlyTrendLine,
   BomMaterialCostItemTransposedQuery,
-} from '@/types/logistics/manufacturing/bom/material-cost-trend';
+} from '@/types/logistics/manufacturing/bom/material-cost-analysis';
 import { useI18n } from 'vue-i18n';
 
 /** 静态 locales 引用键前缀 logistics.manufacturing.bom.material-cost-analysis.page */
@@ -76,12 +76,13 @@ export function costingMonthToDateQuery(
 }
 
 /**
- * 默认核算单月（当月 yyyy-MM）
+ * 默认核算单月（截止上月；分析页当月无实绩）
  * @returns {string} yyyy-MM
  */
 export function buildDefaultCostingMonth(): string {
   const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const end = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  return `${end.getFullYear()}-${String(end.getMonth() + 1).padStart(2, '0')}`;
 }
 
 /**

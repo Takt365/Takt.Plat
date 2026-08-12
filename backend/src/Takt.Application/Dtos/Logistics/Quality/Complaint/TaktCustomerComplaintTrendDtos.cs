@@ -20,7 +20,7 @@ namespace Takt.Application.Dtos.Logistics.Quality.Complaint;
 public class TaktCustomerComplaintMonthlyTrendQueryDto : TaktPagedQuery
 {
     /// <summary>
-    /// 工厂代码（必填；映射实体 RelatedPlant）
+    /// 工厂代码（必填；映射实体 PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 

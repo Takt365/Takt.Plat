@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-price/components -->
 <!-- 文件名称：material-moving-price-form.vue -->
-<!-- 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -27,183 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.materialMovingPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('periodDate')"
-                name="periodDate"
-              >
-                <a-date-picker
-                  v-model:value="formState.periodDate"
-                  :placeholder="pi.ph('periodDate')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <a-input
-                  v-model:value="formState.materialCode"
-                  :placeholder="pi.ph('materialCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.materialMovingPriceId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('valuation')"
-                name="valuation"
-              >
-                <TaktSelect
-                  v-model:value="formState.valuation"
-                  dict-type="logistics_valuation_class_category"
-                  :placeholder="pi.ph('valuation')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stockQuantity')"
-                name="stockQuantity"
-              >
-                <a-input-number
-                  v-model:value="formState.stockQuantity"
-                  :placeholder="pi.ph('stockQuantity')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('stockAmount')"
-                name="stockAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.stockAmount"
-                  :placeholder="pi.ph('stockAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('priceControl')"
-                name="priceControl"
-              >
-                <TaktSelect
-                  v-model:value="formState.priceControl"
-                  dict-type="logistics_price_control_type"
-                  :placeholder="pi.ph('priceControl')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('movingPrice')"
-                name="movingPrice"
-              >
-                <a-input-number
-                  v-model:value="formState.movingPrice"
-                  :placeholder="pi.ph('movingPrice')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('priceUnit')"
-                name="priceUnit"
-              >
-                <TaktSelect
-                  v-model:value="formState.priceUnit"
-                  dict-type="logistics_price_unit_param"
-                  :placeholder="pi.ph('priceUnit')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('currency')"
-                name="currency"
-              >
-                <TaktSelect
-                  v-model:value="formState.currency"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currency')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -254,7 +89,7 @@
 
 <script setup lang="ts">
 /**
- * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/material-moving-price/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -291,15 +126,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -321,7 +159,7 @@ const formState = reactive<Record<string, any>>({})
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   priceControl: "V",
   priceUnit: 1000,
-  currency: "CNY"
+  currencyCode: "CNY"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -380,18 +218,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  periodDate: [
+  valuationPeriod: [
     {
       required: true,
-      message: pi.ph('periodDate'),
-      trigger: 'change'
+      message: pi.ph('valuationPeriod'),
+      trigger: 'blur'
     }
   ],
   materialCode: [
     {
       required: true,
       message: pi.ph('materialCode'),
-      trigger: 'blur'
+      trigger: 'change'
     }
   ],
   valuation: [
@@ -460,10 +298,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  currency: [
+  currencyCode: [
     {
       required: true,
-      message: pi.ph('currency'),
+      message: pi.ph('currencyCode'),
       trigger: 'change'
     }
   ],

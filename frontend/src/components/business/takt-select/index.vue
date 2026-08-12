@@ -4,7 +4,7 @@
 <!-- 文件名称：index.vue -->
 <!-- 创建时间：2025-01-20 -->
 <!-- 创建人：Takt365(Cursor AI) -->
-<!-- 功能描述：Takt 下拉选择框组件，支持 API 动态加载、字典数据、业务选项等 -->
+<!-- 功能描述：Takt 下拉；多选默认宽=基准×2 + maxTagCount responsive 溢出；≥3000 虚拟+远程搜索 -->
 <!--  -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
@@ -31,6 +31,7 @@
   <!-- 其他情况使用 Select 下拉选择框 -->
   <a-select
     v-else
+    :class="selectRootClass"
     :value="effectiveModelValue"
     :options="options"
     :loading="loading"
@@ -41,7 +42,7 @@
     :size="size"
     :show-search="showSearch"
     :filter-option="effectiveFilterOption"
-    :option-filter-prop="remoteSearch ? undefined : 'label'"
+    :option-filter-prop="effectiveRemoteSearch ? undefined : 'label'"
     :virtual="shouldUseVirtual"
     :list-height="listHeight"
     v-bind="{
@@ -65,14 +66,12 @@ import type { SelectValue, DefaultOptionType } from 'ant-design-vue/es/select'
 import type { TaktDictSelectFieldNames, TaktDictSelectOption, TaktSelectOption } from '@/types/common'
 import request from '@/api/request'
 import { createLogger } from '@/utils/logger'
+import { TAKT_LARGE_DATA_AUTO_THRESHOLD } from '@/utils/takt-large-data'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { isEmptyFormFieldValue } from '@/utils/takt-dict-default'
 import { useI18n } from 'vue-i18n'
 
 const selectLogger = createLogger('takt-select')
-
-/** API 选项最大条数（08-overflow-fullstack） */
-const MAX_SELECT_OPTIONS = 500
 
 const { t } = useI18n()
 type SelectOptionLike = { label?: string; value?: string | number; dictLabel?: string; dictValue?: string | number; extLabel?: string; extValue?: string | number } & Record<string, unknown>
@@ -100,13 +99,16 @@ interface Props {
   showSearch?: boolean
   /** 自定义过滤函数 */
   filterOption?: boolean | ((input: string, option?: DefaultOptionType) => boolean)
-  /** 多选时最多显示多少个标签,超出部分以 +N 形式展示。支持数字或 'responsive'(响应式模式,但不推荐在大表单场景下使用,因为对性能有所消耗) */
+  /**
+   * 多选标签上限；未传时默认 responsive（按控件宽度溢出为 +N）。
+   * 可传数字固定显示个数。表单 w-full 时仍用 responsive 按实际宽度溢出。
+   */
   maxTagCount?: number | 'responsive' | undefined
-  /** 是否开启虚拟滚动(大数据量时建议开启,可提升渲染性能)。如果不指定,当选项数量超过 100 条时会自动开启 */
+  /** 是否开启虚拟滚动；未显式指定时，选项数 ≥ 3000 自动开启 */
   virtual?: boolean
   /** API 请求附加查询参数（与 apiUrl 联用，如 plantCode、keyword） */
   apiParams?: Record<string, string | number | boolean | undefined | null> | undefined
-  /** 是否远程搜索（apiUrl 模式下输入关键字重新请求后端，关闭客户端 filter） */
+  /** 是否远程搜索；未显式指定时，apiUrl 且首包选项数 ≥ 3000 自动开启 */
   remoteSearch?: boolean
   /** 远程搜索时写入请求的查询参数字段名，默认 keyword */
   searchParamKey?: string
@@ -121,6 +123,11 @@ interface Props {
   }
   /** dict-type 模式下值未绑定时是否自动选中 IsDefault=1 项（默认 true；用户手动清空后不再回填） */
   applyDictDefault?: boolean
+  /**
+   * 业务区域文化（如 DefaultCulture）；dict-type 时仅显示 CultureCode=eo 或匹配项
+   * 未传时按 Accept-Language + eo 过滤
+   */
+  cultureCode?: string | undefined
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -136,9 +143,9 @@ const props = withDefaults(defineProps<Props>(), {
   showSearch: true,
   filterOption: true,
   maxTagCount: undefined,
-  virtual: false,
+  virtual: undefined,
   apiParams: undefined,
-  remoteSearch: false,
+  remoteSearch: undefined,
   searchParamKey: 'keyword',
   searchDebounceMs: 300,
   listHeight: 256,
@@ -147,6 +154,7 @@ const props = withDefaults(defineProps<Props>(), {
     value: 'value'
   }),
   applyDictDefault: true,
+  cultureCode: undefined,
 })
 
 /**
@@ -168,8 +176,54 @@ function defaultFilterOption(input: string, option?: DefaultOptionType): boolean
   return `${label} ${value} ${extLabel}`.toLowerCase().includes(needle)
 }
 
+const emit = defineEmits<{
+  'update:modelValue': [value: string | number | (string | number)[] | undefined]
+  'change': [value: string | number | (string | number)[] | undefined, option: SelectOptionLike | SelectOptionLike[] | null]
+  'search': [value: string]
+}>()
+
+const attrs = useAttrs()
+
+/**
+ * 是否已由调用方指定占满宽度（勿再套多选自动 2× 宽）
+ * @returns {boolean} 含 w-full 等则为 true
+ */
+function hasExplicitFullWidthClass(): boolean {
+  const cls = attrs.class
+  const text = Array.isArray(cls) ? cls.map(String).join(' ') : String(cls ?? '')
+  return /\bw-full\b/.test(text) || /\bmin-w-full\b/.test(text)
+}
+
+/** 根 class：多选自动宽=基准×2（见 select-base.css） */
+const selectRootClass = computed(() => {
+  const multiple = !!props.multiple
+  return [
+    'takt-select',
+    multiple ? 'takt-select--multiple' : 'takt-select--single',
+    multiple && !hasExplicitFullWidthClass() ? 'takt-select--multiple-auto-width' : null,
+  ]
+})
+
+const loading = ref(false)
+const rawData = ref<TaktSelectOption[]>([])
+const remoteSearchKeyword = ref('')
+let remoteSearchTimer: ReturnType<typeof setTimeout> | undefined
+/** apiUrl 首包（无 keyword）选项数 ≥ 阈值后自动远程搜索 */
+const autoLargeRemoteSearch = ref(false)
+const dictDataStore = useDictDataStore()
+/** 当前 dictType 是否已自动写入过 IsDefault（用户清空后不再自动回填） */
+const dictDefaultApplied = ref(false)
+
+/**
+ * 是否远程搜索：显式 true 强制开；显式 false 强制关；未指定时按大数据自动开
+ */
+const effectiveRemoteSearch = computed(
+  () => props.remoteSearch === true || (props.remoteSearch !== false && autoLargeRemoteSearch.value),
+)
+
 const effectiveFilterOption = computed(() => {
-  if (props.remoteSearch && props.apiUrl) {
+  // 仅显式 remote-search：纯远程，关闭客户端过滤（后端须支持 keyword）
+  if (props.remoteSearch === true && props.apiUrl) {
     return false
   }
   if (typeof props.filterOption === 'function') {
@@ -181,20 +235,6 @@ const effectiveFilterOption = computed(() => {
   }
   return props.filterOption
 })
-
-const emit = defineEmits<{
-  'update:modelValue': [value: string | number | (string | number)[] | undefined]
-  'change': [value: string | number | (string | number)[] | undefined, option: SelectOptionLike | SelectOptionLike[] | null]
-  'search': [value: string]
-}>()
-
-const loading = ref(false)
-const rawData = ref<TaktSelectOption[]>([])
-const remoteSearchKeyword = ref('')
-let remoteSearchTimer: ReturnType<typeof setTimeout> | undefined
-const dictDataStore = useDictDataStore()
-/** 当前 dictType 是否已自动写入过 IsDefault（用户清空后不再自动回填） */
-const dictDefaultApplied = ref(false)
 
 /**
  * 解析 dict-type 模式下 valueField 映射
@@ -226,7 +266,7 @@ function tryApplyDictDefault(): void {
   }
 
   const dictValueField = resolveDictValueField()
-  const defaultValue = dictDataStore.getDictDefaultValue(props.dictType, dictValueField)
+  const defaultValue = dictDataStore.getDictDefaultValue(props.dictType, dictValueField, props.cultureCode)
   if (defaultValue === undefined) {
     return
   }
@@ -236,7 +276,7 @@ function tryApplyDictDefault(): void {
     const dictOptions = dictDataStore.getDictOptionsForSelect(props.dictType, {
       valueField: dictValueField,
       labelField: props.fieldNames?.label === 'extLabel' ? 'extLabel' : 'dictLabel',
-    })
+    }, props.cultureCode)
     if (dictOptions.every((option) => isNumericValue(option.value))) {
       expectedValueType = 'number'
     }
@@ -449,7 +489,7 @@ const options = computed(() => {
     const dictOptions = dictDataStore.getDictOptionsForSelect(props.dictType, {
       valueField: dictValueField,
       labelField: dictLabelField
-    })
+    }, props.cultureCode)
     
     // 根据 modelValue 的类型推断期望的值类型
     let expectedValueType = inferValueType(props.modelValue)
@@ -505,9 +545,16 @@ const options = computed(() => {
   })
 })
 
-// 根据数据量自动决定是否开启虚拟滚动（超过 100 条或显式 virtual 时开启）
+// 虚拟滚动：显式 true，或选项数 ≥ 3000（含静态 options / 已加载 rawData）
 const shouldUseVirtual = computed(() => {
-  return props.virtual === true || options.value.length > 100
+  if (props.virtual === true) {
+    return true
+  }
+  if (props.virtual === false) {
+    return false
+  }
+  const count = Math.max(options.value.length, rawData.value.length, props.options?.length ?? 0)
+  return count >= TAKT_LARGE_DATA_AUTO_THRESHOLD || autoLargeRemoteSearch.value
 })
 
 // 判断是否应该使用 Radio 单选（字典数量 3 个及以下且非多选模式，且值必须是数值类型）
@@ -540,15 +587,13 @@ const radioOptions = computed(() => {
   })
 })
 
-// 多选时，maxTagCount 只在 multiple 为 true 时生效
-// 多选模式下，如果未设置 maxTagCount，默认显示 3 个标签
+// 多选：未指定 maxTagCount 时默认 responsive（按宽度正确溢出为 +N）
 const effectiveMaxTagCount = computed<number | 'responsive'>(() => {
-  // 仅在多选模式下才计算，确保返回值不会是 undefined
   const val = props.maxTagCount
   if (val !== undefined && val !== null) {
     return val
   }
-  return 3
+  return 'responsive'
 })
 
 /**
@@ -606,7 +651,7 @@ const loadData = async () => {
           }
         }
       }
-      if (props.remoteSearch) {
+      if (effectiveRemoteSearch.value) {
         const keyword = remoteSearchKeyword.value.trim()
         if (keyword) {
           params[props.searchParamKey] = keyword
@@ -618,14 +663,14 @@ const loadData = async () => {
         params: Object.keys(params).length > 0 ? params : undefined,
       })
       rawData.value = Array.isArray(data) ? data : []
-      if (!props.remoteSearch && rawData.value.length > MAX_SELECT_OPTIONS) {
-        selectLogger.warn('选项数超过上限，已截断', {
-          action: 'loadData',
-          apiUrl: props.apiUrl,
-          count: rawData.value.length,
-          max: MAX_SELECT_OPTIONS,
-        })
-        rawData.value = rawData.value.slice(0, MAX_SELECT_OPTIONS)
+      // 首包无关键字且条数达阈值 → 后续输入走远程搜索；❌ 禁止前端截断
+      const keyword = remoteSearchKeyword.value.trim()
+      if (
+        !keyword
+        && props.remoteSearch !== false
+        && rawData.value.length >= TAKT_LARGE_DATA_AUTO_THRESHOLD
+      ) {
+        autoLargeRemoteSearch.value = true
       }
     } catch (error) {
       selectLogger.error('加载选项数据失败', { action: 'loadData', apiUrl: props.apiUrl }, error)
@@ -689,7 +734,7 @@ const handleChange = (value: SelectValue, option: DefaultOptionType | DefaultOpt
 // 处理搜索
 const handleSearch = (value: string) => {
   emit('search', value)
-  if (!props.remoteSearch || !props.apiUrl) {
+  if (!effectiveRemoteSearch.value || !props.apiUrl) {
     return
   }
   if (remoteSearchTimer) {
@@ -705,9 +750,25 @@ watch(() => props.dictType, () => {
   dictDefaultApplied.value = false
 })
 
+watch(() => props.cultureCode, () => {
+  dictDefaultApplied.value = false
+  if (props.dictType) {
+    void loadData()
+  }
+})
+
 // 监听 dictType、API URL、options、apiParams 与 disabled 变化
-watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams, props.disabled], () => {
+watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams, props.disabled, props.cultureCode], () => {
+  autoLargeRemoteSearch.value = props.remoteSearch === true
+  remoteSearchKeyword.value = ''
   if (props.options?.length) {
+    if (
+      props.remoteSearch !== false
+      && (props.options?.length ?? 0) >= TAKT_LARGE_DATA_AUTO_THRESHOLD
+    ) {
+      // 静态 options 大数据：仅自动虚拟滚动（无 apiUrl 时无法远程）
+      autoLargeRemoteSearch.value = false
+    }
     return
   }
   if (props.dictType || props.apiUrl) {
@@ -716,7 +777,7 @@ watch(() => [props.dictType, props.apiUrl, props.options, props.apiParams, props
 }, { deep: true })
 
 watch(() => props.modelValue, (val) => {
-  if (!props.remoteSearch || !props.apiUrl || val == null || val === '') {
+  if (!effectiveRemoteSearch.value || !props.apiUrl || val == null || val === '') {
     return
   }
   const text = String(Array.isArray(val) ? val[0] : val).trim()
@@ -730,7 +791,10 @@ watch(() => props.modelValue, (val) => {
 onMounted(() => {
   // 使用 nextTick 确保 props 已经完全初始化（特别是在条件渲染的场景下）
   nextTick(() => {
-    if (props.remoteSearch && props.apiUrl && props.modelValue != null && props.modelValue !== '') {
+    if (props.remoteSearch === true) {
+      autoLargeRemoteSearch.value = true
+    }
+    if (effectiveRemoteSearch.value && props.apiUrl && props.modelValue != null && props.modelValue !== '') {
       remoteSearchKeyword.value = String(
         Array.isArray(props.modelValue) ? props.modelValue[0] : props.modelValue,
       ).trim()

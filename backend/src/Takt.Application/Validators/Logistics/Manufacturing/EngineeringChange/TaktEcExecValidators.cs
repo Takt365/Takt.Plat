@@ -37,7 +37,7 @@ public class TaktEcExecCreateValidator : AbstractValidator<TaktEcExecCreateDto>
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EcnDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)
@@ -74,7 +74,7 @@ public class TaktEcExecUpdateValidator : AbstractValidator<TaktEcExecUpdateDto>
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
         RuleFor(x => x.EcnDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)
@@ -107,7 +107,7 @@ public class TaktEcExecImportValidator : AbstractValidator<TaktEcExecImportDto>
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
         RuleFor(x => x.EcnDetailId)
             .GreaterThanOrEqualTo(0).WithMessage("设变明细 ID不能为负数");
-        RuleFor(x => x.EcNo)
+        RuleFor(x => x.EcCode)
             .NotEmpty().WithMessage("设变单号不能为空")
             .MaximumLength(10).WithMessage("设变单号长度不能超过10个字符");
         RuleFor(x => x.DeptCode)

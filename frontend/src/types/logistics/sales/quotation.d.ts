@@ -23,402 +23,6 @@ import type {
  * @description 对应后端 TaktSalesQuotationDto
  */
 export interface SalesQuotation extends CompanyDtoBase {
-  /**
-   * SalesQuotationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  salesQuotationId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 销售报价编码（唯一索引）
-   */
-  salesQuotationCode: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1: string;
-
-  /**
-   * 报价日期
-   */
-  quotationDate: string;
-
-  /**
-   * 报价有效期至
-   */
-  validUntilDate?: string;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
-   * 报价总数量（基本单位数量）
-   */
-  totalQuantity: number;
-
-  /**
-   * 报价总金额
-   */
-  totalAmount: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount: number;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 报价实付金额
-   */
-  actualAmount: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
-   */
-  quotationStatus: number;
-
-  /**
-   * 销售报价明细列表（主子表关系） （子表：TaktSalesQuotationItem）
-   */
-  items?: SalesQuotationItem[];
-
-}
-
-
-/**
- * SalesQuotation 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 SalesQuotationQuery
- * @description 对应后端 TaktSalesQuotationQueryDto
- */
-export interface SalesQuotationQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 销售报价编码（唯一索引）
-   */
-  salesQuotationCode?: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode?: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1?: string;
-
-  /**
-   * 报价日期（范围查询-开始）
-   */
-  quotationDateStart?: string;
-
-  /**
-   * 报价日期（范围查询-结束）
-   */
-  quotationDateEnd?: string;
-
-  /**
-   * 报价有效期至（范围查询-开始）
-   */
-  validUntilDateStart?: string;
-
-  /**
-   * 报价有效期至（范围查询-结束）
-   */
-  validUntilDateEnd?: string;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
-   * 报价总数量（基本单位数量）
-   */
-  totalQuantity?: number;
-
-  /**
-   * 报价总金额
-   */
-  totalAmount?: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount?: number;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode?: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 报价实付金额
-   */
-  actualAmount?: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
-   */
-  quotationStatus?: number;
-
-  /**
-   * 创建时间（范围查询-开始）
-   */
-  createdAtStart?: string;
-
-  /**
-   * 创建时间（范围查询-结束）
-   */
-  createdAtEnd?: string;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注（模糊查询）
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 创建SalesQuotation DTO
- * 对应前端 SalesQuotationCreate
- * @description 对应后端 TaktSalesQuotationCreateDto
- */
-export interface SalesQuotationCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
-   * 销售报价编码（唯一索引）
-   */
-  salesQuotationCode: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1: string;
-
-  /**
-   * 报价日期
-   */
-  quotationDate: string;
-
-  /**
-   * 报价有效期至
-   */
-  validUntilDate?: string;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
-   * 报价总数量（基本单位数量）
-   */
-  totalQuantity: number;
-
-  /**
-   * 报价总金额
-   */
-  totalAmount: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount: number;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 报价实付金额
-   */
-  actualAmount: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
-   */
-  quotationStatus: number;
-
-  /**
-   * 销售报价明细列表（主子表关系）（子表，级联保存）
-   */
-  items?: SalesQuotationItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新SalesQuotation DTO
- * 继承 TaktSalesQuotationCreateDto，添加 SalesQuotationId 字段
- * 对应前端 SalesQuotationUpdate
- * @description 对应后端 TaktSalesQuotationUpdateDto
- */
-export interface SalesQuotationUpdate extends SalesQuotationCreate {
-  /**
-   * SalesQuotationID（标识要更新的实体）
-   */
-  salesQuotationId: string;
-
-  /**
-   * 销售报价明细列表（主子表关系）（子表，级联保存）
-   */
-  items?: any;
-
-}
-
-
-/**
- * SalesQuotation 状态更新 DTO
- * 对应前端 SalesQuotationStatus
- * @description 对应后端 TaktSalesQuotationStatusDto
- */
-export interface SalesQuotationStatus {
-  /**
-   * SalesQuotationID
-   */
-  salesQuotationId: string;
-
-  /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
-   */
-  quotationStatus: number;
-
-}
-
-
-/**
- * SalesQuotation 导入模板行 DTO
- * 对应前端 SalesQuotationTemplate
- * @description 对应后端 TaktSalesQuotationTemplateDto
- */
-export interface SalesQuotationTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
 
   /**
    * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -476,8 +80,9 @@ export interface SalesQuotationTemplate {
   currencyCode?: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
+  taxCode?: string | null;
   taxRate?: number;
 
   /**
@@ -494,6 +99,11 @@ export interface SalesQuotationTemplate {
    * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；用于匹配税码等区域字典）
+   */
+  cultureCode?: string;
 
   /**
    * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
@@ -516,126 +126,6 @@ export interface SalesQuotationTemplate {
   remark?: string;
 
 }
-
-
-/**
- * SalesQuotation 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 SalesQuotationImport
- * @description 对应后端 TaktSalesQuotationImportDto
- */
-export interface SalesQuotationImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  plantCode?: string;
-
-  /**
-   * 销售报价编码（唯一索引）
-   */
-  salesQuotationCode?: string;
-
-  /**
-   * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-   */
-  customerCode?: string;
-
-  /**
-   * 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-   */
-  customerName1?: string;
-
-  /**
-   * 报价日期
-   */
-  quotationDate?: string;
-
-  /**
-   * 报价有效期至
-   */
-  validUntilDate?: string;
-
-  /**
-   * 销售员（选项 TaktEmployees/options；DictValue=EmployeeCode）
-   */
-  salesBy?: string;
-
-  /**
-   * 报价总数量（基本单位数量）
-   */
-  totalQuantity?: number;
-
-  /**
-   * 报价总金额
-   */
-  totalAmount?: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount?: number;
-
-  /**
-   * 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
-   */
-  currencyCode?: string;
-
-  /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
-   */
-  taxRate?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 报价实付金额
-   */
-  actualAmount?: number;
-
-  /**
-   * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
-   */
-  salesOrderCode?: string;
-
-  /**
-   * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）
-   */
-  quotationStatus?: number;
-
-  /**
-   * 销售报价明细列表（主子表关系）（子表，级联保存）
-   */
-  items?: SalesQuotationItemCreate[];
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * SalesQuotation 导出 DTO（独立实现，不继承响应 Dto）
@@ -709,8 +199,9 @@ export interface SalesQuotationExport {
   currencyCode: string;
 
   /**
-   * 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+   * 税码（字典 accounting_tax_code；按 CultureCode 匹配区域字典；DictValue 随区域变化）
    */
+  taxCode?: string | null;
   taxRate: number;
 
   /**
@@ -727,6 +218,11 @@ export interface SalesQuotationExport {
    * 关联销售订单编码（报价转订单后回填；选项 TaktSalesOrders/options，DictValue=SalesOrderCode）
    */
   salesOrderCode?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code；用于匹配税码等区域字典）
+   */
+  cultureCode: string;
 
   /**
    * 报价状态（字典 logistics_quotation_status；0=草稿 1=已发送 2=已接受 3=已拒绝 4=已过期 5=已作废）

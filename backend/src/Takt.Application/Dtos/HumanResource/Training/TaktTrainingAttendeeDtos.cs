@@ -35,87 +35,6 @@ public class TaktTrainingAttendeeDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TrainingAttendeeId { get; set; }
 
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 培训课程 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long TrainingCourseId { get; set; }
-
-    /// <summary>
-    /// 培训课程 名称（填充字段）
-    /// </summary>
-    public string? TrainingCourseName { get; set; }
-
-    /// <summary>
-    /// 培训课程名称
-    /// </summary>
-    public string CourseName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 培训类型
-    /// </summary>
-    public string TrainingType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 培训讲师
-    /// </summary>
-    public string Instructor { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 培训开始日期
-    /// </summary>
-    public DateTime TrainingStartDate { get; set; }
-
-    /// <summary>
-    /// 培训结束日期
-    /// </summary>
-    public DateTime TrainingEndDate { get; set; }
-
-    /// <summary>
-    /// 培训日期
-    /// </summary>
-    public DateTime TrainingDate { get; set; }
-
-    /// <summary>
-    /// 培训时长（小时）
-    /// </summary>
-    public decimal TrainingHours { get; set; }
-
-    /// <summary>
-    /// 培训成绩
-    /// </summary>
-    public decimal TrainingScore { get; set; }
-
-    /// <summary>
-    /// 是否通过（0=否 1=是）
-    /// </summary>
-    public int IsPassed { get; set; } = 0;
-
-    /// <summary>
-    /// 证书编码
-    /// </summary>
-    public string CertificateCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 培训评价
-    /// </summary>
-    public string TrainingEvaluation { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）
@@ -143,6 +62,11 @@ public class TaktTrainingAttendeeQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工 ID
@@ -234,7 +158,7 @@ public class TaktTrainingAttendeeQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）
@@ -282,9 +206,10 @@ public class TaktTrainingAttendeeCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -368,7 +293,7 @@ public class TaktTrainingAttendeeCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）
@@ -451,6 +376,11 @@ public class TaktTrainingAttendeeTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -525,7 +455,7 @@ public class TaktTrainingAttendeeTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）
@@ -560,9 +490,10 @@ public class TaktTrainingAttendeeImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -639,7 +570,7 @@ public class TaktTrainingAttendeeImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）
@@ -754,7 +685,7 @@ public class TaktTrainingAttendeeExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（1=有效 0=无效）

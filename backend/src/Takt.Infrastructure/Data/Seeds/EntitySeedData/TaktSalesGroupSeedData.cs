@@ -99,7 +99,7 @@ public class TaktSalesGroupSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateSalesGroupAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
@@ -139,6 +139,7 @@ public class TaktSalesGroupSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktSalesGroup> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         SalesGroupSeedItem seed)
     {
         var group = await repository.FirstAsync(g =>
@@ -159,6 +160,7 @@ public class TaktSalesGroupSeedData : ITaktSeedDataCoordinator
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 GroupStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             group = await repository.CreateAsync(group);
             return (group, 1, 0);

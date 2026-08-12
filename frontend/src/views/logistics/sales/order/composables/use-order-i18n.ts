@@ -2,137 +2,141 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/logistics/sales/order/composables
 // 文件名称：use-order-i18n.ts
-// 功能描述：服务订单实体字段清单 + useCustomerServiceOrderI18n（字段名映射一次，文案由 entity.customerserviceorder.* 种子动态解析）
+// 功能描述：Takt销售订单实体字段清单 + useSalesOrderI18n（字段名映射一次，文案由 entity.salesorder.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { CustomerServiceOrderQuery } from '@/types/logistics/customer-service/order'
+import type { SalesOrderQuery } from '@/types/logistics/sales/order'
 import { buildEntitySelfI18nKey } from '@/utils/takt-entity-i18n'
 import { useEntityFieldI18n, type EntityFieldPlaceholderKind } from '@/composables/use-entity-field-i18n'
 
-/** 与 TaktCustomerServiceOrderI18nSeedData 一致的实体 slug */
-export const CUSTOMERSERVICEORDER_ENTITY_SLUG = 'customerserviceorder'
+/** 与 TaktSalesOrderI18nSeedData 一致的实体 slug */
+export const SALESORDER_ENTITY_SLUG = 'salesorder'
 
-/** entity.customerserviceorder._self 静态属性（导入组件 entity-i18n-key 等） */
-export const CUSTOMERSERVICEORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOMERSERVICEORDER_ENTITY_SLUG)
+/** entity.salesorder._self 静态属性（导入组件 entity-i18n-key 等） */
+export const SALESORDER_SELF_I18N_KEY = buildEntitySelfI18nKey(SALESORDER_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
-export const CUSTOMERSERVICEORDER_LIST_FIELDS = [
+export const SALESORDER_LIST_FIELDS = [
   'plantCode',
-  'serviceOrderCode',
-  'clientId',
-  'clientCode',
-  'clientName1',
-  'serviceContractId',
-  'serviceContractCode',
-  'serviceRequestId',
-  'serviceRequestCode',
+  'salesOrderCode',
+  'customerCode',
+  'customerName1',
   'orderDate',
-  'orderType',
-  'orderStatus',
+  'requiredDeliveryDate',
+  'actualDeliveryDate',
+  'salesBy',
+  'totalQuantity',
   'totalAmount',
   'discountAmount',
+  'currencyCode',
+  'exchangeRate',
+  'taxRate',
   'taxAmount',
   'actualAmount',
-  'currencyCode',
-  'plannedStartDate',
-  'plannedEndDate',
-  'actualStartDate',
-  'actualEndDate',
-  'serviceBy',
+  'shippedQuantity',
+  'shippedAmount',
+  'receivedAmount',
+  'deliveryMethod',
+  'paymentMethod',
+  'deliveryAddress',
+  'orderStatus',
+  'deliveryStatus',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
-export const CUSTOMERSERVICEORDER_PLACEHOLDER = {
+export const SALESORDER_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  plantCode: 'required',
-  serviceOrderCode: 'required',
-  clientId: 'required',
-  clientCode: 'required',
-  clientName1: 'required',
-  serviceContractId: 'optional',
-  serviceContractCode: 'optional',
-  serviceRequestId: 'optional',
-  serviceRequestCode: 'optional',
+  plantCode: 'select',
+  salesOrderCode: 'required',
+  customerCode: 'select',
+  customerName1: 'required',
   orderDate: 'select',
-  orderType: 'select',
-  orderStatus: 'select',
+  requiredDeliveryDate: 'optional',
+  actualDeliveryDate: 'optional',
+  salesBy: 'optional',
+  totalQuantity: 'select',
   totalAmount: 'select',
   discountAmount: 'select',
+  currencyCode: 'select',
+  exchangeRate: 'select',
+  taxRate: 'select',
   taxAmount: 'select',
   actualAmount: 'select',
-  currencyCode: 'required',
-  plannedStartDate: 'optional',
-  plannedEndDate: 'optional',
-  actualStartDate: 'optional',
-  actualEndDate: 'optional',
-  serviceBy: 'optional',
+  shippedQuantity: 'select',
+  shippedAmount: 'select',
+  receivedAmount: 'select',
+  deliveryMethod: 'select',
+  paymentMethod: 'select',
+  deliveryAddress: 'optional',
+  orderStatus: 'select',
+  deliveryStatus: 'select',
   extField: 'optional',
   remark: 'optional',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
-export type CustomerServiceOrderField = keyof typeof CUSTOMERSERVICEORDER_PLACEHOLDER
+export type SalesOrderField = keyof typeof SALESORDER_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
-export const CUSTOMERSERVICEORDER_QUERY_STRING_FIELDS = [
+export const SALESORDER_QUERY_STRING_FIELDS = [
   'plantCode',
-  'serviceOrderCode',
-  'clientId',
-  'clientCode',
-  'clientName1',
-  'serviceContractId',
-  'serviceContractCode',
-  'serviceRequestId',
-  'serviceRequestCode',
+  'salesOrderCode',
+  'customerCode',
+  'customerName1',
   'orderDateStart',
   'orderDateEnd',
+  'requiredDeliveryDateStart',
+  'requiredDeliveryDateEnd',
+  'actualDeliveryDateStart',
+  'actualDeliveryDateEnd',
+  'salesBy',
   'currencyCode',
-  'plannedStartDateStart',
-  'plannedStartDateEnd',
-  'plannedEndDateStart',
-  'plannedEndDateEnd',
-  'actualStartDateStart',
-  'actualStartDateEnd',
-  'actualEndDateStart',
-  'actualEndDateEnd',
-  'serviceBy',
+  'deliveryAddress',
   'createdAtStart',
   'createdAtEnd',
   'extField',
   'remark',
-] as const satisfies readonly (keyof CustomerServiceOrderQuery)[]
+] as const satisfies readonly (keyof SalesOrderQuery)[]
 
-export type CustomerServiceOrderQueryField =
-  | (typeof CUSTOMERSERVICEORDER_QUERY_STRING_FIELDS)[number]
-  | 'orderType' | 'orderStatus' | 'totalAmount' | 'discountAmount' | 'taxAmount' | 'actualAmount'
+export type SalesOrderQueryField =
+  | (typeof SALESORDER_QUERY_STRING_FIELDS)[number]
+  | 'totalQuantity' | 'totalAmount' | 'discountAmount' | 'exchangeRate' | 'taxRate' | 'taxAmount' | 'actualAmount' | 'shippedQuantity' | 'shippedAmount' | 'receivedAmount' | 'deliveryMethod' | 'paymentMethod' | 'orderStatus' | 'deliveryStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERSERVICEORDER_QUERY_FIELDS: readonly CustomerServiceOrderQueryField[] = [
-  ...CUSTOMERSERVICEORDER_QUERY_STRING_FIELDS,
-  'orderType',
-  'orderStatus',
+export const SALESORDER_QUERY_FIELDS: readonly SalesOrderQueryField[] = [
+  ...SALESORDER_QUERY_STRING_FIELDS,
+  'totalQuantity',
   'totalAmount',
   'discountAmount',
+  'exchangeRate',
+  'taxRate',
   'taxAmount',
   'actualAmount',
+  'shippedQuantity',
+  'shippedAmount',
+  'receivedAmount',
+  'deliveryMethod',
+  'paymentMethod',
+  'orderStatus',
+  'deliveryStatus',
 ]
 
 /**
- * 服务订单实体字段 i18n：index / order-form 统一入口
+ * Takt销售订单实体字段 i18n：index / order-form 统一入口
  */
-export function useCustomerServiceOrderI18n() {
-  const ef = useEntityFieldI18n(CUSTOMERSERVICEORDER_ENTITY_SLUG)
+export function useSalesOrderI18n() {
+  const ef = useEntityFieldI18n(SALESORDER_ENTITY_SLUG)
 
-  function ph(field: CustomerServiceOrderField): string {
-    return ef.placeholder(field, CUSTOMERSERVICEORDER_PLACEHOLDER[field])
+  function ph(field: SalesOrderField): string {
+    return ef.placeholder(field, SALESORDER_PLACEHOLDER[field])
   }
 
-  function queryPh(field: CustomerServiceOrderQueryField, kind: EntityFieldPlaceholderKind): string {
+  function queryPh(field: SalesOrderQueryField, kind: EntityFieldPlaceholderKind): string {
     return ef.queryPlaceholder(field, kind)
   }
 

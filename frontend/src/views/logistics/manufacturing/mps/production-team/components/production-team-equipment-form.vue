@@ -48,7 +48,7 @@
                   v-model:value="formState.teamCode"
                   :placeholder="pi.ph('teamCode')"
                   show-count
-                  :maxlength="32"
+                  :maxlength="8"
                   allow-clear
                   :disabled="!!formData?.productionTeamEquipmentId"
                 />
@@ -68,12 +68,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('productionEquipmentId')"
-                name="productionEquipmentId"
+                :label="pi.label('prodEquipId')"
+                name="prodEquipId"
               >
                 <a-input
-                  v-model:value="formState.productionEquipmentId"
-                  :placeholder="pi.ph('productionEquipmentId')"
+                  v-model:value="formState.prodEquipId"
+                  :placeholder="pi.ph('prodEquipId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -82,12 +82,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('productionEquipmentCode')"
-                name="productionEquipmentCode"
+                :label="pi.label('prodEquipCode')"
+                name="prodEquipCode"
               >
                 <a-input
-                  v-model:value="formState.productionEquipmentCode"
-                  :placeholder="pi.ph('productionEquipmentCode')"
+                  v-model:value="formState.prodEquipCode"
+                  :placeholder="pi.ph('prodEquipCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -97,25 +97,25 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('equipmentQuantity')"
-                name="equipmentQuantity"
+                :label="pi.label('equipQuantity')"
+                name="equipQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.equipmentQuantity"
-                  :placeholder="pi.ph('equipmentQuantity')"
+                  v-model:value="formState.equipQuantity"
+                  :placeholder="pi.ph('equipQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('teamEquipmentStatus')"
-                name="teamEquipmentStatus"
+                :label="pi.label('teamEquipStatus')"
+                name="teamEquipStatus"
               >
                 <TaktSelect
-                  v-model:value="formState.teamEquipmentStatus"
+                  v-model:value="formState.teamEquipStatus"
                   dict-type="sys_normal_disable"
-                  :placeholder="pi.ph('teamEquipmentStatus')"
+                  :placeholder="pi.ph('teamEquipStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -162,9 +162,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","teamCode","lineNumber","productionEquipmentId","productionEquipmentCode","equipmentQuantity","teamEquipmentStatus","isObsolete"]
-
-
+const formFields = ["plantCode","teamCode","lineNumber","prodEquipId","prodEquipCode","equipQuantity","teamEquipStatus","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -187,7 +185,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  teamEquipmentStatus: 1
+  teamEquipStatus: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -254,41 +252,41 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  productionEquipmentId: [
+  prodEquipId: [
     {
       required: true,
-      message: pi.ph('productionEquipmentId'),
+      message: pi.ph('prodEquipId'),
       trigger: 'blur'
     }
   ],
-  productionEquipmentCode: [
+  prodEquipCode: [
     {
       required: true,
-      message: pi.ph('productionEquipmentCode'),
+      message: pi.ph('prodEquipCode'),
       trigger: 'blur'
     }
   ],
-  equipmentQuantity: [{
+  equipQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('equipmentQuantity'))
+        return Promise.reject(pi.ph('equipQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('equipmentQuantity'))
+        return Promise.reject(pi.ph('equipQuantity'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  teamEquipmentStatus: [{
+  teamEquipStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('teamEquipmentStatus'))
+        return Promise.reject(pi.ph('teamEquipStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('teamEquipmentStatus'))
+        return Promise.reject(pi.ph('teamEquipStatus'))
       }
       return Promise.resolve()
     },
@@ -315,27 +313,27 @@ async function validate() {
   return formState
 }
 
-/** 映射为 Create/Update DTO（含主表外键 productionTeamId） */
+/** 映射为 Create/Update DTO（含主表外键 prodTeamId） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
   if ('lineNumber' in payload) {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
-  if ('equipmentQuantity' in payload) {
-    const rawequipmentQuantity = payload.equipmentQuantity
-    payload.equipmentQuantity = typeof rawequipmentQuantity === 'number' ? rawequipmentQuantity : Number(rawequipmentQuantity)
+  if ('equipQuantity' in payload) {
+    const rawequipQuantity = payload.equipQuantity
+    payload.equipQuantity = typeof rawequipQuantity === 'number' ? rawequipQuantity : Number(rawequipQuantity)
   }
-  if ('teamEquipmentStatus' in payload) {
-    const rawteamEquipmentStatus = payload.teamEquipmentStatus
-    payload.teamEquipmentStatus = typeof rawteamEquipmentStatus === 'number' ? rawteamEquipmentStatus : Number(rawteamEquipmentStatus)
+  if ('teamEquipStatus' in payload) {
+    const rawteamEquipStatus = payload.teamEquipStatus
+    payload.teamEquipStatus = typeof rawteamEquipStatus === 'number' ? rawteamEquipStatus : Number(rawteamEquipStatus)
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete
     payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
-  payload.productionTeamId = props.masterId
+  payload.prodTeamId = props.masterId
   return payload
 }
 

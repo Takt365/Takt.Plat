@@ -16,8 +16,32 @@ import type {
   ProductionMonthlyTrendResult,
 } from '@/types/logistics/manufacturing/output/production-monthly-trend';
 
-/** API 路由前缀 */
+/** API 路由前缀（对应 TaktProductionMonthlyTrendsController） */
 const PRODUCTION_MONTHLY_TREND_API_BASE = 'TaktProductionMonthlyTrends';
+
+/**
+ * 推移查询栏：本表工厂去重选项 URL（供 TaktSelect api-url）
+ * @returns {string} 相对 API 路径
+ */
+export function getProductionMonthlyTrendPlantOptionsUrl(): string {
+  return `${PRODUCTION_MONTHLY_TREND_API_BASE}/plant-options`;
+}
+
+/**
+ * 推移查询栏：产出类别去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getProductionMonthlyTrendOutputCategoryOptionsUrl(): string {
+  return `${PRODUCTION_MONTHLY_TREND_API_BASE}/output-category-options`;
+}
+
+/**
+ * 推移查询栏：机种去重选项 URL
+ * @returns {string} 相对 API 路径
+ */
+export function getProductionMonthlyTrendModelOptionsUrl(): string {
+  return `${PRODUCTION_MONTHLY_TREND_API_BASE}/model-options`;
+}
 
 /**
  * 月生产推移分析

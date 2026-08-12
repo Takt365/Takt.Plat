@@ -8,9 +8,10 @@
 <!-- ======================================== -->
 
 <template>
-  <div class="flex h-full min-h-0 flex-col p-4">
+  <div class="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden p-4">
     <material-cost-analysis-query-form
       v-model:plant-code="plantCode"
+      v-model:material-type="materialType"
       v-model:model-code="modelCode"
       v-model:product-code="productCode"
       v-model:period-range="periodRange"
@@ -32,14 +33,14 @@
       :export-disabled="!hasQuery || total === 0"
       :export-loading="exportLoading"
       :refresh-loading="loading"
-      :right-actions="trendFilterActions"
+      :right-actions="toolbarRightActions"
       export-permission="logistics:manufacturing:bom:material:cost:analysis:export"
       @export="handleExport"
       @refresh="handleRefresh"
     />
     <div
       ref="tableWrapRef"
-      class="min-h-0 flex-1 overflow-hidden"
+      class="min-h-0 min-w-0 flex-1 overflow-hidden"
     >
       <TaktSingleTable
         class="h-full min-h-0"
@@ -125,13 +126,17 @@ import {
   RiArrowDownLine,
   RiArrowUpDownLine,
   RiArrowUpLine,
+  RiLineChartLine,
   RiListCheck,
+  RiSortAlphabetAsc,
+  RiSortNumberDesc,
 } from '@remixicon/vue'
 import {
   exportBomMaterialCostItemTransposed,
+  getBomMaterialCostAnalysisPlantOptions,
   getBomMaterialCostItemTransposedList,
-} from '@/api/logistics/manufacturing/bom/material-cost-item'
-import type { BomMaterialCostItemTransposed } from '@/types/logistics/manufacturing/bom/material-cost-trend'
+} from '@/api/logistics/manufacturing/bom/material-cost-analysis'
+import type { BomMaterialCostItemTransposed } from '@/types/logistics/manufacturing/bom/material-cost-analysis'
 import {
   ensureTaktPaginationConfigAsync,
   getTaktDefaultPageIndex,
@@ -149,8 +154,6 @@ import {
 import MaterialCostAnalysisQueryForm from './components/material-cost-item-analysis-query-form.vue'
 import {
   MATERIAL_COST_ANALYSIS_LOCALE_PREFIX,
-  bomMomTrendSortRank,
-  compareBomMomNullableNumber,
   periodRangeToCostingDateQuery,
   useMaterialCostAnalysis,
 } from './composables/use-material-cost-item-analysis'
@@ -162,6 +165,8 @@ const tenantStore = useTenantStore()
 
 /** 工厂 */
 const plantCode = ref<string | undefined>()
+/** 物料类型（本表；可空=全类型） */
+const materialType = ref<string | undefined>()
 /** 机种 */
 const modelCode = ref<string | undefined>()
 /** 产品（可空） */
@@ -170,8 +175,31 @@ const productCode = ref<string | undefined>()
 const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(3))
 /** 涨跌筛选：空=全部；changed/up/down */
 const trendFilter = ref('')
-/** 右侧涨跌筛选：仅图标 + tooltip，与工具栏右侧一致 */
-const trendFilterActions = computed<ToolBarAction[]>(() => [
+/** 全量排序（分页前） */
+const sortBy = ref('productCode')
+/** 右侧：全量排序 + 涨跌筛选 */
+const toolbarRightActions = computed<ToolBarAction[]>(() => [
+  {
+    key: 'sort-product-code',
+    icon: RiSortAlphabetAsc,
+    tooltip: t(`${localePrefix}.sort.productCode`),
+    active: sortBy.value === 'productCode',
+    onClick: () => setSortBy('productCode'),
+  },
+  {
+    key: 'sort-trend',
+    icon: RiLineChartLine,
+    tooltip: t(`${localePrefix}.sort.trend`),
+    active: sortBy.value === 'trend',
+    onClick: () => setSortBy('trend'),
+  },
+  {
+    key: 'sort-variance-desc',
+    icon: RiSortNumberDesc,
+    tooltip: t(`${localePrefix}.sort.varianceDesc`),
+    active: sortBy.value === 'varianceDesc',
+    onClick: () => setSortBy('varianceDesc'),
+  },
   {
     key: 'trend-all',
     icon: RiListCheck,
@@ -199,8 +227,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 转置行 */
 const rows = ref<BomMaterialCostItemTransposed[]>([])
 /** 期间列 */
@@ -247,8 +274,7 @@ const columns = computed<TableColumnsType>(() => {
       key: 'productDescription',
       width: 180,
       ellipsis: true,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -265,8 +291,6 @@ const columns = computed<TableColumnsType>(() => {
       key: 'trend',
       width: 88,
       fixed: 'right',
-      sorter: (a: BomMaterialCostItemTransposed, b: BomMaterialCostItemTransposed) =>
-        bomMomTrendSortRank(a.trend) - bomMomTrendSortRank(b.trend),
     },
     {
       title: t(`${localePrefix}.columns.varianceAmount`),
@@ -275,8 +299,6 @@ const columns = computed<TableColumnsType>(() => {
       width: 120,
       align: 'right',
       fixed: 'right',
-      sorter: (a: BomMaterialCostItemTransposed, b: BomMaterialCostItemTransposed) =>
-        compareBomMomNullableNumber(a.varianceAmount, b.varianceAmount),
     },
     {
       title: t(`${localePrefix}.columns.variancePercent`),
@@ -285,8 +307,6 @@ const columns = computed<TableColumnsType>(() => {
       width: 100,
       align: 'right',
       fixed: 'right',
-      sorter: (a: BomMaterialCostItemTransposed, b: BomMaterialCostItemTransposed) =>
-        compareBomMomNullableNumber(a.variancePercent, b.variancePercent),
     },
   )
   return cols
@@ -326,20 +346,30 @@ function formatPeriodCost(record: BomMaterialCostItemTransposed, columnKey: stri
 
 /**
  * 构建转置查询（数据源 TaktBomMaterialCost）
+ * @param trendFilterOverride 涨跌筛选覆盖值（点工具栏时显式传入，避免与状态不同步）
+ * @param sortByOverride 全量排序覆盖值
  * @returns 查询或 null
  */
-function buildQuery() {
+function buildQuery(trendFilterOverride?: string, sortByOverride?: string) {
   const plant = plantCode.value?.trim()
-  if (!plant || !periodRange.value?.[0]) {
+  const type = materialType.value?.trim()
+  if (!plant || !type || !periodRange.value?.[0]) {
     return null
   }
   const rangeEnd = periodRange.value?.[1]?.trim() || periodRange.value[0]
+  const filter =
+    trendFilterOverride !== undefined ? trendFilterOverride : trendFilter.value
+  const sort =
+    (sortByOverride !== undefined ? sortByOverride : sortBy.value)?.trim()
+    || 'productCode'
   return {
     plantCode: plant,
+    materialType: type,
     modelCode: modelCode.value?.trim() || undefined,
     productCode: productCode.value?.trim() || undefined,
     focusPeriod: rangeEnd,
-    trendFilter: trendFilter.value || undefined,
+    trendFilter: filter || undefined,
+    sortBy: sort,
     pageIndex: pageIndex.value,
     pageSize: pageSize.value,
     ...periodRangeToCostingDateQuery(periodRange.value),
@@ -355,9 +385,13 @@ function clearData() {
   total.value = 0
 }
 
-/** 加载 */
-async function loadData() {
-  const query = buildQuery()
+/**
+ * 加载
+ * @param trendFilterOverride 涨跌筛选覆盖值（与工具栏点击同步）
+ * @param sortByOverride 全量排序覆盖值
+ */
+async function loadData(trendFilterOverride?: string, sortByOverride?: string) {
+  const query = buildQuery(trendFilterOverride, sortByOverride)
   if (!query) {
     clearData()
     return
@@ -387,6 +421,10 @@ function handleSearch() {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
     return
   }
+  if (!materialType.value?.trim()) {
+    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
+    return
+  }
   if (!periodRange.value?.[0]) {
     message.warning(t(`${localePrefix}.selectPeriodRequired`))
     return
@@ -395,14 +433,33 @@ function handleSearch() {
   void loadData()
 }
 
-/** 涨跌筛选 */
+/**
+ * 涨跌筛选：点涨→up，点跌→down；请求显式带筛选码
+ * @param value 空 / changed / up / down
+ */
 function setTrendFilter(value: string) {
   if (trendFilter.value === value) {
     return
   }
   trendFilter.value = value
   pageIndex.value = getTaktDefaultPageIndex()
-  void loadData()
+  void loadData(value, sortBy.value)
+}
+
+/**
+ * 全量排序（分页前作用于整表）
+ * @param value productCode / trend / varianceDesc
+ */
+function setSortBy(value: string) {
+  if (sortBy.value === value) {
+    return
+  }
+  sortBy.value = value
+  if (!hasQuery.value) {
+    return
+  }
+  pageIndex.value = getTaktDefaultPageIndex()
+  void loadData(trendFilter.value, value)
 }
 
 /** 刷新 */
@@ -410,13 +467,37 @@ function handleRefresh() {
   void loadData()
 }
 
-/** 重置 */
-async function handleReset() {
-  plantCode.value = (await resolveCurrentCompanyRelatedPlantCode()) || undefined
+/**
+ * 默认工厂：取公司关联工厂，仅当其存在于本表（takt_bom_material_cost）PlantCode 去重列表时选中
+ * @returns {Promise<void>}
+ */
+async function applyDefaultPlantFromCompany(): Promise<void> {
+  const related = (await resolveCurrentCompanyRelatedPlantCode()).trim()
+  let matched: string | undefined
+  if (related) {
+    try {
+      const plants = await getBomMaterialCostAnalysisPlantOptions()
+      const hit = (plants ?? []).find(
+        (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
+      )
+      matched = hit ? String(hit.dictValue).trim() : undefined
+    } catch {
+      matched = undefined
+    }
+  }
+  plantCode.value = matched
+  materialType.value = undefined
   modelCode.value = undefined
   productCode.value = undefined
+}
+
+/** 重置 */
+async function handleReset() {
+  await applyDefaultPlantFromCompany()
+  materialType.value = undefined
   periodRange.value = buildDefaultCostingPeriodRange(3)
   trendFilter.value = ''
+  sortBy.value = 'productCode'
   pageIndex.value = getTaktDefaultPageIndex()
   clearData()
 }
@@ -444,8 +525,7 @@ async function handleExport() {
     const exportBase = buildBomExportBaseName('DTA BOM成本推移表', [
       query.plantCode,
       query.modelCode,
-      query.productCode,
-    ])
+      query.productCode])
     const exportMeta = await exportBomMaterialCostItemTransposed(
       {
         ...query,
@@ -456,8 +536,7 @@ async function handleExport() {
       buildBomExportFileName('DTA BOM成本推移表', [
         query.plantCode,
         query.modelCode,
-        query.productCode,
-      ]),
+        query.productCode]),
     )
     const blob = (exportMeta as { blob?: Blob }).blob ?? (exportMeta as unknown as Blob)
     const fileName = resolveExportDownloadFileName({
@@ -506,7 +585,12 @@ function stopTableScrollObserve(): void {
 watch(
   () => tenantStore.companyCode,
   () => {
-    void handleReset()
+    void (async () => {
+      await applyDefaultPlantFromCompany()
+      trendFilter.value = ''
+      pageIndex.value = getTaktDefaultPageIndex()
+      clearData()
+    })()
   },
 )
 
@@ -514,7 +598,7 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   pageIndex.value = getTaktDefaultPageIndex()
   pageSize.value = getTaktDefaultPageSize()
-  plantCode.value = (await resolveCurrentCompanyRelatedPlantCode()) || undefined
+  await applyDefaultPlantFromCompany()
   await nextTick()
   startTableScrollObserve()
 })

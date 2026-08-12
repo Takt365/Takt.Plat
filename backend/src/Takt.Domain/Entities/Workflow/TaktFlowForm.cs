@@ -19,9 +19,11 @@ namespace Takt.Domain.Entities.Workflow;
 /// </summary>
 [SugarTable("takt_workflow_form", "流程表单表")]
 [SugarIndex("ix_flow_form_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_flow_form_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(FormCode), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_form_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(FormCode), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_form_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktFlowForm : TaktCompanyEntityBase
 {
+
     /// <summary>
     /// 表单编码（公司内唯一）
     /// </summary>

@@ -19,6 +19,8 @@ export default {
     session: {
       canceltext: "继续使用",
       content: "您已长时间未操作，系统将在 {minutes} 分钟后自动登出。任意键鼠操作将自动延长会话，无需确认。",
+      expired: "登录已过期，请重新登录",
+      idlelogout: "长时间未操作，已自动退出登录",
       oktext: "立即登出",
       title: "会话即将过期",
     },

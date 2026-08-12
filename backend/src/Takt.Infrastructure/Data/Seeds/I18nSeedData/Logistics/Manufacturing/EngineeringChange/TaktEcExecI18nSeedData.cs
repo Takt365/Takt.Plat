@@ -99,14 +99,14 @@ public class TaktEcExecI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecexec.ecndetailid
             new TranslationSeedItem("entity.ecexec.ecndetailid", "zh-HK", "设变明细ID_hk", "设变明细 ID（TaktEcDetail 主键）"),
 
-            // entity.ecexec.ecno
-            new TranslationSeedItem("entity.ecexec.ecno", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
-            // entity.ecexec.ecno
-            new TranslationSeedItem("entity.ecexec.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
-            // entity.ecexec.ecno
-            new TranslationSeedItem("entity.ecexec.ecno", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
-            // entity.ecexec.ecno
-            new TranslationSeedItem("entity.ecexec.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
+            // entity.ecexec.ecCode
+            new TranslationSeedItem("entity.ecexec.ecCode", "en-US", "设变单号_us", "设变单号（冗余，便于查询）"),
+            // entity.ecexec.ecCode
+            new TranslationSeedItem("entity.ecexec.ecCode", "ja-JP", "设变单号_jp", "设变单号（冗余，便于查询）"),
+            // entity.ecexec.ecCode
+            new TranslationSeedItem("entity.ecexec.ecCode", "zh-CN", "设变单号", "设变单号（冗余，便于查询）"),
+            // entity.ecexec.ecCode
+            new TranslationSeedItem("entity.ecexec.ecCode", "zh-HK", "设变单号_hk", "设变单号（冗余，便于查询）"),
 
             // entity.ecexec.linenumber
             new TranslationSeedItem("entity.ecexec.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),

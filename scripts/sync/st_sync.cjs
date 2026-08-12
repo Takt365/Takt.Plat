@@ -54,7 +54,7 @@ CREATE TABLE #st_source (
   [converted_minutes] DECIMAL(18,4),
   [tenant_code] NVARCHAR(20),
   [company_code] NVARCHAR(20),
-  [ext_field_json] NVARCHAR(MAX),
+  [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
   [updated_by] BIGINT
 );
@@ -119,8 +119,8 @@ CREATE TABLE #delta (
   points_to_minutes_rate_new DECIMAL(18,4),
   converted_minutes_old DECIMAL(18,4),
   converted_minutes_new DECIMAL(18,4),
-  ext_field_json_old NVARCHAR(MAX),
-  ext_field_json_new NVARCHAR(MAX),
+  ext_field_old NVARCHAR(MAX),
+  ext_field_new NVARCHAR(MAX),
   remark_old NVARCHAR(MAX),
   remark_new NVARCHAR(MAX)
 );
@@ -153,7 +153,7 @@ WHEN NOT MATCHED THEN
     [standard_minutes],[time_unit],[standard_shorts],[points_unit],
     [points_to_minutes_rate],[converted_minutes],
     [effective_date],[expiry_date],
-    [tenant_code],[company_code],[ext_field_json],[remark],
+    [tenant_code],[company_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],
     [approved_by],[approved_at],[approval_status],
     [is_deleted]
@@ -163,7 +163,7 @@ WHEN NOT MATCHED THEN
     S.[standard_minutes],S.[time_unit],S.[standard_shorts],S.[points_unit],
     S.[points_to_minutes_rate],S.[converted_minutes],
     @effective_date,'9999-12-31',
-    S.[tenant_code],S.[company_code],S.[ext_field_json],S.[remark],
+    S.[tenant_code],S.[company_code],S.[ext_field],S.[remark],
     S.[updated_by],@now,S.[updated_by],@now,
     S.[updated_by],@now,2,
     0
@@ -182,7 +182,7 @@ OUTPUT
   DELETED.[points_unit], INSERTED.[points_unit],
   DELETED.[points_to_minutes_rate], INSERTED.[points_to_minutes_rate],
   DELETED.[converted_minutes], INSERTED.[converted_minutes],
-  DELETED.[ext_field_json], INSERTED.[ext_field_json],
+  DELETED.[ext_field], INSERTED.[ext_field],
   DELETED.[remark], INSERTED.[remark]
 INTO #delta(
   rn, oper_type, id, material_code, tenant_code, company_code, change_by,
@@ -192,7 +192,7 @@ INTO #delta(
   points_unit_old, points_unit_new,
   points_to_minutes_rate_old, points_to_minutes_rate_new,
   converted_minutes_old, converted_minutes_new,
-  ext_field_json_old, ext_field_json_new,
+  ext_field_old, ext_field_new,
   remark_old, remark_new
 );
 
@@ -201,7 +201,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[tenant_code],[company_code],
-  [ext_field_json],[remark],[created_by],[created_at]
+  [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
   @base_id + d.rn,

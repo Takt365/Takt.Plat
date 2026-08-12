@@ -479,6 +479,7 @@ public class TaktInspectionStandardService : TaktServiceBase, ITaktInspectionSta
                 || (x.SamplingSchemeName != null && x.SamplingSchemeName.Contains(keywords))
                 || (x.StandardDescription != null && x.StandardDescription.Contains(keywords))
                 || SqlFunc.ToString(x.StandardStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -533,6 +534,11 @@ public class TaktInspectionStandardService : TaktServiceBase, ITaktInspectionSta
         if (queryDto?.StandardStatus.HasValue == true)
         {
             exp = exp.And(x => x.StandardStatus == queryDto.StandardStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

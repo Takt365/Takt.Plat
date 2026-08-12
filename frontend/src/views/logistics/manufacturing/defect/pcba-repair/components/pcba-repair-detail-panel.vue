@@ -161,21 +161,21 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('TeamCode')">
+      <a-form-item :label="pi.queryLabel('TeamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.TeamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('TeamCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('cardNo')">
-      <a-form-item :label="pi.queryLabel('cardNo')">
+      <div v-show="isFieldVisible('cardCode')">
+      <a-form-item :label="pi.queryLabel('cardCode')">
         <a-input
-          v-model:value="advancedQueryForm.cardNo"
-          :placeholder="pi.queryPh('cardNo', 'required')"
+          v-model:value="advancedQueryForm.cardCode"
+          :placeholder="pi.queryPh('cardCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -610,24 +610,24 @@ const columns = computed<TableColumnsType>(() => [
       String(getPcbaRepairDetailField(record, 'prodActualQty') ?? ''),
   },
   {
-    title: pi.label('prodTeam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
+    title: pi.label('TeamCode'),
+    dataIndex: 'TeamCode',
+    key: 'TeamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaRepairDetail }) =>
-      String(getPcbaRepairDetailField(record, 'prodTeam') ?? ''),
+      String(getPcbaRepairDetailField(record, 'TeamCode') ?? ''),
   },
   {
-    title: pi.label('cardNo'),
-    dataIndex: 'cardNo',
-    key: 'cardNo',
+    title: pi.label('cardCode'),
+    dataIndex: 'cardCode',
+    key: 'cardCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: PcbaRepairDetail }) =>
-      String(getPcbaRepairDetailField(record, 'cardNo') ?? ''),
+      String(getPcbaRepairDetailField(record, 'cardCode') ?? ''),
   },
   {
     title: pi.label('defectSymptom'),
@@ -726,10 +726,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:defect:pcba:repair:delete',
         onClick: (record: PcbaRepairDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

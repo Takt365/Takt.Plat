@@ -65,8 +65,6 @@ import {
   RiListCheck,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import { resolveCurrentCompanyRelatedPlantCode } from '@/composables/use-company-related-plant'
-import { useTenantStore } from '@/stores/identity/tenant'
 import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import ProductionMonthlyQueryForm from './components/production-monthly-query-form.vue'
 import ProductionMonthlyPanel from './components/production-monthly-panel.vue'
@@ -74,7 +72,6 @@ import ProductionMonthlyPanel from './components/production-monthly-panel.vue'
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.output.production-monthly.page'
-const tenantStore = useTenantStore()
 
 /** 工厂 */
 const plantCode = ref<string | undefined>()
@@ -121,8 +118,7 @@ const trendFilterActions = computed<ToolBarAction[]>(() => [
     tooltip: t(`${localePrefix}.trend.down`),
     active: trendFilter.value === 'down',
     onClick: () => setTrendFilter('down'),
-  },
-])
+  }])
 /** 明细面板 */
 const panelRef = ref<{
   reload?: () => Promise<void>
@@ -161,15 +157,9 @@ function applyDefaultPeriodRange() {
   periodRange.value = buildDefaultCostingPeriodRange(3)
 }
 
-/** 默认工厂 */
-async function applyDefaultPlantFromCompany(): Promise<void> {
-  const plant = await resolveCurrentCompanyRelatedPlantCode()
-  plantCode.value = plant || undefined
-}
-
-/** 重置 */
-async function handleReset() {
-  await applyDefaultPlantFromCompany()
+/** 重置：清空工厂/机种/类别，保留默认期间 */
+function handleReset() {
+  plantCode.value = undefined
   modelCode.value = undefined
   outputCategory.value = undefined
   applyDefaultPeriodRange()
@@ -196,17 +186,9 @@ async function handleExport() {
   }
 }
 
-watch(
-  () => tenantStore.companyCode,
-  () => {
-    void applyDefaultPlantFromCompany()
-  },
-)
-
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   applyDefaultPeriodRange()
-  await applyDefaultPlantFromCompany()
   void getTaktDefaultPageSize()
 })
 </script>

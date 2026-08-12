@@ -26,7 +26,7 @@ export interface EcMonthlyTrendQuery extends TaktPagedQuery {
   /** 关注期间 yyyy-MM */
   focusPeriod?: string;
   /** 设变单号 */
-  ecNo?: string;
+  ecCode?: string;
   /** 责任部门编码 */
   deptCode?: string;
   /** 区分（字典 logistics_ec_distinction_category） */
@@ -47,7 +47,7 @@ export interface EcMonthlyTrend {
   /** 工厂代码 */
   plantCode: string;
   /** 设变单号 */
-  ecNo: string;
+  ecCode: string;
   /** 责任部门编码 */
   deptCode: string;
   /** 各期间完成件数 */

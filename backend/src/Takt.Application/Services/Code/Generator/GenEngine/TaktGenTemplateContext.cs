@@ -1624,7 +1624,7 @@ public static class TaktGenEntityBaseProfile
 
     private static readonly string[] TenantImportColumns =
     {
-        "id", "tenant_code", "ext_field_json", "remark",
+        "id", "tenant_code", "ext_field", "remark",
         "created_by", "created_at", "updated_by", "updated_at",
         "is_deleted", "deleted_by", "deleted_at"
     };

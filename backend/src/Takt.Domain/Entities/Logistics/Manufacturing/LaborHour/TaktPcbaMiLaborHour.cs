@@ -21,11 +21,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.LaborHour;
 [SugarTable("takt_logistics_manufacturing_labor_hour_pcba_mi", "PCBA手插工数统计表")]
 [SugarIndex("ix_pcba_mi_labor_hours_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_pcba_mi_labor_hours_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(ShiftNo), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_prod_team", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdTeam), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_labor_hour_pcba_mi_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
 public class TaktPcbaMiLaborHour : TaktCompanyEntityBase
 {
+
     /// <summary>
     /// 生产日期
     /// </summary>
@@ -35,8 +37,8 @@ public class TaktPcbaMiLaborHour : TaktCompanyEntityBase
     /// <summary>
     /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "prod_team", ColumnDescription = "生产班组", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string ProdTeam { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "生产班组", Length = 8, ColumnDataType = "nvarchar", IsNullable = false)]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）

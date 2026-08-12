@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Foundation
 // 文件名称：TaktCultureDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -36,12 +36,7 @@ public class TaktCultureDto : TaktTenantDtoBase
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
     public string LanguageName { get; set; } = string.Empty;
 
@@ -64,11 +59,6 @@ public class TaktCultureDto : TaktTenantDtoBase
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 翻译列表（一对多关联）
@@ -94,12 +84,12 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
     public string? LanguageName { get; set; } = string.Empty;
 
@@ -122,11 +112,6 @@ public class TaktCultureQueryDto : TaktPagedQuery
     /// 排序号
     /// </summary>
     public int? SortOrder { get; set; }
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -164,15 +149,14 @@ public class TaktCultureCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "文化编码不能为空")]
-    public string CultureCode { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
-    [Required(ErrorMessage = "语言名称（如：简体中文、English）不能为空")]
+    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）不能为空")]
     public string LanguageName { get; set; } = string.Empty;
 
     /// <summary>
@@ -190,16 +174,6 @@ public class TaktCultureCreateDto
     /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int IsDefault { get; set; } = 0;
-
-    /// <summary>
-    /// 排序号
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 翻译列表（一对多关联）（子表，级联保存）
@@ -236,30 +210,11 @@ public class TaktCultureUpdateDto : TaktCultureCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
 
-}
-
-// ========================================
-// Culture 状态 DTO
-// ========================================
-
-/// <summary>
-/// Culture 状态更新 DTO
-/// </summary>
-public class TaktCultureStatusDto
-{
     /// <summary>
-    /// CultureID
+    /// 翻译列表（一对多关联）（子表，级联保存）
     /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long CultureId { get; set; }
+    public new List<TaktTranslationUpdateDto>? TranslationList { get; set; }
 
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；1=启用 0=禁用）不能为空")]
-    public int LanguageStatus { get; set; } = 0;
 }
 
 // ========================================
@@ -301,12 +256,12 @@ public class TaktCultureTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
     public string? LanguageName { get; set; } = string.Empty;
 
@@ -324,11 +279,6 @@ public class TaktCultureTemplateDto
     /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 翻译列表（一对多关联）（子表，级联保存）
@@ -358,12 +308,12 @@ public class TaktCultureImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? CultureCode { get; set; } = string.Empty;
+    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
     public string? LanguageName { get; set; } = string.Empty;
 
@@ -381,11 +331,6 @@ public class TaktCultureImportDto
     /// 默认语言（字典 sys_yes_no_type；1=是 0=否）
     /// </summary>
     public int? IsDefault { get; set; }
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int? LanguageStatus { get; set; }
 
     /// <summary>
     /// 翻译列表（一对多关联）（子表，级联保存）
@@ -421,12 +366,12 @@ public class TaktCultureExportDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 文化编码（唯一索引：租户内唯一，见 ix_culture_culture_unique；如 zh-CN, en-US, ja-JP）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
+    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
-    /// 语言名称（如：简体中文、English）
+    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
     /// </summary>
     public string LanguageName { get; set; } = string.Empty;
 
@@ -449,11 +394,6 @@ public class TaktCultureExportDto
     /// 排序号
     /// </summary>
     public int SortOrder { get; set; } = 0;
-
-    /// <summary>
-    /// 状态（字典 sys_normal_disable_status；1=启用 0=禁用）
-    /// </summary>
-    public int LanguageStatus { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleQuantityService.cs
-// 创建时间：2026-07-21
+// 创建时间：2026-08-10
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购价格数量等级应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
     }
 
     /// <summary>
-    /// 获取采购价格数量等级列表（分页）
+    /// 获取采购价格数量等级列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPurchasePriceScaleQuantityDto>> GetPurchasePriceScaleQuantityListAsync(TaktPurchasePriceScaleQuantityQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPurchasePriceScaleQuantityDto>.Create(
+                new List<TaktPurchasePriceScaleQuantityDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _purchasePriceScaleQuantityRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,8 +105,8 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PurchasePriceCode ?? e.Id.ToString(),
+            DictValue = e.PurchasePriceCode,
+            DictLabel = e.PurchasePriceCode,
         }).ToList();
     }
 
@@ -292,7 +300,15 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPurchasePriceScaleQuantityAsync(TaktPurchasePriceScaleQuantityQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPurchasePriceScaleQuantityQueryDto());
+        var queryDto = query ?? new TaktPurchasePriceScaleQuantityQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPurchasePriceScaleQuantityExportDto>(),
+                sheetName ?? "采购价格数量等级数据",
+                fileName ?? "采购价格数量等级导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _purchasePriceScaleQuantityRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -330,84 +346,176 @@ public class TaktPurchasePriceScaleQuantityService : TaktServiceBase, ITaktPurch
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.PurchasePriceItemId).Contains(keywords)
-                || (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
-                || SqlFunc.ToString(x.PurchasePriceSeq).Contains(keywords)
-                || SqlFunc.ToString(x.PurchaseScaleSeq).Contains(keywords)
-                || SqlFunc.ToString(x.ScaleQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.Price).Contains(keywords)
-                || SqlFunc.ToString(x.UntaxedPrice).Contains(keywords)
-                || SqlFunc.ToString(x.TaxIncludedPrice).Contains(keywords)
+                (x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
         if (queryDto?.PurchasePriceItemId.HasValue == true)
         {
-            exp = exp.And(x => x.PurchasePriceItemId == queryDto.PurchasePriceItemId);
+            var purchasePriceItemId = queryDto.PurchasePriceItemId;
+            exp = exp.And(x => x.PurchasePriceItemId == purchasePriceItemId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchasePriceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchasePriceCode))
         {
-            exp = exp.And(x => x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(queryDto.PurchasePriceCode));
+            var purchasePriceCode = queryDto.PurchasePriceCode;
+            exp = exp.And(x => x.PurchasePriceCode != null && x.PurchasePriceCode.Contains(purchasePriceCode));
         }
 
         if (queryDto?.PurchasePriceSeq.HasValue == true)
         {
-            exp = exp.And(x => x.PurchasePriceSeq == queryDto.PurchasePriceSeq);
+            var purchasePriceSeq = queryDto.PurchasePriceSeq;
+            exp = exp.And(x => x.PurchasePriceSeq == purchasePriceSeq);
         }
 
         if (queryDto?.PurchaseScaleSeq.HasValue == true)
         {
-            exp = exp.And(x => x.PurchaseScaleSeq == queryDto.PurchaseScaleSeq);
+            var purchaseScaleSeq = queryDto.PurchaseScaleSeq;
+            exp = exp.And(x => x.PurchaseScaleSeq == purchaseScaleSeq);
         }
 
         if (queryDto?.ScaleQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.ScaleQuantity == queryDto.ScaleQuantity);
+            var scaleQuantity = queryDto.ScaleQuantity;
+            exp = exp.And(x => x.ScaleQuantity == scaleQuantity);
         }
 
         if (queryDto?.Price.HasValue == true)
         {
-            exp = exp.And(x => x.Price == queryDto.Price);
+            var price = queryDto.Price;
+            exp = exp.And(x => x.Price == price);
         }
 
         if (queryDto?.UntaxedPrice.HasValue == true)
         {
-            exp = exp.And(x => x.UntaxedPrice == queryDto.UntaxedPrice);
+            var untaxedPrice = queryDto.UntaxedPrice;
+            exp = exp.And(x => x.UntaxedPrice == untaxedPrice);
         }
 
         if (queryDto?.TaxIncludedPrice.HasValue == true)
         {
-            exp = exp.And(x => x.TaxIncludedPrice == queryDto.TaxIncludedPrice);
+            var taxIncludedPrice = queryDto.TaxIncludedPrice;
+            exp = exp.And(x => x.TaxIncludedPrice == taxIncludedPrice);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (queryDto?.TaxAmount.HasValue == true)
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var taxAmount = queryDto.TaxAmount;
+            exp = exp.And(x => x.TaxAmount == taxAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPurchasePriceScaleQuantityQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (queryDto.PurchasePriceItemId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PurchasePriceCode))
+        {
+            return true;
+        }
+        if (queryDto.PurchasePriceSeq.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PurchaseScaleSeq.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ScaleQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Price.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.UntaxedPrice.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TaxIncludedPrice.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TaxAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Aps;
 [SugarIndex("ix_aps_schedule_item_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_line_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, nameof(LineNumber), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_aps_schedule_id", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ApsScheduleId), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_aps_schedule_item_process_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessCode), OrderByType.Asc, false)]
 public class TaktApsScheduleItem : TaktCompanyEntityBase
 {
@@ -30,6 +31,7 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "aps_schedule_id", ColumnDescription = "APS排程ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ApsScheduleId { get; set; }
+
 
     /// <summary>
     /// APS排程编码（冗余字段，便于查询）
@@ -67,7 +69,7 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     /// <summary>
     /// 生产工单编码（选项 TaktProductionOrders/options；DictValue=ProdOrderCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_order_code", ColumnDescription = "生产工单编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "work_order_code", ColumnDescription = "生产工单编码", ColumnDataType = "nvarchar", Length = 12, IsNullable = false)]
     public string WorkOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -85,25 +87,25 @@ public class TaktApsScheduleItem : TaktCompanyEntityBase
     /// <summary>
     /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = true)]
+    [SugarColumn(ColumnName = "work_center_code", ColumnDescription = "工作中心编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = true)]
     public string? WorkCenterCode { get; set; }
 
     /// <summary>
-    /// 工作中心名称
+    /// 工作中心描述
     /// </summary>
-    [SugarColumn(ColumnName = "work_center_name", ColumnDescription = "工作中心名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = true)]
-    public string? WorkCenterName { get; set; }
+    [SugarColumn(ColumnName = "work_center_description", ColumnDescription = "工作中心描述", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
+    public string? WorkCenterDescription { get; set; }
 
     /// <summary>
     /// 工序编码
     /// </summary>
-    [SugarColumn(ColumnName = "process_code", ColumnDescription = "工序编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "process_code", ColumnDescription = "工序编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
     public string ProcessCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工序名称
     /// </summary>
-    [SugarColumn(ColumnName = "process_name", ColumnDescription = "工序名称", ColumnDataType = "nvarchar", Length = 200, IsNullable = false)]
+    [SugarColumn(ColumnName = "process_name", ColumnDescription = "工序名称", ColumnDataType = "nvarchar", Length = 70, IsNullable = false)]
     public string ProcessName { get; set; } = string.Empty;
 
     /// <summary>

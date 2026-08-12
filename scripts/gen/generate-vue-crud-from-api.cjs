@@ -4,7 +4,7 @@
 // 文件名称：generate-vue-crud-from-api.cjs
 // 创建时间：2026-06-03
 // 创建人：Takt365(Cursor AI)
-// 功能描述：标准单表 CRUD Vue（index.vue + *-form.vue），仅此一种模板
+// 功能描述：标准单表 CRUD Vue（index.vue + *-form.vue），仅此一种模板；查询栏关键字=栏宽−查询/重置（TaktQueryBar flex）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

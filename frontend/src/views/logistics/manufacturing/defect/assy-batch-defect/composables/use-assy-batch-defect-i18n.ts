@@ -22,7 +22,7 @@ export const ASSYBATCHDEFECT_SELF_I18N_KEY = buildEntitySelfI18nKey(ASSYBATCHDEF
 export const ASSYBATCHDEFECT_LIST_FIELDS = [
   'plantCode',
   'prodCategory',
-  'batchNo',
+  'batchCode',
   'prodDateGroup',
   'prodOrderGroup',
   'modelCode',
@@ -46,7 +46,7 @@ export const ASSYBATCHDEFECT_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   plantCode: 'required',
   prodCategory: 'select',
-  batchNo: 'required',
+  batchCode: 'required',
   prodDateGroup: 'optional',
   prodOrderGroup: 'optional',
   modelCode: 'required',
@@ -72,7 +72,7 @@ export type AssyBatchDefectField = keyof typeof ASSYBATCHDEFECT_PLACEHOLDER
 export const ASSYBATCHDEFECT_QUERY_STRING_FIELDS = [
   'plantCode',
   'prodCategory',
-  'batchNo',
+  'batchCode',
   'prodDateGroup',
   'prodOrderGroup',
   'modelCode',

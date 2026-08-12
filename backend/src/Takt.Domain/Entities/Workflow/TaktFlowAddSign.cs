@@ -20,6 +20,7 @@ namespace Takt.Domain.Entities.Workflow;
 [SugarTable("takt_workflow_add_sign", "流程加签记录表")]
 [SugarIndex("ix_flow_add_sign_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_add_sign_instance", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_flow_add_sign_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktFlowAddSign : TaktCompanyEntityBase
 {
     /// <summary>

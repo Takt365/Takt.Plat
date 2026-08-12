@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Accounting.Controlling
 // 文件名称：TaktCostElementValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CostElement 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCostElement 生成，请按需审阅）
 // 
@@ -35,6 +35,12 @@ public class TaktCostElementCreateValidator : AbstractValidator<TaktCostElementC
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CostElementCode)
             .NotEmpty().WithMessage("成本要素编码不能为空")
             .MaximumLength(4).WithMessage("成本要素编码长度不能超过4个字符");
@@ -43,9 +49,6 @@ public class TaktCostElementCreateValidator : AbstractValidator<TaktCostElementC
             .MaximumLength(100).WithMessage("成本要素名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -75,6 +78,12 @@ public class TaktCostElementUpdateValidator : AbstractValidator<TaktCostElementU
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.CostElementCode)
             .NotEmpty().WithMessage("成本要素编码不能为空")
             .MaximumLength(4).WithMessage("成本要素编码长度不能超过4个字符");
@@ -83,9 +92,6 @@ public class TaktCostElementUpdateValidator : AbstractValidator<TaktCostElementU
             .MaximumLength(100).WithMessage("成本要素名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -111,6 +117,10 @@ public class TaktCostElementImportValidator : AbstractValidator<TaktCostElementI
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.CostElementCode)
             .NotEmpty().WithMessage("成本要素编码不能为空")
             .MaximumLength(4).WithMessage("成本要素编码长度不能超过4个字符");
@@ -119,9 +129,6 @@ public class TaktCostElementImportValidator : AbstractValidator<TaktCostElementI
             .MaximumLength(100).WithMessage("成本要素名称长度不能超过100个字符");
         RuleFor(x => x.ParentId)
             .GreaterThanOrEqualTo(0).WithMessage("父级 ID不能为负数");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

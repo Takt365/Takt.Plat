@@ -137,6 +137,29 @@ export function getStandardOperationRateOptions(): Promise<TaktSelectOption[]> {
   });
 }
 
+/**
+ * 按生产日期解析有效标准生产稼动率（%）
+ * @param {string} plantCode 工厂代码
+ * @param {string} prodDate 生产日期 YYYY-MM-DD
+ * @param {number} operationType 稼动率类型（默认 1=人员）
+ * @returns {Promise<number>} 稼动率(%)
+ */
+export function getEffectiveStandardOperationRatePercent(
+  plantCode: string,
+  prodDate: string,
+  operationType = 1
+): Promise<number> {
+  return request<number>({
+    url: `${STANDARD_OPERATION_RATE_API_BASE}/effective-rate`,
+    method: 'get',
+    params: {
+      plantCode,
+      prodDate,
+      operationType,
+    },
+  });
+}
+
 // ========================================
 // 导入导出
 // ========================================

@@ -87,6 +87,11 @@ public class TaktFinancialPeriodQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
     /// </summary>
@@ -157,6 +162,11 @@ public class TaktFinancialPeriodCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
     /// </summary>
@@ -242,6 +252,11 @@ public class TaktFinancialPeriodTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
     /// </summary>
@@ -299,6 +314,11 @@ public class TaktFinancialPeriodImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
     /// </summary>

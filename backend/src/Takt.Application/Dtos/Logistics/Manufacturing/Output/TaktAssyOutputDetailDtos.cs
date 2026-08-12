@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDetailDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutputDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutputDetail 生成，请按需审阅）
 // 
@@ -77,7 +77,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -127,7 +127,7 @@ public class TaktAssyOutputDetailDto : TaktCompanyDtoBase
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -159,6 +159,16 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 组立日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -196,7 +206,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -206,7 +216,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -246,7 +256,7 @@ public class TaktAssyOutputDetailQueryDto : TaktPagedQuery
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -291,10 +301,15 @@ public class TaktAssyOutputDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 组立日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -334,7 +349,7 @@ public class TaktAssyOutputDetailCreateDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -344,7 +359,7 @@ public class TaktAssyOutputDetailCreateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -384,7 +399,7 @@ public class TaktAssyOutputDetailCreateDto
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -463,6 +478,16 @@ public class TaktAssyOutputDetailTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 组立日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -499,7 +524,7 @@ public class TaktAssyOutputDetailTemplateDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -509,7 +534,7 @@ public class TaktAssyOutputDetailTemplateDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -549,7 +574,7 @@ public class TaktAssyOutputDetailTemplateDto
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -581,10 +606,15 @@ public class TaktAssyOutputDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 组立日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -622,7 +652,7 @@ public class TaktAssyOutputDetailImportDto
     public int? DowntimeMinutes { get; set; }
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -632,7 +662,7 @@ public class TaktAssyOutputDetailImportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -672,7 +702,7 @@ public class TaktAssyOutputDetailImportDto
     public decimal? AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -746,7 +776,7 @@ public class TaktAssyOutputDetailExportDto
     public int DowntimeMinutes { get; set; } = 0;
 
     /// <summary>
-    /// 停线原因（字典 logistics_stop_reason_category，多选 DictLabel 逗号分隔）
+    /// 停线原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? DowntimeReason { get; set; } = string.Empty;
 
@@ -756,7 +786,7 @@ public class TaktAssyOutputDetailExportDto
     public string? DowntimeDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 未达成原因（字典 logistics_nonachievement_reason_category，多选 DictLabel 逗号分隔）
+    /// 未达成原因（多选 DictLabel 逗号分隔；UI 提交由前端 dict-type 转换）
     /// </summary>
     public string? UnachievedReason { get; set; } = string.Empty;
 
@@ -796,7 +826,7 @@ public class TaktAssyOutputDetailExportDto
     public decimal AchievementRate { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

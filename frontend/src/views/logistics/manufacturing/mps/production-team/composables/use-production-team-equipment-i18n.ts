@@ -21,38 +21,38 @@ export const PRODUCTIONTEAMEQUIPMENT_SELF_I18N_KEY = buildEntitySelfI18nKey(PROD
 /** 列表业务列（不含主键） */
 export const PRODUCTIONTEAMEQUIPMENT_LIST_FIELDS = [
   'plantCode',
-  'productionTeamId',
-  'productionTeamName',
+  'prodTeamId',
+  'prodTeamName',
   'teamCode',
   'lineNumber',
-  'productionEquipmentId',
-  'productionEquipmentName',
-  'productionEquipmentCode',
-  'equipmentQuantity',
-  'teamEquipmentStatus',
+  'prodEquipId',
+  'prodEquipName',
+  'prodEquipCode',
+  'equipQuantity',
+  'teamEquipStatus',
   'isObsolete',
 ] as const
 
 /** 明细右栏 panel 默认展示列（不含主键 id；含 action） */
 export const PRODUCTIONTEAMEQUIPMENT_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'plantCode',
-  'productionTeamId',
-  'productionTeamName',
+  'prodTeamId',
+  'prodTeamName',
   'teamCode',
   'lineNumber',
-  'productionEquipmentId',
-  'productionEquipmentName',
-  'productionEquipmentCode',
-  'equipmentQuantity',
-  'teamEquipmentStatus',
+  'prodEquipId',
+  'prodEquipName',
+  'prodEquipCode',
+  'equipQuantity',
+  'teamEquipStatus',
   'isObsolete',
   'action',
 ] as const
 
 /** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
 export const PRODUCTIONTEAMEQUIPMENT_SUMMARY_SUM_FIELDS = [
-  'equipmentQuantity',
-  'teamEquipmentStatus',
+  'equipQuantity',
+  'teamEquipStatus',
   'isObsolete',
 ] as const
 
@@ -64,10 +64,10 @@ export const PRODUCTIONTEAMEQUIPMENT_PLACEHOLDER = {
   plantCode: 'select',
   teamCode: 'required',
   lineNumber: 'select',
-  productionEquipmentId: 'required',
-  productionEquipmentCode: 'required',
-  equipmentQuantity: 'select',
-  teamEquipmentStatus: 'select',
+  prodEquipId: 'required',
+  prodEquipCode: 'required',
+  equipQuantity: 'select',
+  teamEquipStatus: 'select',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
@@ -78,8 +78,8 @@ export type ProductionTeamEquipmentField = keyof typeof PRODUCTIONTEAMEQUIPMENT_
 export const PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS = [
   'plantCode',
   'teamCode',
-  'productionEquipmentId',
-  'productionEquipmentCode',
+  'prodEquipId',
+  'prodEquipCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -88,14 +88,14 @@ export const PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS = [
 
 export type ProductionTeamEquipmentQueryField =
   | (typeof PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'equipmentQuantity' | 'teamEquipmentStatus' | 'isObsolete'
+  | 'lineNumber' | 'equipQuantity' | 'teamEquipStatus' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const PRODUCTIONTEAMEQUIPMENT_QUERY_FIELDS: readonly ProductionTeamEquipmentQueryField[] = [
   ...PRODUCTIONTEAMEQUIPMENT_QUERY_STRING_FIELDS,
   'lineNumber',
-  'equipmentQuantity',
-  'teamEquipmentStatus',
+  'equipQuantity',
+  'teamEquipStatus',
   'isObsolete',
 ]
 

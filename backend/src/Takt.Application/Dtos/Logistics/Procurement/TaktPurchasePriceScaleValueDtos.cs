@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceScaleValueDtos.cs
-// 创建时间：2026-07-21
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePriceScaleValue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePriceScaleValue 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 // ========================================
 
 /// <summary>
-/// Takt采购价格价值等级实体（SAP KONW；主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
+/// Takt采购价格价值等级实体（；主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
 /// 对应前端 TaktPurchasePriceScaleValueDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -82,7 +82,12 @@ public class TaktPurchasePriceScaleValueDto : TaktCompanyDtoBase
     public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -108,6 +113,16 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -150,7 +165,12 @@ public class TaktPurchasePriceScaleValueQueryDto : TaktPagedQuery
     public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -195,10 +215,15 @@ public class TaktPurchasePriceScaleValueCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -242,7 +267,12 @@ public class TaktPurchasePriceScaleValueCreateDto
     public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -321,6 +351,16 @@ public class TaktPurchasePriceScaleValueTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -362,7 +402,12 @@ public class TaktPurchasePriceScaleValueTemplateDto
     public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -394,10 +439,15 @@ public class TaktPurchasePriceScaleValueImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购价格明细 ID（主子表关系；选项 TaktPurchasePriceItems/options，DictValue=Id）
     /// </summary>
@@ -440,7 +490,12 @@ public class TaktPurchasePriceScaleValueImportDto
     public decimal? TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal? TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -519,7 +574,12 @@ public class TaktPurchasePriceScaleValueExportDto
     public decimal TaxIncludedPrice { get; set; }
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 税费（冗余；含税−未税，打印用）
+    /// </summary>
+    public decimal TaxAmount { get; set; }
+
+    /// <summary>
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

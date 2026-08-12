@@ -117,7 +117,7 @@ const queryForm = ref({
 const explosionLines = ref<(BillOfMaterialExplosionLine & { rowKey: string })[]>([])
 
 /** 展开摘要 */
-const summary = ref<{ bomCode: string; parentMaterialCode: string; parentMaterialName: string; quantity: number } | null>(null)
+const summary = ref<{ bomCode: string; parentMaterialCode: string; parentMaterialDescription: string; quantity: number } | null>(null)
 
 /** 当前页码 */
 const currentPage = ref(getTaktDefaultPageIndex())
@@ -153,9 +153,9 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.billofmaterial.parentmaterialname'),
-    dataIndex: 'materialName',
-    key: 'materialName',
+    title: t('entity.billofmaterial.parentmaterialdescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
     width: 160,
     ellipsis: true,
   },
@@ -221,8 +221,7 @@ const columns = computed<TableColumnsType>(() => [
     width: 90,
     customRender: ({ record }: { record: BillOfMaterialExplosionLine }) =>
       h(TaktDictTag, { dictType: 'sys_yes_no_type', value: record.isCircular }),
-  },
-])
+  }])
 
 /**
  * 加载 BOM 展开清单
@@ -244,7 +243,7 @@ async function loadExplosion() {
     summary.value = {
       bomCode: result.bomCode,
       parentMaterialCode: result.parentMaterialCode,
-      parentMaterialName: result.parentMaterialName,
+      parentMaterialDescription: result.parentMaterialDescription,
       quantity: result.quantity,
     }
     explosionLines.value = (result.lines ?? []).map((line, index) => ({

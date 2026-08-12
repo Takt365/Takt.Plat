@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Benefits
 // 文件名称：TaktSocialInsuranceI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSocialInsurance 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -206,15 +206,6 @@ public class TaktSocialInsuranceI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.socialinsurance.totalamount", "zh-CN", "缴纳合计", "缴纳合计（元）"),
             // entity.socialinsurance.totalamount
             new TranslationSeedItem("entity.socialinsurance.totalamount", "zh-HK", "缴纳合计_hk", "缴纳合计（元）"),
-
-            // entity.socialinsurance.relatedplant
-            new TranslationSeedItem("entity.socialinsurance.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.socialinsurance.relatedplant
-            new TranslationSeedItem("entity.socialinsurance.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.socialinsurance.relatedplant
-            new TranslationSeedItem("entity.socialinsurance.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.socialinsurance.relatedplant
-            new TranslationSeedItem("entity.socialinsurance.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.socialinsurance.paystatus
             new TranslationSeedItem("entity.socialinsurance.paystatus", "en-US", "缴纳状态_us", "缴纳状态（字典 hr_social_insurance_pay_status；0=待缴纳 1=已缴纳 2=已补缴）"),

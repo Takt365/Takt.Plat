@@ -85,7 +85,6 @@ export interface Role extends TenantDtoBase {
 
 }
 
-
 /**
  * Role 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -97,6 +96,11 @@ export interface RoleQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
@@ -155,7 +159,6 @@ export interface RoleQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Role DTO
  * 对应前端 RoleCreate
@@ -166,6 +169,11 @@ export interface RoleCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
@@ -224,7 +232,6 @@ export interface RoleCreate {
 
 }
 
-
 /**
  * 更新Role DTO
  * 继承 TaktRoleCreateDto，添加 RoleId 字段
@@ -238,7 +245,6 @@ export interface RoleUpdate extends RoleCreate {
   roleId: string;
 
 }
-
 
 /**
  * Role 状态更新 DTO
@@ -258,7 +264,6 @@ export interface RoleStatus {
 
 }
 
-
 /**
  * Role 排序更新 DTO
  * 对应前端 RoleSort
@@ -277,7 +282,6 @@ export interface RoleSort {
 
 }
 
-
 /**
  * Role 导入模板行 DTO
  * 对应前端 RoleTemplate
@@ -288,6 +292,11 @@ export interface RoleTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
@@ -345,7 +354,6 @@ export interface RoleTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Role 导入 DTO（独立实现，不继承 TemplateDto）
@@ -359,6 +367,11 @@ export interface RoleImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
    */
   roleCode?: string;
@@ -414,7 +427,6 @@ export interface RoleImport {
   remark?: string;
 
 }
-
 
 /**
  * Role 导出 DTO（独立实现，不继承响应 Dto）

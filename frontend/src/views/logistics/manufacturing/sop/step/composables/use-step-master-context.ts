@@ -9,10 +9,13 @@
 import { inject, provide, type InjectionKey, type Ref, ref } from 'vue'
 import type { SopStep } from '@/types/logistics/manufacturing/sop/step'
 
+/** 表格行类型（与 index 列表行、TaktSingleTable slot record 一致） */
+export type SopStepRowRecord = SopStep | Record<string, unknown>
+
 /** 主表选中行上下文 */
 export interface SopStepMasterContext {
   /** 当前选中的主表行（右侧明细依赖） */
-  selectedMasterRow: Ref<SopStep | null>
+  selectedMasterRow: Ref<SopStepRowRecord | null>
 }
 
 const sopStepMasterContextKey: InjectionKey<SopStepMasterContext> = Symbol('stepMasterContext')
@@ -22,7 +25,7 @@ const sopStepMasterContextKey: InjectionKey<SopStepMasterContext> = Symbol('step
  * @returns {SopStepMasterContext} 主表上下文
  */
 export function provideSopStepMasterContext(): SopStepMasterContext {
-  const selectedMasterRow = ref<SopStep | null>(null)
+  const selectedMasterRow = ref<SopStepRowRecord | null>(null)
   const ctx: SopStepMasterContext = { selectedMasterRow }
   provide(sopStepMasterContextKey, ctx)
   return ctx

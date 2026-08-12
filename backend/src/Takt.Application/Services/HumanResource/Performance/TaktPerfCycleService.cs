@@ -306,7 +306,8 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
                 || (x.ApplicableDepartment != null && x.ApplicableDepartment.Contains(keywords))
                 || (x.PerfCycleDescription != null && x.PerfCycleDescription.Contains(keywords))
                 || SqlFunc.ToString(x.CycleScheduleStatus).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.StartDate).Contains(keywords)
@@ -360,9 +361,14 @@ public class TaktPerfCycleService : TaktServiceBase, ITaktPerfCycleService
             exp = exp.And(x => x.CycleScheduleStatus == queryDto.CycleScheduleStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

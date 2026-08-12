@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Workflow;
 [SugarTable("takt_workflow_transition", "流程流转历史表")]
 [SugarIndex("ix_flow_transition_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_transition_instance", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InstanceId), OrderByType.Asc, false)]
+[SugarIndex("ix_flow_transition_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktFlowTransition : TaktCompanyEntityBase
 {
     /// <summary>

@@ -128,11 +128,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('equipmentCode')">
-      <a-form-item :label="t('entity.maintenancehistory.equipmentcode')">
+      <div v-show="isFieldVisible('EquipCode')">
+      <a-form-item :label="t('entity.maintenancehistory.EquipCode')">
         <a-input
-          v-model:value="advancedQueryForm.equipmentCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.equipmentcode') })"
+          v-model:value="advancedQueryForm.EquipCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancehistory.EquipCode') })"
           show-count
           :maxlength="50"
           allow-clear
@@ -585,7 +585,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   maintenanceWorkOrderId: '',
   workOrderCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   maintenanceType: undefined as number | undefined,
   maintenanceCategory: undefined as number | undefined,
   maintenanceCompany: '',
@@ -625,7 +625,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 const queryFieldsMeta = computed(() => [
   { key: 'maintenanceWorkOrderId', label: t('entity.maintenancehistory.maintenanceworkorderid') },
   { key: 'workOrderCode', label: t('entity.maintenancehistory.workordercode') },
-  { key: 'equipmentCode', label: t('entity.maintenancehistory.equipmentcode') },
+  { key: 'EquipCode', label: t('entity.maintenancehistory.EquipCode') },
   { key: 'maintenanceType', label: t('entity.maintenancehistory.maintenancetype') },
   { key: 'maintenanceCategory', label: t('entity.maintenancehistory.maintenancecategory') },
   { key: 'maintenanceCompany', label: t('entity.maintenancehistory.maintenancecompany') },
@@ -657,8 +657,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -682,7 +681,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   maintenanceWorkOrderId: '',
   workOrderCode: '',
-  equipmentCode: '',
+  EquipCode: '',
   maintenanceType: undefined as number | undefined,
   maintenanceCategory: undefined as number | undefined,
   maintenanceCompany: '',
@@ -780,14 +779,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaintenanceHistoryField(record, 'workOrderCode') ?? ''),
   },
   {
-    title: t('entity.maintenancehistory.equipmentcode'),
-    dataIndex: 'equipmentCode',
-    key: 'equipmentCode',
+    title: t('entity.maintenancehistory.EquipCode'),
+    dataIndex: 'EquipCode',
+    key: 'EquipCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: MaintenanceHistory }) =>
-      String(getMaintenanceHistoryField(record, 'equipmentCode') ?? ''),
+      String(getMaintenanceHistoryField(record, 'EquipCode') ?? ''),
   },
   {
     title: t('entity.maintenancehistory.maintenancetype'),
@@ -856,10 +855,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:maintenance:equipment:delete',
         onClick: (record: MaintenanceHistory) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -923,7 +920,7 @@ function buildListQuery(overrides?: Partial<MaintenanceHistoryQuery>): Maintenan
   }
   assignTrimmed('maintenanceWorkOrderId', form.maintenanceWorkOrderId)
   assignTrimmed('workOrderCode', form.workOrderCode)
-  assignTrimmed('equipmentCode', form.equipmentCode)
+  assignTrimmed('EquipCode', form.EquipCode)
   if (form.maintenanceType !== undefined && form.maintenanceType !== null) {
     query.maintenanceType = form.maintenanceType
   }

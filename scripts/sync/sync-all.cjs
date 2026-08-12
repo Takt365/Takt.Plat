@@ -4,7 +4,7 @@
 // 文件名称：sync-all.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：一键串联 SAP 数据同步；顺序固定为 ma→md→so→st→ec（主数据→计划→工时→变更）
+// 功能描述：一键串联源数据同步；顺序固定为 matplt→mdl→so→st→ec（工厂物料→机种→工单→工时→变更）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -23,42 +23,42 @@ const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const PIPELINE = [
   {
     order: 1,
-    key: 'ma',
-    label: 'SAP 物料主数据',
-    script: 'ma_sync.cjs',
+    key: 'matplt',
+    label: '源数据同步：工厂物料',
+    script: 'matplt_sync.cjs',
     dependsOn: [],
     reason: 'PP_SapMaterial → material_plant；工单/工时/EC 均引用 material_code，须最先落地',
   },
   {
     order: 2,
-    key: 'md',
-    label: 'SAP 机种-目的地',
-    script: 'md_sync.cjs',
-    dependsOn: ['ma'],
-    reason: 'PP_SapModelDest → model_destination；机种与物料主数据同属物料域，紧随 ma',
+    key: 'mdl',
+    label: '源数据同步：机种目的地',
+    script: 'mdl_sync.cjs',
+    dependsOn: ['matplt'],
+    reason: 'PP_SapModelDest → model_destination；机种与工厂物料同属物料域，紧随 matplt',
   },
   {
     order: 3,
     key: 'so',
-    label: 'SAP 生产工单/工作中心/序列号',
+    label: '源数据同步：生产工单/工作中心/序列号',
     script: 'so_sync.cjs',
-    dependsOn: ['ma'],
+    dependsOn: ['matplt'],
     reason: 'PP_SapOrders → production_order，并从 Manhour/Serial 回填 work_center、serial_no；组立日报 plant 随工单',
   },
   {
     order: 4,
     key: 'st',
-    label: 'SAP 标准工时',
+    label: '源数据同步：标准工时',
     script: 'st_sync.cjs',
-    dependsOn: ['ma', 'so'],
+    dependsOn: ['matplt', 'so'],
     reason: 'PP_SapManhour → standard_operation_time；与 so 同源工时但独立落表；须在工单之后供组立 stdMinutes',
   },
   {
     order: 5,
     key: 'ec',
-    label: 'SAP 工程变更主表+明细',
+    label: '源数据同步：工程变更主表+明细',
     script: 'ec_sync.cjs',
-    dependsOn: ['ma'],
+    dependsOn: ['matplt'],
     reason: 'PP_SapEcn/EcnSub → source_ec + detail；变更明细含料号，放在主数据与计划/工时之后',
   },
 ];
@@ -94,7 +94,7 @@ function runChildScript(scriptName) {
 }
 
 /**
- * 解析 CLI：--only ma,so 或 --from st
+ * 解析 CLI：--only matplt,so 或 --from st
  * @returns {{ help?: boolean, onlyKeys: Set<string>|null, fromKey: string|null }}
  */
 function parseCliArgs() {
@@ -204,7 +204,7 @@ function printUsage() {
   console.log(`
 用法:
   node scripts/sync/sync-all.cjs
-  node scripts/sync/sync-all.cjs --only ma,so,st
+  node scripts/sync/sync-all.cjs --only matplt,so,st
   node scripts/sync/sync-all.cjs --from so
 
 参数:
@@ -213,11 +213,11 @@ function printUsage() {
   -h, --help      显示帮助
 
 权威顺序（固定）:
-  1. ma  物料主数据     PP_SapMaterial → material_plant
-  2. md  机种-目的地    PP_SapModelDest → model_destination（依赖 ma）
-  3. so  生产工单       PP_SapOrders + Manhour/Serial 回填（依赖 ma）
-  4. st  标准工时       PP_SapManhour → standard_operation_time（依赖 ma, so）
-  5. ec  工程变更       PP_SapEcn/EcnSub → source_ec（依赖 ma）
+  1. matplt  工厂物料     PP_SapMaterial → material_plant
+  2. mdl     机种目的地   PP_SapModelDest → model_destination（依赖 matplt）
+  3. so      生产工单     PP_SapOrders + Manhour/Serial 回填（依赖 matplt）
+  4. st      标准工时     PP_SapManhour → standard_operation_time（依赖 matplt, so）
+  5. ec      工程变更     PP_SapEcn/EcnSub → source_ec（依赖 matplt）
 
 说明:
   - 全量同步必须按 1→5 顺序；--only 子集须包含各步 dependsOn
@@ -225,7 +225,7 @@ function printUsage() {
 
 示例:
   node scripts/sync/sync-all.cjs
-  node scripts/sync/sync-all.cjs --only ma,md,so
+  node scripts/sync/sync-all.cjs --only matplt,mdl,so
   node scripts/sync/sync-all.cjs --from st
 `);
 }

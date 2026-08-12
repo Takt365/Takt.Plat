@@ -332,7 +332,7 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ComplaintHandlingCode != null && x.ComplaintHandlingCode.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintId).Contains(keywords)
-                || (x.ComplaintNo != null && x.ComplaintNo.Contains(keywords))
+                || (x.ComplaintCode != null && x.ComplaintCode.Contains(keywords))
                 || SqlFunc.ToString(x.ComplaintItemId).Contains(keywords)
                 || SqlFunc.ToString(x.HandlingStage).Contains(keywords)
                 || SqlFunc.ToString(x.HandlingMethod).Contains(keywords)
@@ -348,6 +348,7 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
                 || (x.CustomerFeedback != null && x.CustomerFeedback.Contains(keywords))
                 || SqlFunc.ToString(x.CustomerSatisfaction).Contains(keywords)
                 || (x.AttachmentPaths != null && x.AttachmentPaths.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.HandlingAt).Contains(keywords)
@@ -372,9 +373,9 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
             exp = exp.And(x => x.ComplaintId == queryDto.ComplaintId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ComplaintNo))
+        if (!string.IsNullOrEmpty(queryDto?.ComplaintCode))
         {
-            exp = exp.And(x => x.ComplaintNo != null && x.ComplaintNo.Contains(queryDto.ComplaintNo));
+            exp = exp.And(x => x.ComplaintCode != null && x.ComplaintCode.Contains(queryDto.ComplaintCode));
         }
 
         if (queryDto?.ComplaintItemId.HasValue == true)
@@ -450,6 +451,11 @@ public class TaktCustomerComplaintHandlingService : TaktServiceBase, ITaktCustom
         if (!string.IsNullOrEmpty(queryDto?.AttachmentPaths))
         {
             exp = exp.And(x => x.AttachmentPaths != null && x.AttachmentPaths.Contains(queryDto.AttachmentPaths));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

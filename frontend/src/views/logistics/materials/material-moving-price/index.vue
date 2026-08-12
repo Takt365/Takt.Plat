@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-price -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：移动价格列表（大数据：无评估期间参数时默认上月） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getMaterialMovingPriceId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -89,9 +90,9 @@
             dict-type="logistics_price_unit_param"
           />
         </template>
-        <template v-else-if="column.key === 'currency'">
+        <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
-            :value="getMaterialMovingPriceDictValue(record, 'currency')"
+            :value="getMaterialMovingPriceDictValue(record, 'currencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
@@ -146,33 +147,23 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('periodDateStart')">
-      <a-form-item :label="pi.queryLabel('periodDateStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.periodDateStart"
-          :placeholder="pi.queryPh('periodDateStart', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('periodDateEnd')">
-      <a-form-item :label="pi.queryLabel('periodDateEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.periodDateEnd"
-          :placeholder="pi.queryPh('periodDateEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
+      <div v-show="isFieldVisible('valuationPeriod')">
+      <a-form-item :label="pi.queryLabel('valuationPeriod')">
+        <a-input
+          v-model:value="advancedQueryForm.valuationPeriod"
+          :placeholder="pi.queryPh('valuationPeriod', 'optional')"
+          show-count
+          :maxlength="7"
+          allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
       <a-form-item :label="pi.queryLabel('materialCode')">
-        <a-input
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="pi.queryPh('materialCode', 'required')"
-          show-count
-          :maxlength="20"
+          api-url="TaktMaterialPlants/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -234,12 +225,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('currency')">
-      <a-form-item :label="pi.queryLabel('currency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.currency"
+          v-model:value="advancedQueryForm.currencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('currency', 'select')"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -348,7 +339,7 @@
 
 <script setup lang="ts">
 /**
- * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 期间 + 物料 + 评估类别管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/material-moving-price
  */
 import { ref, computed, onMounted } from 'vue'
@@ -364,8 +355,8 @@ import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
+import { buildDefaultCostingPeriodRange } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-period'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
-
 import {
   useMaterialMovingPriceI18n,
   MATERIALMOVINGPRICE_LIST_FIELDS,
@@ -373,6 +364,14 @@ import {
   MATERIALMOVINGPRICE_QUERY_FIELDS,
   MATERIALMOVINGPRICE_SELF_I18N_KEY,
 } from './composables/use-material-moving-price-i18n'
+
+/**
+ * 默认评估期间（上月 yyyy-MM）
+ * @returns {string} yyyy-MM
+ */
+function buildDefaultValuationPeriod(): string {
+  return buildDefaultCostingPeriodRange(1)[1]
+}
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useMaterialMovingPriceI18n()
@@ -421,7 +420,7 @@ const formRef = ref()
 const advancedQueryVisible = ref(false)
 /**
  * 创建空的高级查询表单
- * @returns {Record<string, unknown>} 高级查询初始模型
+ * @returns 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
   const form = Object.fromEntries(MATERIALMOVINGPRICE_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
@@ -460,9 +459,47 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+/**
+ * 是否存在除评估期间外的查询条件（有参则不强制上月期间）
+ * @param form 高级查询表单
+ * @param keyWords 快捷关键字
+ * @returns {boolean}
+ */
+function hasMovingPriceQueryFiltersBesidesPeriod(
+  form: ReturnType<typeof createEmptyAdvancedQueryForm>,
+  keyWords: string,
+): boolean {
+  if (keyWords.trim().length > 0) {
+    return true
+  }
+  for (const key of MATERIALMOVINGPRICE_QUERY_STRING_FIELDS) {
+    if (key === 'valuationPeriod') {
+      continue
+    }
+    if ((form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.stockQuantity !== undefined && form.stockQuantity !== null) {
+    return true
+  }
+  if (form.stockAmount !== undefined && form.stockAmount !== null) {
+    return true
+  }
+  if (form.movingPrice !== undefined && form.movingPrice !== null) {
+    return true
+  }
+  if (form.priceUnit !== undefined && form.priceUnit !== null) {
+    return true
+  }
+  return false
+}
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数
+ * - 填了评估期间 → 按参数查
+ * - 未填期间且无其它条件 → 默认上月
+ * - 未填期间但有其它条件 → 不下发期间（时间不固定）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MaterialMovingPriceQuery} 查询 DTO
  */
@@ -484,7 +521,16 @@ function buildListQuery(overrides?: Partial<MaterialMovingPriceQuery>): Material
     }
   }
   for (const key of MATERIALMOVINGPRICE_QUERY_STRING_FIELDS) {
+    if (key === 'valuationPeriod') {
+      continue
+    }
     assignTrimmed(key, form[key])
+  }
+  const period = (form.valuationPeriod ?? '').trim()
+  if (period.length > 0) {
+    query.valuationPeriod = period
+  } else if (!hasMovingPriceQueryFiltersBesidesPeriod(form, kw)) {
+    query.valuationPeriod = buildDefaultValuationPeriod()
   }
   if (form.stockQuantity !== undefined && form.stockQuantity !== null) {
     query.stockQuantity = form.stockQuantity
@@ -507,17 +553,21 @@ onMounted(async () => {
   loadData()
 })
 
-
 /**
  * 构建列表标准文本列
  * @param key 列 key / dataIndex
  * @param title 列标题
- * @param options 宽度与固定列
+ * @param options 宽度、固定列、排序（参照 identity/user：sorter 为比较函数）
  */
 function buildMaterialMovingPriceListColumn(
   key: string,
   title: string,
-  options?: { width?: number; fixed?: 'left' },
+  options?: {
+    width?: number
+    fixed?: 'left'
+    sorter?: (a: MaterialMovingPriceRowRecord, b: MaterialMovingPriceRowRecord) => number
+    defaultSortOrder?: 'ascend' | 'descend'
+  },
 ) {
   return {
     title,
@@ -527,13 +577,42 @@ function buildMaterialMovingPriceListColumn(
     resizable: true,
     ellipsis: true,
     ...(options?.fixed ? { fixed: options.fixed } : {}),
+    ...(options?.sorter
+      ? {
+          sorter: options.sorter,
+          ...(options.defaultSortOrder ? { defaultSortOrder: options.defaultSortOrder } : {}),
+        }
+      : {}),
   }
 }
 
-/** 表格列定义（i18n 随 locale 变化） */
+/**
+ * 评估期间列排序（yyyy-MM 字符串比较，参照用户视图 username localeCompare）
+ * @param a 行 A
+ * @param b 行 B
+ * @returns {number} 比较结果
+ */
+function compareValuationPeriod(
+  a: MaterialMovingPriceRowRecord,
+  b: MaterialMovingPriceRowRecord,
+): number {
+  const va = String((a as Record<string, unknown>).valuationPeriod ?? '')
+  const vb = String((b as Record<string, unknown>).valuationPeriod ?? '')
+  return va.localeCompare(vb)
+}
+
+/** 表格列定义（i18n 随 locale 变化；评估期间可排序，默认降序） */
 const columns = computed<TableColumnsType>(() => [
   buildMaterialMovingPriceListColumn('materialMovingPriceId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
-  ...MATERIALMOVINGPRICE_LIST_FIELDS.map((key) => buildMaterialMovingPriceListColumn(key, pi.label(key))),
+  ...MATERIALMOVINGPRICE_LIST_FIELDS.map((key) =>
+    buildMaterialMovingPriceListColumn(
+      key,
+      pi.label(key),
+      key === 'valuationPeriod'
+        ? { sorter: compareValuationPeriod, defaultSortOrder: 'descend' }
+        : undefined,
+    ),
+  ),
   CreateActionColumn({
     actions: [
       {
@@ -575,8 +654,6 @@ const getMaterialMovingPriceDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

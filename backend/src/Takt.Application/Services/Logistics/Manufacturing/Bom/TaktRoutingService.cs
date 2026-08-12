@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktRoutingService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：工艺路线主应用服务实现
 // 
@@ -63,12 +63,20 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     }
 
     /// <summary>
-    /// 获取工艺路线主列表（分页）
+    /// 获取工艺路线主列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktRoutingDto>> GetRoutingListAsync(TaktRoutingQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktRoutingDto>.Create(
+                new List<TaktRoutingDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _routingRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,8 +118,8 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.RoutingName ?? e.Id.ToString(),
+            DictValue = e.RoutingCode,
+            DictLabel = e.RoutingName ?? e.RoutingCode,
         }).ToList();
     }
 
@@ -289,7 +297,15 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportRoutingAsync(TaktRoutingQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktRoutingQueryDto());
+        var queryDto = query ?? new TaktRoutingQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktRoutingExportDto>(),
+                sheetName ?? "工艺路线主数据",
+                fileName ?? "工艺路线主导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _routingRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -359,7 +375,20 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     private async Task SaveRoutingChildrenAsync(TaktRouting entity, TaktRoutingCreateDto dto)
     {
         // 工艺路线明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktRoutingItemUpdateDto>? itemsForSave;
+        if (dto is TaktRoutingUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
+        {
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktRoutingItemUpdateDto>>();
+        }
+        else
+        {
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
         {
             await MarkRoutingItemsObsoleteAsync(entity.Id);
             return;
@@ -371,9 +400,9 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktRoutingItem>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Items.Count; i++)
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                var childDto = dto.Items[i];
+                var childDto = itemsForSave[i];
                 childDto.RoutingId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -393,13 +422,12 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
                     submittedIds.Add(childDto.RoutingItemId);
                     var isUniqueUpdate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _routingItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.RoutingId == x.RoutingId
+                        x => x.RoutingId == x.RoutingId
                 && x.LineNumber == x.LineNumber,
                         childDto.RoutingItemId);
                     if (!isUniqueUpdate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique)
                     {
-                        throw new TaktBusinessException("工艺路线明细的CompanyCode、RoutingId、LineNumber已存在");
+                        throw new TaktBusinessException("工艺路线明细的RoutingId、LineNumber已存在");
                     }
                     childDto.Adapt(target);
                     target.Id = childDto.RoutingItemId;
@@ -411,12 +439,11 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
                 {
                     var isUniqueCreate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique = await _uniqueValidator.IsUniqueAsync(
                         _routingItemRepository,
-                        x => x.CompanyCode == x.CompanyCode
-                && x.RoutingId == x.RoutingId
+                        x => x.RoutingId == x.RoutingId
                 && x.LineNumber == x.LineNumber);
                     if (!isUniqueCreate_ix_takt_logistics_manufacturing_bom_routing_item_routing_line_unique)
                     {
-                        throw new TaktBusinessException("工艺路线明细的CompanyCode、RoutingId、LineNumber已存在");
+                        throw new TaktBusinessException("工艺路线明细的RoutingId、LineNumber已存在");
                     }
                     var child = childDto.Adapt<TaktRoutingItem>();
                     child.Id = 0;
@@ -465,112 +492,209 @@ public class TaktRoutingService : TaktServiceBase, ITaktRoutingService
     {
         var exp = Expressionable.Create<TaktRouting>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.WorkCenter != null && x.WorkCenter.Contains(keywords))
                 || (x.RoutingCode != null && x.RoutingCode.Contains(keywords))
                 || (x.RoutingName != null && x.RoutingName.Contains(keywords))
-                || SqlFunc.ToString(x.Purpose).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.Version != null && x.Version.Contains(keywords))
-                || SqlFunc.ToString(x.RoutingStatus).Contains(keywords)
                 || (x.RoutingDescription != null && x.RoutingDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
-                || SqlFunc.ToString(x.ExpiryDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenter))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(queryDto.WorkCenter));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RoutingCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenter))
         {
-            exp = exp.And(x => x.RoutingCode != null && x.RoutingCode.Contains(queryDto.RoutingCode));
+            var workCenter = queryDto.WorkCenter;
+            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(workCenter));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RoutingName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RoutingCode))
         {
-            exp = exp.And(x => x.RoutingName != null && x.RoutingName.Contains(queryDto.RoutingName));
+            var routingCode = queryDto.RoutingCode;
+            exp = exp.And(x => x.RoutingCode != null && x.RoutingCode.Contains(routingCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.RoutingName))
+        {
+            var routingName = queryDto.RoutingName;
+            exp = exp.And(x => x.RoutingName != null && x.RoutingName.Contains(routingName));
         }
 
         if (queryDto?.Purpose.HasValue == true)
         {
-            exp = exp.And(x => x.Purpose == queryDto.Purpose);
+            var purpose = queryDto.Purpose;
+            exp = exp.And(x => x.Purpose == purpose);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Version))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Version))
         {
-            exp = exp.And(x => x.Version != null && x.Version.Contains(queryDto.Version));
+            var version = queryDto.Version;
+            exp = exp.And(x => x.Version != null && x.Version.Contains(version));
         }
 
         if (queryDto?.RoutingStatus.HasValue == true)
         {
-            exp = exp.And(x => x.RoutingStatus == queryDto.RoutingStatus);
+            var routingStatus = queryDto.RoutingStatus;
+            exp = exp.And(x => x.RoutingStatus == routingStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RoutingDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RoutingDescription))
         {
-            exp = exp.And(x => x.RoutingDescription != null && x.RoutingDescription.Contains(queryDto.RoutingDescription));
+            var routingDescription = queryDto.RoutingDescription;
+            exp = exp.And(x => x.RoutingDescription != null && x.RoutingDescription.Contains(routingDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate >= queryDto.EffectiveDateStart);
+            var effectiveDateStart = queryDto.EffectiveDateStart;
+            exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate <= queryDto.EffectiveDateEnd);
+            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate >= queryDto.ExpiryDateStart);
+            var expiryDateStart = queryDto.ExpiryDateStart;
+            exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate <= queryDto.ExpiryDateEnd);
+            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktRoutingQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenter))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RoutingCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RoutingName))
+        {
+            return true;
+        }
+        if (queryDto.Purpose.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Version))
+        {
+            return true;
+        }
+        if (queryDto.RoutingStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RoutingDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EffectiveDateStart.HasValue || queryDto.EffectiveDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExpiryDateStart.HasValue || queryDto.ExpiryDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaOutput 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PcbaOutputId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（回填：随工单）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -56,7 +52,7 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -73,7 +69,7 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -83,7 +79,7 @@ public class TaktPcbaOutputDto : TaktCompanyDtoBase
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA明细列表
@@ -114,12 +110,17 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -139,7 +140,7 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -156,7 +157,7 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -166,7 +167,7 @@ public class TaktPcbaOutputQueryDto : TaktPagedQuery
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -209,9 +210,9 @@ public class TaktPcbaOutputCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -220,9 +221,9 @@ public class TaktPcbaOutputCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -236,9 +237,9 @@ public class TaktPcbaOutputCreateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -256,7 +257,7 @@ public class TaktPcbaOutputCreateDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -266,7 +267,7 @@ public class TaktPcbaOutputCreateDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA明细列表（子表，级联保存）
@@ -330,12 +331,17 @@ public class TaktPcbaOutputTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -350,7 +356,7 @@ public class TaktPcbaOutputTemplateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -367,7 +373,7 @@ public class TaktPcbaOutputTemplateDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -377,7 +383,7 @@ public class TaktPcbaOutputTemplateDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA明细列表（子表，级联保存）
@@ -412,9 +418,9 @@ public class TaktPcbaOutputImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -422,7 +428,7 @@ public class TaktPcbaOutputImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -437,7 +443,7 @@ public class TaktPcbaOutputImportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -454,7 +460,7 @@ public class TaktPcbaOutputImportDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -464,7 +470,7 @@ public class TaktPcbaOutputImportDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// PCBA明细列表（子表，级联保存）
@@ -510,7 +516,7 @@ public class TaktPcbaOutputExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -525,7 +531,7 @@ public class TaktPcbaOutputExportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -542,7 +548,7 @@ public class TaktPcbaOutputExportDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -552,7 +558,7 @@ public class TaktPcbaOutputExportDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -571,21 +577,21 @@ public class TaktPcbaOutputExportDto
 }
 
 // ========================================
-// PCBA 日报默认明细预览 DTO
+// PCBA 默认明细预览（非实体 CRUD）
 // ========================================
 
 /// <summary>
-/// PCBA日报新增时按物料标准工序时间生成的默认明细预览
+/// 按标准工序时间生成的默认明细预览行
 /// </summary>
 public class TaktPcbaOutputDefaultDetailDto
 {
     /// <summary>
-    /// 行号
+    /// 行号（10 起递增）
     /// </summary>
     public int LineNumber { get; set; }
 
     /// <summary>
-    /// 工作中心（对应明细 TimePeriod）
+    /// 工作中心
     /// </summary>
     public string WorkCenter { get; set; } = string.Empty;
 
@@ -595,7 +601,7 @@ public class TaktPcbaOutputDefaultDetailDto
     public string? OperationDesc { get; set; }
 
     /// <summary>
-    /// 标准点数
+    /// 标准工时（短）
     /// </summary>
     public int StandardShorts { get; set; }
 }

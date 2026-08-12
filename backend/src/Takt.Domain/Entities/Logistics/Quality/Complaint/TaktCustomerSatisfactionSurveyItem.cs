@@ -36,7 +36,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     /// <summary>
     /// 调查表编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "customer_satisfaction_survey_code", ColumnDescription = "调查表编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string CustomerSatisfactionSurveyCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -60,7 +60,7 @@ public class TaktCustomerSatisfactionSurveyItem : TaktCompanyEntityBase
     /// <summary>
     /// 调查项目说明
     /// </summary>
-    [SugarColumn(ColumnName = "item_description", ColumnDescription = "项目说明", ColumnDataType = "nvarchar", Length = 500, IsNullable = true)]
+    [SugarColumn(ColumnName = "item_description", ColumnDescription = "项目说明", ColumnDataType = "nvarchar", Length = 70, IsNullable = true)]
     public string? ItemDescription { get; set; }
 
     /// <summary>

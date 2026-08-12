@@ -77,11 +77,6 @@ public class TaktAdminDivision : TaktTenantEntityBase
     [SugarColumn(ColumnName = "postal_code", ColumnDescription = "邮政编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = true)]
     public string? PostalCode { get; set; }
 
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "")]
-    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）

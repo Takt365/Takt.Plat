@@ -27,309 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('periodCode')"
-                name="periodCode"
-              >
-                <a-input
-                  v-model:value="formState.periodCode"
-                  :placeholder="pi.ph('periodCode')"
-                  show-count
-                  :maxlength="6"
-                  allow-clear
-                  :disabled="!!formData?.budgetActualId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('costCenterCode')"
-                name="costCenterCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.costCenterCode"
-                  api-url="TaktCostCenters/options"
-                  :placeholder="pi.ph('costCenterCode')"
-                  :disabled="!!formData?.budgetActualId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('costCenterName')"
-                name="costCenterName"
-              >
-                <a-input
-                  v-model:value="formState.costCenterName"
-                  :placeholder="pi.ph('costCenterName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('budgetItemCode')"
-                name="budgetItemCode"
-              >
-                <a-input
-                  v-model:value="formState.budgetItemCode"
-                  :placeholder="pi.ph('budgetItemCode')"
-                  show-count
-                  :maxlength="40"
-                  allow-clear
-                  :disabled="!!formData?.budgetActualId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('budgetItemName')"
-                name="budgetItemName"
-              >
-                <a-input
-                  v-model:value="formState.budgetItemName"
-                  :placeholder="pi.ph('budgetItemName')"
-                  show-count
-                  :maxlength="200"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('accountTitleCode')"
-                name="accountTitleCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.accountTitleCode"
-                  api-url="TaktAccountTitles/options"
-                  :placeholder="pi.ph('accountTitleCode')"
-                  :disabled="!!formData?.budgetActualId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('budgetType')"
-                name="budgetType"
-              >
-                <TaktSelect
-                  v-model:value="formState.budgetType"
-                  dict-type="accounting_budget_type"
-                  :placeholder="pi.ph('budgetType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('measureType')"
-                name="measureType"
-              >
-                <TaktSelect
-                  v-model:value="formState.measureType"
-                  dict-type="accounting_budget_measure_type"
-                  :placeholder="pi.ph('measureType')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('budgetAmount')"
-                name="budgetAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.budgetAmount"
-                  :placeholder="pi.ph('budgetAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('actualAmount')"
-                name="actualAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.actualAmount"
-                  :placeholder="pi.ph('actualAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('varianceAmount')"
-                name="varianceAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.varianceAmount"
-                  :placeholder="pi.ph('varianceAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('variancePercent')"
-                name="variancePercent"
-              >
-                <a-input-number
-                  v-model:value="formState.variancePercent"
-                  :placeholder="pi.ph('variancePercent')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('priorPeriodActual')"
-                name="priorPeriodActual"
-              >
-                <a-input-number
-                  v-model:value="formState.priorPeriodActual"
-                  :placeholder="pi.ph('priorPeriodActual')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('ytdBudgetAmount')"
-                name="ytdBudgetAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.ytdBudgetAmount"
-                  :placeholder="pi.ph('ytdBudgetAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('ytdActualAmount')"
-                name="ytdActualAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.ytdActualAmount"
-                  :placeholder="pi.ph('ytdActualAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('ytdVarianceAmount')"
-                name="ytdVarianceAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.ytdVarianceAmount"
-                  :placeholder="pi.ph('ytdVarianceAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('currencyCode')"
-                name="currencyCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.currencyCode"
-                  dict-type="accounting_currency_code"
-                  :placeholder="pi.ph('currencyCode')"
-                  :disabled="!!formData?.budgetActualId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('budgetActualStatus')"
-                name="budgetActualStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.budgetActualStatus"
-                  dict-type="sys_normal_disable"
-                  :placeholder="pi.ph('budgetActualStatus')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -417,15 +126,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -499,10 +211,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  relatedPlant: [
+  plantCode: [
     {
       required: true,
-      message: pi.ph('relatedPlant'),
+      message: pi.ph('plantCode'),
       trigger: 'change'
     }
   ],

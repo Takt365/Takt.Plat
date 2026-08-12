@@ -22,61 +22,31 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
+                :label="pi.label('plantCode')"
+                name="plantCode"
               >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.quartzlog.quartztaskid')"
+                :label="pi.label('quartzTaskId')"
                 name="quartzTaskId"
               >
                 <a-input
                   v-model:value="formState.quartzTaskId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.quartztaskid') })"
+                  :placeholder="pi.ph('quartzTaskId')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -85,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.taskname')"
+                :label="pi.label('taskName')"
                 name="taskName"
               >
                 <a-input
                   v-model:value="formState.taskName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.taskname') })"
+                  :placeholder="pi.ph('taskName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -99,36 +69,36 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.jobgroup')"
+                :label="pi.label('jobGroup')"
                 name="jobGroup"
               >
                 <TaktSelect
                   v-model:value="formState.jobGroup"
                   dict-type="sys_quartz_job_group"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzlog.jobgroup') })"
+                  :placeholder="pi.ph('jobGroup')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.tasktype')"
+                :label="pi.label('taskType')"
                 name="taskType"
               >
                 <TaktSelect
                   v-model:value="formState.taskType"
                   dict-type="sys_quartz_task_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzlog.tasktype') })"
+                  :placeholder="pi.ph('taskType')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.executetime')"
+                :label="pi.label('executeTime')"
                 name="executeTime"
               >
                 <a-date-picker
                   v-model:value="formState.executeTime"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executetime') })"
+                  :placeholder="pi.ph('executeTime')"
                   value-format="YYYY-MM-DD"
                   style="width: 100%"
                 />
@@ -136,12 +106,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.executeduration')"
+                :label="pi.label('executeDuration')"
                 name="executeDuration"
               >
                 <a-input
                   v-model:value="formState.executeDuration"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeduration') })"
+                  :placeholder="pi.ph('executeDuration')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -150,14 +120,42 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.quartzlog.executeparams')"
+                :label="pi.label('executeParams')"
                 name="executeParams"
               >
                 <a-input
                   v-model:value="formState.executeParams"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeparams') })"
+                  :placeholder="pi.ph('executeParams')"
                   show-count
                   :maxlength="1000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('executeMessage')"
+                name="executeMessage"
+              >
+                <a-input
+                  v-model:value="formState.executeMessage"
+                  :placeholder="pi.ph('executeMessage')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('errorInfo')"
+                name="errorInfo"
+              >
+                <a-input
+                  v-model:value="formState.errorInfo"
+                  :placeholder="pi.ph('errorInfo')"
+                  show-count
+                  :maxlength="2000"
                   allow-clear
                 />
               </a-form-item>
@@ -167,47 +165,19 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.quartzlog.executemessage')"
-                name="executeMessage"
-              >
-                <a-input
-                  v-model:value="formState.executeMessage"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executemessage') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.quartzlog.errorinfo')"
-                name="errorInfo"
-              >
-                <a-input
-                  v-model:value="formState.errorInfo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.errorinfo') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.quartzlog.executeip')"
+                :label="pi.label('executeIp')"
                 name="executeIp"
               >
                 <a-input
                   v-model:value="formState.executeIp"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeip') })"
+                  :placeholder="pi.ph('executeIp')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -216,12 +186,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.quartzlog.executehost')"
+                :label="pi.label('executeHost')"
                 name="executeHost"
               >
                 <a-input
                   v-model:value="formState.executeHost"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executehost') })"
+                  :placeholder="pi.ph('executeHost')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -230,13 +200,65 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.quartzlog.executestatus')"
+                :label="pi.label('executeStatus')"
                 name="executeStatus"
               >
                 <a-input-number
                   v-model:value="formState.executeStatus"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executestatus') })"
+                  :placeholder="pi.ph('executeStatus')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <a-input
+                  v-model:value="formState.companyCode"
+                  :placeholder="pi.ph('companyCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <a-input
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -253,7 +275,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -268,12 +290,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -296,6 +318,10 @@
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useQuartzLogI18n } from '../composables/use-quartz-log-i18n'
+
+/** 实体字段 i18n */
+const pi = useQuartzLogI18n()
 import type { QuartzLogCreate } from '@/types/statistics/logging/quartz-log'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -306,33 +332,34 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","quartzTaskId","taskName","jobGroup","taskType","executeTime","executeDuration","executeParams","executeMessage","errorInfo","executeIp","executeHost","executeStatus","extField","remark"]
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -353,8 +380,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  jobGroup: "default",
-  taskType: "assembly"
+  jobGroup: "DEFAULT",
+  taskType: "ASSEMBLY"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -396,10 +423,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.quartzLogId
-    if (isCreate) {
+    if (!props.formData?.quartzLogId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -407,91 +433,98 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   quartzTaskId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.quartztaskid') }),
+      message: pi.ph('quartzTaskId'),
       trigger: 'blur'
     }
   ],
   taskName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.taskname') }),
+      message: pi.ph('taskName'),
       trigger: 'blur'
     }
   ],
   jobGroup: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.jobgroup') }),
+      message: pi.ph('jobGroup'),
       trigger: 'change'
     }
   ],
   taskType: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.tasktype') }),
+      message: pi.ph('taskType'),
       trigger: 'change'
     }
   ],
   executeTime: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executetime') }),
+      message: pi.ph('executeTime'),
       trigger: 'change'
     }
   ],
   executeDuration: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeduration') }),
+      message: pi.ph('executeDuration'),
       trigger: 'blur'
     }
   ],
   executeParams: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeparams') }),
+      message: pi.ph('executeParams'),
       trigger: 'blur'
     }
   ],
   executeMessage: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executemessage') }),
+      message: pi.ph('executeMessage'),
       trigger: 'blur'
     }
   ],
   errorInfo: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.errorinfo') }),
+      message: pi.ph('errorInfo'),
       trigger: 'blur'
     }
   ],
   executeIp: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executeip') }),
+      message: pi.ph('executeIp'),
       trigger: 'blur'
     }
   ],
   executeHost: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.quartzlog.executehost') }),
+      message: pi.ph('executeHost'),
       trigger: 'blur'
     }
   ],
   executeStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executestatus') }))
+        return Promise.reject(pi.ph('executeStatus'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.quartzlog.executestatus') }))
+        return Promise.reject(pi.ph('executeStatus'))
       }
       return Promise.resolve()
     },

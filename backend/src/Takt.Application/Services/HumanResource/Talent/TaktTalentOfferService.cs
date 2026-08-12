@@ -317,13 +317,14 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.JobPostingId).Contains(keywords)
-                || (x.OfferNo != null && x.OfferNo.Contains(keywords))
+                || (x.OfferCode != null && x.OfferCode.Contains(keywords))
                 || SqlFunc.ToString(x.EmployeeId).Contains(keywords)
                 || SqlFunc.ToString(x.DeptId).Contains(keywords)
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || SqlFunc.ToString(x.PostId).Contains(keywords)
                 || (x.PostName != null && x.PostName.Contains(keywords))
                 || (x.Reason != null && x.Reason.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.HireDate).Contains(keywords)
@@ -336,9 +337,9 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
             exp = exp.And(x => x.JobPostingId == queryDto.JobPostingId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OfferNo))
+        if (!string.IsNullOrEmpty(queryDto?.OfferCode))
         {
-            exp = exp.And(x => x.OfferNo != null && x.OfferNo.Contains(queryDto.OfferNo));
+            exp = exp.And(x => x.OfferCode != null && x.OfferCode.Contains(queryDto.OfferCode));
         }
 
         if (queryDto?.EmployeeId.HasValue == true)
@@ -371,6 +372,11 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
             exp = exp.And(x => x.Reason != null && x.Reason.Contains(queryDto.Reason));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -400,6 +406,12 @@ public class TaktTalentOfferService : TaktServiceBase, ITaktTalentOfferService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

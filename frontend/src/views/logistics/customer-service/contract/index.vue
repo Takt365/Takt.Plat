@@ -536,8 +536,6 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
-
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -588,7 +586,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /**
  * 构建列表标准文本列
@@ -643,8 +640,6 @@ const getCustomerServiceContractId = (record: CustomerServiceContractRowRecord):
   const id = (record as Record<string, unknown>)?.[entityIdName]
   return id != null ? String(id) : ''
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

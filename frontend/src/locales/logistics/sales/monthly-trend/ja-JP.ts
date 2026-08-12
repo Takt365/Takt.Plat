@@ -14,7 +14,6 @@ export default {
   page: {
     title: '月次販売推移',
     periodRange: '期間年月',
-    customerCode: '得意先',
     selectPlantRequired: '工場コードを選択してください',
     selectPeriodRequired: '期間年月を選択してください',
     summary: '得意先行 {count} 件（月次販売実払金額集計）',

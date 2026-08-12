@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/routine/help-desk/ticket/components -->
 <!-- 文件名称：ticket-form.vue -->
-<!-- 功能描述：服务工单实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：服务台工单实体维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -29,183 +29,56 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
+                :label="pi.label('ticketCode')"
+                name="ticketCode"
               >
                 <a-input
-                  v-model:value="formState.plantCode"
-                  :placeholder="pi.ph('plantCode')"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceTicketCode')"
-                name="serviceTicketCode"
-              >
-                <a-input
-                  v-model:value="formState.serviceTicketCode"
-                  :placeholder="pi.ph('serviceTicketCode')"
+                  v-model:value="formState.ticketCode"
+                  :placeholder="pi.ph('ticketCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
+                  :disabled="!!formData?.ticketId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('clientId')"
-                name="clientId"
+                :label="pi.label('ticketTitle')"
+                name="ticketTitle"
               >
                 <a-input
-                  v-model:value="formState.clientId"
-                  :placeholder="pi.ph('clientId')"
+                  v-model:value="formState.ticketTitle"
+                  :placeholder="pi.ph('ticketTitle')"
+                  show-count
+                  :maxlength="200"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('ticketContent')"
+                name="ticketContent"
+              >
+                <a-textarea
+                  v-model:value="formState.ticketContent"
+                  :placeholder="pi.ph('ticketContent')"
+                  :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('attachments')"
+                name="attachments"
+              >
+                <a-input
+                  v-model:value="formState.attachments"
+                  :placeholder="pi.ph('attachments')"
                   show-count
                   :maxlength="20"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('clientCode')"
-                name="clientCode"
-              >
-                <a-input
-                  v-model:value="formState.clientCode"
-                  :placeholder="pi.ph('clientCode')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('clientName1')"
-                name="clientName1"
-              >
-                <a-input
-                  v-model:value="formState.clientName1"
-                  :placeholder="pi.ph('clientName1')"
-                  show-count
-                  :maxlength="140"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceRequestId')"
-                name="serviceRequestId"
-              >
-                <a-input
-                  v-model:value="formState.serviceRequestId"
-                  :placeholder="pi.ph('serviceRequestId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceRequestCode')"
-                name="serviceRequestCode"
-              >
-                <a-input
-                  v-model:value="formState.serviceRequestCode"
-                  :placeholder="pi.ph('serviceRequestCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceOrderId')"
-                name="serviceOrderId"
-              >
-                <a-input
-                  v-model:value="formState.serviceOrderId"
-                  :placeholder="pi.ph('serviceOrderId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceOrderCode')"
-                name="serviceOrderCode"
-              >
-                <a-input
-                  v-model:value="formState.serviceOrderCode"
-                  :placeholder="pi.ph('serviceOrderCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceContractId')"
-                name="serviceContractId"
-              >
-                <a-input
-                  v-model:value="formState.serviceContractId"
-                  :placeholder="pi.ph('serviceContractId')"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('serviceContractCode')"
-                name="serviceContractCode"
-              >
-                <a-input
-                  v-model:value="formState.serviceContractCode"
-                  :placeholder="pi.ph('serviceContractCode')"
-                  show-count
-                  :maxlength="50"
-                  allow-clear
-                  :disabled="!!formData?.customerServiceTicketId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('ticketType')"
-                name="ticketType"
-              >
-                <a-input-number
-                  v-model:value="formState.ticketType"
-                  :placeholder="pi.ph('ticketType')"
-                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -223,76 +96,85 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('ticketStatus')"
-                name="ticketStatus"
+                :label="pi.label('urgency')"
+                name="urgency"
               >
                 <TaktSelect
-                  v-model:value="formState.ticketStatus"
-                  dict-type="sys_ticket_status"
-                  :placeholder="pi.ph('ticketStatus')"
+                  v-model:value="formState.urgency"
+                  dict-type="sys_urgency_level_category"
+                  :placeholder="pi.ph('urgency')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('ticketSubject')"
-                name="ticketSubject"
+                :label="pi.label('impact')"
+                name="impact"
+              >
+                <TaktSelect
+                  v-model:value="formState.impact"
+                  dict-type="sys_impact_level_category"
+                  :placeholder="pi.ph('impact')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('categoryCode')"
+                name="categoryCode"
               >
                 <a-input
-                  v-model:value="formState.ticketSubject"
-                  :placeholder="pi.ph('ticketSubject')"
+                  v-model:value="formState.categoryCode"
+                  :placeholder="pi.ph('categoryCode')"
                   show-count
-                  :maxlength="200"
+                  :maxlength="50"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('faultDescription')"
-                name="faultDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.faultDescription"
-                  :placeholder="pi.ph('faultDescription')"
-                  :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('solutionDescription')"
-                name="solutionDescription"
-              >
-                <a-textarea
-                  v-model:value="formState.solutionDescription"
-                  :placeholder="pi.ph('solutionDescription')"
-                  :rows="2"
+                  :disabled="!!formData?.ticketId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('serviceLocation')"
-                name="serviceLocation"
+                :label="pi.label('ticketSource')"
+                name="ticketSource"
               >
-                <a-input
-                  v-model:value="formState.serviceLocation"
-                  :placeholder="pi.ph('serviceLocation')"
-                  show-count
-                  :maxlength="500"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.ticketSource"
+                  dict-type="routine_ticket_source_type"
+                  :placeholder="pi.ph('ticketSource')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('assignedEmployeeId')"
-                name="assignedEmployeeId"
+                :label="pi.label('submitterId')"
+                name="submitterId"
+              >
+                <TaktSelect
+                  v-model:value="formState.submitterId"
+                  api-url="TaktUsers/options"
+                  :placeholder="pi.ph('submitterId')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('submitterName')"
+                name="submitterName"
               >
                 <a-input
-                  v-model:value="formState.assignedEmployeeId"
-                  :placeholder="pi.ph('assignedEmployeeId')"
+                  v-model:value="formState.submitterName"
+                  :placeholder="pi.ph('submitterName')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -301,15 +183,116 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('assignedEmployeeName')"
-                name="assignedEmployeeName"
+                :label="pi.label('assigneeId')"
+                name="assigneeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.assigneeId"
+                  api-url="TaktUsers/options"
+                  :placeholder="pi.ph('assigneeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('assigneeName')"
+                name="assigneeName"
               >
                 <a-input
-                  v-model:value="formState.assignedEmployeeName"
-                  :placeholder="pi.ph('assignedEmployeeName')"
+                  v-model:value="formState.assigneeName"
+                  :placeholder="pi.ph('assigneeName')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="20"
                   allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('knowledgeId')"
+                name="knowledgeId"
+              >
+                <TaktSelect
+                  v-model:value="formState.knowledgeId"
+                  api-url="TaktKnowledges/options"
+                  :placeholder="pi.ph('knowledgeId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('parentTicketId')"
+                name="parentTicketId"
+              >
+                <TaktSelect
+                  v-model:value="formState.parentTicketId"
+                  api-url="TaktTickets/options"
+                  :placeholder="pi.ph('parentTicketId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('firstResponseAt')"
+                name="firstResponseAt"
+              >
+                <a-date-picker
+                  v-model:value="formState.firstResponseAt"
+                  :placeholder="pi.ph('firstResponseAt')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('firstResponseDueBy')"
+                name="firstResponseDueBy"
+              >
+                <a-date-picker
+                  v-model:value="formState.firstResponseDueBy"
+                  :placeholder="pi.ph('firstResponseDueBy')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('resolvedAt')"
+                name="resolvedAt"
+              >
+                <a-date-picker
+                  v-model:value="formState.resolvedAt"
+                  :placeholder="pi.ph('resolvedAt')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('resolutionDueBy')"
+                name="resolutionDueBy"
+              >
+                <a-date-picker
+                  v-model:value="formState.resolutionDueBy"
+                  :placeholder="pi.ph('resolutionDueBy')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('closedAt')"
+                name="closedAt"
+              >
+                <a-date-picker
+                  v-model:value="formState.closedAt"
+                  :placeholder="pi.ph('closedAt')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
                 />
               </a-form-item>
             </a-col>
@@ -325,92 +308,92 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('scheduledStartTime')"
-                name="scheduledStartTime"
+                :label="pi.label('itAssetId')"
+                name="itAssetId"
               >
-                <a-date-picker
-                  v-model:value="formState.scheduledStartTime"
-                  :placeholder="pi.ph('scheduledStartTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.itAssetId"
+                  api-url="TaktItAssets/options"
+                  :placeholder="pi.ph('itAssetId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('scheduledEndTime')"
-                name="scheduledEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.scheduledEndTime"
-                  :placeholder="pi.ph('scheduledEndTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('actualStartTime')"
-                name="actualStartTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualStartTime"
-                  :placeholder="pi.ph('actualStartTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('actualEndTime')"
-                name="actualEndTime"
-              >
-                <a-date-picker
-                  v-model:value="formState.actualEndTime"
-                  :placeholder="pi.ph('actualEndTime')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('acceptanceResult')"
-                name="acceptanceResult"
-              >
-                <a-input-number
-                  v-model:value="formState.acceptanceResult"
-                  :placeholder="pi.ph('acceptanceResult')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('acceptedBy')"
-                name="acceptedBy"
+                :label="pi.label('assetCode')"
+                name="assetCode"
               >
                 <a-input
-                  v-model:value="formState.acceptedBy"
-                  :placeholder="pi.ph('acceptedBy')"
+                  v-model:value="formState.assetCode"
+                  :placeholder="pi.ph('assetCode')"
                   show-count
-                  :maxlength="50"
+                  :maxlength="40"
+                  allow-clear
+                  :disabled="!!formData?.ticketId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('applicantDeptId')"
+                name="applicantDeptId"
+              >
+                <TaktSelect
+                  v-model:value="formState.applicantDeptId"
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('applicantDeptId')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('applicantDeptName')"
+                name="applicantDeptName"
+              >
+                <a-input
+                  v-model:value="formState.applicantDeptName"
+                  :placeholder="pi.ph('applicantDeptName')"
+                  show-count
+                  :maxlength="100"
                   allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('acceptedAt')"
-                name="acceptedAt"
+                :label="pi.label('applicantBy')"
+                name="applicantBy"
               >
-                <a-date-picker
-                  v-model:value="formState.acceptedAt"
-                  :placeholder="pi.ph('acceptedAt')"
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.applicantBy"
+                  api-url="TaktUsers/options"
+                  :placeholder="pi.ph('applicantBy')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('ticketStatus')"
+                name="ticketStatus"
+              >
+                <TaktSelect
+                  v-model:value="formState.ticketStatus"
+                  dict-type="sys_ticket_status"
+                  :placeholder="pi.ph('ticketStatus')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('childTickets')"
+                name="childTickets"
+              >
+                <a-input
+                  v-model:value="formState.childTickets"
+                  :placeholder="pi.ph('childTickets')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -454,12 +437,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="pi.ph('cultureCode')"
                   show-count
                   :maxlength="20"
                   disabled
@@ -516,17 +499,17 @@
 
 <script setup lang="ts">
 /**
- * 服务工单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 服务台工单实体维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/routine/help-desk/ticket/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
-import { useCustomerServiceTicketI18n } from '../composables/use-ticket-i18n'
+import { useTicketI18n } from '../composables/use-ticket-i18n'
 
 /** 实体字段 i18n */
-const pi = useCustomerServiceTicketI18n()
-import type { CustomerServiceTicketCreate } from '@/types/logistics/customer-service/ticket'
+const pi = useTicketI18n()
+import type { TicketCreate } from '@/types/routine/help-desk/ticket'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
@@ -538,11 +521,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -553,9 +536,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
@@ -565,7 +552,7 @@ const activeTab = ref('tab-0')
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
-  formData?: Partial<CustomerServiceTicketCreate & { customerServiceTicketId?: string }> | null
+  formData?: Partial<TicketCreate & { ticketId?: string }> | null
   /** 父级提交 loading，禁用表单项 */
   loading?: boolean
 }
@@ -582,6 +569,9 @@ const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
   priority: 3,
+  urgency: 3,
+  impact: 3,
+  ticketSource: 0,
   ticketStatus: 0
 }
 
@@ -598,11 +588,11 @@ onMounted(() => {
   void dictDataStore.loadAllDictDataAsync()
 })
 
-/** 编辑态灌入 formData；新增态恢复默认值（须含 customerServiceTicketId 才视为编辑） */
+/** 编辑态灌入 formData；新增态恢复默认值（须含 ticketId 才视为编辑） */
 watch(
   () => props.formData,
   (val) => {
-    if (val?.customerServiceTicketId) {
+    if (val?.ticketId) {
       const next = { ...val } as Record<string, unknown>
       Object.keys(formState).forEach((k) => delete formState[k])
 
@@ -626,7 +616,7 @@ watch(
 watch(
   () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
   () => {
-    if (!props.formData?.customerServiceTicketId) {
+    if (!props.formData?.ticketId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -634,54 +624,20 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
+  ticketCode: [
     {
       required: true,
-      message: pi.ph('plantCode'),
+      message: pi.ph('ticketCode'),
       trigger: 'blur'
     }
   ],
-  serviceTicketCode: [
+  ticketTitle: [
     {
       required: true,
-      message: pi.ph('serviceTicketCode'),
+      message: pi.ph('ticketTitle'),
       trigger: 'blur'
     }
   ],
-  clientId: [
-    {
-      required: true,
-      message: pi.ph('clientId'),
-      trigger: 'blur'
-    }
-  ],
-  clientCode: [
-    {
-      required: true,
-      message: pi.ph('clientCode'),
-      trigger: 'blur'
-    }
-  ],
-  clientName1: [
-    {
-      required: true,
-      message: pi.ph('clientName1'),
-      trigger: 'blur'
-    }
-  ],
-  ticketType: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('ticketType'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('ticketType'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   priority: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -695,6 +651,59 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  urgency: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('urgency'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('urgency'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  impact: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('impact'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('impact'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  ticketSource: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('ticketSource'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('ticketSource'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  submitterId: [
+    {
+      required: true,
+      message: pi.ph('submitterId'),
+      trigger: 'change'
+    }
+  ],
+  applicantBy: [
+    {
+      required: true,
+      message: pi.ph('applicantBy'),
+      trigger: 'change'
+    }
+  ],
   ticketStatus: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -708,13 +717,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  ticketSubject: [
-    {
-      required: true,
-      message: pi.ph('ticketSubject'),
-      trigger: 'blur'
-    }
-  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -726,21 +728,25 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
-  if ('ticketType' in payload) {
-    const rawticketType = payload.ticketType
-    payload.ticketType = typeof rawticketType === 'number' ? rawticketType : Number(rawticketType)
-  }
   if ('priority' in payload) {
     const rawpriority = payload.priority
     payload.priority = typeof rawpriority === 'number' ? rawpriority : Number(rawpriority)
   }
+  if ('urgency' in payload) {
+    const rawurgency = payload.urgency
+    payload.urgency = typeof rawurgency === 'number' ? rawurgency : Number(rawurgency)
+  }
+  if ('impact' in payload) {
+    const rawimpact = payload.impact
+    payload.impact = typeof rawimpact === 'number' ? rawimpact : Number(rawimpact)
+  }
+  if ('ticketSource' in payload) {
+    const rawticketSource = payload.ticketSource
+    payload.ticketSource = typeof rawticketSource === 'number' ? rawticketSource : Number(rawticketSource)
+  }
   if ('ticketStatus' in payload) {
     const rawticketStatus = payload.ticketStatus
     payload.ticketStatus = typeof rawticketStatus === 'number' ? rawticketStatus : Number(rawticketStatus)
-  }
-  if ('acceptanceResult' in payload) {
-    const rawacceptanceResult = payload.acceptanceResult
-    payload.acceptanceResult = typeof rawacceptanceResult === 'number' ? rawacceptanceResult : Number(rawacceptanceResult)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
@@ -753,7 +759,7 @@ function resetFields() {
     Object.assign(formState, props.formData)
   }
   applyFormDefaults(formState)
-  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.customerServiceTicketId)
+  applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.ticketId)
 
   activeTab.value = 'tab-0'
   formRef.value?.clearValidate()

@@ -21,7 +21,7 @@ export const PCBASMTLABORHOUR_SELF_I18N_KEY = buildEntitySelfI18nKey(PCBASMTLABO
 /** 列表业务列（不含主键） */
 export const PCBASMTLABORHOUR_LIST_FIELDS = [
   'prodDate',
-  'prodTeam',
+  'TeamCode',
   'shiftNo',
   'stdCapacity',
   'prodActualQty',
@@ -37,7 +37,7 @@ export const PCBASMTLABORHOUR_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   prodDate: 'select',
-  prodTeam: 'select',
+  TeamCode: 'select',
   shiftNo: 'select',
   stdCapacity: 'select',
   prodActualQty: 'select',
@@ -47,6 +47,7 @@ export const PCBASMTLABORHOUR_PLACEHOLDER = {
   actualMinutes: 'select',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -56,7 +57,7 @@ export type PcbaSmtLaborHourField = keyof typeof PCBASMTLABORHOUR_PLACEHOLDER
 export const PCBASMTLABORHOUR_QUERY_STRING_FIELDS = [
   'prodDateStart',
   'prodDateEnd',
-  'prodTeam',
+  'TeamCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

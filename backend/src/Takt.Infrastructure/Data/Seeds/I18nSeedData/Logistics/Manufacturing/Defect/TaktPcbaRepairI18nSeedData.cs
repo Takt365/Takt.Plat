@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaRepairI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaRepair 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbarepair._self
             new TranslationSeedItem("entity.pcbarepair._self", "zh-HK", "PCBA改修日报信息_hk", "实体名称"),
 
-            // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "en-US", "工厂代码_us", "工厂代码（回填：随工单）"),
-            // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（回填：随工单）"),
-            // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-CN", "工厂代码", "工厂代码（回填：随工单）"),
-            // entity.pcbarepair.plantcode
-            new TranslationSeedItem("entity.pcbarepair.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（回填：随工单）"),
-
             // entity.pcbarepair.prodcategory
             new TranslationSeedItem("entity.pcbarepair.prodcategory", "en-US", "生产类别_us", "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.pcbarepair.prodcategory
@@ -117,14 +108,14 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbarepair.proddate
             new TranslationSeedItem("entity.pcbarepair.proddate", "zh-HK", "生产日期_hk", "生产日期"),
 
-            // entity.pcbarepair.prodteam
-            new TranslationSeedItem("entity.pcbarepair.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepair.prodteam
-            new TranslationSeedItem("entity.pcbarepair.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepair.prodteam
-            new TranslationSeedItem("entity.pcbarepair.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbarepair.prodteam
-            new TranslationSeedItem("entity.pcbarepair.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepair.teamcode
+            new TranslationSeedItem("entity.pcbarepair.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepair.teamcode
+            new TranslationSeedItem("entity.pcbarepair.teamcode", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepair.teamcode
+            new TranslationSeedItem("entity.pcbarepair.teamcode", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbarepair.teamcode
+            new TranslationSeedItem("entity.pcbarepair.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
             // entity.pcbarepair.shiftno
             new TranslationSeedItem("entity.pcbarepair.shiftno", "en-US", "班次_us", "班次（字典 logistics_shift_category；1=早 2=中 3=晚 4=白班 5=夜班）"),
@@ -171,14 +162,14 @@ public class TaktPcbaRepairI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbarepair.modelcode
             new TranslationSeedItem("entity.pcbarepair.modelcode", "zh-HK", "机种_hk", "机种"),
 
-            // entity.pcbarepair.batchno
-            new TranslationSeedItem("entity.pcbarepair.batchno", "en-US", "批次_us", "批次"),
-            // entity.pcbarepair.batchno
-            new TranslationSeedItem("entity.pcbarepair.batchno", "ja-JP", "批次_jp", "批次"),
-            // entity.pcbarepair.batchno
-            new TranslationSeedItem("entity.pcbarepair.batchno", "zh-CN", "批次", "批次"),
-            // entity.pcbarepair.batchno
-            new TranslationSeedItem("entity.pcbarepair.batchno", "zh-HK", "批次_hk", "批次"),
+            // entity.pcbarepair.batchcode
+            new TranslationSeedItem("entity.pcbarepair.batchcode", "en-US", "批次_us", "批次"),
+            // entity.pcbarepair.batchcode
+            new TranslationSeedItem("entity.pcbarepair.batchcode", "ja-JP", "批次_jp", "批次"),
+            // entity.pcbarepair.batchcode
+            new TranslationSeedItem("entity.pcbarepair.batchcode", "zh-CN", "批次", "批次"),
+            // entity.pcbarepair.batchcode
+            new TranslationSeedItem("entity.pcbarepair.batchcode", "zh-HK", "批次_hk", "批次"),
 
             // entity.pcbarepair.materialcode
             new TranslationSeedItem("entity.pcbarepair.materialcode", "en-US", "物料编码_us", "物料编码"),

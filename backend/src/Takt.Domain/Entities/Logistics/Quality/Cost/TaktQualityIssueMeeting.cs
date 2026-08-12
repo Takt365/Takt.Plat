@@ -36,7 +36,7 @@ public class TaktQualityIssueMeeting : TaktCompanyEntityBase
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>

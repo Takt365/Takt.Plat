@@ -157,7 +157,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["iqcDefectHandlingCode","iqcOrderCode","lineNumber","defectType","defectCode","defectDescription","defectQuantity","handlingMethod"]
 
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<IqcDefectHandlingCreate & { iqcDefectHandlingId?: string }> | null
@@ -181,7 +180,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 iqcDefectHandlingId 才视为编辑） */
 watch(

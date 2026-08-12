@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopExecStepService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：SOP工步执行明细应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
     }
 
     /// <summary>
-    /// 获取SOP工步执行明细列表（分页）
+    /// 获取SOP工步执行明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSopExecStepDto>> GetSopExecStepListAsync(TaktSopExecStepQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSopExecStepDto>.Create(
+                new List<TaktSopExecStepDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sopExecStepRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -97,12 +105,12 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
         EnsureThreeLayerContext();
         var list = await _sopExecStepRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.Id,
+            x => x.StepNo.ToString(),
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.Id.ToString(),
+            DictValue = e.StepNo.ToString(),
+            DictLabel = e.StepNo.ToString(),
         }).ToList();
     }
 
@@ -228,7 +236,15 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSopExecStepAsync(TaktSopExecStepQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktSopExecStepQueryDto());
+        var queryDto = query ?? new TaktSopExecStepQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSopExecStepExportDto>(),
+                sheetName ?? "SOP工步执行明细数据",
+                fileName ?? "SOP工步执行明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _sopExecStepRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -280,105 +296,199 @@ public class TaktSopExecStepService : TaktServiceBase, ITaktSopExecStepService
     {
         var exp = Expressionable.Create<TaktSopExecStep>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.ExecId).Contains(keywords)
-                || SqlFunc.ToString(x.StepId).Contains(keywords)
-                || SqlFunc.ToString(x.StepNo).Contains(keywords)
-                || SqlFunc.ToString(x.StepResult).Contains(keywords)
-                || SqlFunc.ToString(x.ConfirmedBy).Contains(keywords)
-                || SqlFunc.ToString(x.BlockNextStep).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.StartedAt).Contains(keywords)
-                || SqlFunc.ToString(x.EndedAt).Contains(keywords)
-                || SqlFunc.ToString(x.ConfirmedAt).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
         if (queryDto?.ExecId.HasValue == true)
         {
-            exp = exp.And(x => x.ExecId == queryDto.ExecId);
+            var execId = queryDto.ExecId;
+            exp = exp.And(x => x.ExecId == execId);
         }
 
         if (queryDto?.StepId.HasValue == true)
         {
-            exp = exp.And(x => x.StepId == queryDto.StepId);
+            var stepId = queryDto.StepId;
+            exp = exp.And(x => x.StepId == stepId);
         }
 
         if (queryDto?.StepNo.HasValue == true)
         {
-            exp = exp.And(x => x.StepNo == queryDto.StepNo);
+            var stepNo = queryDto.StepNo;
+            exp = exp.And(x => x.StepNo == stepNo);
         }
 
         if (queryDto?.StepResult.HasValue == true)
         {
-            exp = exp.And(x => x.StepResult == queryDto.StepResult);
+            var stepResult = queryDto.StepResult;
+            exp = exp.And(x => x.StepResult == stepResult);
         }
 
         if (queryDto?.ConfirmedBy.HasValue == true)
         {
-            exp = exp.And(x => x.ConfirmedBy == queryDto.ConfirmedBy);
+            var confirmedBy = queryDto.ConfirmedBy;
+            exp = exp.And(x => x.ConfirmedBy == confirmedBy);
         }
 
         if (queryDto?.BlockNextStep.HasValue == true)
         {
-            exp = exp.And(x => x.BlockNextStep == queryDto.BlockNextStep);
+            var blockNextStep = queryDto.BlockNextStep;
+            exp = exp.And(x => x.BlockNextStep == blockNextStep);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.StartedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.StartedAt >= queryDto.StartedAtStart);
+            var startedAtStart = queryDto.StartedAtStart;
+            exp = exp.And(x => x.StartedAt >= startedAtStart);
         }
 
         if (queryDto?.StartedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.StartedAt <= queryDto.StartedAtEnd);
+            var startedAtEnd = queryDto.StartedAtEnd;
+            exp = exp.And(x => x.StartedAt <= startedAtEnd);
         }
 
         if (queryDto?.EndedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.EndedAt >= queryDto.EndedAtStart);
+            var endedAtStart = queryDto.EndedAtStart;
+            exp = exp.And(x => x.EndedAt >= endedAtStart);
         }
 
         if (queryDto?.EndedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EndedAt <= queryDto.EndedAtEnd);
+            var endedAtEnd = queryDto.EndedAtEnd;
+            exp = exp.And(x => x.EndedAt <= endedAtEnd);
         }
 
         if (queryDto?.ConfirmedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.ConfirmedAt >= queryDto.ConfirmedAtStart);
+            var confirmedAtStart = queryDto.ConfirmedAtStart;
+            exp = exp.And(x => x.ConfirmedAt >= confirmedAtStart);
         }
 
         if (queryDto?.ConfirmedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ConfirmedAt <= queryDto.ConfirmedAtEnd);
+            var confirmedAtEnd = queryDto.ConfirmedAtEnd;
+            exp = exp.And(x => x.ConfirmedAt <= confirmedAtEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSopExecStepQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (queryDto.ExecId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StepId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StepNo.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.StepResult.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConfirmedBy.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BlockNextStep.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.StartedAtStart.HasValue || queryDto.StartedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EndedAtStart.HasValue || queryDto.EndedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ConfirmedAtStart.HasValue || queryDto.ConfirmedAtEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

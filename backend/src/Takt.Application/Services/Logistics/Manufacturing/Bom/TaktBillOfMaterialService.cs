@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单应用服务实现
 // 
@@ -72,12 +72,20 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     }
 
     /// <summary>
-    /// 获取物料清单列表（分页）
+    /// 获取物料清单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktBillOfMaterialDto>> GetBillOfMaterialListAsync(TaktBillOfMaterialQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktBillOfMaterialDto>.Create(
+                new List<TaktBillOfMaterialDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _billOfMaterialRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -104,8 +112,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         }
         var dto = entity.Adapt<TaktBillOfMaterialDto>();
         await FillBillOfMaterialDetailsAsync(dto, entity);
-        return dto;
-    }
+        return dto;    }
 
     /// <summary>
     /// 获取物料清单选项列表
@@ -120,8 +127,8 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.BomName ?? e.Id.ToString(),
+            DictValue = e.BomCode,
+            DictLabel = e.BomName ?? e.BomCode,
         }).ToList();
     }
 
@@ -146,9 +153,9 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _billOfMaterialRepository.GetMaxIntAsync(
-                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentMaterialId == entity.ParentMaterialId,
+                x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
                 x => x.SortOrder);
-            entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ParentMaterialId, maxSort);
+            entity.SortOrder = _sortOrderGenerator.GenerateNext(maxSort);
         }
         entity = await _billOfMaterialRepository.CreateAsync(entity);
                 await SaveBillOfMaterialChildrenAsync(entity, dto);
@@ -288,6 +295,9 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             return (0, 0, errors);
         }
         var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
+        var importSortMax = await _billOfMaterialRepository.GetMaxIntAsync(
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.SortOrder);
         for (var i = 0; i < rows.Count; i++)
         {
             try
@@ -310,10 +320,8 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
                 }
                 if (entity.SortOrder <= 0)
                 {
-                    var maxSort = await _billOfMaterialRepository.GetMaxIntAsync(
-                        x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentMaterialId == entity.ParentMaterialId,
-                        x => x.SortOrder);
-                    entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ParentMaterialId, maxSort);
+                    entity.SortOrder = _sortOrderGenerator.GenerateNext(importSortMax);
+                    importSortMax = entity.SortOrder;
                 }
                 await _billOfMaterialRepository.CreateAsync(entity);
                 success += 1;
@@ -336,7 +344,15 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialAsync(TaktBillOfMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktBillOfMaterialQueryDto());
+        var queryDto = query ?? new TaktBillOfMaterialQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktBillOfMaterialExportDto>(),
+                sheetName ?? "物料清单数据",
+                fileName ?? "物料清单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _billOfMaterialRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -353,10 +369,10 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     }
 
     /// <summary>
-    /// BOM 多层递归展开（单层存储、运行时多层展开）
+    /// BOM 递归展开（单层存储、运行时多层展开）
     /// </summary>
     /// <param name="queryDto">展开查询参数</param>
-    /// <returns>展开结果；根 BOM 不存在时返回 null</returns>
+    /// <returns>展开结果；BOM 不存在或无权访问时返回 null</returns>
     public async Task<TaktBillOfMaterialExplosionDto?> GetBillOfMaterialExplosionAsync(TaktBillOfMaterialExplosionQueryDto queryDto)
     {
         ArgumentNullException.ThrowIfNull(queryDto);
@@ -385,21 +401,23 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
 
         var bomIds = plantBoms.Select(x => x.Id).ToHashSet();
         bomIds.Add(root.Id);
-        var allItems = await _billOfMaterialItemRepository.GetListAsync(x => bomIds.Contains(x.BillOfMaterialId));
+        var allItems = await _billOfMaterialItemRepository.GetListAsync(x =>
+            bomIds.Contains(x.BillOfMaterialId) && x.IsObsolete == 0);
         var itemsByBomId = allItems
             .GroupBy(x => x.BillOfMaterialId)
             .ToDictionary(g => g.Key, g => g.OrderBy(i => i.LineNumber).ToList());
 
-        var materialNameMap = BuildMaterialNameMap(plantBoms, root);
+        var materialDescriptionMap = BuildMaterialDescriptionMap(plantBoms, root, allItems);
         var materialPlants = await _materialPlantRepository.GetListAsync(x =>
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == root.PlantCode);
         foreach (var materialPlant in materialPlants)
         {
-            if (!string.IsNullOrWhiteSpace(materialPlant.MaterialCode))
+            if (!string.IsNullOrWhiteSpace(materialPlant.MaterialCode)
+                && !string.IsNullOrWhiteSpace(materialPlant.MaterialDescription))
             {
-                materialNameMap[materialPlant.MaterialCode] = materialPlant.MaterialName;
+                materialDescriptionMap[materialPlant.MaterialCode] = materialPlant.MaterialDescription;
             }
         }
 
@@ -426,16 +444,18 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
                 ancestorCodes,
                 childBomLookup,
                 itemsByBomId,
-                materialNameMap,
+                materialDescriptionMap,
                 lines);
         }
 
+        var parentDescription = root.ParentMaterialDescription ?? string.Empty;
         return new TaktBillOfMaterialExplosionDto
         {
             BillOfMaterialId = root.Id,
             BomCode = root.BomCode,
             ParentMaterialCode = root.ParentMaterialCode,
-            ParentMaterialName = root.ParentMaterialName,
+            ParentMaterialName = parentDescription,
+            ParentMaterialDescription = root.ParentMaterialDescription,
             Quantity = demandQuantity,
             Lines = lines
                 .OrderBy(x => x.HierarchyLevel)
@@ -450,6 +470,30 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     // ========================================
 
     /// <summary>
+    /// 将指定主表下全部未作废物料清单明细标记为作废（编辑清空子表）
+    /// </summary>
+    /// <param name="billOfMaterialId">主表主键</param>
+    /// <returns>任务</returns>
+    private async Task MarkBillOfMaterialItemsObsoleteAsync(long billOfMaterialId)
+    {
+        if (billOfMaterialId <= 0)
+        {
+            return;
+        }
+        var rows = await _billOfMaterialItemRepository.GetListAsync(
+            x => x.BillOfMaterialId == billOfMaterialId && x.IsObsolete == 0);
+        if (rows.Count == 0)
+        {
+            return;
+        }
+        foreach (var row in rows)
+        {
+            row.IsObsolete = 1;
+        }
+        await _billOfMaterialItemRepository.UpdateRangeAsync(rows);
+    }
+
+    /// <summary>
     /// 填充物料清单详情（加载 OneToMany 子表：物料清单明细）
     /// </summary>
     /// <param name="dto">响应 DTO</param>
@@ -461,13 +505,13 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         {
             return;
         }
-        // 物料清单明细 → dto.Items
+        // 物料清单明细 → dto.Items（含作废行）
         var items = await _billOfMaterialItemRepository.GetListAsync(x => x.BillOfMaterialId == entity.Id);
         dto.Items = items.Adapt<List<TaktBillOfMaterialItemDto>>();
     }
 
     /// <summary>
-    /// 保存物料清单子表级联（物料清单明细；Create/Update 后按主表 Id 先删后插）
+    /// 保存物料清单子表级联（物料清单明细；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
@@ -475,58 +519,110 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     private async Task SaveBillOfMaterialChildrenAsync(TaktBillOfMaterial entity, TaktBillOfMaterialCreateDto dto)
     {
         // 物料清单明细（Items）
-        if (dto.Items is not { Count: > 0 })
+        List<TaktBillOfMaterialItemUpdateDto>? itemsForSave;
+        if (dto is TaktBillOfMaterialUpdateDto updateDtoForItems && updateDtoForItems.Items != null)
         {
-            await _billOfMaterialItemRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
+            itemsForSave = updateDtoForItems.Items;
+        }
+        else if (dto.Items != null)
+        {
+            itemsForSave = dto.Items.Adapt<List<TaktBillOfMaterialItemUpdateDto>>();
         }
         else
         {
-            var items = dto.Items.Adapt<List<TaktBillOfMaterialItem>>();
-            foreach (var child in items)
+            itemsForSave = null;
+        }
+        if (itemsForSave is not { Count: > 0 })
+        {
+            await MarkBillOfMaterialItemsObsoleteAsync(entity.Id);
+            return;
+        }
+        else
+        {
+            var existingList = await _billOfMaterialItemRepository.GetListAsync(x => x.BillOfMaterialId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktBillOfMaterialItem>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < itemsForSave.Count; i++)
             {
-                child.BillOfMaterialId = entity.Id;
-            }
-            var itemsNeedLine = items.Where(c => c.LineNumber <= 0).ToList();
-            if (itemsNeedLine.Count > 0)
-            {
-                var businessCode = !string.IsNullOrWhiteSpace(entity.BomCode) ? entity.BomCode : entity.Id.ToString();
-                var maxLine = await _billOfMaterialItemRepository.GetMaxIntAsync(
-                    x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.BillOfMaterialId == entity.Id,
-                    x => x.LineNumber);
-                var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, itemsNeedLine.Count, maxLine).ToList();
-                var lineIdx = 0;
-                foreach (var child in items)
+                var childDto = itemsForSave[i];
+                childDto.BillOfMaterialId = entity.Id;
+                var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    if (child.LineNumber <= 0)
+                    throw new TaktBusinessException("物料清单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、BillOfMaterialId、LineNumber）");
+                }
+                if (childDto.BillOfMaterialItemId > 0)
+                {
+                    if (!existingById.TryGetValue(childDto.BillOfMaterialItemId, out var target))
                     {
-                        child.LineNumber = lineSeq[lineIdx++];
+                        throw new TaktBusinessException("物料清单明细不存在（BillOfMaterialItemId={childDto.BillOfMaterialItemId}）");
                     }
+                    if (target.BillOfMaterialId != entity.Id)
+                    {
+                        throw new TaktBusinessException("物料清单明细不属于当前主表（BillOfMaterialItemId={childDto.BillOfMaterialItemId}）");
+                    }
+                    submittedIds.Add(childDto.BillOfMaterialItemId);
+                    var isUniqueUpdate_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _billOfMaterialItemRepository,
+                        x => x.BillOfMaterialId == x.BillOfMaterialId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode,
+                        childDto.BillOfMaterialItemId);
+                    if (!isUniqueUpdate_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
+                    {
+                        throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialCode已存在");
+                    }
+                    childDto.Adapt(target);
+                    target.Id = childDto.BillOfMaterialItemId;
+                    target.BillOfMaterialId = entity.Id;
+                    target.IsObsolete = 0;
+                    await _billOfMaterialItemRepository.UpdateAsync(target);
+                }
+                else
+                {
+                    var isUniqueCreate_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
+                        _billOfMaterialItemRepository,
+                        x => x.BillOfMaterialId == x.BillOfMaterialId
+                && x.LineNumber == x.LineNumber
+                && x.MaterialCode == x.MaterialCode);
+                    if (!isUniqueCreate_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
+                    {
+                        throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialCode已存在");
+                    }
+                    var child = childDto.Adapt<TaktBillOfMaterialItem>();
+                    child.Id = 0;
+                    child.BillOfMaterialId = entity.Id;
+                    child.IsObsolete = 0;
+                    toCreate.Add(child);
                 }
             }
-                        var seenKeys = new HashSet<string>(StringComparer.Ordinal);
-                        for (var i = 0; i < items.Count; i++)
+            var toObsolete = existingList.Where(x => !submittedIds.Contains(x.Id) && x.IsObsolete == 0).ToList();
+            foreach (var removed in toObsolete)
+            {
+                removed.IsObsolete = 1;
+                await _billOfMaterialItemRepository.UpdateAsync(removed);
+            }
+            if (toCreate.Count > 0)
+            {
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.BomCode) ? entity.BomCode : entity.Id.ToString();
+                    var maxLine = existingList.Count > 0 ? existingList.Max(x => x.LineNumber) : 0;
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
                         {
-                            var key = $"{items[i].CompanyCode}|{items[i].BillOfMaterialId}|{items[i].LineNumber}|{items[i].MaterialId}";
-                            if (!seenKeys.Add(key))
-                            {
-                                throw new TaktBusinessException($"物料清单明细第{i + 1}项与本次提交的其他项重复（CompanyCode、BillOfMaterialId、LineNumber、MaterialId）");
-                            }
+                            child.LineNumber = lineSeq[lineIdx++];
                         }
-            await _billOfMaterialItemRepository.DeleteAsync(x => x.BillOfMaterialId == entity.Id);
-            foreach (var child in items)
-            {
-            var isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
-                _billOfMaterialItemRepository,
-                x => x.CompanyCode == child.CompanyCode
-                    && x.BillOfMaterialId == child.BillOfMaterialId
-                    && x.LineNumber == child.LineNumber
-                    && x.MaterialId == child.MaterialId);
-            if (!isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
-            {
-                throw new TaktBusinessException("物料清单明细的CompanyCode、BillOfMaterialId、LineNumber、MaterialId已存在");
+                    }
+                }
+                await _billOfMaterialItemRepository.CreateRangeAsync(toCreate);
             }
-            }
-            await _billOfMaterialItemRepository.CreateRangeAsync(items);
         }
     }
     // ========================================
@@ -542,143 +638,252 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     {
         var exp = Expressionable.Create<TaktBillOfMaterial>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.BomCode != null && x.BomCode.Contains(keywords))
                 || (x.BomName != null && x.BomName.Contains(keywords))
-                || SqlFunc.ToString(x.ParentMaterialId).Contains(keywords)
                 || (x.ParentMaterialCode != null && x.ParentMaterialCode.Contains(keywords))
-                || (x.ParentMaterialName != null && x.ParentMaterialName.Contains(keywords))
+                || (x.ParentMaterialDescription != null && x.ParentMaterialDescription.Contains(keywords))
                 || (x.BomVersion != null && x.BomVersion.Contains(keywords))
-                || SqlFunc.ToString(x.BomType).Contains(keywords)
                 || (x.AlternativeBomNumber != null && x.AlternativeBomNumber.Contains(keywords))
                 || (x.ParentMaterialUnit != null && x.ParentMaterialUnit.Contains(keywords))
-                || SqlFunc.ToString(x.ParentMaterialQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.BomStatus).Contains(keywords)
                 || (x.BomDescription != null && x.BomDescription.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
-                || SqlFunc.ToString(x.ExpiryDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BomCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(queryDto.BomCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BomName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomCode))
         {
-            exp = exp.And(x => x.BomName != null && x.BomName.Contains(queryDto.BomName));
+            var bomCode = queryDto.BomCode;
+            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(bomCode));
         }
 
-        if (queryDto?.ParentMaterialId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomName))
         {
-            exp = exp.And(x => x.ParentMaterialId == queryDto.ParentMaterialId);
+            var bomName = queryDto.BomName;
+            exp = exp.And(x => x.BomName != null && x.BomName.Contains(bomName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ParentMaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ParentMaterialCode))
         {
-            exp = exp.And(x => x.ParentMaterialCode != null && x.ParentMaterialCode.Contains(queryDto.ParentMaterialCode));
+            var parentMaterialCode = queryDto.ParentMaterialCode;
+            exp = exp.And(x => x.ParentMaterialCode != null && x.ParentMaterialCode.Contains(parentMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ParentMaterialName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ParentMaterialDescription))
         {
-            exp = exp.And(x => x.ParentMaterialName != null && x.ParentMaterialName.Contains(queryDto.ParentMaterialName));
+            var parentMaterialDescription = queryDto.ParentMaterialDescription;
+            exp = exp.And(x => x.ParentMaterialDescription != null && x.ParentMaterialDescription.Contains(parentMaterialDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BomVersion))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomVersion))
         {
-            exp = exp.And(x => x.BomVersion != null && x.BomVersion.Contains(queryDto.BomVersion));
+            var bomVersion = queryDto.BomVersion;
+            exp = exp.And(x => x.BomVersion != null && x.BomVersion.Contains(bomVersion));
         }
 
         if (queryDto?.BomType.HasValue == true)
         {
-            exp = exp.And(x => x.BomType == queryDto.BomType);
+            var bomType = queryDto.BomType;
+            exp = exp.And(x => x.BomType == bomType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AlternativeBomNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AlternativeBomNumber))
         {
-            exp = exp.And(x => x.AlternativeBomNumber != null && x.AlternativeBomNumber.Contains(queryDto.AlternativeBomNumber));
+            var alternativeBomNumber = queryDto.AlternativeBomNumber;
+            exp = exp.And(x => x.AlternativeBomNumber != null && x.AlternativeBomNumber.Contains(alternativeBomNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ParentMaterialUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ParentMaterialUnit))
         {
-            exp = exp.And(x => x.ParentMaterialUnit != null && x.ParentMaterialUnit.Contains(queryDto.ParentMaterialUnit));
+            var parentMaterialUnit = queryDto.ParentMaterialUnit;
+            exp = exp.And(x => x.ParentMaterialUnit != null && x.ParentMaterialUnit.Contains(parentMaterialUnit));
         }
 
         if (queryDto?.ParentMaterialQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.ParentMaterialQuantity == queryDto.ParentMaterialQuantity);
+            var parentMaterialQuantity = queryDto.ParentMaterialQuantity;
+            exp = exp.And(x => x.ParentMaterialQuantity == parentMaterialQuantity);
         }
 
-        if (queryDto?.BomStatus.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomDescription))
         {
-            exp = exp.And(x => x.BomStatus == queryDto.BomStatus);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.BomDescription))
-        {
-            exp = exp.And(x => x.BomDescription != null && x.BomDescription.Contains(queryDto.BomDescription));
+            var bomDescription = queryDto.BomDescription;
+            exp = exp.And(x => x.BomDescription != null && x.BomDescription.Contains(bomDescription));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (queryDto?.BomStatus.HasValue == true)
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var bomStatus = queryDto.BomStatus;
+            exp = exp.And(x => x.BomStatus == bomStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate >= queryDto.EffectiveDateStart);
+            var effectiveDateStart = queryDto.EffectiveDateStart;
+            exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate <= queryDto.EffectiveDateEnd);
+            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate >= queryDto.ExpiryDateStart);
+            var expiryDateStart = queryDto.ExpiryDateStart;
+            exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate <= queryDto.ExpiryDateEnd);
+            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktBillOfMaterialQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ParentMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ParentMaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomVersion))
+        {
+            return true;
+        }
+        if (queryDto.BomType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AlternativeBomNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ParentMaterialUnit))
+        {
+            return true;
+        }
+        if (queryDto.ParentMaterialQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomDescription))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BomStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.EffectiveDateStart.HasValue || queryDto.EffectiveDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExpiryDateStart.HasValue || queryDto.ExpiryDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 
     // ========================================
@@ -686,7 +891,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     // ========================================
 
     /// <summary>
-    /// 构建子件 BOM 查找表（同工厂、同 BOM 类型；已发布且在有效期内；多版本取最新生效）
+    /// 构建已发布且在生效期内的子件 BOM 查找表（父件物料编码 → BOM 头）
     /// </summary>
     /// <param name="plantBoms">同工厂同类型 BOM 头列表</param>
     /// <param name="asOf">生效判定时间点</param>
@@ -710,26 +915,38 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     }
 
     /// <summary>
-    /// 构建物料编码 → 名称映射（BOM 头冗余父件名称）
+    /// 构建物料编码 → 描述映射（BOM 头父件描述 + 明细行描述）
     /// </summary>
     /// <param name="plantBoms">同工厂 BOM 头</param>
     /// <param name="root">根 BOM</param>
-    /// <returns>物料编码 → 名称</returns>
-    private static Dictionary<string, string> BuildMaterialNameMap(
+    /// <param name="items">相关明细行</param>
+    /// <returns>物料编码 → 描述</returns>
+    private static Dictionary<string, string> BuildMaterialDescriptionMap(
         IEnumerable<TaktBillOfMaterial> plantBoms,
-        TaktBillOfMaterial root)
+        TaktBillOfMaterial root,
+        IEnumerable<TaktBillOfMaterialItem> items)
     {
         var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         foreach (var bom in plantBoms)
         {
-            if (!string.IsNullOrWhiteSpace(bom.ParentMaterialCode))
+            if (!string.IsNullOrWhiteSpace(bom.ParentMaterialCode)
+                && !string.IsNullOrWhiteSpace(bom.ParentMaterialDescription))
             {
-                map[bom.ParentMaterialCode] = bom.ParentMaterialName;
+                map[bom.ParentMaterialCode] = bom.ParentMaterialDescription;
             }
         }
-        if (!string.IsNullOrWhiteSpace(root.ParentMaterialCode))
+        if (!string.IsNullOrWhiteSpace(root.ParentMaterialCode)
+            && !string.IsNullOrWhiteSpace(root.ParentMaterialDescription))
         {
-            map[root.ParentMaterialCode] = root.ParentMaterialName;
+            map[root.ParentMaterialCode] = root.ParentMaterialDescription;
+        }
+        foreach (var item in items)
+        {
+            if (!string.IsNullOrWhiteSpace(item.MaterialCode)
+                && !string.IsNullOrWhiteSpace(item.MaterialDescription))
+            {
+                map[item.MaterialCode] = item.MaterialDescription;
+            }
         }
         return map;
     }
@@ -744,6 +961,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         TaktBillOfMaterial root,
         decimal demandQuantity)
     {
+        var description = root.ParentMaterialDescription ?? string.Empty;
         return new TaktBillOfMaterialExplosionLineDto
         {
             HierarchyLevel = 0,
@@ -751,9 +969,10 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
             SourceBillOfMaterialId = root.Id,
             SourceBillOfMaterialItemId = null,
             LineNumber = 0,
-            MaterialId = root.ParentMaterialId,
+            MaterialId = 0,
             MaterialCode = root.ParentMaterialCode,
-            MaterialName = root.ParentMaterialName,
+            MaterialName = description,
+            MaterialDescription = description,
             ImmediateParentMaterialCode = string.Empty,
             UsageQuantity = root.ParentMaterialQuantity <= 0 ? 1m : root.ParentMaterialQuantity,
             MaterialUnit = root.ParentMaterialUnit,
@@ -779,7 +998,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
     /// <param name="ancestorMaterialCodes">祖先物料编码（环检测）</param>
     /// <param name="childBomLookup">子件 BOM 查找表</param>
     /// <param name="itemsByBomId">BOM ID → 明细行</param>
-    /// <param name="materialNameMap">物料编码 → 名称</param>
+    /// <param name="materialDescriptionMap">物料编码 → 描述</param>
     /// <param name="lines">输出行集合</param>
     private void ExpandBillOfMaterialLines(
         TaktBillOfMaterial bom,
@@ -791,7 +1010,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         HashSet<string> ancestorMaterialCodes,
         IReadOnlyDictionary<string, TaktBillOfMaterial> childBomLookup,
         IReadOnlyDictionary<long, List<TaktBillOfMaterialItem>> itemsByBomId,
-        IReadOnlyDictionary<string, string> materialNameMap,
+        IReadOnlyDictionary<string, string> materialDescriptionMap,
         List<TaktBillOfMaterialExplosionLineDto> lines)
     {
         if (currentLevel > maxLevel || items.Count == 0)
@@ -804,14 +1023,18 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
         {
             if (lines.Count >= MaxExplosionLines)
             {
-                throw new TaktBusinessException($"BOM 展开行数超过上限 {MaxExplosionLines}，请缩小需求数量或降低展开层级");
+                throw new TaktBusinessException($"BOM 展开行数超过上限 {MaxExplosionLines}，请减小需求数量或降低展开层级");
             }
 
-            var cumulativeQuantity = parentDemandQuantity * item.ActualUsageQuantity / baseQuantity;
+            var actualUsage = item.ActualUsageQuantity > 0
+                ? item.ActualUsageQuantity
+                : item.UsageQuantity * (1m + item.ScrapRate / 100m);
+            var cumulativeQuantity = parentDemandQuantity * actualUsage / baseQuantity;
             childBomLookup.TryGetValue(item.MaterialCode, out var childBom);
             var hasChildBom = childBom != null ? 1 : 0;
             var isCircular = ancestorMaterialCodes.Contains(item.MaterialCode) ? 1 : 0;
-            materialNameMap.TryGetValue(item.MaterialCode, out var materialName);
+            materialDescriptionMap.TryGetValue(item.MaterialCode, out var materialDescription);
+            materialDescription ??= item.MaterialDescription ?? string.Empty;
 
             lines.Add(new TaktBillOfMaterialExplosionLineDto
             {
@@ -820,9 +1043,10 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
                 SourceBillOfMaterialId = bom.Id,
                 SourceBillOfMaterialItemId = item.Id,
                 LineNumber = item.LineNumber,
-                MaterialId = item.MaterialId,
+                MaterialId = 0,
                 MaterialCode = item.MaterialCode,
-                MaterialName = materialName,
+                MaterialName = materialDescription,
+                MaterialDescription = materialDescription,
                 ImmediateParentMaterialCode = immediateParentMaterialCode,
                 UsageQuantity = item.UsageQuantity,
                 MaterialUnit = item.MaterialUnit,
@@ -858,7 +1082,7 @@ public class TaktBillOfMaterialService : TaktServiceBase, ITaktBillOfMaterialSer
                 nextAncestors,
                 childBomLookup,
                 itemsByBomId,
-                materialNameMap,
+                materialDescriptionMap,
                 lines);
         }
     }

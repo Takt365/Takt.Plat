@@ -290,6 +290,39 @@ function entityBaseNameToScope(baseName) {
 }
 
 /**
+ * 三种实体/DTO 基类是否含公司隔离（CompanyCode）
+ * - TaktTenantEntityBase / TaktTenantDtoBase → false（仅 TenantCode）
+ * - TaktCompany* / TaktApproval* → true（TenantCode + CompanyCode）
+ * @param {string|null|undefined} dtoOrEntityBase 如 TaktTenantDtoBase / TaktCompanyEntityBase
+ * @returns {boolean}
+ */
+function dtoBaseHasCompanyIsolation(dtoOrEntityBase) {
+  if (!dtoOrEntityBase || typeof dtoOrEntityBase !== 'string') {
+    return false;
+  }
+  if (dtoOrEntityBase.includes('Tenant')) {
+    return false;
+  }
+  return dtoOrEntityBase.includes('Company') || dtoOrEntityBase.includes('Approval');
+}
+
+/**
+ * Options / QueryExpression 隔离用 DtoBase：以 Domain 实体基类为准（CompanyCode 是否存在以实体为准）
+ * @param {string|null} dtoBaseFromDto 从 *Dto 声明解析的基类
+ * @param {string|null|undefined} entityBaseFromFile 从实体文件解析的 EntityBase
+ * @returns {string|null}
+ */
+function resolveIsolationDtoBase(dtoBaseFromDto, entityBaseFromFile) {
+  if (entityBaseFromFile) {
+    const fromEntity = resolveDtoBaseFromEntityBase(entityBaseFromFile);
+    if (fromEntity) {
+      return fromEntity;
+    }
+  }
+  return dtoBaseFromDto || null;
+}
+
+/**
  * 查找 Domain 实体文件
  * @param {string} entityPascal 如 CostCenter
  * @param {string} [backendRoot]
@@ -320,11 +353,11 @@ function findDomainEntityFile(entityPascal, backendRoot = DEFAULT_BACKEND_ROOT) 
 }
 
 /**
- * 实体类头正则（含继承 Takt*EntityIncrementBase 的业务实体）
+ * 实体类头正则（含 Increment / Guid 主键变体）
  */
-const ENTITY_CLASS_HEADER_REGEX = /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant|Company|Approval)Entity(?:Increment)?Base)\s*\{/;
+const ENTITY_CLASS_HEADER_REGEX = /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant|Company|Approval)Entity(?:Increment|Guid)?Base)\s*\{/;
 
-/** EntityBase / EntityIncrementBase → DTO 基类 */
+/** EntityBase / EntityIncrementBase / EntityGuidBase → DTO 基类 */
 const ENTITY_BASE_TO_DTO_BASE = {
   TaktTenantEntityBase: 'TaktTenantDtoBase',
   TaktCompanyEntityBase: 'TaktCompanyDtoBase',
@@ -332,7 +365,53 @@ const ENTITY_BASE_TO_DTO_BASE = {
   TaktTenantEntityIncrementBase: 'TaktTenantDtoBase',
   TaktCompanyEntityIncrementBase: 'TaktCompanyDtoBase',
   TaktApprovalEntityIncrementBase: 'TaktApprovalDtoBase',
+  TaktTenantEntityGuidBase: 'TaktTenantDtoBase',
+  TaktCompanyEntityGuidBase: 'TaktCompanyDtoBase',
+  TaktApprovalEntityGuidBase: 'TaktApprovalDtoBase',
 };
+
+/**
+ * 是否租户级实体基类（含 Increment / Guid）
+ * @param {string|null|undefined} entityBase
+ * @returns {boolean}
+ */
+function isTenantEntityBase(entityBase) {
+  return typeof entityBase === 'string' && entityBase.includes('Tenant');
+}
+
+/**
+ * 是否公司或审批级实体基类（含 Increment / Guid）
+ * @param {string|null|undefined} entityBase
+ * @returns {boolean}
+ */
+function isCompanyOrApprovalEntityBase(entityBase) {
+  if (typeof entityBase !== 'string') {
+    return false;
+  }
+  return entityBase.includes('Company') || entityBase.includes('Approval');
+}
+
+/**
+ * 归一化为三种标准 EntityBase（去掉 Increment / Guid 后缀）
+ * @param {string|null|undefined} entityBase
+ * @returns {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'|null}
+ */
+function normalizeEntityBaseKind(entityBase) {
+  if (typeof entityBase !== 'string' || !entityBase) {
+    return null;
+  }
+  const normalized = entityBase.replace(/Increment|Guid/g, '');
+  if (
+    normalized === 'TaktTenantEntityBase' ||
+    normalized === 'TaktCompanyEntityBase' ||
+    normalized === 'TaktApprovalEntityBase'
+  ) {
+    return /** @type {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'} */ (
+      normalized
+    );
+  }
+  return null;
+}
 
 /** 领域实体基类本身（非业务实体；DTO/Validator/i18n 生成必须跳过） */
 const ENTITY_BASE_CLASS_NAMES = new Set(Object.keys(ENTITY_BASE_TO_DTO_BASE));
@@ -373,17 +452,29 @@ function parseEntityBaseFromCsFile(entityFilePath) {
   const content = fs.readFileSync(entityFilePath, 'utf-8');
   const header = parseEntityClassHeaderFromCsContent(content);
   if (header) {
-    return /** @type {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'} */ (
-      header.entityBase.replace('Increment', '')
+    return (
+      normalizeEntityBaseKind(header.entityBase) || 'TaktCompanyEntityBase'
     );
   }
-  if (content.includes(': TaktApprovalEntityIncrementBase') || content.includes(': TaktApprovalEntityBase')) {
+  if (
+    content.includes(': TaktApprovalEntityIncrementBase') ||
+    content.includes(': TaktApprovalEntityGuidBase') ||
+    content.includes(': TaktApprovalEntityBase')
+  ) {
     return 'TaktApprovalEntityBase';
   }
-  if (content.includes(': TaktCompanyEntityIncrementBase') || content.includes(': TaktCompanyEntityBase')) {
+  if (
+    content.includes(': TaktCompanyEntityIncrementBase') ||
+    content.includes(': TaktCompanyEntityGuidBase') ||
+    content.includes(': TaktCompanyEntityBase')
+  ) {
     return 'TaktCompanyEntityBase';
   }
-  if (content.includes(': TaktTenantEntityIncrementBase') || content.includes(': TaktTenantEntityBase')) {
+  if (
+    content.includes(': TaktTenantEntityIncrementBase') ||
+    content.includes(': TaktTenantEntityGuidBase') ||
+    content.includes(': TaktTenantEntityBase')
+  ) {
     return 'TaktTenantEntityBase';
   }
   return 'TaktCompanyEntityBase';
@@ -680,15 +771,15 @@ function resolveTaktModuleInt(moduleName) {
  */
 const ENTITY_BASE_FIELDS = {
   tenant: [
-    'tenantCode', 'ExtField', 'remark',
+    'tenantCode', 'relatedPlant', 'ExtField', 'remark',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
   company: [
-    'tenantCode', 'companyCode', 'ExtField', 'remark',
+    'tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ExtField', 'remark',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
   approval: [
-    'tenantCode', 'companyCode', 'ExtField', 'remark',
+    'tenantCode', 'companyCode', 'cultureCode', 'plantCode', 'ExtField', 'remark',
     'approvalStatus', 'initiatorId', 'initiatedAt', 'approvalOpinion', 'approvedBy', 'approvedAt',
     'flowInstanceId',
     'createdBy', 'createdAt', 'updatedBy', 'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
@@ -902,6 +993,11 @@ module.exports = {
   entityShortFromControllerClassName,
   matchControllerForEntityPrefix,
   entityBaseNameToScope,
+  dtoBaseHasCompanyIsolation,
+  isTenantEntityBase,
+  isCompanyOrApprovalEntityBase,
+  normalizeEntityBaseKind,
+  resolveIsolationDtoBase,
   findDomainEntityFile,
   parseEntityBaseFromCsFile,
   parseEntityClassHeaderFromCsContent,

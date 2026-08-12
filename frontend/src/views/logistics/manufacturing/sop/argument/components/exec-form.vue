@@ -27,48 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companycode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companycode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('common.page.entity.companydefaultculture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.companydefaultculture') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.sopexec.productionorderid')"
@@ -85,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sopexec.workorderno')"
-                name="workOrderNo"
+                :label="t('entity.sopexec.workorderCode')"
+                name="workOrderCode"
               >
                 <a-input
-                  v-model:value="formState.workOrderNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') })"
+                  v-model:value="formState.workOrderCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderCode') })"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -229,18 +199,6 @@
                   show-count
                   :maxlength="20"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.sopexec.contentlang')"
-                name="contentLang"
-              >
-                <a-textarea
-                  v-model:value="formState.contentLang"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopexec.contentlang') })"
-                  :rows="2"
                 />
               </a-form-item>
             </a-col>
@@ -415,8 +373,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -424,7 +382,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","productionOrderId","workOrderNo","serialNumber","materialCode","routingItemId","processSegmentType","workstationId","employeeId","sopId","revisionId","revision","contentLang","startedAt","endedAt","selfCheckResult","execStatus","currentStepId","extField","remark"]
+const formFields = ["tenantCode","companyCode","cultureCode","productionOrderId","workOrderCode","serialNumber","materialCode","routingItemId","processSegmentType","workstationId","employeeId","sopId","revisionId","revision","startedAt","endedAt","selfCheckResult","execStatus","currentStepId","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 
@@ -486,8 +444,7 @@ const sopArgumentFormColumns = computed<TaktEditableTableColumn[]>(() => [
     rows: 2,
     placeholder: t('common.page.form.placeholder.optional', { field: t('common.page.entity.extfield') }),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SopExecCreate & { sopExecId?: string }> | null | undefined) {
@@ -516,7 +473,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       sopExecId: masterId,
     })),
   }
@@ -596,10 +553,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  workOrderNo: [
+  workOrderCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderCode') }),
       trigger: 'blur'
     }
   ],
@@ -665,10 +622,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  contentLang: [
+  cultureCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.contentlang') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.sopexec.culturecode') }),
       trigger: 'blur'
     }
   ],

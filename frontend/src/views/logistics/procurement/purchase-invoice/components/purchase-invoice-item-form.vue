@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/procurement/purchase-invoice/components -->
 <!-- 文件名称：purchase-invoice-item-form.vue -->
-<!-- 功能描述：Takt采购发票实体子表 purchaseInvoiceItem 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
+<!-- 功能描述：Takt采购发票主表实体子表 purchaseInvoiceItem 独立 CRUD 弹窗表单；defineExpose validate/getValues/resetFields。由 generate-vue-master-detail-from-api.cjs 生成，风格与主表 *-form 一致 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- ======================================== -->
 
@@ -21,11 +21,24 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                  :disabled="!!formData?.purchaseInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('lineNumber')"
@@ -43,25 +56,37 @@
                 :label="pi.label('purchaseOrderCode')"
                 name="purchaseOrderCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.purchaseOrderCode"
+                  api-url="TaktPurchaseOrders/options"
                   :placeholder="pi.ph('purchaseOrderCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
                   :disabled="!!formData?.purchaseInvoiceItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('purchaseOrderLineNumber')"
-                name="purchaseOrderLineNumber"
+                :label="pi.label('purchaseOrderItem')"
+                name="purchaseOrderItem"
               >
                 <a-input-number
-                  v-model:value="formState.purchaseOrderLineNumber"
-                  :placeholder="pi.ph('purchaseOrderLineNumber')"
+                  v-model:value="formState.purchaseOrderItem"
+                  :placeholder="pi.ph('purchaseOrderItem')"
                   style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('accountAssignmentSeq')"
+                name="accountAssignmentSeq"
+              >
+                <a-input
+                  v-model:value="formState.accountAssignmentSeq"
+                  :placeholder="pi.ph('accountAssignmentSeq')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -80,73 +105,56 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('purchaseUnit')"
-                name="purchaseUnit"
+                :label="pi.label('valuationArea')"
+                name="valuationArea"
               >
-                <TaktSelect
-                  v-model:value="formState.purchaseUnit"
-                  dict-type="logistics_unit_of_measure_code"
-                  :placeholder="pi.ph('purchaseUnit')"
+                <a-input
+                  v-model:value="formState.valuationArea"
+                  :placeholder="pi.ph('valuationArea')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('invoiceQuantity')"
-                name="invoiceQuantity"
+                :label="pi.label('amount')"
+                name="amount"
               >
                 <a-input-number
-                  v-model:value="formState.invoiceQuantity"
-                  :placeholder="pi.ph('invoiceQuantity')"
+                  v-model:value="formState.amount"
+                  :placeholder="pi.ph('amount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('invoiceUnitPrice')"
-                name="invoiceUnitPrice"
+                :label="pi.label('debitCreditIndicator')"
+                name="debitCreditIndicator"
               >
-                <a-input-number
-                  v-model:value="formState.invoiceUnitPrice"
-                  :placeholder="pi.ph('invoiceUnitPrice')"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.debitCreditIndicator"
+                  :placeholder="pi.ph('debitCreditIndicator')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('discountRate')"
-                name="discountRate"
+                :label="pi.label('taxCode')"
+                name="taxCode"
               >
-                <TaktSelect
-                  v-model:value="formState.discountRate"
-                  dict-type="logistics_discount_rate_param"
-                  :placeholder="pi.ph('discountRate')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('discountAmount')"
-                name="discountAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.discountAmount"
-                  :placeholder="pi.ph('discountAmount')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('taxIncludedAmount')"
-                name="taxIncludedAmount"
-              >
-                <a-input-number
-                  v-model:value="formState.taxIncludedAmount"
-                  :placeholder="pi.ph('taxIncludedAmount')"
-                  style="width: 100%"
+                <a-input
+                  v-model:value="formState.taxCode"
+                  :placeholder="pi.ph('taxCode')"
+                  show-count
+                  :maxlength="2"
+                  allow-clear
+                  :disabled="!!formData?.purchaseInvoiceItemId"
                 />
               </a-form-item>
             </a-col>
@@ -155,31 +163,363 @@
       </a-tab-pane>
       <a-tab-pane
         key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('untaxedAmount')"
-                name="untaxedAmount"
+                :label="pi.label('quantity')"
+                name="quantity"
               >
                 <a-input-number
-                  v-model:value="formState.untaxedAmount"
-                  :placeholder="pi.ph('untaxedAmount')"
+                  v-model:value="formState.quantity"
+                  :placeholder="pi.ph('quantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('taxAmount')"
-                name="taxAmount"
+                :label="pi.label('orderUnit')"
+                name="orderUnit"
+              >
+                <a-input
+                  v-model:value="formState.orderUnit"
+                  :placeholder="pi.ph('orderUnit')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('poPriceQuantity')"
+                name="poPriceQuantity"
               >
                 <a-input-number
-                  v-model:value="formState.taxAmount"
-                  :placeholder="pi.ph('taxAmount')"
+                  v-model:value="formState.poPriceQuantity"
+                  :placeholder="pi.ph('poPriceQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('poPriceUnit')"
+                name="poPriceUnit"
+              >
+                <a-input
+                  v-model:value="formState.poPriceUnit"
+                  :placeholder="pi.ph('poPriceUnit')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('valuatedStockQuantity')"
+                name="valuatedStockQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.valuatedStockQuantity"
+                  :placeholder="pi.ph('valuatedStockQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('previousPeriodStock')"
+                name="previousPeriodStock"
+              >
+                <a-input-number
+                  v-model:value="formState.previousPeriodStock"
+                  :placeholder="pi.ph('previousPeriodStock')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('baseUnit')"
+                name="baseUnit"
+              >
+                <a-input
+                  v-model:value="formState.baseUnit"
+                  :placeholder="pi.ph('baseUnit')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('valuationClass')"
+                name="valuationClass"
+              >
+                <a-input
+                  v-model:value="formState.valuationClass"
+                  :placeholder="pi.ph('valuationClass')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('updatePoHistoryFlag')"
+                name="updatePoHistoryFlag"
+              >
+                <a-date-picker
+                  v-model:value="formState.updatePoHistoryFlag"
+                  :placeholder="pi.ph('updatePoHistoryFlag')"
+                  value-format="YYYY-MM-DD"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('subsequentDebitCredit')"
+                name="subsequentDebitCredit"
+              >
+                <a-input
+                  v-model:value="formState.subsequentDebitCredit"
+                  :placeholder="pi.ph('subsequentDebitCredit')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('blockReasonPrice')"
+                name="blockReasonPrice"
+              >
+                <a-input
+                  v-model:value="formState.blockReasonPrice"
+                  :placeholder="pi.ph('blockReasonPrice')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('blockReasonQuantity')"
+                name="blockReasonQuantity"
+              >
+                <a-input
+                  v-model:value="formState.blockReasonQuantity"
+                  :placeholder="pi.ph('blockReasonQuantity')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('blockReasonQuality')"
+                name="blockReasonQuality"
+              >
+                <a-input
+                  v-model:value="formState.blockReasonQuality"
+                  :placeholder="pi.ph('blockReasonQuality')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('blockReasonEnhanced')"
+                name="blockReasonEnhanced"
+              >
+                <a-input
+                  v-model:value="formState.blockReasonEnhanced"
+                  :placeholder="pi.ph('blockReasonEnhanced')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('valueString')"
+                name="valueString"
+              >
+                <a-input
+                  v-model:value="formState.valueString"
+                  :placeholder="pi.ph('valueString')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceCode')"
+                name="referenceCode"
+              >
+                <a-input
+                  v-model:value="formState.referenceCode"
+                  :placeholder="pi.ph('referenceCode')"
+                  show-count
+                  :maxlength="16"
+                  allow-clear
+                  :disabled="!!formData?.purchaseInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('conditionType')"
+                name="conditionType"
+              >
+                <a-input
+                  v-model:value="formState.conditionType"
+                  :placeholder="pi.ph('conditionType')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('totalValuatedStockValue')"
+                name="totalValuatedStockValue"
+              >
+                <a-input-number
+                  v-model:value="formState.totalValuatedStockValue"
+                  :placeholder="pi.ph('totalValuatedStockValue')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('previousPeriodValue')"
+                name="previousPeriodValue"
+              >
+                <a-input-number
+                  v-model:value="formState.previousPeriodValue"
+                  :placeholder="pi.ph('previousPeriodValue')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentCode')"
+                name="referenceDocumentCode"
+              >
+                <a-input
+                  v-model:value="formState.referenceDocumentCode"
+                  :placeholder="pi.ph('referenceDocumentCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentYear')"
+                name="referenceDocumentYear"
+              >
+                <a-input
+                  v-model:value="formState.referenceDocumentYear"
+                  :placeholder="pi.ph('referenceDocumentYear')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('referenceDocumentItem')"
+                name="referenceDocumentItem"
+              >
+                <a-input-number
+                  v-model:value="formState.referenceDocumentItem"
+                  :placeholder="pi.ph('referenceDocumentItem')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('stockManagedMaterialCode')"
+                name="stockManagedMaterialCode"
+              >
+                <a-input
+                  v-model:value="formState.stockManagedMaterialCode"
+                  :placeholder="pi.ph('stockManagedMaterialCode')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                  :disabled="!!formData?.purchaseInvoiceItemId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('itemText')"
+                name="itemText"
+              >
+                <a-input
+                  v-model:value="formState.itemText"
+                  :placeholder="pi.ph('itemText')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('materialDocumentItem')"
+                name="materialDocumentItem"
+              >
+                <a-input-number
+                  v-model:value="formState.materialDocumentItem"
+                  :placeholder="pi.ph('materialDocumentItem')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -205,7 +545,7 @@
 
 <script setup lang="ts">
 /**
- * Takt采购发票实体子表 purchaseInvoiceItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
+ * Takt采购发票主表实体子表 purchaseInvoiceItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/procurement/purchase-invoice/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -227,9 +567,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","purchaseOrderCode","purchaseOrderLineNumber","materialCode","purchaseUnit","invoiceQuantity","invoiceUnitPrice","discountRate","discountAmount","taxIncludedAmount","untaxedAmount","taxAmount","isObsolete"]
-
-
+const formFields = ["plantCode","lineNumber","purchaseOrderCode","purchaseOrderItem","accountAssignmentSeq","materialCode","valuationArea","amount","debitCreditIndicator","taxCode","quantity","orderUnit","poPriceQuantity","poPriceUnit","valuatedStockQuantity","previousPeriodStock","baseUnit","valuationClass","updatePoHistoryFlag","subsequentDebitCredit","blockReasonPrice","blockReasonQuantity","blockReasonQuality","blockReasonEnhanced","valueString","referenceCode","conditionType","totalValuatedStockValue","previousPeriodValue","referenceDocumentCode","referenceDocumentYear","referenceDocumentItem","stockManagedMaterialCode","itemText","materialDocumentItem","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -250,14 +588,9 @@ const props = withDefaults(defineProps<Props>(), {
 const formRef = ref()
 /** 表单双向绑定模型 */
 const formState = reactive<Record<string, any>>({})
-/** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
-const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  discountRate: 0
-}
-
-/** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
+/** 表单字段默认值（无字典默认项） */
 function applyFormDefaults(target: Record<string, unknown>) {
-  Object.assign(target, FORM_FIELD_DEFAULTS)
+  void target
 }
 
 /** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
@@ -305,104 +638,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  purchaseUnit: [
-    {
-      required: true,
-      message: pi.ph('purchaseUnit'),
-      trigger: 'change'
-    }
-  ],
-  invoiceQuantity: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('invoiceQuantity'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('invoiceQuantity'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  invoiceUnitPrice: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('invoiceUnitPrice'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('invoiceUnitPrice'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  discountRate: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('discountRate'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('discountRate'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  discountAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('discountAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('discountAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxIncludedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxIncludedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxIncludedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  untaxedAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('untaxedAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('untaxedAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  taxAmount: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('taxAmount'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
   isObsolete: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -431,37 +666,45 @@ function getValues(): Record<string, any> {
     const rawlineNumber = payload.lineNumber
     payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
   }
-  if ('purchaseOrderLineNumber' in payload) {
-    const rawpurchaseOrderLineNumber = payload.purchaseOrderLineNumber
-    payload.purchaseOrderLineNumber = typeof rawpurchaseOrderLineNumber === 'number' ? rawpurchaseOrderLineNumber : Number(rawpurchaseOrderLineNumber)
+  if ('purchaseOrderItem' in payload) {
+    const rawpurchaseOrderItem = payload.purchaseOrderItem
+    payload.purchaseOrderItem = typeof rawpurchaseOrderItem === 'number' ? rawpurchaseOrderItem : Number(rawpurchaseOrderItem)
   }
-  if ('invoiceQuantity' in payload) {
-    const rawinvoiceQuantity = payload.invoiceQuantity
-    payload.invoiceQuantity = typeof rawinvoiceQuantity === 'number' ? rawinvoiceQuantity : Number(rawinvoiceQuantity)
+  if ('amount' in payload) {
+    const rawamount = payload.amount
+    payload.amount = typeof rawamount === 'number' ? rawamount : Number(rawamount)
   }
-  if ('invoiceUnitPrice' in payload) {
-    const rawinvoiceUnitPrice = payload.invoiceUnitPrice
-    payload.invoiceUnitPrice = typeof rawinvoiceUnitPrice === 'number' ? rawinvoiceUnitPrice : Number(rawinvoiceUnitPrice)
+  if ('quantity' in payload) {
+    const rawquantity = payload.quantity
+    payload.quantity = typeof rawquantity === 'number' ? rawquantity : Number(rawquantity)
   }
-  if ('discountRate' in payload) {
-    const rawdiscountRate = payload.discountRate
-    payload.discountRate = typeof rawdiscountRate === 'number' ? rawdiscountRate : Number(rawdiscountRate)
+  if ('poPriceQuantity' in payload) {
+    const rawpoPriceQuantity = payload.poPriceQuantity
+    payload.poPriceQuantity = typeof rawpoPriceQuantity === 'number' ? rawpoPriceQuantity : Number(rawpoPriceQuantity)
   }
-  if ('discountAmount' in payload) {
-    const rawdiscountAmount = payload.discountAmount
-    payload.discountAmount = typeof rawdiscountAmount === 'number' ? rawdiscountAmount : Number(rawdiscountAmount)
+  if ('valuatedStockQuantity' in payload) {
+    const rawvaluatedStockQuantity = payload.valuatedStockQuantity
+    payload.valuatedStockQuantity = typeof rawvaluatedStockQuantity === 'number' ? rawvaluatedStockQuantity : Number(rawvaluatedStockQuantity)
   }
-  if ('taxIncludedAmount' in payload) {
-    const rawtaxIncludedAmount = payload.taxIncludedAmount
-    payload.taxIncludedAmount = typeof rawtaxIncludedAmount === 'number' ? rawtaxIncludedAmount : Number(rawtaxIncludedAmount)
+  if ('previousPeriodStock' in payload) {
+    const rawpreviousPeriodStock = payload.previousPeriodStock
+    payload.previousPeriodStock = typeof rawpreviousPeriodStock === 'number' ? rawpreviousPeriodStock : Number(rawpreviousPeriodStock)
   }
-  if ('untaxedAmount' in payload) {
-    const rawuntaxedAmount = payload.untaxedAmount
-    payload.untaxedAmount = typeof rawuntaxedAmount === 'number' ? rawuntaxedAmount : Number(rawuntaxedAmount)
+  if ('totalValuatedStockValue' in payload) {
+    const rawtotalValuatedStockValue = payload.totalValuatedStockValue
+    payload.totalValuatedStockValue = typeof rawtotalValuatedStockValue === 'number' ? rawtotalValuatedStockValue : Number(rawtotalValuatedStockValue)
   }
-  if ('taxAmount' in payload) {
-    const rawtaxAmount = payload.taxAmount
-    payload.taxAmount = typeof rawtaxAmount === 'number' ? rawtaxAmount : Number(rawtaxAmount)
+  if ('previousPeriodValue' in payload) {
+    const rawpreviousPeriodValue = payload.previousPeriodValue
+    payload.previousPeriodValue = typeof rawpreviousPeriodValue === 'number' ? rawpreviousPeriodValue : Number(rawpreviousPeriodValue)
+  }
+  if ('referenceDocumentItem' in payload) {
+    const rawreferenceDocumentItem = payload.referenceDocumentItem
+    payload.referenceDocumentItem = typeof rawreferenceDocumentItem === 'number' ? rawreferenceDocumentItem : Number(rawreferenceDocumentItem)
+  }
+  if ('materialDocumentItem' in payload) {
+    const rawmaterialDocumentItem = payload.materialDocumentItem
+    payload.materialDocumentItem = typeof rawmaterialDocumentItem === 'number' ? rawmaterialDocumentItem : Number(rawmaterialDocumentItem)
   }
   if ('isObsolete' in payload) {
     const rawisObsolete = payload.isObsolete

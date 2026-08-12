@@ -4,7 +4,7 @@
 // 文件名称：so_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 生产工单同步（PP_SapOrders + 工时/序列号回填 → takt_logistics_manufacturing_planning_production_order）
+// 功能描述：SAP 生产工单同步（PP_SapOrders + 工时/序列号回填 → takt_logistics_manufacturing_aps_production_order）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -91,7 +91,7 @@ CREATE TABLE #order_delta (
   prod_order_type_new NVARCHAR(100)
 );
 
-MERGE INTO [takt_logistics_manufacturing_planning_production_order] AS T
+MERGE INTO [takt_logistics_manufacturing_aps_production_order] AS T
 USING #order_source AS S
 ON T.[plant_code] = S.[plant_code]
 AND T.[prod_order_code] = S.[prod_order_code]
@@ -115,7 +115,7 @@ WHEN NOT MATCHED THEN
     [routing_code],[serial_no],[prod_order_type],
     [planned_order_id],[aps_order_id],
     [planned_start_time],[planned_end_time],[order_status],
-    [tenant_code],[company_code],[ext_field_json],[remark],
+    [tenant_code],[company_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],[is_deleted],
     [deleted_by],[deleted_at]
   )
@@ -124,7 +124,7 @@ WHEN NOT MATCHED THEN
     S.[prod_order_qty],S.[produced_qty],S.[unit_of_measure],
     S.[actual_start_date],NULL,3,'',
     S.[routing_code],'',S.[prod_order_type],
-    '',NULL,NULL,NULL,1,
+    NULL,NULL,NULL,NULL,1,
     '000','2300','{}','mismatch update',
     900001,@now,900001,@now,0,
     NULL,NULL
@@ -172,7 +172,7 @@ UPDATE T
 SET
   T.[work_center] = W.work_center,
   T.[updated_at]  = @now
-FROM [takt_logistics_manufacturing_planning_production_order] T
+FROM [takt_logistics_manufacturing_aps_production_order] T
 JOIN wc_agg W
   ON LTRIM(RTRIM(T.[material_code])) = W.material_code
 WHERE ISNULL(T.[work_center], '') <> ISNULL(W.work_center, '');
@@ -190,7 +190,7 @@ UPDATE T
 SET
   T.[serial_no] = S.serial_no,
   T.[updated_at] = @now
-FROM [takt_logistics_manufacturing_planning_production_order] T
+FROM [takt_logistics_manufacturing_aps_production_order] T
 JOIN ser_agg S
   ON LTRIM(RTRIM(T.[prod_order_code])) = S.prod_order_code
 WHERE ISNULL(T.[serial_no], '') <> ISNULL(S.serial_no, '');
@@ -215,7 +215,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [elapsed_time],
   [tenant_code],
   [company_code],
-  [ext_field_json],
+  [ext_field],
   [remark],
   [created_by],
   [created_at]
@@ -223,7 +223,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
 SELECT
   @base_id + d.rn,
   d.oper_type,
-  N'takt_logistics_manufacturing_planning_production_order',
+  N'takt_logistics_manufacturing_aps_production_order',
   d.id,
   CASE WHEN d.oper_type = 'UPDATE' THEN
     (
@@ -281,8 +281,8 @@ FROM #order_delta d;
 -- oper_log
 DECLARE @order_ins INT = (SELECT COUNT(*) FROM #order_delta WHERE oper_type = 'INSERT');
 DECLARE @order_upd INT = (SELECT COUNT(*) FROM #order_delta WHERE oper_type = 'UPDATE');
-DECLARE @wc_count  INT = (SELECT COUNT(*) FROM [takt_logistics_manufacturing_planning_production_order] WHERE ISNULL([work_center], '') <> '');
-DECLARE @ser_count INT = (SELECT COUNT(*) FROM [takt_logistics_manufacturing_planning_production_order] WHERE ISNULL([serial_no], '') <> '');
+DECLARE @wc_count  INT = (SELECT COUNT(*) FROM [takt_logistics_manufacturing_aps_production_order] WHERE ISNULL([work_center], '') <> '');
+DECLARE @ser_count INT = (SELECT COUNT(*) FROM [takt_logistics_manufacturing_aps_production_order] WHERE ISNULL([serial_no], '') <> '');
 DECLARE @json_result NVARCHAR(MAX) = N'{"insert":' + ISNULL(CAST(@order_ins AS NVARCHAR),'0') + N',"update":' + ISNULL(CAST(@order_upd AS NVARCHAR),'0') + N',"work_center":' + ISNULL(CAST(@wc_count AS NVARCHAR),'0') + N',"serial_no":' + ISNULL(CAST(@ser_count AS NVARCHAR),'0') + N'}';
 
 INSERT INTO [takt_statistics_logging_oper_log] (

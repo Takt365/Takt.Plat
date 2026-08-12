@@ -81,6 +81,12 @@
             @change="(checked: unknown) => handlePlanStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'productCategoryCode'">
+          <TaktDictTag
+            :value="getSalesForecastDictValue(record, 'productCategoryCode')"
+            dict-type="logistics_mds_product_category"
+          />
+        </template>
         <template v-else-if="column.key === 'convertedStatus'">
           <TaktDictTag
             :value="getSalesForecastDictValue(record, 'convertedStatus')"
@@ -140,7 +146,7 @@
           v-model:value="advancedQueryForm.salesForecastCode"
           :placeholder="pi.queryPh('salesForecastCode', 'required')"
           show-count
-          :maxlength="10"
+          :maxlength="20"
           allow-clear
         />
       </a-form-item>
@@ -165,43 +171,95 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('planPeriodStartStart')">
-      <a-form-item :label="pi.queryLabel('planPeriodStartStart')">
+      <div v-show="isFieldVisible('receiveDateStart')">
+      <a-form-item :label="pi.queryLabel('receiveDateStart')">
         <a-date-picker
-          v-model:value="advancedQueryForm.planPeriodStartStart"
-          :placeholder="pi.queryPh('planPeriodStartStart', 'select')"
+          v-model:value="advancedQueryForm.receiveDateStart"
+          :placeholder="pi.queryPh('receiveDateStart', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('planPeriodStartEnd')">
-      <a-form-item :label="pi.queryLabel('planPeriodStartEnd')">
+      <div v-show="isFieldVisible('receiveDateEnd')">
+      <a-form-item :label="pi.queryLabel('receiveDateEnd')">
         <a-date-picker
-          v-model:value="advancedQueryForm.planPeriodStartEnd"
-          :placeholder="pi.queryPh('planPeriodStartEnd', 'select')"
+          v-model:value="advancedQueryForm.receiveDateEnd"
+          :placeholder="pi.queryPh('receiveDateEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('planPeriodEndStart')">
-      <a-form-item :label="pi.queryLabel('planPeriodEndStart')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planPeriodEndStart"
-          :placeholder="pi.queryPh('planPeriodEndStart', 'select')"
-          value-format="YYYY-MM-DD"
+      <div v-show="isFieldVisible('receiveVersionNo')">
+      <a-form-item :label="pi.queryLabel('receiveVersionNo')">
+        <a-input-number
+          v-model:value="advancedQueryForm.receiveVersionNo"
+          :placeholder="pi.queryPh('receiveVersionNo', 'required')"
+          :min="1"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('planPeriodEndEnd')">
-      <a-form-item :label="pi.queryLabel('planPeriodEndEnd')">
-        <a-date-picker
-          v-model:value="advancedQueryForm.planPeriodEndEnd"
-          :placeholder="pi.queryPh('planPeriodEndEnd', 'select')"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
+      <div v-show="isFieldVisible('salesProduct')">
+      <a-form-item :label="pi.queryLabel('salesProduct')">
+        <a-input
+          v-model:value="advancedQueryForm.salesProduct"
+          :placeholder="pi.queryPh('salesProduct', 'required')"
+          show-count
+          :maxlength="7"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productCategoryCode')">
+      <a-form-item :label="pi.queryLabel('productCategoryCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.productCategoryCode"
+          dict-type="logistics_mds_product_category"
+          :placeholder="pi.queryPh('productCategoryCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('profitCenterCode')">
+      <a-form-item :label="pi.queryLabel('profitCenterCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.profitCenterCode"
+          api-url="TaktProfitCenters/options"
+          :placeholder="pi.queryPh('profitCenterCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('modelCode')">
+      <a-form-item :label="pi.queryLabel('modelCode')">
+        <a-input
+          v-model:value="advancedQueryForm.modelCode"
+          :placeholder="pi.queryPh('modelCode', 'required')"
+          show-count
+          :maxlength="40"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialCode')">
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.materialCode"
+          api-url="TaktMaterialPlants/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'optional')"
+          :rows="2"
+          allow-clear
         />
       </a-form-item>
       </div>
@@ -675,7 +733,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -766,22 +823,75 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planDate') ?? ''
   },
   {
-    title: pi.label('planPeriodStart'),
-    dataIndex: 'planPeriodStart',
-    key: 'planPeriodStart',
-    width: 120,
+    title: pi.label('receiveDate'),
+    dataIndex: 'receiveDate',
+    key: 'receiveDate',
+    width: 140,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planPeriodStart') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'receiveDate') ?? ''
   },
   {
-    title: pi.label('planPeriodEnd'),
-    dataIndex: 'planPeriodEnd',
-    key: 'planPeriodEnd',
+    title: pi.label('receiveVersionNo'),
+    dataIndex: 'receiveVersionNo',
+    key: 'receiveVersionNo',
+    width: 110,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'receiveVersionNo') ?? ''
+  },
+  {
+    title: pi.label('salesProduct'),
+    dataIndex: 'salesProduct',
+    key: 'salesProduct',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'planPeriodEnd') ?? ''
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'salesProduct') ?? ''
+  },
+  {
+    title: pi.label('productCategoryCode'),
+    dataIndex: 'productCategoryCode',
+    key: 'productCategoryCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+  },
+  {
+    title: pi.label('profitCenterCode'),
+    dataIndex: 'profitCenterCode',
+    key: 'profitCenterCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'profitCenterCode') ?? ''
+  },
+  {
+    title: pi.label('modelCode'),
+    dataIndex: 'modelCode',
+    key: 'modelCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'modelCode') ?? ''
+  },
+  {
+    title: pi.label('materialCode'),
+    dataIndex: 'materialCode',
+    key: 'materialCode',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'materialCode') ?? ''
+  },
+  {
+    title: pi.label('materialDescription'),
+    dataIndex: 'materialDescription',
+    key: 'materialDescription',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: any }) => getSalesForecastField(record, 'materialDescription') ?? ''
   },
   {
     title: pi.label('customerCode'),
@@ -935,8 +1045,6 @@ const toSalesForecastNumber = (value: string | number | undefined | null): numbe
   return Number.isFinite(num) ? num : 0
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -999,10 +1107,15 @@ function handleReset() {
   salesForecastCode: '',
   planDateStart: '',
   planDateEnd: '',
-  planPeriodStartStart: '',
-  planPeriodStartEnd: '',
-  planPeriodEndStart: '',
-  planPeriodEndEnd: '',
+  receiveDateStart: '',
+  receiveDateEnd: '',
+  receiveVersionNo: undefined as number | undefined,
+  salesProduct: '',
+  productCategoryCode: '',
+  profitCenterCode: '',
+  modelCode: '',
+  materialCode: '',
+  materialDescription: '',
   customerCode: '',
   customerName1: '',
   plannerId: '',
@@ -1248,10 +1361,15 @@ function handleAdvancedQueryReset() {
   salesForecastCode: '',
   planDateStart: '',
   planDateEnd: '',
-  planPeriodStartStart: '',
-  planPeriodStartEnd: '',
-  planPeriodEndStart: '',
-  planPeriodEndEnd: '',
+  receiveDateStart: '',
+  receiveDateEnd: '',
+  receiveVersionNo: undefined as number | undefined,
+  salesProduct: '',
+  productCategoryCode: '',
+  profitCenterCode: '',
+  modelCode: '',
+  materialCode: '',
+  materialDescription: '',
   customerCode: '',
   customerName1: '',
   plannerId: '',

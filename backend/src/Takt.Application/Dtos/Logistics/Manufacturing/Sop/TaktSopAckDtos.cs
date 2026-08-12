@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Sop
 // 文件名称：TaktSopAckDtos.cs
-// 创建时间：2026-06-30
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SopAck 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSopAck 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktSopAckDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopAckId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
@@ -52,7 +48,7 @@ public class TaktSopAckDto : TaktCompanyDtoBase
     public string? SopName { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
@@ -63,7 +59,7 @@ public class TaktSopAckDto : TaktCompanyDtoBase
     public string? RevisionName { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
@@ -74,7 +70,7 @@ public class TaktSopAckDto : TaktCompanyDtoBase
     public string? WorkstationName { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AcknowledgedBy { get; set; }
@@ -130,30 +126,35 @@ public class TaktSopAckQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AcknowledgedBy { get; set; }
@@ -214,36 +215,36 @@ public class TaktSopAckCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AcknowledgedBy { get; set; }
@@ -310,30 +311,35 @@ public class TaktSopAckTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AcknowledgedBy { get; set; }
@@ -376,35 +382,35 @@ public class TaktSopAckImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AcknowledgedBy { get; set; }
@@ -453,30 +459,30 @@ public class TaktSopAckExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// SOP 主档 ID（关联 TaktSopDoc.Id，选项 TaktSopDocs/options）
+    /// SOP 主档 ID（选项 TaktSopDocs/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SopId { get; set; }
 
     /// <summary>
-    /// SOP 版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+    /// SOP 版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long RevisionId { get; set; }
 
     /// <summary>
-    /// 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+    /// 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? WorkstationId { get; set; }
 
     /// <summary>
-    /// 确认人 ID（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 确认人 ID（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AcknowledgedBy { get; set; }

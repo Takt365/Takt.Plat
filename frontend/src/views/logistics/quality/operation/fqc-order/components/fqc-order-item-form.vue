@@ -53,12 +53,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('batchNo')"
-                name="batchNo"
+                :label="pi.label('batchCode')"
+                name="batchCode"
               >
                 <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="pi.ph('batchNo')"
+                  v-model:value="formState.batchCode"
+                  :placeholder="pi.ph('batchCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -175,12 +175,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sampleSerialNo')"
-                name="sampleSerialNo"
+                :label="pi.label('sampleSerialCode')"
+                name="sampleSerialCode"
               >
                 <a-input
-                  v-model:value="formState.sampleSerialNo"
-                  :placeholder="pi.ph('sampleSerialNo')"
+                  v-model:value="formState.sampleSerialCode"
+                  :placeholder="pi.ph('sampleSerialCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -279,9 +279,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","batchNo","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialNo","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete"]
-
-
+const formFields = ["lineNumber","materialCode","batchCode","warehouseQuantity","standardCode","samplingSchemeCode","inspectionMethod","sampleQuantity","qualifiedQuantity","unqualifiedQuantity","inspectionReturnQuantity","sampleSerialCode","inspectionDescription","inspectorBy","inspectionDate","judgeStatus","isObsolete"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

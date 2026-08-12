@@ -28,11 +28,6 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 public class TaktSourceOfSupply : TaktCompanyEntityBase
 {
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 货源清单编码（租户+公司内唯一；业务单据号）
     /// </summary>
     [SugarColumn(ColumnName = "source_of_supply_code", ColumnDescription = "货源清单编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
@@ -45,7 +40,7 @@ public class TaktSourceOfSupply : TaktCompanyEntityBase
     /// <summary>
     /// 供货商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供货商编码", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
+    [SugarColumn(ColumnName = "supplier_code", ColumnDescription = "供货商编码", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string SupplierCode { get; set; } = string.Empty;
     /// <summary>
     /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）

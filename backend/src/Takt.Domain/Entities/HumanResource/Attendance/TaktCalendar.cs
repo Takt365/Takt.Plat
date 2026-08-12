@@ -15,12 +15,12 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.HumanResource.Attendance;
 
 /// <summary>
-/// 工厂日历（公司级；按 RelatedPlant 区分工厂维度）
+/// 工厂日历（公司级；按 PlantCode 区分工厂维度）
 /// </summary>
 [SugarTable("takt_human_resource_attendance_calendar", "工厂日历表")]
 [SugarIndex("ix_calendar_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_calendar_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_calendar_plant_date_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(CalendarDate), OrderByType.Asc, true)]
+[SugarIndex("ix_calendar_plant_date_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(CalendarDate), OrderByType.Asc, true)]
 [SugarIndex("ix_calendar_calendar_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CalendarDate), OrderByType.Asc, false)]
 [SugarIndex("ix_calendar_is_working_day", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsWorkingDay), OrderByType.Asc, false)]
 public class TaktCalendar : TaktCompanyEntityBase
@@ -47,9 +47,4 @@ public class TaktCalendar : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "shift_id", ColumnDescription = "关联班次ID", ColumnDataType = "bigint", IsNullable = true)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ShiftId { get; set; }
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
 }

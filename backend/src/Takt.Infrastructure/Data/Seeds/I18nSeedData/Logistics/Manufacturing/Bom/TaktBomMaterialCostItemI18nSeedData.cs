@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostItemI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCostItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,23 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem._self
             new TranslationSeedItem("entity.bommaterialcostitem._self", "zh-HK", "BOM 物料成本明细行信息_hk", "实体名称"),
 
-            // entity.bommaterialcostitem.plantcode
-            new TranslationSeedItem("entity.bommaterialcostitem.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcostitem.plantcode
-            new TranslationSeedItem("entity.bommaterialcostitem.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcostitem.plantcode
-            new TranslationSeedItem("entity.bommaterialcostitem.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.bommaterialcostitem.plantcode
-            new TranslationSeedItem("entity.bommaterialcostitem.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
+            // entity.bommaterialcostitem.bomlevel
+            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "en-US", "层级_us", "层级（BOM 展开层级，如 01/02）"),
+            // entity.bommaterialcostitem.bomlevel
+            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "ja-JP", "层级_jp", "层级（BOM 展开层级，如 01/02）"),
+            // entity.bommaterialcostitem.bomlevel
+            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "zh-CN", "层级", "层级（BOM 展开层级，如 01/02）"),
+            // entity.bommaterialcostitem.bomlevel
+            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "zh-HK", "层级_hk", "层级（BOM 展开层级，如 01/02）"),
+
+            // entity.bommaterialcostitem.sequencecode
+            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "en-US", "序号_us", "序号（展开行序号，如 0010）"),
+            // entity.bommaterialcostitem.sequencecode
+            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "ja-JP", "序号_jp", "序号（展开行序号，如 0010）"),
+            // entity.bommaterialcostitem.sequencecode
+            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "zh-CN", "序号", "序号（展开行序号，如 0010）"),
+            // entity.bommaterialcostitem.sequencecode
+            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "zh-HK", "序号_hk", "序号（展开行序号，如 0010）"),
 
             // entity.bommaterialcostitem.productcode
             new TranslationSeedItem("entity.bommaterialcostitem.productcode", "en-US", "产品编码_us", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
@@ -108,15 +117,6 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.productcode
             new TranslationSeedItem("entity.bommaterialcostitem.productcode", "zh-HK", "产品编码_hk", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
 
-            // entity.bommaterialcostitem.sequenceno
-            new TranslationSeedItem("entity.bommaterialcostitem.sequenceno", "en-US", "序号_us", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequenceno
-            new TranslationSeedItem("entity.bommaterialcostitem.sequenceno", "ja-JP", "序号_jp", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequenceno
-            new TranslationSeedItem("entity.bommaterialcostitem.sequenceno", "zh-CN", "序号", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequenceno
-            new TranslationSeedItem("entity.bommaterialcostitem.sequenceno", "zh-HK", "序号_hk", "序号（展开行序号，如 0010）"),
-
             // entity.bommaterialcostitem.productdescription
             new TranslationSeedItem("entity.bommaterialcostitem.productdescription", "en-US", "产品描述_us", "产品描述"),
             // entity.bommaterialcostitem.productdescription
@@ -126,23 +126,14 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.productdescription
             new TranslationSeedItem("entity.bommaterialcostitem.productdescription", "zh-HK", "产品描述_hk", "产品描述"),
 
-            // entity.bommaterialcostitem.bomlevel
-            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "en-US", "层级_us", "层级（BOM 展开层级，如 01/02）"),
-            // entity.bommaterialcostitem.bomlevel
-            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "ja-JP", "层级_jp", "层级（BOM 展开层级，如 01/02）"),
-            // entity.bommaterialcostitem.bomlevel
-            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "zh-CN", "层级", "层级（BOM 展开层级，如 01/02）"),
-            // entity.bommaterialcostitem.bomlevel
-            new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "zh-HK", "层级_hk", "层级（BOM 展开层级，如 01/02）"),
-
-            // entity.bommaterialcostitem.bomitemno
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemno", "en-US", "BOM项目号_us", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemno
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemno", "ja-JP", "BOM项目号_jp", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemno
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemno", "zh-CN", "BOM项目号", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemno
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemno", "zh-HK", "BOM项目号_hk", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "en-US", "BOM项目号_us", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "ja-JP", "BOM项目号_jp", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-CN", "BOM项目号", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-HK", "BOM项目号_hk", "BOM 项目号（子件行项目号，如 0010）"),
 
             // entity.bommaterialcostitem.componentcode
             new TranslationSeedItem("entity.bommaterialcostitem.componentcode", "en-US", "组件编码_us", "组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
@@ -234,14 +225,14 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.movingpriceunit
             new TranslationSeedItem("entity.bommaterialcostitem.movingpriceunit", "zh-HK", "移动价格单位_hk", "移动价格单位"),
 
-            // entity.bommaterialcostitem.movingpricecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrency", "en-US", "移动价格货币_us", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.movingpricecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrency", "ja-JP", "移动价格货币_jp", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.movingpricecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrency", "zh-CN", "移动价格货币", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.movingpricecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrency", "zh-HK", "移动价格货币_hk", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.movingpricecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "en-US", "移动价格货币_us", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.movingpricecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "ja-JP", "移动价格货币_jp", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.movingpricecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-CN", "移动价格货币", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.movingpricecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.movingpricecurrencycode", "zh-HK", "移动价格货币_hk", "移动价格货币（字典 accounting_currency_code；如 CNY/USD）"),
 
             // entity.bommaterialcostitem.purchaseorganization
             new TranslationSeedItem("entity.bommaterialcostitem.purchaseorganization", "en-US", "采购组织_us", "采购组织"),
@@ -288,14 +279,14 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.purchasepriceunit
             new TranslationSeedItem("entity.bommaterialcostitem.purchasepriceunit", "zh-HK", "采购价格单位_hk", "采购价格单位"),
 
-            // entity.bommaterialcostitem.purchasecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrency", "en-US", "采购货币_us", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.purchasecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrency", "ja-JP", "采购货币_jp", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.purchasecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrency", "zh-CN", "采购货币", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
-            // entity.bommaterialcostitem.purchasecurrency
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrency", "zh-HK", "采购货币_hk", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.purchasecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "en-US", "采购货币_us", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.purchasecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "ja-JP", "采购货币_jp", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.purchasecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-CN", "采购货币", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
+            // entity.bommaterialcostitem.purchasecurrencycode
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasecurrencycode", "zh-HK", "采购货币_hk", "采购货币（字典 accounting_currency_code；如 CNY/USD）"),
 
             // entity.bommaterialcostitem.costingdate
             new TranslationSeedItem("entity.bommaterialcostitem.costingdate", "en-US", "核算日期_us", "核算日期"),

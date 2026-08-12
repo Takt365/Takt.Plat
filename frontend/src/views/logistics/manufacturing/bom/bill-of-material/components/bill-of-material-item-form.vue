@@ -21,19 +21,19 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo')"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.bomcode')"
+                :label="pi.label('bomCode')"
                 name="bomCode"
               >
                 <a-input
                   v-model:value="formState.bomCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') })"
+                  :placeholder="pi.ph('bomCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -43,65 +43,133 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.linenumber')"
+                :label="pi.label('lineNumber')"
                 name="lineNumber"
               >
                 <a-input-number
                   v-model:value="formState.lineNumber"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.linenumber') })"
+                  :placeholder="pi.ph('lineNumber')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.materialid')"
-                name="materialId"
-              >
-                <a-input
-                  v-model:value="formState.materialId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.billofmaterialitem.materialcode')"
+                :label="pi.label('materialCode')"
                 name="materialCode"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.billOfMaterialItemId"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.usagequantity')"
+                :label="pi.label('usageQuantity')"
                 name="usageQuantity"
               >
                 <a-input-number
                   v-model:value="formState.usageQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.usagequantity') })"
+                  :placeholder="pi.ph('usageQuantity')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.materialunit')"
+                :label="pi.label('materialUnit')"
                 name="materialUnit"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.materialUnit"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialunit') })"
+                  dict-type="logistics_unit_of_measure_code"
+                  :placeholder="pi.ph('materialUnit')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('scrapRate')"
+                name="scrapRate"
+              >
+                <a-input-number
+                  v-model:value="formState.scrapRate"
+                  :placeholder="pi.ph('scrapRate')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('actualUsageQuantity')"
+                name="actualUsageQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.actualUsageQuantity"
+                  :placeholder="pi.ph('actualUsageQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('operationSeq')"
+                name="operationSeq"
+              >
+                <a-input-number
+                  v-model:value="formState.operationSeq"
+                  :placeholder="pi.ph('operationSeq')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('workCenter')"
+                name="workCenter"
+              >
+                <TaktSelect
+                  v-model:value="formState.workCenter"
+                  api-url="TaktWorkCenters/options"
+                  :placeholder="pi.ph('workCenter')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('position')"
+                name="position"
+              >
+                <a-input
+                  v-model:value="formState.position"
+                  :placeholder="pi.ph('position')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('substituteGroup')"
+                name="substituteGroup"
+              >
+                <a-input
+                  v-model:value="formState.substituteGroup"
+                  :placeholder="pi.ph('substituteGroup')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -110,25 +178,63 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.scraprate')"
-                name="scrapRate"
+                :label="pi.label('substitutePriority')"
+                name="substitutePriority"
               >
                 <a-input-number
-                  v-model:value="formState.scrapRate"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.scraprate') })"
+                  v-model:value="formState.substitutePriority"
+                  :placeholder="pi.ph('substitutePriority')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.billofmaterialitem.actualusagequantity')"
-                name="actualUsageQuantity"
+                :label="pi.label('isOptional')"
+                name="isOptional"
               >
-                <a-input-number
-                  v-model:value="formState.actualUsageQuantity"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.actualusagequantity') })"
-                  style="width: 100%"
+                <TaktSelect
+                  v-model:value="formState.isOptional"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isOptional')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isPhantom')"
+                name="isPhantom"
+              >
+                <TaktSelect
+                  v-model:value="formState.isPhantom"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isPhantom')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('isObsolete')"
+                name="isObsolete"
+              >
+                <TaktSelect
+                  v-model:value="formState.isObsolete"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isObsolete')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('substitutes')"
+                name="substitutes"
+              >
+                <a-input
+                  v-model:value="formState.substitutes"
+                  :placeholder="pi.ph('substitutes')"
+                  show-count
+                  :maxlength="20"
+                  allow-clear
                 />
               </a-form-item>
             </a-col>
@@ -144,10 +250,17 @@
  * Takt物料清单实体子表 billOfMaterialItem 维护表单 · 由 generate-vue-master-detail-from-api.cjs 生成
  * @module views/logistics/manufacturing/bom/bill-of-material/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useBillOfMaterialItemI18n } from '../composables/use-bill-of-material-item-i18n'
+
+/** 实体字段 i18n */
+const pi = useBillOfMaterialItemI18n()
+
 import type { BillOfMaterialItemCreate } from '@/types/logistics/manufacturing/bom/bill-of-material-item'
+import TaktSelect from '@/components/business/takt-select/index.vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -156,7 +269,8 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["bomCode","lineNumber","materialId","materialCode","usageQuantity","materialUnit","scrapRate","actualUsageQuantity"]
+const formFields = ["bomCode","lineNumber","materialCode","usageQuantity","materialUnit","scrapRate","actualUsageQuantity","operationSeq","workCenter","position","substituteGroup","substitutePriority","isOptional","isPhantom","isObsolete","substitutes"]
+
 
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
@@ -183,6 +297,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 billOfMaterialItemId 才视为编辑） */
 watch(
@@ -211,45 +332,38 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   bomCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.bomcode') }),
+      message: pi.ph('bomCode'),
       trigger: 'blur'
     }
   ],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.linenumber') }))
+        return Promise.reject(pi.ph('lineNumber'))
       }
       return Promise.resolve()
     },
     trigger: 'change'
   }],
-  materialId: [
-    {
-      required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialid') }),
-      trigger: 'blur'
-    }
-  ],
   materialCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialcode') }),
-      trigger: 'blur'
+      message: pi.ph('materialCode'),
+      trigger: 'change'
     }
   ],
   usageQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+        return Promise.reject(pi.ph('usageQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.usagequantity') }))
+        return Promise.reject(pi.ph('usageQuantity'))
       }
       return Promise.resolve()
     },
@@ -258,18 +372,18 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialUnit: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.billofmaterialitem.materialunit') }),
-      trigger: 'blur'
+      message: pi.ph('materialUnit'),
+      trigger: 'change'
     }
   ],
   scrapRate: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+        return Promise.reject(pi.ph('scrapRate'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.scraprate') }))
+        return Promise.reject(pi.ph('scrapRate'))
       }
       return Promise.resolve()
     },
@@ -278,11 +392,76 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   actualUsageQuantity: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+        return Promise.reject(pi.ph('actualUsageQuantity'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.billofmaterialitem.actualusagequantity') }))
+        return Promise.reject(pi.ph('actualUsageQuantity'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  operationSeq: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('operationSeq'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('operationSeq'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  substitutePriority: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('substitutePriority'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('substitutePriority'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isOptional: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isOptional'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isOptional'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isPhantom: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isPhantom'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isPhantom'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  isObsolete: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('isObsolete'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('isObsolete'))
       }
       return Promise.resolve()
     },
@@ -314,6 +493,26 @@ function getValues(): Record<string, any> {
   if ('actualUsageQuantity' in payload) {
     const rawactualUsageQuantity = payload.actualUsageQuantity
     payload.actualUsageQuantity = typeof rawactualUsageQuantity === 'number' ? rawactualUsageQuantity : Number(rawactualUsageQuantity)
+  }
+  if ('operationSeq' in payload) {
+    const rawoperationSeq = payload.operationSeq
+    payload.operationSeq = typeof rawoperationSeq === 'number' ? rawoperationSeq : Number(rawoperationSeq)
+  }
+  if ('substitutePriority' in payload) {
+    const rawsubstitutePriority = payload.substitutePriority
+    payload.substitutePriority = typeof rawsubstitutePriority === 'number' ? rawsubstitutePriority : Number(rawsubstitutePriority)
+  }
+  if ('isOptional' in payload) {
+    const rawisOptional = payload.isOptional
+    payload.isOptional = typeof rawisOptional === 'number' ? rawisOptional : Number(rawisOptional)
+  }
+  if ('isPhantom' in payload) {
+    const rawisPhantom = payload.isPhantom
+    payload.isPhantom = typeof rawisPhantom === 'number' ? rawisPhantom : Number(rawisPhantom)
+  }
+  if ('isObsolete' in payload) {
+    const rawisObsolete = payload.isObsolete
+    payload.isObsolete = typeof rawisObsolete === 'number' ? rawisObsolete : Number(rawisObsolete)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   payload.billOfMaterialId = props.masterId

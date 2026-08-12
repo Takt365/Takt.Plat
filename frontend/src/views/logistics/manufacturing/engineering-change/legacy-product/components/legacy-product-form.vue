@@ -10,7 +10,7 @@
 <template>
   <a-form ref="formRef" :model="formState" layout="horizontal" label-align="right" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
     <a-row :gutter="24">
-      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecNo" disabled /></a-form-item></a-col>
+      <a-col :span="12"><a-form-item :label="t('entity.ec.no')"><a-input v-model:value="formState.ecCode" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.ecolditem')"><a-input v-model:value="formState.ecOldItem" disabled /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdept.oldproducthandling')"><a-input v-model:value="formState.oldProductHandling" /></a-form-item></a-col>
       <a-col :span="12"><a-form-item :label="t('entity.ecdetail.isendofline')"><TaktSelect v-model:value="formState.isEndOfLine" dict-type="logistics_material_eol_status" allow-clear /></a-form-item></a-col>
@@ -26,7 +26,7 @@ import type { EcLegacyProduct, EcLegacyProductUpdate } from '@/types/logistics/m
 const props = defineProps<{ formData?: EcLegacyProduct | null; loading?: boolean }>();
 const { t } = useI18n();
 const formRef = ref();
-const formState = reactive<EcLegacyProductUpdate & { ecNo?: string; ecOldItem?: string }>({
+const formState = reactive<EcLegacyProductUpdate & { ecCode?: string; ecOldItem?: string }>({
   ecDetailId: '',
   isEndOfLine: '',
   oldProductHandling: '',
@@ -36,7 +36,7 @@ watch(() => props.formData, (val) => {
   if (!val) { resetFields(); return; }
   Object.assign(formState, {
     ecDetailId: val.ecDetailId,
-    ecNo: val.ecNo,
+    ecCode: val.ecCode,
     ecOldItem: val.ecOldItem ?? '',
     oldProductHandling: val.oldProductHandling ?? '',
     isEndOfLine: val.isEndOfLine ?? '',
@@ -46,11 +46,11 @@ watch(() => props.formData, (val) => {
 
 async function validate() { await formRef.value?.validate(); }
 function getValues(): EcLegacyProductUpdate {
-  const { ecNo, ecOldItem, ...rest } = formState;
+  const { ecCode, ecOldItem, ...rest } = formState;
   return rest;
 }
 function resetFields() {
-  Object.assign(formState, { ecDetailId: '', isEndOfLine: 0, oldProductHandling: '', remark: '', ecNo: '', ecOldItem: '' });
+  Object.assign(formState, { ecDetailId: '', isEndOfLine: 0, oldProductHandling: '', remark: '', ecCode: '', ecOldItem: '' });
 }
 defineExpose({ validate, getValues, resetFields });
 </script>

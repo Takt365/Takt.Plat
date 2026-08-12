@@ -10,8 +10,12 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { TableColumnsType } from 'ant-design-vue';
-import type { ColumnGroupType, ColumnType } from 'ant-design-vue/es/table/interface';
+import type { TableColumnsType } from 'ant-design-vue'
+import type { ColumnGroupType, ColumnType } from 'ant-design-vue/es/table/interface'
+import { TAKT_LARGE_DATA_AUTO_THRESHOLD } from '@/utils/takt-large-data'
+
+/** 表格 / 树：与下拉共用大数据自动阈值（别名兼容旧引用） */
+export const TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD = TAKT_LARGE_DATA_AUTO_THRESHOLD
 
 type TableColumnItem = ColumnType<Record<string, unknown>> | ColumnGroupType<Record<string, unknown>>;
 
@@ -73,13 +77,7 @@ export const TAKT_TABLE_VIEWPORT_HEIGHT_FALLBACK = 800;
 export const TAKT_TREE_LEFT_VIRTUAL_HEIGHT_FALLBACK = 400;
 
 /**
- * 表格 / 树绑定行数超过此阈值时仍强制虚拟滚动（即使页面传 virtual=false）
- * @description 各 takt-*-table 默认 virtual=true；本阈值是防呆，不是业务数据条数上限
- */
-export const TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD = 5000;
-
-/**
- * 是否启用 Ant Design Vue Table / Tree 虚拟滚动
+ * 是否启用 Ant Design Vue Table / Tree 虚拟滚动（默认开；超大数据强制开；❌ 不截断行数据）
  * @param rowCount 当前绑定行数（表格 dataSource.length 或树节点总数）
  * @param virtualProp 组件 virtual；true 强制开；false 未超阈值时可关；省略则默认开
  * @returns {boolean} 是否开启 virtual
@@ -88,18 +86,18 @@ export function shouldUseTableVirtualScroll(
   rowCount: number,
   virtualProp?: boolean,
 ): boolean {
-  const len = Number.isFinite(rowCount) && rowCount > 0 ? Math.floor(rowCount) : 0;
+  const len = Number.isFinite(rowCount) && rowCount > 0 ? Math.floor(rowCount) : 0
   if (virtualProp === true) {
-    return true;
+    return true
   }
-  // 超大行数强制虚拟化（防呆）；不是「库里只能查这么多条」
-  if (len > TAKT_TABLE_AUTO_VIRTUAL_ROW_THRESHOLD) {
-    return true;
+  // 超大数据强制虚拟化（防呆）；不是「库里只能查这么多条」
+  if (len >= TAKT_LARGE_DATA_AUTO_THRESHOLD) {
+    return true
   }
   if (virtualProp === false) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }
 
 /**

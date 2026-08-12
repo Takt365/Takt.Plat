@@ -26,16 +26,11 @@ namespace Takt.Domain.Entities.Logistics.Quality.Cost;
 [SugarIndex("ix_takt_logistics_quality_incident_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktQualityIncident : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", Length = 4, ColumnDataType = "nvarchar", IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 品质事故编码(唯一,如:QI-2026-0001)
     /// </summary>
-    [SugarColumn(ColumnName = "quality_incident_code", ColumnDescription = "品质事故编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_incident_code", ColumnDescription = "品质事故编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIncidentCode { get; set; } = string.Empty;
 
     // ==================== 基础日期与产品信息 ====================
@@ -55,7 +50,7 @@ public class TaktQualityIncident : TaktCompanyEntityBase
     /// <summary>
     /// 机种/产品型号
     /// </summary>
-    [SugarColumn(ColumnName = "model", ColumnDescription = "机种", Length = 255, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "model", ColumnDescription = "机种", Length = 40, ColumnDataType = "nvarchar", IsNullable = false)]
     public string Model { get; set; } = string.Empty;
 
     /// <summary>
@@ -81,8 +76,8 @@ public class TaktQualityIncident : TaktCompanyEntityBase
     /// <summary>
     /// 成本币种(CNY/USD/JPY等)
     /// </summary>
-    [SugarColumn(ColumnName = "cost_currency", ColumnDescription = "成本币种", Length = 3, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
-    public string CostCurrency { get; set; } = "CNY";
+    [SugarColumn(ColumnName = "currency_code", ColumnDescription = "成本币种", Length = 3, ColumnDataType = "nvarchar", IsNullable = false, DefaultValue = "CNY")]
+    public string CurrencyCode { get; set; } = "CNY";
 
     // ==================== 导航关系 ====================
 

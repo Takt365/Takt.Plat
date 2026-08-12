@@ -120,11 +120,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('offerNo')">
-      <a-form-item :label="t('entity.talentoffer.offerno')">
+      <div v-show="isFieldVisible('offerCode')">
+      <a-form-item :label="t('entity.talentoffer.offerCode')">
         <a-input
-          v-model:value="advancedQueryForm.offerNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.offerno') })"
+          v-model:value="advancedQueryForm.offerCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.talentoffer.offerCode') })"
           show-count
           :maxlength="20"
           allow-clear
@@ -465,7 +465,7 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单模型 */
 const advancedQueryForm = ref({
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',
@@ -490,7 +490,7 @@ const advancedQueryForm = ref({
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
   { key: 'jobPostingId', label: t('entity.talentoffer.jobpostingid') },
-  { key: 'offerNo', label: t('entity.talentoffer.offerno') },
+  { key: 'offerCode', label: t('entity.talentoffer.offerCode') },
   { key: 'hireDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.talentoffer.hiredate')) },
   { key: 'hireDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.talentoffer.hiredate')) },
   { key: 'employeeId', label: t('entity.talentoffer.employeeid') },
@@ -510,8 +510,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -526,8 +525,6 @@ const entityIdName = 'talentOfferId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -552,7 +549,7 @@ function buildListQuery(overrides?: Partial<TalentOfferQuery>): TalentOfferQuery
     }
   }
   assignTrimmed('jobPostingId', form.jobPostingId)
-  assignTrimmed('offerNo', form.offerNo)
+  assignTrimmed('offerCode', form.offerCode)
   assignTrimmed('hireDateStart', form.hireDateStart)
   assignTrimmed('hireDateEnd', form.hireDateEnd)
   assignTrimmed('employeeId', form.employeeId)
@@ -583,12 +580,6 @@ onMounted(async () => {
   loadData()
 })
 
-
-
-
-
-
-
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
   {
@@ -611,13 +602,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'jobPostingId') ?? ''
   },
   {
-    title: t('entity.talentoffer.offerno'),
-    dataIndex: 'offerNo',
-    key: 'offerNo',
+    title: t('entity.talentoffer.offerCode'),
+    dataIndex: 'offerCode',
+    key: 'offerCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'offerNo') ?? ''
+    customRender: ({ record }: { record: any }) => getTalentOfferField(record, 'offerCode') ?? ''
   },
   {
     title: t('entity.talentoffer.hiredate'),
@@ -722,7 +713,6 @@ const getTalentOfferId = (record: any): string => record?.[entityIdName] ?? ''
  */
 const getTalentOfferField = (record: any, field: string): any => record?.[field]
 
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -792,7 +782,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',
@@ -984,7 +974,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   jobPostingId: '',
-  offerNo: '',
+  offerCode: '',
   hireDateStart: '',
   hireDateEnd: '',
   employeeId: '',

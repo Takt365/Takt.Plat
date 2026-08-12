@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktPlannedOrderI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlannedOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktPlannedOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plannedorder._self", "zh-CN", "计划订单信息", "实体名称"),
             // entity.plannedorder._self
             new TranslationSeedItem("entity.plannedorder._self", "zh-HK", "计划订单信息_hk", "实体名称"),
-
-            // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.plannedorder.plantcode
-            new TranslationSeedItem("entity.plannedorder.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
 
             // entity.plannedorder.code
             new TranslationSeedItem("entity.plannedorder.code", "en-US", "计划订单编码_us", "计划订单编码"),

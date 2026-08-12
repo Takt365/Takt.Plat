@@ -23,7 +23,7 @@ export default {
     summary: '{count} EC×dept row(s) (completed tasks by month)',
     summaryImplement: '{count} department row(s) (completed task count by completion month)',
     deptCode: 'Department code',
-    ecNo: 'EC No.',
+    ecCode: 'EC No.',
     trendSummary: 'MoM {base} → {compare}: up {up} · down {down} · flat {flat}',
     exportSuccess: 'Export completed',
     exportFailed: 'Export failed',

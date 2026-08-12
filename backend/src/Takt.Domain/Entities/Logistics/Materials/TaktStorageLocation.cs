@@ -31,11 +31,6 @@ public class TaktStorageLocation : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "warehouse_id", ColumnDescription = "仓库ID", ColumnDataType = "bigint", IsNullable = false)]
     public long WarehouseId { get; set; }
     /// <summary>
-    /// 工厂代码（冗余；选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
-    /// <summary>
     /// 仓库编码（冗余；关联 TaktWarehouse.WarehouseCode，选项 TaktWarehouses/options，DictValue=WarehouseCode）
     /// </summary>
     [SugarColumn(ColumnName = "warehouse_code", ColumnDescription = "存货地点编码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]

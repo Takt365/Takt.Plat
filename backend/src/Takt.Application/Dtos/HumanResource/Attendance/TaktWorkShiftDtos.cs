@@ -35,35 +35,6 @@ public class TaktWorkShiftDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long WorkShiftId { get; set; }
 
-    /// <summary>
-    /// 班次编码（租户+公司内唯一）
-    /// </summary>
-    public string ShiftCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 班次名称
-    /// </summary>
-    public string ShiftName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 当班开始时间（HH:mm）
-    /// </summary>
-    public string StartTime { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 当班结束时间（HH:mm）
-    /// </summary>
-    public string EndTime { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 是否跨自然日（字典 sys_yes_no_type；0=否 1=是）
-    /// </summary>
-    public int CrossMidnight { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -93,6 +64,11 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 班次编码（租户+公司内唯一）
     /// </summary>
     public string? ShiftCode { get; set; } = string.Empty;
@@ -120,7 +96,7 @@ public class TaktWorkShiftQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -168,9 +144,10 @@ public class TaktWorkShiftCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 班次编码（租户+公司内唯一）
@@ -205,7 +182,7 @@ public class TaktWorkShiftCreateDto
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -283,6 +260,11 @@ public class TaktWorkShiftTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 班次编码（租户+公司内唯一）
     /// </summary>
     public string? ShiftCode { get; set; } = string.Empty;
@@ -310,7 +292,7 @@ public class TaktWorkShiftTemplateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -340,9 +322,10 @@ public class TaktWorkShiftImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 班次编码（租户+公司内唯一）
@@ -372,7 +355,7 @@ public class TaktWorkShiftImportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -435,7 +418,7 @@ public class TaktWorkShiftExportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

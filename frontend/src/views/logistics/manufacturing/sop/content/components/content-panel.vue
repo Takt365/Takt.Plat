@@ -128,11 +128,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('contentLang')">
-      <a-form-item :label="t('entity.sopcontent.contentlang')">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="t('entity.sopcontent.culturecode')">
         <a-textarea
-          v-model:value="advancedQueryForm.contentLang"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.contentlang') })"
+          v-model:value="advancedQueryForm.cultureCode"
+          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.culturecode') })"
           :rows="2"
           allow-clear
         />
@@ -304,7 +304,7 @@ const advancedQueryVisible = ref(false)
 const advancedQueryForm = ref({
   revisionId: '',
   sopId: '',
-  contentLang: '',
+  cultureCode: '',
   contentTitle: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -317,13 +317,12 @@ const visibleQueryFieldKeys = ref<string[]>([])
 const queryFieldsMeta = computed(() => [
   { key: 'revisionId', label: t('entity.sopcontent.revisionid') },
   { key: 'sopId', label: t('entity.sopcontent.sopid') },
-  { key: 'contentLang', label: t('entity.sopcontent.contentlang') },
+  { key: 'cultureCode', label: t('entity.sopcontent.culturecode') },
   { key: 'contentTitle', label: t('entity.sopcontent.contenttitle') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 
 /**
  * 高级查询字段标签
@@ -347,7 +346,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   revisionId: '',
   sopId: '',
-  contentLang: '',
+  cultureCode: '',
   contentTitle: '',
   createdAtStart: '',
   createdAtEnd: '',
@@ -418,14 +417,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getSopContentField(record, 'sopId') ?? ''),
   },
   {
-    title: t('entity.sopcontent.contentlang'),
-    dataIndex: 'contentLang',
-    key: 'contentLang',
+    title: t('entity.sopcontent.culturecode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: SopContent }) =>
-      String(getSopContentField(record, 'contentLang') ?? ''),
+      String(getSopContentField(record, 'cultureCode') ?? ''),
   },
   {
     title: t('entity.sopcontent.contenttitle'),
@@ -474,10 +473,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:sop:revision:delete',
         onClick: (record: SopContent) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -541,7 +538,7 @@ function buildListQuery(overrides?: Partial<SopContentQuery>): SopContentQuery {
   }
   assignTrimmed('revisionId', form.revisionId)
   assignTrimmed('sopId', form.sopId)
-  assignTrimmed('contentLang', form.contentLang)
+  assignTrimmed('cultureCode', form.cultureCode)
   assignTrimmed('contentTitle', form.contentTitle)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)

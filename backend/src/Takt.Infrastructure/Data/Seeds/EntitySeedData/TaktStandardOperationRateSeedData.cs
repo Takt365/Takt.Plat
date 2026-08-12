@@ -118,7 +118,7 @@ public class TaktStandardOperationRateSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateStandardOperationRateAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     plantCode,
                     fiscalYear);
                 insertCount += inserted;
@@ -163,6 +163,7 @@ public class TaktStandardOperationRateSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktStandardOperationRate> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         string plantCode,
         FiscalYearSeedItem fiscalYear)
     {
@@ -186,6 +187,7 @@ public class TaktStandardOperationRateSeedData : ITaktSeedDataCoordinator
                 EffectiveDate = fiscalYear.EffectiveDate,
                 ExpiryDate = fiscalYear.ExpiryDate,
                 RateStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             rate = await repository.CreateAsync(rate);
             return (rate, 1, 0);

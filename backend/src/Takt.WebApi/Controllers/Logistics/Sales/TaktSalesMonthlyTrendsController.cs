@@ -15,11 +15,12 @@ using Takt.Application.Dtos.Logistics.Sales;
 using Takt.Application.Services.Logistics.Sales;
 using Takt.Shared.Constants;
 using Takt.Shared.Helpers;
+using Takt.Shared.Options;
 
 namespace Takt.WebApi.Controllers.Logistics.Sales;
 
 /// <summary>
-/// 月销售推移转置分析控制器
+/// 月销售推移转置分析控制器（与销售订单 CRUD 分离）
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "月销售推移")]
@@ -34,6 +35,49 @@ public class TaktSalesMonthlyTrendsController : TaktControllerBase
     public TaktSalesMonthlyTrendsController(ITaktSalesMonthlyTrendService salesMonthlyTrendService)
     {
         _salesMonthlyTrendService = salesMonthlyTrendService;
+    }
+
+    /// <summary>
+    /// 推移查询栏：销售订单本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:monthly:trend:list", "月销售推移工厂选项")]
+    [HttpGet("plant-options")]
+    public async Task<IActionResult> GetSalesMonthlyTrendPlantOptionsAsync()
+    {
+        try
+        {
+            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendPlantOptionsAsync();
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
+    }
+
+    /// <summary>
+    /// 推移查询栏：按工厂去重客户
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
+    [TaktPermission("logistics:sales:monthly:trend:list", "月销售推移客户选项")]
+    [HttpGet("customer-options")]
+    public async Task<IActionResult> GetSalesMonthlyTrendCustomerOptionsAsync([FromQuery] string plantCode)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(plantCode))
+            {
+                return Success(new List<TaktSelectOption>(), "查询成功");
+            }
+            var result = await _salesMonthlyTrendService.GetSalesMonthlyTrendCustomerOptionsAsync(plantCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 
     /// <summary>

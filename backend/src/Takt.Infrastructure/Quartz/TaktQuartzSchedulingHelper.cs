@@ -69,7 +69,7 @@ public static class TaktQuartzSchedulingHelper
                 if (!TaktQuartzSqlPathHelper.IsValidWwwRootRelativeSqlPath(task.SqlScript))
                 {
                     throw new InvalidOperationException(
-                        "SqlScript 只可填相对 wwwroot 的 .sql 路径（如 Quartz/sap_sync_ma.sql），不允许填写具体 SQL 语句");
+                        "SqlScript 只可填相对 wwwroot 的 .sql 路径（如 Quartz/sync_mat.sql），不允许填写具体 SQL 语句");
                 }
                 break;
             default:

@@ -112,7 +112,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
+                  api-url="TaktGeneralMaterials/options"
                   :placeholder="pi.ph('materialCode')"
                   :disabled="!!formData?.masterDemandScheduleLineId"
                 />
@@ -210,8 +210,6 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["mdsCode","demandSourceType","salesOrderId","salesOrderLineNumber","salesForecastId","salesForecastLineNumber","materialCode","bucketStart","bucketEnd","demandQuantity","unitOfMeasure"]
-
-
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {

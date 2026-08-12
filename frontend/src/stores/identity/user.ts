@@ -173,7 +173,7 @@ export const useUserStore = defineStore('user', () => {
       await tenantStore.refreshBusinessContextAsync().catch(() => undefined);
       await loadHolidayThemeForCurrentSession().catch(() => undefined);
       await useLocaleStore().loadCultureOptionsAsync({ force: true }).catch(() => undefined);
-      const userCulture = profile.defaultCulture?.trim();
+      const userCulture = profile.defaultCulture?.trim() || profile.companyDefaultCulture?.trim();
       if (userCulture) {
         useLocaleStore().applyUserProfileLocale(userCulture);
       }
@@ -247,7 +247,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /**
-   * 登录页预览：租户已校验后，按「租户+用户名」解析默认公司与用户 DefaultCulture，再按「租户+公司」拉取当日假日。
+   * 登录页预览：租户已校验后，按「租户+用户名」解析默认公司与用户 CultureCode，再按「租户+公司」拉取当日假日。
    * 界面语言由 {@link useLocaleStore.applyLoginUserLocale} 写入（浏览器与默认不一致时优先浏览器，须在租户语言列表内）；用户手动切换后不会被覆盖。
    * @param tenantCode 已校验的租户编码
    * @param username 登录用户名
@@ -273,7 +273,7 @@ export const useUserStore = defineStore('user', () => {
       return null;
     }
 
-    if (!localeDto.defaultCulture?.trim() && !localeDto.companyCode?.trim()) {
+    if (!localeDto.cultureCode?.trim() && !localeDto.companyCode?.trim()) {
       holidayFromToken.value = null;
       return localeDto;
     }
@@ -287,9 +287,9 @@ export const useUserStore = defineStore('user', () => {
       }
     }
 
-    const defaultCulture = localeDto.defaultCulture?.trim();
-    if (defaultCulture) {
-      useLocaleStore().applyLoginUserLocale(defaultCulture, {
+    const cultureCode = localeDto.cultureCode?.trim();
+    if (cultureCode) {
+      useLocaleStore().applyLoginUserLocale(cultureCode, {
         tenantCode: trimmedTenant,
         username: trimmedUser,
         companyCode,

@@ -110,7 +110,7 @@ internal static class TaktPcbaOutputDerivedFieldsHelper
             companyCode,
             master.PlantCode,
             master.ProdDate,
-            detail.ProductionEquipmentCode,
+            detail.ProdEquipCode,
             detail.ShiftNo);
         detail.StdEquipmentCapacity = TaktProductionStatHelper.CalculateAssyStdCapacity(
             1,
@@ -127,7 +127,7 @@ internal static class TaktPcbaOutputDerivedFieldsHelper
     /// <param name="companyCode">公司编码</param>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="prodDate">生产日期</param>
-    /// <param name="equipmentCode">设备编码</param>
+    /// <param name="EquipCode">设备编码</param>
     /// <param name="shiftNo">班次</param>
     /// <returns>时间稼动率(%)</returns>
     public static async Task<decimal> ResolveEquipmentOperationRatePercentAsync(
@@ -136,22 +136,22 @@ internal static class TaktPcbaOutputDerivedFieldsHelper
         string companyCode,
         string plantCode,
         DateTime prodDate,
-        string equipmentCode,
+        string EquipCode,
         int shiftNo)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(equipmentCode))
+        if (string.IsNullOrWhiteSpace(plantCode) || string.IsNullOrWhiteSpace(EquipCode))
         {
             return 0;
         }
         var prodDateOnly = prodDate.Date;
-        var normalizedEquipmentCode = equipmentCode.Trim();
+        var normalizedEquipCode = EquipCode.Trim();
         var row = await equipmentOperationRateRepository.FirstAsync(x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
             && x.PlantCode == plantCode.Trim()
-            && x.EquipmentCode == normalizedEquipmentCode
+            && x.EquipCode == normalizedEquipCode
             && x.ShiftNo == shiftNo
             && x.TimeCategory == EquipmentOperationRateTimeCategoryDay
             && x.StartDate <= prodDateOnly

@@ -708,7 +708,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -994,8 +993,6 @@ const toPurchasePlanNumber = (value: string | number | undefined | null): number
   const num = Number(value ?? 0)
   return Number.isFinite(num) ? num : 0
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

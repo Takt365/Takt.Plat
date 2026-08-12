@@ -27,11 +27,6 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 [SugarIndex("ix_takt_logistics_manufacturing_mps_standard_operation_rate_sor_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(FinancialYear), OrderByType.Asc, nameof(OperationType), OrderByType.Asc, true)]
 public class TaktStandardOperationRate : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31）

@@ -9,22 +9,42 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:routing:item:create"
-      update-permission="logistics:manufacturing:bom:routing:item:update"
-      delete-permission="logistics:manufacturing:bom:routing:item:delete"
-      import-permission="logistics:manufacturing:bom:routing:item:import"
-      export-permission="logistics:manufacturing:bom:routing:item:export"
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getRoutingItemId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="routingItemId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
+      create-permission="logistics:manufacturing:bom:routing:create"
+      update-permission="logistics:manufacturing:bom:routing:update"
+      delete-permission="logistics:manufacturing:bom:routing:delete"
+      import-permission="logistics:manufacturing:bom:routing:import"
+      export-permission="logistics:manufacturing:bom:routing:export"
       :show-create="true"
       :show-update="true"
       :show-delete="true"
@@ -50,46 +70,50 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getRoutingItemId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="routingItemId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'processSegmentType'">
+        <template v-if="column.key === 'baseUnit'">
           <TaktDictTag
-            :value="getRoutingItemField(record, 'processSegmentType')"
-            dict-type="logistics_process_segment_type"
+            :value="getRoutingItemDictValue(record, 'baseUnit')"
+            dict-type="logistics_unit_of_measure_code"
           />
         </template>
-        <template v-else-if="column.key === 'isInspection'">
+        <template v-else-if="column.key === 'timeUnit'">
           <TaktDictTag
-            :value="getRoutingItemField(record, 'isInspection')"
-            dict-type="sys_yes_no_type"
+            :value="getRoutingItemDictValue(record, 'timeUnit')"
+            dict-type="logistics_time_unit"
+          />
+        </template>
+        <template v-else-if="column.key === 'pointsUnit'">
+          <TaktDictTag
+            :value="getRoutingItemDictValue(record, 'pointsUnit')"
+            dict-type="logistics_points_unit"
           />
         </template>
         <template v-else-if="column.key === 'pointsToMinutesRate'">
           <TaktDictTag
-            :value="getRoutingItemField(record, 'pointsToMinutesRate')"
+            :value="getRoutingItemDictValue(record, 'pointsToMinutesRate')"
             dict-type="logistics_points_to_minutes_rate"
+          />
+        </template>
+        <template v-else-if="column.key === 'isInspection'">
+          <TaktDictTag
+            :value="getRoutingItemDictValue(record, 'isInspection')"
+            dict-type="sys_yes_no_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'processSegmentType'">
+          <TaktDictTag
+            :value="getRoutingItemDictValue(record, 'processSegmentType')"
+            dict-type="logistics_process_segment_type"
+          />
+        </template>
+        <template v-else-if="column.key === 'isObsolete'">
+          <TaktDictTag
+            :value="getRoutingItemDictValue(record, 'isObsolete')"
+            dict-type="sys_yes_no_type"
           />
         </template>
       </template>
@@ -129,11 +153,21 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('routingId')">
-      <a-form-item :label="t('entity.routingitem.routingid')">
+      <a-form-item :label="pi.queryLabel('routingId')">
         <a-input
           v-model:value="advancedQueryForm.routingId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingid') })"
+          :placeholder="pi.queryPh('routingId', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -141,168 +175,175 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('routingCode')">
-      <a-form-item :label="t('entity.routingitem.routingcode')">
+      <a-form-item :label="pi.queryLabel('routingCode')">
         <a-input
           v-model:value="advancedQueryForm.routingCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.routingcode') })"
+          :placeholder="pi.queryPh('routingCode', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="8"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('lineNumber')">
-      <a-form-item :label="t('entity.routingitem.linenumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
         <a-input-number
           v-model:value="advancedQueryForm.lineNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.linenumber') })"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('baseUnit')">
-      <a-form-item :label="t('entity.routingitem.baseunit')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('baseUnit')">
+        <TaktSelect
           v-model:value="advancedQueryForm.baseUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.baseunit') })"
-          show-count
-          :maxlength="5"
+          dict-type="logistics_unit_of_measure_code"
+          :placeholder="pi.queryPh('baseUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('baseQuantity')">
-      <a-form-item :label="t('entity.routingitem.basequantity')">
+      <a-form-item :label="pi.queryLabel('baseQuantity')">
         <a-input-number
           v-model:value="advancedQueryForm.baseQuantity"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.basequantity') })"
+          :placeholder="pi.queryPh('baseQuantity', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardMinutes')">
-      <a-form-item :label="t('entity.routingitem.standardminutes')">
+      <a-form-item :label="pi.queryLabel('standardMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.standardMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.standardminutes') })"
+          :placeholder="pi.queryPh('standardMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('timeUnit')">
-      <a-form-item :label="t('entity.routingitem.timeunit')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('timeUnit')">
+        <TaktSelect
           v-model:value="advancedQueryForm.timeUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.timeunit') })"
-          show-count
-          :maxlength="3"
+          dict-type="logistics_time_unit"
+          :placeholder="pi.queryPh('timeUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('standardShorts')">
-      <a-form-item :label="t('entity.routingitem.standardshorts')">
+      <a-form-item :label="pi.queryLabel('standardShorts')">
         <a-input-number
           v-model:value="advancedQueryForm.standardShorts"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.standardshorts') })"
+          :placeholder="pi.queryPh('standardShorts', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('pointsUnit')">
-      <a-form-item :label="t('entity.routingitem.pointsunit')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('pointsUnit')">
+        <TaktSelect
           v-model:value="advancedQueryForm.pointsUnit"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.pointsunit') })"
-          show-count
-          :maxlength="5"
+          dict-type="logistics_points_unit"
+          :placeholder="pi.queryPh('pointsUnit', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('pointsToMinutesRate')">
-      <a-form-item :label="t('entity.routingitem.pointstominutesrate')">
+      <a-form-item :label="pi.queryLabel('pointsToMinutesRate')">
         <TaktSelect
           v-model:value="advancedQueryForm.pointsToMinutesRate"
           dict-type="logistics_points_to_minutes_rate"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.pointstominutesrate') })"
+          :placeholder="pi.queryPh('pointsToMinutesRate', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('convertedMinutes')">
-      <a-form-item :label="t('entity.routingitem.convertedminutes')">
+      <a-form-item :label="pi.queryLabel('convertedMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.convertedMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.convertedminutes') })"
+          :placeholder="pi.queryPh('convertedMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('setupMinutes')">
-      <a-form-item :label="t('entity.routingitem.setupminutes')">
+      <a-form-item :label="pi.queryLabel('setupMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.setupMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.setupminutes') })"
+          :placeholder="pi.queryPh('setupMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('teardownMinutes')">
-      <a-form-item :label="t('entity.routingitem.teardownminutes')">
+      <a-form-item :label="pi.queryLabel('teardownMinutes')">
         <a-input-number
           v-model:value="advancedQueryForm.teardownMinutes"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.teardownminutes') })"
+          :placeholder="pi.queryPh('teardownMinutes', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('isInspection')">
-      <a-form-item :label="t('entity.routingitem.isinspection')">
+      <a-form-item :label="pi.queryLabel('isInspection')">
         <TaktSelect
           v-model:value="advancedQueryForm.isInspection"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.isinspection') })"
+          :placeholder="pi.queryPh('isInspection', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('processDescription')">
-      <a-form-item :label="t('entity.routingitem.processdescription')">
+      <a-form-item :label="pi.queryLabel('processDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.processDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.routingitem.processdescription') })"
+          :placeholder="pi.queryPh('processDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('processSegmentType')">
-      <a-form-item :label="t('entity.routingitem.processsegmenttype')">
+      <a-form-item :label="pi.queryLabel('processSegmentType')">
         <TaktSelect
           v-model:value="advancedQueryForm.processSegmentType"
           dict-type="logistics_process_segment_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.routingitem.processsegmenttype') })"
+          :placeholder="pi.queryPh('processSegmentType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('extJson')">
-      <a-form-item :label="t('entity.routingitem.extjson')">
+      <a-form-item :label="pi.queryLabel('extJson')">
         <a-input
           v-model:value="advancedQueryForm.extJson"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.routingitem.extjson') })"
+          :placeholder="pi.queryPh('extJson', 'required')"
           show-count
           :maxlength="4000"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('isObsolete')">
+      <a-form-item :label="pi.queryLabel('isObsolete')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.isObsolete"
+          dict-type="sys_yes_no_type"
+          :placeholder="pi.queryPh('isObsolete', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -310,10 +351,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -335,7 +376,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -349,10 +390,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -366,14 +407,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.routingitem._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.routingitem._self"
+        v-if="importVisible"
+        :entity-i18n-key="ROUTINGITEM_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -392,7 +434,7 @@
       :id-column-key="'routingItemId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -412,13 +454,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import RoutingItemForm from './components/routing-item-form.vue'
 import RoutingItemArgumentPanel from './components/routing-item-argument-panel.vue'
-import { provideRoutingItemMasterContext } from './composables/use-routing-item-master-context'
+import { provideRoutingItemMasterContext, type RoutingItemRowRecord } from './composables/use-routing-item-master-context'
 import { getRoutingItemList, getRoutingItemById, createRoutingItem, updateRoutingItem, deleteRoutingItemById, deleteRoutingItemBatch, getRoutingItemTemplate, importRoutingItem, exportRoutingItem } from '@/api/logistics/manufacturing/bom/routing-item'
 import type { RoutingItem, RoutingItemQuery } from '@/types/logistics/manufacturing/bom/routing-item'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useRoutingItemI18n,
+  ROUTINGITEM_LIST_FIELDS,
+  ROUTINGITEM_QUERY_STRING_FIELDS,
+  ROUTINGITEM_QUERY_FIELDS,
+  ROUTINGITEM_SELF_I18N_KEY,
+} from './composables/use-routing-item-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useRoutingItemI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -426,7 +480,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktRoutingItem')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.routingitem._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -442,9 +496,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<RoutingItem | null>(null)
+const selectedRow = ref<RoutingItemRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<RoutingItem[]>([])
+const selectedRows = ref<RoutingItemRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -461,54 +515,82 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ROUTINGITEM_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
+  }
+  if (form.baseQuantity !== undefined && form.baseQuantity !== null) {
+    return true
+  }
+  if (form.standardMinutes !== undefined && form.standardMinutes !== null) {
+    return true
+  }
+  if (form.standardShorts !== undefined && form.standardShorts !== null) {
+    return true
+  }
+  if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
+    return true
+  }
+  if (form.setupMinutes !== undefined && form.setupMinutes !== null) {
+    return true
+  }
+  if (form.teardownMinutes !== undefined && form.teardownMinutes !== null) {
+    return true
+  }
+  if (form.isInspection !== undefined && form.isInspection !== null) {
+    return true
+  }
+  if (form.processSegmentType !== undefined && form.processSegmentType !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(ROUTINGITEM_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof ROUTINGITEM_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    lineNumber: undefined as number | undefined,
+    baseQuantity: undefined as number | undefined,
+    standardMinutes: undefined as number | undefined,
+    standardShorts: undefined as number | undefined,
+    convertedMinutes: undefined as number | undefined,
+    setupMinutes: undefined as number | undefined,
+    teardownMinutes: undefined as number | undefined,
+    isInspection: undefined as number | undefined,
+    processSegmentType: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  routingId: '',
-  routingCode: '',
-  lineNumber: undefined as number | undefined,
-  baseUnit: '',
-  baseQuantity: undefined as number | undefined,
-  standardMinutes: undefined as number | undefined,
-  timeUnit: '',
-  standardShorts: undefined as number | undefined,
-  pointsUnit: '',
-  pointsToMinutesRate: '' as string,
-  convertedMinutes: undefined as number | undefined,
-  setupMinutes: undefined as number | undefined,
-  teardownMinutes: undefined as number | undefined,
-  isInspection: undefined as number | undefined,
-  processDescription: '',
-  processSegmentType: undefined as number | undefined,
-  extJson: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'routingId', label: t('entity.routingitem.routingid') },
-  { key: 'routingCode', label: t('entity.routingitem.routingcode') },
-  { key: 'lineNumber', label: t('entity.routingitem.linenumber') },
-  { key: 'baseUnit', label: t('entity.routingitem.baseunit') },
-  { key: 'baseQuantity', label: t('entity.routingitem.basequantity') },
-  { key: 'standardMinutes', label: t('entity.routingitem.standardminutes') },
-  { key: 'timeUnit', label: t('entity.routingitem.timeunit') },
-  { key: 'standardShorts', label: t('entity.routingitem.standardshorts') },
-  { key: 'pointsUnit', label: t('entity.routingitem.pointsunit') },
-  { key: 'pointsToMinutesRate', label: t('entity.routingitem.pointstominutesrate') },
-  { key: 'convertedMinutes', label: t('entity.routingitem.convertedminutes') },
-  { key: 'setupMinutes', label: t('entity.routingitem.setupminutes') },
-  { key: 'teardownMinutes', label: t('entity.routingitem.teardownminutes') },
-  { key: 'isInspection', label: t('entity.routingitem.isinspection') },
-  { key: 'processDescription', label: t('entity.routingitem.processdescription') },
-  { key: 'processSegmentType', label: t('entity.routingitem.processsegmenttype') },
-  { key: 'extJson', label: t('entity.routingitem.extjson') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  ROUTINGITEM_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -531,7 +613,7 @@ const { selectedMasterRow } = provideRoutingItemMasterContext()
 const routingItemArgumentPanelRef = ref<InstanceType<typeof RoutingItemArgumentPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {RoutingItemQuery} 查询 DTO
  */
@@ -552,24 +634,21 @@ function buildListQuery(overrides?: Partial<RoutingItemQuery>): RoutingItemQuery
       query[key] = v as never
     }
   }
-  assignTrimmed('routingId', form.routingId)
-  assignTrimmed('routingCode', form.routingCode)
+  for (const key of ROUTINGITEM_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.lineNumber !== undefined && form.lineNumber !== null) {
     query.lineNumber = form.lineNumber
   }
-  assignTrimmed('baseUnit', form.baseUnit)
   if (form.baseQuantity !== undefined && form.baseQuantity !== null) {
     query.baseQuantity = form.baseQuantity
   }
   if (form.standardMinutes !== undefined && form.standardMinutes !== null) {
     query.standardMinutes = form.standardMinutes
   }
-  assignTrimmed('timeUnit', form.timeUnit)
   if (form.standardShorts !== undefined && form.standardShorts !== null) {
     query.standardShorts = form.standardShorts
   }
-  assignTrimmed('pointsUnit', form.pointsUnit)
-  assignTrimmed('pointsToMinutesRate', form.pointsToMinutesRate)
   if (form.convertedMinutes !== undefined && form.convertedMinutes !== null) {
     query.convertedMinutes = form.convertedMinutes
   }
@@ -582,18 +661,15 @@ function buildListQuery(overrides?: Partial<RoutingItemQuery>): RoutingItemQuery
   if (form.isInspection !== undefined && form.isInspection !== null) {
     query.isInspection = form.isInspection
   }
-  assignTrimmed('processDescription', form.processDescription)
   if (form.processSegmentType !== undefined && form.processSegmentType !== null) {
     query.processSegmentType = form.processSegmentType
   }
-  assignTrimmed('extJson', form.extJson)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    query.isObsolete = form.isObsolete
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
@@ -605,7 +681,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: RoutingItem | null) {
+function syncMasterSelection(record: RoutingItemRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getRoutingItemId(record) : ''
 }
@@ -615,7 +691,7 @@ function syncMasterSelection(record: RoutingItem | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as RoutingItem
+  const row = record as unknown as RoutingItemRowRecord
   const key = getRoutingItemId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -633,7 +709,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadRoutingItemDetail(record: RoutingItem): Promise<RoutingItem | null> {
+async function loadRoutingItemDetail(record: RoutingItemRowRecord): Promise<RoutingItem | null> {
   const id = getRoutingItemId(record)
   if (!id) {
     return null
@@ -664,7 +740,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'routingItemId') ?? ''
   },
   {
-    title: t('entity.routingitem.routingid'),
+    title: pi.label('routingId'),
     dataIndex: 'routingId',
     key: 'routingId',
     width: 120,
@@ -673,7 +749,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'routingId') ?? ''
   },
   {
-    title: t('entity.routingitem.routingcode'),
+    title: pi.label('routingCode'),
     dataIndex: 'routingCode',
     key: 'routingCode',
     width: 120,
@@ -682,7 +758,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'routingCode') ?? ''
   },
   {
-    title: t('entity.routingitem.linenumber'),
+    title: pi.label('lineNumber'),
     dataIndex: 'lineNumber',
     key: 'lineNumber',
     width: 120,
@@ -691,16 +767,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'lineNumber') ?? ''
   },
   {
-    title: t('entity.routingitem.baseunit'),
+    title: pi.label('baseUnit'),
     dataIndex: 'baseUnit',
     key: 'baseUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'baseUnit') ?? ''
   },
   {
-    title: t('entity.routingitem.basequantity'),
+    title: pi.label('baseQuantity'),
     dataIndex: 'baseQuantity',
     key: 'baseQuantity',
     width: 120,
@@ -709,7 +784,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'baseQuantity') ?? ''
   },
   {
-    title: t('entity.routingitem.standardminutes'),
+    title: pi.label('standardMinutes'),
     dataIndex: 'standardMinutes',
     key: 'standardMinutes',
     width: 120,
@@ -718,16 +793,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'standardMinutes') ?? ''
   },
   {
-    title: t('entity.routingitem.timeunit'),
+    title: pi.label('timeUnit'),
     dataIndex: 'timeUnit',
     key: 'timeUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'timeUnit') ?? ''
   },
   {
-    title: t('entity.routingitem.standardshorts'),
+    title: pi.label('standardShorts'),
     dataIndex: 'standardShorts',
     key: 'standardShorts',
     width: 120,
@@ -736,16 +810,15 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'standardShorts') ?? ''
   },
   {
-    title: t('entity.routingitem.pointsunit'),
+    title: pi.label('pointsUnit'),
     dataIndex: 'pointsUnit',
     key: 'pointsUnit',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'pointsUnit') ?? ''
   },
   {
-    title: t('entity.routingitem.pointstominutesrate'),
+    title: pi.label('pointsToMinutesRate'),
     dataIndex: 'pointsToMinutesRate',
     key: 'pointsToMinutesRate',
     width: 120,
@@ -753,7 +826,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.routingitem.convertedminutes'),
+    title: pi.label('convertedMinutes'),
     dataIndex: 'convertedMinutes',
     key: 'convertedMinutes',
     width: 120,
@@ -762,7 +835,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'convertedMinutes') ?? ''
   },
   {
-    title: t('entity.routingitem.setupminutes'),
+    title: pi.label('setupMinutes'),
     dataIndex: 'setupMinutes',
     key: 'setupMinutes',
     width: 120,
@@ -771,7 +844,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'setupMinutes') ?? ''
   },
   {
-    title: t('entity.routingitem.teardownminutes'),
+    title: pi.label('teardownMinutes'),
     dataIndex: 'teardownMinutes',
     key: 'teardownMinutes',
     width: 120,
@@ -780,7 +853,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'teardownMinutes') ?? ''
   },
   {
-    title: t('entity.routingitem.isinspection'),
+    title: pi.label('isInspection'),
     dataIndex: 'isInspection',
     key: 'isInspection',
     width: 120,
@@ -788,7 +861,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.routingitem.processdescription'),
+    title: pi.label('processDescription'),
     dataIndex: 'processDescription',
     key: 'processDescription',
     width: 120,
@@ -797,7 +870,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'processDescription') ?? ''
   },
   {
-    title: t('entity.routingitem.processsegmenttype'),
+    title: pi.label('processSegmentType'),
     dataIndex: 'processSegmentType',
     key: 'processSegmentType',
     width: 120,
@@ -805,7 +878,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.routingitem.extjson'),
+    title: pi.label('extJson'),
     dataIndex: 'extJson',
     key: 'extJson',
     width: 120,
@@ -814,13 +887,12 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'extJson') ?? ''
   },
   {
-    title: t('entity.routingitem.routing'),
-    dataIndex: 'routing',
-    key: 'routing',
+    title: pi.label('isObsolete'),
+    dataIndex: 'isObsolete',
+    key: 'isObsolete',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getRoutingItemField(record, 'routing') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -829,35 +901,53 @@ const columns = computed<TableColumnsType>(() => [
         label: t('common.page.button.edit'),
         shape: 'plain',
         icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:routing:item:update',
-        onClick: (record: RoutingItem) => handleEdit(record)
+        permission: 'logistics:manufacturing:bom:routing:update',
+        onClick: (record: RoutingItemRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
         label: t('common.page.button.delete'),
         shape: 'plain',
         icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:routing:item:delete',
-        onClick: (record: RoutingItem) => handleDeleteOne(record)
+        permission: 'logistics:manufacturing:bom:routing:delete',
+        onClick: (record: RoutingItemRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getRoutingItemId = (record: any): string => record?.[entityIdName] ?? ''
+const getRoutingItemId = (record: RoutingItemRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getRoutingItemField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getRoutingItemDictValue = (
+  record: RoutingItemRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: RoutingItem[]) => {
+  onChange: (keys: (string | number)[], rows: RoutingItemRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -867,7 +957,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: RoutingItem, selected: boolean) => {
+  onSelect: (record: RoutingItemRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -876,7 +966,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: RoutingItem[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: RoutingItemRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -886,6 +976,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getRoutingItemList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -912,6 +1007,7 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
   routingId: '',
   routingCode: '',
   lineNumber: undefined as number | undefined,
@@ -921,7 +1017,7 @@ function handleReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: '' as string,
+  pointsToMinutesRate: '',
   convertedMinutes: undefined as number | undefined,
   setupMinutes: undefined as number | undefined,
   teardownMinutes: undefined as number | undefined,
@@ -929,6 +1025,7 @@ function handleReset() {
   processDescription: '',
   processSegmentType: undefined as number | undefined,
   extJson: '',
+  isObsolete: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -940,14 +1037,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.routingitem._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: RoutingItem) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.routingitem._self') })
+async function handleEdit(record: RoutingItemRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadRoutingItemDetail(record)
@@ -963,7 +1060,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.routingitem._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -981,10 +1078,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateRoutingItem(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.routingitem._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createRoutingItem(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.routingitem._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1015,15 +1112,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importRoutingItem(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importRoutingItem(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    routingItemArgumentPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1034,6 +1138,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportRoutingItem(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1057,24 +1164,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.routingitem._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[RoutingItem] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.routingitem._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: RoutingItem) {
+async function handleDeleteOne(record: RoutingItemRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.routingitem._self'), name: t('common.tip.this.target', { target: t('entity.routingitem._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteRoutingItemById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.routingitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1086,18 +1193,18 @@ async function handleDeleteOne(record: RoutingItem) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.routingitem._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.routingitem._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteRoutingItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.routingitem._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1120,6 +1227,7 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
   routingId: '',
   routingCode: '',
   lineNumber: undefined as number | undefined,
@@ -1129,7 +1237,7 @@ function handleAdvancedQueryReset() {
   timeUnit: '',
   standardShorts: undefined as number | undefined,
   pointsUnit: '',
-  pointsToMinutesRate: '' as string,
+  pointsToMinutesRate: '',
   convertedMinutes: undefined as number | undefined,
   setupMinutes: undefined as number | undefined,
   teardownMinutes: undefined as number | undefined,
@@ -1137,6 +1245,7 @@ function handleAdvancedQueryReset() {
   processDescription: '',
   processSegmentType: undefined as number | undefined,
   extJson: '',
+  isObsolete: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

@@ -35,7 +35,7 @@ public class TaktMasterProductionScheduleLine : TaktCompanyEntityBase
     /// <summary>
     /// MPS 编码（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "mps_code", ColumnDescription = "MPS编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "mps_code", ColumnDescription = "MPS编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MpsCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -54,7 +54,7 @@ public class TaktMasterProductionScheduleLine : TaktCompanyEntityBase
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
-    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
+    [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>

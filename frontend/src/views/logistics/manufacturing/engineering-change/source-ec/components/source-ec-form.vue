@@ -45,10 +45,10 @@
             <a-col :span="12">
               <a-form-item
                 :label="t('entity.sourceec.no')"
-                name="sourceEcNo"
+                name="sourceEcCode"
               >
                 <a-input
-                  v-model:value="formState.sourceEcNo"
+                  v-model:value="formState.sourceEcCode"
                   :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.no') })"
                   show-count
                   :maxlength="6"
@@ -155,12 +155,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourceppno')"
-                name="sourcePpNo"
+                :label="t('entity.sourceec.sourceppCode')"
+                name="sourcePpCode"
               >
                 <a-input
-                  v-model:value="formState.sourcePpNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceppno') })"
+                  v-model:value="formState.sourcePpCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourceppCode') })"
                   show-count
                   :maxlength="10"
                   allow-clear
@@ -179,12 +179,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.sourceec.sourcetechnicalnoticeno')"
-                name="sourceTechnicalNoticeNo"
+                :label="t('entity.sourceec.sourcetechnicalnoticeCode')"
+                name="sourceTechnicalNoticeCode"
               >
                 <a-input
-                  v-model:value="formState.sourceTechnicalNoticeNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetechnicalnoticeno') })"
+                  v-model:value="formState.sourceTechnicalNoticeCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sourceec.sourcetechnicalnoticeCode') })"
                   show-count
                   :maxlength="10"
                   allow-clear
@@ -536,16 +536,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","sourceEcNo","sourceModel","sourceTitle","sourceStatus","sourceIssueDate","sourceTcjOwner","sourceTcjDependency","sourceEcMeeting","sourcePpNo","sourceTechnicalNoticeNo","sourceImplementation","sourceMainChangeReason","sourceSecondaryChangeReason","sourceSafetyRegulation","sourceProgressStatus","sourceSerialNumberControl","sourceCustomerApproval","sourceServiceManualRevision","sourceUserManualRevision","sourcePromotionManualRevision","sourceStandardDocumentRevision","sourceInformationRelease","sourceCostChange","sourceUnitCost","sourceMoldModificationCost","sourceRelatedDrawing","sourceEcContent"]
+const formFields = ["tenantCode","sourceEcCode","sourceModel","sourceTitle","sourceStatus","sourceIssueDate","sourceTcjOwner","sourceTcjDependency","sourceEcMeeting","sourcePpCode","sourceTechnicalNoticeCode","sourceImplementation","sourceMainChangeReason","sourceSecondaryChangeReason","sourceSafetyRegulation","sourceProgressStatus","sourceSerialNumberControl","sourceCustomerApproval","sourceServiceManualRevision","sourceUserManualRevision","sourcePromotionManualRevision","sourceStandardDocumentRevision","sourceInformationRelease","sourceCostChange","sourceUnitCost","sourceMoldModificationCost","sourceRelatedDrawing","sourceEcContent"]
 
 const childSourceEcDetailRows = ref<Record<string, unknown>[]>([])
 const sourceEcDetailTableRef = ref<{
@@ -571,7 +575,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       sourceEcId: masterId,
     })),
   }
@@ -585,7 +589,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 sourceEcId 才视为编辑） */
 watch(
@@ -625,7 +628,7 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  sourceEcNo: [
+  sourceEcCode: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.sourceec.no') }),

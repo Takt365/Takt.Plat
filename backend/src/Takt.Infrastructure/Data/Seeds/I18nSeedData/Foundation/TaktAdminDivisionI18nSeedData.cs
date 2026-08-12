@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktAdminDivisionI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAdminDivision 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -161,15 +161,6 @@ public class TaktAdminDivisionI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.admindivision.postalcode", "zh-CN", "邮政编码", "邮政编码（可选；部分国家区划关联邮编）"),
             // entity.admindivision.postalcode
             new TranslationSeedItem("entity.admindivision.postalcode", "zh-HK", "邮政编码_hk", "邮政编码（可选；部分国家区划关联邮编）"),
-
-            // entity.admindivision.culturecode
-            new TranslationSeedItem("entity.admindivision.culturecode", "en-US", "区域文化_us", "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）"),
-            // entity.admindivision.culturecode
-            new TranslationSeedItem("entity.admindivision.culturecode", "ja-JP", "区域文化_jp", "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）"),
-            // entity.admindivision.culturecode
-            new TranslationSeedItem("entity.admindivision.culturecode", "zh-CN", "区域文化", "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）"),
-            // entity.admindivision.culturecode
-            new TranslationSeedItem("entity.admindivision.culturecode", "zh-HK", "区域文化_hk", "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）"),
 
             // entity.admindivision.currencycode
             new TranslationSeedItem("entity.admindivision.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）"),

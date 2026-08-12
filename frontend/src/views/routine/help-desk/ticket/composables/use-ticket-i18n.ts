@@ -2,152 +2,152 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/routine/help-desk/ticket/composables
 // 文件名称：use-ticket-i18n.ts
-// 功能描述：服务工单实体字段清单 + useCustomerServiceTicketI18n（字段名映射一次，文案由 entity.customerserviceticket.* 种子动态解析）
+// 功能描述：服务台工单实体字段清单 + useTicketI18n（字段名映射一次，文案由 entity.ticket.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-import type { CustomerServiceTicketQuery } from '@/types/logistics/customer-service/ticket'
+import type { TicketQuery } from '@/types/routine/help-desk/ticket'
 import { buildEntitySelfI18nKey } from '@/utils/takt-entity-i18n'
 import { useEntityFieldI18n, type EntityFieldPlaceholderKind } from '@/composables/use-entity-field-i18n'
 
-/** 与 TaktCustomerServiceTicketI18nSeedData 一致的实体 slug */
-export const CUSTOMERSERVICETICKET_ENTITY_SLUG = 'customerserviceticket'
+/** 与 TaktTicketI18nSeedData 一致的实体 slug */
+export const TICKET_ENTITY_SLUG = 'ticket'
 
-/** entity.customerserviceticket._self 静态属性（导入组件 entity-i18n-key 等） */
-export const CUSTOMERSERVICETICKET_SELF_I18N_KEY = buildEntitySelfI18nKey(CUSTOMERSERVICETICKET_ENTITY_SLUG)
+/** entity.ticket._self 静态属性（导入组件 entity-i18n-key 等） */
+export const TICKET_SELF_I18N_KEY = buildEntitySelfI18nKey(TICKET_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
-export const CUSTOMERSERVICETICKET_LIST_FIELDS = [
-  'plantCode',
-  'serviceTicketCode',
-  'clientId',
-  'clientCode',
-  'clientName1',
-  'serviceRequestId',
-  'serviceRequestCode',
-  'serviceOrderId',
-  'serviceOrderCode',
-  'serviceContractId',
-  'serviceContractCode',
-  'ticketType',
+export const TICKET_LIST_FIELDS = [
+  'ticketCode',
+  'ticketTitle',
+  'ticketContent',
+  'attachments',
   'priority',
+  'urgency',
+  'impact',
+  'categoryCode',
+  'ticketSource',
+  'submitterId',
+  'submitterName',
+  'assigneeId',
+  'assigneeName',
+  'knowledgeId',
+  'parentTicketId',
+  'firstResponseAt',
+  'firstResponseDueBy',
+  'resolvedAt',
+  'resolutionDueBy',
+  'closedAt',
+  'itAssetId',
+  'assetCode',
+  'applicantDeptId',
+  'applicantDeptName',
+  'applicantBy',
   'ticketStatus',
-  'ticketSubject',
-  'faultDescription',
-  'solutionDescription',
-  'serviceLocation',
-  'assignedEmployeeId',
-  'assignedEmployeeName',
-  'scheduledStartTime',
-  'scheduledEndTime',
-  'actualStartTime',
-  'actualEndTime',
-  'acceptanceResult',
-  'acceptedBy',
-  'acceptedAt',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
-export const CUSTOMERSERVICETICKET_PLACEHOLDER = {
+export const TICKET_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
-  plantCode: 'required',
-  serviceTicketCode: 'required',
-  clientId: 'required',
-  clientCode: 'required',
-  clientName1: 'required',
-  serviceRequestId: 'optional',
-  serviceRequestCode: 'optional',
-  serviceOrderId: 'optional',
-  serviceOrderCode: 'optional',
-  serviceContractId: 'optional',
-  serviceContractCode: 'optional',
-  ticketType: 'select',
+  cultureCode: 'optional',
+  ticketCode: 'required',
+  ticketTitle: 'required',
+  ticketContent: 'optional',
+  attachments: 'optional',
   priority: 'select',
+  urgency: 'select',
+  impact: 'select',
+  categoryCode: 'optional',
+  ticketSource: 'select',
+  submitterId: 'select',
+  submitterName: 'optional',
+  assigneeId: 'optional',
+  assigneeName: 'optional',
+  knowledgeId: 'optional',
+  parentTicketId: 'optional',
+  firstResponseAt: 'optional',
+  firstResponseDueBy: 'optional',
+  resolvedAt: 'optional',
+  resolutionDueBy: 'optional',
+  closedAt: 'optional',
+  itAssetId: 'optional',
+  assetCode: 'optional',
+  applicantDeptId: 'optional',
+  applicantDeptName: 'optional',
+  applicantBy: 'select',
   ticketStatus: 'select',
-  ticketSubject: 'required',
-  faultDescription: 'optional',
-  solutionDescription: 'optional',
-  serviceLocation: 'optional',
-  assignedEmployeeId: 'optional',
-  assignedEmployeeName: 'optional',
-  scheduledStartTime: 'optional',
-  scheduledEndTime: 'optional',
-  actualStartTime: 'optional',
-  actualEndTime: 'optional',
-  acceptanceResult: 'optional',
-  acceptedBy: 'optional',
-  acceptedAt: 'optional',
+  childTickets: 'optional',
   extField: 'optional',
   remark: 'optional',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
-export type CustomerServiceTicketField = keyof typeof CUSTOMERSERVICETICKET_PLACEHOLDER
+export type TicketField = keyof typeof TICKET_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
-export const CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS = [
-  'plantCode',
-  'serviceTicketCode',
-  'clientId',
-  'clientCode',
-  'clientName1',
-  'serviceRequestId',
-  'serviceRequestCode',
-  'serviceOrderId',
-  'serviceOrderCode',
-  'serviceContractId',
-  'serviceContractCode',
-  'ticketSubject',
-  'faultDescription',
-  'solutionDescription',
-  'serviceLocation',
-  'assignedEmployeeId',
-  'assignedEmployeeName',
-  'scheduledStartTimeStart',
-  'scheduledStartTimeEnd',
-  'scheduledEndTimeStart',
-  'scheduledEndTimeEnd',
-  'actualStartTimeStart',
-  'actualStartTimeEnd',
-  'actualEndTimeStart',
-  'actualEndTimeEnd',
-  'acceptedBy',
-  'acceptedAtStart',
-  'acceptedAtEnd',
+export const TICKET_QUERY_STRING_FIELDS = [
+  'cultureCode',
+  'ticketCode',
+  'ticketTitle',
+  'ticketContent',
+  'attachments',
+  'categoryCode',
+  'submitterId',
+  'submitterName',
+  'assigneeId',
+  'assigneeName',
+  'knowledgeId',
+  'parentTicketId',
+  'firstResponseAtStart',
+  'firstResponseAtEnd',
+  'firstResponseDueByStart',
+  'firstResponseDueByEnd',
+  'resolvedAtStart',
+  'resolvedAtEnd',
+  'resolutionDueByStart',
+  'resolutionDueByEnd',
+  'closedAtStart',
+  'closedAtEnd',
+  'itAssetId',
+  'assetCode',
+  'applicantDeptId',
+  'applicantDeptName',
+  'applicantBy',
   'createdAtStart',
   'createdAtEnd',
   'extField',
   'remark',
-] as const satisfies readonly (keyof CustomerServiceTicketQuery)[]
+] as const satisfies readonly (keyof TicketQuery)[]
 
-export type CustomerServiceTicketQueryField =
-  | (typeof CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS)[number]
-  | 'ticketType' | 'priority' | 'ticketStatus' | 'acceptanceResult'
+export type TicketQueryField =
+  | (typeof TICKET_QUERY_STRING_FIELDS)[number]
+  | 'priority' | 'urgency' | 'impact' | 'ticketSource' | 'ticketStatus'
 
 /** 高级查询抽屉全部字段（含数值） */
-export const CUSTOMERSERVICETICKET_QUERY_FIELDS: readonly CustomerServiceTicketQueryField[] = [
-  ...CUSTOMERSERVICETICKET_QUERY_STRING_FIELDS,
-  'ticketType',
+export const TICKET_QUERY_FIELDS: readonly TicketQueryField[] = [
+  ...TICKET_QUERY_STRING_FIELDS,
   'priority',
+  'urgency',
+  'impact',
+  'ticketSource',
   'ticketStatus',
-  'acceptanceResult',
 ]
 
 /**
- * 服务工单实体字段 i18n：index / ticket-form 统一入口
+ * 服务台工单实体字段 i18n：index / ticket-form 统一入口
  */
-export function useCustomerServiceTicketI18n() {
-  const ef = useEntityFieldI18n(CUSTOMERSERVICETICKET_ENTITY_SLUG)
+export function useTicketI18n() {
+  const ef = useEntityFieldI18n(TICKET_ENTITY_SLUG)
 
-  function ph(field: CustomerServiceTicketField): string {
-    return ef.placeholder(field, CUSTOMERSERVICETICKET_PLACEHOLDER[field])
+  function ph(field: TicketField): string {
+    return ef.placeholder(field, TICKET_PLACEHOLDER[field])
   }
 
-  function queryPh(field: CustomerServiceTicketQueryField, kind: EntityFieldPlaceholderKind): string {
+  function queryPh(field: TicketQueryField, kind: EntityFieldPlaceholderKind): string {
     return ef.queryPlaceholder(field, kind)
   }
 

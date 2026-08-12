@@ -174,11 +174,6 @@ export interface Company extends TenantDtoBase {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  defaultCulture: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
@@ -244,9 +239,9 @@ export interface Company extends TenantDtoBase {
   financialManagementArea: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
+   * 区域文化编码（字典 sys_culture_code；公司主档权威）
    */
-  relatedPlant: string;
+  cultureCode: string;
 
   /**
    * 排序号（越小越靠前）
@@ -269,7 +264,6 @@ export interface Company extends TenantDtoBase {
   userCompanies?: UserCompany[];
 
 }
-
 
 /**
  * Company 分页查询 DTO
@@ -441,7 +435,7 @@ export interface CompanyQuery extends TaktPagedQuery {
   /**
    * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
@@ -544,7 +538,6 @@ export interface CompanyQuery extends TaktPagedQuery {
   remark?: string;
 
 }
-
 
 /**
  * 创建Company DTO
@@ -705,7 +698,7 @@ export interface CompanyCreate {
   /**
    * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
-  defaultCulture: string;
+  cultureCode: string;
 
   /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
@@ -804,7 +797,6 @@ export interface CompanyCreate {
 
 }
 
-
 /**
  * 更新Company DTO
  * 继承 TaktCompanyCreateDto，添加 CompanyId 字段
@@ -818,7 +810,6 @@ export interface CompanyUpdate extends CompanyCreate {
   companyId: string;
 
 }
-
 
 /**
  * Company 状态更新 DTO
@@ -838,7 +829,6 @@ export interface CompanyStatus {
 
 }
 
-
 /**
  * Company 排序更新 DTO
  * 对应前端 CompanySort
@@ -856,7 +846,6 @@ export interface CompanySort {
   sortOrder: number;
 
 }
-
 
 /**
  * Company 导入模板行 DTO
@@ -1017,7 +1006,7 @@ export interface CompanyTemplate {
   /**
    * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
@@ -1115,7 +1104,6 @@ export interface CompanyTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Company 导入 DTO（独立实现，不继承 TemplateDto）
@@ -1276,7 +1264,7 @@ export interface CompanyImport {
   /**
    * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
@@ -1374,7 +1362,6 @@ export interface CompanyImport {
   remark?: string;
 
 }
-
 
 /**
  * Company 导出 DTO（独立实现，不继承响应 Dto）
@@ -1535,7 +1522,7 @@ export interface CompanyExport {
   /**
    * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
    */
-  defaultCulture: string;
+  cultureCode: string;
 
   /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）

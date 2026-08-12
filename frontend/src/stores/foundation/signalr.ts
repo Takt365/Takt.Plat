@@ -423,7 +423,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           notify({
             type: 'info',
             message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.changeNotification'),
-            description: `${event.ecNo} · ${event.deptCode}`,
+            description: `${event.ecCode} · ${event.deptCode}`,
             duration: 8,
           });
         },
@@ -432,7 +432,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           notify({
             type: 'info',
             message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.taskAssigned'),
-            description: `${event.ecNo} · ${event.taskTitle}`,
+            description: `${event.ecCode} · ${event.taskTitle}`,
             duration: 8,
           });
         },
@@ -444,7 +444,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           notify({
             type: 'success',
             message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.changeClosed'),
-            description: event.ecNo,
+            description: event.ecCode,
             duration: 8,
           });
         },
@@ -462,7 +462,7 @@ export const useSignalRStore = defineStore('signalr', () => {
           notify({
             type: 'success',
             message: translateLocaleMessage('logistics.manufacturing.engineering-change.ec-notification.page.signalr.notificationConfirmed'),
-            description: `${event.ecNo ?? ''} · ${event.deptCode}`.trim(),
+            description: `${event.ecCode ?? ''} · ${event.deptCode}`.trim(),
             duration: 6,
           });
         },

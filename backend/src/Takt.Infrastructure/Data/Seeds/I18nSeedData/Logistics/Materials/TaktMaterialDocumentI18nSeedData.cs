@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDocumentI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDocument 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,50 +90,122 @@ public class TaktMaterialDocumentI18nSeedData : ITaktSeedDataCoordinator
             // entity.materialdocument._self
             new TranslationSeedItem("entity.materialdocument._self", "zh-HK", "Takt物料凭证主表信息_hk", "实体名称"),
 
-            // entity.materialdocument.plantcode
-            new TranslationSeedItem("entity.materialdocument.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialdocument.plantcode
-            new TranslationSeedItem("entity.materialdocument.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialdocument.plantcode
-            new TranslationSeedItem("entity.materialdocument.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.materialdocument.plantcode
-            new TranslationSeedItem("entity.materialdocument.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
+            // entity.materialdocument.code
+            new TranslationSeedItem("entity.materialdocument.code", "en-US", "物料凭证_us", "物料凭证"),
+            // entity.materialdocument.code
+            new TranslationSeedItem("entity.materialdocument.code", "ja-JP", "物料凭证_jp", "物料凭证"),
+            // entity.materialdocument.code
+            new TranslationSeedItem("entity.materialdocument.code", "zh-CN", "物料凭证", "物料凭证"),
+            // entity.materialdocument.code
+            new TranslationSeedItem("entity.materialdocument.code", "zh-HK", "物料凭证_hk", "物料凭证"),
 
-            // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "en-US", "物料编码_us", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
-            // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "ja-JP", "物料编码_jp", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
-            // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-CN", "物料编码", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
-            // entity.materialdocument.materialcode
-            new TranslationSeedItem("entity.materialdocument.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
+            // entity.materialdocument.year
+            new TranslationSeedItem("entity.materialdocument.year", "en-US", "物料凭证的年份_us", "物料凭证的年份"),
+            // entity.materialdocument.year
+            new TranslationSeedItem("entity.materialdocument.year", "ja-JP", "物料凭证的年份_jp", "物料凭证的年份"),
+            // entity.materialdocument.year
+            new TranslationSeedItem("entity.materialdocument.year", "zh-CN", "物料凭证的年份", "物料凭证的年份"),
+            // entity.materialdocument.year
+            new TranslationSeedItem("entity.materialdocument.year", "zh-HK", "物料凭证的年份_hk", "物料凭证的年份"),
 
-            // entity.materialdocument.code
-            new TranslationSeedItem("entity.materialdocument.code", "en-US", "物料凭证号_us", "物料凭证号（租户+公司+工厂内唯一）"),
-            // entity.materialdocument.code
-            new TranslationSeedItem("entity.materialdocument.code", "ja-JP", "物料凭证号_jp", "物料凭证号（租户+公司+工厂内唯一）"),
-            // entity.materialdocument.code
-            new TranslationSeedItem("entity.materialdocument.code", "zh-CN", "物料凭证号", "物料凭证号（租户+公司+工厂内唯一）"),
-            // entity.materialdocument.code
-            new TranslationSeedItem("entity.materialdocument.code", "zh-HK", "物料凭证号_hk", "物料凭证号（租户+公司+工厂内唯一）"),
+            // entity.materialdocument.transactioneventtype
+            new TranslationSeedItem("entity.materialdocument.transactioneventtype", "en-US", "交易/事件类型_us", "交易/事件类型（字典 logistics_material_document_transaction_event_type）"),
+            // entity.materialdocument.transactioneventtype
+            new TranslationSeedItem("entity.materialdocument.transactioneventtype", "ja-JP", "交易/事件类型_jp", "交易/事件类型（字典 logistics_material_document_transaction_event_type）"),
+            // entity.materialdocument.transactioneventtype
+            new TranslationSeedItem("entity.materialdocument.transactioneventtype", "zh-CN", "交易/事件类型", "交易/事件类型（字典 logistics_material_document_transaction_event_type）"),
+            // entity.materialdocument.transactioneventtype
+            new TranslationSeedItem("entity.materialdocument.transactioneventtype", "zh-HK", "交易/事件类型_hk", "交易/事件类型（字典 logistics_material_document_transaction_event_type）"),
+
+            // entity.materialdocument.documenttype
+            new TranslationSeedItem("entity.materialdocument.documenttype", "en-US", "凭证类型_us", "凭证类型（字典 logistics_material_document_type）"),
+            // entity.materialdocument.documenttype
+            new TranslationSeedItem("entity.materialdocument.documenttype", "ja-JP", "凭证类型_jp", "凭证类型（字典 logistics_material_document_type）"),
+            // entity.materialdocument.documenttype
+            new TranslationSeedItem("entity.materialdocument.documenttype", "zh-CN", "凭证类型", "凭证类型（字典 logistics_material_document_type）"),
+            // entity.materialdocument.documenttype
+            new TranslationSeedItem("entity.materialdocument.documenttype", "zh-HK", "凭证类型_hk", "凭证类型（字典 logistics_material_document_type）"),
+
+            // entity.materialdocument.revaluationtype
+            new TranslationSeedItem("entity.materialdocument.revaluationtype", "en-US", "凭证类型重新评估_us", "凭证类型重新评估"),
+            // entity.materialdocument.revaluationtype
+            new TranslationSeedItem("entity.materialdocument.revaluationtype", "ja-JP", "凭证类型重新评估_jp", "凭证类型重新评估"),
+            // entity.materialdocument.revaluationtype
+            new TranslationSeedItem("entity.materialdocument.revaluationtype", "zh-CN", "凭证类型重新评估", "凭证类型重新评估"),
+            // entity.materialdocument.revaluationtype
+            new TranslationSeedItem("entity.materialdocument.revaluationtype", "zh-HK", "凭证类型重新评估_hk", "凭证类型重新评估"),
+
+            // entity.materialdocument.documentdate
+            new TranslationSeedItem("entity.materialdocument.documentdate", "en-US", "凭证日期_us", "凭证日期"),
+            // entity.materialdocument.documentdate
+            new TranslationSeedItem("entity.materialdocument.documentdate", "ja-JP", "凭证日期_jp", "凭证日期"),
+            // entity.materialdocument.documentdate
+            new TranslationSeedItem("entity.materialdocument.documentdate", "zh-CN", "凭证日期", "凭证日期"),
+            // entity.materialdocument.documentdate
+            new TranslationSeedItem("entity.materialdocument.documentdate", "zh-HK", "凭证日期_hk", "凭证日期"),
+
+            // entity.materialdocument.postingdate
+            new TranslationSeedItem("entity.materialdocument.postingdate", "en-US", "过帐日期_us", "过帐日期"),
+            // entity.materialdocument.postingdate
+            new TranslationSeedItem("entity.materialdocument.postingdate", "ja-JP", "过帐日期_jp", "过帐日期"),
+            // entity.materialdocument.postingdate
+            new TranslationSeedItem("entity.materialdocument.postingdate", "zh-CN", "过帐日期", "过帐日期"),
+            // entity.materialdocument.postingdate
+            new TranslationSeedItem("entity.materialdocument.postingdate", "zh-HK", "过帐日期_hk", "过帐日期"),
+
+            // entity.materialdocument.referencecode
+            new TranslationSeedItem("entity.materialdocument.referencecode", "en-US", "参照_us", "参照（最长 16，故 Length=16）"),
+            // entity.materialdocument.referencecode
+            new TranslationSeedItem("entity.materialdocument.referencecode", "ja-JP", "参照_jp", "参照（最长 16，故 Length=16）"),
+            // entity.materialdocument.referencecode
+            new TranslationSeedItem("entity.materialdocument.referencecode", "zh-CN", "参照", "参照（最长 16，故 Length=16）"),
+            // entity.materialdocument.referencecode
+            new TranslationSeedItem("entity.materialdocument.referencecode", "zh-HK", "参照_hk", "参照（最长 16，故 Length=16）"),
+
+            // entity.materialdocument.headertext
+            new TranslationSeedItem("entity.materialdocument.headertext", "en-US", "凭证抬头文本_us", "凭证抬头文本（最长 25，故 Length=25）"),
+            // entity.materialdocument.headertext
+            new TranslationSeedItem("entity.materialdocument.headertext", "ja-JP", "凭证抬头文本_jp", "凭证抬头文本（最长 25，故 Length=25）"),
+            // entity.materialdocument.headertext
+            new TranslationSeedItem("entity.materialdocument.headertext", "zh-CN", "凭证抬头文本", "凭证抬头文本（最长 25，故 Length=25）"),
+            // entity.materialdocument.headertext
+            new TranslationSeedItem("entity.materialdocument.headertext", "zh-HK", "凭证抬头文本_hk", "凭证抬头文本（最长 25，故 Length=25）"),
+
+            // entity.materialdocument.billofladingcode
+            new TranslationSeedItem("entity.materialdocument.billofladingcode", "en-US", "提货单_us", "提货单（最长 16，故 Length=16）"),
+            // entity.materialdocument.billofladingcode
+            new TranslationSeedItem("entity.materialdocument.billofladingcode", "ja-JP", "提货单_jp", "提货单（最长 16，故 Length=16）"),
+            // entity.materialdocument.billofladingcode
+            new TranslationSeedItem("entity.materialdocument.billofladingcode", "zh-CN", "提货单", "提货单（最长 16，故 Length=16）"),
+            // entity.materialdocument.billofladingcode
+            new TranslationSeedItem("entity.materialdocument.billofladingcode", "zh-HK", "提货单_hk", "提货单（最长 16，故 Length=16）"),
+
+            // entity.materialdocument.deliverycode
+            new TranslationSeedItem("entity.materialdocument.deliverycode", "en-US", "交货单_us", "交货单"),
+            // entity.materialdocument.deliverycode
+            new TranslationSeedItem("entity.materialdocument.deliverycode", "ja-JP", "交货单_jp", "交货单"),
+            // entity.materialdocument.deliverycode
+            new TranslationSeedItem("entity.materialdocument.deliverycode", "zh-CN", "交货单", "交货单"),
+            // entity.materialdocument.deliverycode
+            new TranslationSeedItem("entity.materialdocument.deliverycode", "zh-HK", "交货单_hk", "交货单"),
+
+            // entity.materialdocument.transactioncode
+            new TranslationSeedItem("entity.materialdocument.transactioncode", "en-US", "事务代码_us", "事务代码"),
+            // entity.materialdocument.transactioncode
+            new TranslationSeedItem("entity.materialdocument.transactioncode", "ja-JP", "事务代码_jp", "事务代码"),
+            // entity.materialdocument.transactioncode
+            new TranslationSeedItem("entity.materialdocument.transactioncode", "zh-CN", "事务代码", "事务代码"),
+            // entity.materialdocument.transactioncode
+            new TranslationSeedItem("entity.materialdocument.transactioncode", "zh-HK", "事务代码_hk", "事务代码"),
 
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "en-US", "过账人_us", "过账人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "en-US", "用户名_us", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "ja-JP", "过账人_jp", "过账人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "ja-JP", "用户名_jp", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-CN", "过账人", "过账人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "zh-CN", "用户名", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
             // entity.materialdocument.postedby
-            new TranslationSeedItem("entity.materialdocument.postedby", "zh-HK", "过账人_hk", "过账人（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
-
-            // entity.materialdocument.status
-            new TranslationSeedItem("entity.materialdocument.status", "en-US", "物料凭证状态_us", "物料凭证状态（0=草稿，1=已过账，2=已作废）"),
-            // entity.materialdocument.status
-            new TranslationSeedItem("entity.materialdocument.status", "ja-JP", "物料凭证状态_jp", "物料凭证状态（0=草稿，1=已过账，2=已作废）"),
-            // entity.materialdocument.status
-            new TranslationSeedItem("entity.materialdocument.status", "zh-CN", "物料凭证状态", "物料凭证状态（0=草稿，1=已过账，2=已作废）"),
-            // entity.materialdocument.status
-            new TranslationSeedItem("entity.materialdocument.status", "zh-HK", "物料凭证状态_hk", "物料凭证状态（0=草稿，1=已过账，2=已作废）"),
+            new TranslationSeedItem("entity.materialdocument.postedby", "zh-HK", "用户名_hk", "用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）"),
 
             // entity.materialdocument.items
             new TranslationSeedItem("entity.materialdocument.items", "en-US", "物料凭证行项目列表_us", "物料凭证行项目列表（主子表关系）"),

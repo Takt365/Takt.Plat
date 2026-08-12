@@ -67,15 +67,7 @@
           :pagination="false"
         >
           <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'languageStatus'">
-              <a-switch
-                :checked="record.languageStatus === 1"
-                :checked-children="t('common.page.button.enable')"
-                :un-checked-children="t('common.page.button.disable')"
-                @change="(checked: unknown) => handleStatusChange(record as Culture, Boolean(checked))"
-              />
-            </template>
-            <template v-else-if="column.key === 'isDefault'">
+            <template v-if="column.key === 'isDefault'">
               <TaktDictTag
                 :value="record.isDefault"
                 dict-type="sys_yes_no_type"
@@ -147,16 +139,6 @@
             :min="0"
             :placeholder="t('common.page.form.placeholder.input', { field: t('entity.culture.sortorder') })"
             style="width: 100%"
-          />
-        </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('languageStatus')">
-        <a-form-item :label="t('entity.culture.languagestatus')">
-          <TaktSelect
-            v-model:value="advancedQueryForm.languageStatus"
-            dict-type="sys_normal_disable_status"
-            :placeholder="t('common.page.form.placeholder.select', { field: t('entity.culture.languagestatus') })"
-            allow-clear
           />
         </a-form-item>
       </div>
@@ -256,8 +238,7 @@ import {
   createCulture,
   updateCulture,
   deleteCultureById,
-  deleteCultureBatch,
-  updateCultureStatus
+  deleteCultureBatch
 } from '@/api/foundation/culture'
 import type { Culture, CultureQuery, CultureCreate, CultureUpdate } from '@/types/foundation/culture'
 import { CreateActionColumn } from '@/components/business/takt-action-column/index'
@@ -321,7 +302,6 @@ const advancedQueryForm = ref({
   nativeName: '',
   icon: '',
   sortOrder: undefined as number | undefined,
-  languageStatus: undefined as number | undefined,
   isDefault: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -337,7 +317,6 @@ const queryFieldsMeta = computed(() => [
   { key: 'nativeName', label: t('entity.culture.nativename') },
   { key: 'icon', label: t('entity.culture.icon') },
   { key: 'sortOrder', label: t('entity.culture.sortorder') },
-  { key: 'languageStatus', label: t('entity.culture.languagestatus') },
   { key: 'isDefault', label: t('entity.culture.isdefault') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
@@ -378,7 +357,6 @@ function createEmptyAdvancedQueryForm() {
     nativeName: '',
     icon: '',
     sortOrder: undefined as number | undefined,
-    languageStatus: undefined as number | undefined,
     isDefault: undefined as number | undefined,
     createdAtStart: '',
     createdAtEnd: '',
@@ -413,9 +391,6 @@ function buildCultureQuery(): CultureQuery {
   assignTrimmed('icon', form.icon)
   if (form.sortOrder !== undefined && form.sortOrder !== null) {
     query.sortOrder = form.sortOrder
-  }
-  if (form.languageStatus !== undefined && form.languageStatus !== null) {
-    query.languageStatus = form.languageStatus
   }
   if (form.isDefault !== undefined && form.isDefault !== null) {
     query.isDefault = form.isDefault
@@ -467,12 +442,6 @@ const columns = computed<TableColumnsType<Culture>>(() => [
     dataIndex: 'sortOrder',
     key: 'sortOrder',
     width: 90
-  },
-  {
-    title: t('entity.culture.languagestatus'),
-    dataIndex: 'languageStatus',
-    key: 'languageStatus',
-    width: 100
   },
   {
     title: t('entity.culture.isdefault'),
@@ -748,26 +717,6 @@ const handleDeleteOne = (record: Culture) => {
       }
     }
   })
-}
-
-/**
- * 行内切换启用状态
- * @param record 区域文化行
- * @param checked 是否启用
- */
-const handleStatusChange = async (record: Culture, checked: boolean) => {
-  if (!record.cultureId) return
-  try {
-    await updateCultureStatus({
-      cultureId: record.cultureId,
-      languageStatus: checked ? 1 : 0
-    })
-    message.success(t('common.feedback.updated'))
-    await loadData()
-  } catch (error) {
-    logger.error('[Culture] 状态更新失败', undefined, error)
-    message.error(t('common.feedback.failed'))
-  }
 }
 
 const handleFormSubmit = async () => {

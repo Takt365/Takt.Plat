@@ -87,8 +87,7 @@ const metricItems = computed(() => [
   { key: 'notimplemented', title: t('dashboard.data-board.page.change.notimplemented'), value: changeData.value.notImplemented },
   { key: 'implemented', title: t('dashboard.data-board.page.change.implemented'), value: changeData.value.implemented },
   { key: 'inprogress', title: t('dashboard.data-board.page.change.inprogressec'), value: changeData.value.inProgressEc },
-  { key: 'notofficial', title: t('dashboard.data-board.page.change.notofficiallycompleted'), value: changeData.value.notOfficiallyCompletedEc },
-])
+  { key: 'notofficial', title: t('dashboard.data-board.page.change.notofficiallycompleted'), value: changeData.value.notOfficiallyCompletedEc }])
 
 /**
  * 加载设变主表统计（当月录入日期范围）
@@ -151,8 +150,7 @@ async function loadData(): Promise<void> {
         'ecKanbanNotOfficial',
         () => fetchDashboardPagedTotal(DASHBOARD_STATS_API.ecKanbanList, { onlyNotOfficiallyCompleted: 1 }),
         0,
-      ),
-    ])
+      )])
     ecStat.value = stat
     changeData.value = { total, notImplemented, implemented, inProgressEc, notOfficiallyCompletedEc }
   } finally {

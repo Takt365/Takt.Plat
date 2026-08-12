@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料清单明细应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     }
 
     /// <summary>
-    /// 获取物料清单明细列表（分页）
+    /// 获取物料清单明细列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktBillOfMaterialItemDto>> GetBillOfMaterialItemListAsync(TaktBillOfMaterialItemQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktBillOfMaterialItemDto>.Create(
+                new List<TaktBillOfMaterialItemDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _billOfMaterialItemRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -101,13 +109,13 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     {
         EnsureThreeLayerContext();
         var list = await _billOfMaterialItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.MaterialCode ?? string.Empty,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
+            x => x.BomCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialCode,
+            DictValue = e.BomCode,
+            DictLabel = e.BomCode,
         }).ToList();
     }
 
@@ -124,10 +132,10 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             _billOfMaterialItemRepository,
             x => x.BillOfMaterialId == entity.BillOfMaterialId
                 && x.LineNumber == entity.LineNumber
-                && x.MaterialId == entity.MaterialId);
+                && x.MaterialCode == entity.MaterialCode);
         if (!isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
         {
-            throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialId已存在");
+            throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialCode已存在");
         }
         if (entity.LineNumber <= 0)
         {
@@ -160,11 +168,11 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             _billOfMaterialItemRepository,
             x => x.BillOfMaterialId == entity.BillOfMaterialId
                 && x.LineNumber == entity.LineNumber
-                && x.MaterialId == entity.MaterialId,
+                && x.MaterialCode == entity.MaterialCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
         {
-            throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialId已存在");
+            throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialCode已存在");
         }
         await _billOfMaterialItemRepository.UpdateAsync(entity);
                 await SaveBillOfMaterialItemChildrenAsync(entity, dto);
@@ -266,19 +274,19 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             try
             {
                 var entity = rows[i].Adapt<TaktBillOfMaterialItem>();
-                var importKey = $"{entity.BillOfMaterialId}|{entity.LineNumber}|{entity.MaterialId}";
+                var importKey = $"{entity.BillOfMaterialId}|{entity.LineNumber}|{entity.MaterialCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（BillOfMaterialId、LineNumber、MaterialId）");
+                    throw new TaktBusinessException("与Excel中其他行重复（BillOfMaterialId、LineNumber、MaterialCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique = await _uniqueValidator.IsUniqueAsync(
                     _billOfMaterialItemRepository,
                     x => x.BillOfMaterialId == entity.BillOfMaterialId
                         && x.LineNumber == entity.LineNumber
-                        && x.MaterialId == entity.MaterialId);
+                        && x.MaterialCode == entity.MaterialCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_bom_item_bom_line_unique)
                 {
-                    throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialId已存在");
+                    throw new TaktBusinessException("物料清单明细的BillOfMaterialId、LineNumber、MaterialCode已存在");
                 }
                 if (entity.LineNumber <= 0)
                 {
@@ -309,7 +317,15 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialItemAsync(TaktBillOfMaterialItemQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktBillOfMaterialItemQueryDto());
+        var queryDto = query ?? new TaktBillOfMaterialItemQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktBillOfMaterialItemExportDto>(),
+                sheetName ?? "物料清单明细数据",
+                fileName ?? "物料清单明细导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _billOfMaterialItemRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -379,7 +395,20 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
     private async Task SaveBillOfMaterialItemChildrenAsync(TaktBillOfMaterialItem entity, TaktBillOfMaterialItemCreateDto dto)
     {
         // BOM替代料（Substitutes）
-        if (dto.Substitutes is not { Count: > 0 })
+        List<TaktBillOfMaterialSubstituteUpdateDto>? substitutesForSave;
+        if (dto is TaktBillOfMaterialItemUpdateDto updateDtoForSubstitutes && updateDtoForSubstitutes.Substitutes != null)
+        {
+            substitutesForSave = updateDtoForSubstitutes.Substitutes;
+        }
+        else if (dto.Substitutes != null)
+        {
+            substitutesForSave = dto.Substitutes.Adapt<List<TaktBillOfMaterialSubstituteUpdateDto>>();
+        }
+        else
+        {
+            substitutesForSave = null;
+        }
+        if (substitutesForSave is not { Count: > 0 })
         {
             await MarkBillOfMaterialSubstitutesObsoleteAsync(entity.Id);
             return;
@@ -391,9 +420,9 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             var submittedIds = new HashSet<long>();
             var toCreate = new List<TaktBillOfMaterialSubstitute>();
             var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
-            for (var i = 0; i < dto.Substitutes.Count; i++)
+            for (var i = 0; i < substitutesForSave.Count; i++)
             {
-                var childDto = dto.Substitutes[i];
+                var childDto = substitutesForSave[i];
                 childDto.BillOfMaterialItemId = entity.Id;
                 var lineKey = $"{entity.CompanyCode}|{entity.Id}|{childDto.LineNumber}";
                 if (!seenLineKeys.Add(lineKey))
@@ -475,132 +504,257 @@ public class TaktBillOfMaterialItemService : TaktServiceBase, ITaktBillOfMateria
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.BillOfMaterialId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.BomCode != null && x.BomCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.MaterialId).Contains(keywords)
                 || (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.UsageQuantity).Contains(keywords)
+                || (x.MaterialDescription != null && x.MaterialDescription.Contains(keywords))
                 || (x.MaterialUnit != null && x.MaterialUnit.Contains(keywords))
-                || SqlFunc.ToString(x.ScrapRate).Contains(keywords)
-                || SqlFunc.ToString(x.ActualUsageQuantity).Contains(keywords)
-                || SqlFunc.ToString(x.OperationSeq).Contains(keywords)
                 || (x.WorkCenter != null && x.WorkCenter.Contains(keywords))
                 || (x.Position != null && x.Position.Contains(keywords))
                 || (x.SubstituteGroup != null && x.SubstituteGroup.Contains(keywords))
-                || SqlFunc.ToString(x.SubstitutePriority).Contains(keywords)
-                || SqlFunc.ToString(x.IsOptional).Contains(keywords)
-                || SqlFunc.ToString(x.IsPhantom).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (queryDto?.BillOfMaterialId.HasValue == true)
         {
-            exp = exp.And(x => x.BillOfMaterialId == queryDto.BillOfMaterialId);
+            var billOfMaterialId = queryDto.BillOfMaterialId;
+            exp = exp.And(x => x.BillOfMaterialId == billOfMaterialId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BomCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomCode))
         {
-            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(queryDto.BomCode));
+            var bomCode = queryDto.BomCode;
+            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(bomCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            var lineNumber = queryDto.LineNumber;
+            exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
-        if (queryDto?.MaterialId.HasValue == true)
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialId == queryDto.MaterialId);
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
         }
 
         if (queryDto?.UsageQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.UsageQuantity == queryDto.UsageQuantity);
+            var usageQuantity = queryDto.UsageQuantity;
+            exp = exp.And(x => x.UsageQuantity == usageQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialUnit))
         {
-            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(queryDto.MaterialUnit));
+            var materialUnit = queryDto.MaterialUnit;
+            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(materialUnit));
         }
 
         if (queryDto?.ScrapRate.HasValue == true)
         {
-            exp = exp.And(x => x.ScrapRate == queryDto.ScrapRate);
+            var scrapRate = queryDto.ScrapRate;
+            exp = exp.And(x => x.ScrapRate == scrapRate);
         }
 
         if (queryDto?.ActualUsageQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.ActualUsageQuantity == queryDto.ActualUsageQuantity);
+            var actualUsageQuantity = queryDto.ActualUsageQuantity;
+            exp = exp.And(x => x.ActualUsageQuantity == actualUsageQuantity);
         }
 
         if (queryDto?.OperationSeq.HasValue == true)
         {
-            exp = exp.And(x => x.OperationSeq == queryDto.OperationSeq);
+            var operationSeq = queryDto.OperationSeq;
+            exp = exp.And(x => x.OperationSeq == operationSeq);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WorkCenter))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WorkCenter))
         {
-            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(queryDto.WorkCenter));
+            var workCenter = queryDto.WorkCenter;
+            exp = exp.And(x => x.WorkCenter != null && x.WorkCenter.Contains(workCenter));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Position))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Position))
         {
-            exp = exp.And(x => x.Position != null && x.Position.Contains(queryDto.Position));
+            var position = queryDto.Position;
+            exp = exp.And(x => x.Position != null && x.Position.Contains(position));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SubstituteGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubstituteGroup))
         {
-            exp = exp.And(x => x.SubstituteGroup != null && x.SubstituteGroup.Contains(queryDto.SubstituteGroup));
+            var substituteGroup = queryDto.SubstituteGroup;
+            exp = exp.And(x => x.SubstituteGroup != null && x.SubstituteGroup.Contains(substituteGroup));
         }
 
         if (queryDto?.SubstitutePriority.HasValue == true)
         {
-            exp = exp.And(x => x.SubstitutePriority == queryDto.SubstitutePriority);
+            var substitutePriority = queryDto.SubstitutePriority;
+            exp = exp.And(x => x.SubstitutePriority == substitutePriority);
         }
 
         if (queryDto?.IsOptional.HasValue == true)
         {
-            exp = exp.And(x => x.IsOptional == queryDto.IsOptional);
+            var isOptional = queryDto.IsOptional;
+            exp = exp.And(x => x.IsOptional == isOptional);
         }
 
         if (queryDto?.IsPhantom.HasValue == true)
         {
-            exp = exp.And(x => x.IsPhantom == queryDto.IsPhantom);
+            var isPhantom = queryDto.IsPhantom;
+            exp = exp.And(x => x.IsPhantom == isPhantom);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktBillOfMaterialItemQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (queryDto.BillOfMaterialId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (queryDto.UsageQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialUnit))
+        {
+            return true;
+        }
+        if (queryDto.ScrapRate.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualUsageQuantity.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OperationSeq.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.WorkCenter))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Position))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubstituteGroup))
+        {
+            return true;
+        }
+        if (queryDto.SubstitutePriority.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsOptional.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsPhantom.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

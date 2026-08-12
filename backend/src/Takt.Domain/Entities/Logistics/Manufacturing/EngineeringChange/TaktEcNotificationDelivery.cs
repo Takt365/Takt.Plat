@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.EngineeringChange;
 [SugarTable("takt_logistics_manufacturing_ec_notification_delivery", "工程变更通知投递表")]
 [SugarIndex("ix_ec_notification_delivery_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_notification_delivery_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(EcNotificationId), OrderByType.Asc, nameof(DeptCode), OrderByType.Asc, true)]
+[SugarIndex("ix_ec_notification_delivery_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_ec_notification_delivery_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(DeliveryStatus), OrderByType.Asc, false)]
 public class TaktEcNotificationDelivery : TaktCompanyEntityBase
 {
@@ -30,11 +31,12 @@ public class TaktEcNotificationDelivery : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "ec_notification_id", ColumnDescription = "通知单ID", ColumnDataType = "bigint", IsNullable = false)]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EcNotificationId { get; set; }
+
     /// <summary>
     /// 通知单号（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_notification_no", ColumnDescription = "通知单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
-    public string EcNotificationNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_notification_code", ColumnDescription = "通知单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    public string EcNotificationCode { get; set; } = string.Empty;
     /// <summary>
     /// 设变 ID
     /// </summary>
@@ -44,8 +46,8 @@ public class TaktEcNotificationDelivery : TaktCompanyEntityBase
     /// <summary>
     /// 设变单号（冗余）
     /// </summary>
-    [SugarColumn(ColumnName = "ec_no", ColumnDescription = "设变单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
-    public string EcNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "ec_code", ColumnDescription = "设变单号", ColumnDataType = "varchar", Length = 40, IsNullable = false)]
+    public string EcCode { get; set; } = string.Empty;
     /// <summary>
     /// 目标部门编码（TaktDept.DeptCode，如 D0710、D0810）
     /// </summary>

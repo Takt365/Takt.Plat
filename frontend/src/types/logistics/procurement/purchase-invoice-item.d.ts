@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/procurement
 // 文件名称：purchase-invoice-item.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-10
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/procurement 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,484 +16,188 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt采购发票明细实体
+ * Takt采购发票明细实体（公司级；主子表关系见 PurchaseInvoiceId）
  * 对应前端 TaktPurchaseInvoiceItemDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 PurchaseInvoiceItem
  * @description 对应后端 TaktPurchaseInvoiceItemDto
  */
 export interface PurchaseInvoiceItem extends CompanyDtoBase {
-  /**
-   * PurchaseInvoiceItemID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  purchaseInvoiceItemId: string;
 
   /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
-   */
-  purchaseInvoiceId: string;
-
-  /**
-   * 采购发票 名称（填充字段）
-   */
-  purchaseInvoiceName?: string;
-
-  /**
-   * 采购发票编码（冗余字段，便于查询）
-   */
-  purchaseInvoiceCode: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-  /**
-   * 来源采购订单编码
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 来源采购订单行号
-   */
-  purchaseOrderLineNumber?: number;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName: string;
-
-  /**
-   * 物料规格（回填：随物料）
-   */
-  materialSpecification?: string;
-
-  /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  purchaseUnit: string;
-
-  /**
-   * 开票数量（基本单位数量）
-   */
-  invoiceQuantity: number;
-
-  /**
-   * 开票单价
-   */
-  invoiceUnitPrice: number;
-
-  /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
-   */
-  discountRate: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount: number;
-
-  /**
-   * 含税金额
-   */
-  taxIncludedAmount: number;
-
-  /**
-   * 未税金额
-   */
-  untaxedAmount: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * PurchaseInvoiceItem 分页查询 DTO
- * 继承 TaktPagedQuery
- * 对应前端 PurchaseInvoiceItemQuery
- * @description 对应后端 TaktPurchaseInvoiceItemQueryDto
- */
-export interface PurchaseInvoiceItemQuery extends TaktPagedQuery {
-  /**
-   * 租户编码
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码
-   */
-  companyCode?: string;
-
-  /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
-   */
-  purchaseInvoiceId?: string;
-
-  /**
-   * 采购发票编码（冗余字段，便于查询）
+   * 凭证编号（冗余；会计年度见主表 FiscalYear）
    */
   purchaseInvoiceCode?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
    */
   lineNumber?: number;
 
   /**
-   * 来源采购订单编码
+   * 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购订单行号
+   * 项目（采购凭证项目）
    */
-  purchaseOrderLineNumber?: number;
+  purchaseOrderItem?: number;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   * 科目分配序号
+   */
+  accountAssignmentSeq?: string;
+
+  /**
+   * 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称（回填：随物料）
+   * 评估范围
    */
-  materialName?: string;
+  valuationArea?: string;
 
   /**
-   * 物料规格（回填：随物料）
+   * 金额
    */
-  materialSpecification?: string;
+  amount?: number;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 借/贷标识
    */
-  purchaseUnit?: string;
+  debitCreditIndicator?: string;
 
   /**
-   * 开票数量（基本单位数量）
+   * 税码
    */
-  invoiceQuantity?: number;
+  taxCode?: string;
 
   /**
-   * 开票单价
+   * 数量
    */
-  invoiceUnitPrice?: number;
+  quantity?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 订单单位
    */
-  discountRate?: number;
+  orderUnit?: string;
 
   /**
-   * 折扣金额
+   * 订单价格单位数量
    */
-  discountAmount?: number;
+  poPriceQuantity?: number;
 
   /**
-   * 含税金额
+   * 订单价格单位
    */
-  taxIncludedAmount?: number;
+  poPriceUnit?: string;
 
   /**
-   * 未税金额
+   * 总库存
    */
-  untaxedAmount?: number;
+  valuatedStockQuantity?: number;
 
   /**
-   * 税费
+   * 上一过账期间库存
    */
-  taxAmount?: number;
+  previousPeriodStock?: number;
 
   /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
+   * 基本计量单位
    */
-  isObsolete?: number;
+  baseUnit?: string;
 
   /**
-   * 创建时间（范围查询-开始）
+   * 评估类
    */
-  createdAtStart?: string;
+  valuationClass?: string;
 
   /**
-   * 创建时间（范围查询-结束）
+   * 标识: 更新采购订单历史
    */
-  createdAtEnd?: string;
+  updatePoHistoryFlag?: string;
 
   /**
-   * 扩展字段JSON
+   * 后续借/贷
    */
-  extField?: string;
+  subsequentDebitCredit?: string;
 
   /**
-   * 备注（模糊查询）
+   * 价格冻结原因
    */
-  remark?: string;
-
-}
-
-
-/**
- * 创建PurchaseInvoiceItem DTO
- * 对应前端 PurchaseInvoiceItemCreate
- * @description 对应后端 TaktPurchaseInvoiceItemCreateDto
- */
-export interface PurchaseInvoiceItemCreate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode: string;
+  blockReasonPrice?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 数量冻结原因
    */
-  companyCode: string;
+  blockReasonQuantity?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 质量冻结原因
    */
-  companyDefaultCulture: string;
+  blockReasonQuality?: string;
 
   /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+   * 增强冻结原因
    */
-  purchaseInvoiceId: string;
+  blockReasonEnhanced?: string;
 
   /**
-   * 采购发票编码（冗余字段，便于查询）
+   * 价值串
    */
-  purchaseInvoiceCode: string;
+  valueString?: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 参照
    */
-  lineNumber: number;
+  referenceCode?: string;
 
   /**
-   * 来源采购订单编码
+   * 条件类型
    */
-  purchaseOrderCode?: string;
+  conditionType?: string;
 
   /**
-   * 来源采购订单行号
+   * 总价值
    */
-  purchaseOrderLineNumber?: number;
+  totalValuatedStockValue?: number;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   * 前期总值
    */
-  materialCode?: string;
+  previousPeriodValue?: number;
 
   /**
-   * 物料名称（回填：随物料）
+   * 参考凭证
    */
-  materialName: string;
+  referenceDocumentCode?: string;
 
   /**
-   * 物料规格（回填：随物料）
+   * 当前期间年
    */
-  materialSpecification?: string;
+  referenceDocumentYear?: string;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 参考凭证项目
    */
-  purchaseUnit: string;
+  referenceDocumentItem?: number;
 
   /**
-   * 开票数量（基本单位数量）
+   * 库存物料
    */
-  invoiceQuantity: number;
+  stockManagedMaterialCode?: string;
 
   /**
-   * 开票单价
+   * 文本
    */
-  invoiceUnitPrice: number;
+  itemText?: string;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 来自到达的发票的存货过帐行
    */
-  discountRate: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount: number;
-
-  /**
-   * 含税金额
-   */
-  taxIncludedAmount: number;
-
-  /**
-   * 未税金额
-   */
-  untaxedAmount: number;
-
-  /**
-   * 税费
-   */
-  taxAmount: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
-
-/**
- * 更新PurchaseInvoiceItem DTO
- * 继承 TaktPurchaseInvoiceItemCreateDto，添加 PurchaseInvoiceItemId 字段
- * 对应前端 PurchaseInvoiceItemUpdate
- * @description 对应后端 TaktPurchaseInvoiceItemUpdateDto
- */
-export interface PurchaseInvoiceItemUpdate extends PurchaseInvoiceItemCreate {
-  /**
-   * PurchaseInvoiceItemID（标识要更新的实体）
-   */
-  purchaseInvoiceItemId: string;
-
-}
-
-
-/**
- * PurchaseInvoiceItem 作废/撤销作废 DTO
- * 对应前端 PurchaseInvoiceItemObsolete
- * @description 对应后端 TaktPurchaseInvoiceItemObsoleteDto
- */
-export interface PurchaseInvoiceItemObsolete {
-  /**
-   * PurchaseInvoiceItemID
-   */
-  purchaseInvoiceItemId: string;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete: number;
-
-}
-
-
-/**
- * PurchaseInvoiceItem 导入模板行 DTO
- * 对应前端 PurchaseInvoiceItemTemplate
- * @description 对应后端 TaktPurchaseInvoiceItemTemplateDto
- */
-export interface PurchaseInvoiceItemTemplate {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
-   */
-  purchaseInvoiceId?: string;
-
-  /**
-   * 采购发票编码（冗余字段，便于查询）
-   */
-  purchaseInvoiceCode?: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 来源采购订单编码
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 来源采购订单行号
-   */
-  purchaseOrderLineNumber?: number;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName?: string;
-
-  /**
-   * 物料规格（回填：随物料）
-   */
-  materialSpecification?: string;
-
-  /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  purchaseUnit?: string;
-
-  /**
-   * 开票数量（基本单位数量）
-   */
-  invoiceQuantity?: number;
-
-  /**
-   * 开票单价
-   */
-  invoiceUnitPrice?: number;
-
-  /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
-   */
-  discountRate?: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount?: number;
-
-  /**
-   * 含税金额
-   */
-  taxIncludedAmount?: number;
-
-  /**
-   * 未税金额
-   */
-  untaxedAmount?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
+  materialDocumentItem?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
@@ -511,126 +215,6 @@ export interface PurchaseInvoiceItemTemplate {
   remark?: string;
 
 }
-
-
-/**
- * PurchaseInvoiceItem 导入 DTO（独立实现，不继承 TemplateDto）
- * 对应前端 PurchaseInvoiceItemImport
- * @description 对应后端 TaktPurchaseInvoiceItemImportDto
- */
-export interface PurchaseInvoiceItemImport {
-  /**
-   * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
-   */
-  tenantCode?: string;
-
-  /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
-   */
-  companyCode?: string;
-
-  /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
-   */
-  companyDefaultCulture?: string;
-
-  /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
-   */
-  purchaseInvoiceId?: string;
-
-  /**
-   * 采购发票编码（冗余字段，便于查询）
-   */
-  purchaseInvoiceCode?: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber?: number;
-
-  /**
-   * 来源采购订单编码
-   */
-  purchaseOrderCode?: string;
-
-  /**
-   * 来源采购订单行号
-   */
-  purchaseOrderLineNumber?: number;
-
-  /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
-   */
-  materialCode?: string;
-
-  /**
-   * 物料名称（回填：随物料）
-   */
-  materialName?: string;
-
-  /**
-   * 物料规格（回填：随物料）
-   */
-  materialSpecification?: string;
-
-  /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
-   */
-  purchaseUnit?: string;
-
-  /**
-   * 开票数量（基本单位数量）
-   */
-  invoiceQuantity?: number;
-
-  /**
-   * 开票单价
-   */
-  invoiceUnitPrice?: number;
-
-  /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
-   */
-  discountRate?: number;
-
-  /**
-   * 折扣金额
-   */
-  discountAmount?: number;
-
-  /**
-   * 含税金额
-   */
-  taxIncludedAmount?: number;
-
-  /**
-   * 未税金额
-   */
-  untaxedAmount?: number;
-
-  /**
-   * 税费
-   */
-  taxAmount?: number;
-
-  /**
-   * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
-   */
-  isObsolete?: number;
-
-  /**
-   * 扩展字段JSON
-   */
-  extField?: string;
-
-  /**
-   * 备注
-   */
-  remark?: string;
-
-}
-
 
 /**
  * PurchaseInvoiceItem 导出 DTO（独立实现，不继承响应 Dto）
@@ -649,84 +233,189 @@ export interface PurchaseInvoiceItemExport {
   companyCode: string;
 
   /**
-   * 采购发票 ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
+   * 采购发票ID（选项 TaktPurchaseInvoices/options；DictValue=Id）
    */
   purchaseInvoiceId: string;
 
   /**
-   * 采购发票编码（冗余字段，便于查询）
+   * 工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
+
+  /**
+   * 凭证编号（冗余；会计年度见主表 FiscalYear）
    */
   purchaseInvoiceCode: string;
 
   /**
-   * 行号（项号/序号，固定步长=10）
+   * 发票项目（发票行项目；行号步长生成器用 int，固定步长=10）
    */
   lineNumber: number;
 
   /**
-   * 来源采购订单编码
+   * 采购凭证（选项 TaktPurchaseOrders/options；DictValue=PurchaseOrderCode）
    */
   purchaseOrderCode?: string;
 
   /**
-   * 来源采购订单行号
+   * 项目（采购凭证项目）
    */
-  purchaseOrderLineNumber?: number;
+  purchaseOrderItem?: number;
 
   /**
-   * 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
+   * 科目分配序号
+   */
+  accountAssignmentSeq?: string;
+
+  /**
+   * 物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称（回填：随物料）
+   * 评估范围
    */
-  materialName: string;
+  valuationArea?: string;
 
   /**
-   * 物料规格（回填：随物料）
+   * 金额
    */
-  materialSpecification?: string;
+  amount?: number;
 
   /**
-   * 采购单位（字典 logistics_unit_of_measure_code；DictValue=PC/EA 等；默认 PC）
+   * 借/贷标识
    */
-  purchaseUnit: string;
+  debitCreditIndicator?: string;
 
   /**
-   * 开票数量（基本单位数量）
+   * 税码
    */
-  invoiceQuantity: number;
+  taxCode?: string;
 
   /**
-   * 开票单价
+   * 数量
    */
-  invoiceUnitPrice: number;
+  quantity?: number;
 
   /**
-   * 折扣率（字典 logistics_discount_rate_param 预设或手输；0-100，表示折扣百分比）
+   * 订单单位
    */
-  discountRate: number;
+  orderUnit?: string;
 
   /**
-   * 折扣金额
+   * 订单价格单位数量
    */
-  discountAmount: number;
+  poPriceQuantity?: number;
 
   /**
-   * 含税金额
+   * 订单价格单位
    */
-  taxIncludedAmount: number;
+  poPriceUnit?: string;
 
   /**
-   * 未税金额
+   * 总库存
    */
-  untaxedAmount: number;
+  valuatedStockQuantity?: number;
 
   /**
-   * 税费
+   * 上一过账期间库存
    */
-  taxAmount: number;
+  previousPeriodStock?: number;
+
+  /**
+   * 基本计量单位
+   */
+  baseUnit?: string;
+
+  /**
+   * 评估类
+   */
+  valuationClass?: string;
+
+  /**
+   * 标识: 更新采购订单历史
+   */
+  updatePoHistoryFlag?: string;
+
+  /**
+   * 后续借/贷
+   */
+  subsequentDebitCredit?: string;
+
+  /**
+   * 价格冻结原因
+   */
+  blockReasonPrice?: string;
+
+  /**
+   * 数量冻结原因
+   */
+  blockReasonQuantity?: string;
+
+  /**
+   * 质量冻结原因
+   */
+  blockReasonQuality?: string;
+
+  /**
+   * 增强冻结原因
+   */
+  blockReasonEnhanced?: string;
+
+  /**
+   * 价值串
+   */
+  valueString?: string;
+
+  /**
+   * 参照
+   */
+  referenceCode?: string;
+
+  /**
+   * 条件类型
+   */
+  conditionType?: string;
+
+  /**
+   * 总价值
+   */
+  totalValuatedStockValue?: number;
+
+  /**
+   * 前期总值
+   */
+  previousPeriodValue?: number;
+
+  /**
+   * 参考凭证
+   */
+  referenceDocumentCode?: string;
+
+  /**
+   * 当前期间年
+   */
+  referenceDocumentYear?: string;
+
+  /**
+   * 参考凭证项目
+   */
+  referenceDocumentItem?: number;
+
+  /**
+   * 库存物料
+   */
+  stockManagedMaterialCode?: string;
+
+  /**
+   * 文本
+   */
+  itemText?: string;
+
+  /**
+   * 来自到达的发票的存货过帐行
+   */
+  materialDocumentItem?: number;
 
   /**
    * 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）

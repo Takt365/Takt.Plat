@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Foundation
 // 文件名称：TaktQuartzTasksController.cs
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：定时任务控制器
 // 
@@ -201,57 +201,18 @@ public class TaktQuartzTasksController : TaktControllerBase
     }
 
     /// <summary>
-    /// 启动（恢复）定时任务调度
+    /// 立即执行一次定时任务
     /// </summary>
     /// <param name="id">定时任务ID</param>
+    /// <param name="dto">可选执行参数</param>
     /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartz:task:start", "启动定时任务")]
-    [HttpPut("{id}/start")]
-    public async Task<IActionResult> StartQuartzTaskAsync(long id)
-    {
-        try
-        {
-            var result = await _quartzTaskService.StartQuartzTaskAsync(id);
-            return Success(result, "启动成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 暂停定时任务调度
-    /// </summary>
-    /// <param name="id">定时任务ID</param>
-    /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartz:task:pause", "暂停定时任务")]
-    [HttpPut("{id}/pause")]
-    public async Task<IActionResult> PauseQuartzTaskAsync(long id)
-    {
-        try
-        {
-            var result = await _quartzTaskService.PauseQuartzTaskAsync(id);
-            return Success(result, "暂停成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 立即执行一次定时任务（不改变启动/暂停调度状态）
-    /// </summary>
-    /// <param name="id">定时任务ID</param>
-    /// <returns>定时任务DTO</returns>
-    [TaktPermission("foundation:quartz:task:execute", "执行定时任务")]
+    [TaktPermission("foundation:quartz:task:execute", "立即执行定时任务")]
     [HttpPost("{id}/execute")]
-    public async Task<IActionResult> ExecuteQuartzTaskNowAsync(long id)
+    public async Task<IActionResult> ExecuteQuartzTaskNowAsync(long id, [FromBody] TaktQuartzTaskExecuteDto? dto = null)
     {
         try
         {
-            var result = await _quartzTaskService.ExecuteQuartzTaskNowAsync(id);
+            var result = await _quartzTaskService.ExecuteQuartzTaskNowAsync(id, dto?.ExecuteParams);
             return Success(result, "已触发执行");
         }
         catch (Exception ex)

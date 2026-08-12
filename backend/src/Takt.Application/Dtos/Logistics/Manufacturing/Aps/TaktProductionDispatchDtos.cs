@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionDispatchDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionDispatch 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionDispatch 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktProductionDispatchDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionDispatchId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 派工单编码
@@ -46,7 +42,7 @@ public class TaktProductionDispatchDto : TaktCompanyDtoBase
     public string DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionOrderId { get; set; }
@@ -62,7 +58,7 @@ public class TaktProductionDispatchDto : TaktCompanyDtoBase
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
@@ -73,7 +69,7 @@ public class TaktProductionDispatchDto : TaktCompanyDtoBase
     public string? ApsOperationName { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
@@ -125,7 +121,12 @@ public class TaktProductionDispatchQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -135,7 +136,7 @@ public class TaktProductionDispatchQueryDto : TaktPagedQuery
     public string? DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -146,13 +147,13 @@ public class TaktProductionDispatchQueryDto : TaktPagedQuery
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
@@ -232,14 +233,14 @@ public class TaktProductionDispatchCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -249,7 +250,7 @@ public class TaktProductionDispatchCreateDto
     public string DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionOrderId { get; set; }
@@ -261,13 +262,13 @@ public class TaktProductionDispatchCreateDto
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
@@ -372,7 +373,12 @@ public class TaktProductionDispatchTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -382,7 +388,7 @@ public class TaktProductionDispatchTemplateDto
     public string? DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -393,13 +399,13 @@ public class TaktProductionDispatchTemplateDto
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
@@ -456,12 +462,12 @@ public class TaktProductionDispatchImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -471,7 +477,7 @@ public class TaktProductionDispatchImportDto
     public string? DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ProductionOrderId { get; set; }
@@ -482,13 +488,13 @@ public class TaktProductionDispatchImportDto
     public string? ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 
@@ -551,7 +557,7 @@ public class TaktProductionDispatchExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -561,7 +567,7 @@ public class TaktProductionDispatchExportDto
     public string DispatchCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产工单 ID（关联 TaktProductionOrder.Id，选项 TaktProductionOrders/options）
+    /// 生产工单 ID（选项 TaktProductionOrders/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionOrderId { get; set; }
@@ -572,13 +578,13 @@ public class TaktProductionDispatchExportDto
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// APS 工序排程 ID（关联 TaktApsOperation.Id，选项 TaktApsOperations/options）
+    /// APS 工序排程 ID（选项 TaktApsOperations/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ApsOperationId { get; set; }
 
     /// <summary>
-    /// 工作中心编码（关联 TaktWorkCenter.WorkCenterCode，选项 TaktWorkCenters/options，DictValue=WorkCenterCode）
+    /// 工作中心编码（选项 TaktWorkCenters/options；DictValue=WorkCenterCode）
     /// </summary>
     public string? WorkCenterCode { get; set; } = string.Empty;
 

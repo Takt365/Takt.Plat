@@ -91,11 +91,6 @@ export interface User extends TenantDtoBase {
   lockedUntil?: string;
 
   /**
-   * 区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
-   */
-  defaultCulture: string;
-
-  /**
    * 已分配角色 ID 列表
    */
   roleIds?: string[];
@@ -148,7 +143,12 @@ export interface UserQuery extends TaktPagedQuery {
   /**
    * 区域文化编码（模糊查询）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 创建人ID
@@ -217,7 +217,7 @@ export interface CreateUser {
   /**
    * 区域文化编码（BCP47，对齐 TaktCulture.CultureCode）
    */
-  defaultCulture: string;
+  cultureCode: string;
 
   /**
    * 扩展字段JSON
@@ -383,6 +383,11 @@ export interface UserUnlock {
  */
 export interface UserTemplate {
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 用户名（登录账号，20位）
    */
   username: string;
@@ -431,6 +436,11 @@ export interface UserTemplate {
  * @description 对应后端 TaktUserImportDto
  */
 export interface UserImport {
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
   /**
    * 用户名（登录账号，20位）
    */

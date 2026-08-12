@@ -30,11 +30,22 @@
       >
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
-            {{ formatPeriodPrice(record as SalesPriceMonthlyTrend, String(column.key)) }}
+            <template v-if="isCarriedPeriodPrice(record as SalesPriceMonthlyTrend, String(column.key))">
+              <a-tooltip
+                :title="carriedPeriodTooltip(record as SalesPriceMonthlyTrend, String(column.key))"
+              >
+                <span class="cursor-help border-b border-dotted border-text-secondary text-text-secondary">
+                  {{ formatPeriodPrice(record as SalesPriceMonthlyTrend, String(column.key)) }}*
+                </span>
+              </a-tooltip>
+            </template>
+            <template v-else>
+              {{ formatPeriodPrice(record as SalesPriceMonthlyTrend, String(column.key)) }}
+            </template>
           </template>
-          <template v-else-if="column.key === 'currency'">
+          <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as SalesPriceMonthlyTrend).currency"
+              :value="(record as SalesPriceMonthlyTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
@@ -182,7 +193,7 @@ const columns = computed<TableColumnsType>(() => {
   if (props.activeTab === 'model') {
     const cols: TableColumnsType = [
       {
-        title: t('entity.salespriceitem.materialcode'),
+        title: t('entity.salesprice.materialcode'),
         dataIndex: 'materialCode',
         key: 'materialCode',
         width: 140,
@@ -204,7 +215,7 @@ const columns = computed<TableColumnsType>(() => {
         ellipsis: true,
       },
       {
-        title: t(`${localePrefix}.columns.materialText`),
+        title: t('entity.salesprice.materialdescription'),
         dataIndex: 'materialText',
         key: 'materialText',
         width: 180,
@@ -218,13 +229,12 @@ const columns = computed<TableColumnsType>(() => {
         ellipsis: true,
       },
       {
-        title: t('entity.salesprice.customername'),
+        title: t('entity.customer.name1'),
         dataIndex: 'customerName',
         key: 'customerName',
         width: 160,
         ellipsis: true,
-      },
-    ]
+      }]
     for (const period of periodOrder.value) {
       cols.push({
         title: period,
@@ -263,7 +273,7 @@ const columns = computed<TableColumnsType>(() => {
   }
   const cols: TableColumnsType = [
     {
-      title: t('entity.salespriceitem.materialcode'),
+      title: t('entity.salesprice.materialcode'),
       dataIndex: 'materialCode',
       key: 'materialCode',
       width: 140,
@@ -271,9 +281,9 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.material.name'),
-      dataIndex: 'materialName',
-      key: 'materialName',
+      title: t('entity.salesprice.materialdescription'),
+      dataIndex: 'materialDescription',
+      key: 'materialDescription',
       width: 160,
       ellipsis: true,
     },
@@ -285,25 +295,24 @@ const columns = computed<TableColumnsType>(() => {
       ellipsis: true,
     },
     {
-      title: t('entity.salesprice.customername'),
+      title: t('entity.customer.name1'),
       dataIndex: 'customerName',
       key: 'customerName',
       width: 160,
       ellipsis: true,
     },
     {
-      title: t('entity.salesprice.currencycode'),
-      dataIndex: 'currency',
-      key: 'currency',
+      title: t('entity.salespriceitem.conditioncurrencycode'),
+      dataIndex: 'currencyCode',
+      key: 'currencyCode',
       width: 80,
     },
     {
-      title: t('entity.salespriceitem.salesunit'),
+      title: t('entity.salespriceitem.unitofmeasure'),
       dataIndex: 'unit',
       key: 'unit',
       width: 80,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -414,6 +423,33 @@ function formatPeriodPrice(record: SalesPriceMonthlyTrend, columnKey: string): s
   const value = record.periodUnitPrices?.[period]
   if (value == null || Number.isNaN(value)) return '—'
   return value.toFixed(5)
+}
+
+/**
+ * 是否缺月回填价（来源 ≠ 展示月：回填为最近价格日期 yyyy-MM-dd）
+ * @param {SalesPriceMonthlyTrend} record 行
+ * @param {string} columnKey period_yyyy-MM
+ * @returns {boolean} 是否回填
+ */
+function isCarriedPeriodPrice(record: SalesPriceMonthlyTrend, columnKey: string): boolean {
+  const period = columnKey.replace(/^period_/, '')
+  const price = record.periodUnitPrices?.[period]
+  if (price == null || Number.isNaN(price)) return false
+  const source = record.periodPriceSourcePeriods?.[period]
+  if (!source) return false
+  return String(source) !== String(period)
+}
+
+/**
+ * 回填悬停提示（最近价格日期）
+ * @param {SalesPriceMonthlyTrend} record 行
+ * @param {string} columnKey period_yyyy-MM
+ * @returns {string} 提示
+ */
+function carriedPeriodTooltip(record: SalesPriceMonthlyTrend, columnKey: string): string {
+  const period = columnKey.replace(/^period_/, '')
+  const source = record.periodPriceSourcePeriods?.[period] || '—'
+  return t(`${localePrefix}.carriedFrom`, { period: source })
 }
 
 /**

@@ -88,7 +88,7 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
             throw new TaktBusinessException("用户上下文缺失，无法提交后台重算");
         }
 
-        var prepared = TaktBomMaterialCostItemService.PrepareRecalculateModelAverageQuery(queryDto);
+        var prepared = TaktBomMaterialCostAnalysisService.PrepareRecalculateModelAverageQuery(queryDto);
         var jobKey = BuildJobKey(tenantCode, companyCode, prepared.ProcessedMonth, forceRecalculate);
         if (!RunningJobs.TryAdd(jobKey, 0))
         {
@@ -130,8 +130,8 @@ public sealed class TaktBomMaterialCostItemRecalculateBackgroundService : ITaktB
                 context.CompanyCode,
                 context.UserId,
                 context.UserName);
-            var bomMaterialCostItemService = scope.ServiceProvider.GetRequiredService<ITaktBomMaterialCostItemService>();
-            result = await bomMaterialCostItemService.RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
+            var bomMaterialCostAnalysisService = scope.ServiceProvider.GetRequiredService<ITaktBomMaterialCostAnalysisService>();
+            result = await bomMaterialCostAnalysisService.RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
                 context.Query,
                 context.ForceRecalculate,
                 context.ProcessRecordCount);

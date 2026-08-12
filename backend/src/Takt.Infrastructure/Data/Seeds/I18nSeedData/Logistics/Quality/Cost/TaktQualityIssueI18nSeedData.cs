@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktQualityIssue 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktQualityIssueI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityissue._self
             new TranslationSeedItem("entity.qualityissue._self", "zh-HK", "品质问题应对主表信息_hk", "实体名称"),
 
-            // entity.qualityissue.plantcode
-            new TranslationSeedItem("entity.qualityissue.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityissue.plantcode
-            new TranslationSeedItem("entity.qualityissue.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityissue.plantcode
-            new TranslationSeedItem("entity.qualityissue.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.qualityissue.plantcode
-            new TranslationSeedItem("entity.qualityissue.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.qualityissue.code
             new TranslationSeedItem("entity.qualityissue.code", "en-US", "品质问题编码_us", "品质问题编码（唯一，如：QF-2026-0001）"),
             // entity.qualityissue.code
@@ -180,14 +171,14 @@ public class TaktQualityIssueI18nSeedData : ITaktSeedDataCoordinator
             // entity.qualityissue.totalcost
             new TranslationSeedItem("entity.qualityissue.totalcost", "zh-HK", "总费用_hk", "总费用(元,自动计算 = 各子表费用合计)"),
 
-            // entity.qualityissue.costcurrency
-            new TranslationSeedItem("entity.qualityissue.costcurrency", "en-US", "成本币种_us", "成本币种（CNY/USD/JPY等）"),
-            // entity.qualityissue.costcurrency
-            new TranslationSeedItem("entity.qualityissue.costcurrency", "ja-JP", "成本币种_jp", "成本币种（CNY/USD/JPY等）"),
-            // entity.qualityissue.costcurrency
-            new TranslationSeedItem("entity.qualityissue.costcurrency", "zh-CN", "成本币种", "成本币种（CNY/USD/JPY等）"),
-            // entity.qualityissue.costcurrency
-            new TranslationSeedItem("entity.qualityissue.costcurrency", "zh-HK", "成本币种_hk", "成本币种（CNY/USD/JPY等）"),
+            // entity.qualityissue.currencycode
+            new TranslationSeedItem("entity.qualityissue.currencycode", "en-US", "成本币种_us", "成本币种（CNY/USD/JPY等）"),
+            // entity.qualityissue.currencycode
+            new TranslationSeedItem("entity.qualityissue.currencycode", "ja-JP", "成本币种_jp", "成本币种（CNY/USD/JPY等）"),
+            // entity.qualityissue.currencycode
+            new TranslationSeedItem("entity.qualityissue.currencycode", "zh-CN", "成本币种", "成本币种（CNY/USD/JPY等）"),
+            // entity.qualityissue.currencycode
+            new TranslationSeedItem("entity.qualityissue.currencycode", "zh-HK", "成本币种_hk", "成本币种（CNY/USD/JPY等）"),
 
             // entity.qualityissue.meetingitems
             new TranslationSeedItem("entity.qualityissue.meetingitems", "en-US", "会议/调查/试验费用明细列表_us", "会议/调查/试验费用明细列表"),

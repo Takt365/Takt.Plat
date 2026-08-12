@@ -31,7 +31,7 @@ export const COSTCENTER_LIST_FIELDS = [
   'costCenterLevel',
   'validFrom',
   'validTo',
-  'relatedPlant',
+  'plantCode',
   'costCenterStatus',
 ] as const
 
@@ -51,7 +51,7 @@ export const COSTCENTER_PLACEHOLDER = {
   costCenterLevel: 'select',
   validFrom: 'select',
   validTo: 'select',
-  relatedPlant: 'select',
+  plantCode: 'select',
   costCenterStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -73,7 +73,7 @@ export const COSTCENTER_QUERY_STRING_FIELDS = [
   'validFromEnd',
   'validToStart',
   'validToEnd',
-  'relatedPlant',
+  'plantCode',
   'createdAtStart',
   'createdAtEnd',
   'extField',

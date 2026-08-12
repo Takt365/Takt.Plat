@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Mps
 // 文件名称：TaktProductionTeamDtos.cs
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ProductionTeam 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktProductionTeam 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProductionTeamId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）
@@ -51,7 +47,7 @@ public class TaktProductionTeamDto : TaktCompanyDtoBase
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string TeamCategory { get; set; } = string.Empty;
 
@@ -99,7 +95,12 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -114,7 +115,7 @@ public class TaktProductionTeamQueryDto : TaktPagedQuery
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -174,14 +175,14 @@ public class TaktProductionTeamCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=Id）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -197,9 +198,9 @@ public class TaktProductionTeamCreateDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
-    [Required(ErrorMessage = "班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）不能为空")]
+    [Required(ErrorMessage = "班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）不能为空")]
     public string TeamCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -303,7 +304,12 @@ public class TaktProductionTeamTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -318,7 +324,7 @@ public class TaktProductionTeamTemplateDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -370,12 +376,12 @@ public class TaktProductionTeamImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -390,7 +396,7 @@ public class TaktProductionTeamImportDto
     public string? TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string? TeamCategory { get; set; } = string.Empty;
 
@@ -448,7 +454,7 @@ public class TaktProductionTeamExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -463,7 +469,7 @@ public class TaktProductionTeamExportDto
     public string TeamName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 班组分类（字典 logistics_team_category，存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
+    /// 班组分类（字典 logistics_team_category；存 DictValue；A=组立 P=PCBA Q=质检 O=其他；PCBA 线体如 SMT/AI/手插须维护设备组）
     /// </summary>
     public string TeamCategory { get; set; } = string.Empty;
 

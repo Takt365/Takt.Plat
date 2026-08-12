@@ -35,53 +35,6 @@ public class TaktShiftScheduleDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ShiftScheduleId { get; set; }
 
-    /// <summary>
-    /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
-    /// </summary>
-    public int ScheduleType { get; set; } = 0;
-
-    /// <summary>
-    /// 部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；ScheduleType=0 时必填）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DeptId { get; set; }
-
-    /// <summary>
-    /// 部门 名称（填充字段）
-    /// </summary>
-    public string? DeptName { get; set; }
-
-    /// <summary>
-    /// 员工（关联 TaktEmployee.Id，选项 TaktEmployees/options；ScheduleType=1 时必填）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工 名称（填充字段）
-    /// </summary>
-    public string? EmployeeName { get; set; }
-
-    /// <summary>
-    /// 排班日期
-    /// </summary>
-    public DateTime ScheduleDate { get; set; }
-
-    /// <summary>
-    /// 班次（关联 TaktWorkShift.Id，选项 TaktWorkShifts/options）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long ShiftId { get; set; }
-
-    /// <summary>
-    /// 班次 名称（填充字段）
-    /// </summary>
-    public string? ShiftName { get; set; }
-
-    /// <summary>
-    /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
 }
 
@@ -104,6 +57,11 @@ public class TaktShiftScheduleQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
@@ -141,7 +99,7 @@ public class TaktShiftScheduleQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -184,9 +142,10 @@ public class TaktShiftScheduleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
@@ -220,7 +179,7 @@ public class TaktShiftScheduleCreateDto
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -274,6 +233,11 @@ public class TaktShiftScheduleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
     /// </summary>
     public int? ScheduleType { get; set; }
@@ -304,7 +268,7 @@ public class TaktShiftScheduleTemplateDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -334,9 +298,10 @@ public class TaktShiftScheduleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 排班类别（字典 hr_schedule_type；0=部门 1=人员）
@@ -369,7 +334,7 @@ public class TaktShiftScheduleImportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -435,7 +400,7 @@ public class TaktShiftScheduleExportDto
     /// <summary>
     /// 关联工厂（关联 TaktPlant.PlantCode，选项 TaktPlants/options）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

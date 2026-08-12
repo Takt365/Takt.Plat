@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerServiceOrder 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerServiceOrder 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktCustomerServiceOrderDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerServiceOrderId { get; set; }
 
-    /// <summary>
-    /// 工厂代码
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 服务订单编码（组合唯一索引）
@@ -180,12 +176,6 @@ public class TaktCustomerServiceOrderDto : TaktCompanyDtoBase
     /// </summary>
     public TaktCustomerServiceRequestDto? CustomerServiceRequest { get; set; }
 
-    /// <summary>
-    /// 服务工单列表（外键在子表 TaktCustomerServiceTicket.ServiceOrderId）
-    /// （子表：TaktCustomerServiceTicket）
-    /// </summary>
-    public List<TaktCustomerServiceTicketDto>? Tickets { get; set; }
-
 }
 
 // ========================================
@@ -207,6 +197,11 @@ public class TaktCustomerServiceOrderQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -392,9 +387,9 @@ public class TaktCustomerServiceOrderCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -515,11 +510,6 @@ public class TaktCustomerServiceOrderCreateDto
     public string? ServiceBy { get; set; } = string.Empty;
 
     /// <summary>
-    /// 服务工单列表（外键在子表 TaktCustomerServiceTicket.ServiceOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCustomerServiceTicketCreateDto>? Tickets { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -548,11 +538,6 @@ public class TaktCustomerServiceOrderUpdateDto : TaktCustomerServiceOrderCreateD
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerServiceOrderId { get; set; }
-
-    /// <summary>
-    /// 服务工单列表（外键在子表 TaktCustomerServiceTicket.ServiceOrderId）（子表，级联保存）
-    /// </summary>
-    public new List<TaktCustomerServiceTicketUpdateDto>? Tickets { get; set; }
 
 }
 
@@ -624,6 +609,11 @@ public class TaktCustomerServiceOrderTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -735,11 +725,6 @@ public class TaktCustomerServiceOrderTemplateDto
     /// 服务负责人（人员代码）
     /// </summary>
     public string? ServiceBy { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 服务工单列表（外键在子表 TaktCustomerServiceTicket.ServiceOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCustomerServiceTicketCreateDto>? Tickets { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -769,9 +754,9 @@ public class TaktCustomerServiceOrderImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码
@@ -885,11 +870,6 @@ public class TaktCustomerServiceOrderImportDto
     /// 服务负责人（人员代码）
     /// </summary>
     public string? ServiceBy { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 服务工单列表（外键在子表 TaktCustomerServiceTicket.ServiceOrderId）（子表，级联保存）
-    /// </summary>
-    public List<TaktCustomerServiceTicketCreateDto>? Tickets { get; set; }
 
     /// <summary>
     /// 扩展字段JSON

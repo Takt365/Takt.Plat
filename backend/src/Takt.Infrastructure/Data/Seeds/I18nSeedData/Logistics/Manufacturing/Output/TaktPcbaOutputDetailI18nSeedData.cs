@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Output
 // 文件名称：TaktPcbaOutputDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPcbaOutputDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -126,23 +126,23 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbaoutputdetail.timeperiod
             new TranslationSeedItem("entity.pcbaoutputdetail.timeperiod", "zh-HK", "生产时段_hk", "生产时段（PCBA 存工作中心 WorkCenter，新增时按物料查 TaktStandardOperationTime 自动生成）"),
 
-            // entity.pcbaoutputdetail.prodteam
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodteam", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbaoutputdetail.prodteam
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodteam", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbaoutputdetail.prodteam
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodteam", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
-            // entity.pcbaoutputdetail.prodteam
-            new TranslationSeedItem("entity.pcbaoutputdetail.prodteam", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbaoutputdetail.teamcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.teamcode", "en-US", "生产班组_us", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbaoutputdetail.teamcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.teamcode", "ja-JP", "生产班组_jp", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbaoutputdetail.teamcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.teamcode", "zh-CN", "生产班组", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
+            // entity.pcbaoutputdetail.teamcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.teamcode", "zh-HK", "生产班组_hk", "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）"),
 
-            // entity.pcbaoutputdetail.productionequipmentcode
-            new TranslationSeedItem("entity.pcbaoutputdetail.productionequipmentcode", "en-US", "生产设备_us", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.pcbaoutputdetail.productionequipmentcode
-            new TranslationSeedItem("entity.pcbaoutputdetail.productionequipmentcode", "ja-JP", "生产设备_jp", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.pcbaoutputdetail.productionequipmentcode
-            new TranslationSeedItem("entity.pcbaoutputdetail.productionequipmentcode", "zh-CN", "生产设备", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
-            // entity.pcbaoutputdetail.productionequipmentcode
-            new TranslationSeedItem("entity.pcbaoutputdetail.productionequipmentcode", "zh-HK", "生产设备_hk", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.pcbaoutputdetail.prodequipcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodequipcode", "en-US", "生产设备_us", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.pcbaoutputdetail.prodequipcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodequipcode", "ja-JP", "生产设备_jp", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.pcbaoutputdetail.prodequipcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodequipcode", "zh-CN", "生产设备", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
+            // entity.pcbaoutputdetail.prodequipcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.prodequipcode", "zh-HK", "生产设备_hk", "生产设备编码（选项 TaktProductionEquipments/options；DictValue=Id）"),
 
             // entity.pcbaoutputdetail.directlabor
             new TranslationSeedItem("entity.pcbaoutputdetail.directlabor", "en-US", "直接人员_us", "直接人员"),
@@ -261,14 +261,14 @@ public class TaktPcbaOutputDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.pcbaoutputdetail.completedstatus
             new TranslationSeedItem("entity.pcbaoutputdetail.completedstatus", "zh-HK", "完成状态_hk", "完成状态（计算结果：字典 logistics_pcba_completed_status；0=未完成 1=部分完成 2=已完成；按累计完成数与批次数量比较）"),
 
-            // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "en-US", "序列号_us", "序列号（明细级）"),
-            // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "ja-JP", "序列号_jp", "序列号（明细级）"),
-            // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-CN", "序列号", "序列号（明细级）"),
-            // entity.pcbaoutputdetail.serialno
-            new TranslationSeedItem("entity.pcbaoutputdetail.serialno", "zh-HK", "序列号_hk", "序列号（明细级）"),
+            // entity.pcbaoutputdetail.serialcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialcode", "en-US", "序列号_us", "序列号（明细级）"),
+            // entity.pcbaoutputdetail.serialcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialcode", "ja-JP", "序列号_jp", "序列号（明细级）"),
+            // entity.pcbaoutputdetail.serialcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialcode", "zh-CN", "序列号", "序列号（明细级）"),
+            // entity.pcbaoutputdetail.serialcode
+            new TranslationSeedItem("entity.pcbaoutputdetail.serialcode", "zh-HK", "序列号_hk", "序列号（明细级）"),
 
             // entity.pcbaoutputdetail.defectcount
             new TranslationSeedItem("entity.pcbaoutputdetail.defectcount", "en-US", "不良台数_us", "不良台数"),

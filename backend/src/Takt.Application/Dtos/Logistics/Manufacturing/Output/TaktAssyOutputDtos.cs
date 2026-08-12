@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Output
 // 文件名称：TaktAssyOutputDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：AssyOutput 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktAssyOutput 生成，请按需审阅）
 // 
@@ -35,13 +35,9 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyOutputId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（回填：随工单）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -51,9 +47,9 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -76,7 +72,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -93,7 +89,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -103,7 +99,7 @@ public class TaktAssyOutputDto : TaktCompanyDtoBase
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
@@ -144,12 +140,17 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -164,9 +165,9 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public DateTime? ProdDateEnd { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -189,7 +190,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -206,7 +207,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -216,7 +217,7 @@ public class TaktAssyOutputQueryDto : TaktPagedQuery
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
@@ -269,9 +270,9 @@ public class TaktAssyOutputCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -280,9 +281,9 @@ public class TaktAssyOutputCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
-    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
+    [Required(ErrorMessage = "生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）不能为空")]
     public string ProdCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -291,10 +292,10 @@ public class TaktAssyOutputCreateDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）不能为空")]
-    public string ProdTeam { get; set; } = string.Empty;
+    [Required(ErrorMessage = "生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）不能为空")]
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -317,9 +318,9 @@ public class TaktAssyOutputCreateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）不能为空")]
+    [Required(ErrorMessage = "工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）不能为空")]
     public string ProdOrderCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -337,7 +338,7 @@ public class TaktAssyOutputCreateDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -347,7 +348,7 @@ public class TaktAssyOutputCreateDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
@@ -394,6 +395,11 @@ public class TaktAssyOutputUpdateDto : TaktAssyOutputCreateDto
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssyOutputId { get; set; }
 
+    /// <summary>
+    /// 组立日报明细列表（子表，级联保存）
+    /// </summary>
+    public new List<TaktAssyOutputDetailUpdateDto>? AssyOutputDetails { get; set; }
+
 }
 
 // ========================================
@@ -416,12 +422,17 @@ public class TaktAssyOutputTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（回填：随工单）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -431,9 +442,9 @@ public class TaktAssyOutputTemplateDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -456,7 +467,7 @@ public class TaktAssyOutputTemplateDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -473,7 +484,7 @@ public class TaktAssyOutputTemplateDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -483,7 +494,7 @@ public class TaktAssyOutputTemplateDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
@@ -528,9 +539,9 @@ public class TaktAssyOutputImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（回填：随工单）
@@ -538,7 +549,7 @@ public class TaktAssyOutputImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string? ProdCategory { get; set; } = string.Empty;
 
@@ -548,9 +559,9 @@ public class TaktAssyOutputImportDto
     public DateTime? ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -573,7 +584,7 @@ public class TaktAssyOutputImportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string? ProdOrderCode { get; set; } = string.Empty;
 
@@ -590,7 +601,7 @@ public class TaktAssyOutputImportDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -600,7 +611,7 @@ public class TaktAssyOutputImportDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）
@@ -656,7 +667,7 @@ public class TaktAssyOutputExportDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生产类别（字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）
+    /// 生产类别（字典 logistics_prod_category；存 DictValue：EPP/FPP/RWP/MDP/CPP）
     /// </summary>
     public string ProdCategory { get; set; } = string.Empty;
 
@@ -666,9 +677,9 @@ public class TaktAssyOutputExportDto
     public DateTime ProdDate { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string ProdTeam { get; set; } = string.Empty;
+    public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 直接人员
@@ -691,7 +702,7 @@ public class TaktAssyOutputExportDto
     public string? ProdOrderType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单号（选项 TaktProductionOrders/options，按 PlantCode 过滤）
+    /// 工单号（选项 TaktProductionOrders/options；DictValue=ProdOrderCode，ExtValue=PlantCode）
     /// </summary>
     public string ProdOrderCode { get; set; } = string.Empty;
 
@@ -708,7 +719,7 @@ public class TaktAssyOutputExportDto
     /// <summary>
     /// 批次（回填：随工单）
     /// </summary>
-    public string? BatchNo { get; set; } = string.Empty;
+    public string? BatchCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工单数量（回填：随工单）
@@ -718,7 +729,7 @@ public class TaktAssyOutputExportDto
     /// <summary>
     /// 序列号（回填：随工单）
     /// </summary>
-    public string? SerialNo { get; set; } = string.Empty;
+    public string? SerialCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 标准工时(分钟)（回填：按 MaterialCode 查询 TaktStandardOperationTime 汇总转换工时）

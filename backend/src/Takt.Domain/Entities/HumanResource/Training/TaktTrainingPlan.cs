@@ -79,11 +79,6 @@ public class TaktTrainingPlan : TaktApprovalEntityBase
     [SugarColumn(ColumnName = "training_plan_description", ColumnDescription = "计划说明", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string TrainingPlanDescription { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 计划业务状态（字典 sys_normal_disable_status；1=启用 0=禁用）
     /// </summary>
     [SugarColumn(ColumnName = "training_plan_status", ColumnDescription = "业务状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]

@@ -25,20 +25,11 @@ import type { EcDetail, EcDetailCreate } from './ec-detail';
  * @description 对应后端 TaktEcGijutsuDto
  */
 export interface EcGijutsu extends CompanyDtoBase {
-  /**
-   * ecGijutsuId（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  ecGijutsuId: string;
-
-  /**
-   * 工厂代码
-   */
-  plantCode: string;
 
   /**
    * 设变单号（唯一）
    */
-  ecNo: string;
+  ecCode: string;
 
   /**
    * 发行日期
@@ -135,7 +126,7 @@ export interface EcGijutsuQuery extends TaktPagedQuery {
   /**
    * 设变单号（唯一）
    */
-  ecNo?: string;
+  ecCode?: string;
 
   /**
    * 发行日期（范围查询-开始）
@@ -234,7 +225,10 @@ export interface EcGijutsuCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 工厂代码
@@ -244,7 +238,7 @@ export interface EcGijutsuCreate {
   /**
    * 设变单号（唯一）
    */
-  ecNo: string;
+  ecCode: string;
 
   /**
    * 发行日期
@@ -372,7 +366,7 @@ export interface EcGijutsuTemplate {
   /**
    * 设变单号（唯一）
    */
-  ecNo?: string;
+  ecCode?: string;
 
   /**
    * 发行日期
@@ -461,7 +455,10 @@ export interface EcGijutsuImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂代码
@@ -471,7 +468,7 @@ export interface EcGijutsuImport {
   /**
    * 设变单号（唯一）
    */
-  ecNo?: string;
+  ecCode?: string;
 
   /**
    * 发行日期
@@ -565,7 +562,7 @@ export interface EcGijutsuExport {
   /**
    * 设变单号（唯一）
    */
-  ecNo: string;
+  ecCode: string;
 
   /**
    * 发行日期

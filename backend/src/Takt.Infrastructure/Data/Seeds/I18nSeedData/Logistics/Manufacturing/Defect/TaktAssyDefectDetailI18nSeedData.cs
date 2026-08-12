@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyDefectDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyDefectDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -162,14 +162,14 @@ public class TaktAssyDefectDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.assydefectdetail.cumulativedefectqty
             new TranslationSeedItem("entity.assydefectdetail.cumulativedefectqty", "zh-HK", "累计不良_hk", "累计不良"),
 
-            // entity.assydefectdetail.randomcardno
-            new TranslationSeedItem("entity.assydefectdetail.randomcardno", "en-US", "随机卡号_us", "随机卡号"),
-            // entity.assydefectdetail.randomcardno
-            new TranslationSeedItem("entity.assydefectdetail.randomcardno", "ja-JP", "随机卡号_jp", "随机卡号"),
-            // entity.assydefectdetail.randomcardno
-            new TranslationSeedItem("entity.assydefectdetail.randomcardno", "zh-CN", "随机卡号", "随机卡号"),
-            // entity.assydefectdetail.randomcardno
-            new TranslationSeedItem("entity.assydefectdetail.randomcardno", "zh-HK", "随机卡号_hk", "随机卡号"),
+            // entity.assydefectdetail.randomcardcode
+            new TranslationSeedItem("entity.assydefectdetail.randomcardcode", "en-US", "随机卡号_us", "随机卡号"),
+            // entity.assydefectdetail.randomcardcode
+            new TranslationSeedItem("entity.assydefectdetail.randomcardcode", "ja-JP", "随机卡号_jp", "随机卡号"),
+            // entity.assydefectdetail.randomcardcode
+            new TranslationSeedItem("entity.assydefectdetail.randomcardcode", "zh-CN", "随机卡号", "随机卡号"),
+            // entity.assydefectdetail.randomcardcode
+            new TranslationSeedItem("entity.assydefectdetail.randomcardcode", "zh-HK", "随机卡号_hk", "随机卡号"),
 
             // entity.assydefectdetail.occurrenceengineering
             new TranslationSeedItem("entity.assydefectdetail.occurrenceengineering", "en-US", "发生工程_us", "发生工程"),

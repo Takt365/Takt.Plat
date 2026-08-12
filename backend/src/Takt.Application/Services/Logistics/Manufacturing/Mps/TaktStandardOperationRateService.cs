@@ -103,6 +103,26 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
     }
 
     /// <summary>
+    /// 按生产日期解析有效标准生产稼动率（%）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="prodDate">生产日期</param>
+    /// <param name="operationType">稼动率类型（默认 1=人员）</param>
+    /// <returns>稼动率(%)</returns>
+    public async Task<decimal> GetEffectiveStandardOperationRatePercentAsync(string plantCode, DateTime prodDate, int operationType = 1)
+    {
+        EnsureThreeLayerContext();
+        ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
+        return await TaktStandardOperationRateResolver.ResolveEffectiveOperationRatePercentAsync(
+            _standardOperationRateRepository,
+            CurrentTenantCode,
+            CurrentCompanyCode,
+            plantCode.Trim(),
+            prodDate,
+            operationType);
+    }
+
+    /// <summary>
     /// 创建标准生产稼动率
     /// </summary>
     /// <param name="dto">创建DTO</param>
@@ -309,6 +329,7 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
                 || SqlFunc.ToString(x.OperationType).Contains(keywords)
                 || SqlFunc.ToString(x.OperationRate).Contains(keywords)
                 || SqlFunc.ToString(x.RateStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
@@ -340,6 +361,12 @@ public class TaktStandardOperationRateService : TaktServiceBase, ITaktStandardOp
         if (queryDto?.RateStatus.HasValue == true)
         {
             exp = exp.And(x => x.RateStatus == queryDto.RateStatus);
+        }
+
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

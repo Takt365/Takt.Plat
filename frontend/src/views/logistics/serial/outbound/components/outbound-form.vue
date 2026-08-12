@@ -27,48 +27,18 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('plantCode')"
@@ -84,12 +54,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('outboundNo')"
-                name="outboundNo"
+                :label="pi.label('outboundCode')"
+                name="outboundCode"
               >
                 <a-input
-                  v-model:value="formState.outboundNo"
-                  :placeholder="pi.ph('outboundNo')"
+                  v-model:value="formState.outboundCode"
+                  :placeholder="pi.ph('outboundCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -98,12 +68,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('shippingInvoiceNo')"
-                name="shippingInvoiceNo"
+                :label="pi.label('shippingInvoiceCode')"
+                name="shippingInvoiceCode"
               >
                 <a-input
-                  v-model:value="formState.shippingInvoiceNo"
-                  :placeholder="pi.ph('shippingInvoiceNo')"
+                  v-model:value="formState.shippingInvoiceCode"
+                  :placeholder="pi.ph('shippingInvoiceCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -307,8 +277,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
@@ -316,8 +286,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","outboundNo","shippingInvoiceNo","outboundDate","destination","destinationPort","outboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","plantCode","outboundCode","shippingInvoiceCode","outboundDate","destination","destinationPort","outboundType","warehouseCode","locationCode","totalQuantity","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { useSerialOutboundItemI18n } from '../composables/use-outbound-item-i18n'
@@ -340,8 +309,8 @@ const serialOutboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     width: 140,
   },
   {
-    key: 'outboundNo',
-    title: serialOutboundItemPi.label('outboundNo'),
+    key: 'outboundCode',
+    title: serialOutboundItemPi.label('outboundCode'),
     editor: 'input',
     width: 140,
   },
@@ -352,8 +321,8 @@ const serialOutboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     width: 140, summary: 'sum',
   },
   {
-    key: 'outboundSerialNo',
-    title: serialOutboundItemPi.label('outboundSerialNo'),
+    key: 'outboundSerialCode',
+    title: serialOutboundItemPi.label('outboundSerialCode'),
     editor: 'input',
     width: 140, required: true, unique: true,
   },
@@ -364,8 +333,8 @@ const serialOutboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     width: 140,
   },
   {
-    key: 'referenceInboundNo',
-    title: serialOutboundItemPi.label('referenceInboundNo'),
+    key: 'referenceInboundCode',
+    title: serialOutboundItemPi.label('referenceInboundCode'),
     editor: 'input',
     width: 140,
   },
@@ -382,8 +351,7 @@ const serialOutboundItemFormColumns = computed<TaktEditableTableColumn[]>(() => 
     rows: 2,
     placeholder: t('common.page.form.placeholder.extfield'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<SerialOutboundCreate & { serialOutboundId?: string }> | null | undefined) {
@@ -393,11 +361,11 @@ function syncChildRowsFromFormData(val: Partial<SerialOutboundCreate & { serialO
 function createDefaultSerialOutboundItemRow(): Record<string, unknown> {
   return {
     outboundId: '',
-    outboundNo: '',
+    outboundCode: '',
     lineNumber: (childSerialOutboundItemRows.value.length + 1) * 10,
-    outboundSerialNo: '',
+    outboundSerialCode: '',
     referenceInboundId: '',
-    referenceInboundNo: '',
+    referenceInboundCode: '',
     referenceInboundLineNumber: 0,
     extField: '',
   }
@@ -412,7 +380,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
       serialOutboundId: masterId,
     })),
   }
@@ -498,17 +466,17 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  outboundNo: [
+  outboundCode: [
     {
       required: true,
-      message: pi.ph('outboundNo'),
+      message: pi.ph('outboundCode'),
       trigger: 'blur'
     }
   ],
-  shippingInvoiceNo: [
+  shippingInvoiceCode: [
     {
       required: true,
-      message: pi.ph('shippingInvoiceNo'),
+      message: pi.ph('shippingInvoiceCode'),
       trigger: 'blur'
     }
   ],

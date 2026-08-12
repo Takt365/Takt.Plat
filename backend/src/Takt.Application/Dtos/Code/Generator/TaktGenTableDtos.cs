@@ -298,6 +298,11 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -569,6 +574,11 @@ public class TaktGenTableCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -855,6 +865,11 @@ public class TaktGenTableTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -937,6 +952,11 @@ public class TaktGenTableImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>

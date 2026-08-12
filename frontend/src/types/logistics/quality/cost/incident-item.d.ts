@@ -49,14 +49,14 @@ export interface QualityIncidentItem extends CompanyDtoBase {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 废弃费用(元)
@@ -154,14 +154,14 @@ export interface QualityIncidentItemQuery extends TaktPagedQuery {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 废弃费用(元)
@@ -260,7 +260,10 @@ export interface QualityIncidentItemCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 品质事故主表 ID（关联 TaktQualityIncident.Id，选项 TaktQualityIncidents/options）
@@ -278,14 +281,14 @@ export interface QualityIncidentItemCreate {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 废弃费用(元)
@@ -421,14 +424,14 @@ export interface QualityIncidentItemTemplate {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 废弃费用(元)
@@ -517,7 +520,10 @@ export interface QualityIncidentItemImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 品质事故主表 ID（关联 TaktQualityIncident.Id，选项 TaktQualityIncidents/options）
@@ -535,14 +541,14 @@ export interface QualityIncidentItemImport {
   lineNumber?: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode?: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName?: string;
+  materialDescription?: string;
 
   /**
    * 废弃费用(元)
@@ -644,14 +650,14 @@ export interface QualityIncidentItemExport {
   lineNumber: number;
 
   /**
-   * 物料编码（选项 TaktMaterials/options，DictValue=MaterialCode）
+   * 物料编码（选项 TaktGeneralMaterials/options，DictValue=MaterialCode）
    */
   materialCode: string;
 
   /**
-   * 物料名称
+   * 物料描述
    */
-  materialName: string;
+  materialDescription: string;
 
   /**
    * 废弃费用(元)

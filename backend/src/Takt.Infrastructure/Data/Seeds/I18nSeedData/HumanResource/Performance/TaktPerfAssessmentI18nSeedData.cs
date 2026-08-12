@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfAssessmentI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfAssessment 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -215,15 +215,6 @@ public class TaktPerfAssessmentI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfassessment.interviewnotes", "zh-CN", "面谈记录", "面谈记录"),
             // entity.perfassessment.interviewnotes
             new TranslationSeedItem("entity.perfassessment.interviewnotes", "zh-HK", "面谈记录_hk", "面谈记录"),
-
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfassessment.relatedplant
-            new TranslationSeedItem("entity.perfassessment.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.perfassessment.assessmentstatus
             new TranslationSeedItem("entity.perfassessment.assessmentstatus", "en-US", "状态_us", "状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）"),

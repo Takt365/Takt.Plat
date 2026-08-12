@@ -347,8 +347,7 @@ const mappingColumns = computed<TableColumnsType>(() => [
     title: t('code.database.table-data-clone.page.tablemapping.actioncolumn'),
     key: 'action',
     width: 100,
-  },
-])
+  }])
 
 /** 结果明细列 */
 const resultColumns = computed<TableColumnsType>(() => [
@@ -358,8 +357,7 @@ const resultColumns = computed<TableColumnsType>(() => [
   { title: t('code.database.table-data-clone.page.result.backeduprows'), dataIndex: 'backedUpRowCount', key: 'backedUpRowCount', width: 100 },
   { title: t('code.database.table-data-clone.page.result.clearedrows'), dataIndex: 'clearedRowCount', key: 'clearedRowCount', width: 100 },
   { title: t('code.database.table-data-clone.page.result.sourcerows'), dataIndex: 'sourceRowCount', key: 'sourceRowCount', width: 100 },
-  { title: t('code.database.table-data-clone.page.result.clonedrows'), dataIndex: 'clonedRowCount', key: 'clonedRowCount', width: 100 },
-])
+  { title: t('code.database.table-data-clone.page.result.clonedrows'), dataIndex: 'clonedRowCount', key: 'clonedRowCount', width: 100 }])
 
 /** 是否可提交 */
 const canSubmitForm = computed(() => {

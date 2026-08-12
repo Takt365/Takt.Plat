@@ -25,7 +25,7 @@ export const SALESORDERITEM_LIST_FIELDS = [
   'salesOrderCode',
   'lineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'salesUnit',
   'orderQuantity',
@@ -37,6 +37,7 @@ export const SALESORDERITEM_LIST_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'salesAmount',
   'deliveryStatus',
   'isObsolete',
 ] as const
@@ -48,7 +49,7 @@ export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'salesOrderCode',
   'lineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'salesUnit',
   'orderQuantity',
@@ -60,6 +61,7 @@ export const SALESORDERITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'salesAmount',
   'deliveryStatus',
   'isObsolete',
   'action',
@@ -76,6 +78,7 @@ export const SALESORDERITEM_SUMMARY_SUM_FIELDS = [
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'salesAmount',
   'deliveryStatus',
   'isObsolete',
 ] as const
@@ -87,7 +90,7 @@ export const SALESORDERITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   salesUnit: 'select',
   orderQuantity: 'select',
@@ -99,6 +102,7 @@ export const SALESORDERITEM_PLACEHOLDER = {
   taxIncludedAmount: 'select',
   untaxedAmount: 'select',
   taxAmount: 'select',
+  salesAmount: 'select',
   deliveryStatus: 'select',
   isObsolete: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
@@ -110,7 +114,7 @@ export type SalesOrderItemField = keyof typeof SALESORDERITEM_PLACEHOLDER
 export const SALESORDERITEM_QUERY_STRING_FIELDS = [
   'salesOrderCode',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'salesUnit',
   'createdAtStart',
@@ -121,7 +125,7 @@ export const SALESORDERITEM_QUERY_STRING_FIELDS = [
 
 export type SalesOrderItemQueryField =
   | (typeof SALESORDERITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'orderQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'salesUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'deliveryStatus' | 'isObsolete'
+  | 'lineNumber' | 'orderQuantity' | 'shippedQuantity' | 'salesPerUnit' | 'salesUnitPrice' | 'discountRate' | 'discountAmount' | 'taxIncludedAmount' | 'untaxedAmount' | 'taxAmount' | 'salesAmount' | 'deliveryStatus' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = [
@@ -136,6 +140,7 @@ export const SALESORDERITEM_QUERY_FIELDS: readonly SalesOrderItemQueryField[] = 
   'taxIncludedAmount',
   'untaxedAmount',
   'taxAmount',
+  'salesAmount',
   'deliveryStatus',
   'isObsolete',
 ]

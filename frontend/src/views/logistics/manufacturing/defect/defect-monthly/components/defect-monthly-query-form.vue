@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/defect/defect-monthly/components -->
 <!-- 文件名称：defect-monthly-query-form.vue -->
-<!-- 功能描述：月生产不良推移查询栏（工厂/期间/机种/不良类别） -->
+<!-- 功能描述：月生产不良推移查询栏（工厂/期间/不良类别/机种级联） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -12,9 +12,10 @@
     <div class="defect-monthly-query-bar__fields min-w-0 flex flex-1 flex-wrap items-center gap-2">
       <TaktSelect
         v-model:value="plantCode"
-        api-url="TaktPlants/options"
+        :api-url="plantOptionsUrl"
         class="defect-monthly-query-bar__control defect-monthly-query-bar__control--plant"
         allow-clear
+        show-search
         :placeholder="t('entity.assydefect.plantcode')"
       />
       <a-range-picker
@@ -25,21 +26,27 @@
         class="defect-monthly-query-bar__control defect-monthly-query-bar__control--period"
         :placeholder="[
           t(`${localePrefix}.periodRange`),
-          t(`${localePrefix}.periodRange`),
-        ]"
+          t(`${localePrefix}.periodRange`)]"
       />
-      <a-input
-        v-model:value="modelCode"
-        class="defect-monthly-query-bar__control defect-monthly-query-bar__control--model"
-        allow-clear
-        :placeholder="t(`${localePrefix}.modelCode`)"
-      />
-      <a-select
+      <TaktSelect
         v-model:value="defectCategory"
+        :api-url="defectCategoryOptionsUrl"
+        :api-params="defectCategoryApiParams"
+        :disabled="!plantCode?.trim()"
         class="defect-monthly-query-bar__control defect-monthly-query-bar__control--category"
         allow-clear
+        show-search
         :placeholder="t(`${localePrefix}.defectCategory`)"
-        :options="defectCategoryOptions"
+      />
+      <TaktSelect
+        v-model:value="modelCode"
+        :api-url="modelOptionsUrl"
+        :api-params="modelApiParams"
+        :disabled="!plantCode?.trim()"
+        class="defect-monthly-query-bar__control defect-monthly-query-bar__control--model"
+        allow-clear
+        show-search
+        :placeholder="t(`${localePrefix}.modelCode`)"
       />
     </div>
     <a-space class="query-actions">
@@ -69,19 +76,24 @@
 
 <script setup lang="ts">
 /**
- * 月生产不良推移查询栏：工厂 + 期间 + 机种 + 不良类别
+ * 月生产不良推移查询栏：工厂 → 不良类别 → 机种（机种可空）
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
+import {
+  getDefectMonthlyTrendDefectCategoryOptionsUrl,
+  getDefectMonthlyTrendModelOptionsUrl,
+  getDefectMonthlyTrendPlantOptionsUrl,
+} from '@/api/logistics/manufacturing/defect/defect-monthly'
 
-/** 工厂代码 */
+/** 工厂代码（第 1 级，必选） */
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
-/** 机种编码 */
-const modelCode = defineModel<string | undefined>('modelCode')
-/** 不良类别 */
+/** 不良类别（第 2 级，可空） */
 const defectCategory = defineModel<string | undefined>('defectCategory')
+/** 机种编码（第 3 级，可空） */
+const modelCode = defineModel<string | undefined>('modelCode')
 const props = defineProps<{
   /** 查询 loading */
   loading?: boolean
@@ -94,12 +106,48 @@ const emit = defineEmits<{
 const { t } = useI18n()
 /** 静态 locales 前缀 */
 const localePrefix = 'logistics.manufacturing.defect.defect-monthly.page'
+/** 推移本表级联选项 URL（TaktDefectMonthlyTrends） */
+const plantOptionsUrl = getDefectMonthlyTrendPlantOptionsUrl()
+const defectCategoryOptionsUrl = getDefectMonthlyTrendDefectCategoryOptionsUrl()
+const modelOptionsUrl = getDefectMonthlyTrendModelOptionsUrl()
 
-/** 不良类别选项 */
-const defectCategoryOptions = computed(() => [
-  { value: 'assy', label: t(`${localePrefix}.defectCategoryOptions.assy`) },
-  { value: 'pcba', label: t(`${localePrefix}.defectCategoryOptions.pcba`) },
-])
+/** 第 2 级：工厂 → 不良类别 */
+const defectCategoryApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  return { plantCode: plant }
+})
+
+/** 第 3 级：工厂 + 可选不良类别 → 机种 */
+const modelApiParams = computed(() => {
+  const plant = plantCode.value?.trim()
+  if (!plant) {
+    return undefined
+  }
+  const category = defectCategory.value?.trim()
+  return category
+    ? { plantCode: plant, defectCategory: category }
+    : { plantCode: plant }
+})
+
+/** 工厂变更：清空第 2～3 级 */
+watch(
+  () => plantCode.value,
+  () => {
+    defectCategory.value = undefined
+    modelCode.value = undefined
+  },
+)
+
+/** 不良类别变更：清空第 3 级 */
+watch(
+  () => defectCategory.value,
+  () => {
+    modelCode.value = undefined
+  },
+)
 </script>
 
 <style scoped>
@@ -123,12 +171,12 @@ const defectCategoryOptions = computed(() => [
   min-width: 14rem;
 }
 
-.defect-monthly-query-bar__control--model {
+.defect-monthly-query-bar__control--category {
   width: 12rem;
   min-width: 9rem;
 }
 
-.defect-monthly-query-bar__control--category {
+.defect-monthly-query-bar__control--model {
   width: 12rem;
   min-width: 9rem;
 }

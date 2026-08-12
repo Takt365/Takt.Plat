@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Logging
 // 文件名称：TaktLoginLogDtos.cs
-// 创建时间：2026-06-12
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：LoginLog 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktLoginLog 生成，请按需审阅）
 // 
@@ -14,8 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Constants;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Logging;
 
@@ -43,19 +41,19 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式
+    /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
     /// </summary>
-    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
+    public string LoginType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
@@ -63,7 +61,7 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录结果
+    /// 登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）
     /// </summary>
     public string LoginResult { get; set; } = string.Empty;
 
@@ -83,7 +81,7 @@ public class TaktLoginLogDto : TaktCompanyDtoBase
     public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登出时间
+    /// 登出时间（未登出时为 null；登出成功时由 CloseOpenLoginSessionAsync 回填，对齐 TaktOnline.DisconnectTime）
     /// </summary>
     public DateTime? LogoutAt { get; set; }
 
@@ -110,24 +108,34 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 用户名（登录账号）
     /// </summary>
     public string? Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式
+    /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
     /// </summary>
-    public string? LoginType { get; set; }
+    public string? LoginType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string? Browser { get; set; }
+    public string? Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string? Os { get; set; }
+    public string? Os { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
@@ -135,9 +143,9 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     public string? UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录结果
+    /// 登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）
     /// </summary>
-    public string? LoginResult { get; set; }
+    public string? LoginResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果消息
@@ -155,12 +163,12 @@ public class TaktLoginLogQueryDto : TaktPagedQuery
     public string? LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登出时间（范围查询-开始）
+    /// 登出时间（未登出时为 null；登出成功时由 CloseOpenLoginSessionAsync 回填，对齐 TaktOnline.DisconnectTime）（范围查询-开始）
     /// </summary>
     public DateTime? LogoutAtStart { get; set; }
 
     /// <summary>
-    /// 登出时间（范围查询-结束）
+    /// 登出时间（未登出时为 null；登出成功时由 CloseOpenLoginSessionAsync 回填，对齐 TaktOnline.DisconnectTime）（范围查询-结束）
     /// </summary>
     public DateTime? LogoutAtEnd { get; set; }
 
@@ -205,10 +213,15 @@ public class TaktLoginLogCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（登录账号）
     /// </summary>
@@ -216,47 +229,55 @@ public class TaktLoginLogCreateDto
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式
+    /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
     /// </summary>
-    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
+    [Required(ErrorMessage = "登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）不能为空")]
+    public string LoginType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    [Required(ErrorMessage = "浏览器（TaktConstants.BrowserType，默认 unknown）不能为空")]
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    [Required(ErrorMessage = "操作系统（TaktConstants.OperatingSystem，默认 unknown）不能为空")]
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
     /// </summary>
+    [Required(ErrorMessage = "用户代理（User-Agent）不能为空")]
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录结果
+    /// 登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）
     /// </summary>
+    [Required(ErrorMessage = "登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）不能为空")]
     public string LoginResult { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录结果消息
     /// </summary>
+    [Required(ErrorMessage = "登录结果消息不能为空")]
     public string LoginMessage { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录IP地址
     /// </summary>
+    [Required(ErrorMessage = "登录IP地址不能为空")]
     public string LoginIp { get; set; } = string.Empty;
 
     /// <summary>
     /// 登录地点（IP解析，如：中国-广东省-深圳市）
     /// </summary>
+    [Required(ErrorMessage = "登录地点（IP解析，如：中国-广东省-深圳市）不能为空")]
     public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登出时间
+    /// 登出时间（未登出时为 null；登出成功时由 CloseOpenLoginSessionAsync 回填，对齐 TaktOnline.DisconnectTime）
     /// </summary>
     public DateTime? LogoutAt { get; set; }
 
@@ -319,19 +340,19 @@ public class TaktLoginLogExportDto
     public string Username { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录方式
+    /// 登录方式（TaktConstants.LoginType，如 password=账号密码、refreshtoken=刷新令牌）
     /// </summary>
-    public string LoginType { get; set; } = TaktConstants.LoginType.Unknown;
+    public string LoginType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 浏览器（TaktConstants.BrowserType）
+    /// 浏览器（TaktConstants.BrowserType，默认 unknown）
     /// </summary>
-    public string Browser { get; set; } = "unknown";
+    public string Browser { get; set; } = string.Empty;
 
     /// <summary>
-    /// 操作系统（TaktConstants.OperatingSystem）
+    /// 操作系统（TaktConstants.OperatingSystem，默认 unknown）
     /// </summary>
-    public string Os { get; set; } = "unknown";
+    public string Os { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户代理（User-Agent）
@@ -339,7 +360,7 @@ public class TaktLoginLogExportDto
     public string UserAgent { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登录结果
+    /// 登录结果（TaktConstants.LoginResult，如 success=成功、passworderror=密码错误）
     /// </summary>
     public string LoginResult { get; set; } = string.Empty;
 
@@ -359,7 +380,7 @@ public class TaktLoginLogExportDto
     public string LoginLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 登出时间
+    /// 登出时间（未登出时为 null；登出成功时由 CloseOpenLoginSessionAsync 回填，对齐 TaktOnline.DisconnectTime）
     /// </summary>
     public DateTime? LogoutAt { get; set; }
 

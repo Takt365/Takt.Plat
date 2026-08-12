@@ -4,7 +4,7 @@
 // 文件名称：table-columns.ts
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：表格列工具；三个实体基类字段直接映射（对齐 common.d.ts，不含 id）；合计文案列解析
+// 功能描述：表格列工具；三个实体基类字段直接映射（对齐 common.d.ts：id → plant → 其余基类）；合计文案列解析
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -37,26 +37,38 @@ export function readColumnSettingLabel(column: ColumnItem): string | undefined {
 /** 实体基类作用域 ↔ common.d.ts 三个 EntityBase */
 export type TaktEntityScope = 'tenant' | 'company' | 'approval';
 
-/** 单表 / 树表 / 主子表左右布局默认可见业务字段数（不含 id、action、基类字段） */
+/** 单表 / 树表 / 主子表左右布局默认可见业务字段数（不含 id、plant、action、其余基类字段） */
 export type TaktTableLayoutMode = 'single' | 'tree' | 'masterDetailMaster' | 'masterDetailDetail';
 
 export const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT: Record<TaktTableLayoutMode, number> = {
   single: 8,
   tree: 4,
-  /** 主子表左表：id + 2 业务列 = 3 个字段（不含操作列） */
+  /** 主子表左表：id + plant + 2 业务列（不含操作列） */
   masterDetailMaster: 2,
-  /** 主子表右表/子 panel：id + 4 业务列 = 5 个字段（不含操作列） */
+  /** 主子表右表/子 panel：id + plant + 4 业务列（不含操作列） */
   masterDetailDetail: 4,
 };
 
 /**
- * 三个实体基类字段（不含 id；顺序与 common.d.ts 一致）
+ * 作用域对应工厂列键（表格固定第 2 列；对齐 Domain / common.d.ts）
+ * tenant → relatedPlant；company / approval → plantCode
+ */
+export const ENTITY_SCOPE_PLANT_FIELD: Record<TaktEntityScope, 'relatedPlant' | 'plantCode'> = {
+  tenant: 'relatedPlant',
+  company: 'plantCode',
+  approval: 'plantCode',
+};
+
+/**
+ * 三个实体基类字段（不含 id；顺序与 common.d.ts 一致：plant 居首）
  * tenant   → TaktTenantEntityBase
- * company  → TaktCompanyEntityBase（在 tenant 基础上 + companyCode）
- * approval → TaktApprovalEntityBase（在 company 基础上 + 审批字段）
+ * company  → TaktCompanyEntityBase
+ * approval → TaktApprovalEntityBase
  */
 export const ENTITY_BASE_FIELDS = {
   tenant: [
+    'relatedPlant',
+    'cultureCode',
     'tenantCode',
     'ExtField',
     'remark',
@@ -69,8 +81,10 @@ export const ENTITY_BASE_FIELDS = {
     'deletedAt',
   ],
   company: [
+    'plantCode',
     'tenantCode',
     'companyCode',
+    'cultureCode',
     'ExtField',
     'remark',
     'createdBy',
@@ -82,8 +96,10 @@ export const ENTITY_BASE_FIELDS = {
     'deletedAt',
   ],
   approval: [
+    'plantCode',
     'tenantCode',
     'companyCode',
+    'cultureCode',
     'ExtField',
     'remark',
     'approvalStatus',
@@ -147,6 +163,17 @@ export function resolveEntityScopeBaseFieldKeys(entityScope: TaktEntityScope): r
 }
 
 /**
+ * 取 entityScope 对应工厂列键（表格第 2 列）
+ * @param entityScope tenant | company | approval
+ * @returns relatedPlant | plantCode
+ */
+export function resolveEntityScopePlantFieldKey(
+  entityScope: TaktEntityScope,
+): 'relatedPlant' | 'plantCode' {
+  return ENTITY_SCOPE_PLANT_FIELD[entityScope];
+}
+
+/**
  * 获取列 key
  * @param col 列配置
  */
@@ -158,9 +185,9 @@ export function getTableColumnKey(col: ColumnItem | Record<string, unknown>): st
 
 /** 合计文案不得落在这些列（序号等） */
 const TABLE_SUMMARY_LABEL_SKIP_KEY_SET = new Set([
-  'sequenceNo',
+  'sequenceCode',
   'seqNo',
-  'serialNo',
+  'serialCode',
   'rowNo',
   'lineNo',
 ]);
@@ -249,7 +276,12 @@ function buildBaseFieldColumn(field: string, t: (key: string) => string): Column
       sorter: (a: RowRecord, b: RowRecord) => Number(a[field] ?? 0) - Number(b[field] ?? 0),
     };
   }
-  const width = field === 'tenantCode' || field === 'companyCode' ? 100 : field === 'remark' || field === 'ExtField' || field === 'approvalOpinion' ? 150 : 120;
+  const width =
+    field === 'tenantCode' || field === 'companyCode' || field === 'plantCode' || field === 'relatedPlant'
+      ? 100
+      : field === 'remark' || field === 'ExtField' || field === 'approvalOpinion'
+        ? 150
+        : 120;
   return { key: field, dataIndex: field, title, width, ellipsis: true };
 }
 
@@ -271,18 +303,34 @@ export function getDefaultEntityColumns(
 }
 
 /**
- * 业务列 + 基类列合并（同 key 以业务列为准；基类列插在业务列与操作列之间）
+ * 作用域工厂列的备选键（如工厂主档：tenant 作用域但业务列为 plantCode）
+ * @param plantKey 作用域主工厂键
+ */
+function resolveAlternatePlantFieldKey(
+  plantKey: 'relatedPlant' | 'plantCode',
+): 'relatedPlant' | 'plantCode' {
+  return plantKey === 'plantCode' ? 'relatedPlant' : 'plantCode';
+}
+
+/**
+ * 业务列 + 基类列合并（同 key 以业务列为准）
+ * 列序强制：id → plant(plantCode|relatedPlant) → 其余业务列 → 其余基类列 → 操作列
  * @param userColumns 页面业务列
  * @param t 翻译函数
  * @param includeAuditFields 是否含审计字段
  * @param entityScope 基类作用域
+ * @param idColumnKey 主键列键（默认 id）
  */
 export function mergeDefaultColumns(
   userColumns: TableColumnsType,
   t: (key: string) => string,
   includeAuditFields: boolean = true,
   entityScope: TaktEntityScope = 'company',
+  idColumnKey: string | number = 'id',
 ): TableColumnsType {
+  const idKey = String(idColumnKey);
+  const plantKey = resolveEntityScopePlantFieldKey(entityScope);
+  const alternatePlantKey = resolveAlternatePlantFieldKey(plantKey);
   const userKeys = new Set<string>();
   for (const col of userColumns) {
     if ('children' in col && col.children) {
@@ -295,10 +343,13 @@ export function mergeDefaultColumns(
       if (key) userKeys.add(key);
     }
   }
+  const hasAnyPlant = userKeys.has(plantKey) || userKeys.has(alternatePlantKey);
   const baseColumns = getDefaultEntityColumns(t, includeAuditFields, entityScope).filter((col) => {
     const key = getTableColumnKey(col as ColumnItem);
     return key != null && !userKeys.has(key);
   });
+  const idCols: TableColumnsType = [];
+  const plantCols: TableColumnsType = [];
   const body: TableColumnsType = [];
   const actions: TableColumnsType = [];
   for (const col of userColumns) {
@@ -306,15 +357,26 @@ export function mergeDefaultColumns(
     const key = getTableColumnKey(item);
     if (key === 'action' || item.fixed === 'right') {
       actions.push(col);
+    } else if (key === idKey) {
+      idCols.push(col);
+    } else if (key === plantKey || key === alternatePlantKey) {
+      plantCols.push(col);
     } else {
       body.push(col);
     }
   }
-  return [...body, ...baseColumns, ...actions];
+  const basePlantCols = hasAnyPlant
+    ? []
+    : baseColumns.filter((col) => getTableColumnKey(col as ColumnItem) === plantKey);
+  const baseRestCols = baseColumns.filter((col) => {
+    const key = getTableColumnKey(col as ColumnItem);
+    return key !== plantKey;
+  });
+  return [...idCols, ...plantCols, ...basePlantCols, ...body, ...baseRestCols, ...actions];
 }
 
 /**
- * 按可见列键过滤
+ * 按可见列键过滤（输出顺序与 visibleKeys 一致：保证 id、plant 可排在前两位）
  * @param mergedColumns 已合并列
  * @param visibleKeys 可见键
  * @param fallbackColumns 空 keys 时的回退
@@ -327,15 +389,26 @@ export function filterTableColumnsByVisibleKeys(
   if (!visibleKeys.length) {
     return fallbackColumns ?? mergedColumns;
   }
-  const keySet = new Set(visibleKeys.map(String));
-  return mergedColumns.filter((col) => {
+  const byKey = new Map<string, ColumnItem>();
+  for (const col of mergedColumns) {
     const key = getTableColumnKey(col as ColumnItem);
-    return key != null && keySet.has(key);
-  });
+    if (key != null && !byKey.has(key)) {
+      byKey.set(key, col as ColumnItem);
+    }
+  }
+  const ordered: TableColumnsType = [];
+  for (const rawKey of visibleKeys) {
+    const key = String(rawKey);
+    const col = byKey.get(key);
+    if (col) {
+      ordered.push(col);
+    }
+  }
+  return ordered;
 }
 
 /**
- * 从业务 columns 提取自有字段键（排除 id、action、当前 scope 基类字段）
+ * 从业务 columns 提取自有字段键（排除 id、plant、action、当前 scope 基类字段）
  */
 export function extractBusinessColumnKeys(
   userColumns: TableColumnsType,
@@ -345,11 +418,20 @@ export function extractBusinessColumnKeys(
 ): string[] {
   const idKey = String(idColumnKey);
   const actionKey = String(actionColumnKey);
+  const plantKey = resolveEntityScopePlantFieldKey(entityScope);
+  const alternatePlantKey = resolveAlternatePlantFieldKey(plantKey);
   const baseKeys = new Set(resolveEntityScopeBaseFieldKeys(entityScope));
   const keys: string[] = [];
   for (const col of userColumns) {
     const key = getTableColumnKey(col as ColumnItem);
-    if (!key || key === idKey || key === actionKey || baseKeys.has(key)) {
+    if (
+      !key ||
+      key === idKey ||
+      key === actionKey ||
+      key === plantKey ||
+      key === alternatePlantKey ||
+      baseKeys.has(key)
+    ) {
       continue;
     }
     keys.push(key);
@@ -358,7 +440,34 @@ export function extractBusinessColumnKeys(
 }
 
 /**
- * 默认可见列：ID + 前 N 个业务字段 + 操作列
+ * 解析默认可见的工厂列键（优先作用域键，否则业务列中的备选工厂键）
+ * @param userColumns 页面业务列
+ * @param entityScope 基类作用域
+ */
+export function resolveVisiblePlantColumnKey(
+  userColumns: TableColumnsType,
+  entityScope: TaktEntityScope = 'company',
+): string {
+  const plantKey = resolveEntityScopePlantFieldKey(entityScope);
+  const alternatePlantKey = resolveAlternatePlantFieldKey(plantKey);
+  let hasPlant = false;
+  let hasAlternate = false;
+  for (const col of userColumns) {
+    const key = getTableColumnKey(col as ColumnItem);
+    if (key === plantKey) hasPlant = true;
+    if (key === alternatePlantKey) hasAlternate = true;
+  }
+  if (hasPlant) {
+    return plantKey;
+  }
+  if (hasAlternate) {
+    return alternatePlantKey;
+  }
+  return plantKey;
+}
+
+/**
+ * 默认可见列：ID + 工厂 + 前 N 个业务字段 + 操作列
  */
 export function resolveDefaultVisibleColumnKeys(
   userColumns: TableColumnsType,
@@ -373,9 +482,10 @@ export function resolveDefaultVisibleColumnKeys(
   const actionKey = String(options.actionColumnKey ?? 'action');
   const tableMode = options.tableMode ?? 'single';
   const entityScope = options.entityScope ?? 'company';
+  const plantKey = resolveVisiblePlantColumnKey(userColumns, entityScope);
   const count = DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT[tableMode];
   const businessKeys = extractBusinessColumnKeys(userColumns, idKey, actionKey, entityScope);
-  return [idKey, ...businessKeys.slice(0, Math.max(0, count)), actionKey];
+  return [idKey, plantKey, ...businessKeys.slice(0, Math.max(0, count)), actionKey];
 }
 
 /**

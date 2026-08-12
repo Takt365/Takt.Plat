@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Sales
 // 文件名称：TaktSalesInvoiceValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -35,24 +35,21 @@ public class TaktSalesInvoiceCreateValidator : AbstractValidator<TaktSalesInvoic
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.YearMonth)
-            .NotEmpty().WithMessage("年度期间不能为空")
-            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
-        RuleFor(x => x.CustomerCode)
-            .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
-        RuleFor(x => x.CustomerName1)
-            .NotEmpty().WithMessage("客户名称1不能为空")
-            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+        RuleFor(x => x.BillingDocumentCode)
+            .NotEmpty().WithMessage("开票凭证不能为空")
+            .MaximumLength(10).WithMessage("开票凭证长度不能超过10个字符");
         RuleFor(x => x.CurrencyCode)
-            .NotEmpty().WithMessage("结算币种不能为空")
-            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
-        RuleFor(x => x.AccountingDocumentCode)
-            .NotEmpty().WithMessage("会计凭证编码不能为空")
-            .MaximumLength(40).WithMessage("会计凭证编码长度不能超过40个字符");
+            .NotEmpty().WithMessage("凭证货币不能为空")
+            .MaximumLength(3).WithMessage("凭证货币长度不能超过3个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("售达方不能为空")
+            .MaximumLength(10).WithMessage("售达方长度不能超过10个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -82,24 +79,21 @@ public class TaktSalesInvoiceUpdateValidator : AbstractValidator<TaktSalesInvoic
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
         RuleFor(x => x.PlantCode)
             .NotEmpty().WithMessage("工厂代码不能为空")
             .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.YearMonth)
-            .NotEmpty().WithMessage("年度期间不能为空")
-            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
-        RuleFor(x => x.CustomerCode)
-            .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
-        RuleFor(x => x.CustomerName1)
-            .NotEmpty().WithMessage("客户名称1不能为空")
-            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+        RuleFor(x => x.BillingDocumentCode)
+            .NotEmpty().WithMessage("开票凭证不能为空")
+            .MaximumLength(10).WithMessage("开票凭证长度不能超过10个字符");
         RuleFor(x => x.CurrencyCode)
-            .NotEmpty().WithMessage("结算币种不能为空")
-            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
-        RuleFor(x => x.AccountingDocumentCode)
-            .NotEmpty().WithMessage("会计凭证编码不能为空")
-            .MaximumLength(40).WithMessage("会计凭证编码长度不能超过40个字符");
+            .NotEmpty().WithMessage("凭证货币不能为空")
+            .MaximumLength(3).WithMessage("凭证货币长度不能超过3个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("售达方不能为空")
+            .MaximumLength(10).WithMessage("售达方长度不能超过10个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -125,24 +119,19 @@ public class TaktSalesInvoiceImportValidator : AbstractValidator<TaktSalesInvoic
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
         RuleFor(x => x.PlantCode)
-            .NotEmpty().WithMessage("工厂代码不能为空")
-            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
-        RuleFor(x => x.YearMonth)
-            .NotEmpty().WithMessage("年度期间不能为空")
-            .MaximumLength(6).WithMessage("年度期间长度不能超过6个字符");
-        RuleFor(x => x.CustomerCode)
-            .NotEmpty().WithMessage("客户编码不能为空")
-            .MaximumLength(40).WithMessage("客户编码长度不能超过40个字符");
-        RuleFor(x => x.CustomerName1)
-            .NotEmpty().WithMessage("客户名称1不能为空")
-            .MaximumLength(140).WithMessage("客户名称1长度不能超过140个字符");
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
+        RuleFor(x => x.BillingDocumentCode)
+            .NotEmpty().WithMessage("开票凭证不能为空")
+            .MaximumLength(10).WithMessage("开票凭证长度不能超过10个字符");
         RuleFor(x => x.CurrencyCode)
-            .NotEmpty().WithMessage("结算币种不能为空")
-            .MaximumLength(3).WithMessage("结算币种长度不能超过3个字符");
-        RuleFor(x => x.AccountingDocumentCode)
-            .NotEmpty().WithMessage("会计凭证编码不能为空")
-            .MaximumLength(40).WithMessage("会计凭证编码长度不能超过40个字符");
+            .NotEmpty().WithMessage("凭证货币不能为空")
+            .MaximumLength(3).WithMessage("凭证货币长度不能超过3个字符");
+        RuleFor(x => x.CustomerCode)
+            .NotEmpty().WithMessage("售达方不能为空")
+            .MaximumLength(10).WithMessage("售达方长度不能超过10个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

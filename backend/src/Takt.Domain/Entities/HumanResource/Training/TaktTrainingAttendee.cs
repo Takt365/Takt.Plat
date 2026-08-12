@@ -96,11 +96,6 @@ public class TaktTrainingAttendee : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "training_evaluation", ColumnDescription = "培训评价", ColumnDataType = "nvarchar", Length = 500, IsNullable = false)]
     public string TrainingEvaluation { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 参训记录状态（字典 sys_normal_disable_status；1=有效 0=无效）
     /// </summary>
     [SugarColumn(ColumnName = "training_result_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "1")]

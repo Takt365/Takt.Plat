@@ -125,23 +125,20 @@ const statusFilterOptions = computed(() => [
   { value: TaktEcImplementationStatus.NotStarted, label: t(`${localePrefix}.implementationStatus.notStarted`) },
   { value: TaktEcImplementationStatus.InProgress, label: t(`${localePrefix}.implementationStatus.inProgress`) },
   { value: TaktEcImplementationStatus.OfficiallyCompleted, label: t(`${localePrefix}.implementationStatus.officiallyCompleted`) },
-  { value: TaktEcImplementationStatus.FullyCompleted, label: t(`${localePrefix}.implementationStatus.fullyCompleted`) },
-]);
+  { value: TaktEcImplementationStatus.FullyCompleted, label: t(`${localePrefix}.implementationStatus.fullyCompleted`) }]);
 /** 列定义 */
 const columns = computed(() => [
-  { title: t('entity.ec.no'), dataIndex: 'ecNo', key: 'ecNo', width: 120 },
+  { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 120 },
   { title: t('entity.ec.title'), dataIndex: 'ecTitle', key: 'ecTitle', width: 200 },
   { title: t(`${localePrefix}.column.implementationStatus`), dataIndex: 'implementationStatus', key: 'implementationStatus', width: 110 },
   { title: t(`${localePrefix}.column.currentDept`), dataIndex: 'currentDeptCode', key: 'currentDeptCode', width: 100 },
   { title: t(`${localePrefix}.column.pendingCount`), dataIndex: 'pendingAtCurrentDeptCount', key: 'pendingAtCurrentDeptCount', width: 90 },
   { title: t(`${localePrefix}.column.detailCount`), dataIndex: 'detailCount', key: 'detailCount', width: 80 },
   { title: t(`${localePrefix}.column.path`), dataIndex: 'deptPath', key: 'deptPath', width: 420 },
-  { title: t('entity.ec.leader'), dataIndex: 'ecLeader', key: 'ecLeader', width: 100 },
-]);
+  { title: t('entity.ec.leader'), dataIndex: 'ecLeader', key: 'ecLeader', width: 100 }]);
 /** 可见列 keys */
 const visibleColumnKeys = ref([
-  'ecNo', 'ecTitle', 'implementationStatus', 'currentDeptCode', 'pendingAtCurrentDeptCount', 'detailCount', 'deptPath', 'ecLeader',
-]);
+  'ecCode', 'ecTitle', 'implementationStatus', 'currentDeptCode', 'pendingAtCurrentDeptCount', 'detailCount', 'deptPath', 'ecLeader']);
 /** 行选择 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,

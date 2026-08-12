@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdetail.ecid
             new TranslationSeedItem("entity.ecdetail.ecid", "zh-HK", "设变ID_hk", "设变主表ID（主表主键,序列化为string以避免Javascript精度问题）"),
 
-            // entity.ecdetail.ecno
-            new TranslationSeedItem("entity.ecdetail.ecno", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdetail.ecno
-            new TranslationSeedItem("entity.ecdetail.ecno", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdetail.ecno
-            new TranslationSeedItem("entity.ecdetail.ecno", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
-            // entity.ecdetail.ecno
-            new TranslationSeedItem("entity.ecdetail.ecno", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdetail.eccode
+            new TranslationSeedItem("entity.ecdetail.eccode", "en-US", "设变单号_us", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdetail.eccode
+            new TranslationSeedItem("entity.ecdetail.eccode", "ja-JP", "设变单号_jp", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdetail.eccode
+            new TranslationSeedItem("entity.ecdetail.eccode", "zh-CN", "设变单号", "设变单号（冗余字段,便于查询）"),
+            // entity.ecdetail.eccode
+            new TranslationSeedItem("entity.ecdetail.eccode", "zh-HK", "设变单号_hk", "设变单号（冗余字段,便于查询）"),
 
             // entity.ecdetail.linenumber
             new TranslationSeedItem("entity.ecdetail.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
@@ -117,14 +117,14 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             // entity.ecdetail.linenumber
             new TranslationSeedItem("entity.ecdetail.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
 
-            // entity.ecdetail.ecbomlineno
-            new TranslationSeedItem("entity.ecdetail.ecbomlineno", "en-US", "BOM行号_us", "BOM行号（Ec_bom_line_no）"),
-            // entity.ecdetail.ecbomlineno
-            new TranslationSeedItem("entity.ecdetail.ecbomlineno", "ja-JP", "BOM行号_jp", "BOM行号（Ec_bom_line_no）"),
-            // entity.ecdetail.ecbomlineno
-            new TranslationSeedItem("entity.ecdetail.ecbomlineno", "zh-CN", "BOM行号", "BOM行号（Ec_bom_line_no）"),
-            // entity.ecdetail.ecbomlineno
-            new TranslationSeedItem("entity.ecdetail.ecbomlineno", "zh-HK", "BOM行号_hk", "BOM行号（Ec_bom_line_no）"),
+            // entity.ecdetail.ecbomlinecode
+            new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "en-US", "BOM行号_us", "BOM行号（Ec_bom_line_no）"),
+            // entity.ecdetail.ecbomlinecode
+            new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "ja-JP", "BOM行号_jp", "BOM行号（Ec_bom_line_no）"),
+            // entity.ecdetail.ecbomlinecode
+            new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "zh-CN", "BOM行号", "BOM行号（Ec_bom_line_no）"),
+            // entity.ecdetail.ecbomlinecode
+            new TranslationSeedItem("entity.ecdetail.ecbomlinecode", "zh-HK", "BOM行号_hk", "BOM行号（Ec_bom_line_no）"),
 
             // entity.ecdetail.ecmodel
             new TranslationSeedItem("entity.ecdetail.ecmodel", "en-US", "机种_us", "机种（Ec_model）"),

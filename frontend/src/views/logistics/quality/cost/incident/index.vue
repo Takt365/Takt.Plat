@@ -199,11 +199,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="t('entity.qualityincident.costcurrency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="t('entity.qualityincident.currencyCode')">
         <a-input
-          v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.costcurrency') })"
+          v-model:value="advancedQueryForm.currencyCode"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincident.currencyCode') })"
           show-count
           :maxlength="3"
           allow-clear
@@ -383,7 +383,7 @@ const advancedQueryForm = ref({
   incidentReason: '',
   totalScrapQuantity: undefined as number | undefined,
   totalScrapCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -400,12 +400,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'incidentReason', label: t('entity.qualityincident.incidentreason') },
   { key: 'totalScrapQuantity', label: t('entity.qualityincident.totalscrapquantity') },
   { key: 'totalScrapCost', label: t('entity.qualityincident.totalscrapcost') },
-  { key: 'costCurrency', label: t('entity.qualityincident.costcurrency') },
+  { key: 'currencyCode', label: t('entity.qualityincident.currencyCode') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -462,7 +461,7 @@ function buildListQuery(overrides?: Partial<QualityIncidentQuery>): QualityIncid
   if (form.totalScrapCost !== undefined && form.totalScrapCost !== null) {
     query.totalScrapCost = form.totalScrapCost
   }
-  assignTrimmed('costCurrency', form.costCurrency)
+  assignTrimmed('currencyCode', form.currencyCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -474,7 +473,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
 
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
@@ -611,13 +609,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'totalScrapCost') ?? ''
   },
   {
-    title: t('entity.qualityincident.costcurrency'),
-    dataIndex: 'costCurrency',
-    key: 'costCurrency',
+    title: t('entity.qualityincident.currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'costCurrency') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityIncidentField(record, 'currencyCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -649,7 +647,6 @@ const getQualityIncidentId = (record: any): string => record?.[entityIdName] ?? 
  * @param field 字段名
  */
 const getQualityIncidentField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -718,7 +715,7 @@ function handleReset() {
   incidentReason: '',
   totalScrapQuantity: undefined as number | undefined,
   totalScrapCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -919,7 +916,7 @@ function handleAdvancedQueryReset() {
   incidentReason: '',
   totalScrapQuantity: undefined as number | undefined,
   totalScrapCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

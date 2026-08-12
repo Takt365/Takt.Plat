@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.qualityincidentitem.materialname')"
-                name="materialName"
+                :label="t('entity.qualityincidentitem.materialdescription')"
+                name="materialDescription"
               >
                 <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialname') })"
+                  v-model:value="formState.materialDescription"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialdescription') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -151,8 +151,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","scrapCost","scrapSize","partPrice","scrapReasonCost","freightCharges"]
-
+const formFields = ["lineNumber","materialCode","materialDescription","scrapCost","scrapSize","partPrice","scrapReasonCost","freightCharges"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -177,7 +176,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 qualityIncidentItemId 才视为编辑） */
 watch(
@@ -223,10 +221,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialName: [
+  materialDescription: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.qualityincidentitem.materialdescription') }),
       trigger: 'blur'
     }
   ],

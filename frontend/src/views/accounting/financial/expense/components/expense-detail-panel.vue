@@ -202,11 +202,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('invoiceNo')">
-      <a-form-item :label="pi.queryLabel('invoiceNo')">
+      <div v-show="isFieldVisible('invoiceCode')">
+      <a-form-item :label="pi.queryLabel('invoiceCode')">
         <a-input
-          v-model:value="advancedQueryForm.invoiceNo"
-          :placeholder="pi.queryPh('invoiceNo', 'required')"
+          v-model:value="advancedQueryForm.invoiceCode"
+          :placeholder="pi.queryPh('invoiceCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -630,14 +630,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getExpenseDetailField(record, 'accountTitle') ?? ''),
   },
   {
-    title: pi.label('invoiceNo'),
-    dataIndex: 'invoiceNo',
-    key: 'invoiceNo',
+    title: pi.label('invoiceCode'),
+    dataIndex: 'invoiceCode',
+    key: 'invoiceCode',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ExpenseDetail }) =>
-      String(getExpenseDetailField(record, 'invoiceNo') ?? ''),
+      String(getExpenseDetailField(record, 'invoiceCode') ?? ''),
   },
   {
     title: pi.label('expenseDetailDate'),
@@ -676,10 +676,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'accounting:financial:expense:delete',
         onClick: (record: ExpenseDetail) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

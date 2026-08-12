@@ -9,17 +9,37 @@
 
 <template>
   <div class="p-4 flex flex-col min-h-0 h-full">
-    <!-- 查询栏 -->
-    <TaktQueryBar
-      v-model="queryKeyword"
-      :placeholder="searchPlaceholder"
-      :loading="loading"
-      @search="handleSearch"
-      @reset="handleReset"
-    />
-
-    <!-- 工具栏 -->
-    <TaktToolsBar
+    <!-- 左主右从 -->
+    <TaktMasterDetailTableLr
+      v-model:master-current="currentPage"
+      v-model:master-page-size="pageSize"
+      v-model:selected-master-key="selectedMasterKey"
+      class="min-h-0 flex-1"
+      :master-columns="columns"
+      :master-data-source="dataSource"
+      :master-loading="loading"
+      :master-row-key="getSopExecId"
+      :master-row-selection="rowSelection"
+      master-id-column-key="sopExecId"
+      :master-visible-column-keys="visibleColumnKeys"
+      master-table-mode="masterDetailMaster"
+      master-scroll-layout="masterDetailLr"
+      :master-total="total"
+      master-entity-scope="company"
+      @master-change="handleTableChange"
+      @master-resize-column="handleResizeColumn"
+      @master-pagination-change="handleMasterPaginationChange"
+      @master-select="handleMasterSelect"
+    >
+      <template #master-toolbar>
+        <TaktQueryBar
+          v-model="queryKeyword"
+          :placeholder="searchPlaceholder"
+          :loading="loading"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
+        <TaktToolsBar
       create-permission="logistics:manufacturing:sop:exec:create"
       update-permission="logistics:manufacturing:sop:exec:update"
       delete-permission="logistics:manufacturing:sop:exec:delete"
@@ -50,45 +70,25 @@
       @advanced-query="handleAdvancedQuery"
       @column-setting="handleColumnSetting"
       @refresh="handleRefresh"
-    />
-
-    <!-- 左主右从 -->
-    <TaktMasterDetailTableLr
-      v-model:master-current="currentPage"
-      v-model:master-page-size="pageSize"
-      v-model:selected-master-key="selectedMasterKey"
-      class="min-h-0 flex-1"
-      :master-columns="columns"
-      :master-data-source="dataSource"
-      :master-loading="loading"
-      :master-row-key="getSopExecId"
-      :master-row-selection="rowSelection"
-      master-id-column-key="sopExecId"
-      :master-visible-column-keys="visibleColumnKeys"
-      :master-total="total"
-      master-entity-scope="company"
-      @master-change="handleTableChange"
-      @master-resize-column="handleResizeColumn"
-      @master-pagination-change="handleMasterPaginationChange"
-      @master-select="handleMasterSelect"
-    >
+        />
+      </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'processSegmentType'">
           <TaktDictTag
-            :value="getSopExecField(record, 'processSegmentType')"
+            :value="getSopExecDictValue(record, 'processSegmentType')"
             dict-type="logistics_process_segment_type"
           />
         </template>
         <template v-else-if="column.key === 'selfCheckResult'">
           <TaktDictTag
-            :value="getSopExecField(record, 'selfCheckResult')"
+            :value="getSopExecDictValue(record, 'selfCheckResult')"
             dict-type="logistics_sop_check_result_type"
           />
         </template>
         <template v-else-if="column.key === 'execStatus'">
           <TaktDictTag
-            :value="getSopExecField(record, 'execStatus')"
+            :value="getSopExecDictValue(record, 'execStatus')"
             dict-type="logistics_sop_exec_status"
           />
         </template>
@@ -129,22 +129,41 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('productionOrderId')">
-      <a-form-item :label="t('entity.sopexec.productionorderid')">
-        <a-input
-          v-model:value="advancedQueryForm.productionOrderId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.productionorderid') })"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('workOrderNo')">
-      <a-form-item :label="t('entity.sopexec.workorderno')">
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productionOrderId')">
+      <a-form-item :label="pi.queryLabel('productionOrderId')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.productionOrderId"
+          api-url="TaktProductionOrders/options"
+          :placeholder="pi.queryPh('productionOrderId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('workOrderCode')">
+      <a-form-item :label="pi.queryLabel('workOrderCode')">
         <a-input
-          v-model:value="advancedQueryForm.workOrderNo"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workorderno') })"
+          v-model:value="advancedQueryForm.workOrderCode"
+          :placeholder="pi.queryPh('workOrderCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -152,10 +171,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('serialNumber')">
-      <a-form-item :label="t('entity.sopexec.serialnumber')">
+      <a-form-item :label="pi.queryLabel('serialNumber')">
         <a-input
           v-model:value="advancedQueryForm.serialNumber"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.serialnumber') })"
+          :placeholder="pi.queryPh('serialNumber', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -163,107 +182,91 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialCode')">
-      <a-form-item :label="t('entity.sopexec.materialcode')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('materialCode')">
+        <TaktSelect
           v-model:value="advancedQueryForm.materialCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.materialcode') })"
-          show-count
-          :maxlength="50"
+          api-url="TaktMaterialPlants/options"
+          :placeholder="pi.queryPh('materialCode', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('routingItemId')">
-      <a-form-item :label="t('entity.sopexec.routingitemid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('routingItemId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.routingItemId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.routingitemid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktRoutingItems/options"
+          :placeholder="pi.queryPh('routingItemId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('processSegmentType')">
-      <a-form-item :label="t('entity.sopexec.processsegmenttype')">
+      <a-form-item :label="pi.queryLabel('processSegmentType')">
         <TaktSelect
           v-model:value="advancedQueryForm.processSegmentType"
           dict-type="logistics_process_segment_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.processsegmenttype') })"
+          :placeholder="pi.queryPh('processSegmentType', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('workstationId')">
-      <a-form-item :label="t('entity.sopexec.workstationid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('workstationId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.workstationId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.workstationid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSopWorkstations/options"
+          :placeholder="pi.queryPh('workstationId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('employeeId')">
-      <a-form-item :label="t('entity.sopexec.employeeid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('employeeId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.employeeId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.employeeid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktEmployees/options"
+          :placeholder="pi.queryPh('employeeId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('sopId')">
-      <a-form-item :label="t('entity.sopexec.sopid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('sopId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.sopId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.sopid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSopDocs/options"
+          :placeholder="pi.queryPh('sopId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('revisionId')">
-      <a-form-item :label="t('entity.sopexec.revisionid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('revisionId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.revisionId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.revisionid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSopRevisions/options"
+          :placeholder="pi.queryPh('revisionId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('revision')">
-      <a-form-item :label="t('entity.sopexec.revision')">
+      <a-form-item :label="pi.queryLabel('revision')">
         <a-input
           v-model:value="advancedQueryForm.revision"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.revision') })"
+          :placeholder="pi.queryPh('revision', 'required')"
           show-count
           :maxlength="20"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('contentLang')">
-      <a-form-item :label="t('entity.sopexec.contentlang')">
-        <a-textarea
-          v-model:value="advancedQueryForm.contentLang"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopexec.contentlang') })"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('startedAtStart')">
-      <a-form-item :label="t('entity.sopexec.startedatstart')">
+      <a-form-item :label="pi.queryLabel('startedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.startedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.startedatstart') })"
+          :placeholder="pi.queryPh('startedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -271,20 +274,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('startedAtEnd')">
-      <a-form-item :label="t('entity.sopexec.startedatend')">
+      <a-form-item :label="pi.queryLabel('startedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.startedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.startedatend') })"
+          :placeholder="pi.queryPh('startedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endedAtStart')">
-      <a-form-item :label="t('entity.sopexec.endedatstart')">
+      <a-form-item :label="pi.queryLabel('endedAtStart')">
         <a-input
           v-model:value="advancedQueryForm.endedAtStart"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.endedatstart') })"
+          :placeholder="pi.queryPh('endedAtStart', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -292,51 +295,50 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('endedAtEnd')">
-      <a-form-item :label="t('entity.sopexec.endedatend')">
+      <a-form-item :label="pi.queryLabel('endedAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.endedAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.endedatend') })"
+          :placeholder="pi.queryPh('endedAtEnd', 'select')"
           value-format="YYYY-MM-DD"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('selfCheckResult')">
-      <a-form-item :label="t('entity.sopexec.selfcheckresult')">
+      <a-form-item :label="pi.queryLabel('selfCheckResult')">
         <TaktSelect
           v-model:value="advancedQueryForm.selfCheckResult"
           dict-type="logistics_sop_check_result_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.selfcheckresult') })"
+          :placeholder="pi.queryPh('selfCheckResult', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('execStatus')">
-      <a-form-item :label="t('entity.sopexec.execstatus')">
+      <a-form-item :label="pi.queryLabel('execStatus')">
         <TaktSelect
           v-model:value="advancedQueryForm.execStatus"
           dict-type="logistics_sop_exec_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.sopexec.execstatus') })"
+          :placeholder="pi.queryPh('execStatus', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currentStepId')">
-      <a-form-item :label="t('entity.sopexec.currentstepid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('currentStepId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.currentStepId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.sopexec.currentstepid') })"
-          show-count
-          :maxlength="20"
+          api-url="TaktSopSteps/options"
+          :placeholder="pi.queryPh('currentStepId', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -344,10 +346,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -369,7 +371,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -383,10 +385,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -400,14 +402,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.sopexec._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.sopexec._self"
+        v-if="importVisible"
+        :entity-i18n-key="SOPEXEC_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -426,7 +429,7 @@
       :id-column-key="'sopExecId'"
       :action-column-key="'action'"
       entity-scope="company"
-      table-mode="single"
+      table-mode="masterDetailMaster"
       @update:checked-keys="handleColumnKeysChange"
       @reset="handleColumnSettingReset"
     />
@@ -446,13 +449,25 @@ import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import SopExecForm from './components/exec-form.vue'
 import SopExecStepPanel from './components/exec-step-panel.vue'
-import { provideSopExecMasterContext } from './composables/use-exec-master-context'
+import { provideSopExecMasterContext, type SopExecRowRecord } from './composables/use-exec-master-context'
 import { getSopExecList, getSopExecById, createSopExec, updateSopExec, deleteSopExecById, deleteSopExecBatch, getSopExecTemplate, importSopExec, exportSopExec, updateSopExecStatus } from '@/api/logistics/manufacturing/sop/exec'
 import type { SopExec, SopExecQuery } from '@/types/logistics/manufacturing/sop/exec'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+
+import {
+  useSopExecI18n,
+  SOPEXEC_LIST_FIELDS,
+  SOPEXEC_QUERY_STRING_FIELDS,
+  SOPEXEC_QUERY_FIELDS,
+  SOPEXEC_SELF_I18N_KEY,
+} from './composables/use-exec-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useSopExecI18n()
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
@@ -460,7 +475,7 @@ const { t } = useI18n()
 const excelNames = taktExcelEntityNames('TaktSopExec')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.sopexec._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -476,9 +491,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<SopExec | null>(null)
+const selectedRow = ref<SopExecRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<SopExec[]>([])
+const selectedRows = ref<SopExecRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -495,58 +510,54 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of SOPEXEC_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.processSegmentType !== undefined && form.processSegmentType !== null) {
+    return true
+  }
+  if (form.selfCheckResult !== undefined && form.selfCheckResult !== null) {
+    return true
+  }
+  if (form.execStatus !== undefined && form.execStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(SOPEXEC_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof SOPEXEC_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    processSegmentType: undefined as number | undefined,
+    selfCheckResult: undefined as number | undefined,
+    execStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  productionOrderId: '',
-  workOrderNo: '',
-  serialNumber: '',
-  materialCode: '',
-  routingItemId: '',
-  processSegmentType: undefined as number | undefined,
-  workstationId: '',
-  employeeId: '',
-  sopId: '',
-  revisionId: '',
-  revision: '',
-  contentLang: '',
-  startedAtStart: '',
-  startedAtEnd: '',
-  endedAtStart: '',
-  endedAtEnd: '',
-  selfCheckResult: undefined as number | undefined,
-  execStatus: undefined as number | undefined,
-  currentStepId: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'productionOrderId', label: t('entity.sopexec.productionorderid') },
-  { key: 'workOrderNo', label: t('entity.sopexec.workorderno') },
-  { key: 'serialNumber', label: t('entity.sopexec.serialnumber') },
-  { key: 'materialCode', label: t('entity.sopexec.materialcode') },
-  { key: 'routingItemId', label: t('entity.sopexec.routingitemid') },
-  { key: 'processSegmentType', label: t('entity.sopexec.processsegmenttype') },
-  { key: 'workstationId', label: t('entity.sopexec.workstationid') },
-  { key: 'employeeId', label: t('entity.sopexec.employeeid') },
-  { key: 'sopId', label: t('entity.sopexec.sopid') },
-  { key: 'revisionId', label: t('entity.sopexec.revisionid') },
-  { key: 'revision', label: t('entity.sopexec.revision') },
-  { key: 'contentLang', label: t('entity.sopexec.contentlang') },
-  { key: 'startedAtStart', label: t('entity.sopexec.startedatstart') },
-  { key: 'startedAtEnd', label: t('entity.sopexec.startedatend') },
-  { key: 'endedAtStart', label: t('entity.sopexec.endedatstart') },
-  { key: 'endedAtEnd', label: t('entity.sopexec.endedatend') },
-  { key: 'selfCheckResult', label: t('entity.sopexec.selfcheckresult') },
-  { key: 'execStatus', label: t('entity.sopexec.execstatus') },
-  { key: 'currentStepId', label: t('entity.sopexec.currentstepid') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+const queryFieldsMeta = computed(() =>
+  SOPEXEC_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -569,7 +580,7 @@ const { selectedMasterRow } = provideSopExecMasterContext()
 const sopExecStepPanelRef = ref<InstanceType<typeof SopExecStepPanel> | null>(null)
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {SopExecQuery} 查询 DTO
  */
@@ -590,38 +601,21 @@ function buildListQuery(overrides?: Partial<SopExecQuery>): SopExecQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('productionOrderId', form.productionOrderId)
-  assignTrimmed('workOrderNo', form.workOrderNo)
-  assignTrimmed('serialNumber', form.serialNumber)
-  assignTrimmed('materialCode', form.materialCode)
-  assignTrimmed('routingItemId', form.routingItemId)
+  for (const key of SOPEXEC_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.processSegmentType !== undefined && form.processSegmentType !== null) {
     query.processSegmentType = form.processSegmentType
   }
-  assignTrimmed('workstationId', form.workstationId)
-  assignTrimmed('employeeId', form.employeeId)
-  assignTrimmed('sopId', form.sopId)
-  assignTrimmed('revisionId', form.revisionId)
-  assignTrimmed('revision', form.revision)
-  assignTrimmed('contentLang', form.contentLang)
-  assignTrimmed('startedAtStart', form.startedAtStart)
-  assignTrimmed('startedAtEnd', form.startedAtEnd)
-  assignTrimmed('endedAtStart', form.endedAtStart)
-  assignTrimmed('endedAtEnd', form.endedAtEnd)
   if (form.selfCheckResult !== undefined && form.selfCheckResult !== null) {
     query.selfCheckResult = form.selfCheckResult
   }
   if (form.execStatus !== undefined && form.execStatus !== null) {
     query.execStatus = form.execStatus
   }
-  assignTrimmed('currentStepId', form.currentStepId)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
@@ -633,7 +627,7 @@ onMounted(async () => {
 const selectedMasterKey = ref('')
 
 /** 同步主表选中行到右侧明细（子表由 *-panel watch 自动 reload） */
-function syncMasterSelection(record: SopExec | null) {
+function syncMasterSelection(record: SopExecRowRecord | null) {
   selectedMasterRow.value = record
   selectedMasterKey.value = record ? getSopExecId(record) : ''
 }
@@ -643,7 +637,7 @@ function syncMasterSelection(record: SopExec | null) {
  * @param record 主表行
  */
 function handleMasterSelect(record: Record<string, unknown>) {
-  const row = record as unknown as SopExec
+  const row = record as unknown as SopExecRowRecord
   const key = getSopExecId(row)
   selectedRowKeys.value = [key]
   selectedRows.value = [row]
@@ -661,7 +655,7 @@ function handleMasterPaginationChange(_page: number, _pageSize: number) {
 }
 
 /** 加载主表详情并回填当前页 dataSource */
-async function loadSopExecDetail(record: SopExec): Promise<SopExec | null> {
+async function loadSopExecDetail(record: SopExecRowRecord): Promise<SopExec | null> {
   const id = getSopExecId(record)
   if (!id) {
     return null
@@ -692,7 +686,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'sopExecId') ?? ''
   },
   {
-    title: t('entity.sopexec.productionorderid'),
+    title: pi.label('productionOrderId'),
     dataIndex: 'productionOrderId',
     key: 'productionOrderId',
     width: 120,
@@ -701,16 +695,16 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'productionOrderId') ?? ''
   },
   {
-    title: t('entity.sopexec.workorderno'),
-    dataIndex: 'workOrderNo',
-    key: 'workOrderNo',
+    title: pi.label('workOrderCode'),
+    dataIndex: 'workOrderCode',
+    key: 'workOrderCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopExecField(record, 'workOrderNo') ?? ''
+    customRender: ({ record }: { record: any }) => getSopExecField(record, 'workOrderCode') ?? ''
   },
   {
-    title: t('entity.sopexec.serialnumber'),
+    title: pi.label('serialNumber'),
     dataIndex: 'serialNumber',
     key: 'serialNumber',
     width: 120,
@@ -719,7 +713,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'serialNumber') ?? ''
   },
   {
-    title: t('entity.sopexec.materialcode'),
+    title: pi.label('materialCode'),
     dataIndex: 'materialCode',
     key: 'materialCode',
     width: 120,
@@ -728,7 +722,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'materialCode') ?? ''
   },
   {
-    title: t('entity.sopexec.routingitemid'),
+    title: pi.label('routingItemId'),
     dataIndex: 'routingItemId',
     key: 'routingItemId',
     width: 120,
@@ -737,7 +731,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'routingItemId') ?? ''
   },
   {
-    title: t('entity.sopexec.processsegmenttype'),
+    title: pi.label('processSegmentType'),
     dataIndex: 'processSegmentType',
     key: 'processSegmentType',
     width: 120,
@@ -745,7 +739,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.sopexec.workstationid'),
+    title: pi.label('workstationId'),
     dataIndex: 'workstationId',
     key: 'workstationId',
     width: 120,
@@ -754,7 +748,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'workstationId') ?? ''
   },
   {
-    title: t('entity.sopexec.employeeid'),
+    title: pi.label('employeeId'),
     dataIndex: 'employeeId',
     key: 'employeeId',
     width: 120,
@@ -763,7 +757,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'employeeId') ?? ''
   },
   {
-    title: t('entity.sopexec.sopid'),
+    title: pi.label('sopId'),
     dataIndex: 'sopId',
     key: 'sopId',
     width: 120,
@@ -772,7 +766,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'sopId') ?? ''
   },
   {
-    title: t('entity.sopexec.revisionid'),
+    title: pi.label('revisionId'),
     dataIndex: 'revisionId',
     key: 'revisionId',
     width: 120,
@@ -781,7 +775,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'revisionId') ?? ''
   },
   {
-    title: t('entity.sopexec.revision'),
+    title: pi.label('revision'),
     dataIndex: 'revision',
     key: 'revision',
     width: 120,
@@ -790,16 +784,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'revision') ?? ''
   },
   {
-    title: t('entity.sopexec.contentlang'),
-    dataIndex: 'contentLang',
-    key: 'contentLang',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopExecField(record, 'contentLang') ?? ''
-  },
-  {
-    title: t('entity.sopexec.startedat'),
+    title: pi.label('startedAt'),
     dataIndex: 'startedAt',
     key: 'startedAt',
     width: 120,
@@ -808,7 +793,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'startedAt') ?? ''
   },
   {
-    title: t('entity.sopexec.endedat'),
+    title: pi.label('endedAt'),
     dataIndex: 'endedAt',
     key: 'endedAt',
     width: 120,
@@ -817,7 +802,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'endedAt') ?? ''
   },
   {
-    title: t('entity.sopexec.selfcheckresult'),
+    title: pi.label('selfCheckResult'),
     dataIndex: 'selfCheckResult',
     key: 'selfCheckResult',
     width: 120,
@@ -825,7 +810,7 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.sopexec.execstatus'),
+    title: pi.label('execStatus'),
     dataIndex: 'execStatus',
     key: 'execStatus',
     width: 120,
@@ -833,22 +818,13 @@ const columns = computed<TableColumnsType>(() => [
     ellipsis: true,
   },
   {
-    title: t('entity.sopexec.currentstepid'),
+    title: pi.label('currentStepId'),
     dataIndex: 'currentStepId',
     key: 'currentStepId',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: any }) => getSopExecField(record, 'currentStepId') ?? ''
-  },
-  {
-    title: t('entity.sopexec.workstation'),
-    dataIndex: 'workstation',
-    key: 'workstation',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getSopExecField(record, 'workstation') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -858,7 +834,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:manufacturing:sop:exec:update',
-        onClick: (record: SopExec) => handleEdit(record)
+        onClick: (record: SopExecRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -866,26 +842,44 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:sop:exec:delete',
-        onClick: (record: SopExec) => handleDeleteOne(record)
+        onClick: (record: SopExecRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getSopExecId = (record: any): string => record?.[entityIdName] ?? ''
+const getSopExecId = (record: SopExecRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
  * 读取行字段值
  * @param record 行数据
  * @param field 字段名
  */
 const getSopExecField = (record: any, field: string): any => record?.[field]
+/**
+ * 供 TaktDictTag 等组件使用的标量字典值
+ * @param record 行数据
+ * @param field 字段名
+ */
+const getSopExecDictValue = (
+  record: SopExecRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
 
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: SopExec[]) => {
+  onChange: (keys: (string | number)[], rows: SopExecRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
@@ -895,7 +889,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelect: (record: SopExec, selected: boolean) => {
+  onSelect: (record: SopExecRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
       syncMasterSelection(record)
@@ -904,7 +898,7 @@ const rowSelection = computed(() => ({
       syncMasterSelection(null)
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: SopExec[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: SopExecRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
     syncMasterSelection(selectedRow.value)
   }
@@ -914,6 +908,11 @@ const rowSelection = computed(() => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getSopExecList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -940,8 +939,10 @@ function handleSearch() {
 function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   productionOrderId: '',
-  workOrderNo: '',
+  workOrderCode: '',
   serialNumber: '',
   materialCode: '',
   routingItemId: '',
@@ -951,7 +952,6 @@ function handleReset() {
   sopId: '',
   revisionId: '',
   revision: '',
-  contentLang: '',
   startedAtStart: '',
   startedAtEnd: '',
   endedAtStart: '',
@@ -970,14 +970,14 @@ function handleReset() {
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.sopexec._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
 /** 打开编辑弹窗（主子表：先拉详情含子表） */
-async function handleEdit(record: SopExec) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.sopexec._self') })
+async function handleEdit(record: SopExecRowRecord) {
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
   formLoading.value = true
   try {
     const detail = await loadSopExecDetail(record)
@@ -993,7 +993,7 @@ function handleUpdate() {
   if (selectedRow.value) {
     void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.sopexec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -1011,10 +1011,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateSopExec(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.sopexec._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createSopExec(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.sopexec._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -1045,15 +1045,22 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importSopExec(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importSopExec(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+
+      if (selectedMasterKey.value) {
+    sopExecStepPanelRef.value?.reload?.()
+      }
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -1064,6 +1071,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportSopExec(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -1087,24 +1097,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.sopexec._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[SopExec] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.sopexec._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: SopExec) {
+async function handleDeleteOne(record: SopExecRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.sopexec._self'), name: t('common.tip.this.target', { target: t('entity.sopexec._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteSopExecById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.sopexec._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1116,18 +1126,18 @@ async function handleDeleteOne(record: SopExec) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.sopexec._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.sopexec._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteSopExecBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.sopexec._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       selectedRowKeys.value = []
       selectedRows.value = []
       selectedRow.value = null
@@ -1150,8 +1160,10 @@ function handleAdvancedQuerySubmit() {
 
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
+  cultureCode: '',
+  plantCode: '',
   productionOrderId: '',
-  workOrderNo: '',
+  workOrderCode: '',
   serialNumber: '',
   materialCode: '',
   routingItemId: '',
@@ -1161,7 +1173,6 @@ function handleAdvancedQueryReset() {
   sopId: '',
   revisionId: '',
   revision: '',
-  contentLang: '',
   startedAtStart: '',
   startedAtEnd: '',
   endedAtStart: '',

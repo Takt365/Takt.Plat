@@ -15,7 +15,7 @@ export interface EcDeptView extends CompanyDtoBase {
   ecDeptId?: string;
   ecDetailId: string;
   ecId: string;
-  ecNo: string;
+  ecCode: string;
   lineNumber: number;
   ecModel: string;
   ecOldItem?: string;
@@ -36,27 +36,27 @@ export interface EcDeptView extends CompanyDtoBase {
   oldProductHandling?: string;
   purchaseOrderIssueDate?: string;
   supplier?: string;
-  purchaseOrderNo?: string;
-  iqcOrderNo?: string;
+  purchaseOrderCode?: string;
+  iqcOrderCode?: string;
   inspectionDate?: string;
   outboundBatch?: string;
   outboundDate?: string;
   productionDate?: string;
   productionBatch?: string;
-  outboundOrderNo?: string;
+  outboundOrderCode?: string;
   productionTeam?: string;
   implementationDate?: string;
   /** 实施批次（制一） */
   implementationBatch?: string;
   inspectionBatch?: string;
-  samplingNo?: string;
+  samplingCode?: string;
   /** 确认日期（制技） */
   confirmationDate?: string;
   isSopUpdated: number;
 }
 
 export interface EcDeptViewQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   ecModel?: string;
   isImplemented?: number;
   ecOldItem?: string;
@@ -78,20 +78,20 @@ export interface EcDeptViewUpdate {
   oldProductHandling?: string;
   purchaseOrderIssueDate?: string;
   supplier?: string;
-  purchaseOrderNo?: string;
-  iqcOrderNo?: string;
+  purchaseOrderCode?: string;
+  iqcOrderCode?: string;
   inspectionDate?: string;
   outboundBatch?: string;
   outboundDate?: string;
   productionDate?: string;
   productionBatch?: string;
-  outboundOrderNo?: string;
+  outboundOrderCode?: string;
   productionTeam?: string;
   implementationDate?: string;
   /** 实施批次（制一） */
   implementationBatch?: string;
   inspectionBatch?: string;
-  samplingNo?: string;
+  samplingCode?: string;
   /** 确认日期（制技） */
   confirmationDate?: string;
   isSopUpdated: number;

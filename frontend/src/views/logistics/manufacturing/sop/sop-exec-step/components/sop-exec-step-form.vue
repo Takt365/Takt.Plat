@@ -162,7 +162,6 @@ const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["execId","stepId","stepNo","startedAt","endedAt","stepResult","confirmedBy","confirmedAt"]
 
-
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
   formData?: Partial<SopExecStepCreate & { sopExecStepId?: string }> | null

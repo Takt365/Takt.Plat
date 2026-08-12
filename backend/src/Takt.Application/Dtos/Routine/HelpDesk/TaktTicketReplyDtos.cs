@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Routine.HelpDesk
 // 文件名称：TaktTicketReplyDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TicketReply 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktTicketReply 生成，请按需审阅）
 // 
@@ -36,7 +36,7 @@ public class TaktTicketReplyDto : TaktCompanyDtoBase
     public long TicketReplyId { get; set; }
 
     /// <summary>
-    /// 工单 ID
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TicketId { get; set; }
@@ -47,12 +47,12 @@ public class TaktTicketReplyDto : TaktCompanyDtoBase
     public string? TicketName { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AuthorId { get; set; }
@@ -73,7 +73,7 @@ public class TaktTicketReplyDto : TaktCompanyDtoBase
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 
@@ -106,18 +106,28 @@ public class TaktTicketReplyQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单 ID
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AuthorId { get; set; }
@@ -138,7 +148,7 @@ public class TaktTicketReplyQueryDto : TaktPagedQuery
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -188,23 +198,28 @@ public class TaktTicketReplyCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工单 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AuthorId { get; set; }
@@ -226,7 +241,7 @@ public class TaktTicketReplyCreateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 
@@ -282,18 +297,28 @@ public class TaktTicketReplyTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单 ID
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AuthorId { get; set; }
@@ -314,7 +339,7 @@ public class TaktTicketReplyTemplateDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -346,23 +371,28 @@ public class TaktTicketReplyImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工单 ID
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int? AuthorType { get; set; }
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? AuthorId { get; set; }
@@ -383,7 +413,7 @@ public class TaktTicketReplyImportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int? IsInternal { get; set; }
 
@@ -421,18 +451,18 @@ public class TaktTicketReplyExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工单 ID
+    /// 工单 ID（选项 TaktTickets/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long TicketId { get; set; }
 
     /// <summary>
-    /// 作者类型（0=客服，1=用户，2=系统）
+    /// 作者类型（字典 routine_ticket_reply_author_type；0=客服 1=用户 2=系统）
     /// </summary>
     public int AuthorType { get; set; } = 0;
 
     /// <summary>
-    /// 作者用户 ID
+    /// 作者 ID（选项 TaktUsers/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AuthorId { get; set; }
@@ -453,7 +483,7 @@ public class TaktTicketReplyExportDto
     public string? Attachments { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否内部备注（仅客服可见）
+    /// 是否内部备注（字典 sys_yes_no_type；1=是 0=否，仅客服可见）
     /// </summary>
     public int IsInternal { get; set; } = 0;
 

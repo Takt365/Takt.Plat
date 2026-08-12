@@ -93,12 +93,12 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
         EnsureThreeLayerContext();
         var list = await _calendarRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.RelatedPlant ?? string.Empty,
+            x => x.PlantCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.RelatedPlant ?? e.Id.ToString(),
+            DictLabel = e.PlantCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -112,11 +112,11 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
         var entity = dto.Adapt<TaktCalendar>();
         var isUnique_ix_calendar_plant_date_unique = await _uniqueValidator.IsUniqueAsync(
             _calendarRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CalendarDate == entity.CalendarDate);
         if (!isUnique_ix_calendar_plant_date_unique)
         {
-            throw new TaktBusinessException("工厂日历的RelatedPlant、CalendarDate已存在");
+            throw new TaktBusinessException("工厂日历的PlantCode、CalendarDate已存在");
         }
         entity = await _calendarRepository.CreateAsync(entity);
         return await GetCalendarByIdAsync(entity.Id) ?? entity.Adapt<TaktCalendarDto>();
@@ -138,12 +138,12 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
         dto.Adapt(entity);
         var isUnique_ix_calendar_plant_date_unique = await _uniqueValidator.IsUniqueAsync(
             _calendarRepository,
-            x => x.RelatedPlant == entity.RelatedPlant
+            x => x.PlantCode == entity.PlantCode
                 && x.CalendarDate == entity.CalendarDate,
             id);
         if (!isUnique_ix_calendar_plant_date_unique)
         {
-            throw new TaktBusinessException("工厂日历的RelatedPlant、CalendarDate已存在");
+            throw new TaktBusinessException("工厂日历的PlantCode、CalendarDate已存在");
         }
         await _calendarRepository.UpdateAsync(entity);
         return await GetCalendarByIdAsync(id) ?? throw new TaktBusinessException("工厂日历不存在");
@@ -217,18 +217,18 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
             try
             {
                 var entity = rows[i].Adapt<TaktCalendar>();
-                var importKey = $"{entity.RelatedPlant}|{entity.CalendarDate}";
+                var importKey = $"{entity.PlantCode}|{entity.CalendarDate}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（RelatedPlant、CalendarDate）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、CalendarDate）");
                 }
                 var isUnique_ix_calendar_plant_date_unique = await _uniqueValidator.IsUniqueAsync(
                     _calendarRepository,
-                    x => x.RelatedPlant == entity.RelatedPlant
+                    x => x.PlantCode == entity.PlantCode
                         && x.CalendarDate == entity.CalendarDate);
                 if (!isUnique_ix_calendar_plant_date_unique)
                 {
-                    throw new TaktBusinessException("工厂日历的RelatedPlant、CalendarDate已存在");
+                    throw new TaktBusinessException("工厂日历的PlantCode、CalendarDate已存在");
                 }
                 await _calendarRepository.CreateAsync(entity);
                 success += 1;
@@ -287,7 +287,8 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
                 SqlFunc.ToString(x.IsWorkingDay).Contains(keywords)
                 || SqlFunc.ToString(x.HolidayId).Contains(keywords)
                 || SqlFunc.ToString(x.ShiftId).Contains(keywords)
-                || (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CalendarDate).Contains(keywords)
@@ -310,9 +311,14 @@ public class TaktCalendarService : TaktServiceBase, ITaktCalendarService
             exp = exp.And(x => x.ShiftId == queryDto.ShiftId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RelatedPlant))
+        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(queryDto.RelatedPlant));
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

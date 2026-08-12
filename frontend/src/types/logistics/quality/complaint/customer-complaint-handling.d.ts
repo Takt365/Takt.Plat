@@ -23,15 +23,6 @@ import type {
  * @description 对应后端 TaktCustomerComplaintHandlingDto
  */
 export interface CustomerComplaintHandling extends CompanyDtoBase {
-  /**
-   * CustomerComplaintHandlingID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
-   */
-  customerComplaintHandlingId: string;
-
-  /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
 
   /**
    * 客诉处理记录编码（唯一索引）
@@ -51,7 +42,7 @@ export interface CustomerComplaintHandling extends CompanyDtoBase {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo: string;
+  complaintCode: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
@@ -191,7 +182,7 @@ export interface CustomerComplaintHandlingQuery extends TaktPagedQuery {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo?: string;
+  complaintCode?: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
@@ -340,7 +331,10 @@ export interface CustomerComplaintHandlingCreate {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -360,7 +354,7 @@ export interface CustomerComplaintHandlingCreate {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo: string;
+  complaintCode: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
@@ -533,7 +527,7 @@ export interface CustomerComplaintHandlingTemplate {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo?: string;
+  complaintCode?: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
@@ -657,7 +651,10 @@ export interface CustomerComplaintHandlingImport {
   /**
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
-  companyDefaultCulture?: string;
+  /**
+   * 区域文化编码（登录或公司切换注入）
+   */
+  cultureCode?: string
 
   /**
    * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
@@ -677,7 +674,7 @@ export interface CustomerComplaintHandlingImport {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo?: string;
+  complaintCode?: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）
@@ -816,7 +813,7 @@ export interface CustomerComplaintHandlingExport {
   /**
    * 客诉单号（冗余字段，便于查询）
    */
-  complaintNo: string;
+  complaintCode: string;
 
   /**
    * 客诉明细 ID（关联 TaktCustomerComplaintItem.Id，选项 TaktCustomerComplaintItems/options）

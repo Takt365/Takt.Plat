@@ -178,8 +178,7 @@ const columns = computed<TableColumnsType>(() => {
       key: 'supplierName',
       width: 160,
       ellipsis: true,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,

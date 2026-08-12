@@ -13,6 +13,22 @@
 export default {
   page: {
     executeSubmitted: 'バックグラウンド実行を受け付けました。完了後に通知します',
+    executeMonth: {
+      modalTitle: '原価計算月を選択',
+      costingMonth: '原価計算月',
+      costingMonthPlaceholder: '原価計算月を選択',
+      costingMonthRequired: '原価計算月を選択してください',
+      hint: '既定は当月です。パラメータなしの Cron 実行も当月で計算します。',
+    },
+    executeDb: {
+      modalTitle: '同期データベースを選択',
+      sourceDatabase: 'ソースデータベース',
+      targetDatabase: 'ターゲットデータベース',
+      sourceRequired: 'ソースデータベースを選択してください',
+      targetRequired: 'ターゲットデータベースを選択してください',
+      hintTargetOnly: 'ソースは固定（Sap_Data または同一 DB 回填）です。書き込み先のテナント DB を選択してください。',
+      hintSourceTarget: 'ステージング元と書き込み先テナント DB を選択してください。Cron は ExecuteParams に同キーが必要です。',
+    },
     signalr: {
       executeSucceeded: 'タスク {code} 実行成功（{duration}ms）',
       executeFailed: 'タスク {code} 実行失敗（{duration}ms）',

@@ -111,7 +111,7 @@ public class TaktWarehouseSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateWarehouseAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode,
+                    company.CompanyCode, company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
@@ -169,6 +169,7 @@ public class TaktWarehouseSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktWarehouse> repository,
         string tenantCode,
         string companyCode,
+        string cultureCode,
         WarehouseSeedItem seed)
     {
         var warehouse = await repository.FirstAsync(w =>
@@ -190,6 +191,7 @@ public class TaktWarehouseSeedData : ITaktSeedDataCoordinator
                 IsBuiltIn = IsBuiltInYes,
                 SortOrder = seed.SortOrder,
                 WarehouseStatus = StatusEnabled,
+                CultureCode = cultureCode
             };
             warehouse = await repository.CreateAsync(warehouse);
             return (warehouse, 1, 0);

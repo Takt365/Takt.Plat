@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/foundation
 // 文件名称：quartz-task.ts
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -123,38 +123,16 @@ export function updateQuartzTaskStatus(dto: QuartzTaskStatus): Promise<QuartzTas
 }
 
 /**
- * 启动（恢复）定时任务调度
+ * 立即执行一次定时任务
  * @param {string} id 定时任务ID
+ * @param {string} [executeParams] 本次执行参数（非空则覆盖任务配置）
  * @returns {Promise<QuartzTask>} 定时任务DTO
  */
-export function startQuartzTask(id: string): Promise<QuartzTask> {
-  return request<QuartzTask>({
-    url: `${QUARTZ_TASK_API_BASE}/${id}/start`,
-    method: 'put',
-  });
-}
-
-/**
- * 暂停定时任务调度
- * @param {string} id 定时任务ID
- * @returns {Promise<QuartzTask>} 定时任务DTO
- */
-export function pauseQuartzTask(id: string): Promise<QuartzTask> {
-  return request<QuartzTask>({
-    url: `${QUARTZ_TASK_API_BASE}/${id}/pause`,
-    method: 'put',
-  });
-}
-
-/**
- * 立即执行一次定时任务（不改变启动/暂停调度状态）
- * @param {string} id 定时任务ID
- * @returns {Promise<QuartzTask>} 定时任务DTO
- */
-export function executeQuartzTaskNow(id: string): Promise<QuartzTask> {
+export function executeQuartzTaskNow(id: string, executeParams?: string): Promise<QuartzTask> {
   return request<QuartzTask>({
     url: `${QUARTZ_TASK_API_BASE}/${id}/execute`,
     method: 'post',
+    data: executeParams != null && executeParams !== '' ? { executeParams } : undefined,
   });
 }
 

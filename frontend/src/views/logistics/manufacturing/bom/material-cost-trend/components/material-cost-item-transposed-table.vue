@@ -69,7 +69,7 @@ import { useI18n } from 'vue-i18n';
 import type {
   BomMaterialCostItemModelSummary,
   BomMaterialCostItemTransposed,
-} from '@/types/logistics/manufacturing/bom/material-cost-trend';
+} from '@/types/logistics/manufacturing/bom/material-cost-analysis';
 import {
   MATERIAL_COST_ANALYSIS_LOCALE_PREFIX,
   useMaterialCostAnalysis,
@@ -143,8 +143,7 @@ const columns = computed<TableColumnsType>(() => {
       key: 'productDescription',
       width: 200,
       fixed: 'left',
-    },
-  ];
+    }];
   const periodCols: TableColumnsType = props.periodOrder.map((period) => ({
     title: period,
     key: `period_${period}`,

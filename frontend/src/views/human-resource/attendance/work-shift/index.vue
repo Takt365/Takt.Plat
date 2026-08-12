@@ -160,10 +160,10 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('relatedPlant')">
+      <div v-show="isFieldVisible('plantCode')">
       <a-form-item :label="t('entity.workshift.relatedplant')">
         <a-input
-          v-model:value="advancedQueryForm.relatedPlant"
+          v-model:value="advancedQueryForm.plantCode"
           :placeholder="t('common.page.form.placeholder.required', { field: t('entity.workshift.relatedplant') })"
           show-count
           :maxlength="4"
@@ -338,7 +338,7 @@ const advancedQueryForm = ref({
   startTime: '',
   endTime: '',
   crossMidnight: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -351,12 +351,11 @@ const queryFieldsMeta = computed(() => [
   { key: 'startTime', label: t('entity.workshift.starttime') },
   { key: 'endTime', label: t('entity.workshift.endtime') },
   { key: 'crossMidnight', label: t('entity.workshift.crossmidnight') },
-  { key: 'relatedPlant', label: t('entity.workshift.relatedplant') },
+  { key: 'plantCode', label: t('entity.workshift.relatedplant') },
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -371,8 +370,6 @@ const entityIdName = 'workShiftId'
 const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
-
-
 
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
@@ -403,7 +400,7 @@ function buildListQuery(overrides?: Partial<WorkShiftQuery>): WorkShiftQuery {
   if (form.crossMidnight !== undefined && form.crossMidnight !== null) {
     query.crossMidnight = form.crossMidnight
   }
-  assignTrimmed('relatedPlant', form.relatedPlant)
+  assignTrimmed('plantCode', form.plantCode)
   assignTrimmed('createdAtStart', form.createdAtStart)
   assignTrimmed('createdAtEnd', form.createdAtEnd)
   assignTrimmed('extField', form.extField)
@@ -415,12 +412,6 @@ onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
-
-
-
-
-
-
 
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
@@ -481,12 +472,12 @@ const columns = computed<TableColumnsType>(() => [
   },
   {
     title: t('entity.workshift.relatedplant'),
-    dataIndex: 'relatedPlant',
-    key: 'relatedPlant',
+    dataIndex: 'plantCode',
+    key: 'plantCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getWorkShiftField(record, 'relatedPlant') ?? ''
+    customRender: ({ record }: { record: any }) => getWorkShiftField(record, 'plantCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -518,7 +509,6 @@ const getWorkShiftId = (record: any): string => record?.[entityIdName] ?? ''
  * @param field 字段名
  */
 const getWorkShiftField = (record: any, field: string): any => record?.[field]
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -593,7 +583,7 @@ function handleReset() {
   startTime: '',
   endTime: '',
   crossMidnight: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -773,7 +763,7 @@ function handleAdvancedQueryReset() {
   startTime: '',
   endTime: '',
   crossMidnight: undefined as number | undefined,
-  relatedPlant: '',
+  plantCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

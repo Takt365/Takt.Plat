@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSalesInvoiceDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SalesInvoice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSalesInvoice 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt销售发票实体
+/// Takt销售发票主表实体（公司级）
 /// 对应前端 TaktSalesInvoiceDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,47 +36,197 @@ public class TaktSalesInvoiceDto : TaktCompanyDtoBase
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 开票凭证
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票类型
     /// </summary>
-    public string YearMonth { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 出具发票类别
     /// </summary>
-    public string CustomerCode { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// SD 凭证类别
     /// </summary>
-    public string CustomerName1 { get; set; } = string.Empty;
+    public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int TaxRate { get; set; } = 0;
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    public string AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期
+    /// </summary>
+    public DateTime BillingDate { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票明细列表（主子表关系）
     /// （子表：TaktSalesInvoiceItem）
     /// </summary>
     public List<TaktSalesInvoiceItemDto>? Items { get; set; }
@@ -104,44 +254,214 @@ public class TaktSalesInvoiceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票凭证
     /// </summary>
-    public string? YearMonth { get; set; } = string.Empty;
+    public string? BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 开票类型
     /// </summary>
-    public string? CustomerCode { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// 出具发票类别
     /// </summary>
-    public string? CustomerName1 { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int? TaxRate { get; set; }
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期（范围查询-开始）
+    /// </summary>
+    public DateTime? BillingDateStart { get; set; }
+
+    /// <summary>
+    /// 出具发票日期（范围查询-结束）
+    /// </summary>
+    public DateTime? BillingDateEnd { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal? NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期（范围查询-开始）
+    /// </summary>
+    public DateTime? ExchangeRateDateStart { get; set; }
+
+    /// <summary>
+    /// 换算日期（范围查询-结束）
+    /// </summary>
+    public DateTime? ExchangeRateDateEnd { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -184,58 +504,210 @@ public class TaktSalesInvoiceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
+    /// <summary>
+    /// 开票凭证
+    /// </summary>
+    [Required(ErrorMessage = "开票凭证不能为空")]
+    public string BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票类型
     /// </summary>
-    [Required(ErrorMessage = "年度期间（yyyyMM）不能为空")]
-    public string YearMonth { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 出具发票类别
     /// </summary>
-    [Required(ErrorMessage = "客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）不能为空")]
-    public string CustomerCode { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// SD 凭证类别
     /// </summary>
-    [Required(ErrorMessage = "客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）不能为空")]
-    public string CustomerName1 { get; set; } = string.Empty;
+    public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
-    [Required(ErrorMessage = "结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）不能为空")]
+    [Required(ErrorMessage = "凭证货币（字典 accounting_currency_code）不能为空")]
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int TaxRate { get; set; } = 0;
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    [Required(ErrorMessage = "会计凭证编码（租户+公司+工厂内唯一）不能为空")]
-    public string AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期
+    /// </summary>
+    public DateTime BillingDate { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    [Required(ErrorMessage = "售达方（选项 TaktCustomers/options；DictValue=CustomerCode）不能为空")]
+    public string CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
 
@@ -270,10 +742,34 @@ public class TaktSalesInvoiceUpdateDto : TaktSalesInvoiceCreateDto
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// 销售发票明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public new List<TaktSalesInvoiceItemUpdateDto>? Items { get; set; }
 
+}
+
+// ========================================
+// SalesInvoice 状态 DTO
+// ========================================
+
+/// <summary>
+/// SalesInvoice 状态更新 DTO
+/// </summary>
+public class TaktSalesInvoiceStatusDto
+{
+    /// <summary>
+    /// SalesInvoiceID
+    /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long SalesInvoiceId { get; set; }
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    [Required(ErrorMessage = "过账状态不能为空")]
+    public string PostingStatus { get; set; } = string.Empty;
 }
 
 // ========================================
@@ -296,47 +792,207 @@ public class TaktSalesInvoiceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票凭证
     /// </summary>
-    public string? YearMonth { get; set; } = string.Empty;
+    public string? BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 开票类型
     /// </summary>
-    public string? CustomerCode { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// 出具发票类别
     /// </summary>
-    public string? CustomerName1 { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int? TaxRate { get; set; }
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期
+    /// </summary>
+    public DateTime? BillingDate { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal? NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
 
@@ -368,52 +1024,207 @@ public class TaktSalesInvoiceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票凭证
     /// </summary>
-    public string? YearMonth { get; set; } = string.Empty;
+    public string? BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 开票类型
     /// </summary>
-    public string? CustomerCode { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// 出具发票类别
     /// </summary>
-    public string? CustomerName1 { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// SD 凭证类别
+    /// </summary>
+    public string? DocumentCategory { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
     public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int? TaxRate { get; set; }
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal? TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    public string? AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
 
     /// <summary>
-    /// 销售发票明细列表（主子表关系，一张发票可有多个明细行）（子表，级联保存）
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期
+    /// </summary>
+    public DateTime? BillingDate { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal? NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 销售发票明细列表（主子表关系）（子表，级联保存）
     /// </summary>
     public List<TaktSalesInvoiceItemCreateDto>? Items { get; set; }
 
@@ -451,44 +1262,194 @@ public class TaktSalesInvoiceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 开票凭证
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string BillingDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 年度期间（yyyyMM）
+    /// 开票类型
     /// </summary>
-    public string YearMonth { get; set; } = string.Empty;
+    public string? BillingType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// 出具发票类别
     /// </summary>
-    public string CustomerCode { get; set; } = string.Empty;
+    public string? BillingCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
+    /// SD 凭证类别
     /// </summary>
-    public string CustomerName1 { get; set; } = string.Empty;
+    public string? DocumentCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 结算币种（字典 accounting_currency_code；DictValue=CNY/USD 等；一单一币种）
+    /// 凭证货币（字典 accounting_currency_code）
     /// </summary>
     public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税率（字典 accounting_tax_rate_param；13=13%，9=9%，0=0% 等；一单一税率）
+    /// 销售组织
     /// </summary>
-    public int TaxRate { get; set; } = 0;
+    public string? SalesOrganization { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税费
+    /// 分销渠道
     /// </summary>
-    public decimal TaxAmount { get; set; }
+    public string? DistributionChannel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 会计凭证编码（租户+公司+工厂内唯一）
+    /// 定价过程
     /// </summary>
-    public string AccountingDocumentCode { get; set; } = string.Empty;
+    public string? PricingProcedure { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 单据条件号
+    /// </summary>
+    public string? ConditionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 装运条件（字典 logistics_shipping_conditions）
+    /// </summary>
+    public string? ShippingConditions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 出具发票日期
+    /// </summary>
+    public DateTime BillingDate { get; set; }
+
+    /// <summary>
+    /// 客户组
+    /// </summary>
+    public string? CustomerGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件
+    /// </summary>
+    public string? Incoterms1 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国际贸易条件(部分2)（最长 28，故 Length=28）
+    /// </summary>
+    public string? Incoterms2 { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 过账状态
+    /// </summary>
+    public string? PostingStatus { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 会计汇率
+    /// </summary>
+    public decimal? AccountingExchangeRate { get; set; }
+
+    /// <summary>
+    /// 付款条件
+    /// </summary>
+    public string? PaymentTerms { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 客户分配帐户组别
+    /// </summary>
+    public string? AccountAssignmentGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 目的地国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? CountryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 净价值
+    /// </summary>
+    public decimal NetAmount { get; set; }
+
+    /// <summary>
+    /// 付款方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string? PayerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 售达方（选项 TaktCustomers/options；DictValue=CustomerCode）
+    /// </summary>
+    public string CustomerCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 统计货币（字典 accounting_currency_code）
+    /// </summary>
+    public string? StatisticsCurrencyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 外贸数据编号
+    /// </summary>
+    public string? ForeignTradeCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已取消的开票凭证
+    /// </summary>
+    public string? CancelledBillingDocument { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 发票清单类型
+    /// </summary>
+    public string? InvoiceListType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 产品组
+    /// </summary>
+    public string? Division { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 定价的层次类型
+    /// </summary>
+    public string? HierarchyTypePricing { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 贸易伙伴
+    /// </summary>
+    public string? TradingPartner { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 征税国家（字典 sys_country_code；DictValue=ISO alpha-2）
+    /// </summary>
+    public string? TaxDepartureCountry { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 组织销售税编号
+    /// </summary>
+    public string? OrganizationSalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 国家销售税编号
+    /// </summary>
+    public string? CountrySalesTaxNumber { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 参考（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已被取消
+    /// </summary>
+    public string? CancelledFlag { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 换算日期
+    /// </summary>
+    public DateTime? ExchangeRateDate { get; set; }
+
+    /// <summary>
+    /// 付款参考（最长 30，故 Length=30）
+    /// </summary>
+    public string? PaymentReference { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 冲销原因
+    /// </summary>
+    public string? ReversalReason { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 已创建的（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

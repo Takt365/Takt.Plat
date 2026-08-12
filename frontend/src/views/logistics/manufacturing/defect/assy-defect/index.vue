@@ -164,12 +164,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('prodTeam')">
-      <a-form-item :label="pi.queryLabel('prodTeam')">
+      <div v-show="isFieldVisible('TeamCode')">
+      <a-form-item :label="pi.queryLabel('TeamCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.prodTeam"
+          v-model:value="advancedQueryForm.TeamCode"
           api-url="TaktProductionTeams/options"
-          :placeholder="pi.queryPh('prodTeam', 'select')"
+          :placeholder="pi.queryPh('TeamCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -226,11 +226,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('batchNo')">
-      <a-form-item :label="pi.queryLabel('batchNo')">
+      <div v-show="isFieldVisible('batchCode')">
+      <a-form-item :label="pi.queryLabel('batchCode')">
         <a-input
-          v-model:value="advancedQueryForm.batchNo"
-          :placeholder="pi.queryPh('batchNo', 'required')"
+          v-model:value="advancedQueryForm.batchCode"
+          :placeholder="pi.queryPh('batchCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -532,7 +532,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -622,13 +621,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodDate') ?? ''
   },
   {
-    title: pi.label('prodTeam'),
-    dataIndex: 'prodTeam',
-    key: 'prodTeam',
+    title: pi.label('TeamCode'),
+    dataIndex: 'TeamCode',
+    key: 'TeamCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'prodTeam') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'TeamCode') ?? ''
   },
   {
     title: pi.label('shiftNo'),
@@ -675,13 +674,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'modelCode') ?? ''
   },
   {
-    title: pi.label('batchNo'),
-    dataIndex: 'batchNo',
-    key: 'batchNo',
+    title: pi.label('batchCode'),
+    dataIndex: 'batchCode',
+    key: 'batchCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'batchNo') ?? ''
+    customRender: ({ record }: { record: any }) => getAssyDefectField(record, 'batchCode') ?? ''
   },
   {
     title: pi.label('materialCode'),
@@ -758,8 +757,6 @@ const getAssyDefectDictValue = (
   return String(value)
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -822,13 +819,13 @@ function handleReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodTeam: '',
+  TeamCode: '',
   shiftNo: undefined as number | undefined,
   prodOrderType: '',
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
   modelCode: '',
-  batchNo: '',
+  batchCode: '',
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,
@@ -1034,13 +1031,13 @@ function handleAdvancedQueryReset() {
   prodCategory: '',
   prodDateStart: '',
   prodDateEnd: '',
-  prodTeam: '',
+  TeamCode: '',
   shiftNo: undefined as number | undefined,
   prodOrderType: '',
   prodOrderCode: '',
   prodOrderQty: undefined as number | undefined,
   modelCode: '',
-  batchNo: '',
+  batchCode: '',
   materialCode: '',
   prodActualQty: undefined as number | undefined,
   goodQuantity: undefined as number | undefined,

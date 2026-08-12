@@ -101,7 +101,7 @@ public class TaktMaintenanceHistoryArchiveService : TaktServiceBase, ITaktMainte
         };
 
         history.WorkOrderCode = workOrder.WorkOrderCode;
-        history.EquipmentCode = workOrder.EquipmentCode;
+        history.EquipCode = workOrder.EquipCode;
         history.MaintenanceType = workOrder.MaintenanceType;
         history.MaintenanceCategory = workOrder.MaintenanceCategory;
         history.MaintenanceCompany = workOrder.MaintenanceCompany;
@@ -160,7 +160,7 @@ public class TaktMaintenanceHistoryArchiveService : TaktServiceBase, ITaktMainte
             .Select(m => new
             {
                 materialCode = m.MaterialCode,
-                materialName = m.MaterialName,
+                materialDescription = m.MaterialDescription,
                 quantity = m.IssuedQuantity,
                 unit = m.MaterialUnit,
                 amount = m.Amount,

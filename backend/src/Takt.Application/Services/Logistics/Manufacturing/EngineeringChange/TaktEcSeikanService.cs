@@ -343,7 +343,7 @@ public class TaktEcSeikanService : TaktServiceBase, ITaktEcSeikanService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EcnDetailId).Contains(keywords)
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || SqlFunc.ToString(x.IsImplemented).Contains(keywords)
@@ -352,6 +352,7 @@ public class TaktEcSeikanService : TaktServiceBase, ITaktEcSeikanService
                 || (x.PoRemainder != null && x.PoRemainder.Contains(keywords))
                 || (x.Balance != null && x.Balance.Contains(keywords))
                 || (x.OldProductHandling != null && x.OldProductHandling.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ScheduledProductionDate).Contains(keywords)
@@ -364,9 +365,9 @@ public class TaktEcSeikanService : TaktServiceBase, ITaktEcSeikanService
             exp = exp.And(x => x.EcnDetailId == queryDto.EcnDetailId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -409,6 +410,11 @@ public class TaktEcSeikanService : TaktServiceBase, ITaktEcSeikanService
             exp = exp.And(x => x.OldProductHandling != null && x.OldProductHandling.Contains(queryDto.OldProductHandling));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -438,6 +444,12 @@ public class TaktEcSeikanService : TaktServiceBase, ITaktEcSeikanService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

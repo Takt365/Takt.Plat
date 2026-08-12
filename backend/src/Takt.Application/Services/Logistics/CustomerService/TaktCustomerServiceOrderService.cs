@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.CustomerService
 // 文件名称：TaktCustomerServiceOrderService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：服务订单应用服务实现
 // 
@@ -30,7 +30,8 @@ namespace Takt.Application.Services.Logistics.CustomerService;
 public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerServiceOrderService
 {
     private readonly ITaktCompanyRepository<TaktCustomerServiceOrder> _customerServiceOrderRepository;
-    private readonly ITaktCompanyRepository<TaktCustomerServiceTicket> _customerServiceTicketRepository;
+    private readonly ITaktCompanyRepository<TaktCustomerServiceContract> _customerServiceContractRepository;
+    private readonly ITaktCompanyRepository<TaktCustomerServiceRequest> _customerServiceRequestRepository;
     private readonly ITaktSortOrderGenerator _sortOrderGenerator;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
@@ -38,14 +39,16 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     /// 构造函数
     /// </summary>
     /// <param name="customerServiceOrderRepository">服务订单仓储</param>
-    /// <param name="customerServiceTicketRepository">CustomerServiceTicket仓储</param>
+    /// <param name="customerServiceContractRepository">服务合同仓储</param>
+    /// <param name="customerServiceRequestRepository">服务请求仓储</param>
     /// <param name="sortOrderGenerator">排序号生成器</param>
     /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktCustomerServiceOrderService(
         ITaktCompanyRepository<TaktCustomerServiceOrder> customerServiceOrderRepository,
-        ITaktCompanyRepository<TaktCustomerServiceTicket> customerServiceTicketRepository,
+        ITaktCompanyRepository<TaktCustomerServiceContract> customerServiceContractRepository,
+        ITaktCompanyRepository<TaktCustomerServiceRequest> customerServiceRequestRepository,
         ITaktSortOrderGenerator sortOrderGenerator,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
@@ -53,18 +56,27 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
         : base(userContext, localizationService)
     {
         _customerServiceOrderRepository = customerServiceOrderRepository;
-        _customerServiceTicketRepository = customerServiceTicketRepository;
+        _customerServiceContractRepository = customerServiceContractRepository;
+        _customerServiceRequestRepository = customerServiceRequestRepository;
         _sortOrderGenerator = sortOrderGenerator;
         _uniqueValidator = uniqueValidator;
     }
 
     /// <summary>
-    /// 获取服务订单列表（分页）
+    /// 获取服务订单列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCustomerServiceOrderDto>> GetCustomerServiceOrderListAsync(TaktCustomerServiceOrderQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCustomerServiceOrderDto>.Create(
+                new List<TaktCustomerServiceOrderDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _customerServiceOrderRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -89,9 +101,8 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
         {
             return null;
         }
-        var dto = entity.Adapt<TaktCustomerServiceOrderDto>();
-        await FillCustomerServiceOrderDetailsAsync(dto, entity);
-        return dto;    }
+        return entity.Adapt<TaktCustomerServiceOrderDto>();
+    }
 
     /// <summary>
     /// 获取服务订单选项列表
@@ -119,6 +130,8 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     public async Task<TaktCustomerServiceOrderDto> CreateCustomerServiceOrderAsync(TaktCustomerServiceOrderCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomerServiceOrder>();
+        await StampCustomerServiceOrderCustomerServiceContractAsync(entity, dto);
+        await StampCustomerServiceOrderCustomerServiceRequestAsync(entity, dto);
         var isUnique_ix_takt_logistics_customer_service_order_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerServiceOrderRepository,
             x => x.PlantCode == entity.PlantCode
@@ -135,7 +148,6 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             entity.SortOrder = _sortOrderGenerator.GenerateNextForMaster(entity.ClientId, maxSort);
         }
         entity = await _customerServiceOrderRepository.CreateAsync(entity);
-                await SaveCustomerServiceOrderChildrenAsync(entity, dto);
         return await GetCustomerServiceOrderByIdAsync(entity.Id) ?? entity.Adapt<TaktCustomerServiceOrderDto>();
     }
 
@@ -153,6 +165,8 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             throw new TaktBusinessException("服务订单不存在");
         }
         dto.Adapt(entity);
+        await StampCustomerServiceOrderCustomerServiceContractAsync(entity, dto);
+        await StampCustomerServiceOrderCustomerServiceRequestAsync(entity, dto);
         var isUnique_ix_takt_logistics_customer_service_order_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerServiceOrderRepository,
             x => x.PlantCode == entity.PlantCode
@@ -163,7 +177,6 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             throw new TaktBusinessException("服务订单的PlantCode、ServiceOrderCode已存在");
         }
         await _customerServiceOrderRepository.UpdateAsync(entity);
-                await SaveCustomerServiceOrderChildrenAsync(entity, dto);
         return await GetCustomerServiceOrderByIdAsync(id) ?? throw new TaktBusinessException("服务订单不存在");
     }
 
@@ -174,12 +187,6 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     /// <returns>任务</returns>
     public async Task DeleteCustomerServiceOrderByIdAsync(long id)
     {
-        var entity = await _customerServiceOrderRepository.GetByIdAsync(id);
-        if (entity == null)
-        {
-            throw new TaktBusinessException("服务订单不存在或已删除");
-        }
-        await _customerServiceTicketRepository.DeleteAsync(x => x.ServiceOrderId == entity.Id);
         var deleted = await _customerServiceOrderRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -275,6 +282,9 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
             try
             {
                 var entity = rows[i].Adapt<TaktCustomerServiceOrder>();
+                var importDto = rows[i].Adapt<TaktCustomerServiceOrderCreateDto>();
+                await StampCustomerServiceOrderCustomerServiceContractAsync(entity, importDto);
+                await StampCustomerServiceOrderCustomerServiceRequestAsync(entity, importDto);
                 var importKey = $"{entity.PlantCode}|{entity.ServiceOrderCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -316,7 +326,15 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCustomerServiceOrderAsync(TaktCustomerServiceOrderQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCustomerServiceOrderQueryDto());
+        var queryDto = query ?? new TaktCustomerServiceOrderQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCustomerServiceOrderExportDto>(),
+                sheetName ?? "服务订单数据",
+                fileName ?? "服务订单导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _customerServiceOrderRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -333,95 +351,47 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     }
 
     // ========================================
-    // 主子表级联（OneToMany）
+    // 主表外键同步（ManyToOne）
     // ========================================
 
     /// <summary>
-    /// 填充服务订单详情（加载 OneToMany 子表：服务工单）
+    /// 同步服务订单主表外键（ManyToOne → 服务合同）
     /// </summary>
-    /// <param name="dto">响应 DTO</param>
-    /// <param name="entity">主表实体</param>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task FillCustomerServiceOrderDetailsAsync(TaktCustomerServiceOrderDto dto, TaktCustomerServiceOrder entity)
+    private async Task StampCustomerServiceOrderCustomerServiceContractAsync(TaktCustomerServiceOrder entity, TaktCustomerServiceOrderCreateDto dto)
     {
-        if (dto == null)
+        if (dto.ServiceContractId is not > 0)
         {
             return;
         }
-        // 服务工单 → dto.Tickets
-        var tickets = await _customerServiceTicketRepository.GetListAsync(x => x.ServiceOrderId == entity.Id);
-        dto.Tickets = tickets.Adapt<List<TaktCustomerServiceTicketDto>>();
+        var master = await _customerServiceContractRepository.GetByIdAsync(dto.ServiceContractId.Value);
+        if (master == null)
+        {
+            throw new TaktBusinessException("服务合同不存在");
+        }
+        entity.ServiceContractId = master.Id;
     }
 
     /// <summary>
-    /// 保存服务订单子表级联（服务工单；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
+    /// 同步服务订单主表外键（ManyToOne → 服务请求）
     /// </summary>
-    /// <param name="entity">主表实体</param>
-    /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
+    /// <param name="entity">当前实体</param>
+    /// <param name="dto">创建 DTO</param>
     /// <returns>任务</returns>
-    private async Task SaveCustomerServiceOrderChildrenAsync(TaktCustomerServiceOrder entity, TaktCustomerServiceOrderCreateDto dto)
+    private async Task StampCustomerServiceOrderCustomerServiceRequestAsync(TaktCustomerServiceOrder entity, TaktCustomerServiceOrderCreateDto dto)
     {
-        // 服务工单（Tickets）
-        List<TaktCustomerServiceTicketUpdateDto>? ticketsForSave;
-        if (dto is TaktCustomerServiceOrderUpdateDto updateDtoForTickets && updateDtoForTickets.Tickets != null)
+        if (dto.ServiceRequestId is not > 0)
         {
-            ticketsForSave = updateDtoForTickets.Tickets;
+            return;
         }
-        else if (dto.Tickets != null)
+        var master = await _customerServiceRequestRepository.GetByIdAsync(dto.ServiceRequestId.Value);
+        if (master == null)
         {
-            ticketsForSave = dto.Tickets.Adapt<List<TaktCustomerServiceTicketUpdateDto>>();
+            throw new TaktBusinessException("服务请求不存在");
         }
-        else
-        {
-            ticketsForSave = null;
-        }
-        if (ticketsForSave is not { Count: > 0 })
-        {
-            await _customerServiceTicketRepository.DeleteAsync(x => x.ServiceOrderId == entity.Id);
-        }
-        else
-        {
-            var existingList = await _customerServiceTicketRepository.GetListAsync(x => x.ServiceOrderId == entity.Id);
-            var existingById = existingList.ToDictionary(x => x.Id);
-            var submittedIds = new HashSet<long>();
-            var toCreate = new List<TaktCustomerServiceTicket>();
-            for (var i = 0; i < ticketsForSave.Count; i++)
-            {
-                var childDto = ticketsForSave[i];
-                childDto.ServiceOrderId = entity.Id;
-                if (childDto.CustomerServiceTicketId > 0)
-                {
-                    if (!existingById.TryGetValue(childDto.CustomerServiceTicketId, out var target))
-                    {
-                        throw new TaktBusinessException("服务工单不存在（CustomerServiceTicketId={childDto.CustomerServiceTicketId}）");
-                    }
-                    if (target.ServiceOrderId != entity.Id)
-                    {
-                        throw new TaktBusinessException("服务工单不属于当前主表（CustomerServiceTicketId={childDto.CustomerServiceTicketId}）");
-                    }
-                    submittedIds.Add(childDto.CustomerServiceTicketId);
-                    childDto.Adapt(target);
-                    target.Id = childDto.CustomerServiceTicketId;
-                    target.ServiceOrderId = entity.Id;
-                    await _customerServiceTicketRepository.UpdateAsync(target);
-                }
-                else
-                {
-                    var child = childDto.Adapt<TaktCustomerServiceTicket>();
-                    child.Id = 0;
-                    child.ServiceOrderId = entity.Id;
-                    toCreate.Add(child);
-                }
-            }
-            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
-            {
-                await _customerServiceTicketRepository.DeleteAsync(removed.Id);
-            }
-            if (toCreate.Count > 0)
-            {
-                await _customerServiceTicketRepository.CreateRangeAsync(toCreate);
-            }
-        }
+        entity.ServiceRequestId = master.Id;
     }
     // ========================================
     // 查询表达式
@@ -436,199 +406,348 @@ public class TaktCustomerServiceOrderService : TaktServiceBase, ITaktCustomerSer
     {
         var exp = Expressionable.Create<TaktCustomerServiceOrder>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ServiceOrderCode != null && x.ServiceOrderCode.Contains(keywords))
-                || SqlFunc.ToString(x.ClientId).Contains(keywords)
                 || (x.ClientCode != null && x.ClientCode.Contains(keywords))
                 || (x.ClientName1 != null && x.ClientName1.Contains(keywords))
-                || SqlFunc.ToString(x.ServiceContractId).Contains(keywords)
                 || (x.ServiceContractCode != null && x.ServiceContractCode.Contains(keywords))
-                || SqlFunc.ToString(x.ServiceRequestId).Contains(keywords)
                 || (x.ServiceRequestCode != null && x.ServiceRequestCode.Contains(keywords))
-                || SqlFunc.ToString(x.OrderType).Contains(keywords)
-                || SqlFunc.ToString(x.OrderStatus).Contains(keywords)
-                || SqlFunc.ToString(x.TotalAmount).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountAmount).Contains(keywords)
-                || SqlFunc.ToString(x.TaxAmount).Contains(keywords)
-                || SqlFunc.ToString(x.ActualAmount).Contains(keywords)
                 || (x.CurrencyCode != null && x.CurrencyCode.Contains(keywords))
                 || (x.ServiceBy != null && x.ServiceBy.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.OrderDate).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedStartDate).Contains(keywords)
-                || SqlFunc.ToString(x.PlannedEndDate).Contains(keywords)
-                || SqlFunc.ToString(x.ActualStartDate).Contains(keywords)
-                || SqlFunc.ToString(x.ActualEndDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceOrderCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.ServiceOrderCode != null && x.ServiceOrderCode.Contains(queryDto.ServiceOrderCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceOrderCode))
+        {
+            var serviceOrderCode = queryDto.ServiceOrderCode;
+            exp = exp.And(x => x.ServiceOrderCode != null && x.ServiceOrderCode.Contains(serviceOrderCode));
         }
 
         if (queryDto?.ClientId.HasValue == true)
         {
-            exp = exp.And(x => x.ClientId == queryDto.ClientId);
+            var clientId = queryDto.ClientId;
+            exp = exp.And(x => x.ClientId == clientId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClientCode))
         {
-            exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(queryDto.ClientCode));
+            var clientCode = queryDto.ClientCode;
+            exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(clientCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClientName1))
         {
-            exp = exp.And(x => x.ClientName1 != null && x.ClientName1.Contains(queryDto.ClientName1));
+            var clientName1 = queryDto.ClientName1;
+            exp = exp.And(x => x.ClientName1 != null && x.ClientName1.Contains(clientName1));
         }
 
         if (queryDto?.ServiceContractId.HasValue == true)
         {
-            exp = exp.And(x => x.ServiceContractId == queryDto.ServiceContractId);
+            var serviceContractId = queryDto.ServiceContractId;
+            exp = exp.And(x => x.ServiceContractId == serviceContractId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceContractCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceContractCode))
         {
-            exp = exp.And(x => x.ServiceContractCode != null && x.ServiceContractCode.Contains(queryDto.ServiceContractCode));
+            var serviceContractCode = queryDto.ServiceContractCode;
+            exp = exp.And(x => x.ServiceContractCode != null && x.ServiceContractCode.Contains(serviceContractCode));
         }
 
         if (queryDto?.ServiceRequestId.HasValue == true)
         {
-            exp = exp.And(x => x.ServiceRequestId == queryDto.ServiceRequestId);
+            var serviceRequestId = queryDto.ServiceRequestId;
+            exp = exp.And(x => x.ServiceRequestId == serviceRequestId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceRequestCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceRequestCode))
         {
-            exp = exp.And(x => x.ServiceRequestCode != null && x.ServiceRequestCode.Contains(queryDto.ServiceRequestCode));
+            var serviceRequestCode = queryDto.ServiceRequestCode;
+            exp = exp.And(x => x.ServiceRequestCode != null && x.ServiceRequestCode.Contains(serviceRequestCode));
         }
 
         if (queryDto?.OrderType.HasValue == true)
         {
-            exp = exp.And(x => x.OrderType == queryDto.OrderType);
+            var orderType = queryDto.OrderType;
+            exp = exp.And(x => x.OrderType == orderType);
         }
 
         if (queryDto?.OrderStatus.HasValue == true)
         {
-            exp = exp.And(x => x.OrderStatus == queryDto.OrderStatus);
+            var orderStatus = queryDto.OrderStatus;
+            exp = exp.And(x => x.OrderStatus == orderStatus);
         }
 
         if (queryDto?.TotalAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TotalAmount == queryDto.TotalAmount);
+            var totalAmount = queryDto.TotalAmount;
+            exp = exp.And(x => x.TotalAmount == totalAmount);
         }
 
         if (queryDto?.DiscountAmount.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountAmount == queryDto.DiscountAmount);
+            var discountAmount = queryDto.DiscountAmount;
+            exp = exp.And(x => x.DiscountAmount == discountAmount);
         }
 
         if (queryDto?.TaxAmount.HasValue == true)
         {
-            exp = exp.And(x => x.TaxAmount == queryDto.TaxAmount);
+            var taxAmount = queryDto.TaxAmount;
+            exp = exp.And(x => x.TaxAmount == taxAmount);
         }
 
         if (queryDto?.ActualAmount.HasValue == true)
         {
-            exp = exp.And(x => x.ActualAmount == queryDto.ActualAmount);
+            var actualAmount = queryDto.ActualAmount;
+            exp = exp.And(x => x.ActualAmount == actualAmount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceBy))
         {
-            exp = exp.And(x => x.ServiceBy != null && x.ServiceBy.Contains(queryDto.ServiceBy));
+            var serviceBy = queryDto.ServiceBy;
+            exp = exp.And(x => x.ServiceBy != null && x.ServiceBy.Contains(serviceBy));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.OrderDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.OrderDate >= queryDto.OrderDateStart);
+            var orderDateStart = queryDto.OrderDateStart;
+            exp = exp.And(x => x.OrderDate >= orderDateStart);
         }
 
         if (queryDto?.OrderDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.OrderDate <= queryDto.OrderDateEnd);
+            var orderDateEnd = queryDto.OrderDateEnd;
+            exp = exp.And(x => x.OrderDate <= orderDateEnd);
         }
 
         if (queryDto?.PlannedStartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartDate >= queryDto.PlannedStartDateStart);
+            var plannedStartDateStart = queryDto.PlannedStartDateStart;
+            exp = exp.And(x => x.PlannedStartDate >= plannedStartDateStart);
         }
 
         if (queryDto?.PlannedStartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedStartDate <= queryDto.PlannedStartDateEnd);
+            var plannedStartDateEnd = queryDto.PlannedStartDateEnd;
+            exp = exp.And(x => x.PlannedStartDate <= plannedStartDateEnd);
         }
 
         if (queryDto?.PlannedEndDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndDate >= queryDto.PlannedEndDateStart);
+            var plannedEndDateStart = queryDto.PlannedEndDateStart;
+            exp = exp.And(x => x.PlannedEndDate >= plannedEndDateStart);
         }
 
         if (queryDto?.PlannedEndDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.PlannedEndDate <= queryDto.PlannedEndDateEnd);
+            var plannedEndDateEnd = queryDto.PlannedEndDateEnd;
+            exp = exp.And(x => x.PlannedEndDate <= plannedEndDateEnd);
         }
 
         if (queryDto?.ActualStartDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ActualStartDate >= queryDto.ActualStartDateStart);
+            var actualStartDateStart = queryDto.ActualStartDateStart;
+            exp = exp.And(x => x.ActualStartDate >= actualStartDateStart);
         }
 
         if (queryDto?.ActualStartDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ActualStartDate <= queryDto.ActualStartDateEnd);
+            var actualStartDateEnd = queryDto.ActualStartDateEnd;
+            exp = exp.And(x => x.ActualStartDate <= actualStartDateEnd);
         }
 
         if (queryDto?.ActualEndDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ActualEndDate >= queryDto.ActualEndDateStart);
+            var actualEndDateStart = queryDto.ActualEndDateStart;
+            exp = exp.And(x => x.ActualEndDate >= actualEndDateStart);
         }
 
         if (queryDto?.ActualEndDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ActualEndDate <= queryDto.ActualEndDateEnd);
+            var actualEndDateEnd = queryDto.ActualEndDateEnd;
+            exp = exp.And(x => x.ActualEndDate <= actualEndDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCustomerServiceOrderQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceOrderCode))
+        {
+            return true;
+        }
+        if (queryDto.ClientId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ClientCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ClientName1))
+        {
+            return true;
+        }
+        if (queryDto.ServiceContractId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceContractCode))
+        {
+            return true;
+        }
+        if (queryDto.ServiceRequestId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceRequestCode))
+        {
+            return true;
+        }
+        if (queryDto.OrderType.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.OrderStatus.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TotalAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DiscountAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TaxAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualAmount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceBy))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.OrderDateStart.HasValue || queryDto.OrderDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedStartDateStart.HasValue || queryDto.PlannedStartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PlannedEndDateStart.HasValue || queryDto.PlannedEndDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualStartDateStart.HasValue || queryDto.ActualStartDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ActualEndDateStart.HasValue || queryDto.ActualEndDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

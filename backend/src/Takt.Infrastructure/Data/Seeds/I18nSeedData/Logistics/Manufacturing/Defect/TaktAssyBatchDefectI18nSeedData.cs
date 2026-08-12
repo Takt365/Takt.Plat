@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Defect
 // 文件名称：TaktAssyBatchDefectI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktAssyBatchDefect 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktAssyBatchDefectI18nSeedData : ITaktSeedDataCoordinator
             // entity.assybatchdefect._self
             new TranslationSeedItem("entity.assybatchdefect._self", "zh-HK", "组立批量不良统计信息_hk", "实体名称"),
 
-            // entity.assybatchdefect.plantcode
-            new TranslationSeedItem("entity.assybatchdefect.plantcode", "en-US", "工厂代码_us", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assybatchdefect.plantcode
-            new TranslationSeedItem("entity.assybatchdefect.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assybatchdefect.plantcode
-            new TranslationSeedItem("entity.assybatchdefect.plantcode", "zh-CN", "工厂代码", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-            // entity.assybatchdefect.plantcode
-            new TranslationSeedItem("entity.assybatchdefect.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（取最近日报，关联 TaktPlant.PlantCode）"),
-
             // entity.assybatchdefect.prodcategory
             new TranslationSeedItem("entity.assybatchdefect.prodcategory", "en-US", "生产类别_us", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
             // entity.assybatchdefect.prodcategory
@@ -108,14 +99,14 @@ public class TaktAssyBatchDefectI18nSeedData : ITaktSeedDataCoordinator
             // entity.assybatchdefect.prodcategory
             new TranslationSeedItem("entity.assybatchdefect.prodcategory", "zh-HK", "生产类别_hk", "生产类别（统计维度，字典 logistics_prod_category，存 DictValue：EPP/FPP/RWP/MDP/CPP）"),
 
-            // entity.assybatchdefect.batchno
-            new TranslationSeedItem("entity.assybatchdefect.batchno", "en-US", "批次_us", "批次（统计维度）"),
-            // entity.assybatchdefect.batchno
-            new TranslationSeedItem("entity.assybatchdefect.batchno", "ja-JP", "批次_jp", "批次（统计维度）"),
-            // entity.assybatchdefect.batchno
-            new TranslationSeedItem("entity.assybatchdefect.batchno", "zh-CN", "批次", "批次（统计维度）"),
-            // entity.assybatchdefect.batchno
-            new TranslationSeedItem("entity.assybatchdefect.batchno", "zh-HK", "批次_hk", "批次（统计维度）"),
+            // entity.assybatchdefect.batchcode
+            new TranslationSeedItem("entity.assybatchdefect.batchcode", "en-US", "批次_us", "批次（统计维度）"),
+            // entity.assybatchdefect.batchcode
+            new TranslationSeedItem("entity.assybatchdefect.batchcode", "ja-JP", "批次_jp", "批次（统计维度）"),
+            // entity.assybatchdefect.batchcode
+            new TranslationSeedItem("entity.assybatchdefect.batchcode", "zh-CN", "批次", "批次（统计维度）"),
+            // entity.assybatchdefect.batchcode
+            new TranslationSeedItem("entity.assybatchdefect.batchcode", "zh-HK", "批次_hk", "批次（统计维度）"),
 
             // entity.assybatchdefect.proddategroup
             new TranslationSeedItem("entity.assybatchdefect.proddategroup", "en-US", "生产日期组_us", "生产日期组（与生产工单组一一对应，yyyy-MM-dd 逗号分隔，取同工单最早生产日期）"),

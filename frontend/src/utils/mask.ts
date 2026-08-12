@@ -43,7 +43,7 @@ export class MaskHelper {
     'bankCard',
     'bankcard',
     'cardNumber',
-    'cardNo',
+    'cardCode',
     'creditCard',
     'phone',
     'mobile',

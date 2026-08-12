@@ -79,11 +79,6 @@ export interface DictData extends TenantDtoBase {
   cssClass: number;
 
   /**
-   * 区域文化编码（与 TaktCulture.CultureCode / Accept-Language 对齐，如 zh-CN、ja-JP；eo 表示世界语/全语言通用）
-   */
-  cultureCode: string;
-
-  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault: number;
@@ -99,7 +94,6 @@ export interface DictData extends TenantDtoBase {
   dictType?: DictType;
 
 }
-
 
 /**
  * DictData 分页查询 DTO
@@ -164,6 +158,11 @@ export interface DictDataQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -194,7 +193,6 @@ export interface DictDataQuery extends TaktPagedQuery {
   remark?: string;
 
 }
-
 
 /**
  * 创建DictData DTO
@@ -258,6 +256,11 @@ export interface DictDataCreate {
   cultureCode: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault: number;
@@ -279,7 +282,6 @@ export interface DictDataCreate {
 
 }
 
-
 /**
  * 更新DictData DTO
  * 继承 TaktDictDataCreateDto，添加 DictDataId 字段
@@ -293,7 +295,6 @@ export interface DictDataUpdate extends DictDataCreate {
   dictDataId: string;
 
 }
-
 
 /**
  * DictData 排序更新 DTO
@@ -312,7 +313,6 @@ export interface DictDataSort {
   sortOrder: number;
 
 }
-
 
 /**
  * DictData 导入模板行 DTO
@@ -376,6 +376,11 @@ export interface DictDataTemplate {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -396,7 +401,6 @@ export interface DictDataTemplate {
   remark?: string;
 
 }
-
 
 /**
  * DictData 导入 DTO（独立实现，不继承 TemplateDto）
@@ -460,6 +464,11 @@ export interface DictDataImport {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 是否默认项（1=是，0=否）
    */
   isDefault?: number;
@@ -480,7 +489,6 @@ export interface DictDataImport {
   remark?: string;
 
 }
-
 
 /**
  * DictData 导出 DTO（独立实现，不继承响应 Dto）
@@ -569,7 +577,6 @@ export interface DictDataExport {
   createdAt: string;
 
 }
-
 
 /**
  * 当前 Accept-Language 下全部字典数据响应 DTO（含 CultureCode eo 的全区域项）

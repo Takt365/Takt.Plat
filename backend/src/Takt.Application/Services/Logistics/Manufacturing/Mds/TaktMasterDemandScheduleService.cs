@@ -409,6 +409,7 @@ public class TaktMasterDemandScheduleService : TaktServiceBase, ITaktMasterDeman
                 || (x.MdsCode != null && x.MdsCode.Contains(keywords))
                 || SqlFunc.ToString(x.BucketType).Contains(keywords)
                 || SqlFunc.ToString(x.ScheduleStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.PlanPeriodStart).Contains(keywords)
@@ -435,6 +436,11 @@ public class TaktMasterDemandScheduleService : TaktServiceBase, ITaktMasterDeman
         if (queryDto?.ScheduleStatus.HasValue == true)
         {
             exp = exp.And(x => x.ScheduleStatus == queryDto.ScheduleStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

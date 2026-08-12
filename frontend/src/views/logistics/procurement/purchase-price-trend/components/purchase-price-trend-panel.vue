@@ -30,11 +30,22 @@
       >
         <template #bodyCell="{ column, record, text }">
           <template v-if="String(column.key).startsWith('period_')">
-            {{ formatPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key)) }}
+            <template v-if="isCarriedPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key))">
+              <a-tooltip
+                :title="carriedPeriodTooltip(record as PurchasePriceMonthlyTrend, String(column.key))"
+              >
+                <span class="cursor-help border-b border-dotted border-text-secondary text-text-secondary">
+                  {{ formatPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key)) }}*
+                </span>
+              </a-tooltip>
+            </template>
+            <template v-else>
+              {{ formatPeriodPrice(record as PurchasePriceMonthlyTrend, String(column.key)) }}
+            </template>
           </template>
-          <template v-else-if="column.key === 'currency'">
+          <template v-else-if="column.key === 'currencyCode'">
             <TaktDictTag
-              :value="(record as PurchasePriceMonthlyTrend).currency"
+              :value="(record as PurchasePriceMonthlyTrend).currencyCode"
               dict-type="accounting_currency_code"
             />
           </template>
@@ -124,6 +135,8 @@ const props = defineProps<{
   plantCode?: string
   /** 年月区间 */
   periodRange?: [string, string] | null
+  /** 产品物料类型（机种推移必填） */
+  materialType?: string
   /** 供应商编码 */
   supplierCode?: string
   /** 物料编码关键字 */
@@ -205,7 +218,7 @@ const columns = computed<TableColumnsType>(() => {
         ellipsis: true,
       },
       {
-        title: t(`${localePrefix}.columns.materialText`),
+        title: t('entity.purchaseprice.materialdescription'),
         dataIndex: 'materialText',
         key: 'materialText',
         width: 180,
@@ -217,8 +230,7 @@ const columns = computed<TableColumnsType>(() => {
         key: 'supplierCode',
         width: 120,
         ellipsis: true,
-      },
-    ]
+      }]
     for (const period of periodOrder.value) {
       cols.push({
         title: period,
@@ -266,9 +278,9 @@ const columns = computed<TableColumnsType>(() => {
       fixed: 'left',
     },
     {
-      title: t('entity.material.name'),
-      dataIndex: 'materialName',
-      key: 'materialName',
+      title: t('entity.purchaseprice.materialdescription'),
+      dataIndex: 'materialDescription',
+      key: 'materialDescription',
       width: 160,
       ellipsis: true,
     },
@@ -280,16 +292,16 @@ const columns = computed<TableColumnsType>(() => {
       ellipsis: true,
     },
     {
-      title: t('entity.purchaseorder.suppliername'),
+      title: t('entity.supplier.name1'),
       dataIndex: 'supplierName',
       key: 'supplierName',
       width: 160,
       ellipsis: true,
     },
     {
-      title: t('entity.purchasepriceitem.conditioncurrency'),
-      dataIndex: 'currency',
-      key: 'currency',
+      title: t('entity.purchasepriceitem.conditioncurrencycode'),
+      dataIndex: 'currencyCode',
+      key: 'currencyCode',
       width: 80,
     },
     {
@@ -297,8 +309,7 @@ const columns = computed<TableColumnsType>(() => {
       dataIndex: 'unit',
       key: 'unit',
       width: 80,
-    },
-  ]
+    }]
   for (const period of periodOrder.value) {
     cols.push({
       title: period,
@@ -412,6 +423,33 @@ function formatPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: string)
 }
 
 /**
+ * 是否缺月回填价（来源 ≠ 展示月：回填为最近价格日期 yyyy-MM-dd）
+ * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {string} columnKey period_yyyy-MM
+ * @returns {boolean} 是否回填
+ */
+function isCarriedPeriodPrice(record: PurchasePriceMonthlyTrend, columnKey: string): boolean {
+  const period = columnKey.replace(/^period_/, '')
+  const price = record.periodUnitPrices?.[period]
+  if (price == null || Number.isNaN(price)) return false
+  const source = record.periodPriceSourcePeriods?.[period]
+  if (!source) return false
+  return String(source) !== String(period)
+}
+
+/**
+ * 回填悬停提示（最近价格日期）
+ * @param {PurchasePriceMonthlyTrend} record 行
+ * @param {string} columnKey period_yyyy-MM
+ * @returns {string} 提示
+ */
+function carriedPeriodTooltip(record: PurchasePriceMonthlyTrend, columnKey: string): string {
+  const period = columnKey.replace(/^period_/, '')
+  const source = record.periodPriceSourcePeriods?.[period] || '—'
+  return t(`${localePrefix}.carriedFrom`, { period: source })
+}
+
+/**
  * 期间区间 → API 参数
  * @param {[string, string] | null | undefined} range 年月区间
  * @returns periodDateStart / periodDateEnd / focusPeriod
@@ -437,11 +475,16 @@ function periodRangeToQuery(range: [string, string] | null | undefined) {
  */
 function buildQuery() {
   const plant = props.plantCode?.trim()
+  const type = props.materialType?.trim()
   if (!plant) {
+    return null
+  }
+  if (props.activeTab === 'model' && !type) {
     return null
   }
   return {
     plantCode: plant,
+    materialType: type || undefined,
     supplierCode: props.supplierCode?.trim() || undefined,
     materialCode: props.materialCode?.trim() || undefined,
     priceType: props.priceType,

@@ -19,6 +19,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 /// Takt工厂实体
 /// 代表租户下的独立工厂（租户级实体，只需要TenantCode）
 /// 与公司种子对称，参照 SAP Plant 设计
+/// 特例：虽继承 TaktTenantEntityBase，但不落 related_plant（工厂主档语义即 PlantCode，无需再关联工厂）
 /// </summary>
 [SugarTable("takt_logistics_materials_plant", "工厂表")]
 [SugarIndex("ix_plant_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -26,6 +27,12 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 [SugarIndex("ix_plant_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, true)]
 public class TaktPlant : TaktTenantEntityBase
 {
+    /// <summary>
+    /// 关联工厂（工厂主档忽略：不建列、不读写；业务标识仅用 PlantCode）
+    /// </summary>
+    [SugarColumn(IsIgnore = true)]
+    public new string RelatedPlant { get; set; } = string.Empty;
+
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
@@ -51,11 +58,6 @@ public class TaktPlant : TaktTenantEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "code_alias", ColumnDescription = "编码代号", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "TKC")]
     public string CodeAlias { get; set; } = "TKC";
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-    /// </summary>
-    [SugarColumn(ColumnName = "default_culture", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public string DefaultCulture { get; set; } = "en-US";
     /// <summary>
     /// 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
     /// </summary>

@@ -358,12 +358,13 @@ fix(dept): 修复部门唯一索引冲突
 | Vue 视图/表单 | `13-vue-view`、`14-vue-form` | index.vue / *-form.vue 三种形态 |
 | 代码生成 | `15-codegen` | generate-all 流水线、排除、生成后审阅 |
 | 权限与翻译键 | `16-permission-i18n` | Permission 四处一致、I18nKey 动态/静态 |
+| 通用字段长度 | `17-field-length` | Domain `SugarColumn` Length 专项表 |
 | 溢出 | `06`/`07`/`08` | 分页/虚拟列表/联调 |
 | 工具类 | `04`/`05` | Helper/utils 设计 |
 | 工作流 | `09-workflow` | 引擎与业务集成 |
 | 空行 | `03-format-blank-lines` | 写入格式 |
 
-§1.4/§1.5 与 `12-crud` §三能力表**同源**：命名以本章为准；CRUD 联调与页面壳以 `12-crud` 为准。`01`/`02` 内 CRUD 细节**引用** `12-crud`，不重复展开。权限验证与翻译键全栈细则见 `16-permission-i18n`。
+§1.4/§1.5 与 `12-crud` §三能力表**同源**：命名以本章为准；CRUD 联调与页面壳以 `12-crud` 为准。`01`/`02` 内 CRUD 细节**引用** `12-crud`，不重复展开。权限验证与翻译键全栈细则见 `16-permission-i18n`。字段 Length 见 `17-field-length`。
 
 ### 6.1 `scripts/` 脚本语言（强制）
 
@@ -409,7 +410,8 @@ Shell **仅**在以下情况使用，且 **scripts 入口只能是 `node scripts
 - **溢出与安全边界**：遵守 §五 五条铁律；详述见 `06-overflow-csharp`、`07-overflow-vue`、`08-overflow-fullstack`
 - **Vue 前端工具类**（`frontend/src/utils/`）：见 `@.cursor/rules/05-utils-vue.mdc`
 - **审批工作流**（`Workflow/`、`takt-flow-*`）：见 `@.cursor/rules/09-workflow.mdc`；清单 `.cursor/skills/09-workflow/`
-- **规则 Skill 索引**：`.cursor/skills/00-project/SKILL.md`（00~16 与规则同名）
+- **规则 Skill 索引**：`.cursor/skills/00-project/SKILL.md`（00~17 与规则同名）
+- **通用字段长度**：`17-field-length`（Domain 编码/描述 Length）
 - **标准 CRUD 全栈基线**：见 `@.cursor/rules/12-crud.mdc`（**单表/主子表/树表均须遵守**）；清单 `12-crud`
 - **Vue 视图/表单**：`13-vue-view`（index.vue）、`14-vue-form`（*-form.vue）
 - **全栈代码生成**：`15-codegen`（`generate-all.cjs`）；清单 `15-codegen`；**`scripts/` 仅 `.cjs`；禁止 PowerShell 查找/替换（§6.1～§6.2）**

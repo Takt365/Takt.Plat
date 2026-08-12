@@ -160,7 +160,6 @@ export interface Bank extends TenantDtoBase {
 
 }
 
-
 /**
  * Bank 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -172,6 +171,11 @@ export interface BankQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -325,7 +329,6 @@ export interface BankQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Bank DTO
  * 对应前端 BankCreate
@@ -336,6 +339,11 @@ export interface BankCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -479,7 +487,6 @@ export interface BankCreate {
 
 }
 
-
 /**
  * 更新Bank DTO
  * 继承 TaktBankCreateDto，添加 BankId 字段
@@ -494,7 +501,6 @@ export interface BankUpdate extends BankCreate {
 
 }
 
-
 /**
  * Bank 导入模板行 DTO
  * 对应前端 BankTemplate
@@ -505,6 +511,11 @@ export interface BankTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -647,7 +658,6 @@ export interface BankTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Bank 导入 DTO（独立实现，不继承 TemplateDto）
@@ -661,6 +671,11 @@ export interface BankImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
    */
   countryRegion?: string;
@@ -801,7 +816,6 @@ export interface BankImport {
   remark?: string;
 
 }
-
 
 /**
  * Bank 导出 DTO（独立实现，不继承响应 Dto）

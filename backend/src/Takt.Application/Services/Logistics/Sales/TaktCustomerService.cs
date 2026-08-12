@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktCustomerService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：客户信息应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
     }
 
     /// <summary>
-    /// 获取客户信息列表（分页）
+    /// 获取客户信息列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktCustomerDto>> GetCustomerListAsync(TaktCustomerQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktCustomerDto>.Create(
+                new List<TaktCustomerDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _customerRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -114,6 +122,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
     public async Task<TaktCustomerDto> CreateCustomerAsync(TaktCustomerCreateDto dto)
     {
         var entity = dto.Adapt<TaktCustomer>();
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
             x => x.PlantCode == entity.PlantCode
@@ -147,6 +156,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             throw new TaktBusinessException("客户信息不存在");
         }
         dto.Adapt(entity);
+        entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
             x => x.PlantCode == entity.PlantCode
@@ -265,6 +275,7 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             try
             {
                 var entity = rows[i].Adapt<TaktCustomer>();
+                entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
                 var importKey = $"{entity.PlantCode}|{entity.CustomerCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
@@ -304,7 +315,15 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportCustomerAsync(TaktCustomerQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktCustomerQueryDto());
+        var queryDto = query ?? new TaktCustomerQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktCustomerExportDto>(),
+                sheetName ?? "客户信息数据",
+                fileName ?? "客户信息导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _customerRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -333,21 +352,19 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
     {
         var exp = Expressionable.Create<TaktCustomer>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerName1 != null && x.CustomerName1.Contains(keywords))
                 || (x.CustomerName2 != null && x.CustomerName2.Contains(keywords))
                 || (x.CustomerShortName != null && x.CustomerShortName.Contains(keywords))
-                || SqlFunc.ToString(x.CustomerType).Contains(keywords)
                 || (x.EnterpriseNature != null && x.EnterpriseNature.Contains(keywords))
                 || (x.IndustryAttribute != null && x.IndustryAttribute.Contains(keywords))
-                || (x.DefaultCulture != null && x.DefaultCulture.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.CustomerTaxNumber != null && x.CustomerTaxNumber.Contains(keywords))
-                || SqlFunc.ToString(x.TaxRate).Contains(keywords)
                 || (x.RegistrationCountry != null && x.RegistrationCountry.Contains(keywords))
                 || (x.RegistrationProvince != null && x.RegistrationProvince.Contains(keywords))
                 || (x.RegistrationCity != null && x.RegistrationCity.Contains(keywords))
@@ -369,306 +386,584 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
                 || (x.AccountAssignmentGroup != null && x.AccountAssignmentGroup.Contains(keywords))
                 || (x.SupplierCode != null && x.SupplierCode.Contains(keywords))
                 || (x.NielsenIndicator != null && x.NielsenIndicator.Contains(keywords))
-                || SqlFunc.ToString(x.CentralPostingBlock).Contains(keywords)
                 || (x.ReconciliationAccount != null && x.ReconciliationAccount.Contains(keywords))
                 || (x.Headquarters != null && x.Headquarters.Contains(keywords))
-                || SqlFunc.ToString(x.ClearingWithVendor).Contains(keywords)
                 || (x.PaymentTerms != null && x.PaymentTerms.Contains(keywords))
-                || SqlFunc.ToString(x.PaymentMethod).Contains(keywords)
                 || (x.DeliveringPlant != null && x.DeliveringPlant.Contains(keywords))
                 || (x.Incoterms1 != null && x.Incoterms1.Contains(keywords))
                 || (x.Incoterms2 != null && x.Incoterms2.Contains(keywords))
                 || (x.ShippingConditions != null && x.ShippingConditions.Contains(keywords))
                 || (x.CustomerPricingProcedure != null && x.CustomerPricingProcedure.Contains(keywords))
-                || SqlFunc.ToString(x.CreditLevel).Contains(keywords)
-                || SqlFunc.ToString(x.CreditAmount).Contains(keywords)
-                || SqlFunc.ToString(x.DiscountRate).Contains(keywords)
                 || (x.SalesBy != null && x.SalesBy.Contains(keywords))
-                || SqlFunc.ToString(x.CustomerLevel).Contains(keywords)
-                || SqlFunc.ToString(x.EvaluationScore).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
-                || SqlFunc.ToString(x.CustomerStatus).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PlantCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerName1))
         {
-            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(queryDto.CustomerName1));
+            var customerName1 = queryDto.CustomerName1;
+            exp = exp.And(x => x.CustomerName1 != null && x.CustomerName1.Contains(customerName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerName2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerName2))
         {
-            exp = exp.And(x => x.CustomerName2 != null && x.CustomerName2.Contains(queryDto.CustomerName2));
+            var customerName2 = queryDto.CustomerName2;
+            exp = exp.And(x => x.CustomerName2 != null && x.CustomerName2.Contains(customerName2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerShortName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerShortName))
         {
-            exp = exp.And(x => x.CustomerShortName != null && x.CustomerShortName.Contains(queryDto.CustomerShortName));
+            var customerShortName = queryDto.CustomerShortName;
+            exp = exp.And(x => x.CustomerShortName != null && x.CustomerShortName.Contains(customerShortName));
         }
 
         if (queryDto?.CustomerType.HasValue == true)
         {
-            exp = exp.And(x => x.CustomerType == queryDto.CustomerType);
+            var customerType = queryDto.CustomerType;
+            exp = exp.And(x => x.CustomerType == customerType);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EnterpriseNature))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EnterpriseNature))
         {
-            exp = exp.And(x => x.EnterpriseNature != null && x.EnterpriseNature.Contains(queryDto.EnterpriseNature));
+            var enterpriseNature = queryDto.EnterpriseNature;
+            exp = exp.And(x => x.EnterpriseNature != null && x.EnterpriseNature.Contains(enterpriseNature));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IndustryAttribute))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IndustryAttribute))
         {
-            exp = exp.And(x => x.IndustryAttribute != null && x.IndustryAttribute.Contains(queryDto.IndustryAttribute));
+            var industryAttribute = queryDto.IndustryAttribute;
+            exp = exp.And(x => x.IndustryAttribute != null && x.IndustryAttribute.Contains(industryAttribute));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DefaultCulture))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DefaultCulture != null && x.DefaultCulture.Contains(queryDto.DefaultCulture));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerTaxNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerTaxNumber))
         {
-            exp = exp.And(x => x.CustomerTaxNumber != null && x.CustomerTaxNumber.Contains(queryDto.CustomerTaxNumber));
+            var customerTaxNumber = queryDto.CustomerTaxNumber;
+            exp = exp.And(x => x.CustomerTaxNumber != null && x.CustomerTaxNumber.Contains(customerTaxNumber));
         }
 
         if (queryDto?.TaxRate.HasValue == true)
         {
-            exp = exp.And(x => x.TaxRate == queryDto.TaxRate);
+            var taxRate = queryDto.TaxRate;
+            exp = exp.And(x => x.TaxRate == taxRate);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationCountry))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegistrationCountry))
         {
-            exp = exp.And(x => x.RegistrationCountry != null && x.RegistrationCountry.Contains(queryDto.RegistrationCountry));
+            var registrationCountry = queryDto.RegistrationCountry;
+            exp = exp.And(x => x.RegistrationCountry != null && x.RegistrationCountry.Contains(registrationCountry));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationProvince))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegistrationProvince))
         {
-            exp = exp.And(x => x.RegistrationProvince != null && x.RegistrationProvince.Contains(queryDto.RegistrationProvince));
+            var registrationProvince = queryDto.RegistrationProvince;
+            exp = exp.And(x => x.RegistrationProvince != null && x.RegistrationProvince.Contains(registrationProvince));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationCity))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegistrationCity))
         {
-            exp = exp.And(x => x.RegistrationCity != null && x.RegistrationCity.Contains(queryDto.RegistrationCity));
+            var registrationCity = queryDto.RegistrationCity;
+            exp = exp.And(x => x.RegistrationCity != null && x.RegistrationCity.Contains(registrationCity));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegistrationAddress1))
         {
-            exp = exp.And(x => x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(queryDto.RegistrationAddress1));
+            var registrationAddress1 = queryDto.RegistrationAddress1;
+            exp = exp.And(x => x.RegistrationAddress1 != null && x.RegistrationAddress1.Contains(registrationAddress1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RegistrationAddress2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RegistrationAddress2))
         {
-            exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(queryDto.RegistrationAddress2));
+            var registrationAddress2 = queryDto.RegistrationAddress2;
+            exp = exp.And(x => x.RegistrationAddress2 != null && x.RegistrationAddress2.Contains(registrationAddress2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerPhone))
         {
-            exp = exp.And(x => x.CustomerPhone != null && x.CustomerPhone.Contains(queryDto.CustomerPhone));
+            var customerPhone = queryDto.CustomerPhone;
+            exp = exp.And(x => x.CustomerPhone != null && x.CustomerPhone.Contains(customerPhone));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerFax))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerFax))
         {
-            exp = exp.And(x => x.CustomerFax != null && x.CustomerFax.Contains(queryDto.CustomerFax));
+            var customerFax = queryDto.CustomerFax;
+            exp = exp.And(x => x.CustomerFax != null && x.CustomerFax.Contains(customerFax));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerEmail))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerEmail))
         {
-            exp = exp.And(x => x.CustomerEmail != null && x.CustomerEmail.Contains(queryDto.CustomerEmail));
+            var customerEmail = queryDto.CustomerEmail;
+            exp = exp.And(x => x.CustomerEmail != null && x.CustomerEmail.Contains(customerEmail));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerWebsite))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerWebsite))
         {
-            exp = exp.And(x => x.CustomerWebsite != null && x.CustomerWebsite.Contains(queryDto.CustomerWebsite));
+            var customerWebsite = queryDto.CustomerWebsite;
+            exp = exp.And(x => x.CustomerWebsite != null && x.CustomerWebsite.Contains(customerWebsite));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPerson))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPerson))
         {
-            exp = exp.And(x => x.ContactPerson != null && x.ContactPerson.Contains(queryDto.ContactPerson));
+            var contactPerson = queryDto.ContactPerson;
+            exp = exp.And(x => x.ContactPerson != null && x.ContactPerson.Contains(contactPerson));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactPhone))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactPhone))
         {
-            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(queryDto.ContactPhone));
+            var contactPhone = queryDto.ContactPhone;
+            exp = exp.And(x => x.ContactPhone != null && x.ContactPhone.Contains(contactPhone));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContactEmail))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContactEmail))
         {
-            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(queryDto.ContactEmail));
+            var contactEmail = queryDto.ContactEmail;
+            exp = exp.And(x => x.ContactEmail != null && x.ContactEmail.Contains(contactEmail));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CurrencyCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
         {
-            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(queryDto.CurrencyCode));
+            var currencyCode = queryDto.CurrencyCode;
+            exp = exp.And(x => x.CurrencyCode != null && x.CurrencyCode.Contains(currencyCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesOrganization))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesOrganization))
         {
-            exp = exp.And(x => x.SalesOrganization != null && x.SalesOrganization.Contains(queryDto.SalesOrganization));
+            var salesOrganization = queryDto.SalesOrganization;
+            exp = exp.And(x => x.SalesOrganization != null && x.SalesOrganization.Contains(salesOrganization));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DistributionChannel))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DistributionChannel))
         {
-            exp = exp.And(x => x.DistributionChannel != null && x.DistributionChannel.Contains(queryDto.DistributionChannel));
+            var distributionChannel = queryDto.DistributionChannel;
+            exp = exp.And(x => x.DistributionChannel != null && x.DistributionChannel.Contains(distributionChannel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductGroup))
         {
-            exp = exp.And(x => x.ProductGroup != null && x.ProductGroup.Contains(queryDto.ProductGroup));
+            var productGroup = queryDto.ProductGroup;
+            exp = exp.And(x => x.ProductGroup != null && x.ProductGroup.Contains(productGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerGroup))
         {
-            exp = exp.And(x => x.CustomerGroup != null && x.CustomerGroup.Contains(queryDto.CustomerGroup));
+            var customerGroup = queryDto.CustomerGroup;
+            exp = exp.And(x => x.CustomerGroup != null && x.CustomerGroup.Contains(customerGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TradingPartner))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TradingPartner))
         {
-            exp = exp.And(x => x.TradingPartner != null && x.TradingPartner.Contains(queryDto.TradingPartner));
+            var tradingPartner = queryDto.TradingPartner;
+            exp = exp.And(x => x.TradingPartner != null && x.TradingPartner.Contains(tradingPartner));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AccountAssignmentGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AccountAssignmentGroup))
         {
-            exp = exp.And(x => x.AccountAssignmentGroup != null && x.AccountAssignmentGroup.Contains(queryDto.AccountAssignmentGroup));
+            var accountAssignmentGroup = queryDto.AccountAssignmentGroup;
+            exp = exp.And(x => x.AccountAssignmentGroup != null && x.AccountAssignmentGroup.Contains(accountAssignmentGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupplierCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupplierCode))
         {
-            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(queryDto.SupplierCode));
+            var supplierCode = queryDto.SupplierCode;
+            exp = exp.And(x => x.SupplierCode != null && x.SupplierCode.Contains(supplierCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NielsenIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NielsenIndicator))
         {
-            exp = exp.And(x => x.NielsenIndicator != null && x.NielsenIndicator.Contains(queryDto.NielsenIndicator));
+            var nielsenIndicator = queryDto.NielsenIndicator;
+            exp = exp.And(x => x.NielsenIndicator != null && x.NielsenIndicator.Contains(nielsenIndicator));
         }
 
         if (queryDto?.CentralPostingBlock.HasValue == true)
         {
-            exp = exp.And(x => x.CentralPostingBlock == queryDto.CentralPostingBlock);
+            var centralPostingBlock = queryDto.CentralPostingBlock;
+            exp = exp.And(x => x.CentralPostingBlock == centralPostingBlock);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReconciliationAccount))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReconciliationAccount))
         {
-            exp = exp.And(x => x.ReconciliationAccount != null && x.ReconciliationAccount.Contains(queryDto.ReconciliationAccount));
+            var reconciliationAccount = queryDto.ReconciliationAccount;
+            exp = exp.And(x => x.ReconciliationAccount != null && x.ReconciliationAccount.Contains(reconciliationAccount));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Headquarters))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Headquarters))
         {
-            exp = exp.And(x => x.Headquarters != null && x.Headquarters.Contains(queryDto.Headquarters));
+            var headquarters = queryDto.Headquarters;
+            exp = exp.And(x => x.Headquarters != null && x.Headquarters.Contains(headquarters));
         }
 
         if (queryDto?.ClearingWithVendor.HasValue == true)
         {
-            exp = exp.And(x => x.ClearingWithVendor == queryDto.ClearingWithVendor);
+            var clearingWithVendor = queryDto.ClearingWithVendor;
+            exp = exp.And(x => x.ClearingWithVendor == clearingWithVendor);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PaymentTerms))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PaymentTerms))
         {
-            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(queryDto.PaymentTerms));
+            var paymentTerms = queryDto.PaymentTerms;
+            exp = exp.And(x => x.PaymentTerms != null && x.PaymentTerms.Contains(paymentTerms));
         }
 
         if (queryDto?.PaymentMethod.HasValue == true)
         {
-            exp = exp.And(x => x.PaymentMethod == queryDto.PaymentMethod);
+            var paymentMethod = queryDto.PaymentMethod;
+            exp = exp.And(x => x.PaymentMethod == paymentMethod);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeliveringPlant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeliveringPlant))
         {
-            exp = exp.And(x => x.DeliveringPlant != null && x.DeliveringPlant.Contains(queryDto.DeliveringPlant));
+            var deliveringPlant = queryDto.DeliveringPlant;
+            exp = exp.And(x => x.DeliveringPlant != null && x.DeliveringPlant.Contains(deliveringPlant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Incoterms1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Incoterms1))
         {
-            exp = exp.And(x => x.Incoterms1 != null && x.Incoterms1.Contains(queryDto.Incoterms1));
+            var incoterms1 = queryDto.Incoterms1;
+            exp = exp.And(x => x.Incoterms1 != null && x.Incoterms1.Contains(incoterms1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Incoterms2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Incoterms2))
         {
-            exp = exp.And(x => x.Incoterms2 != null && x.Incoterms2.Contains(queryDto.Incoterms2));
+            var incoterms2 = queryDto.Incoterms2;
+            exp = exp.And(x => x.Incoterms2 != null && x.Incoterms2.Contains(incoterms2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShippingConditions))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShippingConditions))
         {
-            exp = exp.And(x => x.ShippingConditions != null && x.ShippingConditions.Contains(queryDto.ShippingConditions));
+            var shippingConditions = queryDto.ShippingConditions;
+            exp = exp.And(x => x.ShippingConditions != null && x.ShippingConditions.Contains(shippingConditions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerPricingProcedure))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerPricingProcedure))
         {
-            exp = exp.And(x => x.CustomerPricingProcedure != null && x.CustomerPricingProcedure.Contains(queryDto.CustomerPricingProcedure));
+            var customerPricingProcedure = queryDto.CustomerPricingProcedure;
+            exp = exp.And(x => x.CustomerPricingProcedure != null && x.CustomerPricingProcedure.Contains(customerPricingProcedure));
         }
 
         if (queryDto?.CreditLevel.HasValue == true)
         {
-            exp = exp.And(x => x.CreditLevel == queryDto.CreditLevel);
+            var creditLevel = queryDto.CreditLevel;
+            exp = exp.And(x => x.CreditLevel == creditLevel);
         }
 
         if (queryDto?.CreditAmount.HasValue == true)
         {
-            exp = exp.And(x => x.CreditAmount == queryDto.CreditAmount);
+            var creditAmount = queryDto.CreditAmount;
+            exp = exp.And(x => x.CreditAmount == creditAmount);
         }
 
         if (queryDto?.DiscountRate.HasValue == true)
         {
-            exp = exp.And(x => x.DiscountRate == queryDto.DiscountRate);
+            var discountRate = queryDto.DiscountRate;
+            exp = exp.And(x => x.DiscountRate == discountRate);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SalesBy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SalesBy))
         {
-            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(queryDto.SalesBy));
+            var salesBy = queryDto.SalesBy;
+            exp = exp.And(x => x.SalesBy != null && x.SalesBy.Contains(salesBy));
         }
 
         if (queryDto?.CustomerLevel.HasValue == true)
         {
-            exp = exp.And(x => x.CustomerLevel == queryDto.CustomerLevel);
+            var customerLevel = queryDto.CustomerLevel;
+            exp = exp.And(x => x.CustomerLevel == customerLevel);
         }
 
         if (queryDto?.EvaluationScore.HasValue == true)
         {
-            exp = exp.And(x => x.EvaluationScore == queryDto.EvaluationScore);
+            var evaluationScore = queryDto.EvaluationScore;
+            exp = exp.And(x => x.EvaluationScore == evaluationScore);
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
         if (queryDto?.CustomerStatus.HasValue == true)
         {
-            exp = exp.And(x => x.CustomerStatus == queryDto.CustomerStatus);
+            var customerStatus = queryDto.CustomerStatus;
+            exp = exp.And(x => x.CustomerStatus == customerStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktCustomerQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerName2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerShortName))
+        {
+            return true;
+        }
+        if (queryDto.CustomerType.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EnterpriseNature))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IndustryAttribute))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerTaxNumber))
+        {
+            return true;
+        }
+        if (queryDto.TaxRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegistrationCountry))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegistrationProvince))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegistrationCity))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegistrationAddress1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RegistrationAddress2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerFax))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerEmail))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerWebsite))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPerson))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactPhone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ContactEmail))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CurrencyCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesOrganization))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DistributionChannel))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TradingPartner))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AccountAssignmentGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SupplierCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NielsenIndicator))
+        {
+            return true;
+        }
+        if (queryDto.CentralPostingBlock.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ReconciliationAccount))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Headquarters))
+        {
+            return true;
+        }
+        if (queryDto.ClearingWithVendor.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PaymentTerms))
+        {
+            return true;
+        }
+        if (queryDto.PaymentMethod.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeliveringPlant))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Incoterms1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Incoterms2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ShippingConditions))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerPricingProcedure))
+        {
+            return true;
+        }
+        if (queryDto.CreditLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreditAmount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DiscountRate.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SalesBy))
+        {
+            return true;
+        }
+        if (queryDto.CustomerLevel.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EvaluationScore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CustomerStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

@@ -22,7 +22,7 @@ import type {
  * 对应前端 Plant
  * @description 对应后端 TaktPlantDto
  */
-export interface Plant extends TenantDtoBase {
+export interface Plant extends Omit<TenantDtoBase, 'relatedPlant'> {
   /**
    * PlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -52,11 +52,6 @@ export interface Plant extends TenantDtoBase {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  defaultCulture: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -280,7 +275,6 @@ export interface Plant extends TenantDtoBase {
 
 }
 
-
 /**
  * Plant 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -321,7 +315,7 @@ export interface PlantQuery extends TaktPagedQuery {
   /**
    * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -575,7 +569,6 @@ export interface PlantQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * 创建Plant DTO
  * 对应前端 PlantCreate
@@ -615,7 +608,7 @@ export interface PlantCreate {
   /**
    * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
-  defaultCulture: string;
+  cultureCode: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -844,7 +837,6 @@ export interface PlantCreate {
 
 }
 
-
 /**
  * 更新Plant DTO
  * 继承 TaktPlantCreateDto，添加 PlantId 字段
@@ -858,7 +850,6 @@ export interface PlantUpdate extends PlantCreate {
   plantId: string;
 
 }
-
 
 /**
  * Plant 状态更新 DTO
@@ -878,7 +869,6 @@ export interface PlantStatus {
 
 }
 
-
 /**
  * Plant 排序更新 DTO
  * 对应前端 PlantSort
@@ -896,7 +886,6 @@ export interface PlantSort {
   sortOrder: number;
 
 }
-
 
 /**
  * Plant 导入模板行 DTO
@@ -937,7 +926,7 @@ export interface PlantTemplate {
   /**
    * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1165,7 +1154,6 @@ export interface PlantTemplate {
   remark?: string;
 
 }
-
 
 /**
  * Plant 导入 DTO（独立实现，不继承 TemplateDto）
@@ -1206,7 +1194,7 @@ export interface PlantImport {
   /**
    * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
-  defaultCulture?: string;
+  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1435,7 +1423,6 @@ export interface PlantImport {
 
 }
 
-
 /**
  * Plant 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 PlantExport
@@ -1475,7 +1462,7 @@ export interface PlantExport {
   /**
    * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
    */
-  defaultCulture: string;
+  cultureCode: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）

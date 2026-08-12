@@ -73,11 +73,17 @@ node scripts/generate-all.cjs --Holiday --dry-run
 
 树表 **Dept**：后端可生成，Vue 须参照 `dept/index.vue` 手工。
 
+## 列表无查询条件则空表（防大数据卡顿）
+
+- 后端：`HasAnyListQueryFilter` —— 无业务条件时 `GetXxxListAsync` / `ExportXxxAsync` 返回空；**有条件时正常过滤分页**
+- 前端：`hasAnyListQueryFilter` —— 无参/重置静默空表；有参才请求
+- QueryExpression：字符串条件局部变量捕获后再 `Contains`；KeyWords 禁止日期 `ToString().Contains`
+
 ## 生成后必检
 
 ```
 - [ ] dotnet build
-- [ ] QueryExpression / 业务过滤（服务私有方法）
+- [ ] QueryExpression / 无参空表 + 有参过滤
 - [ ] 权限四处一致（16-permission-i18n）
 - [ ] entity.* i18n 种子与列标题 t('entity.*')
 - [ ] 树表/排除实体：13-vue-view + 14-vue-form 手工页

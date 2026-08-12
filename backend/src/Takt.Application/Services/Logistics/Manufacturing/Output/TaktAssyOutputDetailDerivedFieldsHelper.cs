@@ -124,7 +124,7 @@ internal static class TaktAssyOutputDetailDerivedFieldsHelper
     /// <param name="detailRepository">组立日报明细仓储</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="prodTeam">生产班组</param>
+    /// <param name="TeamCode">生产班组</param>
     /// <param name="prodDate">生产日期</param>
     /// <param name="timePeriod">生产时段</param>
     /// <returns>任务</returns>
@@ -133,13 +133,13 @@ internal static class TaktAssyOutputDetailDerivedFieldsHelper
         ITaktCompanyRepository<TaktAssyOutputDetail> detailRepository,
         string tenantCode,
         string companyCode,
-        string prodTeam,
+        string TeamCode,
         DateTime prodDate,
         string timePeriod)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        if (string.IsNullOrWhiteSpace(prodTeam) || string.IsNullOrWhiteSpace(timePeriod))
+        if (string.IsNullOrWhiteSpace(TeamCode) || string.IsNullOrWhiteSpace(timePeriod))
         {
             return;
         }
@@ -147,7 +147,7 @@ internal static class TaktAssyOutputDetailDerivedFieldsHelper
         var masters = await assyOutputRepository.GetListAsync(m =>
             m.TenantCode == tenantCode
             && m.CompanyCode == companyCode
-            && m.ProdTeam == prodTeam
+            && m.TeamCode == TeamCode
             && m.ProdDate == prodDateOnly);
         if (masters.Count == 0)
         {

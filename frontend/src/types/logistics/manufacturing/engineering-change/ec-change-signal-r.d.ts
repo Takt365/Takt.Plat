@@ -15,9 +15,9 @@ export interface EcChangeNotificationEvent {
   companyCode: string;
   deliveryId: string;
   ecNotificationId: string;
-  ecNotificationNo: string;
+  ecNotificationCode: string;
   ecId: string;
-  ecNo: string;
+  ecCode: string;
   ecTitle?: string;
   deptCode: string;
   priority: number;
@@ -28,7 +28,7 @@ export interface EcChangeNotificationEvent {
 export interface EcExecutionTaskAssignedEvent {
   companyCode: string;
   taskId: string;
-  ecNo: string;
+  ecCode: string;
   deptCode: string;
   taskTitle: string;
   dueDate?: string;
@@ -38,7 +38,7 @@ export interface EcExecutionTaskAssignedEvent {
 export interface EcExecutionTaskProgressEvent {
   companyCode: string;
   taskId: string;
-  ecNo: string;
+  ecCode: string;
   deptCode: string;
   taskStatus: number;
   progressPercent: number;
@@ -51,7 +51,7 @@ export interface EcExecutionTaskProgressEvent {
 export interface EcChangeClosedEvent {
   companyCode: string;
   ecId: string;
-  ecNo: string;
+  ecCode: string;
   ecNotificationId: string;
   closedAt: string;
 }
@@ -60,7 +60,7 @@ export interface EcChangeClosedEvent {
 export interface EcExecutionTaskAlertEvent {
   companyCode: string;
   taskId: string;
-  ecNo: string;
+  ecCode: string;
   deptCode: string;
   alertType: string;
   message: string;
@@ -69,8 +69,8 @@ export interface EcExecutionTaskAlertEvent {
 /** 通知确认回执（推送给发起人） */
 export interface EcNotificationConfirmedEvent {
   ecNotificationId: string;
-  ecNotificationNo?: string;
-  ecNo?: string;
+  ecNotificationCode?: string;
+  ecCode?: string;
   deptCode: string;
   confirmedByUserName?: string;
   confirmedAt?: string;

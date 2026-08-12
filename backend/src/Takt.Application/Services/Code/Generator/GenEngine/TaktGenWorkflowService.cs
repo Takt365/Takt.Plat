@@ -966,7 +966,7 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
     }
 
     /// <summary>
-    /// 实体基类在数据库中的列名（与 TaktCompanyEntityBase.cs 三档基类 SugarColumn 一致），导入时排除；ext_field_json、remark 保留为业务列。
+    /// 实体基类在数据库中的列名（与 TaktCompanyEntityBase.cs 三档基类 SugarColumn 一致），导入时排除；ext_field、remark 保留为业务列。
     /// </summary>
     private static readonly HashSet<string> EntityBaseColumnNames = TaktGenEntityBaseProfile.AllImportColumnNames
         .ToHashSet(StringComparer.OrdinalIgnoreCase);

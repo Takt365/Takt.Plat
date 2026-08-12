@@ -404,7 +404,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
                 || SqlFunc.ToString(x.DailyCompletedQty).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionQty).Contains(keywords)
                 || SqlFunc.ToString(x.InspectionStatus).Contains(keywords)
-                || (x.ProdTeam != null && x.ProdTeam.Contains(keywords))
+                || (x.TeamCode != null && x.TeamCode.Contains(keywords))
                 || SqlFunc.ToString(x.InspectionWorkHours).Contains(keywords)
                 || SqlFunc.ToString(x.AoiWorkHours).Contains(keywords)
                 || SqlFunc.ToString(x.DefectQty).Contains(keywords)
@@ -412,6 +412,7 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
                 || (x.SerialNumber != null && x.SerialNumber.Contains(keywords))
                 || (x.Content != null && x.Content.Contains(keywords))
                 || (x.DefectLocation != null && x.DefectLocation.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.BSideAssemblyDate).Contains(keywords)
@@ -475,9 +476,9 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
             exp = exp.And(x => x.InspectionStatus == queryDto.InspectionStatus);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProdTeam))
+        if (!string.IsNullOrEmpty(queryDto?.TeamCode))
         {
-            exp = exp.And(x => x.ProdTeam != null && x.ProdTeam.Contains(queryDto.ProdTeam));
+            exp = exp.And(x => x.TeamCode != null && x.TeamCode.Contains(queryDto.TeamCode));
         }
 
         if (queryDto?.InspectionWorkHours.HasValue == true)
@@ -513,6 +514,11 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
         if (!string.IsNullOrEmpty(queryDto?.DefectLocation))
         {
             exp = exp.And(x => x.DefectLocation != null && x.DefectLocation.Contains(queryDto.DefectLocation));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -554,6 +560,12 @@ public class TaktPcbaInspectionDetailService : TaktServiceBase, ITaktPcbaInspect
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

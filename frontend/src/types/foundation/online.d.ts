@@ -101,7 +101,6 @@ export interface Online extends CompanyDtoBase {
 
 }
 
-
 /**
  * Online 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -117,6 +116,11 @@ export interface OnlineQuery extends TaktPagedQuery {
    * 公司代码
    */
   companyCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+   */
+  plantCode?: string;
 
   /**
    * SignalR 连接 ID（租户+公司内唯一）
@@ -225,7 +229,6 @@ export interface OnlineQuery extends TaktPagedQuery {
 
 }
 
-
 /**
  * Online 状态更新 DTO
  * @description 对应后端 TaktOnlineStatusDto
@@ -242,7 +245,6 @@ export interface OnlineStatus {
   onlineStatus: number;
 
 }
-
 
 /**
  * Online 导出 DTO（独立实现，不继承响应 Dto）
@@ -345,7 +347,6 @@ export interface OnlineExport {
   createdAt: string;
 
 }
-
 
 /**
  * 当前登录用户在线统计 DTO

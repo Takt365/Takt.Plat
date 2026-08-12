@@ -54,8 +54,8 @@ public class TaktEmployee : TaktCompanyEntityBase
     /// <summary>
     /// 身份证号（人事档案必填）
     /// </summary>
-    [SugarColumn(ColumnName = "id_card_no", ColumnDescription = "身份证号", ColumnDataType = "varchar", Length = 18, IsNullable = false)]
-    public string IdCardNo { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "id_card_code", ColumnDescription = "身份证号", ColumnDataType = "varchar", Length = 18, IsNullable = false)]
+    public string IdCardCode { get; set; } = string.Empty;
     /// <summary>
     /// 手机号码（人事档案必填）
     /// </summary>

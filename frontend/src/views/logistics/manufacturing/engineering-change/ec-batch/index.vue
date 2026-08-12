@@ -43,9 +43,9 @@
         @resize-column="handleResizeColumn"
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'ecNo'">
+          <template v-if="column.key === 'ecCode'">
             <a-typography-link @click.stop="handleDetail(record as EcExecBatchTransposed)">
-              {{ record.ecNo }}
+              {{ record.ecCode }}
             </a-typography-link>
           </template>
           <template v-else-if="String(column.key ?? '').startsWith('stageDate_')">
@@ -72,7 +72,7 @@
     >
       <a-spin :spinning="detailLoading">
         <a-descriptions v-if="detailData" bordered :column="2" size="small">
-          <a-descriptions-item :label="t('entity.ec.no')">{{ detailData.ecNo }}</a-descriptions-item>
+          <a-descriptions-item :label="t('entity.ec.no')">{{ detailData.ecCode }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.linenumber')">{{ detailData.lineNumber }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.ecmodel')">{{ detailData.ecModel }}</a-descriptions-item>
           <a-descriptions-item :label="t('entity.ecdetail.ecnewitem')">{{ detailData.ecNewItem ?? '—' }}</a-descriptions-item>
@@ -163,15 +163,14 @@ function stageColumnTitle(stageCode: string, kind: 'date' | 'batch'): string {
 const columns = computed(() => {
   const order = transposedResult.value?.stageCodeOrder ?? [];
   const base: TableColumnsType = [
-    { title: t('entity.ec.no'), dataIndex: 'ecNo', key: 'ecNo', width: 110, fixed: 'left' as const },
+    { title: t('entity.ec.no'), dataIndex: 'ecCode', key: 'ecCode', width: 110, fixed: 'left' as const },
     { title: t(`${localePrefix}.column.technicalLiaisonNo`), dataIndex: 'technicalLiaisonNo', key: 'technicalLiaisonNo', width: 110 },
     { title: t(`${localePrefix}.column.pNo`), dataIndex: 'pNo', key: 'pNo', width: 100 },
     { title: t(`${localePrefix}.column.tcjLiaisonNo`), dataIndex: 'tcjLiaisonNo', key: 'tcjLiaisonNo', width: 120 },
     { title: t('entity.ec.issuedate'), dataIndex: 'ecIssueDate', key: 'ecIssueDate', width: 100 },
     { title: t('entity.ecdetail.ecmodel'), dataIndex: 'ecModel', key: 'ecModel', width: 100 },
     { title: t('entity.ecdetail.ecnewitem'), dataIndex: 'ecNewItem', key: 'ecNewItem', width: 120 },
-    { title: t(`${localePrefix}.column.ecEntryDate`), dataIndex: 'ecEntryDate', key: 'ecEntryDate', width: 100 },
-  ];
+    { title: t(`${localePrefix}.column.ecEntryDate`), dataIndex: 'ecEntryDate', key: 'ecEntryDate', width: 100 }];
   order.forEach((stageCode) => {
     base.push({
       title: stageColumnTitle(stageCode, 'date'),
@@ -199,8 +198,7 @@ const columns = computed(() => {
           permission: 'logistics:manufacturing:engineering:change:batch:detail',
           buttonClass: 'takt-button-detail',
           onClick: (record) => handleDetail(record),
-        },
-      ],
+        }],
     }),
   );
   return base;
@@ -244,7 +242,7 @@ function formatStageDate(record: Record<string, unknown>, columnKey: string): st
 function formatStageBatch(record: Record<string, unknown>, columnKey: string): string {
   const stageCode = columnKey.replace('stageBatch_', '');
   const row = record as unknown as EcExecBatchTransposed;
-  return row.stageCells?.[stageCode]?.batchNo ?? '';
+  return row.stageCells?.[stageCode]?.batchCode ?? '';
 }
 
 /**

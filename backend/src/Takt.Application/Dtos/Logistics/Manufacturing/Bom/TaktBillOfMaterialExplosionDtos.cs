@@ -76,6 +76,11 @@ public class TaktBillOfMaterialExplosionDto
     /// 展开行列表（按层级、行号排序）
     /// </summary>
     public List<TaktBillOfMaterialExplosionLineDto> Lines { get; set; } = new();
+
+    /// <summary>
+    /// 父件物料描述
+    /// </summary>
+    public string? ParentMaterialDescription { get; set; }
 }
 
 /// <summary>
@@ -190,4 +195,9 @@ public class TaktBillOfMaterialExplosionLineDto
     /// 是否循环引用（检测到环时标记，不再下钻）
     /// </summary>
     public int IsCircular { get; set; }
+
+    /// <summary>
+    /// 子项物料描述
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
 }

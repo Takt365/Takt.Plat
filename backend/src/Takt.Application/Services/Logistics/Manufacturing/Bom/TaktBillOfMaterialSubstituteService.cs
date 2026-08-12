@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialSubstituteService.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
 // 功能描述：BOM替代料应用服务实现
 // 
@@ -64,12 +64,20 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     }
 
     /// <summary>
-    /// 获取BOM替代料列表（分页）
+    /// 获取BOM替代料列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktBillOfMaterialSubstituteDto>> GetBillOfMaterialSubstituteListAsync(TaktBillOfMaterialSubstituteQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktBillOfMaterialSubstituteDto>.Create(
+                new List<TaktBillOfMaterialSubstituteDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _billOfMaterialSubstituteRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -105,13 +113,13 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     {
         EnsureThreeLayerContext();
         var list = await _billOfMaterialSubstituteRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.IsObsolete == 0,
             x => x.BomCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.BomCode ?? e.Id.ToString(),
+            DictValue = e.BomCode,
+            DictLabel = e.BomCode,
         }).ToList();
     }
 
@@ -319,7 +327,15 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportBillOfMaterialSubstituteAsync(TaktBillOfMaterialSubstituteQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktBillOfMaterialSubstituteQueryDto());
+        var queryDto = query ?? new TaktBillOfMaterialSubstituteQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktBillOfMaterialSubstituteExportDto>(),
+                sheetName ?? "BOM替代料数据",
+                fileName ?? "BOM替代料导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _billOfMaterialSubstituteRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -400,136 +416,257 @@ public class TaktBillOfMaterialSubstituteService : TaktServiceBase, ITaktBillOfM
             exp = exp.And(x => x.IsObsolete == 0);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                SqlFunc.ToString(x.BillOfMaterialItemId).Contains(keywords)
-                || SqlFunc.ToString(x.BillOfMaterialId).Contains(keywords)
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.BomCode != null && x.BomCode.Contains(keywords))
                 || (x.PrimaryMaterialCode != null && x.PrimaryMaterialCode.Contains(keywords))
-                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
-                || SqlFunc.ToString(x.SubstituteMaterialId).Contains(keywords)
                 || (x.SubstituteMaterialCode != null && x.SubstituteMaterialCode.Contains(keywords))
                 || (x.SubstituteGroup != null && x.SubstituteGroup.Contains(keywords))
-                || SqlFunc.ToString(x.SubstitutePriority).Contains(keywords)
-                || SqlFunc.ToString(x.UsageQuantity).Contains(keywords)
                 || (x.MaterialUnit != null && x.MaterialUnit.Contains(keywords))
-                || SqlFunc.ToString(x.UsageRatio).Contains(keywords)
-                || SqlFunc.ToString(x.IsEnabled).Contains(keywords)
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.EffectiveDate).Contains(keywords)
-                || SqlFunc.ToString(x.ExpiryDate).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (queryDto?.BillOfMaterialItemId.HasValue == true)
         {
-            exp = exp.And(x => x.BillOfMaterialItemId == queryDto.BillOfMaterialItemId);
+            var billOfMaterialItemId = queryDto.BillOfMaterialItemId;
+            exp = exp.And(x => x.BillOfMaterialItemId == billOfMaterialItemId);
         }
 
         if (queryDto?.BillOfMaterialId.HasValue == true)
         {
-            exp = exp.And(x => x.BillOfMaterialId == queryDto.BillOfMaterialId);
+            var billOfMaterialId = queryDto.BillOfMaterialId;
+            exp = exp.And(x => x.BillOfMaterialId == billOfMaterialId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BomCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomCode))
         {
-            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(queryDto.BomCode));
+            var bomCode = queryDto.BomCode;
+            exp = exp.And(x => x.BomCode != null && x.BomCode.Contains(bomCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PrimaryMaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PrimaryMaterialCode))
         {
-            exp = exp.And(x => x.PrimaryMaterialCode != null && x.PrimaryMaterialCode.Contains(queryDto.PrimaryMaterialCode));
+            var primaryMaterialCode = queryDto.PrimaryMaterialCode;
+            exp = exp.And(x => x.PrimaryMaterialCode != null && x.PrimaryMaterialCode.Contains(primaryMaterialCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
         {
-            exp = exp.And(x => x.LineNumber == queryDto.LineNumber);
+            var lineNumber = queryDto.LineNumber;
+            exp = exp.And(x => x.LineNumber == lineNumber);
         }
 
         if (queryDto?.SubstituteMaterialId.HasValue == true)
         {
-            exp = exp.And(x => x.SubstituteMaterialId == queryDto.SubstituteMaterialId);
+            var substituteMaterialId = queryDto.SubstituteMaterialId;
+            exp = exp.And(x => x.SubstituteMaterialId == substituteMaterialId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SubstituteMaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubstituteMaterialCode))
         {
-            exp = exp.And(x => x.SubstituteMaterialCode != null && x.SubstituteMaterialCode.Contains(queryDto.SubstituteMaterialCode));
+            var substituteMaterialCode = queryDto.SubstituteMaterialCode;
+            exp = exp.And(x => x.SubstituteMaterialCode != null && x.SubstituteMaterialCode.Contains(substituteMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SubstituteGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubstituteGroup))
         {
-            exp = exp.And(x => x.SubstituteGroup != null && x.SubstituteGroup.Contains(queryDto.SubstituteGroup));
+            var substituteGroup = queryDto.SubstituteGroup;
+            exp = exp.And(x => x.SubstituteGroup != null && x.SubstituteGroup.Contains(substituteGroup));
         }
 
         if (queryDto?.SubstitutePriority.HasValue == true)
         {
-            exp = exp.And(x => x.SubstitutePriority == queryDto.SubstitutePriority);
+            var substitutePriority = queryDto.SubstitutePriority;
+            exp = exp.And(x => x.SubstitutePriority == substitutePriority);
         }
 
         if (queryDto?.UsageQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.UsageQuantity == queryDto.UsageQuantity);
+            var usageQuantity = queryDto.UsageQuantity;
+            exp = exp.And(x => x.UsageQuantity == usageQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialUnit))
         {
-            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(queryDto.MaterialUnit));
+            var materialUnit = queryDto.MaterialUnit;
+            exp = exp.And(x => x.MaterialUnit != null && x.MaterialUnit.Contains(materialUnit));
         }
 
         if (queryDto?.UsageRatio.HasValue == true)
         {
-            exp = exp.And(x => x.UsageRatio == queryDto.UsageRatio);
+            var usageRatio = queryDto.UsageRatio;
+            exp = exp.And(x => x.UsageRatio == usageRatio);
         }
 
         if (queryDto?.IsEnabled.HasValue == true)
         {
-            exp = exp.And(x => x.IsEnabled == queryDto.IsEnabled);
+            var isEnabled = queryDto.IsEnabled;
+            exp = exp.And(x => x.IsEnabled == isEnabled);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.EffectiveDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate >= queryDto.EffectiveDateStart);
+            var effectiveDateStart = queryDto.EffectiveDateStart;
+            exp = exp.And(x => x.EffectiveDate >= effectiveDateStart);
         }
 
         if (queryDto?.EffectiveDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.EffectiveDate <= queryDto.EffectiveDateEnd);
+            var effectiveDateEnd = queryDto.EffectiveDateEnd;
+            exp = exp.And(x => x.EffectiveDate <= effectiveDateEnd);
         }
 
         if (queryDto?.ExpiryDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate >= queryDto.ExpiryDateStart);
+            var expiryDateStart = queryDto.ExpiryDateStart;
+            exp = exp.And(x => x.ExpiryDate >= expiryDateStart);
         }
 
         if (queryDto?.ExpiryDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ExpiryDate <= queryDto.ExpiryDateEnd);
+            var expiryDateEnd = queryDto.ExpiryDateEnd;
+            exp = exp.And(x => x.ExpiryDate <= expiryDateEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktBillOfMaterialSubstituteQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (queryDto.BillOfMaterialItemId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.BillOfMaterialId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BomCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PrimaryMaterialCode))
+        {
+            return true;
+        }
+        if (queryDto.LineNumber.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SubstituteMaterialId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubstituteMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubstituteGroup))
+        {
+            return true;
+        }
+        if (queryDto.SubstitutePriority.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.UsageQuantity.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialUnit))
+        {
+            return true;
+        }
+        if (queryDto.UsageRatio.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsEnabled.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.IsObsolete.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.EffectiveDateStart.HasValue || queryDto.EffectiveDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExpiryDateStart.HasValue || queryDto.ExpiryDateEnd.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

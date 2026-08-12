@@ -318,8 +318,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
   userEmail: [
     {
       required: true,
@@ -348,8 +347,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
   userPhone: [
     {
       required: true,
@@ -369,8 +367,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
         return Promise.resolve();
       },
       trigger: 'blur',
-    },
-  ],
+    }],
 }));
 
 /**

@@ -4,7 +4,7 @@
 // 文件名称：generate-vue-tree-from-api.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：树表 Vue 视图生成（大数据：左侧懒加载+virtual，右侧 getXxxList 服务端分页）；单表见 generate-vue-crud-from-api.cjs；主子表见 generate-vue-master-detail-from-api.cjs
+// 功能描述：树表 Vue 视图生成（大数据：左侧懒加载+virtual，右侧 getXxxList 服务端分页）；查询栏关键字=左/右表栏宽−查询/重置（组件 flex）；单表见 generate-vue-crud-from-api.cjs；主子表见 generate-vue-master-detail-from-api.cjs
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -131,8 +131,8 @@ function buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, createPr
     ? `Pick<${entityPascal}Update, 'parentId' | 'sortOrder'>`
     : `Pick<${entityPascal}Update, 'parentId'> & { sortOrder: number }`;
   const fieldLines = createProperties.map((p) => {
-    if (p.name === 'companyDefaultCulture') {
-      return `    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',`;
+    if (p.name === 'cultureCode') {
+      return `    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',`;
     }
     if (p.name === 'parentId' || p.name === 'sortOrder') {
       return `    ${p.name}: overrides.${p.name},`;
@@ -349,7 +349,7 @@ ${dictBodyCellExtra}
   const entityI18nIndexImport = buildEntityI18nIndexImportBlock(entityPascal, viewEntityKebab, './composables', {
     includeListFields: false,
   });
-  const needsUserStoreForTreeDrop = caps.hasUpdate && updateDtoFields.some((p) => p.name === 'companyDefaultCulture');
+  const needsUserStoreForTreeDrop = caps.hasUpdate && updateDtoFields.some((p) => p.name === 'cultureCode');
   const hasSortOrderInUpdateDto = updateDtoFields.some((p) => p.name === 'sortOrder');
   const treeUpdateDtoBlock = caps.hasUpdate
     ? buildTreeUpdateDtoFunction(entityPascal, entityCamel, idField, updateDtoFields)
@@ -1176,7 +1176,7 @@ const tenantStore = useTenantStore()
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode（登录或公司切换注入，表单只读）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或公司切换）
  */
@@ -1187,8 +1187,8 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
 }
 ` : '';

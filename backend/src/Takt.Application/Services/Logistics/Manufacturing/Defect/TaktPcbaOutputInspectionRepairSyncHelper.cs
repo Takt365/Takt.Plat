@@ -146,7 +146,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     /// <param name="plantCode">工厂代码</param>
     /// <param name="prodCategory">生产类别</param>
     /// <param name="prodDate">生产日期</param>
-    /// <param name="prodTeam">生产班组</param>
+    /// <param name="TeamCode">生产班组</param>
     /// <param name="shiftNo">班次</param>
     /// <param name="prodOrderCode">工单号</param>
     /// <returns>任务</returns>
@@ -158,7 +158,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         string plantCode,
         string prodCategory,
         DateTime prodDate,
-        string prodTeam,
+        string TeamCode,
         int shiftNo,
         string prodOrderCode)
     {
@@ -172,7 +172,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
             plantCode,
             prodCategory,
             prodDate,
-            prodTeam,
+            TeamCode,
             shiftNo,
             prodOrderCode);
     }
@@ -323,7 +323,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         string plantCode,
         string prodCategory,
         DateTime prodDate,
-        string prodTeam,
+        string TeamCode,
         int shiftNo,
         string prodOrderCode)
     {
@@ -455,7 +455,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         inspectionDetail.ProdOrderCode = output.ProdOrderCode;
         inspectionDetail.PcbaBoardType = detail.PcbBoardType;
         inspectionDetail.ShiftNo = detail.ShiftNo;
-        inspectionDetail.ProdTeam = detail.ProdTeam;
+        inspectionDetail.TeamCode = detail.TeamCode;
         inspectionDetail.DailyCompletedQty = detail.DailyCompletedQty;
         ApplyPanelSideAssemblyDates(output.ProdDate, detail.PanelSide, inspectionDetail);
     }
@@ -470,7 +470,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
     {
         repairDetail.ProdOrderCode = output.ProdOrderCode;
         repairDetail.PcbaBoardType = detail.PcbBoardType;
-        repairDetail.ProdTeam = detail.ProdTeam;
+        repairDetail.TeamCode = detail.TeamCode;
         repairDetail.ProdActualQty = detail.DailyCompletedQty;
     }
 
@@ -534,7 +534,7 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         inspection.ProdOrderCode = output.ProdOrderCode;
         inspection.ProdOrderQty = output.ProdOrderQty;
         inspection.ModelCode = output.ModelCode;
-        inspection.BatchNo = output.BatchNo;
+        inspection.BatchCode = output.BatchCode;
         inspection.MaterialCode = output.MaterialCode;
     }
 
@@ -549,13 +549,13 @@ internal static class TaktPcbaOutputInspectionRepairSyncHelper
         repair.PlantCode = output.PlantCode;
         repair.ProdCategory = output.ProdCategory;
         repair.ProdDate = output.ProdDate;
-        repair.ProdTeam = headerDetail?.ProdTeam ?? string.Empty;
+        repair.TeamCode = headerDetail?.TeamCode ?? string.Empty;
         repair.ShiftNo = headerDetail is { ShiftNo: > 0 } ? headerDetail.ShiftNo : 1;
         repair.ProdOrderType = output.ProdOrderType;
         repair.ProdOrderCode = output.ProdOrderCode;
         repair.ProdOrderQty = output.ProdOrderQty;
         repair.ModelCode = output.ModelCode;
-        repair.BatchNo = output.BatchNo;
+        repair.BatchCode = output.BatchCode;
         repair.MaterialCode = output.MaterialCode;
     }
 

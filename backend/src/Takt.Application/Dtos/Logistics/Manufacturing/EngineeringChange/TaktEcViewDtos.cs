@@ -26,6 +26,13 @@ namespace Takt.Application.Dtos.Logistics.Manufacturing.EngineeringChange;
 /// </summary>
 public class TaktEcDeptViewDto : TaktCompanyDtoBase
 {
+    /// <summary>
+    /// EcDeptViewID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcDeptViewId { get; set; }
+
     /// <summary>部门记录 ID；未创建时为空</summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? EcExecId { get; set; }
@@ -103,6 +110,27 @@ public class TaktEcDeptViewDto : TaktCompanyDtoBase
     public DateTime? ConfirmationDate { get; set; }
     /// <summary>是否更新 SOP（0=否 1=是）</summary>
     public int IsSopUpdated { get; set; }
+
+
+    /// <summary>
+    /// PurchaseOrderCode
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; }
+
+    /// <summary>
+    /// IqcOrderCode
+    /// </summary>
+    public string? IqcOrderCode { get; set; }
+
+    /// <summary>
+    /// OutboundOrderCode
+    /// </summary>
+    public string? OutboundOrderCode { get; set; }
+
+    /// <summary>
+    /// SamplingCode
+    /// </summary>
+    public string? SamplingCode { get; set; }
 }
 
 /// <summary>
@@ -120,6 +148,11 @@ public class TaktEcDeptViewQueryDto : TaktPagedQuery
     public string? EcOldItem { get; set; }
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string? EcCode { get; set; }
 }
 
 /// <summary>
@@ -184,6 +217,27 @@ public class TaktEcDeptViewUpdateDto
     public int IsSopUpdated { get; set; }
     /// <summary>备注</summary>
     public string? Remark { get; set; }
+
+
+    /// <summary>
+    /// PurchaseOrderCode
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; }
+
+    /// <summary>
+    /// IqcOrderCode
+    /// </summary>
+    public string? IqcOrderCode { get; set; }
+
+    /// <summary>
+    /// OutboundOrderCode
+    /// </summary>
+    public string? OutboundOrderCode { get; set; }
+
+    /// <summary>
+    /// SamplingCode
+    /// </summary>
+    public string? SamplingCode { get; set; }
 }
 
 /// <summary>
@@ -259,6 +313,33 @@ public class TaktEcDeptViewTemplateDto
 /// </summary>
 public class TaktEcDeptViewImportDto : TaktEcDeptViewTemplateDto
 {
+
+
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// PurchaseOrderCode
+    /// </summary>
+    public string? PurchaseOrderCode { get; set; }
+
+    /// <summary>
+    /// IqcOrderCode
+    /// </summary>
+    public string? IqcOrderCode { get; set; }
+
+    /// <summary>
+    /// OutboundOrderCode
+    /// </summary>
+    public string? OutboundOrderCode { get; set; }
+
+    /// <summary>
+    /// SamplingCode
+    /// </summary>
+    public string? SamplingCode { get; set; }
 }
 
 // ========================================
@@ -270,6 +351,13 @@ public class TaktEcDeptViewImportDto : TaktEcDeptViewTemplateDto
 /// </summary>
 public class TaktEcKanbanDto : TaktCompanyDtoBase
 {
+    /// <summary>
+    /// EcKanbanID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcKanbanId { get; set; }
+
     /// <summary>设变主表 ID</summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -328,6 +416,16 @@ public class TaktEcKanbanQueryDto : TaktPagedQuery
     public int? ImplementationStatus { get; set; }
     /// <summary>仅未正式完成（品管课未全部实施）</summary>
     public int? OnlyNotOfficiallyCompleted { get; set; }
+
+    /// <summary>
+    /// EcCode
+    /// </summary>
+    public string? EcCode { get; set; }
+
+    /// <summary>
+    /// CultureCode
+    /// </summary>
+    public string? CultureCode { get; set; }
 }
 
 // ========================================
@@ -339,6 +437,13 @@ public class TaktEcKanbanQueryDto : TaktPagedQuery
 /// </summary>
 public class TaktEcBatchDto : TaktCompanyDtoBase
 {
+    /// <summary>
+    /// EcBatchID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcBatchId { get; set; }
+
     /// <summary>设变明细 ID</summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -372,6 +477,21 @@ public class TaktEcBatchQueryDto : TaktPagedQuery
     public string? BatchNo { get; set; }
     /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
+
+    /// <summary>
+    /// 批次号（预定/生产批次模糊）
+    /// </summary>
+    public string BatchCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -401,6 +521,13 @@ public class TaktEcBatchUpdateDto
 /// </summary>
 public class TaktEcKakuninDto : TaktCompanyDtoBase
 {
+    /// <summary>
+    /// EcKakuninID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcKakuninId { get; set; }
+
     /// <summary>设变明细 ID</summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -440,6 +567,16 @@ public class TaktEcKakuninQueryDto : TaktPagedQuery
     public string? EcModel { get; set; }
     /// <summary>新料号</summary>
     public string? EcNewItem { get; set; }
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>
@@ -469,6 +606,13 @@ public class TaktEcKakuninUpdateDto
 /// </summary>
 public class TaktEcLegacyProductDto : TaktCompanyDtoBase
 {
+    /// <summary>
+    /// EcLegacyProductID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
+    /// </summary>
+    [AdaptMember("Id")]
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long EcLegacyProductId { get; set; }
+
     /// <summary>设变明细 ID</summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -504,6 +648,16 @@ public class TaktEcLegacyProductQueryDto : TaktPagedQuery
     public string? EcOldItem { get; set; }
     /// <summary>机种（Ec_model）</summary>
     public string? EcModel { get; set; }
+
+    /// <summary>
+    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// </summary>
+    public string? CultureCode { get; set; }
+
+    /// <summary>
+    /// 设变单号
+    /// </summary>
+    public string EcCode { get; set; } = string.Empty;
 }
 
 /// <summary>

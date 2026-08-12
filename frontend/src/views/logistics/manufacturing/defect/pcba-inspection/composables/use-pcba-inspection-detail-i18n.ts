@@ -33,7 +33,7 @@ export const PCBAINSPECTIONDETAIL_LIST_FIELDS = [
   'dailyCompletedQty',
   'inspectionQty',
   'inspectionStatus',
-  'prodTeam',
+  'TeamCode',
   'inspectionWorkHours',
   'aoiWorkHours',
   'defectQty',
@@ -59,7 +59,7 @@ export const PCBAINSPECTIONDETAIL_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'dailyCompletedQty',
   'inspectionQty',
   'inspectionStatus',
-  'prodTeam',
+  'TeamCode',
   'inspectionWorkHours',
   'aoiWorkHours',
   'defectQty',
@@ -100,7 +100,7 @@ export const PCBAINSPECTIONDETAIL_PLACEHOLDER = {
   dailyCompletedQty: 'select',
   inspectionQty: 'select',
   inspectionStatus: 'select',
-  prodTeam: 'optional',
+  TeamCode: 'optional',
   inspectionWorkHours: 'select',
   aoiWorkHours: 'select',
   defectQty: 'select',
@@ -109,6 +109,7 @@ export const PCBAINSPECTIONDETAIL_PLACEHOLDER = {
   content: 'optional',
   defectLocation: 'optional',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -125,7 +126,7 @@ export const PCBAINSPECTIONDETAIL_QUERY_STRING_FIELDS = [
   'tSideAssemblyDateStart',
   'tSideAssemblyDateEnd',
   'inspectorName',
-  'prodTeam',
+  'TeamCode',
   'handPlacement',
   'serialNumber',
   'content',

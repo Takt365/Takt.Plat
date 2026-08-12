@@ -22,128 +22,23 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('plantCode')"
-                name="plantCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.plantCode"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('plantCode')"
-                  :disabled="!!formData?.materialDocumentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('materialCode')"
-                name="materialCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.materialCode"
-                  api-url="TaktMaterials/options"
-                  :placeholder="pi.ph('materialCode')"
-                  :disabled="!!formData?.materialDocumentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('materialDocumentCode')"
-                name="materialDocumentCode"
-              >
-                <a-input
-                  v-model:value="formState.materialDocumentCode"
-                  :placeholder="pi.ph('materialDocumentCode')"
-                  show-count
-                  :maxlength="10"
-                  allow-clear
-                  :disabled="!!formData?.materialDocumentId"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('postedBy')"
-                name="postedBy"
-              >
-                <TaktSelect
-                  v-model:value="formState.postedBy"
-                  api-url="TaktEmployees/options"
-                  :placeholder="pi.ph('postedBy')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('materialDocumentStatus')"
-                name="materialDocumentStatus"
-              >
-                <a-input-number
-                  v-model:value="formState.materialDocumentStatus"
-                  :placeholder="pi.ph('materialDocumentStatus')"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('tenantCode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="pi.ph('tenantCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyCode')"
-                name="companyCode"
-              >
-                <a-input
-                  v-model:value="formState.companyCode"
-                  :placeholder="pi.ph('companyCode')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('companyDefaultCulture')"
-                name="companyDefaultCulture"
-              >
-                <a-input
-                  v-model:value="formState.companyDefaultCulture"
-                  :placeholder="pi.ph('companyDefaultCulture')"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
+              <a-col :span="12">
+                <a-form-item
+                  :label="t('common.page.entity.culturecode')"
+                  name="cultureCode"
+                >
+                  <a-input
+                    v-model:value="formState.cultureCode"
+                    disabled
+                    :placeholder="t('common.page.form.placeholder.input')"
+                  />
+                </a-form-item>
+              </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -203,6 +98,39 @@
       section-border
       class="w-full min-w-0"
     >
+      <template #cell-movementType="{ record }">
+        <TaktSelect
+          v-model:value="record.movementType"
+          dict-type="logistics_movement_type"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.ph('movementType')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-materialCode="{ record }">
+        <TaktSelect
+          v-model:value="record.materialCode"
+          api-url="TaktMaterialPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.queryPh('materialCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-plantCode="{ record }">
+        <TaktSelect
+          v-model:value="record.plantCode"
+          api-url="TaktPlants/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.queryPh('plantCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-warehouseCode="{ record }">
         <TaktSelect
           v-model:value="record.warehouseCode"
@@ -214,13 +142,13 @@
           allow-clear
         />
       </template>
-      <template #cell-movementType="{ record }">
+      <template #cell-stockType="{ record }">
         <TaktSelect
-          v-model:value="record.movementType"
-          dict-type="logistics_movement_type"
+          v-model:value="record.stockType"
+          dict-type="logistics_stock_type"
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
-          :placeholder="materialDocumentItemPi.ph('movementType')"
+          :placeholder="materialDocumentItemPi.ph('stockType')"
           :disabled="loading"
           allow-clear
         />
@@ -236,6 +164,17 @@
           allow-clear
         />
       </template>
+      <template #cell-supplierCode="{ record }">
+        <TaktSelect
+          v-model:value="record.supplierCode"
+          api-url="TaktSuppliers/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.queryPh('supplierCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
       <template #cell-customerCode="{ record }">
         <TaktSelect
           v-model:value="record.customerCode"
@@ -243,6 +182,50 @@
           class="w-full"
           :get-popup-container="getSelectPopupContainer"
           :placeholder="materialDocumentItemPi.queryPh('customerCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-currencyCode="{ record }">
+        <TaktSelect
+          v-model:value="record.currencyCode"
+          dict-type="accounting_currency_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.ph('currencyCode')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-baseUnit="{ record }">
+        <TaktSelect
+          v-model:value="record.baseUnit"
+          dict-type="logistics_unit_of_measure_code"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.ph('baseUnit')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-profitCenterCode="{ record }">
+        <TaktSelect
+          v-model:value="record.profitCenterCode"
+          api-url="TaktProfitCenters/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.queryPh('profitCenterCode', 'select')"
+          :disabled="loading"
+          allow-clear
+        />
+      </template>
+      <template #cell-postedBy="{ record }">
+        <TaktSelect
+          v-model:value="record.postedBy"
+          api-url="TaktEmployees/options"
+          class="w-full"
+          :get-popup-container="getSelectPopupContainer"
+          :placeholder="materialDocumentItemPi.queryPh('postedBy', 'select')"
           :disabled="loading"
           allow-clear
         />
@@ -267,7 +250,7 @@
  * Takt物料凭证主表实体维护表单 · 由 generate-vue-master-detail-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/material-document/components
  */
-import { reactive, watch, computed, ref } from 'vue'
+import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
 import { useMaterialDocumentI18n } from '../composables/use-material-document-i18n'
@@ -278,6 +261,7 @@ const pi = useMaterialDocumentI18n()
 import type { MaterialDocumentCreate } from '@/types/logistics/materials/material-document'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
+import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
 import { useUserStore } from '@/stores/identity/user'
 
@@ -301,17 +285,20 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","companyDefaultCulture","plantCode","materialCode","materialDocumentCode","postedBy","materialDocumentStatus","extField","remark"]
-
+const formFields = ["tenantCode","companyCode","cultureCode","materialDocumentCode","materialDocumentYear","transactionEventType","documentType","revaluationType","documentDate","postingDate","referenceCode","headerText","billOfLadingCode","deliveryCode","transactionCode","postedBy","extField","remark"]
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
 import { resolveNextDetailLineNumber } from '@/utils/takt-sequence'
@@ -354,9 +341,22 @@ const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140,
   },
   {
-    key: 'warehouseCode',
-    title: materialDocumentItemPi.label('warehouseCode'),
-    width: 140,
+    key: 'lineId',
+    title: materialDocumentItemPi.label('lineId'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('lineId'),
+  },
+  {
+    key: 'parentLineId',
+    title: materialDocumentItemPi.label('parentLineId'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('parentLineId'),
+  },
+  {
+    key: 'lineDepth',
+    title: materialDocumentItemPi.label('lineDepth'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('lineDepth'),
   },
   {
     key: 'movementType',
@@ -364,10 +364,77 @@ const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140,
   },
   {
-    key: 'postingDate',
-    title: materialDocumentItemPi.label('postingDate'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD',
+    key: 'autoCreatedFlag',
+    title: materialDocumentItemPi.label('autoCreatedFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('autoCreatedFlag'),
+  },
+  {
+    key: 'materialCode',
+    title: materialDocumentItemPi.label('materialCode'),
+    width: 140,
+  },
+  {
+    key: 'plantCode',
+    title: materialDocumentItemPi.label('plantCode'),
+    width: 140,
+  },
+  {
+    key: 'warehouseCode',
+    title: materialDocumentItemPi.label('warehouseCode'),
+    width: 140,
+  },
+  {
+    key: 'batchCode',
+    title: materialDocumentItemPi.label('batchCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('batchCode'),
+  },
+  {
+    key: 'stockType',
+    title: materialDocumentItemPi.label('stockType'),
+    width: 140,
+  },
+  {
+    key: 'restrictedStockFlag',
+    title: materialDocumentItemPi.label('restrictedStockFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('restrictedStockFlag'),
+  },
+  {
+    key: 'specialStock',
+    title: materialDocumentItemPi.label('specialStock'),
+    width: 140,
+  },
+  {
+    key: 'supplierCode',
+    title: materialDocumentItemPi.label('supplierCode'),
+    width: 140,
+  },
+  {
+    key: 'customerCode',
+    title: materialDocumentItemPi.label('customerCode'),
+    width: 140,
+  },
+  {
+    key: 'debitCreditIndicator',
+    title: materialDocumentItemPi.label('debitCreditIndicator'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('debitCreditIndicator'),
+  },
+  {
+    key: 'currencyCode',
+    title: materialDocumentItemPi.label('currencyCode'),
+    width: 140,
+  },
+  {
+    key: 'localCurrencyAmount',
+    title: materialDocumentItemPi.label('localCurrencyAmount'),
+    width: 140,
+  },
+  {
+    key: 'alternativeAmount',
+    title: materialDocumentItemPi.label('alternativeAmount'),
     width: 140,
   },
   {
@@ -376,9 +443,31 @@ const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140,
   },
   {
-    key: 'specialStock',
-    title: materialDocumentItemPi.label('specialStock'),
+    key: 'baseUnit',
+    title: materialDocumentItemPi.label('baseUnit'),
     width: 140,
+  },
+  {
+    key: 'entryQuantity',
+    title: materialDocumentItemPi.label('entryQuantity'),
+    width: 140,
+  },
+  {
+    key: 'entryUnit',
+    title: materialDocumentItemPi.label('entryUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('entryUnit'),
+  },
+  {
+    key: 'poPriceQuantity',
+    title: materialDocumentItemPi.label('poPriceQuantity'),
+    width: 140,
+  },
+  {
+    key: 'poPriceUnit',
+    title: materialDocumentItemPi.label('poPriceUnit'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('poPriceUnit'),
   },
   {
     key: 'purchaseOrderCode',
@@ -387,28 +476,15 @@ const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('purchaseOrderCode'),
   },
   {
-    key: 'productionOrderCode',
-    title: materialDocumentItemPi.label('productionOrderCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('productionOrderCode'),
-  },
-  {
-    key: 'projectCode',
-    title: materialDocumentItemPi.label('projectCode'),
-    editor: 'input',
-    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('projectCode'),
-  },
-  {
-    key: 'localCurrencyAmount',
-    title: materialDocumentItemPi.label('localCurrencyAmount'),
+    key: 'purchaseOrderItem',
+    title: materialDocumentItemPi.label('purchaseOrderItem'),
     width: 140,
   },
   {
-    key: 'documentDate',
-    title: materialDocumentItemPi.label('documentDate'),
-    editor: 'datePicker',
-    valueFormat: 'YYYY-MM-DD',
-    width: 140,
+    key: 'referenceDocumentYear',
+    title: materialDocumentItemPi.label('referenceDocumentYear'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('referenceDocumentYear'),
   },
   {
     key: 'referenceDocumentCode',
@@ -417,16 +493,228 @@ const materialDocumentItemFormColumns = computed<TaktEditableTableColumn[]>(() =
     width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('referenceDocumentCode'),
   },
   {
-    key: 'customerCode',
-    title: materialDocumentItemPi.label('customerCode'),
+    key: 'referenceDocumentItem',
+    title: materialDocumentItemPi.label('referenceDocumentItem'),
+    width: 140,
+  },
+  {
+    key: 'originalMaterialDocumentYear',
+    title: materialDocumentItemPi.label('originalMaterialDocumentYear'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('originalMaterialDocumentYear'),
+  },
+  {
+    key: 'originalMaterialDocumentCode',
+    title: materialDocumentItemPi.label('originalMaterialDocumentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('originalMaterialDocumentCode'),
+  },
+  {
+    key: 'originalLineNumber',
+    title: materialDocumentItemPi.label('originalLineNumber'),
+    width: 140,
+  },
+  {
+    key: 'deliveryCompletedFlag',
+    title: materialDocumentItemPi.label('deliveryCompletedFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('deliveryCompletedFlag'),
+  },
+  {
+    key: 'itemText',
+    title: materialDocumentItemPi.label('itemText'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('itemText'),
+  },
+  {
+    key: 'equipmentCode',
+    title: materialDocumentItemPi.label('equipmentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('equipmentCode'),
+  },
+  {
+    key: 'goodsRecipient',
+    title: materialDocumentItemPi.label('goodsRecipient'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('goodsRecipient'),
+  },
+  {
+    key: 'unloadingPoint',
+    title: materialDocumentItemPi.label('unloadingPoint'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('unloadingPoint'),
+  },
+  {
+    key: 'businessAreaCode',
+    title: materialDocumentItemPi.label('businessAreaCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('businessAreaCode'),
+  },
+  {
+    key: 'controllingAreaCode',
+    title: materialDocumentItemPi.label('controllingAreaCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('controllingAreaCode'),
+  },
+  {
+    key: 'tradingPartnerBusinessArea',
+    title: materialDocumentItemPi.label('tradingPartnerBusinessArea'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('tradingPartnerBusinessArea'),
+  },
+  {
+    key: 'productionOrderCode',
+    title: materialDocumentItemPi.label('productionOrderCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('productionOrderCode'),
+  },
+  {
+    key: 'assetCode',
+    title: materialDocumentItemPi.label('assetCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('assetCode'),
+  },
+  {
+    key: 'assetSubCode',
+    title: materialDocumentItemPi.label('assetSubCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('assetSubCode'),
+  },
+  {
+    key: 'fiscalYear',
+    title: materialDocumentItemPi.label('fiscalYear'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('fiscalYear'),
+  },
+  {
+    key: 'postToPreviousPeriodFlag',
+    title: materialDocumentItemPi.label('postToPreviousPeriodFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('postToPreviousPeriodFlag'),
+  },
+  {
+    key: 'postToPreviousYearFlag',
+    title: materialDocumentItemPi.label('postToPreviousYearFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('postToPreviousYearFlag'),
+  },
+  {
+    key: 'accountingDocumentCode',
+    title: materialDocumentItemPi.label('accountingDocumentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('accountingDocumentCode'),
+  },
+  {
+    key: 'accountingDocumentItem',
+    title: materialDocumentItemPi.label('accountingDocumentItem'),
+    width: 140,
+  },
+  {
+    key: 'revaluationDocumentCode',
+    title: materialDocumentItemPi.label('revaluationDocumentCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('revaluationDocumentCode'),
+  },
+  {
+    key: 'revaluationDocumentItem',
+    title: materialDocumentItemPi.label('revaluationDocumentItem'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('revaluationDocumentItem'),
+  },
+  {
+    key: 'reservationCode',
+    title: materialDocumentItemPi.label('reservationCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('reservationCode'),
+  },
+  {
+    key: 'reservationItem',
+    title: materialDocumentItemPi.label('reservationItem'),
+    width: 140,
+  },
+  {
+    key: 'finalIssueFlag',
+    title: materialDocumentItemPi.label('finalIssueFlag'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('finalIssueFlag'),
+  },
+  {
+    key: 'reservationQuantity',
+    title: materialDocumentItemPi.label('reservationQuantity'),
+    width: 140,
+  },
+  {
+    key: 'receivingMaterialCode',
+    title: materialDocumentItemPi.label('receivingMaterialCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('receivingMaterialCode'),
+  },
+  {
+    key: 'receivingPlantCode',
+    title: materialDocumentItemPi.label('receivingPlantCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('receivingPlantCode'),
+  },
+  {
+    key: 'receivingWarehouseCode',
+    title: materialDocumentItemPi.label('receivingWarehouseCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('receivingWarehouseCode'),
+  },
+  {
+    key: 'profitCenterCode',
+    title: materialDocumentItemPi.label('profitCenterCode'),
+    width: 140,
+  },
+  {
+    key: 'valuatedStockQuantity',
+    title: materialDocumentItemPi.label('valuatedStockQuantity'),
+    width: 140,
+  },
+  {
+    key: 'totalValuatedStockValue',
+    title: materialDocumentItemPi.label('totalValuatedStockValue'),
+    width: 140,
+  },
+  {
+    key: 'priceControl',
+    title: materialDocumentItemPi.label('priceControl'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('priceControl'),
+  },
+  {
+    key: 'manufacturerPartMaterialCode',
+    title: materialDocumentItemPi.label('manufacturerPartMaterialCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('manufacturerPartMaterialCode'),
+  },
+  {
+    key: 'mkpfReferenceCode',
+    title: materialDocumentItemPi.label('mkpfReferenceCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('mkpfReferenceCode'),
+  },
+  {
+    key: 'imDeliveryCode',
+    title: materialDocumentItemPi.label('imDeliveryCode'),
+    editor: 'input',
+    width: 140, allowClear: true, placeholder: materialDocumentItemPi.ph('imDeliveryCode'),
+  },
+  {
+    key: 'imDeliveryItem',
+    title: materialDocumentItemPi.label('imDeliveryItem'),
+    width: 140,
+  },
+  {
+    key: 'postedBy',
+    title: materialDocumentItemPi.label('postedBy'),
     width: 140,
   },
   {
     key: 'isObsolete',
     title: materialDocumentItemPi.label('isObsolete'),
     width: 140,
-  },
-])
+  }])
 
 /** 编辑态从 formData 同步各子表行 */
 function syncChildRowsFromFormData(val: Partial<MaterialDocumentCreate & { materialDocumentId?: string }> | null | undefined) {
@@ -437,18 +725,72 @@ function syncChildRowsFromFormData(val: Partial<MaterialDocumentCreate & { mater
 function createDefaultMaterialDocumentItemRow(): Record<string, unknown> {
   return {
     lineNumber: allocateNextMaterialDocumentItemLineNumber(),
-    warehouseCode: '',
+    lineId: '',
+    parentLineId: '',
+    lineDepth: '',
     movementType: '',
-    postingDate: '',
-    quantity: 0,
+    autoCreatedFlag: '',
+    materialCode: '',
+    plantCode: '',
+    warehouseCode: '',
+    batchCode: '',
+    stockType: '',
+    restrictedStockFlag: '',
     specialStock: '',
-    purchaseOrderCode: '',
-    productionOrderCode: '',
-    projectCode: '',
-    localCurrencyAmount: 0,
-    documentDate: '',
-    referenceDocumentCode: '',
+    supplierCode: '',
     customerCode: '',
+    debitCreditIndicator: '',
+    currencyCode: '',
+    localCurrencyAmount: 0,
+    alternativeAmount: 0,
+    quantity: 0,
+    baseUnit: '',
+    entryQuantity: 0,
+    entryUnit: '',
+    poPriceQuantity: 0,
+    poPriceUnit: '',
+    purchaseOrderCode: '',
+    purchaseOrderItem: 0,
+    referenceDocumentYear: '',
+    referenceDocumentCode: '',
+    referenceDocumentItem: 0,
+    originalMaterialDocumentYear: '',
+    originalMaterialDocumentCode: '',
+    originalLineNumber: 0,
+    deliveryCompletedFlag: '',
+    itemText: '',
+    equipmentCode: '',
+    goodsRecipient: '',
+    unloadingPoint: '',
+    businessAreaCode: '',
+    controllingAreaCode: '',
+    tradingPartnerBusinessArea: '',
+    productionOrderCode: '',
+    assetCode: '',
+    assetSubCode: '',
+    fiscalYear: '',
+    postToPreviousPeriodFlag: '',
+    postToPreviousYearFlag: '',
+    accountingDocumentCode: '',
+    accountingDocumentItem: 0,
+    revaluationDocumentCode: '',
+    revaluationDocumentItem: '',
+    reservationCode: '',
+    reservationItem: 0,
+    finalIssueFlag: '',
+    reservationQuantity: 0,
+    receivingMaterialCode: '',
+    receivingPlantCode: '',
+    receivingWarehouseCode: '',
+    profitCenterCode: '',
+    valuatedStockQuantity: 0,
+    totalValuatedStockValue: 0,
+    priceControl: '',
+    manufacturerPartMaterialCode: '',
+    mkpfReferenceCode: '',
+    imDeliveryCode: '',
+    imDeliveryItem: 0,
+    postedBy: '',
     isObsolete: 0,
   }
 }
@@ -464,7 +806,7 @@ function buildSubmitPayload() {
         ...row,
         tenantCode: tenantStore.tenantCode,
         companyCode: tenantStore.companyCode,
-        companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+        cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
         materialDocumentId: masterId,
       }
       if (isUpdate && isPersistedMaterialDocumentItemRow(row)) {
@@ -498,6 +840,13 @@ function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
 
+/** Pinia：字典缓存（TaktSelect dict-type 渲染前预热，避免选项空白） */
+const dictDataStore = useDictDataStore()
+
+/** 表单挂载时预加载全量字典 */
+onMounted(() => {
+  void dictDataStore.loadAllDictDataAsync()
+})
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 materialDocumentId 才视为编辑） */
 watch(
@@ -537,20 +886,6 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  plantCode: [
-    {
-      required: true,
-      message: pi.ph('plantCode'),
-      trigger: 'change'
-    }
-  ],
-  materialCode: [
-    {
-      required: true,
-      message: pi.ph('materialCode'),
-      trigger: 'change'
-    }
-  ],
   materialDocumentCode: [
     {
       required: true,
@@ -558,19 +893,27 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialDocumentStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(pi.ph('materialDocumentStatus'))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(pi.ph('materialDocumentStatus'))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
+  materialDocumentYear: [
+    {
+      required: true,
+      message: pi.ph('materialDocumentYear'),
+      trigger: 'blur'
+    }
+  ],
+  documentDate: [
+    {
+      required: true,
+      message: pi.ph('documentDate'),
+      trigger: 'change'
+    }
+  ],
+  postingDate: [
+    {
+      required: true,
+      message: pi.ph('postingDate'),
+      trigger: 'change'
+    }
+  ],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -583,10 +926,6 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = buildSubmitPayload() as Record<string, unknown>
-  if ('materialDocumentStatus' in payload) {
-    const rawmaterialDocumentStatus = payload.materialDocumentStatus
-    payload.materialDocumentStatus = typeof rawmaterialDocumentStatus === 'number' ? rawmaterialDocumentStatus : Number(rawmaterialDocumentStatus)
-  }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload
 }

@@ -55,12 +55,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.iqcorderitem.materialname')"
-                name="materialName"
+                :label="t('entity.iqcorderitem.materialdescription')"
+                name="materialDescription"
               >
                 <a-input
-                  v-model:value="formState.materialName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialname') })"
+                  v-model:value="formState.materialDescription"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialdescription') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -69,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.iqcorderitem.batchno')"
-                name="batchNo"
+                :label="t('entity.iqcorderitem.batchCode')"
+                name="batchCode"
               >
                 <a-input
-                  v-model:value="formState.batchNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.batchno') })"
+                  v-model:value="formState.batchCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.batchCode') })"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -159,8 +159,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["lineNumber","materialCode","materialName","batchNo","purchaseQuantity","standardCode","samplingSchemeCode","inspectionMethod"]
-
+const formFields = ["lineNumber","materialCode","materialDescription","batchCode","purchaseQuantity","standardCode","samplingSchemeCode","inspectionMethod"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -185,7 +184,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 iqcOrderItemId 才视为编辑） */
 watch(
@@ -231,10 +229,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  materialName: [
+  materialDescription: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialname') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.iqcorderitem.materialdescription') }),
       trigger: 'blur'
     }
   ],

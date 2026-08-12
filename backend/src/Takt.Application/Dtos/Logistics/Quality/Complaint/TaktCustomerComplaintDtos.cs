@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Complaint
 // 文件名称：TaktCustomerComplaintDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：CustomerComplaint 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCustomerComplaint 生成，请按需审阅）
 // 
@@ -35,108 +35,6 @@ public class TaktCustomerComplaintDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CustomerComplaintId { get; set; }
 
-    /// <summary>
-    /// 客诉单号（组合唯一索引）
-    /// </summary>
-    public string CustomerComplaintCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户 ID（选项 TaktCustomers/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long CustomerId { get; set; }
-
-    /// <summary>
-    /// 客户 名称（填充字段）
-    /// </summary>
-    public string? CustomerName { get; set; }
-
-    /// <summary>
-    /// 客户名称1（冗余，与 TaktCustomer.CustomerName1 对齐）
-    /// </summary>
-    public string CustomerName1 { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode）
-    /// </summary>
-    public string? CustomerCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 投诉日期
-    /// </summary>
-    public DateTime ComplaintDate { get; set; }
-
-    /// <summary>
-    /// 投诉方式（字典 logistics_quality_complaint_method；0=电话，1=邮件，2=传真，3=现场，4=其他）
-    /// </summary>
-    public int ComplaintMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 投诉类型（字典 logistics_quality_complaint_type）
-    /// </summary>
-    public int ComplaintType { get; set; } = 0;
-
-    /// <summary>
-    /// 投诉等级（字典 logistics_quality_complaint_level）
-    /// </summary>
-    public int ComplaintLevel { get; set; } = 0;
-
-    /// <summary>
-    /// 责任部门 ID（选项 TaktDepts/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsibleDeptId { get; set; }
-
-    /// <summary>
-    /// 责任部门名称
-    /// </summary>
-    public string? ResponsibleDeptName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 责任人 ID（选项 TaktEmployees/options；DictValue=Id）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? ResponsiblePersonId { get; set; }
-
-    /// <summary>
-    /// 责任人姓名
-    /// </summary>
-    public string? ResponsiblePersonName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 要求回复日期
-    /// </summary>
-    public DateTime? RequiredReplyDate { get; set; }
-
-    /// <summary>
-    /// 实际回复日期
-    /// </summary>
-    public DateTime? ActualReplyDate { get; set; }
-
-    /// <summary>
-    /// 客诉描述
-    /// </summary>
-    public string ComplaintDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 处理结果/回复内容
-    /// </summary>
-    public string? HandlingResult { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 客户满意度（字典 logistics_quality_customer_satisfaction）
-    /// </summary>
-    public int? CustomerSatisfaction { get; set; }
-
-    /// <summary>
-    /// 附件 （JSON列表形式，由TaktFile 统一上传到服务器）
-    /// </summary>
-    public string? Attachments { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -175,6 +73,11 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉单号（组合唯一索引）
@@ -287,7 +190,7 @@ public class TaktCustomerComplaintQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）
@@ -340,9 +243,9 @@ public class TaktCustomerComplaintCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉单号（组合唯一索引）
@@ -444,7 +347,7 @@ public class TaktCustomerComplaintCreateDto
     /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉状态（字典 logistics_quality_complaint_status）
@@ -561,6 +464,11 @@ public class TaktCustomerComplaintTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 客诉单号（组合唯一索引）
     /// </summary>
     public string? CustomerComplaintCode { get; set; } = string.Empty;
@@ -656,7 +564,7 @@ public class TaktCustomerComplaintTemplateDto
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉状态（字典 logistics_quality_complaint_status）
@@ -696,9 +604,9 @@ public class TaktCustomerComplaintImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉单号（组合唯一索引）
@@ -796,7 +704,7 @@ public class TaktCustomerComplaintImportDto
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 客诉状态（字典 logistics_quality_complaint_status）
@@ -937,7 +845,7 @@ public class TaktCustomerComplaintExportDto
     /// <summary>
     /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）

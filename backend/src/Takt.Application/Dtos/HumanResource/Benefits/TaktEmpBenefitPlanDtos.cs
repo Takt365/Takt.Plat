@@ -35,47 +35,6 @@ public class TaktEmpBenefitPlanDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long EmpBenefitPlanId { get; set; }
 
-    /// <summary>
-    /// 员工 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long EmployeeId { get; set; }
-
-    /// <summary>
-    /// 员工姓名
-    /// </summary>
-    public string EmployeeName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 福利项目 ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long BenefitItemId { get; set; }
-
-    /// <summary>
-    /// 福利项目 名称（填充字段）
-    /// </summary>
-    public string? BenefitItemName { get; set; }
-
-    /// <summary>
-    /// 方案编码
-    /// </summary>
-    public string PlanCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 参保/参与日期
-    /// </summary>
-    public DateTime EnrollmentDate { get; set; }
-
-    /// <summary>
-    /// 失效日期
-    /// </summary>
-    public DateTime? ExpiryDate { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
@@ -103,6 +62,11 @@ public class TaktEmpBenefitPlanQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 员工 ID
@@ -149,7 +113,7 @@ public class TaktEmpBenefitPlanQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
@@ -197,9 +161,10 @@ public class TaktEmpBenefitPlanCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -239,7 +204,7 @@ public class TaktEmpBenefitPlanCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
@@ -322,6 +287,11 @@ public class TaktEmpBenefitPlanTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 员工 ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -356,7 +326,7 @@ public class TaktEmpBenefitPlanTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
@@ -391,9 +361,10 @@ public class TaktEmpBenefitPlanImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 员工 ID
@@ -430,7 +401,7 @@ public class TaktEmpBenefitPlanImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）
@@ -505,7 +476,7 @@ public class TaktEmpBenefitPlanExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 hr_emp_benefit_plan_status）

@@ -4,7 +4,7 @@
 // 文件名称：generate-vue-common.cjs
 // 创建时间：2026-06-08
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Vue 三脚本共用基础设施（CLI + API/types/字段解析）；不含 index/form 模板
+// 功能描述：Vue 三脚本共用基础设施（CLI + API/types/字段解析）；查询栏关键字 flex 约定见文件内注释；不含 index/form 模板
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -43,6 +43,12 @@ const VUE_TEMPLATE = {
   TREE: 'tree',
   MASTER_DETAIL: 'master-detail',
 };
+
+/**
+ * 查询栏关键字宽度约定（组件 CSS，非生成属性）：
+ * 输入框 flex:1 = 所在左/右表栏宽 −「查询」「重置」按钮（及 gap）；
+ * 树左查询栏无按钮时占满左表栏宽。见 TaktQueryBar / TaktTree*QueryBar。
+ */
 
 const CONFIG = {
   frontendRoot: path.resolve(__dirname, '../../frontend'),
@@ -203,7 +209,7 @@ function runVueGeneratorCli(opts) {
 const SKIP_LIST_FIELDS = new Set([
   'tenantCode',
   'companyCode',
-  'companyDefaultCulture',
+  'cultureCode',
   'createdAt',
   'updatedAt',
   'createdBy',
@@ -229,10 +235,10 @@ const SKIP_FORM_FIELDS = new Set([
 ]);
 
 /** CreateDto 上下文隔离字段（与 generate-dtos-from-entity 固定字段对齐，表单只读自动注入） */
-const SCOPE_FORM_FIELD_NAMES = ['tenantCode', 'companyCode', 'companyDefaultCulture'];
+const SCOPE_FORM_FIELD_NAMES = ['tenantCode', 'companyCode', 'cultureCode'];
 
 /** 租户/公司实体本身：表单中隔离字段可编辑 */
-const SCOPE_FIELD_EDITABLE_ENTITIES = new Set(['Tenant', 'Company']);
+const SCOPE_FIELD_EDITABLE_ENTITIES = new Set(['Tenant', 'Company', 'Plant']);
 
 const SKIP_QUERY_FIELDS = new Set([
   'pageIndex',
@@ -249,11 +255,22 @@ const TEXTAREA_NAME_HINTS = ['remark', 'extfield', 'quote', 'description', 'cont
 /** 表单 Tabs 分页标准：每 Tab 最多字段数（满 Tab 时 2 列 × 5 行 = 10 项；不足 10 项时单列） */
 const FORM_TAB_FIELDS_PER_TAB = 10;
 
-/** 始终置于最后一个 Tab 的字段（顺序固定：隔离字段 + 扩展 + 备注） */
+/**
+ * 始终置于第一个 Tab 开头的字段（顺序固定：工厂 → 区域文化，再接业务字段）
+ * plantCode（公司/审批）与 relatedPlant（租户）通常二选一；cultureCode 紧随其后
+ */
+const FORM_TAB_LEADING_FIELD_NAMES = [
+  'plantCode',
+  'relatedPlant',
+  'cultureCode',
+];
+
+const FORM_TAB_LEADING_FIELD_NAME_SET = new Set(FORM_TAB_LEADING_FIELD_NAMES);
+
+/** 始终置于最后一个 Tab 的字段（顺序固定：租户/公司隔离 + 扩展 + 备注） */
 const FORM_TAB_TRAILING_FIELD_NAMES = [
   'tenantCode',
   'companyCode',
-  'companyDefaultCulture',
   'extField',
   'remark',
 ];
@@ -297,7 +314,9 @@ const COMMON_ENTITY_FIELD_T_KEYS = {
   extField: 'common.page.entity.extfield',
   tenantCode: 'common.page.entity.tenantcode',
   companyCode: 'common.page.entity.companycode',
-  companyDefaultCulture: 'common.page.entity.companydefaultculture',
+  cultureCode: 'common.page.entity.culturecode',
+  plantCode: 'common.page.entity.plantcode',
+  relatedPlant: 'common.page.entity.relatedplant',
   createdAtStart: 'common.page.entity.createdatstart',
   createdAtEnd: 'common.page.entity.createdatend',
 };
@@ -477,7 +496,7 @@ function buildRemixIconImportLine(options = {}) {
  * @returns {boolean}
  */
 function isScopeFieldReadOnly(entityPascal, fieldName) {
-  if (fieldName === 'companyDefaultCulture') {
+  if (fieldName === 'cultureCode' && !SCOPE_FIELD_EDITABLE_ENTITIES.has(entityPascal)) {
     return true;
   }
   if (!SCOPE_FORM_FIELD_NAMES.includes(fieldName)) {
@@ -561,7 +580,10 @@ function renderReadOnlyControlAttrs(field, indent) {
 }
 
 /**
- * 按 Tab 规则拆分表单字段：业务字段每 Tab 最多 FORM_TAB_FIELDS_PER_TAB；末 Tab 固定 trailing 字段
+ * 按 Tab 规则拆分表单字段：
+ * - 首 Tab：plantCode/relatedPlant → cultureCode → 业务字段（凑满 FORM_TAB_FIELDS_PER_TAB）
+ * - 中间 Tab：其余业务字段分页
+ * - 末 Tab：tenantCode / companyCode / extField / remark
  * @param {object[]} formFields
  * @returns {object[][]}
  */
@@ -569,29 +591,46 @@ function partitionFormFieldsForTabs(formFields) {
   if (!formFields?.length) {
     return [[]];
   }
+  const leadingByName = new Map();
   const trailingByName = new Map();
   const main = [];
   for (const field of formFields) {
-    if (FORM_TAB_TRAILING_FIELD_NAME_SET.has(field.name)) {
+    if (FORM_TAB_LEADING_FIELD_NAME_SET.has(field.name)) {
+      leadingByName.set(field.name, field);
+    } else if (FORM_TAB_TRAILING_FIELD_NAME_SET.has(field.name)) {
       trailingByName.set(field.name, field);
     } else {
       main.push(field);
     }
   }
+  const leading = FORM_TAB_LEADING_FIELD_NAMES
+    .map((name) => leadingByName.get(name))
+    .filter(Boolean);
   const trailing = FORM_TAB_TRAILING_FIELD_NAMES
     .map((name) => trailingByName.get(name))
     .filter(Boolean);
   if (main.length === 0) {
-    return trailing.length ? [trailing] : [[]];
+    if (leading.length && trailing.length) {
+      return [leading, trailing];
+    }
+    if (leading.length) {
+      return [leading];
+    }
+    if (trailing.length) {
+      return [trailing];
+    }
+    return [[]];
   }
-  const mainTabs = [];
-  for (let i = 0; i < main.length; i += FORM_TAB_FIELDS_PER_TAB) {
-    mainTabs.push(main.slice(i, i + FORM_TAB_FIELDS_PER_TAB));
+  const firstMainCapacity = Math.max(0, FORM_TAB_FIELDS_PER_TAB - leading.length);
+  const firstMain = main.slice(0, firstMainCapacity);
+  const restMain = main.slice(firstMainCapacity);
+  const mainTabs = [[...leading, ...firstMain]];
+  for (let i = 0; i < restMain.length; i += FORM_TAB_FIELDS_PER_TAB) {
+    mainTabs.push(restMain.slice(i, i + FORM_TAB_FIELDS_PER_TAB));
   }
-  if (!trailing.length) {
-    return mainTabs;
+  if (trailing.length) {
+    mainTabs.push(trailing);
   }
-  mainTabs.push(trailing);
   return mainTabs;
 }
 
@@ -646,7 +685,7 @@ function buildFormContentClassExpr(useFormTabs, tabCount) {
  * 解析 CreateDto 隔离字段存在性（代码生成期烘焙，避免运行时 formFields.includes）
  * @param {object[]} formFields
  * @param {object[]} [masterDetailChildren]
- * @returns {{ hasTenant: boolean, hasCompany: boolean, hasCompanyDefaultCulture: boolean }}
+ * @returns {{ hasTenant: boolean, hasCompany: boolean, hasCultureCode: boolean, hasPlantCode: boolean, hasRelatedPlant: boolean }}
  */
 function resolveScopeFormFieldPresence(formFields, masterDetailChildren = []) {
   const names = new Set();
@@ -661,35 +700,43 @@ function resolveScopeFormFieldPresence(formFields, masterDetailChildren = []) {
   return {
     hasTenant: names.has('tenantCode'),
     hasCompany: names.has('companyCode'),
-    hasCompanyDefaultCulture: names.has('companyDefaultCulture'),
+    hasCultureCode: names.has('cultureCode'),
+    hasPlantCode: names.has('plantCode'),
+    hasRelatedPlant: names.has('relatedPlant'),
   };
 }
 
 /**
  * *-form.vue：租户/公司隔离 Pinia 与 applyScopeDefaults（按字段存在性生成）
- * @param {{ hasTenant: boolean, hasCompany: boolean, hasCompanyDefaultCulture: boolean }} presence
+ * @param {{ hasTenant: boolean, hasCompany: boolean, hasCultureCode: boolean, hasPlantCode: boolean, hasRelatedPlant: boolean }} presence
  * @param {string} entityIdField
  * @returns {{ imports: string, script: string, watch: string }}
  */
 function buildScopeContextFormScriptFragments(presence, entityIdField) {
-  const { hasTenant, hasCompany, hasCompanyDefaultCulture } = presence;
-  if (!hasTenant && !hasCompany && !hasCompanyDefaultCulture) {
+  const {
+    hasTenant,
+    hasCompany,
+    hasCultureCode,
+    hasPlantCode = false,
+    hasRelatedPlant = false,
+  } = presence;
+  if (!hasTenant && !hasCompany && !hasCultureCode && !hasPlantCode && !hasRelatedPlant) {
     return { imports: '', script: '', watch: '' };
   }
   const imports = ["import { useTenantStore } from '@/stores/identity/tenant'"];
-  if (hasCompanyDefaultCulture) {
+  if (hasCultureCode) {
     imports.push("import { useUserStore } from '@/stores/identity/user'");
   }
   const storeLines = [];
-  if (hasTenant || hasCompany) {
+  if (hasTenant || hasCompany || hasPlantCode || hasRelatedPlant) {
     storeLines.push('/** Pinia：租户上下文 */');
     storeLines.push('const tenantStore = useTenantStore()');
-  } else if (hasCompanyDefaultCulture) {
-    storeLines.push('/** Pinia：租户上下文（公司默认语言联动） */');
+  } else if (hasCultureCode) {
+    storeLines.push('/** Pinia：租户上下文（公司区域文化联动） */');
     storeLines.push('const tenantStore = useTenantStore()');
   }
-  if (hasCompanyDefaultCulture) {
-    storeLines.push('/** Pinia：用户上下文 */');
+  if (hasCultureCode) {
+    storeLines.push('/** Pinia：用户上下文（当前公司 CultureCode 注入源） */');
     storeLines.push('const userStore = useUserStore()');
   }
   const applyLines = [];
@@ -703,14 +750,26 @@ function buildScopeContextFormScriptFragments(presence, entityIdField) {
     target.companyCode = tenantStore.companyCode
   }`);
   }
-  if (hasCompanyDefaultCulture) {
-    applyLines.push(`  if (force || !target.companyDefaultCulture) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (hasCultureCode) {
+    applyLines.push(`  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }`);
+  }
+  if (hasPlantCode) {
+    applyLines.push(`  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }`);
+  }
+  if (hasRelatedPlant) {
+    applyLines.push(`  if (force || !target.relatedPlant) {
+    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
   }`);
   }
   const scopeComment = hasCompany
-    ? '租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）'
-    : '租户级实体仅注入 tenantCode，表单只读';
+    ? '租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）'
+    : hasRelatedPlant
+      ? '租户 / RelatedPlant（登录或公司切换注入；关联工厂可选改）'
+      : '租户级实体仅注入 tenantCode，表单只读';
   const script = `
 ${storeLines.join('\n')}
 
@@ -730,8 +789,11 @@ ${applyLines.join('\n')}
   if (hasCompany) {
     watchSources.push('tenantStore.companyCode');
   }
-  if (hasCompanyDefaultCulture) {
+  if (hasCultureCode) {
     watchSources.push('userStore.userInfo?.companyDefaultCulture');
+  }
+  if (hasPlantCode || hasRelatedPlant) {
+    watchSources.push('tenantStore.currentCompanyRelatedPlant');
   }
   const watchExpr = watchSources.length === 1
     ? `() => ${watchSources[0]}`
@@ -984,7 +1046,12 @@ const pi = ${hookName}()
 }
 
 /**
- * index.vue：高级查询 createEmptyAdvancedQueryForm（字段常量来自 composable）
+ * 列表/导出：无业务查询条件时表格为空、不请求接口（与后端 HasAnyListQueryFilter 对齐）。
+ * 有条件时正常分页查询（过滤生效，不是解锁全表）。
+ */
+
+/**
+ * index.vue：高级查询 createEmptyAdvancedQueryForm + hasAnyListQueryFilter
  * @param {string} entityPascal
  * @param {object[]} queryFields
  * @returns {string}
@@ -993,8 +1060,32 @@ function buildAdvancedQueryFactoryBlock(entityPascal, queryFields = []) {
   const prefix = entityI18nConstPrefix(entityPascal);
   const numberFields = (queryFields || []).filter((f) => f.type === 'number');
   const numberInitLines = numberFields.map((f) => `    ${f.name}: undefined as number | undefined,`).join('\n');
+  const numberCheckLines = numberFields.length > 0
+    ? numberFields.map((f) => `  if (form.${f.name} !== undefined && form.${f.name} !== null) {
+    return true
+  }`).join('\n')
+    : '';
   return `/**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of ${prefix}_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+${numberCheckLines}
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -1004,8 +1095,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
-${numberInitLines}
-  }
+${numberInitLines}  }
 }`;
 }
 
@@ -1100,7 +1190,7 @@ ${control}
 }
 
 /**
- * 生成表单 a-tab-pane 块列表（含末 Tab trailing 字段规则）
+ * 生成表单 a-tab-pane 块列表（首 Tab：工厂+区域文化；末 Tab：公司/扩展/备注）
  * @param {object} options
  * @param {object[]} options.formFields
  * @param {object} [options.formCodeControlOptions]
@@ -1356,6 +1446,7 @@ function extractOptionsApiUrl(doc) {
 /** 字段名 → 选项 API 回退（实体注释缺失时） */
 const FIELD_OPTIONS_API_FALLBACK = {
   relatedPlant: 'TaktPlants/options',
+  plantCode: 'TaktPlants/options',
   relatedCompany: 'TaktCompanies/options',
 };
 
@@ -1473,7 +1564,9 @@ const YES_NO_DICT_TYPE = 'sys_yes_no_type';
 const BUSINESS_CODE_EDIT_LOCK_SKIP_NAMES = new Set([
   'tenantCode',
   'companyCode',
-  'companyDefaultCulture',
+  'cultureCode',
+  'plantCode',
+  'relatedPlant',
   'deptCode',
   'parentCode',
 ]);
@@ -2015,6 +2108,10 @@ function resolveChildMenuViewPath(child, modulePath) {
  * @returns {boolean}
  */
 function childHasStandaloneMenu(child, modulePath) {
+  // 显式登记的独立菜单从实体（即便菜单种子尚未进 MENU_INDEX）
+  if (isStandaloneChildVueEntity(child.childPascal)) {
+    return true;
+  }
   const childKebab = child.viewChildKebab || child.childKebab;
   const menuByKebab = childKebab ? MENU_INDEX.get(childKebab) : null;
   if (menuByKebab?.componentPath) {
@@ -3314,25 +3411,32 @@ const DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT = {
   masterDetailDetail: 4,
 };
 
-/** 与 table-columns.ts ENTITY_BASE_FIELDS 对齐（小写键，不含 id） */
+/** 与 table-columns.ts ENTITY_BASE_FIELDS 对齐（小写键，不含 id；plant 居首） */
 const ENTITY_BASE_FIELDS_BY_SCOPE = {
   tenant: [
-    'tenantCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
+    'relatedPlant', 'cultureCode', 'tenantCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
     'isDeleted', 'deletedBy', 'deletedAt',
   ],
   company: [
-    'tenantCode', 'companyCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
+    'plantCode', 'tenantCode', 'companyCode', 'cultureCode', 'extField', 'remark', 'createdBy', 'createdAt', 'updatedBy', 'updatedAt',
     'isDeleted', 'deletedBy', 'deletedAt',
   ],
   approval: [
-    'tenantCode', 'companyCode', 'extField', 'remark', 'approvalStatus', 'initiatorId', 'initiatedAt',
+    'plantCode', 'tenantCode', 'companyCode', 'cultureCode', 'extField', 'remark', 'approvalStatus', 'initiatorId', 'initiatedAt',
     'approvalOpinion', 'approvedBy', 'approvedAt', 'flowInstanceId', 'createdBy', 'createdAt', 'updatedBy',
     'updatedAt', 'isDeleted', 'deletedBy', 'deletedAt',
   ],
 };
 
+/** 与 table-columns.ts ENTITY_SCOPE_PLANT_FIELD 对齐 */
+const ENTITY_SCOPE_PLANT_FIELD = {
+  tenant: 'relatedPlant',
+  company: 'plantCode',
+  approval: 'plantCode',
+};
+
 /**
- * 从列表字段元数据提取业务列 key（排除 id、action、基类字段）
+ * 从列表字段元数据提取业务列 key（排除 id、plant、action、基类字段）
  * @param {Array<{ name: string }>} listFields
  * @param {string} entityIdName
  * @param {'tenant'|'company'|'approval'} [entityScope]
@@ -3340,10 +3444,11 @@ const ENTITY_BASE_FIELDS_BY_SCOPE = {
  */
 function extractBusinessListFieldNames(listFields, entityIdName, entityScope = 'company') {
   const baseKeys = new Set(ENTITY_BASE_FIELDS_BY_SCOPE[entityScope] || ENTITY_BASE_FIELDS_BY_SCOPE.company);
+  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope] || ENTITY_SCOPE_PLANT_FIELD.company;
   const keys = [];
   for (const field of listFields || []) {
     const name = field?.name;
-    if (!name || name === entityIdName || name === 'action' || baseKeys.has(name)) {
+    if (!name || name === entityIdName || name === 'action' || name === plantKey || baseKeys.has(name)) {
       continue;
     }
     keys.push(name);
@@ -3352,7 +3457,7 @@ function extractBusinessListFieldNames(listFields, entityIdName, entityScope = '
 }
 
 /**
- * 默认可见列 key（id + 前 N 个业务列 + action）
+ * 默认可见列 key（id + plant + 前 N 个业务列 + action）
  * @param {Array<{ name: string }>} listFields
  * @param {string} entityIdName
  * @param {'tenant'|'company'|'approval'} [entityScope]
@@ -3361,8 +3466,9 @@ function extractBusinessListFieldNames(listFields, entityIdName, entityScope = '
  */
 function buildDefaultVisibleColumnKeys(listFields, entityIdName, entityScope = 'company', tableMode = 'single') {
   const count = DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT[tableMode] ?? DEFAULT_VISIBLE_BUSINESS_FIELD_COUNT.single;
+  const plantKey = ENTITY_SCOPE_PLANT_FIELD[entityScope] || ENTITY_SCOPE_PLANT_FIELD.company;
   const businessKeys = extractBusinessListFieldNames(listFields, entityIdName, entityScope).slice(0, Math.max(0, count));
-  return [entityIdName, ...businessKeys, 'action'];
+  return [entityIdName, plantKey, ...businessKeys, 'action'];
 }
 
 /**
@@ -3834,12 +3940,12 @@ function buildGeneratedFormVueScriptFragments(options) {
 
 /**
  * index.vue：buildListQuery 函数（列表/导出共用；空查询项不下发，避免 DateTime? 绑定 400）
+ * 无参不补默认条件；由 hasAnyListQueryFilter 决定是否请求
  * @param {string} entityPascal
  * @param {object[]} [queryFields]
  * @returns {string}
  */
 function buildServerPagedListQueryBlock(entityPascal, queryFields = []) {
-  const stringFields = (queryFields || []).filter((f) => f.type !== 'number');
   const numberFields = (queryFields || []).filter((f) => f.type === 'number');
   const constName = `${entityI18nConstPrefix(entityPascal)}_QUERY_STRING_FIELDS`;
   const numberAssign = numberFields.map((f) => `  if (form.${f.name} !== undefined && form.${f.name} !== null) {
@@ -3848,7 +3954,7 @@ function buildServerPagedListQueryBlock(entityPascal, queryFields = []) {
   const numberAssignBlock = numberAssign ? `\n${numberAssign}` : '';
   return `
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {${entityPascal}Query} 查询 DTO
  */
@@ -3883,7 +3989,12 @@ function buildListQuery(overrides?: Partial<${entityPascal}Query>): ${entityPasc
  * @returns {string}
  */
 function buildServerPagedLoadDataBody(apiGetList) {
-  return `    const res = await ${apiGetList}(buildListQuery())
+  return `    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
+    const res = await ${apiGetList}(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0`;
 }
@@ -3894,7 +4005,10 @@ function buildServerPagedLoadDataBody(apiGetList) {
  * @returns {string}
  */
 function buildServerPagedExportApiCall(apiExport) {
-  return `    const exportMeta = await ${apiExport}(
+  return `    if (!hasAnyListQueryFilter()) {
+      return
+    }
+    const exportMeta = await ${apiExport}(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
       excelNames.fileBase
@@ -3909,7 +4023,7 @@ function buildServerPagedExportApiCall(apiExport) {
 function buildServerPagedOnMountedBlock(extraMountedBody = '') {
   const body = extraMountedBody.trimEnd();
   const mid = body ? `${body}\n` : '';
-  return `/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+  return `/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
 ${mid}  loadData()
@@ -4073,6 +4187,7 @@ module.exports = {
   SKIP_FORM_FIELDS,
   SKIP_QUERY_FIELDS,
   FORM_TAB_FIELDS_PER_TAB,
+  FORM_TAB_LEADING_FIELD_NAMES,
   FORM_TAB_TRAILING_FIELD_NAMES,
   resolveFormFieldColSpan,
   MENU_INDEX,

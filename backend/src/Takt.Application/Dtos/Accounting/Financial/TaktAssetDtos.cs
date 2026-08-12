@@ -35,118 +35,6 @@ public class TaktAssetDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AssetId { get; set; }
 
-    /// <summary>
-    /// 资产代码
-    /// </summary>
-    public string AssetCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产名称
-    /// </summary>
-    public string AssetName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产分类（字典 accounting_asset_category）
-    /// </summary>
-    public string AssetCategory { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产类型（字典 accounting_asset_type）
-    /// </summary>
-    public string AssetType { get; set; } = "NORM";
-
-    /// <summary>
-    /// 资产原值
-    /// </summary>
-    public decimal AssetOriginalValue { get; set; }
-
-    /// <summary>
-    /// 资产净值
-    /// </summary>
-    public decimal AssetNetValue { get; set; }
-
-    /// <summary>
-    /// 累计折旧
-    /// </summary>
-    public decimal AccumulatedDepreciation { get; set; }
-
-    /// <summary>
-    /// 成本中心ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? CostCenterId { get; set; }
-
-    /// <summary>
-    /// 成本中心名称
-    /// </summary>
-    public string? CostCenterName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 部门ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? DeptId { get; set; }
-
-    /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 使用者ID
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? UserId { get; set; }
-
-    /// <summary>
-    /// 使用者名称
-    /// </summary>
-    public string? UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 资产位置
-    /// </summary>
-    public string? AssetLocation { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 购买日期
-    /// </summary>
-    public DateTime? PurchaseDate { get; set; }
-
-    /// <summary>
-    /// 启用日期
-    /// </summary>
-    public DateTime? StartDate { get; set; }
-
-    /// <summary>
-    /// 报废日期
-    /// </summary>
-    public DateTime? ScrapDate { get; set; }
-
-    /// <summary>
-    /// 处置日期
-    /// </summary>
-    public DateTime? DisposalDate { get; set; }
-
-    /// <summary>
-    /// 预计使用月数
-    /// </summary>
-    public int ExpectedLifeMonths { get; set; } = 0;
-
-    /// <summary>
-    /// 折旧方法（字典 accounting_depreciation_method）
-    /// </summary>
-    public int DepreciationMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 每月折旧金额
-    /// </summary>
-    public decimal MonthlyDepreciation { get; set; }
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
@@ -173,6 +61,11 @@ public class TaktAssetQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产代码
@@ -305,7 +198,7 @@ public class TaktAssetQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
@@ -353,9 +246,10 @@ public class TaktAssetCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 资产代码
@@ -471,7 +365,7 @@ public class TaktAssetCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
@@ -552,6 +446,11 @@ public class TaktAssetTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 资产代码
     /// </summary>
     public string? AssetCode { get; set; } = string.Empty;
@@ -662,7 +561,7 @@ public class TaktAssetTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
@@ -695,9 +594,10 @@ public class TaktAssetImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 资产代码
@@ -810,7 +710,7 @@ public class TaktAssetImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）
@@ -959,7 +859,7 @@ public class TaktAssetExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 资产状态（字典 accounting_asset_status）

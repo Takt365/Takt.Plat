@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktSourceEcI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSourceEc 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktSourceEcI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceec._self
             new TranslationSeedItem("entity.sourceec._self", "zh-HK", "设变来源明细列表信息_hk", "实体名称"),
 
-            // entity.sourceec.no
-            new TranslationSeedItem("entity.sourceec.no", "en-US", "设变号码_us", "设变号码"),
-            // entity.sourceec.no
-            new TranslationSeedItem("entity.sourceec.no", "ja-JP", "设变号码_jp", "设变号码"),
-            // entity.sourceec.no
-            new TranslationSeedItem("entity.sourceec.no", "zh-CN", "设变号码", "设变号码"),
-            // entity.sourceec.no
-            new TranslationSeedItem("entity.sourceec.no", "zh-HK", "设变号码_hk", "设变号码"),
+            // entity.sourceec.code
+            new TranslationSeedItem("entity.sourceec.code", "en-US", "设变号码_us", "设变号码"),
+            // entity.sourceec.code
+            new TranslationSeedItem("entity.sourceec.code", "ja-JP", "设变号码_jp", "设变号码"),
+            // entity.sourceec.code
+            new TranslationSeedItem("entity.sourceec.code", "zh-CN", "设变号码", "设变号码"),
+            // entity.sourceec.code
+            new TranslationSeedItem("entity.sourceec.code", "zh-HK", "设变号码_hk", "设变号码"),
 
             // entity.sourceec.sourcemodel
             new TranslationSeedItem("entity.sourceec.sourcemodel", "en-US", "机种_us", "机种"),
@@ -162,23 +162,23 @@ public class TaktSourceEcI18nSeedData : ITaktSeedDataCoordinator
             // entity.sourceec.meeting
             new TranslationSeedItem("entity.sourceec.meeting", "zh-HK", "设变会议_hk", "设变会议"),
 
-            // entity.sourceec.sourceppno
-            new TranslationSeedItem("entity.sourceec.sourceppno", "en-US", "PP番号_us", "PP番号"),
-            // entity.sourceec.sourceppno
-            new TranslationSeedItem("entity.sourceec.sourceppno", "ja-JP", "PP番号_jp", "PP番号"),
-            // entity.sourceec.sourceppno
-            new TranslationSeedItem("entity.sourceec.sourceppno", "zh-CN", "PP番号", "PP番号"),
-            // entity.sourceec.sourceppno
-            new TranslationSeedItem("entity.sourceec.sourceppno", "zh-HK", "PP番号_hk", "PP番号"),
+            // entity.sourceec.sourceppcode
+            new TranslationSeedItem("entity.sourceec.sourceppcode", "en-US", "PP番号_us", "PP番号"),
+            // entity.sourceec.sourceppcode
+            new TranslationSeedItem("entity.sourceec.sourceppcode", "ja-JP", "PP番号_jp", "PP番号"),
+            // entity.sourceec.sourceppcode
+            new TranslationSeedItem("entity.sourceec.sourceppcode", "zh-CN", "PP番号", "PP番号"),
+            // entity.sourceec.sourceppcode
+            new TranslationSeedItem("entity.sourceec.sourceppcode", "zh-HK", "PP番号_hk", "PP番号"),
 
-            // entity.sourceec.sourcetechnicalnoticeno
-            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticeno", "en-US", "技联书_us", "技联书"),
-            // entity.sourceec.sourcetechnicalnoticeno
-            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticeno", "ja-JP", "技联书_jp", "技联书"),
-            // entity.sourceec.sourcetechnicalnoticeno
-            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticeno", "zh-CN", "技联书", "技联书"),
-            // entity.sourceec.sourcetechnicalnoticeno
-            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticeno", "zh-HK", "技联书_hk", "技联书"),
+            // entity.sourceec.sourcetechnicalnoticecode
+            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticecode", "en-US", "技联书_us", "技联书"),
+            // entity.sourceec.sourcetechnicalnoticecode
+            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticecode", "ja-JP", "技联书_jp", "技联书"),
+            // entity.sourceec.sourcetechnicalnoticecode
+            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticecode", "zh-CN", "技联书", "技联书"),
+            // entity.sourceec.sourcetechnicalnoticecode
+            new TranslationSeedItem("entity.sourceec.sourcetechnicalnoticecode", "zh-HK", "技联书_hk", "技联书"),
 
             // entity.sourceec.sourceimplementation
             new TranslationSeedItem("entity.sourceec.sourceimplementation", "en-US", "实施_us", "实施"),

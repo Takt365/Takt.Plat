@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemValidators.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialDocumentItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktMaterialDocumentItem 生成，请按需审阅）
 // 
@@ -35,17 +35,23 @@ public class TaktMaterialDocumentItemCreateValidator : AbstractValidator<TaktMat
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaterialDocumentId)
-            .GreaterThanOrEqualTo(0).WithMessage("物料凭证 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("物料凭证ID不能为负数");
         RuleFor(x => x.MaterialDocumentCode)
-            .NotEmpty().WithMessage("物料凭证号不能为空")
-            .MaximumLength(10).WithMessage("物料凭证号长度不能超过10个字符");
-        RuleFor(x => x.WarehouseCode)
-            .NotEmpty().WithMessage("库存地点不能为空")
-            .MaximumLength(4).WithMessage("库存地点长度不能超过4个字符");
+            .NotEmpty().WithMessage("物料凭证不能为空")
+            .MaximumLength(10).WithMessage("物料凭证长度不能超过10个字符");
         RuleFor(x => x.MovementType)
             .NotEmpty().WithMessage("移动类型不能为空")
-            .MaximumLength(4).WithMessage("移动类型长度不能超过4个字符");
+            .MaximumLength(3).WithMessage("移动类型长度不能超过3个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料不能为空")
+            .MaximumLength(20).WithMessage("物料长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -75,17 +81,23 @@ public class TaktMaterialDocumentItemUpdateValidator : AbstractValidator<TaktMat
         RuleFor(x => x.CompanyCode)
             .NotEmpty().WithMessage("公司代码不能为空")
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符");
+        RuleFor(x => x.CultureCode)
+            .NotEmpty().WithMessage("区域文化编码不能为空")
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符");
+        RuleFor(x => x.PlantCode)
+            .NotEmpty().WithMessage("工厂代码不能为空")
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符");
         RuleFor(x => x.MaterialDocumentId)
-            .GreaterThanOrEqualTo(0).WithMessage("物料凭证 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("物料凭证ID不能为负数");
         RuleFor(x => x.MaterialDocumentCode)
-            .NotEmpty().WithMessage("物料凭证号不能为空")
-            .MaximumLength(10).WithMessage("物料凭证号长度不能超过10个字符");
-        RuleFor(x => x.WarehouseCode)
-            .NotEmpty().WithMessage("库存地点不能为空")
-            .MaximumLength(4).WithMessage("库存地点长度不能超过4个字符");
+            .NotEmpty().WithMessage("物料凭证不能为空")
+            .MaximumLength(10).WithMessage("物料凭证长度不能超过10个字符");
         RuleFor(x => x.MovementType)
             .NotEmpty().WithMessage("移动类型不能为空")
-            .MaximumLength(4).WithMessage("移动类型长度不能超过4个字符");
+            .MaximumLength(3).WithMessage("移动类型长度不能超过3个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料不能为空")
+            .MaximumLength(20).WithMessage("物料长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符");
         RuleFor(x => x.Remark)
@@ -111,17 +123,21 @@ public class TaktMaterialDocumentItemImportValidator : AbstractValidator<TaktMat
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
         RuleFor(x => x.CompanyCode)
             .MaximumLength(4).WithMessage("公司代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.CompanyCode));
+        RuleFor(x => x.CultureCode)
+            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符").When(x => !string.IsNullOrWhiteSpace(x.CultureCode));
+        RuleFor(x => x.PlantCode)
+            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.PlantCode));
         RuleFor(x => x.MaterialDocumentId)
-            .GreaterThanOrEqualTo(0).WithMessage("物料凭证 ID不能为负数");
+            .GreaterThanOrEqualTo(0).WithMessage("物料凭证ID不能为负数");
         RuleFor(x => x.MaterialDocumentCode)
-            .NotEmpty().WithMessage("物料凭证号不能为空")
-            .MaximumLength(10).WithMessage("物料凭证号长度不能超过10个字符");
-        RuleFor(x => x.WarehouseCode)
-            .NotEmpty().WithMessage("库存地点不能为空")
-            .MaximumLength(4).WithMessage("库存地点长度不能超过4个字符");
+            .NotEmpty().WithMessage("物料凭证不能为空")
+            .MaximumLength(10).WithMessage("物料凭证长度不能超过10个字符");
         RuleFor(x => x.MovementType)
             .NotEmpty().WithMessage("移动类型不能为空")
-            .MaximumLength(4).WithMessage("移动类型长度不能超过4个字符");
+            .MaximumLength(3).WithMessage("移动类型长度不能超过3个字符");
+        RuleFor(x => x.MaterialCode)
+            .NotEmpty().WithMessage("物料不能为空")
+            .MaximumLength(20).WithMessage("物料长度不能超过20个字符");
         RuleFor(x => x.ExtField)
             .MaximumLength(4000).WithMessage("扩展字段JSON长度不能超过4000个字符").When(x => !string.IsNullOrWhiteSpace(x.ExtField));
         RuleFor(x => x.Remark)

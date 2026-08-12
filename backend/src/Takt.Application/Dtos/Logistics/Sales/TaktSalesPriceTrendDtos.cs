@@ -259,6 +259,16 @@ public class TaktSalesPriceMonthlyTrendDto
     /// 环比变动率（小数比率，保留 4 位；如 0.2978 表示 29.78%）
     /// </summary>
     public decimal? VariancePercent { get; set; }
+
+    /// <summary>
+    /// MaterialDescription
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// CurrencyCode
+    /// </summary>
+    public string CurrencyCode { get; set; } = string.Empty;
 }
 
 /// <summary>

@@ -23,7 +23,7 @@ export default {
     summary: '設変番号×部門行 {count} 件（完了日時で月次集計）',
     summaryImplement: '部門行 {count} 件（完了日時で月次実施件数集計）',
     deptCode: '部門コード',
-    ecNo: '設変番号',
+    ecCode: '設変番号',
     trendSummary: '前月比 {base} → {compare}：増 {up} · 減 {down} · 横ばい {flat}',
     exportSuccess: 'エクスポート完了',
     exportFailed: 'エクスポート失敗',

@@ -248,7 +248,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                 && x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode);
             var onHandByMaterial = materialPlants.ToDictionary(x => x.MaterialCode, x => x.CurrentStock, StringComparer.OrdinalIgnoreCase);
-            var materialNameByCode = materialPlants.ToDictionary(x => x.MaterialCode, x => x.MaterialName, StringComparer.OrdinalIgnoreCase);
+            var materialNameByCode = materialPlants.ToDictionary(x => x.MaterialCode, x => x.MaterialDescription, StringComparer.OrdinalIgnoreCase);
             var procurementByMaterial = materialPlants.ToDictionary(x => x.MaterialCode, x => ResolveProcurementType(x.PurchaseType), StringComparer.OrdinalIgnoreCase);
 
             var scheduledByMaterial = await BuildScheduledReceiptsByMaterialAsync(mrp.PlantCode, options);
@@ -272,7 +272,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                     MaterialRequirementsPlanningCode = mrp.MaterialRequirementsPlanningCode,
                     LineNumber = lineNumber,
                     MaterialCode = bucket.MaterialCode,
-                    MaterialName = materialNameByCode.GetValueOrDefault(bucket.MaterialCode) ?? bucket.MaterialCode,
+                    MaterialDescription = materialNameByCode.GetValueOrDefault(bucket.MaterialCode) ?? bucket.MaterialCode,
                     ParentMaterialCode = bucket.ParentMaterialCode,
                     BomLevel = bucket.BomLevel,
                     RequirementDate = bucket.RequirementDate,
@@ -359,7 +359,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                     ProductionPlanCode = productionPlan.ProductionPlanCode,
                     LineNumber = ppLine,
                     MaterialCode = item.MaterialCode,
-                    MaterialName = item.MaterialName,
+                    MaterialDescription = item.MaterialDescription,
                     MaterialSpecification = item.MaterialSpecification,
                     PlanUnit = item.PlanUnit,
                     PlanQuantity = item.NetRequirement,
@@ -424,7 +424,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                     PurchasePlanCode = purchasePlan.PurchasePlanCode,
                     LineNumber = bpLine,
                     MaterialCode = item.MaterialCode,
-                    MaterialName = item.MaterialName,
+                    MaterialDescription = item.MaterialDescription,
                     MaterialSpecification = item.MaterialSpecification,
                     PlanUnit = item.PlanUnit,
                     PlanQuantity = item.NetRequirement,
@@ -660,7 +660,7 @@ public class TaktManufacturingPlanningOrchestratorService : TaktServiceBase, ITa
                 LineNumber = item.LineNumber,
                 AllocationCategory = "K",
                 MaterialCode = item.MaterialCode,
-                MaterialName = item.MaterialName,
+                MaterialDescription = item.MaterialDescription,
                 MaterialSpecification = item.MaterialSpecification,
                 RequestUnit = item.PlanUnit,
                 RequestQuantity = item.PlanQuantity - item.ConvertedQuantity,

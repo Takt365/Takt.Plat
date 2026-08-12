@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getApsScheduleItemId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -186,7 +187,7 @@
       <a-form-item :label="pi.queryLabel('productCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.productCode"
-          api-url="TaktMaterials/options"
+          api-url="TaktMaterialPlants/options"
           :placeholder="pi.queryPh('productCode', 'select')"
           allow-clear
         />
@@ -213,13 +214,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('workCenterName')">
-      <a-form-item :label="pi.queryLabel('workCenterName')">
-        <a-input
-          v-model:value="advancedQueryForm.workCenterName"
-          :placeholder="pi.queryPh('workCenterName', 'required')"
-          show-count
-          :maxlength="20"
+      <div v-show="isFieldVisible('workCenterDescription')">
+      <a-form-item :label="pi.queryLabel('workCenterDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.workCenterDescription"
+          :placeholder="pi.queryPh('workCenterDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -801,14 +801,14 @@ const columns = computed<TableColumnsType>(() => [
       String(getApsScheduleItemField(record, 'workCenterCode') ?? ''),
   },
   {
-    title: pi.label('workCenterName'),
-    dataIndex: 'workCenterName',
-    key: 'workCenterName',
+    title: pi.label('workCenterDescription'),
+    dataIndex: 'workCenterDescription',
+    key: 'workCenterDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
     customRender: ({ record }: { record: ApsScheduleItem }) =>
-      String(getApsScheduleItemField(record, 'workCenterName') ?? ''),
+      String(getApsScheduleItemField(record, 'workCenterDescription') ?? ''),
   },
   {
     title: pi.label('processCode'),
@@ -967,10 +967,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:manufacturing:aps:schedule:delete',
         onClick: (record: ApsScheduleItem) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {

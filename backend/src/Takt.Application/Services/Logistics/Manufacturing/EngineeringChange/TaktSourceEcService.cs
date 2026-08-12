@@ -98,12 +98,12 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
         EnsureThreeLayerContext();
         var list = await _sourceEcRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
-            x => x.SourceEcNo ?? string.Empty,
+            x => x.SourceEcCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.Id,
-            DictLabel = e.SourceEcNo ?? e.Id.ToString(),
+            DictLabel = e.SourceEcCode ?? e.Id.ToString(),
         }).ToList();
     }
 
@@ -115,12 +115,12 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
     public async Task<TaktSourceEcDto> CreateSourceEcAsync(TaktSourceEcCreateDto dto)
     {
         var entity = dto.Adapt<TaktSourceEc>();
-        var isUnique_ix_source_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_source_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcRepository,
-            x => x.SourceEcNo == entity.SourceEcNo);
-        if (!isUnique_ix_source_ec_no_unique)
+            x => x.SourceEcCode == entity.SourceEcCode);
+        if (!isUnique_ix_source_ec_code_unique)
         {
-            throw new TaktBusinessException("设变来源主的SourceEcNo已存在");
+            throw new TaktBusinessException("设变来源主的SourceEcCode已存在");
         }
         entity = await _sourceEcRepository.CreateAsync(entity);
                 await SaveSourceEcChildrenAsync(entity, dto);
@@ -141,13 +141,13 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
             throw new TaktBusinessException("设变来源主不存在");
         }
         dto.Adapt(entity);
-        var isUnique_ix_source_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+        var isUnique_ix_source_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
             _sourceEcRepository,
-            x => x.SourceEcNo == entity.SourceEcNo,
+            x => x.SourceEcCode == entity.SourceEcCode,
             id);
-        if (!isUnique_ix_source_ec_no_unique)
+        if (!isUnique_ix_source_ec_code_unique)
         {
-            throw new TaktBusinessException("设变来源主的SourceEcNo已存在");
+            throw new TaktBusinessException("设变来源主的SourceEcCode已存在");
         }
         await _sourceEcRepository.UpdateAsync(entity);
                 await SaveSourceEcChildrenAsync(entity, dto);
@@ -245,17 +245,17 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
             try
             {
                 var entity = rows[i].Adapt<TaktSourceEc>();
-                var importKey = $"{entity.SourceEcNo}";
+                var importKey = $"{entity.SourceEcCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（SourceEcCode）");
                 }
-                var isUnique_ix_source_ec_no_unique = await _uniqueValidator.IsUniqueAsync(
+                var isUnique_ix_source_ec_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _sourceEcRepository,
-                    x => x.SourceEcNo == entity.SourceEcNo);
-                if (!isUnique_ix_source_ec_no_unique)
+                    x => x.SourceEcCode == entity.SourceEcCode);
+                if (!isUnique_ix_source_ec_code_unique)
                 {
-                    throw new TaktBusinessException("设变来源主的SourceEcNo已存在");
+                    throw new TaktBusinessException("设变来源主的SourceEcCode已存在");
                 }
                 await _sourceEcRepository.CreateAsync(entity);
                 success += 1;
@@ -359,15 +359,15 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.SourceEcNo != null && x.SourceEcNo.Contains(keywords))
+                (x.SourceEcCode != null && x.SourceEcCode.Contains(keywords))
                 || (x.SourceModel != null && x.SourceModel.Contains(keywords))
                 || (x.SourceTitle != null && x.SourceTitle.Contains(keywords))
                 || (x.SourceStatus != null && x.SourceStatus.Contains(keywords))
                 || (x.SourceTcjOwner != null && x.SourceTcjOwner.Contains(keywords))
                 || (x.SourceTcjDependency != null && x.SourceTcjDependency.Contains(keywords))
                 || (x.SourceEcMeeting != null && x.SourceEcMeeting.Contains(keywords))
-                || (x.SourcePpNo != null && x.SourcePpNo.Contains(keywords))
-                || (x.SourceTechnicalNoticeNo != null && x.SourceTechnicalNoticeNo.Contains(keywords))
+                || (x.SourcePpCode != null && x.SourcePpCode.Contains(keywords))
+                || (x.SourceTechnicalNoticeCode != null && x.SourceTechnicalNoticeCode.Contains(keywords))
                 || (x.SourceImplementation != null && x.SourceImplementation.Contains(keywords))
                 || (x.SourceMainChangeReason != null && x.SourceMainChangeReason.Contains(keywords))
                 || (x.SourceSecondaryChangeReason != null && x.SourceSecondaryChangeReason.Contains(keywords))
@@ -385,6 +385,7 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
                 || SqlFunc.ToString(x.SourceMoldModificationCost).Contains(keywords)
                 || (x.SourceRelatedDrawing != null && x.SourceRelatedDrawing.Contains(keywords))
                 || (x.SourceEcContent != null && x.SourceEcContent.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.SourceIssueDate).Contains(keywords)
@@ -392,9 +393,9 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceEcNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourceEcCode))
         {
-            exp = exp.And(x => x.SourceEcNo != null && x.SourceEcNo.Contains(queryDto.SourceEcNo));
+            exp = exp.And(x => x.SourceEcCode != null && x.SourceEcCode.Contains(queryDto.SourceEcCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceModel))
@@ -427,14 +428,14 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
             exp = exp.And(x => x.SourceEcMeeting != null && x.SourceEcMeeting.Contains(queryDto.SourceEcMeeting));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourcePpNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourcePpCode))
         {
-            exp = exp.And(x => x.SourcePpNo != null && x.SourcePpNo.Contains(queryDto.SourcePpNo));
+            exp = exp.And(x => x.SourcePpCode != null && x.SourcePpCode.Contains(queryDto.SourcePpCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceTechnicalNoticeNo))
+        if (!string.IsNullOrEmpty(queryDto?.SourceTechnicalNoticeCode))
         {
-            exp = exp.And(x => x.SourceTechnicalNoticeNo != null && x.SourceTechnicalNoticeNo.Contains(queryDto.SourceTechnicalNoticeNo));
+            exp = exp.And(x => x.SourceTechnicalNoticeCode != null && x.SourceTechnicalNoticeCode.Contains(queryDto.SourceTechnicalNoticeCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.SourceImplementation))
@@ -522,6 +523,11 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
             exp = exp.And(x => x.SourceEcContent != null && x.SourceEcContent.Contains(queryDto.SourceEcContent));
         }
 
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
         {
             exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
@@ -551,6 +557,12 @@ public class TaktSourceEcService : TaktServiceBase, ITaktSourceEcService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

@@ -20,7 +20,7 @@ export const BUDGETACTUAL_SELF_I18N_KEY = buildEntitySelfI18nKey(BUDGETACTUAL_EN
 
 /** 列表业务列（不含主键） */
 export const BUDGETACTUAL_LIST_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'costCenterCode',
   'costCenterName',
@@ -46,7 +46,7 @@ export const BUDGETACTUAL_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
-  relatedPlant: 'select',
+  plantCode: 'select',
   periodCode: 'required',
   costCenterCode: 'select',
   costCenterName: 'optional',
@@ -74,7 +74,7 @@ export type BudgetActualField = keyof typeof BUDGETACTUAL_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const BUDGETACTUAL_QUERY_STRING_FIELDS = [
-  'relatedPlant',
+  'plantCode',
   'periodCode',
   'costCenterCode',
   'costCenterName',

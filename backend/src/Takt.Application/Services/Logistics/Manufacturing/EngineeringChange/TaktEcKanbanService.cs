@@ -81,7 +81,7 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
             predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            x => x.EcNo,
+            x => x.EcCode,
             false);
         var pageRows = new List<TaktEcKanbanDto>();
         foreach (var ec in ecs)
@@ -226,13 +226,13 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.EcNo != null && x.EcNo.Contains(keywords))
+                (x.EcCode != null && x.EcCode.Contains(keywords))
                 || (x.EcTitle != null && x.EcTitle.Contains(keywords))
                 || (x.EcLeader != null && x.EcLeader.Contains(keywords)));
         }
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
         if (queryDto?.ChangeStatus.HasValue == true)
         {
@@ -242,6 +242,12 @@ public class TaktEcKanbanService : TaktServiceBase, ITaktEcKanbanService
         {
             exp = exp.And(x => x.EcStatus == queryDto.EcStatus);
         }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
+        }
+
         return exp.ToExpression();
     }
 }

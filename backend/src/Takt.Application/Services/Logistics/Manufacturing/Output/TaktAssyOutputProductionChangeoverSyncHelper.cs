@@ -35,7 +35,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
     /// <param name="productionOrderRepository">生产工单仓储</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    /// <param name="prodTeam">生产班组</param>
+    /// <param name="TeamCode">生产班组</param>
     /// <param name="prodDate">生产日期</param>
     /// <param name="timePeriod">生产时段</param>
     /// <returns>任务</returns>
@@ -46,7 +46,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         ITaktCompanyRepository<TaktProductionOrder> productionOrderRepository,
         string tenantCode,
         string companyCode,
-        string prodTeam,
+        string TeamCode,
         DateTime prodDate,
         string timePeriod)
     {
@@ -56,7 +56,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         ArgumentNullException.ThrowIfNull(productionOrderRepository);
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
-        if (string.IsNullOrWhiteSpace(prodTeam) || string.IsNullOrWhiteSpace(timePeriod))
+        if (string.IsNullOrWhiteSpace(TeamCode) || string.IsNullOrWhiteSpace(timePeriod))
         {
             return;
         }
@@ -67,7 +67,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             assyOutputDetailRepository,
             tenantCode,
             companyCode,
-            prodTeam,
+            TeamCode,
             prodDateOnly);
         if (dayContext.Masters.Count == 0)
         {
@@ -87,7 +87,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             productionChangeoverRepository,
             tenantCode,
             companyCode,
-            prodTeam,
+            TeamCode,
             prodDateOnly,
             bucketDetailSyncKeys);
         var candidates = bucketLines
@@ -107,7 +107,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
                 changeoverMaster.PlantCode,
                 changeoverMaster.ProdCategory,
                 prodDateOnly,
-                prodTeam,
+                TeamCode,
                 currentMaster.ProdOrderCode,
                 currentMaster.ModelCode,
                 changeoverMaster.ProdOrderCode,
@@ -118,7 +118,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
                     changeoverMaster.PlantCode,
                     changeoverMaster.ProdCategory,
                     prodDateOnly,
-                    prodTeam,
+                    TeamCode,
                     currentMaster.ProdOrderCode,
                     currentMaster.ModelCode,
                     changeoverMaster.ProdOrderCode,
@@ -163,7 +163,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
     {
         ArgumentNullException.ThrowIfNull(output);
         ArgumentNullException.ThrowIfNull(details);
-        if (string.IsNullOrWhiteSpace(output.ProdTeam))
+        if (string.IsNullOrWhiteSpace(output.TeamCode))
         {
             return;
         }
@@ -181,7 +181,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
                 productionOrderRepository,
                 tenantCode,
                 companyCode,
-                output.ProdTeam,
+                output.TeamCode,
                 output.ProdDate,
                 timePeriod);
         }
@@ -195,13 +195,13 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         ITaktCompanyRepository<TaktAssyOutputDetail> assyOutputDetailRepository,
         string tenantCode,
         string companyCode,
-        string prodTeam,
+        string TeamCode,
         DateTime prodDateOnly)
     {
         var masters = await assyOutputRepository.GetListAsync(m =>
             m.TenantCode == tenantCode
             && m.CompanyCode == companyCode
-            && m.ProdTeam == prodTeam
+            && m.TeamCode == TeamCode
             && m.ProdDate == prodDateOnly);
         if (masters.Count == 0)
         {
@@ -277,14 +277,14 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         ITaktCompanyRepository<TaktProductionChangeover> productionChangeoverRepository,
         string tenantCode,
         string companyCode,
-        string prodTeam,
+        string TeamCode,
         DateTime prodDateOnly,
         HashSet<string> bucketDetailSyncKeys)
     {
         var existing = await productionChangeoverRepository.GetListAsync(x =>
             x.TenantCode == tenantCode
             && x.CompanyCode == companyCode
-            && x.ProdTeam == prodTeam
+            && x.TeamCode == TeamCode
             && x.ProdDate == prodDateOnly
             && x.ChangeoverCategory == AssyChangeoverCategory
             && x.ExtField != null
@@ -314,7 +314,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             && x.PlantCode == group.PlantCode
             && x.ProdCategory == group.ProdCategory
             && x.ProdDate == group.ProdDate
-            && x.ProdTeam == group.ProdTeam
+            && x.TeamCode == group.TeamCode
             && x.CurrentProdOrderCode == group.CurrentProdOrderCode
             && x.CurrentModelCode == group.CurrentModelCode
             && x.ChangeoverProdOrderCode == group.ChangeoverProdOrderCode
@@ -332,7 +332,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         entity.ProdCategory = group.ProdCategory;
         entity.ChangeoverCategory = AssyChangeoverCategory;
         entity.ProdDate = group.ProdDate;
-        entity.ProdTeam = group.ProdTeam;
+        entity.TeamCode = group.TeamCode;
         entity.CurrentProdOrderCode = group.CurrentProdOrderCode;
         entity.CurrentModelCode = group.CurrentModelCode;
         entity.ChangeoverProdOrderCode = group.ChangeoverProdOrderCode;
@@ -403,7 +403,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         string plantCode,
         string prodCategory,
         DateTime prodDate,
-        string prodTeam,
+        string TeamCode,
         string currentProdOrderCode,
         string currentModelCode,
         string changeoverProdOrderCode,
@@ -413,7 +413,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             plantCode,
             prodCategory,
             prodDate.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
-            prodTeam,
+            TeamCode,
             currentProdOrderCode,
             currentModelCode,
             changeoverProdOrderCode,
@@ -442,7 +442,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             string plantCode,
             string prodCategory,
             DateTime prodDate,
-            string prodTeam,
+            string teamCode,
             string currentProdOrderCode,
             string currentModelCode,
             string changeoverProdOrderCode,
@@ -452,7 +452,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
             PlantCode = plantCode;
             ProdCategory = prodCategory;
             ProdDate = prodDate;
-            ProdTeam = prodTeam;
+            TeamCode = teamCode;
             CurrentProdOrderCode = currentProdOrderCode;
             CurrentModelCode = currentModelCode;
             ChangeoverProdOrderCode = changeoverProdOrderCode;
@@ -463,7 +463,7 @@ internal static class TaktAssyOutputProductionChangeoverSyncHelper
         public string PlantCode { get; }
         public string ProdCategory { get; }
         public DateTime ProdDate { get; }
-        public string ProdTeam { get; }
+        public string TeamCode { get; }
         public string CurrentProdOrderCode { get; }
         public string CurrentModelCode { get; }
         public string ChangeoverProdOrderCode { get; }

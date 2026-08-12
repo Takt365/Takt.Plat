@@ -5,7 +5,7 @@
 // 文件名称：TaktProductionTeam.cs
 // 创建时间：2026-03-16
 // 创建人：Takt365(Cursor AI)
-// 功能描述：生产班组实体，用于替代 prod_team_category 字典管理生产班组主数据
+// 功能描述：生产班组实体，用于替代 team_code_category 字典管理生产班组主数据
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -25,16 +25,11 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Mps;
 [SugarIndex("ix_takt_logistics_manufacturing_mps_production_team_team_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, nameof(TeamCategory), OrderByType.Asc, true)]
 public class TaktProductionTeam : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "plant_code", ColumnDescription = "工厂代码", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 班组编码（唯一标识，例如：1、1SMT1、1SMT2、2自插A 等）
     /// </summary>
-    [SugarColumn(ColumnName = "team_code", ColumnDescription = "班组编码", ColumnDataType = "nvarchar", Length = 32, IsNullable = false)]
+    [SugarColumn(ColumnName = "team_code", ColumnDescription = "班组编码", ColumnDataType = "nvarchar", Length = 8, IsNullable = false)]
     public string TeamCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -74,7 +69,7 @@ public class TaktProductionTeam : TaktCompanyEntityBase
     /// <summary>
     /// 设备组明细（PCBA 线体 SMT/AI/手插等生产设备及台数）
     /// </summary>
-    [Navigate(NavigateType.OneToMany, nameof(TaktProductionTeamEquipment.ProductionTeamId))]
+    [Navigate(NavigateType.OneToMany, nameof(TaktProductionTeamEquipment.ProdTeamId))]
     public List<TaktProductionTeamEquipment> TeamEquipmentList { get; set; } = new();
 
 }

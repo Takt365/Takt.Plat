@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Procurement
 // 文件名称：TaktPurchasePriceDtos.cs
-// 创建时间：2026-07-21
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PurchasePrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPurchasePrice 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PurchasePriceId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 定价记录号（唯一索引；长度 20）
@@ -51,27 +47,32 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -91,7 +92,7 @@ public class TaktPurchasePriceDto : TaktCompanyDtoBase
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -140,7 +141,12 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -155,27 +161,32 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -205,7 +216,7 @@ public class TaktPurchasePriceQueryDto : TaktPagedQuery
     public DateTime? ValidToEnd { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -261,14 +272,14 @@ public class TaktPurchasePriceCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
+    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -284,29 +295,35 @@ public class TaktPurchasePriceCreateDto
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
-    [Required(ErrorMessage = "供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）不能为空")]
+    [Required(ErrorMessage = "供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）不能为空")]
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
-    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）不能为空")]
+    [Required(ErrorMessage = "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）不能为空")]
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    [Required(ErrorMessage = "物料描述（回填：随物料）不能为空")]
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -326,7 +343,7 @@ public class TaktPurchasePriceCreateDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -403,7 +420,12 @@ public class TaktPurchasePriceTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -418,27 +440,32 @@ public class TaktPurchasePriceTemplateDto
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -458,7 +485,7 @@ public class TaktPurchasePriceTemplateDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -506,12 +533,12 @@ public class TaktPurchasePriceImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -526,27 +553,32 @@ public class TaktPurchasePriceImportDto
     public string? PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string? SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string? MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? GrBasedInvoiceInspection { get; set; }
 
@@ -566,7 +598,7 @@ public class TaktPurchasePriceImportDto
     public DateTime? ValidTo { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }
@@ -620,7 +652,7 @@ public class TaktPurchasePriceExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
@@ -635,27 +667,32 @@ public class TaktPurchasePriceExportDto
     public string PriceType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 供应商编码（选项 TaktSuppliers/options，DictValue=SupplierCode）
+    /// 供应商编码（选项 TaktSuppliers/options；DictValue=SupplierCode）
     /// </summary>
     public string SupplierCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料编码（选项 TaktMaterialPlants/options，DictValue=MaterialCode）
+    /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode）
     /// </summary>
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购组（选项 TaktPurchaseGroups/options，DictValue=PurchaseGroupCode）
+    /// 物料描述（回填：随物料）
+    /// </summary>
+    public string MaterialDescription { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购组（选项 TaktPurchaseGroups/options；DictValue=PurchaseGroupCode）
     /// </summary>
     public string? PurchaseGroup { get; set; } = string.Empty;
 
     /// <summary>
-    /// 税码（字典 accounting_tax_code，DictValue=J0～J8/L1/X0～X3；SAP MWSKZ；中国）
+    /// 税码（字典 accounting_tax_code；DictValue=J0～J8/L1/X0～X3；中国）
     /// </summary>
     public string? TaxCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 基于收货的发票检验（字典 sys_yes_no_type，0=否 1=是；SAP WEBRE）
+    /// 基于收货的发票检验（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int GrBasedInvoiceInspection { get; set; } = 0;
 
@@ -675,7 +712,7 @@ public class TaktPurchasePriceExportDto
     public DateTime ValidTo { get; set; }
 
     /// <summary>
-    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options，DictValue=Id）
+    /// 来源采购询价 ID（选项 TaktPurchaseInquirys/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? PurchaseInquiryId { get; set; }

@@ -25,7 +25,7 @@ export const CUSTOMERCOMPLAINTITEM_LIST_FIELDS = [
   'lineNumber',
   'productCode',
   'productName',
-  'batchNo',
+  'batchCode',
   'itemType',
   'defectDescription',
   'defectLevel',
@@ -48,7 +48,7 @@ export const CUSTOMERCOMPLAINTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'lineNumber',
   'productCode',
   'productName',
-  'batchNo',
+  'batchCode',
   'itemType',
   'defectDescription',
   'defectLevel',
@@ -83,7 +83,7 @@ export const CUSTOMERCOMPLAINTITEM_PLACEHOLDER = {
   lineNumber: 'select',
   productCode: 'optional',
   productName: 'optional',
-  batchNo: 'optional',
+  batchCode: 'optional',
   itemType: 'select',
   defectDescription: 'optional',
   defectLevel: 'select',
@@ -97,6 +97,7 @@ export const CUSTOMERCOMPLAINTITEM_PLACEHOLDER = {
   attachmentPaths: 'optional',
   improvementStatus: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -107,7 +108,7 @@ export const CUSTOMERCOMPLAINTITEM_QUERY_STRING_FIELDS = [
   'complaintId',
   'productCode',
   'productName',
-  'batchNo',
+  'batchCode',
   'defectDescription',
   'defectLevel',
   'causeAnalysis',

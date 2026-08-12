@@ -134,18 +134,17 @@
           v-model:value="advancedQueryForm.workCenterCode"
           :placeholder="pi.queryPh('workCenterCode', 'required')"
           show-count
-          :maxlength="40"
+          :maxlength="10"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('workCenterName')">
-      <a-form-item :label="pi.queryLabel('workCenterName')">
-        <a-input
-          v-model:value="advancedQueryForm.workCenterName"
-          :placeholder="pi.queryPh('workCenterName', 'required')"
-          show-count
-          :maxlength="200"
+      <div v-show="isFieldVisible('workCenterDescription')">
+      <a-form-item :label="pi.queryLabel('workCenterDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.workCenterDescription"
+          :placeholder="pi.queryPh('workCenterDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -414,7 +413,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -496,13 +494,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'workCenterCode') ?? ''
   },
   {
-    title: pi.label('workCenterName'),
-    dataIndex: 'workCenterName',
-    key: 'workCenterName',
+    title: pi.label('workCenterDescription'),
+    dataIndex: 'workCenterDescription',
+    key: 'workCenterDescription',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'workCenterName') ?? ''
+    customRender: ({ record }: { record: any }) => getWorkCenterField(record, 'workCenterDescription') ?? ''
   },
   {
     title: pi.label('workCenterStatus'),
@@ -567,8 +565,6 @@ const toWorkCenterNumber = (value: string | number | undefined | null): number =
   return Number.isFinite(num) ? num : 0
 }
 
-
-
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -629,7 +625,7 @@ function handleReset() {
   advancedQueryForm.value = {
   plantCode: '',
   workCenterCode: '',
-  workCenterName: '',
+  workCenterDescription: '',
   workCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',
@@ -855,7 +851,7 @@ function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   plantCode: '',
   workCenterCode: '',
-  workCenterName: '',
+  workCenterDescription: '',
   workCenterStatus: undefined as number | undefined,
   createdAtStart: '',
   createdAtEnd: '',

@@ -35,86 +35,6 @@ public class TaktSalaryItemDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long SalaryItemId { get; set; }
 
-    /// <summary>
-    /// 项目编码（租户+公司内唯一）
-    /// </summary>
-    public string ItemCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 项目名称
-    /// </summary>
-    public string ItemName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 简称
-    /// </summary>
-    public string? ShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 项目类型（字典 hr_salary_item_type：基本工资/岗位工资/津贴/奖金/股权激励等）
-    /// </summary>
-    public int ItemType { get; set; } = 0;
-
-    /// <summary>
-    /// 计算方式（字典 hr_salary_calc_method_type：固定金额/按比例/按公式）
-    /// </summary>
-    public int CalcMethod { get; set; } = 0;
-
-    /// <summary>
-    /// 关联计算公式步骤 ID（calc_method 为按公式时引用 TaktSalaryFormula 单行；整单核算用 formula_set_code）
-    /// </summary>
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long? SalaryFormulaId { get; set; }
-
-    /// <summary>
-    /// 关联计算公式步骤 名称（填充字段）
-    /// </summary>
-    public string? SalaryFormulaName { get; set; }
-
-    /// <summary>
-    /// 默认金额（元）
-    /// </summary>
-    public decimal DefaultAmount { get; set; }
-
-    /// <summary>
-    /// 默认比例（%，0~100）
-    /// </summary>
-    public decimal DefaultRate { get; set; }
-
-    /// <summary>
-    /// 默认行权/授予价格（元；item_type 为股权激励时使用）
-    /// </summary>
-    public decimal StrikePrice { get; set; }
-
-    /// <summary>
-    /// 默认归属年限（年；item_type 为股权激励时使用）
-    /// </summary>
-    public int VestingYears { get; set; } = 0;
-
-    /// <summary>
-    /// 是否扣款项（字典 sys_yes_no_type）
-    /// </summary>
-    public int IsDeduction { get; set; } = 0;
-
-    /// <summary>
-    /// 是否计入应税所得（字典 sys_yes_no_type）
-    /// </summary>
-    public int IsTaxable { get; set; } = 0;
-
-    /// <summary>
-    /// 是否计入社保基数（字典 sys_yes_no_type）
-    /// </summary>
-    public int IncludeSocialSecurityBase { get; set; } = 0;
-
-    /// <summary>
-    /// 是否计入公积金基数（字典 sys_yes_no_type）
-    /// </summary>
-    public int IncludeHousingFundBase { get; set; } = 0;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -147,6 +67,11 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 项目编码（租户+公司内唯一）
@@ -222,7 +147,7 @@ public class TaktSalaryItemQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号
@@ -275,9 +200,10 @@ public class TaktSalaryItemCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 项目编码（租户+公司内唯一）
@@ -356,7 +282,7 @@ public class TaktSalaryItemCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -463,6 +389,11 @@ public class TaktSalaryItemTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 项目编码（租户+公司内唯一）
     /// </summary>
     public string? ItemCode { get; set; } = string.Empty;
@@ -536,7 +467,7 @@ public class TaktSalaryItemTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -571,9 +502,10 @@ public class TaktSalaryItemImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 项目编码（租户+公司内唯一）
@@ -649,7 +581,7 @@ public class TaktSalaryItemImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（字典 sys_normal_disable_status）
@@ -763,7 +695,7 @@ public class TaktSalaryItemExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号

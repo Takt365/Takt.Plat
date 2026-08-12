@@ -23,14 +23,11 @@ export const SALESFORECASTITEM_LIST_FIELDS = [
   'salesForecastId',
   'salesForecastCode',
   'lineNumber',
-  'materialCode',
-  'materialName',
-  'materialSpecification',
-  'modelCode',
-  'modelName',
-  'planUnit',
-  'planQuantity',
-  'plannedDeliveryDate',
+  'fiscalYear',
+  'planMonth',
+  'planQuantity001',
+  'planQuantity002',
+  'planQuantityDelta',
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
@@ -42,14 +39,11 @@ export const SALESFORECASTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'salesForecastId',
   'salesForecastCode',
   'lineNumber',
-  'materialCode',
-  'materialName',
-  'materialSpecification',
-  'modelCode',
-  'modelName',
-  'planUnit',
-  'planQuantity',
-  'plannedDeliveryDate',
+  'fiscalYear',
+  'planMonth',
+  'planQuantity001',
+  'planQuantity002',
+  'planQuantityDelta',
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
@@ -59,7 +53,10 @@ export const SALESFORECASTITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
 
 /** 明细右栏 panel 合计列（当前页 dataSource 数值字段求和） */
 export const SALESFORECASTITEM_SUMMARY_SUM_FIELDS = [
-  'planQuantity',
+  'planMonth',
+  'planQuantity001',
+  'planQuantity002',
+  'planQuantityDelta',
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',
@@ -72,18 +69,16 @@ export const SALESFORECASTITEM_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
-  materialCode: 'select',
-  materialName: 'optional',
-  materialSpecification: 'optional',
-  modelCode: 'optional',
-  modelName: 'optional',
-  planUnit: 'select',
-  planQuantity: 'select',
-  plannedDeliveryDate: 'optional',
+  fiscalYear: 'select',
+  planMonth: 'select',
+  planQuantity001: 'select',
+  planQuantity002: 'select',
+  planQuantityDelta: 'select',
   convertedQuantity: 'select',
   estimatedUnitPrice: 'select',
   estimatedAmount: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -92,14 +87,7 @@ export type SalesForecastItemField = keyof typeof SALESFORECASTITEM_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const SALESFORECASTITEM_QUERY_STRING_FIELDS = [
   'salesForecastCode',
-  'materialCode',
-  'materialName',
-  'materialSpecification',
-  'modelCode',
-  'modelName',
-  'planUnit',
-  'plannedDeliveryDateStart',
-  'plannedDeliveryDateEnd',
+  'fiscalYear',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -108,13 +96,16 @@ export const SALESFORECASTITEM_QUERY_STRING_FIELDS = [
 
 export type SalesForecastItemQueryField =
   | (typeof SALESFORECASTITEM_QUERY_STRING_FIELDS)[number]
-  | 'lineNumber' | 'planQuantity' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'isObsolete'
+  | 'lineNumber' | 'planMonth' | 'planQuantity001' | 'planQuantity002' | 'planQuantityDelta' | 'convertedQuantity' | 'estimatedUnitPrice' | 'estimatedAmount' | 'isObsolete'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const SALESFORECASTITEM_QUERY_FIELDS: readonly SalesForecastItemQueryField[] = [
   ...SALESFORECASTITEM_QUERY_STRING_FIELDS,
   'lineNumber',
-  'planQuantity',
+  'planMonth',
+  'planQuantity001',
+  'planQuantity002',
+  'planQuantityDelta',
   'convertedQuantity',
   'estimatedUnitPrice',
   'estimatedAmount',

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/manufacturing/sop
 // 文件名称：doc.d.ts
-// 创建时间：2026-06-30
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/sop 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -29,11 +29,6 @@ export interface SopDoc extends ApprovalDtoBase {
   sopDocId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-   */
-  plantCode: string;
-
-  /**
    * SOP 编码
    */
   sopCode: string;
@@ -44,12 +39,12 @@ export interface SopDoc extends ApprovalDtoBase {
   sopName: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
@@ -59,7 +54,7 @@ export interface SopDoc extends ApprovalDtoBase {
   routingItemName?: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
@@ -69,7 +64,7 @@ export interface SopDoc extends ApprovalDtoBase {
   workstationName?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
 
@@ -77,11 +72,6 @@ export interface SopDoc extends ApprovalDtoBase {
    * 当前生效版本 名称（填充字段）
    */
   currentRevisionName?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
@@ -124,7 +114,12 @@ export interface SopDocQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode?: string;
 
@@ -139,29 +134,24 @@ export interface SopDocQuery extends TaktPagedQuery {
   sopName?: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang?: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
@@ -248,12 +238,12 @@ export interface SopDocCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode: string;
 
@@ -268,29 +258,24 @@ export interface SopDocCreate {
   sopName: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
@@ -326,6 +311,11 @@ export interface SopDocUpdate extends SopDocCreate {
    * SopDocID（标识要更新的实体）
    */
   sopDocId: string;
+
+  /**
+   * 版本列表（子表，级联保存）
+   */
+  revisions?: any;
 
 }
 
@@ -366,7 +356,12 @@ export interface SopDocTemplate {
   companyCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -381,29 +376,24 @@ export interface SopDocTemplate {
   sopName?: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang?: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
@@ -445,12 +435,12 @@ export interface SopDocImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
    */
   plantCode?: string;
 
@@ -465,29 +455,24 @@ export interface SopDocImport {
   sopName?: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode?: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId?: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang?: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）
@@ -524,7 +509,12 @@ export interface SopDocExport {
   sopDocId: string;
 
   /**
-   * 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
    */
   plantCode: string;
 
@@ -539,29 +529,24 @@ export interface SopDocExport {
   sopName: string;
 
   /**
-   * 产品/物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options）
+   * 产品/物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
    */
   materialCode: string;
 
   /**
-   * 工艺路线明细 ID（关联 TaktRoutingItem.Id，选项 TaktRoutingItems/options）
+   * 工艺路线明细 ID（选项 TaktRoutingItems/options；DictValue=Id）
    */
   routingItemId: string;
 
   /**
-   * 工位 ID（关联 TaktSopWorkstation.Id，选项 TaktSopWorkstations/options）
+   * 工位 ID（选项 TaktSopWorkstations/options；DictValue=Id）
    */
   workstationId?: string;
 
   /**
-   * 当前生效版本 ID（关联 TaktSopRevision.Id，选项 TaktSopRevisions/options）
+   * 当前生效版本 ID（选项 TaktSopRevisions/options；DictValue=Id）
    */
   currentRevisionId?: string;
-
-  /**
-   * 默认语言（选项 TaktCultures/options，DictValue=CultureCode）
-   */
-  defaultLang: string;
 
   /**
    * 状态（字典 sys_normal_disable_status；0=禁用，1=启用，2=锁定）

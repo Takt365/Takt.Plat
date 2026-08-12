@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/logistics/manufacturing/output
 // 文件名称：pcba-output.ts
-// 创建时间：2026-07-13
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/manufacturing/output 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   PcbaOutput,
   PcbaOutputCreate,
-  PcbaOutputDefaultDetail,
   PcbaOutputUpdate
 } from '@/types/logistics/manufacturing/output/pcba-output';
 
@@ -121,29 +120,6 @@ export function getPcbaOutputOptions(): Promise<TaktSelectOption[]> {
   return request<TaktSelectOption[]>({
     url: `${PCBA_OUTPUT_API_BASE}/options`,
     method: 'get',
-  });
-}
-
-/**
- * 按物料获取 PCBA 日报默认明细预览（一行一工作中心）
- * @param {string} materialCode 物料编码
- * @param {string} plantCode 工厂代码
- * @param {string} prodDate 生产日期（YYYY-MM-DD）
- * @returns {Promise<PcbaOutputDefaultDetail[]>} 默认明细预览
- */
-export function getPcbaOutputDefaultDetailsByMaterial(
-  materialCode: string,
-  plantCode: string,
-  prodDate: string
-): Promise<PcbaOutputDefaultDetail[]> {
-  return request<PcbaOutputDefaultDetail[]>({
-    url: `${PCBA_OUTPUT_API_BASE}/default-details-by-material`,
-    method: 'get',
-    params: {
-      materialCode,
-      plantCode,
-      prodDate,
-    },
   });
 }
 

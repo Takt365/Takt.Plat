@@ -28,12 +28,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.ecno')"
-                name="ecNo"
+                :label="t('entity.ecattachment.ecCode')"
+                name="ecCode"
               >
                 <a-input
-                  v-model:value="formState.ecNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecno') })"
+                  v-model:value="formState.ecCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') })"
                   show-count
                   :maxlength="10"
                   disabled
@@ -71,12 +71,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.ecattachment.docno')"
-                name="docNo"
+                :label="t('entity.ecattachment.docCode')"
+                name="docCode"
               >
                 <a-input
-                  v-model:value="formState.docNo"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docno') })"
+                  v-model:value="formState.docCode"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') })"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -199,7 +199,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ['tenantCode', 'companyCode', 'companyDefaultCulture', 'ecNo', 'lineNumber', 'attachmentType', 'docNo', 'fileName', 'accessUrl', 'extField', 'remark']
+const formFields = ['tenantCode', 'companyCode','cultureCode', 'ecCode', 'lineNumber', 'attachmentType', 'docCode', 'fileName', 'accessUrl', 'extField', 'remark']
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -241,9 +241,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('companyDefaultCulture') && (force || !target.companyDefaultCulture)) {
-    target.companyDefaultCulture = userStore.userInfo?.companyDefaultCulture ?? ''
+  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
+
 }
 
 /** 表单字段默认值 */
@@ -380,13 +384,12 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  ecNo: [
+  ecCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecno') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.ecCode') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   lineNumber: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
@@ -409,27 +412,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change',
   }],
-  docNo: [
+  docCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docno') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.docCode') }),
       trigger: 'blur',
-    },
-  ],
+    }],
   fileName: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.filename') }),
       trigger: 'change',
-    },
-  ],
+    }],
   accessUrl: [
     {
       required: true,
       message: t('common.page.form.placeholder.required', { field: t('entity.ecattachment.accessurl') }),
       trigger: 'change',
-    },
-  ],
+    }],
 }))
 
 /** 校验表单（失败 throw，供父级 handleFormSubmit 捕获） */
@@ -445,10 +445,10 @@ function getValues(): Record<string, any> {
     companyCode: formState.companyCode,
     companyDefaultCulture: formState.companyDefaultCulture,
     ecId: props.masterId,
-    ecNo: String(formState.ecNo ?? '').trim(),
+    ecCode: String(formState.ecCode ?? '').trim(),
     lineNumber: typeof formState.lineNumber === 'number' ? formState.lineNumber : Number(formState.lineNumber),
     attachmentType: String(formState.attachmentType ?? '').trim(),
-    docNo: String(formState.docNo ?? '').trim(),
+    docCode: String(formState.docCode ?? '').trim(),
     fileName: String(formState.fileName ?? '').trim(),
     accessUrl: String(formState.accessUrl ?? '').trim(),
     extField: formState.extField,

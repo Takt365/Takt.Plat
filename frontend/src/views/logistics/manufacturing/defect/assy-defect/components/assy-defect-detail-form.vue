@@ -115,12 +115,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('randomCardNo')"
-                name="randomCardNo"
+                :label="pi.label('randomCardCode')"
+                name="randomCardCode"
               >
                 <a-input
-                  v-model:value="formState.randomCardNo"
-                  :placeholder="pi.ph('randomCardNo')"
+                  v-model:value="formState.randomCardCode"
+                  :placeholder="pi.ph('randomCardCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -248,7 +248,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","prodActualQty","goodQuantity","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardNo","occurrenceEngineering","testStep","defectSymptom","defectLocation","defectReason","repairOperator"]
+const formFields = ["prodOrderCode","prodActualQty","goodQuantity","lineNumber","defectCategory","defectQty","cumulativeDefectQty","randomCardCode","occurrenceEngineering","testStep","defectSymptom","defectLocation","defectReason","repairOperator"]
 
 
 

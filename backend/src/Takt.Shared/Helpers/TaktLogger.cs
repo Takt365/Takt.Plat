@@ -58,6 +58,7 @@ public static class TaktLogger
             CompanyCode = context?.CompanyCode,
             Route = context?.Route,
             RequestId = context?.RequestId,
+            TraceId = context?.TraceId,
             ClientIp = context?.ClientIp,
             Extra = context?.Extra
         };

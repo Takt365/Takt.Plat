@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktWorkCenterI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktWorkCenter 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,15 +90,6 @@ public class TaktWorkCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.workcenter._self
             new TranslationSeedItem("entity.workcenter._self", "zh-HK", "工作中心信息_hk", "实体名称"),
 
-            // entity.workcenter.plantcode
-            new TranslationSeedItem("entity.workcenter.plantcode", "en-US", "工厂代码_us", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.workcenter.plantcode
-            new TranslationSeedItem("entity.workcenter.plantcode", "ja-JP", "工厂代码_jp", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.workcenter.plantcode
-            new TranslationSeedItem("entity.workcenter.plantcode", "zh-CN", "工厂代码", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-            // entity.workcenter.plantcode
-            new TranslationSeedItem("entity.workcenter.plantcode", "zh-HK", "工厂代码_hk", "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）"),
-
             // entity.workcenter.code
             new TranslationSeedItem("entity.workcenter.code", "en-US", "工作中心编码_us", "工作中心编码"),
             // entity.workcenter.code
@@ -108,14 +99,14 @@ public class TaktWorkCenterI18nSeedData : ITaktSeedDataCoordinator
             // entity.workcenter.code
             new TranslationSeedItem("entity.workcenter.code", "zh-HK", "工作中心编码_hk", "工作中心编码"),
 
-            // entity.workcenter.name
-            new TranslationSeedItem("entity.workcenter.name", "en-US", "工作中心名称_us", "工作中心名称"),
-            // entity.workcenter.name
-            new TranslationSeedItem("entity.workcenter.name", "ja-JP", "工作中心名称_jp", "工作中心名称"),
-            // entity.workcenter.name
-            new TranslationSeedItem("entity.workcenter.name", "zh-CN", "工作中心名称", "工作中心名称"),
-            // entity.workcenter.name
-            new TranslationSeedItem("entity.workcenter.name", "zh-HK", "工作中心名称_hk", "工作中心名称"),
+            // entity.workcenter.description
+            new TranslationSeedItem("entity.workcenter.description", "en-US", "工作中心描述_us", "工作中心描述"),
+            // entity.workcenter.description
+            new TranslationSeedItem("entity.workcenter.description", "ja-JP", "工作中心描述_jp", "工作中心描述"),
+            // entity.workcenter.description
+            new TranslationSeedItem("entity.workcenter.description", "zh-CN", "工作中心描述", "工作中心描述"),
+            // entity.workcenter.description
+            new TranslationSeedItem("entity.workcenter.description", "zh-HK", "工作中心描述_hk", "工作中心描述"),
 
             // entity.workcenter.status
             new TranslationSeedItem("entity.workcenter.status", "en-US", "工作中心状态_us", "状态（字典 sys_normal_disable；1=启用，0=禁用）"),

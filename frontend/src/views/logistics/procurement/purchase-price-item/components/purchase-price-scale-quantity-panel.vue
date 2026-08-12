@@ -63,6 +63,7 @@
         :data-source="dataSource"
         :loading="loading"
         :stripe="true"
+        :virtual="true"
         :row-key="getPurchasePriceScaleQuantityId"
         :row-selection="rowSelection"
         :custom-row="onClickRow"
@@ -183,6 +184,15 @@
         <a-input-number
           v-model:value="advancedQueryForm.taxIncludedPrice"
           :placeholder="pi.queryPh('taxIncludedPrice', 'required')"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('taxAmount')">
+      <a-form-item :label="pi.queryLabel('taxAmount')">
+        <a-input-number
+          v-model:value="advancedQueryForm.taxAmount"
+          :placeholder="pi.queryPh('taxAmount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
@@ -410,7 +420,49 @@ const formRef = ref()
 
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PURCHASEPRICESCALEQUANTITY_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.purchasePriceSeq !== undefined && form.purchasePriceSeq !== null) {
+    return true
+  }
+  if (form.purchaseScaleSeq !== undefined && form.purchaseScaleSeq !== null) {
+    return true
+  }
+  if (form.scaleQuantity !== undefined && form.scaleQuantity !== null) {
+    return true
+  }
+  if (form.price !== undefined && form.price !== null) {
+    return true
+  }
+  if (form.untaxedPrice !== undefined && form.untaxedPrice !== null) {
+    return true
+  }
+  if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
+    return true
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    return true
+  }
+  if (form.isObsolete !== undefined && form.isObsolete !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -426,8 +478,8 @@ function createEmptyAdvancedQueryForm() {
     price: undefined as number | undefined,
     untaxedPrice: undefined as number | undefined,
     taxIncludedPrice: undefined as number | undefined,
-    isObsolete: undefined as number | undefined,
-  }
+    taxAmount: undefined as number | undefined,
+    isObsolete: undefined as number | undefined,  }
 }
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 const visibleQueryFieldKeys = ref<string[]>([])
@@ -577,6 +629,16 @@ const columns = computed<TableColumnsType>(() => [
       String(getPurchasePriceScaleQuantityField(record, 'taxIncludedPrice') ?? ''),
   },
   {
+    title: pi.label('taxAmount'),
+    dataIndex: 'taxAmount',
+    key: 'taxAmount',
+    width: 120,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: PurchasePriceScaleQuantity }) =>
+      String(getPurchasePriceScaleQuantityField(record, 'taxAmount') ?? ''),
+  },
+  {
     title: pi.label('isObsolete'),
     dataIndex: 'isObsolete',
     key: 'isObsolete',
@@ -603,10 +665,8 @@ const columns = computed<TableColumnsType>(() => [
         icon: RiDeleteBinLine,
         permission: 'logistics:procurement:purchase:price:delete',
         onClick: (record: PurchasePriceScaleQuantity) => void handleDeleteOne(record),
-      },
-    ],
-  }),
-])
+      }],
+  })])
 
 /** 与 TaktSingleTable 展示列对齐（用于汇总行单元格） */
 const resolvedSummaryColumns = computed(() => {
@@ -715,7 +775,7 @@ function onClickRow(record: PurchasePriceScaleQuantity) {
 }
 
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PurchasePriceScaleQuantityQuery} 查询 DTO
  */
@@ -757,6 +817,9 @@ function buildListQuery(overrides?: Partial<PurchasePriceScaleQuantityQuery>): P
   }
   if (form.taxIncludedPrice !== undefined && form.taxIncludedPrice !== null) {
     query.taxIncludedPrice = form.taxIncludedPrice
+  }
+  if (form.taxAmount !== undefined && form.taxAmount !== null) {
+    query.taxAmount = form.taxAmount
   }
   if (form.isObsolete !== undefined && form.isObsolete !== null) {
     query.isObsolete = form.isObsolete
@@ -991,6 +1054,9 @@ async function handleExport() {
   }
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPurchasePriceScaleQuantity(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Performance
 // 文件名称：TaktPerfObjectiveI18nSeedData.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPerfObjective 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -197,15 +197,6 @@ public class TaktPerfObjectiveI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.perfobjective.achievementnotes", "zh-CN", "目标达成说明", "目标达成说明"),
             // entity.perfobjective.achievementnotes
             new TranslationSeedItem("entity.perfobjective.achievementnotes", "zh-HK", "目标达成说明_hk", "目标达成说明"),
-
-            // entity.perfobjective.relatedplant
-            new TranslationSeedItem("entity.perfobjective.relatedplant", "en-US", "关联工厂_us", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfobjective.relatedplant
-            new TranslationSeedItem("entity.perfobjective.relatedplant", "ja-JP", "关联工厂_jp", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfobjective.relatedplant
-            new TranslationSeedItem("entity.perfobjective.relatedplant", "zh-CN", "关联工厂", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
-            // entity.perfobjective.relatedplant
-            new TranslationSeedItem("entity.perfobjective.relatedplant", "zh-HK", "关联工厂_hk", "关联工厂（选项 TaktPlants/options；DictValue=Id）"),
 
             // entity.perfobjective.objectivestatus
             new TranslationSeedItem("entity.perfobjective.objectivestatus", "en-US", "业务状态_us", "业务状态（字典 hr_perf_objective_status；0=待确认 1=进行中 2=已完成）"),

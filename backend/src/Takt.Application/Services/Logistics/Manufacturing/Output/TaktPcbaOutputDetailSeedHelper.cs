@@ -97,9 +97,9 @@ internal static class TaktPcbaOutputDetailSeedHelper
                 {
                     existing.CompanyCode = dto.CompanyCode;
                 }
-                if (string.IsNullOrWhiteSpace(existing.CompanyDefaultCulture))
+                if (string.IsNullOrWhiteSpace(existing.CultureCode))
                 {
-                    existing.CompanyDefaultCulture = dto.CompanyDefaultCulture;
+                    existing.CultureCode = dto.CultureCode;
                 }
                 if (existing.ShiftNo <= 0)
                 {
@@ -114,7 +114,7 @@ internal static class TaktPcbaOutputDetailSeedHelper
                 {
                     TenantCode = dto.TenantCode,
                     CompanyCode = dto.CompanyCode,
-                    CompanyDefaultCulture = dto.CompanyDefaultCulture,
+                    CultureCode = dto.CultureCode,
                     PcbaOutputId = 0,
                     ProdOrderCode = dto.ProdOrderCode,
                     LineNumber = lineNumber,

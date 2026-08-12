@@ -27,7 +27,7 @@ export interface EcExecTransposed {
   lineNumber: number;
   ecIssueDate: string;
   ecLeader: string;
-  ecNo: string;
+  ecCode: string;
   ecModel: string;
   ecNewItem?: string | null;
   deptCells: Record<string, EcExecTransposedCell>;
@@ -35,7 +35,7 @@ export interface EcExecTransposed {
 
 /** 设变部门转置查询 */
 export interface EcExecTransposedQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   ecModel?: string;
   ecNewItem?: string;
   ecLeader?: string;
@@ -55,7 +55,7 @@ export interface EcExecTransposedResult {
 export interface EcExecBatchTransposedStage {
   stageCode: string;
   stageDate?: string | null;
-  batchNo?: string | null;
+  batchCode?: string | null;
   dateDisplayText?: string | null;
 }
 
@@ -64,7 +64,7 @@ export interface EcExecBatchTransposed {
   ecDetailId: string;
   ecId: string;
   lineNumber: number;
-  ecNo: string;
+  ecCode: string;
   technicalLiaisonNo?: string | null;
   pNo?: string | null;
   tcjLiaisonNo?: string | null;
@@ -77,12 +77,12 @@ export interface EcExecBatchTransposed {
 
 /** 设变批次转置查询 */
 export interface EcExecBatchTransposedQuery extends TaktPagedQuery {
-  ecNo?: string;
+  ecCode?: string;
   ecModel?: string;
   ecNewItem?: string;
   ecIssueDateStart?: string;
   ecIssueDateEnd?: string;
-  batchNo?: string;
+  batchCode?: string;
 }
 
 /** 设变批次转置分页结果 */

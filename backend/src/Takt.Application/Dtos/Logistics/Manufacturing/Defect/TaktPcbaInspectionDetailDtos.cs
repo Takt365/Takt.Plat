@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Manufacturing.Defect
 // 文件名称：TaktPcbaInspectionDetailDtos.cs
-// 创建时间：2026-07-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：PcbaInspectionDetail 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPcbaInspectionDetail 生成，请按需审阅）
 // 
@@ -57,17 +57,17 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -107,9 +107,9 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public int InspectionStatus { get; set; } = 0;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -142,12 +142,12 @@ public class TaktPcbaInspectionDetailDto : TaktCompanyDtoBase
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -180,6 +180,16 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// PCBA检查日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -196,17 +206,17 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -236,7 +246,7 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -256,9 +266,9 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public int? InspectionStatus { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -291,12 +301,12 @@ public class TaktPcbaInspectionDetailQueryDto : TaktPagedQuery
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -341,10 +351,15 @@ public class TaktPcbaInspectionDetailCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// PCBA检查日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -363,17 +378,17 @@ public class TaktPcbaInspectionDetailCreateDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -393,7 +408,7 @@ public class TaktPcbaInspectionDetailCreateDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -413,9 +428,9 @@ public class TaktPcbaInspectionDetailCreateDto
     public int InspectionStatus { get; set; } = 0;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -448,12 +463,12 @@ public class TaktPcbaInspectionDetailCreateDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 
@@ -467,6 +482,11 @@ public class TaktPcbaInspectionDetailCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+    /// <summary>
+    /// PcbaInspectionDetailId
+    /// </summary>
+    public long PcbaInspectionDetailId { get; set; }
 }
 
 // ========================================
@@ -485,7 +505,7 @@ public class TaktPcbaInspectionDetailUpdateDto : TaktPcbaInspectionDetailCreateD
     [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
-    public long PcbaInspectionDetailId { get; set; }
+    public new long PcbaInspectionDetailId { get; set; }
 
 }
 
@@ -556,6 +576,16 @@ public class TaktPcbaInspectionDetailTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// PCBA检查日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -572,17 +602,17 @@ public class TaktPcbaInspectionDetailTemplateDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -602,7 +632,7 @@ public class TaktPcbaInspectionDetailTemplateDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -622,9 +652,9 @@ public class TaktPcbaInspectionDetailTemplateDto
     public int? InspectionStatus { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -657,12 +687,12 @@ public class TaktPcbaInspectionDetailTemplateDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -694,10 +724,15 @@ public class TaktPcbaInspectionDetailImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// PCBA检查日报ID（主表主键,序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -715,17 +750,17 @@ public class TaktPcbaInspectionDetailImportDto
     public int? LineNumber { get; set; }
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -745,7 +780,7 @@ public class TaktPcbaInspectionDetailImportDto
     public int? ShiftNo { get; set; }
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -765,9 +800,9 @@ public class TaktPcbaInspectionDetailImportDto
     public int? InspectionStatus { get; set; }
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -800,12 +835,12 @@ public class TaktPcbaInspectionDetailImportDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int? IsObsolete { get; set; }
 
@@ -859,17 +894,17 @@ public class TaktPcbaInspectionDetailExportDto
     public int LineNumber { get; set; } = 0;
 
     /// <summary>
-    /// PCBA板别（字典 logistics_pcba_function_category，存 DictValue）
+    /// PCBA板别（字典 logistics_pcba_function_category；存 DictValue）
     /// </summary>
     public string? PcbaBoardType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目视线别（字典 logistics_visual_inspection_line_category，存 DictValue）
+    /// 目视线别（字典 logistics_visual_inspection_line_category；存 DictValue）
     /// </summary>
     public string? VisualInspectionLine { get; set; } = string.Empty;
 
     /// <summary>
-    /// AOI线别（字典 logistics_aoi_inspection_line_category，存 DictValue）
+    /// AOI线别（字典 logistics_aoi_inspection_line_category；存 DictValue）
     /// </summary>
     public string? AoiLine { get; set; } = string.Empty;
 
@@ -889,7 +924,7 @@ public class TaktPcbaInspectionDetailExportDto
     public int ShiftNo { get; set; } = 0;
 
     /// <summary>
-    /// 检查员（关联 TaktEmployee.Id，选项 TaktEmployees/options）
+    /// 检查员（选项 TaktEmployees/options；DictValue=Id）
     /// </summary>
     public string? InspectorName { get; set; } = string.Empty;
 
@@ -909,9 +944,9 @@ public class TaktPcbaInspectionDetailExportDto
     public int InspectionStatus { get; set; } = 0;
 
     /// <summary>
-    /// 生产班组（选项 TaktProductionTeams/options，存 TeamCode，ExtValue=PlantCode 过滤）
+    /// 生产班组（选项 TaktProductionTeams/options；DictValue=TeamCode，ExtValue=PlantCode）
     /// </summary>
-    public string? ProdTeam { get; set; } = string.Empty;
+    public string? TeamCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 检查工数
@@ -944,12 +979,12 @@ public class TaktPcbaInspectionDetailExportDto
     public string? Content { get; set; } = string.Empty;
 
     /// <summary>
-    /// 不良个所（字典 logistics_pcb_location_category，存 DictValue）
+    /// 不良个所（字典 logistics_pcb_location_category；存 DictValue）
     /// </summary>
     public string? DefectLocation { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否作废（字典 sys_yes_no_type，0=否 1=是；编辑移除子行时标记作废）
+    /// 是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）
     /// </summary>
     public int IsObsolete { get; set; } = 0;
 

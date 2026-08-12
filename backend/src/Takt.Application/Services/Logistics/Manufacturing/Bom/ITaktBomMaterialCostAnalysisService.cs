@@ -1,0 +1,169 @@
+// ========================================
+// 项目名称：节拍工厂·Takt Plat
+// 命名空间：Takt.Application.Services.Logistics.Manufacturing.Bom
+// 文件名称：ITaktBomMaterialCostAnalysisService.cs
+// 创建时间：2026-08-01
+// 创建人：Takt365(Cursor AI)
+// 功能描述：BOM 成本分析服务接口（含三页共用工厂/机种/物料级联选项）
+//
+// 版权信息：Copyright (c) 2026 Takt  All rights reserved.
+// 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
+// ========================================
+
+using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+using Takt.Shared.Options;
+
+namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
+
+/// <summary>
+/// BOM 成本分析服务（转置 / 差异 / 月度涨跌；
+/// 工厂→机种→物料级联选项供成本分析 / 产品推移 / 机种推移三页共用）
+/// </summary>
+public interface ITaktBomMaterialCostAnalysisService
+{
+    /// <summary>
+    /// 查询栏工厂选项（级联第 1 级）：仅当前公司 RelatedPlant，且须存在于本表 PlantCode
+    /// </summary>
+    /// <returns>下拉选项（通常 0～1 项；DictValue=PlantCode）</returns>
+    Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisPlantOptionsAsync();
+
+    /// <summary>
+    /// 查询栏物料类型去重选项（本表 MaterialType；须工厂）
+    /// <para>返回该工厂下全部类型（FERT/HALB/…），不做默认截断；前端拉全量后再默认选中 FERT。</para>
+    /// <para>❌ 非字典 logistics_material_type（CRUD 表单专用）。</para>
+    /// </summary>
+    /// <param name="queryDto">须 PlantCode</param>
+    /// <returns>DictValue/DictLabel=MaterialType；PlantCode 空则空列表</returns>
+    Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisMaterialTypeOptionsAsync(
+        TaktBomMaterialCostAnalysisMaterialTypeOptionsQueryDto queryDto);
+
+    /// <summary>
+    /// 查询栏机种去重选项（本表 ModelCode；须工厂）
+    /// <para>MaterialType 有值才按类型过滤，空=该工厂全部机种。DictLabel 优先型号目的地机种名。</para>
+    /// <para>❌ 非 CRUD 主数据 TaktModelDestination / TaktBomMaterialCosts/model-options。</para>
+    /// </summary>
+    /// <param name="queryDto">机种选项查询（PlantCode 必填；MaterialType 可选）</param>
+    /// <returns>下拉选项（DictValue=ModelCode；DictLabel=机种名或编码）</returns>
+    Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisModelOptionsAsync(
+        TaktBomMaterialCostAnalysisModelOptionsQueryDto queryDto);
+
+    /// <summary>
+    /// 查询栏产品编码去重选项（本表 ProductCode；须工厂）
+    /// <para>仅本表 ProductCode；❌ 非 MaterialPlant、非物料类型字典。MaterialType/ModelCode 可空。</para>
+    /// </summary>
+    /// <param name="queryDto">产品选项查询（PlantCode 必填）</param>
+    /// <returns>DictValue=ProductCode；ExtValue=ModelCode；ExtLabel=MaterialType</returns>
+    Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisProductOptionsAsync(
+        TaktBomMaterialCostAnalysisProductOptionsQueryDto queryDto);
+
+    /// <summary>
+    /// 获取成本分析转置列表（产品 × 核算月成本矩阵 + 环比涨跌）
+    /// </summary>
+    /// <param name="queryDto">转置查询 DTO</param>
+    /// <returns>分页转置行、期间列、可选机种汇总与合计</returns>
+    Task<TaktBomMaterialCostAnalysisTransposedResultDto> GetBomMaterialCostAnalysisTransposedListAsync(
+        TaktBomMaterialCostAnalysisTransposedQueryDto queryDto);
+
+    /// <summary>
+    /// 导出成本分析转置 Excel
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>实际文件名与文件字节</returns>
+    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostAnalysisTransposedAsync(
+        TaktBomMaterialCostAnalysisTransposedQueryDto? query = null,
+        string? sheetName = null,
+        string? fileName = null);
+
+    /// <summary>
+    /// 获取成本分析差异（单产品两核算月组件级对比）
+    /// </summary>
+    /// <param name="queryDto">差异查询 DTO</param>
+    /// <returns>汇总与组件差异明细</returns>
+    Task<TaktBomMaterialCostAnalysisVarianceResultDto> GetBomMaterialCostAnalysisVarianceAnalysisAsync(
+        TaktBomMaterialCostAnalysisVarianceQueryDto queryDto);
+
+    /// <summary>
+    /// 导出成本分析差异 Excel（汇总 + 明细双表）
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">明细工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>实际文件名与文件字节</returns>
+    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostAnalysisVarianceAnalysisAsync(
+        TaktBomMaterialCostAnalysisVarianceQueryDto query,
+        string? sheetName = null,
+        string? fileName = null);
+
+    /// <summary>
+    /// 获取成本分析月度涨跌（机种下单产品或产品平均月成本序列）
+    /// </summary>
+    /// <param name="queryDto">月度涨跌查询 DTO</param>
+    /// <returns>月度涨跌结果</returns>
+    Task<TaktBomMaterialCostAnalysisMonthlyTrendResultDto> GetBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
+        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto queryDto);
+
+    /// <summary>
+    /// 导出成本分析月度涨跌 Excel
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>实际文件名与文件字节</returns>
+    Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
+        TaktBomMaterialCostAnalysisMonthlyTrendQueryDto query,
+        string? sheetName = null,
+        string? fileName = null);
+
+    /// <summary>
+    /// 成本合计/重算：明细按工厂+产品+核算月合计写入主表（仅 FERT），再刷新机种月均
+    /// </summary>
+    /// <param name="queryDto">筛选（PlantCode/ModelCode 可选；须单个核算月）</param>
+    /// <param name="forceRecalculate">为 true 时 ResetGroupCount 计入已同步组（与合计同 Sync 范围）</param>
+    /// <param name="processRecordCount">处理工厂+产品组上限（0=全部）</param>
+    /// <returns>重算统计</returns>
+    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto> RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
+        TaktBomMaterialCostItemQueryDto queryDto,
+        bool forceRecalculate = false,
+        int processRecordCount = 5000);
+
+    /// <summary>
+    /// Quartz 成本合计：仅合计判定日所在自然月（CostingDate 当月）
+    /// </summary>
+    /// <param name="force">保留参数（兼容旧调用）</param>
+    /// <param name="asOfDate">判定日；默认今天</param>
+    /// <param name="nthWorkingDay">保留参数（兼容旧调用）</param>
+    /// <returns>合计统计</returns>
+    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostSumAsync(
+        bool force = false,
+        DateTime? asOfDate = null,
+        int nthWorkingDay = 3);
+
+    /// <summary>
+    /// Quartz 重算成本：force 重算判定日所在自然月（CostingDate 当月）
+    /// </summary>
+    /// <param name="force">保留参数（兼容旧调用）</param>
+    /// <param name="asOfDate">判定日；默认今天</param>
+    /// <param name="nthWorkingDay">保留参数（兼容旧调用）</param>
+    /// <returns>重算统计</returns>
+    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostRecalculateAsync(
+        bool force = false,
+        DateTime? asOfDate = null,
+        int nthWorkingDay = 3);
+
+    /// <summary>
+    /// 仅按型号目的地回写主表机种编码，并按工厂物料回写物料类型，再重算机种月平均（不改产品月成本、不扫明细）
+    /// </summary>
+    /// <param name="queryDto">工厂 + 核算期间；机种可选</param>
+    /// <returns>刷新结果</returns>
+    Task<TaktBomMaterialCostRefreshModelResultDto> RefreshBomMaterialCostModelFieldsAsync(
+        TaktBomMaterialCostRefreshModelQueryDto queryDto);
+
+    /// <summary>
+    /// Quartz：当月先回填机种+物料类型，再按物料类型+机种重算机种月平均
+    /// </summary>
+    /// <param name="asOfDate">判定日；默认今天（目标月=该日所在月）</param>
+    /// <returns>各工厂汇总结果；当月无主表行时返回 null</returns>
+    Task<TaktBomMaterialCostRefreshModelResultDto?> RunScheduledBomModelAvgCostAsync(DateTime? asOfDate = null);
+}

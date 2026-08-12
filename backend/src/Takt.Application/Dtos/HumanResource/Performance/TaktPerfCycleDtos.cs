@@ -35,80 +35,6 @@ public class TaktPerfCycleDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PerfCycleId { get; set; }
 
-    /// <summary>
-    /// 周期编码（租户+公司内唯一）
-    /// </summary>
-    public string CycleCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 周期名称
-    /// </summary>
-    public string CycleName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 周期类型（月度/季度/半年度/年度）
-    /// </summary>
-    public string CycleType { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 周期年度
-    /// </summary>
-    public int CycleYear { get; set; } = 0;
-
-    /// <summary>
-    /// 周期序号
-    /// </summary>
-    public int CycleSequence { get; set; } = 0;
-
-    /// <summary>
-    /// 开始日期
-    /// </summary>
-    public DateTime StartDate { get; set; }
-
-    /// <summary>
-    /// 结束日期
-    /// </summary>
-    public DateTime EndDate { get; set; }
-
-    /// <summary>
-    /// 目标设定截止日期
-    /// </summary>
-    public DateTime GoalSettingDueDate { get; set; }
-
-    /// <summary>
-    /// 自评截止日期
-    /// </summary>
-    public DateTime SelfEvaluationDueDate { get; set; }
-
-    /// <summary>
-    /// 主管评审截止日期
-    /// </summary>
-    public DateTime SupervisorReviewDueDate { get; set; }
-
-    /// <summary>
-    /// 面谈截止日期
-    /// </summary>
-    public DateTime InterviewDueDate { get; set; }
-
-    /// <summary>
-    /// 结果确认截止日期
-    /// </summary>
-    public DateTime ResultConfirmationDueDate { get; set; }
-
-    /// <summary>
-    /// 适用部门
-    /// </summary>
-    public string ApplicableDepartment { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 周期说明
-    /// </summary>
-    public string PerfCycleDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -136,6 +62,11 @@ public class TaktPerfCycleQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 周期编码（租户+公司内唯一）
@@ -245,7 +176,7 @@ public class TaktPerfCycleQueryDto : TaktPagedQuery
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -293,9 +224,10 @@ public class TaktPerfCycleCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 周期编码（租户+公司内唯一）
@@ -376,7 +308,7 @@ public class TaktPerfCycleCreateDto
     /// 关联工厂
     /// </summary>
     [Required(ErrorMessage = "关联工厂不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -459,6 +391,11 @@ public class TaktPerfCycleTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 周期编码（租户+公司内唯一）
     /// </summary>
     public string? CycleCode { get; set; } = string.Empty;
@@ -531,7 +468,7 @@ public class TaktPerfCycleTemplateDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -566,9 +503,10 @@ public class TaktPerfCycleImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
     /// 周期编码（租户+公司内唯一）
@@ -643,7 +581,7 @@ public class TaktPerfCycleImportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）
@@ -756,7 +694,7 @@ public class TaktPerfCycleExportDto
     /// <summary>
     /// 关联工厂
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 状态（0=待启动 1=目标设定中 2=进行中 3=评审中 4=已完成 5=已归档）

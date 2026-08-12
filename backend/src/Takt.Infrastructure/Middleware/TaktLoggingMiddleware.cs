@@ -258,6 +258,7 @@ public class TaktLoggingMiddleware
             Module = "request",
             Action = "http",
             RequestId = requestId,
+            TraceId = Activity.Current?.TraceId.ToString(),
             Route = context.Request.Path.Value,
             ClientIp = context.Connection.RemoteIpAddress?.ToString(),
             TenantCode = TaktUserContext.TryResolveTenantCode(context),

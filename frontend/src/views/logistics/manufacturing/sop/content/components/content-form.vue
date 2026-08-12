@@ -56,12 +56,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.sopcontent.contentlang')"
-                name="contentLang"
+                :label="t('entity.sopcontent.culturecode')"
+                name="cultureCode"
               >
                 <a-textarea
-                  v-model:value="formState.contentLang"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.contentlang') })"
+                  v-model:value="formState.cultureCode"
+                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.sopcontent.culturecode') })"
                   :rows="2"
                 />
               </a-form-item>
@@ -158,8 +158,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["revisionId","sopId","contentLang","contentTitle","steps","extField","remark"]
-
+const formFields = ["revisionId","sopId","cultureCode","contentTitle","steps","extField","remark"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -184,7 +183,6 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
-
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 sopContentId 才视为编辑） */
 watch(
@@ -224,10 +222,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  contentLang: [
+  cultureCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.contentlang') }),
+      message: t('common.page.form.placeholder.required', { field: t('entity.sopcontent.culturecode') }),
       trigger: 'blur'
     }
   ],

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Statistics.Report
 // 文件名称：TaktConfigurableOrderByDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ConfigurableOrderBy 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktConfigurableOrderBy 生成，请按需审阅）
 // 
@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
-using Takt.Shared.Enums;
 
 namespace Takt.Application.Dtos.Statistics.Report;
 
@@ -60,7 +59,7 @@ public class TaktConfigurableOrderByDto : TaktCompanyDtoBase
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public int SortDirection { get; set; }
+    public int SortDirection { get; set; } = 0;
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）
@@ -95,6 +94,16 @@ public class TaktConfigurableOrderByQueryDto : TaktPagedQuery
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -162,10 +171,15 @@ public class TaktConfigurableOrderByCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -187,12 +201,7 @@ public class TaktConfigurableOrderByCreateDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public int SortDirection { get; set; }
-
-    /// <summary>
-    /// 排序号（ORDER BY 优先级）
-    /// </summary>
-    public int SortOrder { get; set; } = 0;
+    public int SortDirection { get; set; } = 0;
 
     /// <summary>
     /// 扩展字段JSON
@@ -204,6 +213,12 @@ public class TaktConfigurableOrderByCreateDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -270,6 +285,16 @@ public class TaktConfigurableOrderByTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+    /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -289,11 +314,6 @@ public class TaktConfigurableOrderByTemplateDto
     /// 排序方向（升序/降序）
     /// </summary>
     public int? SortDirection { get; set; }
-
-    /// <summary>
-    /// 排序号（ORDER BY 优先级）
-    /// </summary>
-    public int? SortOrder { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -323,10 +343,15 @@ public class TaktConfigurableOrderByImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
     /// <summary>
     /// 关联报表主表 ID（主子表关系）
     /// </summary>
@@ -349,11 +374,6 @@ public class TaktConfigurableOrderByImportDto
     public int? SortDirection { get; set; }
 
     /// <summary>
-    /// 排序号（ORDER BY 优先级）
-    /// </summary>
-    public int? SortOrder { get; set; }
-
-    /// <summary>
     /// 扩展字段JSON
     /// </summary>
     public string? ExtField { get; set; }
@@ -363,6 +383,12 @@ public class TaktConfigurableOrderByImportDto
     /// </summary>
     public string? Remark { get; set; }
 
+
+
+    /// <summary>
+    /// SortOrder
+    /// </summary>
+    public int SortOrder { get; set; }
 }
 
 // ========================================
@@ -405,7 +431,7 @@ public class TaktConfigurableOrderByExportDto
     /// <summary>
     /// 排序方向（升序/降序）
     /// </summary>
-    public int SortDirection { get; set; }
+    public int SortDirection { get; set; } = 0;
 
     /// <summary>
     /// 排序号（ORDER BY 优先级）

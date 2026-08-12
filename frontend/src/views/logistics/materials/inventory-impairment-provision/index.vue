@@ -83,9 +83,9 @@
             dict-type="logistics_inventory_provision_scope"
           />
         </template>
-        <template v-else-if="column.key === 'currency'">
+        <template v-else-if="column.key === 'currencyCode'">
           <TaktDictTag
-            :value="getInventoryImpairmentProvisionDictValue(record, 'currency')"
+            :value="getInventoryImpairmentProvisionDictValue(record, 'currencyCode')"
             dict-type="accounting_currency_code"
           />
         </template>
@@ -176,11 +176,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('materialName')">
-      <a-form-item :label="pi.queryLabel('materialName')">
+      <div v-show="isFieldVisible('materialDescription')">
+      <a-form-item :label="pi.queryLabel('materialDescription')">
         <a-input
-          v-model:value="advancedQueryForm.materialName"
-          :placeholder="pi.queryPh('materialName', 'required')"
+          v-model:value="advancedQueryForm.materialDescription"
+          :placeholder="pi.queryPh('materialDescription', 'required')"
           show-count
           :maxlength="200"
           allow-clear
@@ -333,12 +333,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('currency')">
-      <a-form-item :label="pi.queryLabel('currency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.currency"
+          v-model:value="advancedQueryForm.currencyCode"
           dict-type="accounting_currency_code"
-          :placeholder="pi.queryPh('currency', 'select')"
+          :placeholder="pi.queryPh('currencyCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -592,7 +592,6 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
-
 /**
  * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
  * @param overrides 覆盖分页或导出上限等字段
@@ -675,7 +674,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /**
  * 构建列表标准文本列
  * @param key 列 key / dataIndex
@@ -743,8 +741,6 @@ const getInventoryImpairmentProvisionDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({

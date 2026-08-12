@@ -151,11 +151,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('debitNoteNo')">
-      <a-form-item :label="pi.queryLabel('debitNoteNo')">
+      <div v-show="isFieldVisible('debitNoteCode')">
+      <a-form-item :label="pi.queryLabel('debitNoteCode')">
         <a-textarea
-          v-model:value="advancedQueryForm.debitNoteNo"
-          :placeholder="pi.queryPh('debitNoteNo', 'optional')"
+          v-model:value="advancedQueryForm.debitNoteCode"
+          :placeholder="pi.queryPh('debitNoteCode', 'optional')"
           :rows="2"
           allow-clear
         />
@@ -181,11 +181,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('costCurrency')">
-      <a-form-item :label="pi.queryLabel('costCurrency')">
+      <div v-show="isFieldVisible('currencyCode')">
+      <a-form-item :label="pi.queryLabel('currencyCode')">
         <a-input
-          v-model:value="advancedQueryForm.costCurrency"
-          :placeholder="pi.queryPh('costCurrency', 'required')"
+          v-model:value="advancedQueryForm.currencyCode"
+          :placeholder="pi.queryPh('currencyCode', 'required')"
           show-count
           :maxlength="3"
           allow-clear
@@ -442,7 +442,6 @@ onMounted(async () => {
   loadData()
 })
 
-
 /** 主表行点击选中 key（左右主子表高亮） */
 const selectedMasterKey = ref('')
 
@@ -542,13 +541,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'customerName1') ?? ''
   },
   {
-    title: pi.label('debitNoteNo'),
-    dataIndex: 'debitNoteNo',
-    key: 'debitNoteNo',
+    title: pi.label('debitNoteCode'),
+    dataIndex: 'debitNoteCode',
+    key: 'debitNoteCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'debitNoteNo') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'debitNoteCode') ?? ''
   },
   {
     title: pi.label('recorder'),
@@ -569,13 +568,13 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'totalQualityCost') ?? ''
   },
   {
-    title: pi.label('costCurrency'),
-    dataIndex: 'costCurrency',
-    key: 'costCurrency',
+    title: pi.label('currencyCode'),
+    dataIndex: 'currencyCode',
+    key: 'currencyCode',
     width: 120,
     resizable: true,
     ellipsis: true,
-    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'costCurrency') ?? ''
+    customRender: ({ record }: { record: any }) => getQualityAssuranceField(record, 'currencyCode') ?? ''
   },
   CreateActionColumn({
     actions: [
@@ -610,8 +609,6 @@ const getQualityAssuranceId = (record: QualityAssuranceRowRecord): string => {
  * @param field 字段名
  */
 const getQualityAssuranceField = (record: any, field: string): any => record?.[field]
-
-
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
@@ -675,10 +672,10 @@ function handleReset() {
   qualityAssuranceCode: '',
   assuranceMonth: '',
   customerName1: '',
-  debitNoteNo: '',
+  debitNoteCode: '',
   recorder: '',
   totalQualityCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',
@@ -881,10 +878,10 @@ function handleAdvancedQueryReset() {
   qualityAssuranceCode: '',
   assuranceMonth: '',
   customerName1: '',
-  debitNoteNo: '',
+  debitNoteCode: '',
   recorder: '',
   totalQualityCost: undefined as number | undefined,
-  costCurrency: '',
+  currencyCode: '',
   createdAtStart: '',
   createdAtEnd: '',
   extField: '',

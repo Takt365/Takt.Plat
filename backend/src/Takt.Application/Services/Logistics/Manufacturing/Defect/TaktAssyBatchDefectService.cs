@@ -113,10 +113,10 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique = await _uniqueValidator.IsUniqueAsync(
             _assyBatchDefectRepository,
             x => x.ProdCategory == entity.ProdCategory
-                && x.BatchNo == entity.BatchNo);
+                && x.BatchCode == entity.BatchCode);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique)
         {
-            throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchNo已存在");
+            throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchCode已存在");
         }
         entity = await _assyBatchDefectRepository.CreateAsync(entity);
         return await GetAssyBatchDefectByIdAsync(entity.Id) ?? entity.Adapt<TaktAssyBatchDefectDto>();
@@ -139,11 +139,11 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
         var isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique = await _uniqueValidator.IsUniqueAsync(
             _assyBatchDefectRepository,
             x => x.ProdCategory == entity.ProdCategory
-                && x.BatchNo == entity.BatchNo,
+                && x.BatchCode == entity.BatchCode,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique)
         {
-            throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchNo已存在");
+            throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchCode已存在");
         }
         await _assyBatchDefectRepository.UpdateAsync(entity);
         return await GetAssyBatchDefectByIdAsync(id) ?? throw new TaktBusinessException("组立批量不良统计不存在");
@@ -234,18 +234,18 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
             try
             {
                 var entity = rows[i].Adapt<TaktAssyBatchDefect>();
-                var importKey = $"{entity.ProdCategory}|{entity.BatchNo}";
+                var importKey = $"{entity.ProdCategory}|{entity.BatchCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（ProdCategory、BatchNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（ProdCategory、BatchCode）");
                 }
                 var isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique = await _uniqueValidator.IsUniqueAsync(
                     _assyBatchDefectRepository,
                     x => x.ProdCategory == entity.ProdCategory
-                        && x.BatchNo == entity.BatchNo);
+                        && x.BatchCode == entity.BatchCode);
                 if (!isUnique_ix_takt_logistics_manufacturing_defect_assy_batch_unique)
                 {
-                    throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchNo已存在");
+                    throw new TaktBusinessException("组立批量不良统计的ProdCategory、BatchCode已存在");
                 }
                 await _assyBatchDefectRepository.CreateAsync(entity);
                 success += 1;
@@ -303,7 +303,7 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.ProdCategory != null && x.ProdCategory.Contains(keywords))
-                || (x.BatchNo != null && x.BatchNo.Contains(keywords))
+                || (x.BatchCode != null && x.BatchCode.Contains(keywords))
                 || (x.ProdDateGroup != null && x.ProdDateGroup.Contains(keywords))
                 || (x.ProdOrderGroup != null && x.ProdOrderGroup.Contains(keywords))
                 || (x.ModelCode != null && x.ModelCode.Contains(keywords))
@@ -317,6 +317,7 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
                 || SqlFunc.ToString(x.YieldRatePercent).Contains(keywords)
                 || SqlFunc.ToString(x.ReportCount).Contains(keywords)
                 || SqlFunc.ToString(x.BatchStatus).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.LastProdDate).Contains(keywords)
@@ -334,9 +335,9 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
             exp = exp.And(x => x.ProdCategory != null && x.ProdCategory.Contains(queryDto.ProdCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchNo))
+        if (!string.IsNullOrEmpty(queryDto?.BatchCode))
         {
-            exp = exp.And(x => x.BatchNo != null && x.BatchNo.Contains(queryDto.BatchNo));
+            exp = exp.And(x => x.BatchCode != null && x.BatchCode.Contains(queryDto.BatchCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ProdDateGroup))
@@ -402,6 +403,11 @@ public class TaktAssyBatchDefectService : TaktServiceBase, ITaktAssyBatchDefectS
         if (queryDto?.BatchStatus.HasValue == true)
         {
             exp = exp.And(x => x.BatchStatus == queryDto.BatchStatus);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

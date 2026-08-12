@@ -485,8 +485,7 @@ const queryFieldsMeta = computed(() => [
   { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
   { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
   { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') },
-])
+  { key: 'remark', label: t('common.page.entity.remark') }])
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 导入对话框是否打开 */
@@ -715,7 +714,7 @@ function buildCostElementUpdateDto(
     costElementId: String(costElement.costElementId),
     tenantCode: costElement.tenantCode,
     companyCode: costElement.companyCode,
-    companyDefaultCulture: userStore.userInfo?.companyDefaultCulture ?? '',
+    cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
     costElementCode: costElement.costElementCode,
     costElementName: costElement.costElementName,
     costElementType: costElement.costElementType,
@@ -827,7 +826,6 @@ const getCostElementDictValue = (
   if (typeof value === 'string' || typeof value === 'number') return value
   return String(value)
 }
-
 
 /** 从异常对象提取用户可见消息 */
 const getErrorMessage = (error: unknown, fallback: string): string => {
@@ -949,8 +947,7 @@ watchEffect(() => {
         onClick: (record: CostElement) => handleDeleteOne(record)
       }
     ],
-  }),
-  ]
+  })]
 })
 
 /** 行选择配置 */
@@ -1025,7 +1022,6 @@ const handleReset = () => {
   }
   tableCurrentPage.value = getTaktDefaultPageIndex()
 }
-
 
 /**
  * 行内状态切换

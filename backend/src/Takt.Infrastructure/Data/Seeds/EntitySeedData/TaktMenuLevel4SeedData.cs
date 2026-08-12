@@ -217,6 +217,27 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertBOM13;
             updateCount += updateBOM13;
+
+            // 差异成本推移：机种必选；组件编码/用量月度差异与涨跌
+            var (insertBOM14, updateBOM14) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_VARIANCE_COST_TREND", menu =>
+            {
+                menu.MenuName = "差异成本推移";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_VARIANCE_COST_TREND";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.variance.cost.trend";
+                menu.Icon = "RiExchangeFundsLine";
+                menu.ParentId = manufacturingBomMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:bom:variance:cost:trend:list";
+                menu.RoutePath = "/logistics/manufacturing/bom/variance-cost-trend";
+                menu.ComponentPath = "logistics/manufacturing/bom/variance-cost-trend/index";
+                menu.SortOrder = 8;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertBOM14;
+            updateCount += updateBOM14;
         }
 
         // ========== MDS计划下的四级菜单 ==========

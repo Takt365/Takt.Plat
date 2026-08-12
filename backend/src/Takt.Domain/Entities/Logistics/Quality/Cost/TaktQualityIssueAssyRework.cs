@@ -36,7 +36,7 @@ public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
     /// <summary>
     /// 品质问题编码（冗余字段，便于查询）
     /// </summary>
-    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 30, ColumnDataType = "nvarchar", IsNullable = false)]
+    [SugarColumn(ColumnName = "quality_issue_code", ColumnDescription = "品质问题编码", Length = 20, ColumnDataType = "nvarchar", IsNullable = false)]
     public string QualityIssueCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -108,8 +108,8 @@ public class TaktQualityIssueAssyRework : TaktCompanyEntityBase
     /// <summary>
     /// 组装 Debit Note No
     /// </summary>
-    [SugarColumn(ColumnName = "assy_debit_note_no", ColumnDescription = "组装 Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
-    public string? AssyDebitNoteNo { get; set; }
+    [SugarColumn(ColumnName = "assy_debit_note_code", ColumnDescription = "组装 Debit Note No", Length = 30, ColumnDataType = "nvarchar", IsNullable = true)]
+    public string? AssyDebitNoteCode { get; set; }
 
     /// <summary>
     /// 组装其他费用(元)

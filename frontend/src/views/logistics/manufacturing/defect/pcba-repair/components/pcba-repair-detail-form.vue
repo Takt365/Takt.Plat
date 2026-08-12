@@ -79,24 +79,24 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('prodTeam')"
-                name="prodTeam"
+                :label="pi.label('TeamCode')"
+                name="TeamCode"
               >
                 <TaktSelect
-                  v-model:value="formState.prodTeam"
+                  v-model:value="formState.TeamCode"
                   api-url="TaktProductionTeams/options"
-                  :placeholder="pi.ph('prodTeam')"
+                  :placeholder="pi.ph('TeamCode')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('cardNo')"
-                name="cardNo"
+                :label="pi.label('cardCode')"
+                name="cardCode"
               >
                 <a-input
-                  v-model:value="formState.cardNo"
-                  :placeholder="pi.ph('cardNo')"
+                  v-model:value="formState.cardCode"
+                  :placeholder="pi.ph('cardCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -244,7 +244,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","prodTeam","cardNo","defectSymptom","defectEngineering","defectReason","defectQty","defectResponsibility","defectNature","repairOperator","isObsolete"]
+const formFields = ["prodOrderCode","lineNumber","pcbaBoardType","prodActualQty","TeamCode","cardCode","defectSymptom","defectEngineering","defectReason","defectQty","defectResponsibility","defectNature","repairOperator","isObsolete"]
 
 
 

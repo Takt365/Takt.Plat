@@ -377,12 +377,13 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 SqlFunc.ToString(x.EcId).Contains(keywords)
-                || (x.EcNo != null && x.EcNo.Contains(keywords))
+                || (x.EcCode != null && x.EcCode.Contains(keywords))
                 || SqlFunc.ToString(x.LineNumber).Contains(keywords)
                 || (x.AttachmentType != null && x.AttachmentType.Contains(keywords))
-                || (x.DocNo != null && x.DocNo.Contains(keywords))
+                || (x.DocCode != null && x.DocCode.Contains(keywords))
                 || (x.FileName != null && x.FileName.Contains(keywords))
                 || (x.AccessUrl != null && x.AccessUrl.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
@@ -394,9 +395,9 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             exp = exp.And(x => x.EcId == queryDto.EcId);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EcNo))
+        if (!string.IsNullOrEmpty(queryDto?.EcCode))
         {
-            exp = exp.And(x => x.EcNo != null && x.EcNo.Contains(queryDto.EcNo));
+            exp = exp.And(x => x.EcCode != null && x.EcCode.Contains(queryDto.EcCode));
         }
 
         if (queryDto?.LineNumber.HasValue == true)
@@ -409,9 +410,9 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
             exp = exp.And(x => x.AttachmentType != null && x.AttachmentType.Contains(queryDto.AttachmentType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocNo))
+        if (!string.IsNullOrEmpty(queryDto?.DocCode))
         {
-            exp = exp.And(x => x.DocNo != null && x.DocNo.Contains(queryDto.DocNo));
+            exp = exp.And(x => x.DocCode != null && x.DocCode.Contains(queryDto.DocCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.FileName))
@@ -422,6 +423,11 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         if (!string.IsNullOrEmpty(queryDto?.AccessUrl))
         {
             exp = exp.And(x => x.AccessUrl != null && x.AccessUrl.Contains(queryDto.AccessUrl));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -443,6 +449,12 @@ public class TaktEcAttachmentService : TaktServiceBase, ITaktEcAttachmentService
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

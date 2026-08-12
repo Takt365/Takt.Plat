@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Quality.Cost
 // 文件名称：TaktQualityIssueDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：QualityIssue 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktQualityIssue 生成，请按需审阅）
 // 
@@ -35,10 +35,6 @@ public class TaktQualityIssueDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long QualityIssueId { get; set; }
 
-    /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 品质问题编码（唯一，如：QF-2026-0001）
@@ -88,7 +84,7 @@ public class TaktQualityIssueDto : TaktCompanyDtoBase
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    public string CostCurrency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议/调查/试验费用明细列表
@@ -129,6 +125,11 @@ public class TaktQualityIssueQueryDto : TaktPagedQuery
     /// 公司代码
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -188,7 +189,7 @@ public class TaktQualityIssueQueryDto : TaktPagedQuery
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    public string? CostCurrency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -231,9 +232,9 @@ public class TaktQualityIssueCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -293,7 +294,7 @@ public class TaktQualityIssueCreateDto
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
     [Required(ErrorMessage = "成本币种（CNY/USD/JPY等）不能为空")]
-    public string CostCurrency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议/调查/试验费用明细列表（子表，级联保存）
@@ -377,6 +378,11 @@ public class TaktQualityIssueTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
@@ -429,7 +435,7 @@ public class TaktQualityIssueTemplateDto
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    public string? CostCurrency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议/调查/试验费用明细列表（子表，级联保存）
@@ -474,9 +480,9 @@ public class TaktQualityIssueImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
@@ -531,7 +537,7 @@ public class TaktQualityIssueImportDto
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    public string? CostCurrency { get; set; } = string.Empty;
+    public string? CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 会议/调查/试验费用明细列表（子表，级联保存）
@@ -634,7 +640,7 @@ public class TaktQualityIssueExportDto
     /// <summary>
     /// 成本币种（CNY/USD/JPY等）
     /// </summary>
-    public string CostCurrency { get; set; } = string.Empty;
+    public string CurrencyCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

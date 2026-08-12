@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：quartz-task.d.ts
-// 创建时间：2026-06-29
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -74,7 +74,7 @@ export interface QuartzTask extends CompanyDtoBase {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 
@@ -138,11 +138,6 @@ export interface QuartzTask extends CompanyDtoBase {
    */
   taskStatus: number;
 
-  /**
-   * 关联的任务执行日志列表（主子表关系：QuartzTaskId） （子表：TaktQuartzLog）
-   */
-  quartzLogs?: QuartzLog[];
-
 }
 
 
@@ -162,6 +157,16 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
    * 公司代码
    */
   companyCode?: string;
+
+  /**
+   * 区域文化编码（字典 sys_culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
 
   /**
    * 任务编码（租户+公司内唯一）
@@ -209,7 +214,7 @@ export interface QuartzTaskQuery extends TaktPagedQuery {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 
@@ -328,9 +333,14 @@ export interface QuartzTaskCreate {
   companyCode: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture: string;
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
 
   /**
    * 任务编码（租户+公司内唯一）
@@ -378,7 +388,7 @@ export interface QuartzTaskCreate {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 
@@ -441,11 +451,6 @@ export interface QuartzTaskCreate {
    * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
    */
   taskStatus: number;
-
-  /**
-   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
-   */
-  quartzLogs?: QuartzLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -511,6 +516,16 @@ export interface QuartzTaskTemplate {
   companyCode?: string;
 
   /**
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
+
+  /**
    * 任务编码（租户+公司内唯一）
    */
   taskCode?: string;
@@ -556,7 +571,7 @@ export interface QuartzTaskTemplate {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 
@@ -619,11 +634,6 @@ export interface QuartzTaskTemplate {
    * 任务状态（字典 sys_quartz_task_status；0=正常 1=暂停）
    */
   taskStatus?: number;
-
-  /**
-   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
-   */
-  quartzLogs?: QuartzLogCreate[];
 
   /**
    * 扩展字段JSON
@@ -655,9 +665,14 @@ export interface QuartzTaskImport {
   companyCode?: string;
 
   /**
-   * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
    */
-  companyDefaultCulture?: string;
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
 
   /**
    * 任务编码（租户+公司内唯一）
@@ -705,7 +720,7 @@ export interface QuartzTaskImport {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 
@@ -770,11 +785,6 @@ export interface QuartzTaskImport {
   taskStatus?: number;
 
   /**
-   * 关联的任务执行日志列表（主子表关系：QuartzTaskId）（子表，级联保存）
-   */
-  quartzLogs?: QuartzLogCreate[];
-
-  /**
    * 扩展字段JSON
    */
   extField?: string;
@@ -802,6 +812,11 @@ export interface QuartzTaskExport {
    * 公司代码
    */
   companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
 
   /**
    * 任务编码（租户+公司内唯一）
@@ -849,7 +864,7 @@ export interface QuartzTaskExport {
   requestMethod?: string;
 
   /**
-   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sap_sync_ma.sql）
+   * SQL 脚本路径（任务类型为 SQL 时使用；只可填相对 wwwroot 的 .sql 路径如 Quartz/sync_mat.sql，禁止内联 SQL）
    */
   sqlScript?: string;
 

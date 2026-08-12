@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Logistics.Procurement
 // 文件名称：TaktPurchaseGroupsController.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Cursor AI)
 // 功能描述：采购组主数据控制器
 // 
@@ -187,11 +187,11 @@ public class TaktPurchaseGroupsController : TaktControllerBase
     /// <returns>采购组主数据DTO</returns>
     [TaktPermission("logistics:procurement:purchase:group:update", "更新采购组主数据状态")]
     [HttpPut("status")]
-    public async Task<IActionResult> UpdateGroupStatusAsync([FromBody] TaktGroupStatusDto dto)
+    public async Task<IActionResult> UpdatePurchaseGroupStatusAsync([FromBody] TaktPurchaseGroupStatusDto dto)
     {
         try
         {
-            var result = await _purchaseGroupService.UpdateGroupStatusAsync(dto);
+            var result = await _purchaseGroupService.UpdatePurchaseGroupStatusAsync(dto);
             return Success(result, "更新成功");
         }
         catch (Exception ex)

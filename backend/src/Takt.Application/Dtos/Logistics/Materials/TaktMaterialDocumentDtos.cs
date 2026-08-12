@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialDocumentDtos.cs
-// 创建时间：2026-07-15
+// 创建时间：2026-08-11
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialDocument 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialDocument 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt物料凭证主表实体（公司级；行项目见 TaktMaterialDocumentItem）
+/// Takt物料凭证主表实体（公司级）
 /// 对应前端 TaktMaterialDocumentDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,29 +36,69 @@ public class TaktMaterialDocumentDto : TaktCompanyDtoBase
     public long MaterialDocumentId { get; set; }
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
-    /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
+    /// 物料凭证
     /// </summary>
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int MaterialDocumentStatus { get; set; } = 0;
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期
+    /// </summary>
+    public DateTime DocumentDate { get; set; }
+
+    /// <summary>
+    /// 过帐日期
+    /// </summary>
+    public DateTime PostingDate { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）
@@ -89,29 +129,89 @@ public class TaktMaterialDocumentQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（字典 sys_culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
-    /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
+    /// 物料凭证
     /// </summary>
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int? MaterialDocumentStatus { get; set; }
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期（范围查询-开始）
+    /// </summary>
+    public DateTime? DocumentDateStart { get; set; }
+
+    /// <summary>
+    /// 凭证日期（范围查询-结束）
+    /// </summary>
+    public DateTime? DocumentDateEnd { get; set; }
+
+    /// <summary>
+    /// 过帐日期（范围查询-开始）
+    /// </summary>
+    public DateTime? PostingDateStart { get; set; }
+
+    /// <summary>
+    /// 过帐日期（范围查询-结束）
+    /// </summary>
+    public DateTime? PostingDateEnd { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 创建时间（范围查询-开始）
@@ -154,37 +254,81 @@ public class TaktMaterialDocumentCreateDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string CompanyDefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options，DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
+    /// 物料凭证
     /// </summary>
-    [Required(ErrorMessage = "物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）不能为空")]
-    public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
-    /// </summary>
-    [Required(ErrorMessage = "物料凭证号（租户+公司+工厂内唯一）不能为空")]
+    [Required(ErrorMessage = "物料凭证不能为空")]
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    [Required(ErrorMessage = "物料凭证的年份不能为空")]
+    public string MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int MaterialDocumentStatus { get; set; } = 0;
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期
+    /// </summary>
+    public DateTime DocumentDate { get; set; }
+
+    /// <summary>
+    /// 过帐日期
+    /// </summary>
+    public DateTime PostingDate { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -229,30 +373,6 @@ public class TaktMaterialDocumentUpdateDto : TaktMaterialDocumentCreateDto
 }
 
 // ========================================
-// MaterialDocument 状态 DTO
-// ========================================
-
-/// <summary>
-/// MaterialDocument 状态更新 DTO
-/// </summary>
-public class TaktMaterialDocumentStatusDto
-{
-    /// <summary>
-    /// MaterialDocumentID
-    /// </summary>
-    [Required(ErrorMessage = "ID不能为空")]
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long MaterialDocumentId { get; set; }
-
-    /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
-    /// </summary>
-    [Required(ErrorMessage = "物料凭证状态（0=草稿，1=已过账，2=已作废）不能为空")]
-    public int MaterialDocumentStatus { get; set; } = 0;
-}
-
-// ========================================
 // 导入 DTO
 // ========================================
 
@@ -272,29 +392,79 @@ public class TaktMaterialDocumentTemplateDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
+
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
-    /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
+    /// 物料凭证
     /// </summary>
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int? MaterialDocumentStatus { get; set; }
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期
+    /// </summary>
+    public DateTime? DocumentDate { get; set; }
+
+    /// <summary>
+    /// 过帐日期
+    /// </summary>
+    public DateTime? PostingDate { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -329,34 +499,79 @@ public class TaktMaterialDocumentImportDto
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
+    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
     /// </summary>
-    public string? CompanyDefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
-
     /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
-    /// </summary>
-    public string? MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
+    /// 物料凭证
     /// </summary>
     public string? MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string? MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int? MaterialDocumentStatus { get; set; }
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期
+    /// </summary>
+    public DateTime? DocumentDate { get; set; }
+
+    /// <summary>
+    /// 过帐日期
+    /// </summary>
+    public DateTime? PostingDate { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 物料凭证行项目列表（主子表关系）（子表，级联保存）
@@ -397,29 +612,69 @@ public class TaktMaterialDocumentExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options，DictValue=PlantCode）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料编码（关联 TaktMaterial.MaterialCode，选项 TaktMaterials/options；从物料主数据跳转按此字段查凭证列表）
-    /// </summary>
-    public string MaterialCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 物料凭证号（租户+公司+工厂内唯一）
+    /// 物料凭证
     /// </summary>
     public string MaterialDocumentCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 过账人（关联 TaktEmployee.EmployeeCode，选项 TaktEmployees/options，DictValue=EmployeeCode）
+    /// 物料凭证的年份
     /// </summary>
-    public string? PostedBy { get; set; } = string.Empty;
+    public string MaterialDocumentYear { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料凭证状态（0=草稿，1=已过账，2=已作废）
+    /// 交易/事件类型（字典 logistics_material_document_transaction_event_type）
     /// </summary>
-    public int MaterialDocumentStatus { get; set; } = 0;
+    public string? TransactionEventType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型（字典 logistics_material_document_type）
+    /// </summary>
+    public string? DocumentType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证类型重新评估
+    /// </summary>
+    public string? RevaluationType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证日期
+    /// </summary>
+    public DateTime DocumentDate { get; set; }
+
+    /// <summary>
+    /// 过帐日期
+    /// </summary>
+    public DateTime PostingDate { get; set; }
+
+    /// <summary>
+    /// 参照（最长 16，故 Length=16）
+    /// </summary>
+    public string? ReferenceCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 凭证抬头文本（最长 25，故 Length=25）
+    /// </summary>
+    public string? HeaderText { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 提货单（最长 16，故 Length=16）
+    /// </summary>
+    public string? BillOfLadingCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 交货单
+    /// </summary>
+    public string? DeliveryCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 事务代码
+    /// </summary>
+    public string? TransactionCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 用户名（选项 TaktEmployees/options；DictValue=EmployeeCode）
+    /// </summary>
+    public string? PostedBy { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON

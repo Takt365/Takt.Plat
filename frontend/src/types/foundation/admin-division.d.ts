@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/foundation
 // 文件名称：admin-division.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-06
 // 创建人：Takt365(Auto Generated)
 // 功能描述：foundation 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -69,11 +69,6 @@ export interface AdminDivision extends TenantDtoBase {
   postalCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode: string;
-
-  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode: string;
@@ -100,7 +95,6 @@ export interface AdminDivision extends TenantDtoBase {
 
 }
 
-
 /**
  * AdminDivision 树形列表/树选择 DTO（含子节点）
  * 对应 GetAdminDivisionTreeAsync 等接口
@@ -114,7 +108,6 @@ export interface AdminDivisionTree extends AdminDivision {
   children: AdminDivisionTree[];
 
 }
-
 
 /**
  * AdminDivision 分页查询 DTO
@@ -174,6 +167,11 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
@@ -219,7 +217,6 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   remark?: string;
 
 }
-
 
 /**
  * 创建AdminDivision DTO
@@ -268,6 +265,11 @@ export interface AdminDivisionCreate {
   cultureCode: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode: string;
@@ -299,7 +301,6 @@ export interface AdminDivisionCreate {
 
 }
 
-
 /**
  * 更新AdminDivision DTO
  * 继承 TaktAdminDivisionCreateDto，添加 AdminDivisionId 字段
@@ -313,7 +314,6 @@ export interface AdminDivisionUpdate extends AdminDivisionCreate {
   adminDivisionId: string;
 
 }
-
 
 /**
  * AdminDivision 状态更新 DTO
@@ -333,7 +333,6 @@ export interface AdminDivisionStatus {
 
 }
 
-
 /**
  * AdminDivision 排序更新 DTO
  * 对应前端 AdminDivisionSort
@@ -351,7 +350,6 @@ export interface AdminDivisionSort {
   sortOrder: number;
 
 }
-
 
 /**
  * AdminDivision 导入模板行 DTO
@@ -400,6 +398,11 @@ export interface AdminDivisionTemplate {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
@@ -430,7 +433,6 @@ export interface AdminDivisionTemplate {
   remark?: string;
 
 }
-
 
 /**
  * AdminDivision 导入 DTO（独立实现，不继承 TemplateDto）
@@ -479,6 +481,11 @@ export interface AdminDivisionImport {
   cultureCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
@@ -509,7 +516,6 @@ export interface AdminDivisionImport {
   remark?: string;
 
 }
-
 
 /**
  * AdminDivision 导出 DTO（独立实现，不继承响应 Dto）

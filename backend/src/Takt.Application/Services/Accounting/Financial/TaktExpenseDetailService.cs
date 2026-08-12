@@ -354,7 +354,8 @@ public class TaktExpenseDetailService : TaktServiceBase, ITaktExpenseDetailServi
                 || SqlFunc.ToString(x.ItemQuantity).Contains(keywords)
                 || SqlFunc.ToString(x.ItemAmount).Contains(keywords)
                 || (x.AccountTitle != null && x.AccountTitle.Contains(keywords))
-                || (x.InvoiceNo != null && x.InvoiceNo.Contains(keywords))
+                || (x.InvoiceCode != null && x.InvoiceCode.Contains(keywords))
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.ExpenseDetailDate).Contains(keywords)
@@ -407,9 +408,14 @@ public class TaktExpenseDetailService : TaktServiceBase, ITaktExpenseDetailServi
             exp = exp.And(x => x.AccountTitle != null && x.AccountTitle.Contains(queryDto.AccountTitle));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InvoiceNo))
+        if (!string.IsNullOrEmpty(queryDto?.InvoiceCode))
         {
-            exp = exp.And(x => x.InvoiceNo != null && x.InvoiceNo.Contains(queryDto.InvoiceNo));
+            exp = exp.And(x => x.InvoiceCode != null && x.InvoiceCode.Contains(queryDto.InvoiceCode));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))
@@ -441,6 +447,12 @@ public class TaktExpenseDetailService : TaktServiceBase, ITaktExpenseDetailServi
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
+        {
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
+        }
+
 
         return exp.ToExpression();
     }

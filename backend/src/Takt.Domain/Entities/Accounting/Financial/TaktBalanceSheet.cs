@@ -23,15 +23,10 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarTable("takt_accounting_financial_balance_sheet", "资产负债表")]
 [SugarIndex("ix_balance_sheet_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_balance_sheet_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_balance_sheet_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(RelatedPlant), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(StatementLineCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_accounting_financial_balance_sheet_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Asc, nameof(StatementLineCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_accounting_financial_balance_sheet_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PeriodCode), OrderByType.Desc, false)]
 public class TaktBalanceSheet : TaktCompanyEntityBase
 {
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 会计期间编码（YYYYMM；资产负债表日所属报告期）
     /// </summary>

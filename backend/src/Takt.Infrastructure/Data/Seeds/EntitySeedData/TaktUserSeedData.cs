@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称:节拍工厂·Takt Plat
 // 命名空间:Takt.Infrastructure.Data.Seeds
 // 文件名称:TaktUserSeedData.cs
@@ -132,7 +132,7 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
                 PasswordExpireDays = username == "admin" ? 90 : 30,
                 LoginCount = 0,
                 LoginFailCount = 0,
-                DefaultCulture = "en-US"
+                CultureCode = "en-US"
             };
             user = await userRepository.CreateAsync(user);
             return (user, 1, 0);
@@ -146,7 +146,7 @@ public class TaktUserSeedData : ITaktSeedDataCoordinator
             user.IsBuiltIn = 1;
             user.UserStatus = 1;
             user.PasswordExpireDays = username == "admin" ? 90 : 30;
-            user.DefaultCulture = "en-US";
+            user.CultureCode = "en-US";
 
             await userRepository.UpdateAsync(user);
             return (user, 0, 1);

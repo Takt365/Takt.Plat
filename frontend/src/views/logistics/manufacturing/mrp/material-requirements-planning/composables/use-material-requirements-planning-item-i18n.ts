@@ -24,7 +24,7 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_LIST_FIELDS = [
   'materialRequirementsPlanningCode',
   'lineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',
@@ -47,7 +47,7 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_DEFAULT_VISIBLE_COLUMN_KEYS = [
   'materialRequirementsPlanningCode',
   'lineNumber',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',
@@ -84,7 +84,7 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_PLACEHOLDER = {
   companyDefaultCulture: 'optional',
   lineNumber: 'select',
   materialCode: 'select',
-  materialName: 'optional',
+  materialDescription: 'optional',
   materialSpecification: 'optional',
   modelCode: 'optional',
   modelName: 'optional',
@@ -99,6 +99,7 @@ export const MATERIALREQUIREMENTSPLANNINGITEM_PLACEHOLDER = {
   netRequirement: 'select',
   procurementType: 'select',
   isObsolete: 'select',
+  plantCode: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -108,7 +109,7 @@ export type MaterialRequirementsPlanningItemField = keyof typeof MATERIALREQUIRE
 export const MATERIALREQUIREMENTSPLANNINGITEM_QUERY_STRING_FIELDS = [
   'materialRequirementsPlanningCode',
   'materialCode',
-  'materialName',
+  'materialDescription',
   'materialSpecification',
   'modelCode',
   'modelName',

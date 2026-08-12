@@ -122,10 +122,10 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         var isUnique_ix_takt_logistics_serial_inbound_inbound_unique = await _uniqueValidator.IsUniqueAsync(
             _serialInboundRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InboundNo == entity.InboundNo);
+                && x.InboundCode == entity.InboundCode);
         if (!isUnique_ix_takt_logistics_serial_inbound_inbound_unique)
         {
-            throw new TaktBusinessException("序列号入库的PlantCode、InboundNo已存在");
+            throw new TaktBusinessException("序列号入库的PlantCode、InboundCode已存在");
         }
         entity = await _serialInboundRepository.CreateAsync(entity);
                 await SaveSerialInboundChildrenAsync(entity, dto);
@@ -149,11 +149,11 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         var isUnique_ix_takt_logistics_serial_inbound_inbound_unique = await _uniqueValidator.IsUniqueAsync(
             _serialInboundRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.InboundNo == entity.InboundNo,
+                && x.InboundCode == entity.InboundCode,
             id);
         if (!isUnique_ix_takt_logistics_serial_inbound_inbound_unique)
         {
-            throw new TaktBusinessException("序列号入库的PlantCode、InboundNo已存在");
+            throw new TaktBusinessException("序列号入库的PlantCode、InboundCode已存在");
         }
         await _serialInboundRepository.UpdateAsync(entity);
                 await SaveSerialInboundChildrenAsync(entity, dto);
@@ -234,18 +234,18 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
             try
             {
                 var entity = rows[i].Adapt<TaktSerialInbound>();
-                var importKey = $"{entity.PlantCode}|{entity.InboundNo}";
+                var importKey = $"{entity.PlantCode}|{entity.InboundCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、InboundNo）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、InboundCode）");
                 }
                 var isUnique_ix_takt_logistics_serial_inbound_inbound_unique = await _uniqueValidator.IsUniqueAsync(
                     _serialInboundRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.InboundNo == entity.InboundNo);
+                        && x.InboundCode == entity.InboundCode);
                 if (!isUnique_ix_takt_logistics_serial_inbound_inbound_unique)
                 {
-                    throw new TaktBusinessException("序列号入库的PlantCode、InboundNo已存在");
+                    throw new TaktBusinessException("序列号入库的PlantCode、InboundCode已存在");
                 }
                 await _serialInboundRepository.CreateAsync(entity);
                 success += 1;
@@ -430,11 +430,12 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
                 (x.PlantCode != null && x.PlantCode.Contains(keywords))
-                || (x.InboundNo != null && x.InboundNo.Contains(keywords))
+                || (x.InboundCode != null && x.InboundCode.Contains(keywords))
                 || SqlFunc.ToString(x.InboundType).Contains(keywords)
                 || (x.WarehouseCode != null && x.WarehouseCode.Contains(keywords))
                 || (x.LocationCode != null && x.LocationCode.Contains(keywords))
                 || SqlFunc.ToString(x.TotalQuantity).Contains(keywords)
+                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
                 || SqlFunc.ToString(x.InboundDate).Contains(keywords)
@@ -447,9 +448,9 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(queryDto.PlantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InboundNo))
+        if (!string.IsNullOrEmpty(queryDto?.InboundCode))
         {
-            exp = exp.And(x => x.InboundNo != null && x.InboundNo.Contains(queryDto.InboundNo));
+            exp = exp.And(x => x.InboundCode != null && x.InboundCode.Contains(queryDto.InboundCode));
         }
 
         if (queryDto?.InboundType.HasValue == true)
@@ -470,6 +471,11 @@ public class TaktSerialInboundService : TaktServiceBase, ITaktSerialInboundServi
         if (queryDto?.TotalQuantity.HasValue == true)
         {
             exp = exp.And(x => x.TotalQuantity == queryDto.TotalQuantity);
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
+        {
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.ExtField))

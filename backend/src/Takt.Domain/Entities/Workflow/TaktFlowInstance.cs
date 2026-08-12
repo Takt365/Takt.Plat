@@ -20,12 +20,14 @@ namespace Takt.Domain.Entities.Workflow;
 /// </summary>
 [SugarTable("takt_workflow_instance", "流程实例表")]
 [SugarIndex("ix_flow_instance_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
-[SugarIndex("ix_flow_instance_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(InstanceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_instance_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(InstanceCode), OrderByType.Asc, true)]
+[SugarIndex("ix_flow_instance_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_instance_definition", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProcessDefinitionId), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_instance_starter", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(StartUserId), OrderByType.Asc, false)]
 [SugarIndex("ix_flow_instance_business", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BusinessType), OrderByType.Asc, nameof(BusinessKey), OrderByType.Asc, false)]
 public class TaktFlowInstance : TaktCompanyEntityBase
-{    /// <summary>
+{
+    /// <summary>
     /// 实例编码（对外业务单号）
     /// </summary>
     [SugarColumn(ColumnName = "instance_code", ColumnDescription = "实例编码", ColumnDataType = "varchar", Length = 64, IsNullable = false)]

@@ -97,11 +97,6 @@ public class TaktPerfAssessment : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "interview_notes", ColumnDescription = "面谈记录", ColumnDataType = "nvarchar", Length = 1000, IsNullable = false)]
     public string InterviewNotes { get; set; } = string.Empty;
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
     /// 状态（字典 hr_perf_assessment_status；0=待自评 1=自评中 2=待主管评审 3=评审中 4=已完成 5=已确认）
     /// </summary>
     [SugarColumn(ColumnName = "assessment_status", ColumnDescription = "状态", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
