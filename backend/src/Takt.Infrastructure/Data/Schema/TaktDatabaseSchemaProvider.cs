@@ -37,7 +37,7 @@ public class TaktDatabaseSchemaProvider : ITaktDatabaseSchemaProvider
     private static readonly Type[] EntityTypes = typeof(TaktTenantEntityBase).Assembly
         .GetTypes()
         .Where(t => t.IsClass && !t.IsAbstract &&
-                    (typeof(TaktTenantEntityScopeBase).IsAssignableFrom(t) ||
+                    (typeof(TaktTenantCoreEntityScopeBase).IsAssignableFrom(t) ||
                      typeof(TaktCompanyEntityScopeBase).IsAssignableFrom(t) ||
                      typeof(TaktApprovalEntityScopeBase).IsAssignableFrom(t)))
         .OrderBy(t => t.FullName, StringComparer.Ordinal)

@@ -2,6 +2,7 @@ SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -145,18 +146,18 @@ WHEN MATCHED AND (
   OR T.[priority] <> S.[priority]
 ) THEN
   UPDATE SET
-    T.[material_description] = S.[material_description],
-    T.[prod_batch] = S.[prod_batch],
-    T.[prod_order_qty] = S.[prod_order_qty],
-    T.[produced_qty] = S.[produced_qty],
-    T.[unit_of_measure] = S.[unit_of_measure],
-    T.[actual_start_date] = S.[actual_start_date],
-    T.[routing_code] = S.[routing_code],
-    T.[priority] = S.[priority],
-    T.[updated_by] = @sync_user_id,
-    T.[updated_at] = @now,
-    T.[culture_code] = @culture_code,
-    T.[is_deleted] = 0
+  T.[material_description]=S.[material_description],
+  T.[prod_batch]=S.[prod_batch],
+  T.[prod_order_qty]=S.[prod_order_qty],
+  T.[produced_qty]=S.[produced_qty],
+  T.[unit_of_measure]=S.[unit_of_measure],
+  T.[actual_start_date]=S.[actual_start_date],
+  T.[routing_code]=S.[routing_code],
+  T.[priority]=S.[priority],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[culture_code]=@culture_code,
+  T.[is_deleted]=0
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[prod_order_code],[material_code],[material_description],[prod_batch],
@@ -259,6 +260,54 @@ WHERE T.[tenant_code] = @tenant_code
 
 DECLARE @ser_upd INT = @@ROWCOUNT;
 
+-- 回填空序号：无 SAP 序号且已有实际开工日、订单数量>0
+-- 件数：有小数时 qty/小数部分（如 150.500/0.500=301、0.250/0.250=1）；整数则取整
+-- 序号：YY + 月码(1-9/X/Y/Z) + 0001~ + YY + 月码 + 件数4位
+UPDATE T
+SET
+  T.[serial_code] = CONCAT(
+    RIGHT(YEAR(T.[actual_start_date]), 2),
+    CASE MONTH(T.[actual_start_date])
+      WHEN 10 THEN N'X'
+      WHEN 11 THEN N'Y'
+      WHEN 12 THEN N'Z'
+      ELSE CAST(MONTH(T.[actual_start_date]) AS VARCHAR(2))
+    END,
+    N'0001~',
+    RIGHT(YEAR(T.[actual_start_date]), 2),
+    CASE MONTH(T.[actual_start_date])
+      WHEN 10 THEN N'X'
+      WHEN 11 THEN N'Y'
+      WHEN 12 THEN N'Z'
+      ELSE CAST(MONTH(T.[actual_start_date]) AS VARCHAR(2))
+    END,
+    RIGHT(
+      N'0000' + CAST(
+        CASE
+          WHEN ROUND(CAST(T.[prod_order_qty] AS DECIMAL(18, 4)) - FLOOR(CAST(T.[prod_order_qty] AS DECIMAL(18, 4))), 4) > 0
+          THEN CAST(ROUND(
+            CAST(T.[prod_order_qty] AS DECIMAL(18, 4))
+            / ROUND(CAST(T.[prod_order_qty] AS DECIMAL(18, 4)) - FLOOR(CAST(T.[prod_order_qty] AS DECIMAL(18, 4))), 4)
+          , 0) AS INT)
+          ELSE CAST(FLOOR(CAST(T.[prod_order_qty] AS DECIMAL(18, 4))) AS INT)
+        END
+      AS VARCHAR(10)),
+      4
+    )
+  ),
+  T.[updated_by] = @sync_user_id,
+  T.[updated_at] = @now
+FROM [takt_logistics_manufacturing_aps_production_order] T
+WHERE T.[tenant_code] = @tenant_code
+  AND T.[company_code] = @company_code
+  AND T.[is_deleted] = 0
+  AND (T.[serial_code] IS NULL OR LTRIM(RTRIM(T.[serial_code])) = N'')
+  AND T.[prod_order_qty] IS NOT NULL
+  AND CAST(T.[prod_order_qty] AS DECIMAL(18, 4)) > 0
+  AND T.[actual_start_date] IS NOT NULL;
+
+DECLARE @ser_backfill INT = @@ROWCOUNT;
+
 -- 孤儿软删：目标有而源没有时才软删；存在更新/不存在插入已由 MERGE 完成
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
 CREATE TABLE #soft_deleted_rows (
@@ -344,7 +393,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -389,7 +438,7 @@ SELECT
   N'MERGE Order Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  @tenant_code,@company_code,'{}',N'SYNC',@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,'{}',N'SYNC',@sync_user_id,@now
 FROM #order_delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #order_delta WHERE oper_type = 'INSERT');
@@ -408,7 +457,8 @@ DECLARE @json_result NVARCHAR(MAX) =
   + N',"soft_delete_this_run":' + CAST(@delete_count AS NVARCHAR)
   + N',"soft_delete_keys":"' + REPLACE(@soft_deleted_keys, N'"', N'''') + N'"'
   + N',"work_center":' + CAST(@wc_upd AS NVARCHAR)
-  + N',"serial_code":' + CAST(@ser_upd AS NVARCHAR) + N'}';
+  + N',"serial_code":' + CAST(@ser_upd AS NVARCHAR)
+  + N',"serial_code_backfill":' + CAST(@ser_backfill AS NVARCHAR) + N'}';
 
 
 
@@ -417,7 +467,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -431,7 +481,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 -- Quartz 执行器读取此结果集写入 ExecuteMessage / quartz-.log
@@ -448,4 +498,6 @@ SELECT
   @update_count AS [update_count],
   @unchanged_count AS [unchanged_count],
   @delete_count AS [delete_count],
+  @ser_upd AS [serial_code_upd],
+  @ser_backfill AS [serial_code_backfill],
   @soft_deleted_keys AS [soft_deleted_keys];

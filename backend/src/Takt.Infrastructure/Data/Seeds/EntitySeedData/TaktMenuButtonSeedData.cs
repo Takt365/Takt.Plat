@@ -519,6 +519,19 @@ public class TaktMenuButtonSeedData
         int sortOrder)
     {
         var button = await menuRepository.FirstAsync(m => m.TenantCode == tenantCode && m.MenuCode == buttonCode);
+        // 父级 MenuCode 变更后旧按钮仍挂同一 ParentId，按权限末段回收，避免重复插入
+        if (button == null)
+        {
+            var permSuffix = permission.Contains(':')
+                ? permission[permission.LastIndexOf(':')..]
+                : $":{permission}";
+            button = await menuRepository.FirstAsync(m =>
+                m.TenantCode == tenantCode
+                && m.ParentId == parentId
+                && m.MenuType == 2
+                && m.Permission != null
+                && m.Permission.EndsWith(permSuffix));
+        }
 
         if (button == null)
         {
@@ -575,6 +588,7 @@ public class TaktMenuButtonSeedData
         else
         {
             button.MenuName = buttonName;
+            button.MenuCode = buttonCode;
             button.I18nKey = menuL10nKey;
             button.Permission = permission;
             button.MenuStatus = 1;

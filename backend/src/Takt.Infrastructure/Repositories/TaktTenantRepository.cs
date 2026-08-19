@@ -28,7 +28,7 @@ namespace Takt.Infrastructure.Repositories;
 /// 适用于：用户、角色、菜单等跨公司共享的实体
 /// </summary>
 /// <typeparam name="TEntity">租户级实体类型</typeparam>
-public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
+public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> where TEntity : TaktTenantCoreEntityScopeBase, ITaktTenantEntity, new()
 {
     /// <summary>
     /// SqlSugar 数据库上下文
@@ -490,31 +490,56 @@ public class TaktTenantRepository<TEntity> : ITaktTenantRepository<TEntity> wher
         return query;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 取字段最大值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最大值；无记录时为类型默认值</returns>
     public virtual Task<TResult> MaxAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) =>
         BuildAggregateReadQuery(predicate).MaxAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 取字段最小值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最小值；无记录时为类型默认值</returns>
     public virtual Task<TResult> MinAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) =>
         BuildAggregateReadQuery(predicate).MinAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段之和（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>求和结果；无记录时为类型默认值</returns>
     public virtual Task<TResult> SumAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
         BuildAggregateReadQuery(predicate).SumAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段平均值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>平均值；无记录时为类型默认值</returns>
     public virtual Task<TResult> AvgAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
         BuildAggregateReadQuery(predicate).AvgAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段中位数（当前租户与公司范围内、未删除；SqlServer/PostgreSQL/Oracle 等走 PERCENTILE_CONT，MySql/Sqlite 有序切片回退）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>中位数；无记录时为类型默认值</returns>
     public virtual Task<TResult> MedianAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>

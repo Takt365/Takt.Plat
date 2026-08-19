@@ -1,13 +1,15 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
 DECLARE @now DATETIME = GETDATE();
 DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
--- 源表 / 目标表：同名 + 列与实体 TaktSellerMaterial 一致（租户级，无 company_code）
+-- 源表 / 目标表：同名 + 列与实体 TaktSellerMaterial 一致（组合 4：仅租户，无 related_plant / culture_code / company_code）
 -- {{SourceDatabase}}.dbo.takt_logistics_sales_seller_material → 当前租户库同名表
 -- 业务唯一键：InternalMaterialCode+MaterialCode（与租户库唯一索引 Tenant+InternalMaterialCode+MaterialCode 对齐）
 
@@ -31,6 +33,7 @@ CREATE TABLE #st_source (
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
   [is_deleted] INT,
+  [created_at] DATETIME,
   [updated_by] BIGINT
 );
 
@@ -54,10 +57,11 @@ SELECT
   S.[seller_material_code],
   S.[seller_material_description],
   S.[seller_material_specification],
-  @tenant_code,
+  S.[tenant_code],
   '{}',
   '',
   S.[is_deleted],
+  S.[created_at],
   @sync_user_id
 FROM (
   SELECT
@@ -67,11 +71,12 @@ FROM (
     ) AS rn
   FROM (
     SELECT
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[customer_code], N''))), 10), N'') AS [customer_code],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[customer_short_name], N''))), 40), N'') AS [customer_short_name],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[client_code], N''))), 20), N'') AS [client_code],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[client_short_name], N''))), 40), N'') AS [client_short_name],
-      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[material_type], N''))), 4), N''), N'HERS') AS [material_type],
+      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[material_type], N''))), 4), N''), N'') AS [material_type],
       ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[material_group], N''))), 9), N''), N'') AS [material_group],
       CASE
         WHEN LEN(LTRIM(RTRIM(R.[internal_material_code]))) = 18
@@ -90,6 +95,7 @@ FROM (
       ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[seller_material_description], N''))), 40), N''), N'') AS [seller_material_description],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[seller_material_specification], N''))), 70), N'') AS [seller_material_specification],
       CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      R.[created_at] AS [created_at],
       ROW_NUMBER() OVER (
         PARTITION BY
           CASE
@@ -116,6 +122,7 @@ FROM (
       AND LTRIM(RTRIM(ISNULL(R.[internal_material_code], N''))) NOT LIKE N'%）%'
       AND LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%（%'
       AND LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%）%'
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
   ) N
   WHERE N.dup_rn = 1
 ) S
@@ -253,23 +260,22 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[seller_material_specification], N''))) <> LTRIM(RTRIM(ISNULL(S.[seller_material_specification], N'')))
 ) THEN
   UPDATE SET
-    T.[customer_code] = S.[customer_code],
-    T.[customer_short_name] = S.[customer_short_name],
-    T.[client_code] = S.[client_code],
-    T.[client_short_name] = S.[client_short_name],
-    T.[material_type] = S.[material_type],
-    T.[material_group] = S.[material_group],
-    T.[material_description] = S.[material_description],
-    T.[seller_material_code] = S.[seller_material_code],
-    T.[seller_material_description] = S.[seller_material_description],
-    T.[seller_material_specification] = S.[seller_material_specification],
-    T.[ext_field] = S.[ext_field],
-    T.[remark] = S.[remark],
-    T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[is_deleted] = S.[is_deleted],
-    T.[deleted_by] = CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    T.[deleted_at] = CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[customer_code]=S.[customer_code],
+  T.[customer_short_name]=S.[customer_short_name],
+  T.[client_code]=S.[client_code],
+  T.[client_short_name]=S.[client_short_name],
+  T.[material_type]=S.[material_type],
+  T.[material_group]=S.[material_group],
+  T.[material_description]=S.[material_description],
+  T.[seller_material_code]=S.[seller_material_code],
+  T.[seller_material_description]=S.[seller_material_description],
+  T.[seller_material_specification]=S.[seller_material_specification],
+  T.[remark]=S.[remark],
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[customer_code],[customer_short_name],[client_code],[client_short_name],
@@ -282,7 +288,7 @@ WHEN NOT MATCHED THEN
     S.[id],S.[customer_code],S.[customer_short_name],S.[client_code],S.[client_short_name],
     S.[material_type],S.[material_group],S.[internal_material_code],S.[material_code],S.[material_description],
     S.[seller_material_code],S.[seller_material_description],S.[seller_material_specification],S.[tenant_code],S.[ext_field],S.[remark],
-    S.[updated_by],@now,S.[updated_by],@now,
+    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
     S.[is_deleted],
     CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
     CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
@@ -360,6 +366,11 @@ DECLARE @target_count INT = (
   WHERE [tenant_code] = @tenant_code
     AND [is_deleted] = 0
 );
+DECLARE @source_active_count INT = (
+  SELECT COUNT(*)
+  FROM #st_source
+  WHERE [is_deleted] = 0
+);
 DECLARE @target_physical INT = (
   SELECT COUNT(*)
   FROM [takt_logistics_sales_seller_material]
@@ -372,10 +383,10 @@ DECLARE @soft_deleted INT = (
     AND [is_deleted] = 1
 );
 
-IF @target_count <> @source_count
+IF @target_count <> @source_active_count
 BEGIN
   DECLARE @count_msg NVARCHAR(200) = CONCAT(
-    N'有效行数不一致: source=', @source_count, N', active=', @target_count);
+    N'有效行数不一致: source=', @source_active_count, N', active=', @target_count);
   THROW 50002, @count_msg, 1;
 END;
 
@@ -383,7 +394,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -418,7 +429,7 @@ SELECT
   N'MERGE SellerMaterial Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,@company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,@company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -448,7 +459,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -462,7 +473,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 SELECT

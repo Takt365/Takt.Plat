@@ -54,8 +54,12 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// </summary>
     /// <param name="predicate">查询条件</param>
     /// <param name="asTableName">可选物理表名（年分表路由）</param>
+    /// <param name="includeSoftDeleted">为 true 时含已软删行（默认仍经读隔离过滤 IsDeleted=0）</param>
     /// <returns>实体列表</returns>
-    Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null);
+    Task<List<TEntity>> GetListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        string? asTableName = null,
+        bool includeSoftDeleted = false);
 
     /// <summary>
     /// 根据条件查询列表（带排序）
@@ -64,12 +68,14 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// <param name="orderBy">排序字段</param>
     /// <param name="isDesc">是否降序</param>
     /// <param name="asTableName">可选物理表名（年分表路由）</param>
+    /// <param name="includeSoftDeleted">为 true 时含已软删行（默认仍经读隔离过滤 IsDeleted=0）</param>
     /// <returns>实体列表</returns>
     Task<List<TEntity>> GetListAsync(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, object>> orderBy,
         bool isDesc = true,
-        string? asTableName = null);
+        string? asTableName = null,
+        bool includeSoftDeleted = false);
 
     /// <summary>
     /// 导出用条件查询（带上限行数上限，防止全表加载 OOM）
@@ -115,6 +121,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// <param name="pageSize">每页大小</param>
     /// <param name="orderBy">排序字段</param>
     /// <param name="isDesc">是否降序</param>
+    /// <param name="asTableName">年分表物理名；空则用实体默认表</param>
+    /// <param name="thenBy">第二排序字段（在 orderBy 之后）</param>
+    /// <param name="thenByDesc">第二排序是否降序</param>
     /// <returns>分页结果</returns>
     Task<(List<TEntity> Items, int Total)> GetPagedAsync(
         Expression<Func<TEntity, bool>> predicate,
@@ -122,7 +131,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
         int pageSize,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool isDesc = true,
-        string? asTableName = null);
+        string? asTableName = null,
+        Expression<Func<TEntity, object>>? thenBy = null,
+        bool thenByDesc = false);
 
     // ========================================
     // 新增操作
@@ -159,8 +170,9 @@ public interface ITaktCompanyRepository<TEntity> : ITaktUniqueExistenceRepositor
     /// 批量更新实体
     /// </summary>
     /// <param name="entities">实体列表</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
     /// <returns>更新的实体数量</returns>
-    Task<int> UpdateRangeAsync(List<TEntity> entities);
+    Task<int> UpdateRangeAsync(List<TEntity> entities, string? asTableName = null);
 
     /// <summary>
     /// 根据条件更新

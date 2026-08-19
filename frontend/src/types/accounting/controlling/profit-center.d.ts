@@ -23,17 +23,58 @@ import type {
  * @description 对应后端 TaktProfitCenterDto
  */
 export interface ProfitCenter extends CompanyDtoBase {
-
+  /**
+   * ProfitCenterID
+   */
+  profitCenterId: string;
+  /**
+   * 利润中心编码（4位，租户+公司内唯一）
+   */
+  profitCenterCode: string;
+  /**
+   * 利润中心名称
+   */
+  profitCenterName: string;
+  /**
+   * 父级 ID
+   */
+  parentId: string;
+  /**
+   * 负责人用户 ID
+   */
+  managerId?: string;
+  /**
+   * 负责人姓名
+   */
+  managerName?: string;
+  /**
+   * 所属部门 ID
+   */
+  deptId?: string;
+  /**
+   * 所属部门名称
+   */
+  deptName?: string;
+  /**
+   * 利润中心层级
+   */
+  profitCenterLevel: number;
+  /**
+   * 生效日期
+   */
+  validFrom: string;
+  /**
+   * 失效日期
+   */
+  validTo: string;
   /**
    * 排序号
    */
   sortOrder: number;
-
   /**
    * 利润中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   profitCenterStatus: number;
-
 }
 
 
@@ -179,7 +220,7 @@ export interface ProfitCenterCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
@@ -187,7 +228,7 @@ export interface ProfitCenterCreate {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string
 
@@ -329,7 +370,7 @@ export interface ProfitCenterTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -418,7 +459,7 @@ export interface ProfitCenterImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -426,7 +467,7 @@ export interface ProfitCenterImport {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string
 

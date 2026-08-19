@@ -34,10 +34,17 @@ public sealed class TaktDatabaseBackupJobHandler : ITaktQuartzJobHandler
         _databaseBackupService = databaseBackupService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 处理器键（与 TaktQuartzTask.ClassName 匹配）
+    /// </summary>
     public string HandlerKey => TaktDatabaseBackupService.QuartzHandlerClassName;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行任务逻辑
+    /// </summary>
+    /// <param name="context">执行上下文</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>任务</returns>
     public async Task ExecuteAsync(TaktQuartzJobContext context, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(context);

@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostAnalysesController.cs
 // 创建时间：2026-08-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 成本分析控制器（转置 / 差异 / 月度涨跌；成本合计/重算/机种月均；与 CostItem CRUD 分离）
+// 功能描述：BOM 成本分析控制器（转置 / 差异 / 月度涨跌；与 CostItem CRUD 分离）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -20,26 +20,22 @@ using Takt.Shared.Options;
 namespace Takt.WebApi.Controllers.Logistics.Manufacturing.Bom;
 
 /// <summary>
-/// BOM 成本分析控制器（转置 / 差异 / 月度涨跌；成本合计/重算/机种月均；与 CostItem CRUD 分离）
+/// BOM 成本分析控制器（转置 / 差异 / 月度涨跌；与 CostItem CRUD 分离）
 /// </summary>
 [ApiModule(4, "后勤管理")]
 [Route("api/[controller]", Name = "BOM物料成本分析")]
 public class TaktBomMaterialCostAnalysesController : TaktControllerBase
 {
     private readonly ITaktBomMaterialCostAnalysisService _bomMaterialCostAnalysisService;
-    private readonly ITaktBomMaterialCostItemRecalculateBackgroundService _recalculateBackgroundService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
     /// <param name="bomMaterialCostAnalysisService">BOM 成本分析服务</param>
-    /// <param name="recalculateBackgroundService">成本合计/重算后台调度</param>
     public TaktBomMaterialCostAnalysesController(
-        ITaktBomMaterialCostAnalysisService bomMaterialCostAnalysisService,
-        ITaktBomMaterialCostItemRecalculateBackgroundService recalculateBackgroundService)
+        ITaktBomMaterialCostAnalysisService bomMaterialCostAnalysisService)
     {
         _bomMaterialCostAnalysisService = bomMaterialCostAnalysisService;
-        _recalculateBackgroundService = recalculateBackgroundService;
     }
 
     /// <summary>
@@ -269,61 +265,6 @@ public class TaktBomMaterialCostAnalysesController : TaktControllerBase
             var (resultFileName, fileContent) = await _bomMaterialCostAnalysisService.ExportBomMaterialCostAnalysisMonthlyTrendAnalysisAsync(
                 query, sheetName, exportName);
             return File(fileContent, TaktExcelHelper.ExcelContentType, resultFileName);
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 提交后台成本合计/重算（明细 Sync 主表；完成后 SignalR 通知触发用户）
-    /// </summary>
-    /// <param name="queryDto">与明细列表相同的筛选（须单个核算月；忽略分页）</param>
-    /// <param name="forceRecalculate">为 true 时按重置成本路径排队</param>
-    /// <param name="processRecordCount">处理工厂+产品组上限（0=全部；默认 5000）</param>
-    /// <returns>已提交回执</returns>
-    [TaktPermission("logistics:manufacturing:bom:material:cost:update", "合计或重算BOM物料成本")]
-    [HttpPut("recalculate-model-average")]
-    public async Task<IActionResult> RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
-        [FromQuery] TaktBomMaterialCostItemQueryDto queryDto,
-        [FromQuery] bool forceRecalculate = false,
-        [FromQuery] int processRecordCount = 5000)
-    {
-        try
-        {
-            var prepared = TaktBomMaterialCostAnalysisService.PrepareRecalculateModelAverageQuery(queryDto);
-            await _recalculateBackgroundService.EnqueueRecalculateAsync(
-                prepared.Query,
-                forceRecalculate,
-                processRecordCount);
-            var submitted = new TaktBomMaterialCostItemRecalculateSubmittedDto
-            {
-                ProcessedMonth = prepared.ProcessedMonth,
-                ForceRecalculate = forceRecalculate,
-            };
-            return Success(submitted, "已提交后台重算，完成后将通知您");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 同步刷新主表机种编码 / 物料类型 / 机种月均（不改产品月成本、不扫明细）
-    /// </summary>
-    /// <param name="queryDto">工厂 + 核算期间；机种可选</param>
-    /// <returns>刷新结果</returns>
-    [TaktPermission("logistics:manufacturing:bom:material:cost:update", "回填BOM机种价格")]
-    [HttpPost("refresh-model-fields")]
-    public async Task<IActionResult> RefreshBomMaterialCostModelFieldsAsync(
-        [FromBody] TaktBomMaterialCostRefreshModelQueryDto queryDto)
-    {
-        try
-        {
-            var result = await _bomMaterialCostAnalysisService.RefreshBomMaterialCostModelFieldsAsync(queryDto);
-            return Success(result, "机种字段刷新完成");
         }
         catch (Exception ex)
         {

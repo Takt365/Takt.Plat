@@ -1,6 +1,8 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -98,16 +100,14 @@ AND LTRIM(RTRIM(T.[destination_code])) = S.[destination_code]
 WHEN MATCHED AND (
   T.[is_deleted] <> 0
   OR T.[sort_order] <> 0
-  OR LTRIM(RTRIM(ISNULL(T.[ext_field], N''))) <> N'{}'
   OR LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> N'幂等更新'
 ) THEN
   UPDATE SET
-    T.[sort_order] = 0,
-    T.[ext_field] = '{}',
-    T.[remark] = N'幂等更新',
-    T.[updated_by] = @sync_user_id,
-    T.[updated_at] = @now,
-    T.[is_deleted] = 0
+  T.[sort_order]=0,
+  T.[remark]=N'幂等更新',
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=0
 WHEN NOT MATCHED THEN
   INSERT (
     [id],
@@ -282,7 +282,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -317,7 +317,7 @@ SELECT
   N'MERGE Model Destination Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #cjs_delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #cjs_delta WHERE oper_type = 'INSERT');
@@ -345,7 +345,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_epoch + 1,
@@ -359,7 +359,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 -- Quartz 执行器读取此结果集写入 ExecuteMessage / quartz-.log

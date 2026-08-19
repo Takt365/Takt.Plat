@@ -44,7 +44,7 @@ export interface Numbering extends CompanyDtoBase {
   documentType: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode: string;
 
@@ -149,7 +149,7 @@ export interface NumberingQuery extends TaktPagedQuery {
   documentType?: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode?: string;
 
@@ -248,7 +248,7 @@ export interface NumberingCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
@@ -261,7 +261,7 @@ export interface NumberingCreate {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string
 
@@ -281,7 +281,7 @@ export interface NumberingCreate {
   documentType: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode: string;
 
@@ -404,7 +404,7 @@ export interface NumberingTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -429,7 +429,7 @@ export interface NumberingTemplate {
   documentType?: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode?: string;
 
@@ -518,7 +518,7 @@ export interface NumberingImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -531,7 +531,7 @@ export interface NumberingImport {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string
 
@@ -551,7 +551,7 @@ export interface NumberingImport {
   documentType?: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode?: string;
 
@@ -660,7 +660,7 @@ export interface NumberingExport {
   documentType: string;
 
   /**
-   * 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+   * 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
    */
   deptCode: string;
 

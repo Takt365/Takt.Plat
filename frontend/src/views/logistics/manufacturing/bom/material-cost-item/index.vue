@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/manufacturing/bom/material-cost-item -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：BOM 物料成本明细行管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：BOM 物料成本明细行页面（导入/导出/查询；无新增/更新/删除） -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -20,14 +20,8 @@
 
     <!-- 工具栏 -->
     <TaktToolsBar
-      create-permission="logistics:manufacturing:bom:material:cost:item:create"
-      update-permission="logistics:manufacturing:bom:material:cost:item:update"
-      delete-permission="logistics:manufacturing:bom:material:cost:item:delete"
       import-permission="logistics:manufacturing:bom:material:cost:item:import"
       export-permission="logistics:manufacturing:bom:material:cost:item:export"
-      :show-create="true"
-      :show-update="true"
-      :show-delete="true"
       :show-import="true"
       :show-export="true"
       :show-expand="false"
@@ -35,16 +29,7 @@
       :show-column-setting="true"
       :show-fullscreen="true"
       :show-refresh="true"
-      :create-disabled="false"
-      :create-loading="loading"
-      :update-disabled="updateDisabled"
-      :update-loading="loading"
-      :delete-disabled="deleteDisabled"
-      :delete-loading="loading"
       :refresh-loading="loading"
-      @create="handleCreate"
-      @update="handleUpdate"
-      @delete="handleDelete"
       @import="handleImport"
       @export="handleExport"
       @advanced-query="handleAdvancedQuery"
@@ -97,23 +82,6 @@
       @show-size-change="handlePaginationSizeChange"
     />
 
-    <!-- 新增/编辑对话框 -->
-    <TaktModal
-      v-model:open="formVisible"
-      :title="formTitle"
-      width="50%"
-      wrap-class-name="takt-form-modal-resizable"
-      :confirm-loading="formLoading"
-      @ok="handleFormSubmit"
-      @cancel="handleFormCancel"
-    >
-      <BomMaterialCostItemForm
-        :key="formData?.bomMaterialCostItemId ?? 'create'"
-        ref="formRef"
-        :form-data="formData"
-        :loading="formLoading"
-      />
-    </TaktModal>
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -156,11 +124,11 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('sequenceCode')">
-      <a-form-item :label="pi.queryLabel('sequenceCode')">
+      <div v-show="isFieldVisible('bomItemCode')">
+      <a-form-item :label="pi.queryLabel('bomItemCode')">
         <a-input
-          v-model:value="advancedQueryForm.sequenceCode"
-          :placeholder="pi.queryPh('sequenceCode', 'required')"
+          v-model:value="advancedQueryForm.bomItemCode"
+          :placeholder="pi.queryPh('bomItemCode', 'required')"
           show-count
           :maxlength="4"
           allow-clear
@@ -177,23 +145,23 @@
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('lineNumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
+        <a-input-number
+          v-model:value="advancedQueryForm.lineNumber"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
+          :min="1"
+          :step="10"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('productDescription')">
       <a-form-item :label="pi.queryLabel('productDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.productDescription"
           :placeholder="pi.queryPh('productDescription', 'optional')"
           :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('bomItemCode')">
-      <a-form-item :label="pi.queryLabel('bomItemCode')">
-        <a-input
-          v-model:value="advancedQueryForm.bomItemCode"
-          :placeholder="pi.queryPh('bomItemCode', 'required')"
-          show-count
-          :maxlength="4"
           allow-clear
         />
       </a-form-item>
@@ -492,23 +460,22 @@
 
 <script setup lang="ts">
 /**
- * BOM 物料成本明细行管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * BOM 物料成本明细行页面（导入/导出/查询；无新增/更新/删除）
  * @module views/logistics/manufacturing/bom/material-cost-item
  */
 import { ref, computed, onMounted } from 'vue'
-import { message, Modal } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { TableColumnsType } from 'ant-design-vue'
-import { CreateActionColumn } from '@/components/business/takt-action-column/index'
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
-import BomMaterialCostItemForm from './components/material-cost-item-form.vue'
-import { getBomMaterialCostItemList, getBomMaterialCostItemById, createBomMaterialCostItem, updateBomMaterialCostItem, deleteBomMaterialCostItemById, deleteBomMaterialCostItemBatch, getBomMaterialCostItemTemplate, importBomMaterialCostItem, exportBomMaterialCostItem } from '@/api/logistics/manufacturing/bom/material-cost-item'
+import { getBomMaterialCostItemList, getBomMaterialCostItemTemplate, importBomMaterialCostItem, exportBomMaterialCostItem } from '@/api/logistics/manufacturing/bom/material-cost-item'
 import type { BomMaterialCostItem, BomMaterialCostItemQuery } from '@/types/logistics/manufacturing/bom/material-cost-item'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { sortBomMaterialCostItemRowsByProductCodeLineNumber } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-item-sort'
+import { RiQuestionLine } from '@remixicon/vue'
 
 import {
   useBomMaterialCostItemI18n,
@@ -550,17 +517,6 @@ const selectedRows = ref<BomMaterialCostItemRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
-/** 新增/编辑弹窗是否打开 */
-const formVisible = ref(false)
-/** 弹窗标题（新增/编辑） */
-const formTitle = ref('')
-/** 传入内嵌表单的编辑数据 */
-const formData = ref<Partial<BomMaterialCostItem> | null>(null)
-/** 表单提交 loading */
-const formLoading = ref(false)
-/** 内嵌表单组件 ref（validate / getValues / resetFields） */
-const formRef = ref()
-
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
@@ -577,6 +533,9 @@ function hasAnyListQueryFilter(): boolean {
     if (String(form[key] ?? '').trim().length > 0) {
       return true
     }
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    return true
   }
   if (form.componentQuantity !== undefined && form.componentQuantity !== null) {
     return true
@@ -607,6 +566,7 @@ function createEmptyAdvancedQueryForm() {
   >
   return {
     ...form,
+    lineNumber: undefined as number | undefined,
     componentQuantity: undefined as number | undefined,
     movingAveragePrice: undefined as number | undefined,
     movingPriceUnit: undefined as number | undefined,
@@ -629,10 +589,6 @@ const importVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'bomMaterialCostItemId'
-/** 工具栏「编辑」是否禁用（须恰好选中一行） */
-const updateDisabled = computed(() => selectedRows.value.length !== 1)
-/** 工具栏「删除」是否禁用（未选中任何行） */
-const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
@@ -662,6 +618,9 @@ function buildListQuery(overrides?: Partial<BomMaterialCostItemQuery>): BomMater
   }
   for (const key of BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
+  }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    query.lineNumber = form.lineNumber
   }
   if (form.componentQuantity !== undefined && form.componentQuantity !== null) {
     query.componentQuantity = form.componentQuantity
@@ -714,26 +673,6 @@ function buildBomMaterialCostItemListColumn(
 const columns = computed<TableColumnsType>(() => [
   buildBomMaterialCostItemListColumn('bomMaterialCostItemId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
   ...BOMMATERIALCOSTITEM_LIST_FIELDS.map((key) => buildBomMaterialCostItemListColumn(key, pi.label(key))),
-  CreateActionColumn({
-    actions: [
-      {
-        key: 'update',
-        label: t('common.page.button.edit'),
-        shape: 'plain',
-        icon: RiEditLine,
-        permission: 'logistics:manufacturing:bom:material:cost:item:update',
-        onClick: (record: BomMaterialCostItemRowRecord) => handleEdit(record)
-      },
-      {
-        key: 'delete',
-        label: t('common.page.button.delete'),
-        shape: 'plain',
-        icon: RiDeleteBinLine,
-        permission: 'logistics:manufacturing:bom:material:cost:item:delete',
-        onClick: (record: BomMaterialCostItemRowRecord) => handleDeleteOne(record)
-      }
-    ]
-  })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
@@ -806,7 +745,7 @@ async function loadData() {
       return
     }
     const res = await getBomMaterialCostItemList(buildListQuery())
-    dataSource.value = res.data ?? []
+    dataSource.value = sortBomMaterialCostItemRowsByProductCodeLineNumber(res.data ?? [])
     total.value = res.total ?? 0
   } catch (error: any) {
     logger.error('[BomMaterialCostItem] 加载数据失败', { error })
@@ -835,75 +774,6 @@ function handleReset() {
   loadData()
 }
 
-/** 打开新增弹窗 */
-function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
-  formData.value = null
-  formVisible.value = true
-  nextTick(() => formRef.value?.resetFields())
-}
-/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
-async function handleEdit(record: BomMaterialCostItemRowRecord) {
-  const id = getBomMaterialCostItemId(record)
-  if (!id) {
-    return
-  }
-  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
-  formLoading.value = true
-  try {
-    const detail = await getBomMaterialCostItemById(id)
-    formData.value = detail ?? ({ ...record } as Partial<BomMaterialCostItem>)
-    formVisible.value = true
-  } catch (error: unknown) {
-    message.error(t('common.feedback.load.data.failed'))
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 工具栏编辑：打开当前单选行 */
-function handleUpdate() {
-  if (selectedRow.value) {
-    void handleEdit(selectedRow.value)
-  } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
-  }
-}
-/** 提交新增/编辑表单 */
-async function handleFormSubmit() {
-  const refInst = formRef.value
-  if (!refInst?.validate) return
-  try {
-    await refInst.validate()
-  } catch {
-    return
-  }
-  formLoading.value = true
-  try {
-    const payload = refInst.getValues?.() ?? { ...(formData.value as any) }
-    const id = (formData.value as any)?.[entityIdName]
-    if (id) {
-      await updateBomMaterialCostItem(id, payload as any)
-      message.success(t('common.feedback.updated', { target: pi.self() }))
-    } else {
-      await createBomMaterialCostItem(payload as any)
-      message.success(t('common.feedback.created', { target: pi.self() }))
-    }
-    formVisible.value = false
-    formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-    loadData()
-  } finally {
-    formLoading.value = false
-  }
-}
-
-/** 关闭新增/编辑弹窗（不提交） */
-function handleFormCancel() {
-  formVisible.value = false
-  formData.value = null
-  nextTick(() => formRef.value?.resetFields())
-}
 /** 打开导入对话框 */
 function handleImport() {
   importVisible.value = true
@@ -970,39 +840,6 @@ async function handleExport() {
   } finally {
     loading.value = false
   }
-}
-/** 删除单行 */
-async function handleDeleteOne(record: BomMaterialCostItemRowRecord) {
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      await deleteBomMaterialCostItemById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      loadData()
-    }
-  })
-}
-/** 批量删除选中行 */
-async function handleDelete() {
-  if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
-    return
-  }
-  Modal.confirm({
-    title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
-    okText: t('common.page.button.delete'),
-    cancelText: t('common.page.button.cancel'),
-    onOk: async () => {
-      const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
-      await deleteBomMaterialCostItemBatch(ids)
-      message.success(t('common.feedback.deleted', { target: pi.self() }))
-      loadData()
-    }
-  })
 }
 /** 打开高级查询抽屉 */
 function handleAdvancedQuery() {

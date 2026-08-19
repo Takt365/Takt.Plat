@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktGeneralMaterialDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GeneralMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktGeneralMaterial 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription）
+/// Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription） 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
 /// 对应前端 TaktGeneralMaterialDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
-public class TaktGeneralMaterialDto : TaktTenantDtoBase
+public class TaktGeneralMaterialDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// GeneralMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -1077,11 +1077,6 @@ public class TaktGeneralMaterialQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（租户内唯一）
     /// </summary>
@@ -2147,11 +2142,6 @@ public class TaktGeneralMaterialCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（租户内唯一）
     /// </summary>
@@ -3237,11 +3227,6 @@ public class TaktGeneralMaterialTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（租户内唯一）
     /// </summary>
@@ -4274,11 +4259,6 @@ public class TaktGeneralMaterialImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（租户内唯一）
     /// </summary>

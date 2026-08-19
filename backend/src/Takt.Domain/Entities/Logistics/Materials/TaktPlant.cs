@@ -17,22 +17,16 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt工厂实体
-/// 代表租户下的独立工厂（租户级实体，只需要TenantCode）
+/// 代表租户下的独立工厂主档
 /// 与公司种子对称，参照 SAP Plant 设计
-/// 特例：虽继承 TaktTenantEntityBase，但不落 related_plant（工厂主档语义即 PlantCode，无需再关联工厂）
+/// 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
 /// </summary>
 [SugarTable("takt_logistics_materials_plant", "工厂表")]
 [SugarIndex("ix_plant_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_plant_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_plant_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, true)]
-public class TaktPlant : TaktTenantEntityBase
+public class TaktPlant : TaktTenantCultureEntityBase
 {
-    /// <summary>
-    /// 关联工厂（工厂主档忽略：不建列、不读写；业务标识仅用 PlantCode）
-    /// </summary>
-    [SugarColumn(IsIgnore = true)]
-    public new string RelatedPlant { get; set; } = string.Empty;
-
     /// <summary>
     /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
     /// </summary>
@@ -264,7 +258,7 @@ public class TaktPlant : TaktTenantEntityBase
     [SugarColumn(ColumnName = "factory_calendar", ColumnDescription = "工厂日历", ColumnDataType = "varchar", Length = 2, IsNullable = false, DefaultValue = "")]
     public string FactoryCalendar { get; set; } = string.Empty;
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     [SugarColumn(ColumnName = "related_company", ColumnDescription = "关联公司", ColumnDataType = "varchar", Length = 4, IsNullable = false)]
     public string RelatedCompany { get; set; } = string.Empty;

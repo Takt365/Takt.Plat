@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Foundation;
 /// <summary>
 /// 敏感词实体（租户内共享，供新闻、公告评论等模块引用）
 /// 对应前端 TaktVocabularyDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktVocabularyDto : TaktTenantDtoBase
+public class TaktVocabularyDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// VocabularyID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -76,12 +77,6 @@ public class TaktVocabularyQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 敏感词文本（租户内唯一）
     /// </summary>
@@ -141,12 +136,6 @@ public class TaktVocabularyCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 敏感词文本（租户内唯一）
     /// </summary>
@@ -242,12 +231,6 @@ public class TaktVocabularyTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 敏感词文本（租户内唯一）
     /// </summary>
@@ -294,12 +277,6 @@ public class TaktVocabularyImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 敏感词文本（租户内唯一）
     /// </summary>

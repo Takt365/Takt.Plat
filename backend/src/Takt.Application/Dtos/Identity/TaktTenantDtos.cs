@@ -26,7 +26,7 @@ namespace Takt.Application.Dtos.Identity;
 /// 对应前端 TaktTenantDto
 /// 继承 TaktTenantDtoBase
 /// </summary>
-public class TaktTenantDto : TaktTenantDtoBase
+public class TaktTenantDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// TenantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -91,12 +91,6 @@ public class TaktTenantQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
@@ -181,12 +175,6 @@ public class TaktTenantCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
@@ -303,12 +291,6 @@ public class TaktTenantTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>
@@ -375,12 +357,6 @@ public class TaktTenantImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 租户名称
     /// </summary>

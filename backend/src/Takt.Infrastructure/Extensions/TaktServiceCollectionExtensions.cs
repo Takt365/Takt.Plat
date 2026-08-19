@@ -41,8 +41,7 @@ public static class TaktServiceCollectionExtensions
             ActivatorUtilities.CreateInstance<TaktUserContext>(sp));
 
         // 注册本地化服务（默认 en-US；请求头 Accept-Language 与前端 locale 同步）
-        var localizationOptions = configuration.RequireOptions<TaktLocalizationOptions>(TaktLocalizationOptions.SectionName);
-        localizationOptions.Validate();
+        var localizationOptions = configuration.RequireLocalization();
 
         services.Configure<TaktLocalizationOptions>(configuration.GetSection(TaktLocalizationOptions.SectionName));
 

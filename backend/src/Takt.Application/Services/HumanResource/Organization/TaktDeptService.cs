@@ -473,6 +473,7 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
             exp = exp.And(x =>
                 (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || (x.DeptName != null && x.DeptName.Contains(keywords))
+                || (x.DeptShortName != null && x.DeptShortName.Contains(keywords))
                 || SqlFunc.ToString(x.ParentId).Contains(keywords)
                 || SqlFunc.ToString(x.Level).Contains(keywords)
                 || (x.DeptPath != null && x.DeptPath.Contains(keywords))
@@ -502,6 +503,11 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         if (!string.IsNullOrEmpty(queryDto?.DeptName))
         {
             exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
+        }
+
+        if (!string.IsNullOrEmpty(queryDto?.DeptShortName))
+        {
+            exp = exp.And(x => x.DeptShortName != null && x.DeptShortName.Contains(queryDto.DeptShortName));
         }
 
         if (queryDto?.ParentId.HasValue == true)

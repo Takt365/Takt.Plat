@@ -78,6 +78,12 @@
             @change="(checked: unknown) => handleStatusChange(record, Boolean(checked))"
           />
         </template>
+        <template v-else-if="column.key === 'deptCode'">
+          <TaktDictTag
+            :value="getNumberingField(record, 'deptCode')"
+            dict-type="sys_numbering_dept_code"
+          />
+        </template>
         <template v-else-if="column.key === 'dateFormat'">
           <TaktDictTag
             :value="getNumberingField(record, 'dateFormat')"
@@ -174,7 +180,7 @@
       <a-form-item :label="t('entity.numbering.deptcode')">
         <TaktSelect
           v-model:value="advancedQueryForm.deptCode"
-          api-url="TaktIsoCodes/options"
+          dict-type="sys_numbering_dept_code"
           :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.deptcode') })"
           allow-clear
         />

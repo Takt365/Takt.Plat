@@ -23,7 +23,7 @@ public sealed class TaktStatQueryBuildRequest
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（强制隔离）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 

@@ -21,7 +21,7 @@ export default {
     periodRange: 'Costing period',
     selectPlantRequired: 'Please select a plant',
     selectModelRequired: 'Please select a model',
-    itemFilterHint: 'Default: ProductionRelated=X, PurchaseType=F (clear to show all)',
+    itemFilterHint: 'Default: ProductionRelated=X, PcbSectIndicator empty, PurchaseType=F (clear to show all)',
     productRowCount: 'Products',
     modalmasterhint: 'Left model → center product → right lines (no entity split). Import lines, then sum or recalculate cost.',
     costSum: 'Cost sum',
@@ -46,17 +46,5 @@ export default {
     refreshModelFieldsSuccess:
       '{month} model price backfill done: scanned {scanned}, model updated {modelUpdated}, average updated {averageUpdated} ({groups} groups)',
     refreshModelFieldsFailed: 'Failed to backfill model price',
-    zeroPrice: {
-      button: 'Component zero price',
-      monthTitle: 'Select plant and costing month',
-      title: 'Component zero price ({month})',
-      hint: '{month} · {productCount} products · {componentCount} zero-price components (all models · ProductionRelated=X · PurchaseType=F · moving avg = 0; suggested substitute = reverse trailing version e.g. D01446500B→A, use that material’s latest priced month on/before costing month)',
-      productCodes: 'Shared products',
-      productCount: 'Products',
-      suggestedComponentCode: 'Suggested component',
-      suggestedMovingPrice: 'Suggested moving price',
-      exportSuccess: 'Component zero price list exported',
-      exportFailed: 'Failed to export component zero price list',
-    },
   },
 };

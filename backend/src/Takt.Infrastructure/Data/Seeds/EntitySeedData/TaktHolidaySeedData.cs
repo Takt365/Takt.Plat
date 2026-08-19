@@ -104,6 +104,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
                     repository,
                     tenantCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
                     holidayData);
 
@@ -305,6 +306,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktHoliday> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktHolidaySeedItem seed)
     {
@@ -323,6 +325,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                PlantCode = plantCode,
                 CultureCode = cultureCode,
                 HolidayName = seed.HolidayName,
                 HolidayType = seed.HolidayType,
@@ -344,6 +347,7 @@ public class TaktHolidaySeedData : ITaktSeedDataCoordinator
         holiday.HolidayGreeting = seed.HolidayGreeting;
         holiday.HolidayQuote = seed.HolidayQuote;
         holiday.HolidayTheme = seed.HolidayTheme;
+        holiday.PlantCode = plantCode;
         holiday.CultureCode = cultureCode;
 
         await repository.UpdateAsync(holiday);

@@ -16,7 +16,7 @@
         class="sales-price-trend-query-bar__control sales-price-trend-query-bar__control--plant"
         allow-clear
         show-search
-        :placeholder="t('entity.salesprice.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
       />
       <a-range-picker
         v-model:value="periodRange"

@@ -24,9 +24,9 @@ namespace Takt.Application.Dtos.Identity;
 /// <summary>
 /// 用户实体 代表系统登录账号（身份认证域） 注意：用户与员工档案分离，用户仅用于认证和权限控制
 /// 对应前端 TaktUserDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCultureDtoBase
 /// </summary>
-public class TaktUserDto : TaktTenantDtoBase
+public class TaktUserDto : TaktTenantCultureDtoBase
 {
     /// <summary>
     /// UserID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -65,11 +65,6 @@ public class TaktUserDto : TaktTenantDtoBase
     /// 关联的员工名称（填充字段）
     /// </summary>
     public string? EmployeeName { get; set; }
-
-    /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
@@ -161,12 +156,6 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
@@ -194,9 +183,9 @@ public class TaktUserQueryDto : TaktPagedQuery
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
@@ -273,11 +262,6 @@ public class TaktUserQueryDto : TaktPagedQuery
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CreatedBy { get; set; }
-
-    /// <summary>
-    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
-    /// </summary>
-    public string? CultureCode { get; set; }
 }
 
 // ========================================
@@ -293,12 +277,6 @@ public class TaktUserCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
@@ -327,10 +305,10 @@ public class TaktUserCreateDto
     public long EmployeeId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    [Required(ErrorMessage = "区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）不能为空")]
-    public string DefaultCulture { get; set; } = string.Empty;
+    [Required(ErrorMessage = "区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）不能为空")]
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
@@ -431,12 +409,6 @@ public class TaktUserTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
@@ -464,9 +436,9 @@ public class TaktUserTemplateDto
     public long? EmployeeId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
@@ -519,12 +491,6 @@ public class TaktUserImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
@@ -567,9 +533,9 @@ public class TaktUserImportDto
     public string? StatusName { get; set; }
 
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）
@@ -676,9 +642,9 @@ public class TaktUserExportDto
     public string? RoleNames { get; set; }
 
     /// <summary>
-    /// 区域文化编码（BCP47，对齐 TaktCulture.CultureCode，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 内置（字典 sys_yes_no_type；种子用户 admin/guest/demo 为内置，不允许删除）

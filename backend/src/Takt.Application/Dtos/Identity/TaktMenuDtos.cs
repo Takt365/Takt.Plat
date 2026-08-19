@@ -26,7 +26,7 @@ namespace Takt.Application.Dtos.Identity;
 /// 对应前端 TaktMenuDto
 /// 继承 TaktTenantDtoBase
 /// </summary>
-public class TaktMenuDto : TaktTenantDtoBase
+public class TaktMenuDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// MenuID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -168,12 +168,6 @@ public class TaktMenuQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -309,12 +303,6 @@ public class TaktMenuCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -509,12 +497,6 @@ public class TaktMenuTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>
@@ -627,12 +609,6 @@ public class TaktMenuImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>

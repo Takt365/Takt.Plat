@@ -365,7 +365,15 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 为被强退的在线用户落库并 SignalR 推送系统消息（与 message-form：Create + Send 一致；按 online 租户/公司，适用于延迟强退后台任务）
+    /// </summary>
+    /// <param name="online">目标在线用户</param>
+    /// <param name="messageContent">消息正文</param>
+    /// <param name="messageGroup">消息分组 DictValue</param>
+    /// <param name="fromUserId">操作者用户 ID（可为空，须与 fromUserName 成对解析）</param>
+    /// <param name="fromUserName">操作者登录名</param>
+    /// <returns>任务</returns>
     public async Task CreateAndSendOnlineKickMessageAsync(
         TaktOnline online,
         string messageContent,
@@ -431,7 +439,13 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         await _signalRDispatchService.PushPrivateMessageAsync(push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Quartz 任务执行完成后落库在线消息并私信推送（From=执行人，To=推送对象；适用于 SQL 同步等后台任务）
+    /// </summary>
+    /// <param name="task">定时任务实体</param>
+    /// <param name="log">执行日志</param>
+    /// <param name="triggerUserName">手动触发用户名（可空；空则回退任务 CreatedBy）</param>
+    /// <returns>任务</returns>
     public async Task CreateAndSendQuartzTaskExecutedMessageAsync(
         TaktQuartzTask task,
         TaktQuartzLog log,
@@ -478,6 +492,67 @@ public class TaktMessageService : TaktServiceBase, ITaktMessageService
         {
             TenantCode = tenantCode,
             CompanyCode = companyCode,
+            MessageId = entity.Id,
+            FromUserName = entity.FromUserName,
+            FromUserId = entity.FromUserId,
+            ToUserName = entity.ToUserName,
+            ToUserId = entity.ToUserId,
+            MessageTitle = entity.MessageTitle,
+            MessageContent = entity.MessageContent,
+            Attachments = entity.MessageAttachments,
+            MessageType = entity.MessageType,
+            MessageGroup = entity.MessageGroup,
+            SendTime = entity.SendTime,
+            ReadTime = entity.ReadTime,
+            ReadStatus = entity.ReadStatus,
+        };
+        await _signalRDispatchService.PushPrivateMessageAsync(push);
+    }
+
+    /// <summary>
+    /// 向当前登录用户落库操作结果消息并私信推送（From=To=当前用户）
+    /// </summary>
+    /// <param name="messageContent">消息正文</param>
+    /// <param name="messageGroup">消息分组 DictValue；空则 reminder</param>
+    /// <returns>任务</returns>
+    public async Task CreateAndSendSelfOperationMessageAsync(string messageContent, string? messageGroup = null)
+    {
+        EnsureThreeLayerContext();
+        ArgumentException.ThrowIfNullOrWhiteSpace(messageContent);
+        var userId = CurrentUserId ?? 0L;
+        var userName = CurrentUserName?.Trim() ?? string.Empty;
+        if (userId <= 0 || string.IsNullOrWhiteSpace(userName))
+        {
+            throw new TaktBusinessException("操作消息缺少当前用户信息");
+        }
+
+        var content = messageContent.Trim();
+        var group = string.IsNullOrWhiteSpace(messageGroup)
+            ? TaktBomOperationMessageConstants.MessageGroup
+            : messageGroup.Trim();
+        var messageType = TaktBomOperationMessageConstants.MessageType;
+        var entity = new TaktMessage
+        {
+            TenantCode = CurrentTenantCode,
+            CompanyCode = CurrentCompanyCode,
+            FromUserId = userId,
+            FromUserName = userName,
+            ToUserId = userId,
+            ToUserName = userName,
+            MessageTitle = BuildAutoMessageTitle(messageType, group, content),
+            MessageContent = content,
+            MessageType = messageType,
+            MessageGroup = group,
+            SendTime = DateTime.Now,
+            IsCc = 0,
+            ReadStatus = 0,
+            CreatedBy = userId,
+        };
+        entity = await _messageRepository.CreateAsync(entity);
+        var push = new TaktSignalRPrivateMessagePush
+        {
+            TenantCode = CurrentTenantCode,
+            CompanyCode = CurrentCompanyCode,
             MessageId = entity.Id,
             FromUserName = entity.FromUserName,
             FromUserId = entity.FromUserId,

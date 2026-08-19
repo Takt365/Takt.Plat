@@ -17,12 +17,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt物料多语言描述实体（租户级；SAP MAKT：MATNR + SPRAS + MAKTX）
+/// 特例：继承组合2：无关联工厂、有语言
 /// </summary>
 [SugarTable("takt_logistics_materials_material_description", "物料描述表")]
 [SugarIndex("ix_takt_logistics_materials_material_description_tenant", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_material_description_unique", nameof(TenantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(CultureCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_materials_material_description_material_code", nameof(TenantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, false)]
-public class TaktMaterialDescription : TaktTenantEntityBase
+public class TaktMaterialDescription : TaktTenantCultureEntityBase
 {
     /// <summary>
     /// 物料编码（选项 TaktGeneralMaterials/options；DictValue=MaterialCode）

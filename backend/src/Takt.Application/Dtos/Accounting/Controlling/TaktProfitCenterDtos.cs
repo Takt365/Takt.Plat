@@ -35,6 +35,58 @@ public class TaktProfitCenterDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ProfitCenterId { get; set; }
 
+    /// <summary>
+    /// 利润中心编码（4位，租户+公司内唯一）
+    /// </summary>
+    public string ProfitCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 利润中心名称
+    /// </summary>
+    public string ProfitCenterName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 负责人用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManagerId { get; set; }
+
+    /// <summary>
+    /// 负责人姓名
+    /// </summary>
+    public string? ManagerName { get; set; }
+
+    /// <summary>
+    /// 所属部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 所属部门名称
+    /// </summary>
+    public string? DeptName { get; set; }
+
+    /// <summary>
+    /// 利润中心层级
+    /// </summary>
+    public int ProfitCenterLevel { get; set; } = 1;
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 排序号
@@ -84,7 +136,7 @@ public class TaktProfitCenterQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -202,12 +254,12 @@ public class TaktProfitCenterCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -371,12 +423,12 @@ public class TaktProfitCenterTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -464,12 +516,12 @@ public class TaktProfitCenterImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 

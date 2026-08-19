@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 汇率实体（租户级主数据；租户内各公司共用同一套汇率；维护自币种至目标币种的折算汇率及生效区间）
  * 对应前端 TaktExchangeRateDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 ExchangeRate
  * @description 对应后端 TaktExchangeRateDto
  */
-export interface ExchangeRate extends TenantDtoBase {
+export interface ExchangeRate extends TenantCoreDtoBase {
   /**
    * ExchangeRateID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -86,11 +86,6 @@ export interface ExchangeRateQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
@@ -179,11 +174,6 @@ export interface ExchangeRateCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
@@ -286,11 +276,6 @@ export interface ExchangeRateTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
    */
   fromCurrencyCode?: string;
@@ -357,11 +342,6 @@ export interface ExchangeRateImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）

@@ -92,7 +92,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         _backupOptions = backupOptions.Value;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取数据库备份列表（分页）
+    /// </summary>
+    /// <param name="queryDto">查询DTO</param>
+    /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktDatabaseBackupDto>> GetDatabaseBackupListAsync(TaktDatabaseBackupQueryDto queryDto)
     {
         EnsureThreeLayerContext();
@@ -108,7 +112,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
             queryDto.PageSize);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 根据ID获取数据库备份
+    /// </summary>
+    /// <param name="id">数据库备份ID</param>
+    /// <returns>DTO</returns>
     public async Task<TaktDatabaseBackupDto?> GetDatabaseBackupByIdAsync(long id)
     {
         var entity = await _databaseBackupRepository.GetByIdAsync(id);
@@ -119,7 +127,10 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return MapToDto(entity);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取备份路径选项（默认根目录与白名单）
+    /// </summary>
+    /// <returns>路径选项</returns>
     public TaktDatabaseBackupPathOptionsDto GetDatabaseBackupPathOptions()
     {
         // 不再下发固定根；保留字段仅为兼容旧前端
@@ -130,7 +141,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 浏览本地目录（任意盘符路径；无固定白名单）
+    /// </summary>
+    /// <param name="dto">请求</param>
+    /// <returns>浏览结果</returns>
     public Task<TaktDatabaseBackupBrowseResult> BrowseLocalAsync(TaktDatabaseBackupBrowseLocalDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -209,7 +224,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         });
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 浏览网络 UNC 目录
+    /// </summary>
+    /// <param name="dto">请求</param>
+    /// <returns>浏览结果</returns>
     public async Task<TaktDatabaseBackupBrowseResult> BrowseNetworkAsync(TaktDatabaseBackupBrowseNetworkDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -276,7 +295,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 浏览 FTP 目录
+    /// </summary>
+    /// <param name="dto">请求</param>
+    /// <returns>浏览结果</returns>
     public async Task<TaktDatabaseBackupBrowseResult> BrowseFtpAsync(TaktDatabaseBackupBrowseFtpDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -339,7 +362,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 在 API 宿主上创建本地目录（任意路径，无固定根）
+    /// </summary>
+    /// <param name="dto">目录路径</param>
+    /// <returns>创建后的完整路径</returns>
     public Task<string> CreateLocalDirectoryAsync(TaktDatabaseBackupMkdirLocalDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -368,7 +395,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return Task.FromResult(full);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 创建网络 UNC 目录
+    /// </summary>
+    /// <param name="dto">UNC 与凭据</param>
+    /// <returns>创建后的路径</returns>
     public async Task<string> CreateNetworkDirectoryAsync(TaktDatabaseBackupBrowseNetworkDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -403,7 +434,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 创建 FTP 远程目录
+    /// </summary>
+    /// <param name="dto">FTP 连接与路径</param>
+    /// <returns>创建后的远程路径</returns>
     public async Task<string> CreateFtpDirectoryAsync(TaktDatabaseBackupBrowseFtpDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -445,7 +480,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 创建备份配置（草稿，状态待执行）
+    /// </summary>
+    /// <param name="dto">创建DTO</param>
+    /// <returns>备份记录</returns>
     public async Task<TaktDatabaseBackupDto> CreateDatabaseBackupAsync(TaktDatabaseBackupCreateDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -489,7 +528,12 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return MapToDto(entity);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 更新备份配置（仅待执行/失败可改）
+    /// </summary>
+    /// <param name="id">主键</param>
+    /// <param name="dto">更新DTO</param>
+    /// <returns>备份记录</returns>
     public async Task<TaktDatabaseBackupDto> UpdateDatabaseBackupAsync(long id, TaktDatabaseBackupUpdateDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -538,7 +582,13 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return MapToDto(entity);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出数据库备份
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件名与内容</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportDatabaseBackupAsync(
         TaktDatabaseBackupQueryDto? query = null,
         string? sheetName = null,
@@ -561,7 +611,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
             fileName ?? "数据库备份导出.xlsx");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 按记录立即执行（创建一次性 Quartz 任务）
+    /// </summary>
+    /// <param name="id">备份记录主键</param>
+    /// <returns>备份记录</returns>
     public async Task<TaktDatabaseBackupDto> RunDatabaseBackupByIdAsync(long id)
     {
         EnsureThreeLayerContext();
@@ -570,7 +624,12 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return await AttachQuartzAndPersistAsync(entity, DateTime.Now, ExecuteModeImmediate);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 按记录后台调度（创建一次性 Quartz 任务）
+    /// </summary>
+    /// <param name="id">备份记录主键</param>
+    /// <param name="dto">调度参数</param>
+    /// <returns>备份记录</returns>
     public async Task<TaktDatabaseBackupDto> ScheduleDatabaseBackupByIdAsync(long id, TaktDatabaseBackupScheduleByIdDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -584,7 +643,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return await AttachQuartzAndPersistAsync(entity, dto.ScheduledAt, ExecuteModeBackground);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 立即执行数据库备份（创建记录 + 一次性 Quartz；兼容旧 API）
+    /// </summary>
+    /// <param name="dto">备份请求</param>
+    /// <returns>备份记录（状态为已调度，关联 QuartzTaskId）</returns>
     public async Task<TaktDatabaseBackupDto> RunDatabaseBackupNowAsync(TaktDatabaseBackupRunDto dto)
     {
         EnsureThreeLayerContext();
@@ -594,7 +657,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return await CreateScheduledBackupAsync(dto, ExecuteModeImmediate);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 调度数据库备份（创建 Quartz 一次性任务）
+    /// </summary>
+    /// <param name="dto">备份请求（含 ScheduledAt）</param>
+    /// <returns>备份记录</returns>
     public async Task<TaktDatabaseBackupDto> ScheduleDatabaseBackupAsync(TaktDatabaseBackupRunDto dto)
     {
         EnsureThreeLayerContext();
@@ -750,7 +817,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行已调度的数据库备份（Quartz Job 回调）
+    /// </summary>
+    /// <param name="backupId">备份记录主键</param>
+    /// <returns>执行摘要（含落盘路径；跳过时说明原因）</returns>
     public async Task<string> ExecuteScheduledDatabaseBackupAsync(long backupId)
     {
         var entity = await _databaseBackupRepository.GetByIdAsync(backupId);
@@ -783,7 +854,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         return $"数据库备份完成 backupId={backupId}，文件={resultPath}";
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 删除数据库备份
+    /// </summary>
+    /// <param name="id">数据库备份ID</param>
+    /// <returns>任务</returns>
     public async Task DeleteDatabaseBackupByIdAsync(long id)
     {
         var entity = await _databaseBackupRepository.GetByIdAsync(id);
@@ -802,7 +877,11 @@ public class TaktDatabaseBackupService : TaktServiceBase, ITaktDatabaseBackupSer
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 批量删除数据库备份
+    /// </summary>
+    /// <param name="ids">ID列表</param>
+    /// <returns>任务</returns>
     public async Task DeleteDatabaseBackupBatchAsync(IEnumerable<long> ids)
     {
         var idList = ids?.Distinct().ToList() ?? new List<long>();

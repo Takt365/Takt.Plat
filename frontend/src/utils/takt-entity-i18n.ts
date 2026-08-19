@@ -8,13 +8,15 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-/** 通用实体字段 → common.page.entity.*（与 TaktCommonI18nSeedData 一致） */
+/** 通用实体字段 → common.page.entity.*（与 TaktCommonI18nSeedData / ENTITY_BASE_FIELDS 一致；PlantCode 等不进 entity.{slug}.*） */
 export const COMMON_ENTITY_FIELD_I18N_KEYS: Readonly<Record<string, string>> = {
   remark: 'common.page.entity.remark',
   extField: 'common.page.entity.extfield',
   tenantCode: 'common.page.entity.tenantcode',
   companyCode: 'common.page.entity.companycode',
   cultureCode: 'common.page.entity.culturecode',
+  plantCode: 'common.page.entity.plantcode',
+  relatedPlant: 'common.page.entity.relatedplant',
   companyDefaultCulture: 'common.page.entity.companydefaultculture',
   createdAtStart: 'common.page.entity.createdatstart',
   createdAtEnd: 'common.page.entity.createdatend',

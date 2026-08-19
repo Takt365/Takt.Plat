@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktMenuI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Cursor AI)
 // 功能描述：菜单导航国际化翻译种子（menu.* 键，与 TaktMenuLevel1~4SeedData I18nKey 对齐）
 // 
@@ -572,15 +572,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.foundation.numbering
             ("menu.foundation.numbering", "zh-HK", "编码规则_hk", "菜单导航"),
 
-            // menu.foundation.iso.code
-            ("menu.foundation.iso.code", "en-US", "ISO编码_us", "菜单导航"),
-            // menu.foundation.iso.code
-            ("menu.foundation.iso.code", "ja-JP", "ISO编码_jp", "菜单导航"),
-            // menu.foundation.iso.code
-            ("menu.foundation.iso.code", "zh-CN", "ISO编码", "菜单导航"),
-            // menu.foundation.iso.code
-            ("menu.foundation.iso.code", "zh-HK", "ISO编码_hk", "菜单导航"),
-
             // menu.foundation.dict
             ("menu.foundation.dict", "en-US", "数据字典_us", "菜单导航"),
             // menu.foundation.dict
@@ -670,6 +661,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.foundation.admin.division", "zh-CN", "行政区划", "菜单导航"),
             // menu.foundation.admin.division
             ("menu.foundation.admin.division", "zh-HK", "行政区划_hk", "菜单导航"),
+
+            // menu.foundation.ip.geolocation
+            ("menu.foundation.ip.geolocation", "en-US", "IP归属_us", "菜单导航"),
+            // menu.foundation.ip.geolocation
+            ("menu.foundation.ip.geolocation", "ja-JP", "IP归属_jp", "菜单导航"),
+            // menu.foundation.ip.geolocation
+            ("menu.foundation.ip.geolocation", "zh-CN", "IP归属", "菜单导航"),
+            // menu.foundation.ip.geolocation
+            ("menu.foundation.ip.geolocation", "zh-HK", "IP归属_hk", "菜单导航"),
 
             // menu.statistics.report._self
             ("menu.statistics.report._self", "en-US", "报表管理_us", "菜单导航"),
@@ -1850,6 +1850,15 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.bom.material.cost
             ("menu.logistics.manufacturing.bom.material.cost", "zh-HK", "BOM物料成本_hk", "菜单导航"),
 
+            // menu.logistics.manufacturing.bom.material.zeroprice
+            ("menu.logistics.manufacturing.bom.material.zeroprice", "en-US", "BOM零价格_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.material.zeroprice
+            ("menu.logistics.manufacturing.bom.material.zeroprice", "ja-JP", "BOM零价格_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.material.zeroprice
+            ("menu.logistics.manufacturing.bom.material.zeroprice", "zh-CN", "BOM零价格", "菜单导航"),
+            // menu.logistics.manufacturing.bom.material.zeroprice
+            ("menu.logistics.manufacturing.bom.material.zeroprice", "zh-HK", "BOM零价格_hk", "菜单导航"),
+
             // menu.logistics.manufacturing.bom.material.cost.analysis
             ("menu.logistics.manufacturing.bom.material.cost.analysis", "en-US", "BOM成本分析_us", "菜单导航"),
             // menu.logistics.manufacturing.bom.material.cost.analysis
@@ -1877,14 +1886,14 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             // menu.logistics.manufacturing.bom.model.cost.trend
             ("menu.logistics.manufacturing.bom.model.cost.trend", "zh-HK", "机种成本推移_hk", "菜单导航"),
 
-            // menu.logistics.manufacturing.bom.variance.cost.trend
-            ("menu.logistics.manufacturing.bom.variance.cost.trend", "en-US", "差异成本推移_us", "菜单导航"),
-            // menu.logistics.manufacturing.bom.variance.cost.trend
-            ("menu.logistics.manufacturing.bom.variance.cost.trend", "ja-JP", "差异成本推移_jp", "菜单导航"),
-            // menu.logistics.manufacturing.bom.variance.cost.trend
-            ("menu.logistics.manufacturing.bom.variance.cost.trend", "zh-CN", "差异成本推移", "菜单导航"),
-            // menu.logistics.manufacturing.bom.variance.cost.trend
-            ("menu.logistics.manufacturing.bom.variance.cost.trend", "zh-HK", "差异成本推移_hk", "菜单导航"),
+            // menu.logistics.manufacturing.bom.pricedelta.trend
+            ("menu.logistics.manufacturing.bom.pricedelta.trend", "en-US", "成本差异推移_us", "菜单导航"),
+            // menu.logistics.manufacturing.bom.pricedelta.trend
+            ("menu.logistics.manufacturing.bom.pricedelta.trend", "ja-JP", "成本差异推移_jp", "菜单导航"),
+            // menu.logistics.manufacturing.bom.pricedelta.trend
+            ("menu.logistics.manufacturing.bom.pricedelta.trend", "zh-CN", "成本差异推移", "菜单导航"),
+            // menu.logistics.manufacturing.bom.pricedelta.trend
+            ("menu.logistics.manufacturing.bom.pricedelta.trend", "zh-HK", "成本差异推移_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.mds.sales.forecast
             ("menu.logistics.manufacturing.mds.sales.forecast", "en-US", "销售预测_us", "菜单导航"),
@@ -2137,42 +2146,6 @@ public class TaktMenuI18nSeedData : ITaktSeedDataCoordinator
             ("menu.logistics.manufacturing.aps.production.order", "zh-CN", "生产工单", "菜单导航"),
             // menu.logistics.manufacturing.aps.production.order
             ("menu.logistics.manufacturing.aps.production.order", "zh-HK", "生产工单_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.aps.work.center
-            ("menu.logistics.manufacturing.aps.work.center", "en-US", "工作中心_us", "菜单导航"),
-            // menu.logistics.manufacturing.aps.work.center
-            ("menu.logistics.manufacturing.aps.work.center", "ja-JP", "工作中心_jp", "菜单导航"),
-            // menu.logistics.manufacturing.aps.work.center
-            ("menu.logistics.manufacturing.aps.work.center", "zh-CN", "工作中心", "菜单导航"),
-            // menu.logistics.manufacturing.aps.work.center
-            ("menu.logistics.manufacturing.aps.work.center", "zh-HK", "工作中心_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.aps.changeover.matrix
-            ("menu.logistics.manufacturing.aps.changeover.matrix", "en-US", "换型矩阵_us", "菜单导航"),
-            // menu.logistics.manufacturing.aps.changeover.matrix
-            ("menu.logistics.manufacturing.aps.changeover.matrix", "ja-JP", "换型矩阵_jp", "菜单导航"),
-            // menu.logistics.manufacturing.aps.changeover.matrix
-            ("menu.logistics.manufacturing.aps.changeover.matrix", "zh-CN", "换型矩阵", "菜单导航"),
-            // menu.logistics.manufacturing.aps.changeover.matrix
-            ("menu.logistics.manufacturing.aps.changeover.matrix", "zh-HK", "换型矩阵_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.aps.aps.order
-            ("menu.logistics.manufacturing.aps.aps.order", "en-US", "APS订单_us", "菜单导航"),
-            // menu.logistics.manufacturing.aps.aps.order
-            ("menu.logistics.manufacturing.aps.aps.order", "ja-JP", "APS订单_jp", "菜单导航"),
-            // menu.logistics.manufacturing.aps.aps.order
-            ("menu.logistics.manufacturing.aps.aps.order", "zh-CN", "APS订单", "菜单导航"),
-            // menu.logistics.manufacturing.aps.aps.order
-            ("menu.logistics.manufacturing.aps.aps.order", "zh-HK", "APS订单_hk", "菜单导航"),
-
-            // menu.logistics.manufacturing.aps.production.dispatch
-            ("menu.logistics.manufacturing.aps.production.dispatch", "en-US", "生产派工_us", "菜单导航"),
-            // menu.logistics.manufacturing.aps.production.dispatch
-            ("menu.logistics.manufacturing.aps.production.dispatch", "ja-JP", "生产派工_jp", "菜单导航"),
-            // menu.logistics.manufacturing.aps.production.dispatch
-            ("menu.logistics.manufacturing.aps.production.dispatch", "zh-CN", "生产派工", "菜单导航"),
-            // menu.logistics.manufacturing.aps.production.dispatch
-            ("menu.logistics.manufacturing.aps.production.dispatch", "zh-HK", "生产派工_hk", "菜单导航"),
 
             // menu.logistics.manufacturing.engineering.change.ec.group
             ("menu.logistics.manufacturing.engineering.change.ec.group", "en-US", "设变组_us", "菜单导航"),

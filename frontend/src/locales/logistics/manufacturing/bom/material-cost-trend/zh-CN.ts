@@ -29,11 +29,6 @@ export default {
       all: '全部',
       changed: '仅变动',
     },
-    sort: {
-      bom: 'BOM 展开序（全表）',
-      trend: '涨跌优先（全表）',
-      varianceDesc: '差额绝对值降序（全表）',
-    },
     trend: {
       none: '—',
       up: '涨',

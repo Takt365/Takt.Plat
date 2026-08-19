@@ -14,11 +14,11 @@ export default {
   page: {
     executeSubmitted: 'Submitted for background execution; you will be notified when finished',
     executeMonth: {
-      modalTitle: 'Select costing month',
+      modalTitle: 'Select costing month and target database',
       costingMonth: 'Costing month',
       costingMonthPlaceholder: 'Select costing month',
       costingMonthRequired: 'Please select a costing month',
-      hint: 'Defaults to the current month. Cron runs without params also use the current month.',
+      hint: 'Target database and costing month are both required. Cron without params uses the current month and task ExecuteParams for the database.',
     },
     executeDb: {
       modalTitle: 'Select sync databases',

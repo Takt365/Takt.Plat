@@ -18,6 +18,7 @@ import type {
 import type {
   Translation,
   TranslationCreate,
+  TranslationMessages,
   TranslationTransposedResult,
   TranslationUpdate
 } from '@/types/foundation/translation';
@@ -27,6 +28,23 @@ import type {
  * @description TaktTranslations
  */
 const TRANSLATION_API_BASE = 'TaktTranslations';
+
+// ========================================
+// 前端动态 messages（vue-i18n）
+// ========================================
+
+/**
+ * 获取指定文化下的前端动态翻译键值（GET /messages，允许匿名）
+ * @param {string} cultureCode 区域文化编码（BCP47）
+ * @returns {Promise<TranslationMessages>} 扁平 I18nKey → 文本
+ */
+export function getTranslationMessages(cultureCode: string): Promise<TranslationMessages> {
+  return request<TranslationMessages>({
+    url: `${TRANSLATION_API_BASE}/messages`,
+    method: 'get',
+    params: { cultureCode },
+  });
+}
 
 // ========================================
 // 转置（多语言表格）

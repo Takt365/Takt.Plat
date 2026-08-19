@@ -19,7 +19,7 @@ namespace Takt.Application.Dtos.Identity;
 /// <summary>
 /// 用户-租户关联列表 DTO（对应 TaktUserTenant）
 /// </summary>
-public class TaktUserTenantDto : TaktTenantDtoBase
+public class TaktUserTenantDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// 关联主键（适配实体 Id）

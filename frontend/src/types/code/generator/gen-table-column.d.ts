@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/code/generator
 // 文件名称：gen-table-column.d.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：code/generator 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
- * Takt代码生成字段配置实体
+ * Takt代码生成字段配置实体 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
  * 对应前端 TaktGenTableColumnDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase
  * 对应前端 GenTableColumn
  * @description 对应后端 TaktGenTableColumnDto
  */
-export interface GenTableColumn extends TenantDtoBase {
+export interface GenTableColumn extends TenantCoreDtoBase {
   /**
    * GenTableColumnID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -139,7 +139,7 @@ export interface GenTableColumn extends TenantDtoBase {
   htmlType: string;
 
   /**
-   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
    */
   dictType?: string;
 
@@ -162,11 +162,6 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
@@ -274,7 +269,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   htmlType?: string;
 
   /**
-   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
    */
   dictType?: string;
 
@@ -291,7 +286,7 @@ export interface GenTableColumnQuery extends TaktPagedQuery {
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注（模糊查询）
@@ -311,11 +306,6 @@ export interface GenTableColumnCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
@@ -423,14 +413,14 @@ export interface GenTableColumnCreate {
   htmlType: string;
 
   /**
-   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
    */
   dictType?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -456,25 +446,6 @@ export interface GenTableColumnUpdate extends GenTableColumnCreate {
 
 
 /**
- * GenTableColumn 排序更新 DTO
- * 对应前端 GenTableColumnSort
- * @description 对应后端 TaktGenTableColumnSortDto
- */
-export interface GenTableColumnSort {
-  /**
-   * GenTableColumnID
-   */
-  genTableColumnId: string;
-
-  /**
-   * 行号（项号/序号，固定步长=10）
-   */
-  lineNumber: number;
-
-}
-
-
-/**
  * GenTableColumn 导入模板行 DTO
  * 对应前端 GenTableColumnTemplate
  * @description 对应后端 TaktGenTableColumnTemplateDto
@@ -484,11 +455,6 @@ export interface GenTableColumnTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
@@ -551,9 +517,59 @@ export interface GenTableColumnTemplate {
   isRequired?: number;
 
   /**
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isCreate?: number;
+
+  /**
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isUpdate?: number;
+
+  /**
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isUnique?: number;
+
+  /**
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isList?: number;
+
+  /**
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isExport?: number;
+
+  /**
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   */
+  isSort?: number;
+
+  /**
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isQuery?: number;
+
+  /**
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   */
+  queryType?: string;
+
+  /**
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   */
+  htmlType?: string;
+
+  /**
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
+   */
+  dictType?: string;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -575,11 +591,6 @@ export interface GenTableColumnImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
    */
   genTableId?: string;
@@ -640,9 +651,59 @@ export interface GenTableColumnImport {
   isRequired?: number;
 
   /**
+   * 新增（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isCreate?: number;
+
+  /**
+   * 更新（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isUpdate?: number;
+
+  /**
+   * 查重（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isUnique?: number;
+
+  /**
+   * 列表（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isList?: number;
+
+  /**
+   * 导出（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isExport?: number;
+
+  /**
+   * 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+   */
+  isSort?: number;
+
+  /**
+   * 查询（字典 sys_yes_no_type；0=否 1=是）
+   */
+  isQuery?: number;
+
+  /**
+   * 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+   */
+  queryType?: string;
+
+  /**
+   * 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+   */
+  htmlType?: string;
+
+  /**
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
+   */
+  dictType?: string;
+
+  /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注
@@ -769,14 +830,14 @@ export interface GenTableColumnExport {
   htmlType: string;
 
   /**
-   * 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+   * 字典类型（选项 TaktDictTypes/options；DictValue=Id）
    */
   dictType?: string;
 
   /**
    * 扩展字段JSON
    */
-  ExtField?: string;
+  extField?: string;
 
   /**
    * 备注

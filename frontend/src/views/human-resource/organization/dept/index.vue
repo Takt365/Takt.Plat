@@ -514,6 +514,7 @@ const advancedQueryForm = ref({
 const queryFieldsMeta = computed(() => [
   { key: 'deptCode', label: t('entity.dept.code') },
   { key: 'deptName', label: t('entity.dept.name') },
+  { key: 'deptShortName', label: t('entity.dept.shortname') },
   { key: 'parentId', label: t('entity.dept.parentid') },
   { key: 'level', label: t('entity.dept.level') },
   { key: 'deptPath', label: t('entity.dept.path') },
@@ -922,6 +923,15 @@ watchEffect(() => {
     width: 160,
     resizable: true,
     ellipsis: true,
+  },
+  {
+    title: t('entity.dept.shortname'),
+    dataIndex: 'deptShortName',
+    key: 'deptShortName',
+    width: 100,
+    resizable: true,
+    ellipsis: true,
+    customRender: ({ record }: { record: Record<string, unknown> }) => getDeptField(record, 'deptShortName') ?? ''
   },
   {
     title: t('entity.dept.parentid'),

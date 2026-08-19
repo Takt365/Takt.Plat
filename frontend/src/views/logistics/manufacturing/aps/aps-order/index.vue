@@ -126,10 +126,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.apsorder.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.apsorder.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="40"
           allow-clear
@@ -459,7 +459,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.apsorder.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'apsOrderCode', label: t('entity.apsorder.code') },
   { key: 'plannedOrderId', label: t('entity.apsorder.plannedorderid') },
   { key: 'plannedOrderCode', label: t('entity.apsorder.plannedordercode') },
@@ -615,7 +615,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getApsOrderField(record, 'apsOrderId') ?? ''
   },
   {
-    title: t('entity.apsorder.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

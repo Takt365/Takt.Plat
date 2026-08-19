@@ -101,12 +101,12 @@
       >
         <!-- 自定义列渲染 -->
         <template #bodyCell="{ column, record }">
-          <template v-if="column.key === 'accountTitleId'">
+          <template v-if="column.key === 'accountTitleName'">
             <span
               class="inline-block"
               :style="{ paddingLeft: `${(record._treeDepth ?? 0) * 16}px` }"
             >
-              {{ getAccountTitleField(record, 'accountTitleId') }}
+              {{ getAccountTitleField(record, 'accountTitleName') }}
             </span>
           </template>
         <template v-else-if="column.key === 'accountTitleType'">
@@ -585,8 +585,8 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'accountTitleId'
-/** 树节点标题字段名（左侧树 title 与缩进列） */
-const treeTitleField = 'accountTitleId'
+/** 树节点标题字段名（左侧树 title：AccountTitleName 按 ParentId 递归） */
+const treeTitleField = 'accountTitleName'
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()

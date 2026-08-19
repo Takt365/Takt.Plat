@@ -276,7 +276,16 @@ public static class TaktQualityInspectionTrendAnalysisCore
         /// <summary>单例</summary>
         public static InspectionTrendRowKeyComparer Instance { get; } = new();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 月生产推移行键比较器
+        /// </summary>
+        /// <summary>单例</summary>
+        /// <summary>
+        /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+        /// </summary>
+        /// <param name="x">左值</param>
+        /// <param name="y">右值</param>
+        /// <returns>是否相等</returns>
         public bool Equals(InspectionTrendRowKey? x, InspectionTrendRowKey? y)
         {
             if (x is null || y is null)
@@ -287,7 +296,11 @@ public static class TaktQualityInspectionTrendAnalysisCore
                 && string.Equals(x.DimensionCode, y.DimensionCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 计算行键哈希（工厂/机种/产出类别大写）
+        /// </summary>
+        /// <param name="obj">行键</param>
+        /// <returns>哈希码</returns>
         public int GetHashCode(InspectionTrendRowKey obj) =>
             HashCode.Combine(
                 StringComparer.OrdinalIgnoreCase.GetHashCode(obj.PlantCode),

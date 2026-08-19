@@ -1,13 +1,27 @@
 -- ========================================
 -- 暂存表 DDL（手工执行，非 Quartz 任务）
 -- 表名与租户库目标表相同（仅库不同：暂存库 vs 租户业务库）
--- 对齐：
---   sync_ad.sql  / TaktAdminDivision
---   sync_bc.sql  / TaktBomMaterialCostItem；sync_bv.sql / TaktBomMaterialCost
---   sync_pup.sql / sync_sp.sql（采购/销售价格四级）
---   sync_sup.sql / TaktSupplier；sync_cus.sql / TaktCustomer
---   sync_matdoc.sql / TaktMaterialDocument(+Item)
---   sync_sdinv.sql / TaktSalesInvoice(+Item)
+-- 隔离列必须按目标实体继承，禁止四列一套乱加：
+--   TaktTenantCoreEntityBase    → tenant_code
+--   TaktTenantCultureEntityBase → tenant_code + culture_code
+--   TaktTenantPlantEntityBase   → tenant_code + related_plant
+--   TaktTenantEntityBase        → tenant_code + culture_code + related_plant
+--   TaktCompanyEntityBase       → tenant_code + company_code + culture_code + plant_code
+--   TaktApprovalEntityBase      → 同上四列
+-- 本文件表：
+--   sync_ad      / TaktAdminDivision          → Core（仅 tenant_code）
+--   sync_mfrmat  / TaktManufacturerMaterial   → Core（仅 tenant_code）
+--   sync_distmat / TaktSellerMaterial         → Core（仅 tenant_code）
+--   sync_matpkg  / TaktPackagingMaterial      → Company
+--   sync_bc/bv   / TaktBomMaterialCostItem/Cost → Company
+--   sync_pup/sp  / 采购/销售价格四级          → Company
+--   sync_sup/cus / TaktSupplier / TaktCustomer → Company
+--   sync_po      / TaktPurchaseOrder(+Item)    → Company
+--   sync_so      / TaktSalesOrder(+Item)       → Company
+--   sync_matdoc  / TaktMaterialDocument(+Item) → Company
+--   sync_miro    / TaktPurchaseInvoice(+Item)  → Company
+--   sync_billing / TaktSalesInvoice(+Item)     → Company
+-- 源表列与目标实体隔离列一致；sync 从源表读 tenant/company/culture/plant，禁止用任务占位符回填
 -- ========================================
 -- 手工执行前请将 USE 改为实际暂存库名（如 zTakt_900_Dev / zTakt_900_Prod）
 USE [zTakt_900_Dev];
@@ -20,6 +34,7 @@ IF OBJECT_ID(N'dbo.takt_foundation_admin_division', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_foundation_admin_division] (
     [id] BIGINT NOT NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
     [country_code] NVARCHAR(2) NOT NULL,
     [division_code] NVARCHAR(40) NOT NULL,
     [division_name] NVARCHAR(200) NOT NULL,
@@ -27,20 +42,120 @@ BEGIN
     [level] INT NOT NULL CONSTRAINT [df_sap_admin_division_level] DEFAULT (1),
     [division_path] NVARCHAR(500) NOT NULL CONSTRAINT [df_sap_admin_division_path] DEFAULT (N''),
     [is_leaf] INT NOT NULL CONSTRAINT [df_sap_admin_division_is_leaf] DEFAULT (0),
-    [postal_code] NVARCHAR(20) NULLVARCHAR(5) NOT NULL CONSTRAINT [df_sap_admin_division_culture] DEFAULT (''),
+    [postal_code] NVARCHAR(20) NULL,
     [currency_code] VARCHAR(3) NOT NULL CONSTRAINT [df_sap_admin_division_currency] DEFAULT (''),
     [phone_code] VARCHAR(16) NOT NULL CONSTRAINT [df_sap_admin_division_phone] DEFAULT (''),
     [is_built_in] INT NOT NULL CONSTRAINT [df_sap_admin_division_built_in] DEFAULT (0),
     [sort_order] INT NOT NULL CONSTRAINT [df_sap_admin_division_sort] DEFAULT (0),
     [division_status] INT NOT NULL CONSTRAINT [df_sap_admin_division_status] DEFAULT (1),
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_admin_division_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL,
     CONSTRAINT [pk_sap_admin_division] PRIMARY KEY CLUSTERED ([id])
   );
   CREATE UNIQUE INDEX [ux_sap_admin_division_code]
-    ON [dbo].[takt_foundation_admin_division] ([division_code]);
+    ON [dbo].[takt_foundation_admin_division] ([tenant_code], [division_code]);
   CREATE INDEX [ix_sap_admin_division_parent]
     ON [dbo].[takt_foundation_admin_division] ([parent_id]);
   CREATE INDEX [ix_sap_admin_division_country_level]
     ON [dbo].[takt_foundation_admin_division] ([country_code], [level]);
+END
+GO
+
+-- ----------------------------------------
+-- 制造商物料 / 销售商物料（sync_mfrmat / sync_distmat）
+-- TaktManufacturerMaterial / TaktSellerMaterial：Core，仅 tenant_code
+-- ----------------------------------------
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_manufacturer_material', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_procurement_manufacturer_material] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [vendor_code] NVARCHAR(20) NULL,
+    [vendor_short_name] NVARCHAR(40) NULL,
+    [supplier_code] NVARCHAR(10) NULL,
+    [supplier_short_name] NVARCHAR(40) NULL,
+    [material_type] NVARCHAR(4) NOT NULL CONSTRAINT [df_sap_manufacturer_material_type] DEFAULT (N'HERS'),
+    [material_group] NVARCHAR(9) NOT NULL CONSTRAINT [df_sap_manufacturer_material_group] DEFAULT (N''),
+    [internal_material_code] NVARCHAR(20) NOT NULL,
+    [material_code] NVARCHAR(20) NOT NULL,
+    [material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_manufacturer_material_desc] DEFAULT (N''),
+    [manufacturer_material_code] NVARCHAR(40) NOT NULL,
+    [manufacturer_material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_manufacturer_mfr_desc] DEFAULT (N''),
+    [manufacturer_material_specification] NVARCHAR(70) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_manufacturer_material_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_manufacturer_material]
+    ON [dbo].[takt_logistics_procurement_manufacturer_material]
+    ([tenant_code], [internal_material_code], [material_code]);
+END
+GO
+
+IF OBJECT_ID(N'dbo.takt_logistics_sales_seller_material', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_sales_seller_material] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [customer_code] NVARCHAR(10) NULL,
+    [customer_short_name] NVARCHAR(40) NULL,
+    [client_code] NVARCHAR(20) NULL,
+    [client_short_name] NVARCHAR(40) NULL,
+    [material_type] NVARCHAR(4) NOT NULL CONSTRAINT [df_sap_seller_material_type] DEFAULT (N'HERS'),
+    [material_group] NVARCHAR(9) NOT NULL CONSTRAINT [df_sap_seller_material_group] DEFAULT (N''),
+    [internal_material_code] NVARCHAR(20) NOT NULL,
+    [material_code] NVARCHAR(20) NOT NULL,
+    [material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_seller_material_desc] DEFAULT (N''),
+    [seller_material_code] NVARCHAR(40) NOT NULL,
+    [seller_material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_seller_seller_desc] DEFAULT (N''),
+    [seller_material_specification] NVARCHAR(70) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_seller_material_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_seller_material]
+    ON [dbo].[takt_logistics_sales_seller_material]
+    ([tenant_code], [internal_material_code], [material_code]);
+END
+GO
+
+-- ----------------------------------------
+-- 包装物料（sync_matpkg）
+-- TaktPackagingMaterial：Company
+-- ----------------------------------------
+IF OBJECT_ID(N'dbo.takt_logistics_materials_packaging_material', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_materials_packaging_material] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
+    [packaging_material_code] NVARCHAR(20) NOT NULL,
+    [material_code] NVARCHAR(20) NOT NULL,
+    [material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_packaging_material_desc] DEFAULT (N''),
+    [hs_code] NVARCHAR(20) NULL,
+    [hs_name] NVARCHAR(500) NULL,
+    [additional_code] NVARCHAR(20) NULL,
+    [origin_country_region_code] NVARCHAR(2) NULL,
+    [origin_country_region_name] NVARCHAR(100) NULL,
+    [destination_country_region_code] NVARCHAR(2) NULL,
+    [destination_country_region_name] NVARCHAR(100) NULL,
+    [regulatory_condition_code] NVARCHAR(40) NULL,
+    [tariff_rate_type] NVARCHAR(40) NULL,
+    [gross_weight] DECIMAL(18,10) NULL,
+    [net_weight] DECIMAL(18,10) NULL,
+    [weight_unit] NVARCHAR(10) NOT NULL CONSTRAINT [df_sap_packaging_weight_unit] DEFAULT (N'KG'),
+    [business_volume] DECIMAL(18,6) NULL,
+    [volume_unit] NVARCHAR(10) NOT NULL CONSTRAINT [df_sap_packaging_volume_unit] DEFAULT (N'M3'),
+    [size_dimension] NVARCHAR(40) NULL,
+    [packaging_type] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_packaging_type] DEFAULT (N'VERP'),
+    [packing_unit] NVARCHAR(20) NOT NULL CONSTRAINT [df_sap_packaging_packing_unit] DEFAULT (N'CAR'),
+    [quantity_per_packing] DECIMAL(18,2) NULL,
+    [packaging_spec] NVARCHAR(200) NULL,
+    [packaging_description] NVARCHAR(500) NULL,
+    [sort_order] INT NOT NULL CONSTRAINT [df_sap_packaging_sort] DEFAULT (0),
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_packaging_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_packaging_material]
+    ON [dbo].[takt_logistics_materials_packaging_material]
+    ([tenant_code], [company_code], [plant_code], [packaging_material_code]);
 END
 GO
 
@@ -50,17 +165,21 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_manufacturing_bom_material_cost_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_manufacturing_bom_material_cost_item] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
-    [product_code] NVARCHAR(20) NOT NULL,
-    [sequence_code] NVARCHAR(4) NOT NULL,
-    [product_description] NVARCHAR(40) NULL,
     [bom_level] NVARCHAR(20) NULL,
     [bom_item_code] NVARCHAR(4) NOT NULL,
+    [product_code] NVARCHAR(20) NOT NULL,
+    [line_number] INT NOT NULL CONSTRAINT [df_sap_bom_material_cost_item_line_number] DEFAULT (10),
+    [product_description] NVARCHAR(40) NULL,
     [component_code] NVARCHAR(20) NOT NULL,
     [component_description] NVARCHAR(40) NULL,
     [component_quantity] DECIMAL(18,2) NULL,
     [batch_indicator] NVARCHAR(1) NULL,
     [production_related] NVARCHAR(1) NULL,
+    [pcb_sect_indicator] NVARCHAR(1) NULL,
     [purchase_type] NVARCHAR(1) NULL,
     [special_procurement_type] NVARCHAR(50) NULL,
     [profit_center_code] NVARCHAR(4) NULL,
@@ -73,11 +192,13 @@ BEGIN
     [net_purchase_price] DECIMAL(18,5) NULL,
     [purchase_price_unit] INT NULL,
     [purchase_currency_code] NVARCHAR(3) NULL,
-    [costing_date] DATETIME NULL
+    [costing_date] DATETIME NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_bom_material_cost_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_bom_material_cost_item]
     ON [dbo].[takt_logistics_manufacturing_bom_material_cost_item]
-    ([plant_code], [product_code], [sequence_code], [bom_level], [bom_item_code], [component_code],
+    ([tenant_code], [company_code], [plant_code], [bom_level], [bom_item_code], [product_code], [line_number], [component_code],
      [component_quantity], [batch_indicator], [production_related], [purchase_type],
      [special_procurement_type], [costing_date]);
 END
@@ -86,19 +207,27 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_manufacturing_bom_material_cost', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_manufacturing_bom_material_cost] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [model_code] NVARCHAR(40) NOT NULL,
     [model_monthly_average_cost] DECIMAL(18,5) NULL,
+    [material_type] NVARCHAR(4) NOT NULL CONSTRAINT [df_sap_bom_material_cost_material_type] DEFAULT (N'FERT'),
     [product_code] NVARCHAR(20) NOT NULL,
     [product_description] NVARCHAR(40) NULL,
     [product_monthly_cost] DECIMAL(18,5) NULL,
+    [product_monthly_calculation] DECIMAL(18,5) NULL,
+    [latest_purchase_cost] DECIMAL(18,5) NULL,
     [currency_code] NVARCHAR(3) NULL,
     [costing_period] NVARCHAR(7) NULL,
-    [costing_date] DATETIME NULL
+    [costing_date] DATETIME NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_bom_material_cost_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_bom_material_cost]
     ON [dbo].[takt_logistics_manufacturing_bom_material_cost]
-    ([plant_code], [model_code], [product_code], [costing_period]);
+    ([tenant_code], [company_code], [plant_code], [model_code], [product_code], [costing_period]);
 END
 GO
 
@@ -108,12 +237,15 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [price_type] NVARCHAR(4) NULL,
-    [supplier_code] NVARCHAR(40) NULL,
-    [material_code] NVARCHAR(40) NULL,
+    [supplier_code] NVARCHAR(10) NULL,
+    [material_code] NVARCHAR(20) NULL,
+    [material_description] NVARCHAR(40) NULL,
     [purchase_group] NVARCHAR(3) NULL,
     [tax_code] NVARCHAR(4) NULL,
     [gr_based_invoice_inspection] INT NULL,
@@ -121,18 +253,23 @@ BEGIN
     [valid_from] DATETIME NULL,
     [valid_to] DATETIME NULL,
     [purchase_inquiry_id] BIGINT NULL,
-    [purchase_inquiry_code] NVARCHAR(40) NULL,
-    [variable_key] NVARCHAR(40) NULL
+    [purchase_inquiry_code] VARCHAR(20) NULL,
+    [variable_key] NVARCHAR(40) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_price_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price]
-    ON [dbo].[takt_logistics_procurement_purchase_price] ([company_code], [plant_code], [purchase_price_code]);
+    ON [dbo].[takt_logistics_procurement_purchase_price] ([tenant_code], [company_code], [plant_code], [purchase_price_code]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_item] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [price_type] NVARCHAR(4) NULL,
@@ -153,17 +290,22 @@ BEGIN
     [min_order_quantity] INT NULL,
     [rounding_value] INT NULL,
     [planned_delivery_time_days] INT NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_price_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_item]
-    ON [dbo].[takt_logistics_procurement_purchase_price_item] ([company_code], [purchase_price_code], [purchase_price_seq]);
+    ON [dbo].[takt_logistics_procurement_purchase_price_item] ([tenant_code], [company_code], [plant_code], [purchase_price_code], [purchase_price_seq]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_scale_quantity', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_quantity] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [purchase_scale_seq] INT NOT NULL,
@@ -172,18 +314,23 @@ BEGIN
     [untaxed_price] DECIMAL(18,5) NULL,
     [tax_included_price] DECIMAL(18,5) NULL,
     [tax_amount] DECIMAL(18,5) NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_price_scale_qty_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_scale_qty]
     ON [dbo].[takt_logistics_procurement_purchase_price_scale_quantity]
-    ([company_code], [purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_quantity]);
+    ([tenant_code], [company_code], [plant_code], [purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_quantity]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price_scale_value', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_value] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_price_code] NVARCHAR(20) NOT NULL,
     [purchase_price_seq] INT NOT NULL,
     [purchase_scale_seq] INT NOT NULL,
@@ -192,11 +339,13 @@ BEGIN
     [untaxed_price] DECIMAL(18,5) NULL,
     [tax_included_price] DECIMAL(18,5) NULL,
     [tax_amount] DECIMAL(18,5) NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_price_scale_val_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_price_scale_val]
     ON [dbo].[takt_logistics_procurement_purchase_price_scale_value]
-    ([company_code], [purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_value]);
+    ([tenant_code], [company_code], [plant_code], [purchase_price_code], [purchase_price_seq], [purchase_scale_seq], [scale_value]);
 END
 GO
 
@@ -206,12 +355,15 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_sales_price', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_price] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [sales_price_code] NVARCHAR(20) NOT NULL,
     [price_type] NVARCHAR(4) NULL,
-    [customer_code] NVARCHAR(40) NULL,
-    [material_code] NVARCHAR(40) NULL,
+    [customer_code] NVARCHAR(10) NULL,
+    [material_code] NVARCHAR(20) NULL,
+    [material_description] NVARCHAR(40) NULL,
     [sales_group] NVARCHAR(3) NULL,
     [tax_code] NVARCHAR(4) NULL,
     [gr_based_invoice_inspection] INT NULL,
@@ -219,18 +371,23 @@ BEGIN
     [valid_from] DATETIME NULL,
     [valid_to] DATETIME NULL,
     [sales_quotation_id] BIGINT NULL,
-    [sales_quotation_code] NVARCHAR(40) NULL,
-    [variable_key] NVARCHAR(40) NULL
+    [sales_quotation_code] VARCHAR(20) NULL,
+    [variable_key] NVARCHAR(40) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_price_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_price]
-    ON [dbo].[takt_logistics_sales_price] ([company_code], [plant_code], [sales_price_code]);
+    ON [dbo].[takt_logistics_sales_price] ([tenant_code], [company_code], [plant_code], [sales_price_code]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_sales_price_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_price_item] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [sales_price_code] NVARCHAR(20) NOT NULL,
     [sales_price_seq] INT NOT NULL,
     [price_type] NVARCHAR(4) NULL,
@@ -251,17 +408,22 @@ BEGIN
     [min_order_quantity] INT NULL,
     [rounding_value] INT NULL,
     [planned_delivery_time_days] INT NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_price_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_price_item]
-    ON [dbo].[takt_logistics_sales_price_item] ([company_code], [sales_price_code], [sales_price_seq]);
+    ON [dbo].[takt_logistics_sales_price_item] ([tenant_code], [company_code], [plant_code], [sales_price_code], [sales_price_seq]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_sales_price_scale_quantity', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_price_scale_quantity] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [sales_price_code] NVARCHAR(20) NOT NULL,
     [sales_price_seq] INT NOT NULL,
     [sales_scale_seq] INT NOT NULL,
@@ -270,18 +432,23 @@ BEGIN
     [untaxed_price] DECIMAL(18,5) NULL,
     [tax_included_price] DECIMAL(18,5) NULL,
     [tax_amount] DECIMAL(18,5) NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_price_scale_qty_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_price_scale_qty]
     ON [dbo].[takt_logistics_sales_price_scale_quantity]
-    ([company_code], [sales_price_code], [sales_price_seq], [sales_scale_seq], [scale_quantity]);
+    ([tenant_code], [company_code], [plant_code], [sales_price_code], [sales_price_seq], [sales_scale_seq], [scale_quantity]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_sales_price_scale_value', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_price_scale_value] (
-    [company_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [sales_price_code] NVARCHAR(20) NOT NULL,
     [sales_price_seq] INT NOT NULL,
     [sales_scale_seq] INT NOT NULL,
@@ -290,70 +457,14 @@ BEGIN
     [untaxed_price] DECIMAL(18,5) NULL,
     [tax_included_price] DECIMAL(18,5) NULL,
     [tax_amount] DECIMAL(18,5) NULL,
-    [is_obsolete] INT NULL
+    [is_obsolete] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_price_scale_val_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_price_scale_val]
     ON [dbo].[takt_logistics_sales_price_scale_value]
-    ([company_code], [sales_price_code], [sales_price_seq], [sales_scale_seq], [scale_value]);
+    ([tenant_code], [company_code], [plant_code], [sales_price_code], [sales_price_seq], [sales_scale_seq], [scale_value]);
 END
-GO
-
--- 已有价格主表补列 company_code 并重建唯一索引（幂等）
-IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_price', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_price] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF EXISTS (
-  SELECT 1 FROM sys.indexes
-  WHERE object_id = OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price')
-    AND name = N'ux_sap_purchase_price'
-)
-  DROP INDEX [ux_sap_purchase_price] ON [dbo].[takt_logistics_procurement_purchase_price];
-GO
-IF NOT EXISTS (
-  SELECT 1 FROM sys.indexes
-  WHERE object_id = OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_price')
-    AND name = N'ux_sap_purchase_price'
-)
-  CREATE UNIQUE INDEX [ux_sap_purchase_price]
-    ON [dbo].[takt_logistics_procurement_purchase_price] ([company_code], [plant_code], [purchase_price_code]);
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_sales_price', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_sales_price] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF EXISTS (
-  SELECT 1 FROM sys.indexes
-  WHERE object_id = OBJECT_ID(N'dbo.takt_logistics_sales_price')
-    AND name = N'ux_sap_sales_price'
-)
-  DROP INDEX [ux_sap_sales_price] ON [dbo].[takt_logistics_sales_price];
-GO
-IF NOT EXISTS (
-  SELECT 1 FROM sys.indexes
-  WHERE object_id = OBJECT_ID(N'dbo.takt_logistics_sales_price')
-    AND name = N'ux_sap_sales_price'
-)
-  CREATE UNIQUE INDEX [ux_sap_sales_price]
-    ON [dbo].[takt_logistics_sales_price] ([company_code], [plant_code], [sales_price_code]);
-GO
-
--- 已有价格子表补列 company_code（幂等）
-IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_price_item', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_price_item] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_price_scale_quantity', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_quantity] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_price_scale_value', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_price_scale_value] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_sales_price_item', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_sales_price_item] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_sales_price_scale_quantity', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_sales_price_scale_quantity] ADD [company_code] NVARCHAR(4) NULL;
-GO
-IF COL_LENGTH(N'dbo.takt_logistics_sales_price_scale_value', N'company_code') IS NULL
-  ALTER TABLE [dbo].[takt_logistics_sales_price_scale_value] ADD [company_code] NVARCHAR(4) NULL;
 GO
 
 -- 已有价格表补列 tax_amount（幂等）
@@ -396,6 +507,9 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_supplier', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_supplier] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [supplier_code] NVARCHAR(10) NOT NULL,
     [supplier_name1] NVARCHAR(140) NOT NULL,
@@ -404,8 +518,8 @@ BEGIN
     [supplier_type] INT NULL,
     [enterprise_nature] VARCHAR(4) NULL,
     [industry_attribute] VARCHAR(4) NULL,
-    [default_culture] VARCHAR(5) NULL,
     [supplier_tax_number] NVARCHAR(50) NULL,
+    [tax_code] NVARCHAR(4) NULL,
     [tax_rate] INT NULL,
     [registration_country] NVARCHAR(2) NULL,
     [registration_province] NVARCHAR(70) NULL,
@@ -440,16 +554,21 @@ BEGIN
     [supplier_level] INT NULL,
     [evaluation_score] DECIMAL(5,2) NULL,
     [sort_order] INT NULL,
-    [supplier_status] INT NULL
+    [supplier_status] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_procurement_supplier_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_procurement_supplier]
-    ON [dbo].[takt_logistics_procurement_supplier] ([supplier_code]);
+    ON [dbo].[takt_logistics_procurement_supplier] ([tenant_code], [company_code], [supplier_code]);
 END
 GO
 
 IF OBJECT_ID(N'dbo.takt_logistics_sales_customer', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_customer] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [customer_code] NVARCHAR(10) NOT NULL,
     [customer_name1] NVARCHAR(140) NOT NULL,
@@ -458,8 +577,8 @@ BEGIN
     [customer_type] INT NULL,
     [enterprise_nature] VARCHAR(4) NULL,
     [industry_attribute] VARCHAR(4) NULL,
-    [default_culture] VARCHAR(5) NULL,
     [customer_tax_number] NVARCHAR(50) NULL,
+    [tax_code] NVARCHAR(4) NULL,
     [tax_rate] INT NULL,
     [registration_country] NVARCHAR(2) NULL,
     [registration_province] NVARCHAR(70) NULL,
@@ -500,22 +619,185 @@ BEGIN
     [customer_level] INT NULL,
     [evaluation_score] DECIMAL(5,2) NULL,
     [sort_order] INT NULL,
-    [customer_status] INT NULL
+    [customer_status] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_customer_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_customer]
-    ON [dbo].[takt_logistics_sales_customer] ([plant_code], [customer_code]);
+    ON [dbo].[takt_logistics_sales_customer] ([tenant_code], [company_code], [plant_code], [customer_code]);
+END
+GO
+
+-- ----------------------------------------
+-- 采购订单 / 销售订单（sync_po / sync_so）
+-- TaktPurchaseOrder(+Item) / TaktSalesOrder(+Item)：Company
+-- ----------------------------------------
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_order', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_order] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
+    [purchase_order_code] NVARCHAR(20) NOT NULL,
+    [purchase_request_id] BIGINT NULL,
+    [purchase_request_code] NVARCHAR(20) NULL,
+    [supplier_code] NVARCHAR(10) NOT NULL,
+    [supplier_name1] NVARCHAR(140) NOT NULL,
+    [order_date] DATETIME NOT NULL,
+    [required_arrival_date] DATETIME NULL,
+    [actual_arrival_date] DATETIME NULL,
+    [purchase_group] NVARCHAR(3) NULL,
+    [total_quantity] DECIMAL(18,4) NULL,
+    [total_amount] DECIMAL(18,2) NULL,
+    [discount_amount] DECIMAL(18,2) NULL,
+    [currency_code] NVARCHAR(3) NOT NULL CONSTRAINT [df_sap_purchase_order_currency] DEFAULT (N'CNY'),
+    [exchange_rate] DECIMAL(18,5) NULL,
+    [tax_code] NVARCHAR(4) NULL,
+    [tax_rate] INT NULL,
+    [tax_amount] DECIMAL(18,2) NULL,
+    [actual_amount] DECIMAL(18,2) NULL,
+    [received_quantity] DECIMAL(18,4) NULL,
+    [received_amount] DECIMAL(18,2) NULL,
+    [paid_amount] DECIMAL(18,2) NULL,
+    [payment_method] INT NULL,
+    [delivery_method] INT NULL,
+    [delivery_address] NVARCHAR(500) NULL,
+    [order_status] INT NULL,
+    [delivery_status] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_order_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_purchase_order]
+    ON [dbo].[takt_logistics_procurement_purchase_order]
+    ([tenant_code], [company_code], [plant_code], [purchase_order_code], [supplier_code], [order_date]);
+END
+GO
+
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_order_item', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_procurement_purchase_order_item] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
+    [purchase_order_id] BIGINT NOT NULL,
+    [purchase_order_code] NVARCHAR(20) NOT NULL,
+    [line_number] INT NOT NULL,
+    [request_code] NVARCHAR(20) NULL,
+    [request_line_number] INT NULL,
+    [material_code] NVARCHAR(20) NULL,
+    [material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_purchase_order_item_desc] DEFAULT (N''),
+    [material_specification] NVARCHAR(70) NULL,
+    [purchase_unit] NVARCHAR(20) NOT NULL CONSTRAINT [df_sap_purchase_order_item_unit] DEFAULT (N'PC'),
+    [order_quantity] DECIMAL(18,5) NULL,
+    [received_quantity] DECIMAL(18,5) NULL,
+    [purchase_per_unit] INT NULL,
+    [purchase_unit_price] DECIMAL(18,5) NULL,
+    [discount_rate] DECIMAL(5,2) NULL,
+    [discount_amount] DECIMAL(18,5) NULL,
+    [tax_included_amount] DECIMAL(18,5) NULL,
+    [untaxed_amount] DECIMAL(18,5) NULL,
+    [tax_amount] DECIMAL(18,5) NULL,
+    [purchase_amount] DECIMAL(18,5) NULL,
+    [delivery_status] INT NULL,
+    [is_obsolete] INT NOT NULL CONSTRAINT [df_sap_purchase_order_item_obsolete] DEFAULT (0),
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_order_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_purchase_order_item]
+    ON [dbo].[takt_logistics_procurement_purchase_order_item]
+    ([tenant_code], [company_code], [purchase_order_id], [line_number], [material_code]);
+END
+GO
+
+IF OBJECT_ID(N'dbo.takt_logistics_sales_order', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_sales_order] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
+    [sales_order_code] NVARCHAR(20) NOT NULL,
+    [customer_code] NVARCHAR(10) NOT NULL,
+    [customer_name1] NVARCHAR(140) NOT NULL,
+    [order_date] DATETIME NOT NULL,
+    [required_delivery_date] DATETIME NULL,
+    [actual_delivery_date] DATETIME NULL,
+    [sales_by] NVARCHAR(50) NULL,
+    [total_quantity] DECIMAL(18,4) NULL,
+    [total_amount] DECIMAL(18,2) NULL,
+    [discount_amount] DECIMAL(18,2) NULL,
+    [currency_code] NVARCHAR(3) NOT NULL CONSTRAINT [df_sap_sales_order_currency] DEFAULT (N'CNY'),
+    [exchange_rate] DECIMAL(18,5) NULL,
+    [tax_code] NVARCHAR(4) NULL,
+    [tax_rate] INT NULL,
+    [tax_amount] DECIMAL(18,2) NULL,
+    [actual_amount] DECIMAL(18,2) NULL,
+    [shipped_quantity] DECIMAL(18,4) NULL,
+    [shipped_amount] DECIMAL(18,2) NULL,
+    [received_amount] DECIMAL(18,2) NULL,
+    [delivery_method] INT NULL,
+    [payment_method] INT NULL,
+    [delivery_address] NVARCHAR(500) NULL,
+    [order_status] INT NULL,
+    [delivery_status] INT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_order_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_sales_order]
+    ON [dbo].[takt_logistics_sales_order]
+    ([tenant_code], [company_code], [plant_code], [sales_order_code]);
+END
+GO
+
+IF OBJECT_ID(N'dbo.takt_logistics_sales_order_item', N'U') IS NULL
+BEGIN
+  CREATE TABLE [dbo].[takt_logistics_sales_order_item] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
+    [sales_order_id] BIGINT NOT NULL,
+    [sales_order_code] NVARCHAR(20) NOT NULL,
+    [line_number] INT NOT NULL,
+    [material_code] NVARCHAR(20) NOT NULL,
+    [material_description] NVARCHAR(40) NOT NULL CONSTRAINT [df_sap_sales_order_item_desc] DEFAULT (N''),
+    [material_specification] NVARCHAR(70) NULL,
+    [sales_unit] NVARCHAR(5) NOT NULL CONSTRAINT [df_sap_sales_order_item_unit] DEFAULT (N'PC'),
+    [order_quantity] DECIMAL(18,5) NULL,
+    [shipped_quantity] DECIMAL(18,5) NULL,
+    [sales_per_unit] INT NULL,
+    [sales_unit_price] DECIMAL(18,5) NULL,
+    [discount_rate] DECIMAL(5,2) NULL,
+    [discount_amount] DECIMAL(18,5) NULL,
+    [tax_included_amount] DECIMAL(18,5) NULL,
+    [untaxed_amount] DECIMAL(18,5) NULL,
+    [tax_amount] DECIMAL(18,5) NULL,
+    [sales_amount] DECIMAL(18,5) NULL,
+    [delivery_status] INT NULL,
+    [is_obsolete] INT NOT NULL CONSTRAINT [df_sap_sales_order_item_obsolete] DEFAULT (0),
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_order_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
+  );
+  CREATE UNIQUE INDEX [ux_sap_sales_order_item]
+    ON [dbo].[takt_logistics_sales_order_item]
+    ([tenant_code], [company_code], [sales_order_id], [line_number]);
 END
 GO
 
 -- ----------------------------------------
 -- 物料凭证 / 采购发票 / 销售发票暂存表
--- 规则：表名与租户库相同；业务列与实体一致（源=目标业务列）
--- 不含 id/tenant/company/审计列（由 sync 脚本写入目标）
+-- 规则：表名与租户库相同；业务列与实体一致；隔离列按 TaktCompanyEntityBase
 -- ----------------------------------------
 -- 物料凭证主（sync_matdoc；业务列=TaktMaterialDocument）
 IF OBJECT_ID(N'dbo.takt_logistics_materials_material_document', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_materials_material_document] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [material_document_code] NVARCHAR(10) NOT NULL,
     [material_document_year] NVARCHAR(4) NOT NULL,
     [transaction_event_type] NVARCHAR(2) NULL,
@@ -527,11 +809,13 @@ BEGIN
     [header_text] NVARCHAR(25) NULL,
     [transaction_code] NVARCHAR(4) NULL,
     [delivery_code] NVARCHAR(10) NULL,
-    [posted_by] NVARCHAR(12) NULL
+    [posted_by] NVARCHAR(12) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_material_document_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_material_document]
     ON [dbo].[takt_logistics_materials_material_document]
-    ([material_document_year], [material_document_code]);
+    ([tenant_code], [company_code], [material_document_year], [material_document_code]);
 END
 GO
 
@@ -539,6 +823,9 @@ GO
 IF OBJECT_ID(N'dbo.takt_logistics_materials_material_document_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_materials_material_document_item] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [material_document_id] BIGINT NOT NULL,
     [plant_code] NVARCHAR(4) NOT NULL,
     [material_document_code] NVARCHAR(10) NOT NULL,
@@ -645,18 +932,24 @@ BEGIN
     [mkpf_transaction_code2] NVARCHAR(40) NULL,
     [im_delivery_code] NVARCHAR(20) NULL,
     [im_delivery_item] INT NULL,
-    [is_obsolete] INT NOT NULL
+    [is_obsolete] INT NOT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_material_document_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_material_document_item]
     ON [dbo].[takt_logistics_materials_material_document_item]
-    ([material_document_id], [line_number]);
+    ([tenant_code], [company_code], [material_document_id], [line_number]);
 END
 GO
 
--- 采购发票主（sync_puinv；业务列=TaktPurchaseInvoice）
+-- 采购发票主（sync_miro；业务列=TaktPurchaseInvoice）
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_invoice', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_invoice] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_invoice_code] NVARCHAR(10) NOT NULL,
     [fiscal_year] NVARCHAR(4) NOT NULL,
     [document_type] NVARCHAR(2) NULL,
@@ -687,20 +980,25 @@ BEGIN
     [payment_method] NVARCHAR(1) NULL,
     [baseline_date] DATETIME NULL,
     [entered_by] NVARCHAR(12) NULL,
-    [branch_account] NVARCHAR(10) NULL
+    [branch_account] NVARCHAR(10) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_invoice_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_invoice]
     ON [dbo].[takt_logistics_procurement_purchase_invoice]
-    ([fiscal_year], [purchase_invoice_code]);
+    ([tenant_code], [company_code], [fiscal_year], [purchase_invoice_code]);
 END
 GO
 
--- 采购发票明细（sync_puinv；业务列=TaktPurchaseInvoiceItem + fiscal_year 关联键）
+-- 采购发票明细（sync_miro；业务列=TaktPurchaseInvoiceItem + fiscal_year 关联键）
 IF OBJECT_ID(N'dbo.takt_logistics_procurement_purchase_invoice_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_procurement_purchase_invoice_item] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
     [fiscal_year] NVARCHAR(4) NOT NULL,
-    [plant_code] NVARCHAR(4) NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [purchase_invoice_code] NVARCHAR(10) NOT NULL,
     [line_number] INT NOT NULL,
     [purchase_order_code] NVARCHAR(20) NULL,
@@ -736,18 +1034,24 @@ BEGIN
     [reference_document_item] INT NULL,
     [stock_managed_material_code] NVARCHAR(20) NULL,
     [material_document_item] INT NULL,
-    [is_obsolete] INT NOT NULL
+    [is_obsolete] INT NOT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_purchase_invoice_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_purchase_invoice_item]
     ON [dbo].[takt_logistics_procurement_purchase_invoice_item]
-    ([fiscal_year], [purchase_invoice_code], [line_number]);
+    ([tenant_code], [company_code], [fiscal_year], [purchase_invoice_code], [line_number]);
 END
 GO
 
--- 销售发票主（sync_sdinv；业务列=TaktSalesInvoice）
+-- 销售发票主（sync_billing；业务列=TaktSalesInvoice）
 IF OBJECT_ID(N'dbo.takt_logistics_sales_invoice', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_invoice] (
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [billing_document_code] NVARCHAR(10) NOT NULL,
     [billing_type] NVARCHAR(4) NULL,
     [billing_category] NVARCHAR(1) NULL,
@@ -804,19 +1108,24 @@ BEGIN
     [logical_system] NVARCHAR(10) NULL,
     [cancelled_flag] NVARCHAR(1) NULL,
     [exchange_rate_date] DATETIME NULL,
-    [payment_reference] NVARCHAR(30) NULL
+    [payment_reference] NVARCHAR(30) NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_invoice_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_invoice]
     ON [dbo].[takt_logistics_sales_invoice]
-    ([billing_document_code]);
+    ([tenant_code], [company_code], [billing_document_code]);
 END
 GO
 
--- 销售发票明细（sync_sdinv；业务列=TaktSalesInvoiceItem）
+-- 销售发票明细（sync_billing；业务列=TaktSalesInvoiceItem）
 IF OBJECT_ID(N'dbo.takt_logistics_sales_invoice_item', N'U') IS NULL
 BEGIN
   CREATE TABLE [dbo].[takt_logistics_sales_invoice_item] (
-    [plant_code] NVARCHAR(4) NULL,
+    [tenant_code] VARCHAR(3) NOT NULL,
+    [company_code] VARCHAR(4) NOT NULL,
+    [culture_code] VARCHAR(5) NOT NULL,
+    [plant_code] NVARCHAR(4) NOT NULL,
     [billing_document_code] NVARCHAR(10) NOT NULL,
     [line_number] INT NOT NULL,
     [billing_quantity] DECIMAL(13,3) NULL,
@@ -897,11 +1206,185 @@ BEGIN
     [payment_guarantee_form] NVARCHAR(2) NULL,
     [gross_amount] DECIMAL(15,2) NULL,
     [exchange_rate_date] DATETIME NULL,
-    [is_obsolete] INT NOT NULL
+    [is_obsolete] INT NOT NULL,
+    [is_deleted] INT NOT NULL CONSTRAINT [df_sap_sales_invoice_item_is_deleted] DEFAULT (0),
+    [created_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_sales_invoice_item]
     ON [dbo].[takt_logistics_sales_invoice_item]
-    ([billing_document_code], [line_number]);
+    ([tenant_code], [company_code], [billing_document_code], [line_number]);
 END
 GO
+
+-- ----------------------------------------
+-- 已有表幂等补齐（ALTER 一律 NULL，避免存量失败）
+-- ----------------------------------------
+-- Core：仅 tenant_code；禁止 company/plant/culture
+DECLARE @core_table SYSNAME;
+DECLARE @core_ddl NVARCHAR(400);
+DECLARE core_tbl CURSOR LOCAL FAST_FORWARD FOR
+SELECT v.n FROM (VALUES
+  (N'takt_foundation_admin_division'),
+  (N'takt_logistics_procurement_manufacturer_material'),
+  (N'takt_logistics_sales_seller_material')
+) v(n);
+OPEN core_tbl;
+FETCH NEXT FROM core_tbl INTO @core_table;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+  IF OBJECT_ID(N'dbo.' + @core_table, N'U') IS NOT NULL
+  BEGIN
+    IF COL_LENGTH(N'dbo.' + @core_table, N'tenant_code') IS NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] ADD [tenant_code] VARCHAR(3) NULL;';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @core_table, N'is_deleted') IS NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] ADD [is_deleted] INT NULL;';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @core_table, N'created_at') IS NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] ADD [created_at] DATETIME NULL;';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @core_table, N'company_code') IS NOT NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] DROP COLUMN [company_code];';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @core_table, N'plant_code') IS NOT NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] DROP COLUMN [plant_code];';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @core_table, N'culture_code') IS NOT NULL
+    BEGIN
+      SET @core_ddl = N'ALTER TABLE [dbo].[' + @core_table + N'] DROP COLUMN [culture_code];';
+      EXEC sys.sp_executesql @core_ddl;
+    END
+  END
+  FETCH NEXT FROM core_tbl INTO @core_table;
+END
+CLOSE core_tbl;
+DEALLOCATE core_tbl;
+GO
+
+-- Company：TaktCompanyEntityBase → tenant_code + company_code + culture_code + plant_code
+DECLARE @company_table SYSNAME;
+DECLARE @ddl NVARCHAR(400);
+DECLARE company_tbl CURSOR LOCAL FAST_FORWARD FOR
+SELECT v.n FROM (VALUES
+  (N'takt_logistics_manufacturing_bom_material_cost_item'),
+  (N'takt_logistics_manufacturing_bom_material_cost'),
+  (N'takt_logistics_procurement_purchase_price'),
+  (N'takt_logistics_procurement_purchase_price_item'),
+  (N'takt_logistics_procurement_purchase_price_scale_quantity'),
+  (N'takt_logistics_procurement_purchase_price_scale_value'),
+  (N'takt_logistics_sales_price'),
+  (N'takt_logistics_sales_price_item'),
+  (N'takt_logistics_sales_price_scale_quantity'),
+  (N'takt_logistics_sales_price_scale_value'),
+  (N'takt_logistics_procurement_supplier'),
+  (N'takt_logistics_sales_customer'),
+  (N'takt_logistics_procurement_purchase_order'),
+  (N'takt_logistics_procurement_purchase_order_item'),
+  (N'takt_logistics_sales_order'),
+  (N'takt_logistics_sales_order_item'),
+  (N'takt_logistics_materials_packaging_material'),
+  (N'takt_logistics_materials_material_document'),
+  (N'takt_logistics_materials_material_document_item'),
+  (N'takt_logistics_procurement_purchase_invoice'),
+  (N'takt_logistics_procurement_purchase_invoice_item'),
+  (N'takt_logistics_sales_invoice'),
+  (N'takt_logistics_sales_invoice_item')
+) v(n);
+OPEN company_tbl;
+FETCH NEXT FROM company_tbl INTO @company_table;
+WHILE @@FETCH_STATUS = 0
+BEGIN
+  IF OBJECT_ID(N'dbo.' + @company_table, N'U') IS NOT NULL
+  BEGIN
+    IF COL_LENGTH(N'dbo.' + @company_table, N'tenant_code') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [tenant_code] VARCHAR(3) NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @company_table, N'company_code') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [company_code] VARCHAR(4) NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @company_table, N'culture_code') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [culture_code] VARCHAR(5) NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @company_table, N'plant_code') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [plant_code] NVARCHAR(4) NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @company_table, N'is_deleted') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [is_deleted] INT NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+    IF COL_LENGTH(N'dbo.' + @company_table, N'created_at') IS NULL
+    BEGIN
+      SET @ddl = N'ALTER TABLE [dbo].[' + @company_table + N'] ADD [created_at] DATETIME NULL;';
+      EXEC sys.sp_executesql @ddl;
+    END
+  END
+  FETCH NEXT FROM company_tbl INTO @company_table;
+END
+CLOSE company_tbl;
+DEALLOCATE company_tbl;
+GO
+
+-- 实体有、旧 CREATE 缺的业务列
+IF COL_LENGTH(N'dbo.takt_logistics_manufacturing_bom_material_cost', N'material_type') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_manufacturing_bom_material_cost] ADD [material_type] NVARCHAR(4) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_manufacturing_bom_material_cost', N'latest_purchase_cost') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_manufacturing_bom_material_cost] ADD [latest_purchase_cost] DECIMAL(18,5) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_procurement_purchase_price', N'material_description') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_procurement_purchase_price] ADD [material_description] NVARCHAR(40) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_sales_price', N'material_description') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_price] ADD [material_description] NVARCHAR(40) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_procurement_supplier', N'tax_code') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_procurement_supplier] ADD [tax_code] NVARCHAR(4) NULL;
+GO
+IF COL_LENGTH(N'dbo.takt_logistics_sales_customer', N'tax_code') IS NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_customer] ADD [tax_code] NVARCHAR(4) NULL;
+GO
+
+-- default_culture 不是实体列；有值则迁到 culture_code 再删
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_supplier', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_procurement_supplier', N'default_culture') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_procurement_supplier', N'culture_code') IS NOT NULL
+  UPDATE [dbo].[takt_logistics_procurement_supplier]
+  SET [culture_code] = [default_culture]
+  WHERE [culture_code] IS NULL AND [default_culture] IS NOT NULL;
+GO
+IF OBJECT_ID(N'dbo.takt_logistics_procurement_supplier', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_procurement_supplier', N'default_culture') IS NOT NULL
+  ALTER TABLE [dbo].[takt_logistics_procurement_supplier] DROP COLUMN [default_culture];
+GO
+IF OBJECT_ID(N'dbo.takt_logistics_sales_customer', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_customer', N'default_culture') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_customer', N'culture_code') IS NOT NULL
+  UPDATE [dbo].[takt_logistics_sales_customer]
+  SET [culture_code] = [default_culture]
+  WHERE [culture_code] IS NULL AND [default_culture] IS NOT NULL;
+GO
+IF OBJECT_ID(N'dbo.takt_logistics_sales_customer', N'U') IS NOT NULL
+  AND COL_LENGTH(N'dbo.takt_logistics_sales_customer', N'default_culture') IS NOT NULL
+  ALTER TABLE [dbo].[takt_logistics_sales_customer] DROP COLUMN [default_culture];
+GO
+
 

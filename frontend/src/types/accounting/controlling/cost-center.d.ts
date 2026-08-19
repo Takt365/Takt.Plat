@@ -23,17 +23,62 @@ import type {
  * @description 对应后端 TaktCostCenterDto
  */
 export interface CostCenter extends CompanyDtoBase {
-
+  /**
+   * CostCenterID
+   */
+  costCenterId: string;
+  /**
+   * 成本中心编码（4位，租户+公司内唯一）
+   */
+  costCenterCode: string;
+  /**
+   * 成本中心名称
+   */
+  costCenterName: string;
+  /**
+   * 父级 ID（0 表示根节点）
+   */
+  parentId: string;
+  /**
+   * 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+   */
+  costCenterType: number;
+  /**
+   * 负责人用户 ID
+   */
+  managerId?: string;
+  /**
+   * 负责人姓名
+   */
+  managerName?: string;
+  /**
+   * 所属部门 ID
+   */
+  deptId?: string;
+  /**
+   * 所属部门名称
+   */
+  deptName?: string;
+  /**
+   * 成本中心层级
+   */
+  costCenterLevel: number;
+  /**
+   * 生效日期
+   */
+  validFrom: string;
+  /**
+   * 失效日期
+   */
+  validTo: string;
   /**
    * 排序号
    */
   sortOrder: number;
-
   /**
    * 成本中心状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costCenterStatus: number;
-
 }
 
 
@@ -184,7 +229,7 @@ export interface CostCenterCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
@@ -192,7 +237,7 @@ export interface CostCenterCreate {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string
 
@@ -339,7 +384,7 @@ export interface CostCenterTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -433,7 +478,7 @@ export interface CostCenterImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
@@ -441,7 +486,7 @@ export interface CostCenterImport {
    * 当前公司区域文化 BCP47（登录或公司切换注入，须与 takt_company.default_culture 一致，用于写入校验）
    */
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string
 

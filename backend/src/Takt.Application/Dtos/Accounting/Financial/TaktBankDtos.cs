@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktBankDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Bank 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktBank 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 // ========================================
 
 /// <summary>
-/// 银行信息实体（租户级；租户内各公司共用；按国家地区 + 银行代码唯一）
+/// 银行信息实体（公司级；租户+公司隔离；按国家地区 + 银行代码唯一）
 /// 对应前端 TaktBankDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktCompanyDtoBase
 /// </summary>
-public class TaktBankDto : TaktTenantDtoBase
+public class TaktBankDto : TaktCompanyDtoBase
 {
     /// <summary>
     /// BankID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -182,11 +182,21 @@ public class TaktBankQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -352,11 +362,21 @@ public class TaktBankCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -536,11 +556,21 @@ public class TaktBankTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -693,11 +723,21 @@ public class TaktBankImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
+    /// </summary>
+    public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+    /// </summary>
+    public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
     /// </summary>
@@ -855,6 +895,21 @@ public class TaktBankExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long BankId { get; set; }
+
+    /// <summary>
+    /// 公司代码
+    /// </summary>
+    public string CompanyCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）

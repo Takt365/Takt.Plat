@@ -102,7 +102,15 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
         _flowInstanceRepository = flowInstanceRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送流程定义变更
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="scheme">流程定义实体</param>
+    /// <param name="changeType">变更类型</param>
+    /// <param name="operatorUserName">操作人用户名</param>
+    /// <returns>任务</returns>
     public async Task NotifySchemeChangedAsync(
         string tenantCode,
         string companyCode,
@@ -125,7 +133,13 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
         await _signalRDispatchService.PushFlowSchemeChangedAsync(push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送流程实例推进与相关用户待办计数
+    /// </summary>
+    /// <param name="instance">流程实例</param>
+    /// <param name="actionType">动作类型</param>
+    /// <param name="additionalUsers">额外通知用户</param>
+    /// <returns>任务</returns>
     public async Task NotifyInstanceProgressedAsync(
         TaktFlowInstance instance,
         string actionType,
@@ -173,7 +187,13 @@ public class TaktWorkflowSignalRNotifier : ITaktWorkflowSignalRNotifier
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 统计指定用户待办数量（Running 实例 + Pending 任务）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="userId">用户 ID</param>
+    /// <returns>待办数量</returns>
     public async Task<int> CountTodoForUserAsync(string tenantCode, string companyCode, long userId)
     {
         if (userId <= 0)

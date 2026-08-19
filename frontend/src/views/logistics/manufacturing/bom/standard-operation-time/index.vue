@@ -110,10 +110,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.standardoperationtime.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.standardoperationtime.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -529,7 +529,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.standardoperationtime.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'materialCode', label: t('entity.standardoperationtime.materialcode') },
   { key: 'workCenter', label: t('entity.standardoperationtime.workcenter') },
   { key: 'operationDesc', label: t('entity.standardoperationtime.operationdesc') },
@@ -651,7 +651,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getStandardOperationTimeField(record, 'standardOperationTimeId') ?? ''
   },
   {
-    title: t('entity.standardoperationtime.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

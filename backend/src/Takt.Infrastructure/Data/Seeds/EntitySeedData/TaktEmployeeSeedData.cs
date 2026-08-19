@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktEmployeeSeedData.cs
@@ -54,7 +54,8 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var sqlSugarContext = serviceProvider.GetRequiredService<TaktSeedContext>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
+        var database = configuration.RequireDatabase();
+        var configuredCompanyCodes = database.CompanyCodes;
 
         int insertCount = 0;
         int updateCount = 0;
@@ -86,6 +87,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     sqlSugarContext,
                     tenantCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
                     employeeData.EmployeeCode,
                     employeeData.EmployeeName,
@@ -172,7 +174,9 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                     City = "110100",
                     District = "110105",
                     Address1 = sample.Address1,
-                CultureCode = employee.CultureCode};
+                    PlantCode = employee.PlantCode,
+                    CultureCode = employee.CultureCode
+                };
                 await addressRepository.CreateAsync(address);
                 insertCount++;
             }
@@ -183,6 +187,8 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
                 address.City = "110100";
                 address.District = "110105";
                 address.Address1 = sample.Address1;
+                address.PlantCode = employee.PlantCode;
+                address.CultureCode = employee.CultureCode;
                 await sqlSugarContext.Db.Updateable(address).ExecuteCommandAsync();
                 updateCount++;
             }
@@ -198,6 +204,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         TaktSeedContext sqlSugarContext,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         string EmployeeCode,
         string name,
@@ -210,6 +217,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                PlantCode = plantCode,
                 CultureCode = cultureCode,
                 EmployeeCode = EmployeeCode,
                 EmployeeName = name,
@@ -224,6 +232,7 @@ public class TaktEmployeeSeedData : ITaktSeedDataCoordinator
         employee.EmployeeName = name;
         employee.EmployeeStatus = 2;
         employee.IsBuiltIn = 1;
+        employee.PlantCode = plantCode;
         employee.CultureCode = cultureCode;
         ApplySeedPersonalProfile(employee, sequence);
         await sqlSugarContext.Db.Updateable(employee)

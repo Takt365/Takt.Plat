@@ -20,7 +20,6 @@ export const MATERIALMOVINGPRICE_SELF_I18N_KEY = buildEntitySelfI18nKey(MATERIAL
 
 /** 列表业务列（不含主键） */
 export const MATERIALMOVINGPRICE_LIST_FIELDS = [
-  'plantCode',
   'valuationPeriod',
   'materialCode',
   'valuation',
@@ -36,7 +35,7 @@ export const MATERIALMOVINGPRICE_LIST_FIELDS = [
 export const MATERIALMOVINGPRICE_PLACEHOLDER = {
   tenantCode: 'optional',
   companyCode: 'optional',
-  companyDefaultCulture: 'optional',
+  cultureCode: 'optional',
   plantCode: 'select',
   valuationPeriod: 'required',
   materialCode: 'select',
@@ -56,6 +55,7 @@ export type MaterialMovingPriceField = keyof typeof MATERIALMOVINGPRICE_PLACEHOL
 
 /** 高级查询可 trim 的字符串字段 */
 export const MATERIALMOVINGPRICE_QUERY_STRING_FIELDS = [
+  'cultureCode',
   'plantCode',
   'valuationPeriod',
   'materialCode',

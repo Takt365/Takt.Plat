@@ -27,12 +27,8 @@ export interface BomMaterialCostItemComponentMovingPriceQuery extends TaktPagedQ
   periodDateEnd?: string;
   /** 关注期间 yyyy-MM */
   focusPeriod?: string;
-  /** 评估类别（明细无此字段，服务忽略） */
-  valuation?: string;
   /** 涨跌筛选：up/down/flat/none/changed */
   trendFilter?: string;
-  /** 全量排序（分页前）：bom / trend / varianceDesc */
-  sortBy?: string;
 }
 
 /**
@@ -44,8 +40,8 @@ export interface BomMaterialCostItemComponentMovingPrice {
   modelCode: string;
   productCode: string;
   productDescription: string;
-  /** 序号（明细表） */
-  sequenceCode?: string;
+  /** 行号（项号/序号，固定步长=10） */
+  lineNumber?: number;
   /** BOM 层级 */
   bomLevel?: string;
   /** BOM 项目号 */
@@ -57,6 +53,8 @@ export interface BomMaterialCostItemComponentMovingPrice {
   /** 组件数量 */
   componentQuantity?: number;
   productionRelated?: string | null;
+  /** PCB SECT 标识（空参与；X 不参与） */
+  pcbSectIndicator?: string | null;
   purchaseType: string;
   currencyCode: string;
   /** 各核算月材料成本，键 yyyy-MM；缺月无键 */

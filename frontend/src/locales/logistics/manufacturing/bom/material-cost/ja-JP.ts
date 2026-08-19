@@ -21,7 +21,7 @@ export default {
     periodRange: '原価年月',
     selectPlantRequired: '工場コードを選択してください',
     selectModelRequired: '機種を選択してください',
-    itemFilterHint: '既定：生産関連=X、購買タイプ=F（クリアで全件表示）',
+    itemFilterHint: '既定：生産関連=X、PCB SECT 標識空、購買タイプ=F（クリアで全件表示）',
     productRowCount: '製品数',
     modalmasterhint: '左機種 → 中製品 → 右明細（エンティティ分割なし）。明細取込後に合計または再計算してください。',
     costSum: 'コスト合計',
@@ -46,17 +46,5 @@ export default {
     refreshModelFieldsSuccess:
       '{month} 機種価格反映完了：スキャン {scanned}、機種更新 {modelUpdated}、平均更新 {averageUpdated}（{groups} グループ）',
     refreshModelFieldsFailed: '機種価格の反映に失敗しました',
-    zeroPrice: {
-      button: '部品ゼロ価格',
-      monthTitle: '工場・原価月を選択',
-      title: '部品ゼロ価格（{month}）',
-      hint: '{month} · 製品 {productCount} · ゼロ価格部品 {componentCount}（全機種 · ProductionRelated=X · PurchaseType=F · 移動平均価格=0；代替候補=末尾版英字を逆引き例 D01446500B→A、原価月以前の直近有価月の移動価格）',
-      productCodes: '共有製品',
-      productCount: '製品数',
-      suggestedComponentCode: '代替候補部品',
-      suggestedMovingPrice: '代替移動価格',
-      exportSuccess: '部品ゼロ価格一覧のエクスポートに成功しました',
-      exportFailed: '部品ゼロ価格一覧のエクスポートに失敗しました',
-    },
   },
 };

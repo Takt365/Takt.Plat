@@ -107,6 +107,14 @@ public interface ITaktMessageService
         string? triggerUserName);
 
     /// <summary>
+    /// 向当前登录用户落库操作结果消息并私信推送（From=To=当前用户；失败由调用方决定是否吞掉）
+    /// </summary>
+    /// <param name="messageContent">消息正文</param>
+    /// <param name="messageGroup">消息分组 DictValue；空则 reminder</param>
+    /// <returns>任务</returns>
+    Task CreateAndSendSelfOperationMessageAsync(string messageContent, string? messageGroup = null);
+
+    /// <summary>
     /// 删除在线消息
     /// </summary>
     /// <param name="id">在线消息ID</param>

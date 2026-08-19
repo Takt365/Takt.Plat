@@ -1,6 +1,8 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -10,6 +12,7 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- 源表 / 目标表：同名 + 列与实体 TaktPackagingMaterial 一致
 -- {{SourceDatabase}}.dbo.takt_logistics_materials_packaging_material → 当前租户库同名表
 -- 业务唯一键：Plant+PackagingMaterialCode（与租户库唯一索引 Tenant+Company+Plant+PackagingMaterialCode 对齐）
+-- tenant/company/plant/culture 取自源表本列；空值丢弃，不回退任务参数
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
 CREATE TABLE #st_source (
@@ -42,9 +45,11 @@ CREATE TABLE #st_source (
   [sort_order] INT,
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
+  [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
   [is_deleted] INT,
+  [created_at] DATETIME,
   [updated_by] BIGINT
 );
 
@@ -81,11 +86,13 @@ SELECT
   S.[packaging_spec],
   S.[packaging_description],
   S.[sort_order],
-  @tenant_code,
-  @company_code,
+  S.[tenant_code],
+  S.[company_code],
+  S.[culture_code],
   '{}',
   '',
   S.[is_deleted],
+  S.[created_at],
   @sync_user_id
 FROM (
   SELECT
@@ -96,6 +103,9 @@ FROM (
   FROM (
     SELECT
       LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
       CASE
         WHEN LEN(LTRIM(RTRIM(R.[packaging_material_code]))) = 18
           AND LTRIM(RTRIM(R.[packaging_material_code])) NOT LIKE '%[^0-9]%'
@@ -120,17 +130,18 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[tariff_rate_type], N''))), 40), N'') AS [tariff_rate_type],
       TRY_CAST(R.[gross_weight] AS DECIMAL(18,10)) AS [gross_weight],
       TRY_CAST(R.[net_weight] AS DECIMAL(18,10)) AS [net_weight],
-      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[weight_unit], N''))), 10), N''), N'KG') AS [weight_unit],
+      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[weight_unit], N''))), 10), N''), N'') AS [weight_unit],
       TRY_CAST(R.[business_volume] AS DECIMAL(18,6)) AS [business_volume],
-      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[volume_unit], N''))), 10), N''), N'M3') AS [volume_unit],
+      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[volume_unit], N''))), 10), N''), N'') AS [volume_unit],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[size_dimension], N''))), 40), N'') AS [size_dimension],
-      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packaging_type], N''))), 40), N''), N'VERP') AS [packaging_type],
-      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packing_unit], N''))), 20), N''), N'CAR') AS [packing_unit],
+      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packaging_type], N''))), 40), N''), N'') AS [packaging_type],
+      ISNULL(NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packing_unit], N''))), 20), N''), N'') AS [packing_unit],
       TRY_CAST(R.[quantity_per_packing] AS DECIMAL(18,2)) AS [quantity_per_packing],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packaging_spec], N''))), 200), N'') AS [packaging_spec],
       NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[packaging_description], N''))), 500), N'') AS [packaging_description],
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      R.[created_at] AS [created_at],
       ROW_NUMBER() OVER (
         PARTITION BY
           LTRIM(RTRIM(R.[plant_code])),
@@ -146,6 +157,9 @@ FROM (
       ) AS dup_rn
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_packaging_material] R
     WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%（%'
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%）%'
@@ -170,6 +184,9 @@ DECLARE @sap_eligible_count INT = (
   SELECT COUNT(*)
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_packaging_material] R
   WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%（%'
     AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%）%'
@@ -189,6 +206,9 @@ DECLARE @sap_key_count INT = (
       END AS [packaging_material_code]
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_packaging_material] R
     WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%（%'
       AND LTRIM(RTRIM(ISNULL(R.[packaging_material_code], N''))) NOT LIKE N'%）%'
@@ -253,10 +273,9 @@ CREATE TABLE #delta (
 
 DECLARE @target_before INT = (
   SELECT COUNT(*)
-  FROM [takt_logistics_materials_packaging_material]
-  WHERE [tenant_code] = @tenant_code
-    AND [company_code] = @company_code
-    AND [is_deleted] = 0
+  FROM [takt_logistics_materials_packaging_material] T
+  WHERE T.[is_deleted] = 0
+    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
 MERGE INTO [takt_logistics_materials_packaging_material] AS T
@@ -290,38 +309,39 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[packaging_spec], N''))) <> LTRIM(RTRIM(ISNULL(S.[packaging_spec], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[packaging_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[packaging_description], N'')))
   OR T.[sort_order] <> S.[sort_order]
+  OR LTRIM(RTRIM(ISNULL(T.[culture_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[culture_code], N'')))
 ) THEN
   UPDATE SET
-    T.[material_code] = S.[material_code],
-    T.[material_description] = S.[material_description],
-    T.[hs_code] = S.[hs_code],
-    T.[hs_name] = S.[hs_name],
-    T.[additional_code] = S.[additional_code],
-    T.[origin_country_region_code] = S.[origin_country_region_code],
-    T.[origin_country_region_name] = S.[origin_country_region_name],
-    T.[destination_country_region_code] = S.[destination_country_region_code],
-    T.[destination_country_region_name] = S.[destination_country_region_name],
-    T.[regulatory_condition_code] = S.[regulatory_condition_code],
-    T.[tariff_rate_type] = S.[tariff_rate_type],
-    T.[gross_weight] = S.[gross_weight],
-    T.[net_weight] = S.[net_weight],
-    T.[weight_unit] = S.[weight_unit],
-    T.[business_volume] = S.[business_volume],
-    T.[volume_unit] = S.[volume_unit],
-    T.[size_dimension] = S.[size_dimension],
-    T.[packaging_type] = S.[packaging_type],
-    T.[packing_unit] = S.[packing_unit],
-    T.[quantity_per_packing] = S.[quantity_per_packing],
-    T.[packaging_spec] = S.[packaging_spec],
-    T.[packaging_description] = S.[packaging_description],
-    T.[sort_order] = S.[sort_order],
-    T.[ext_field] = S.[ext_field],
-    T.[remark] = S.[remark],
-        T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[is_deleted] = S.[is_deleted],
-    T.[deleted_by] = CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    T.[deleted_at] = CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[material_code]=S.[material_code],
+  T.[material_description]=S.[material_description],
+  T.[hs_code]=S.[hs_code],
+  T.[hs_name]=S.[hs_name],
+  T.[additional_code]=S.[additional_code],
+  T.[origin_country_region_code]=S.[origin_country_region_code],
+  T.[origin_country_region_name]=S.[origin_country_region_name],
+  T.[destination_country_region_code]=S.[destination_country_region_code],
+  T.[destination_country_region_name]=S.[destination_country_region_name],
+  T.[regulatory_condition_code]=S.[regulatory_condition_code],
+  T.[tariff_rate_type]=S.[tariff_rate_type],
+  T.[gross_weight]=S.[gross_weight],
+  T.[net_weight]=S.[net_weight],
+  T.[weight_unit]=S.[weight_unit],
+  T.[business_volume]=S.[business_volume],
+  T.[volume_unit]=S.[volume_unit],
+  T.[size_dimension]=S.[size_dimension],
+  T.[packaging_type]=S.[packaging_type],
+  T.[packing_unit]=S.[packing_unit],
+  T.[quantity_per_packing]=S.[quantity_per_packing],
+  T.[packaging_spec]=S.[packaging_spec],
+  T.[packaging_description]=S.[packaging_description],
+  T.[sort_order]=S.[sort_order],
+  T.[culture_code]=S.[culture_code],
+  T.[remark]=S.[remark],
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[packaging_material_code],[material_code],[material_description],
@@ -331,7 +351,7 @@ WHEN NOT MATCHED THEN
     [regulatory_condition_code],[tariff_rate_type],
     [gross_weight],[net_weight],[weight_unit],[business_volume],[volume_unit],
     [size_dimension],[packaging_type],[packing_unit],[quantity_per_packing],
-    [packaging_spec],[packaging_description],[sort_order],[tenant_code],[company_code],[ext_field],[remark],
+    [packaging_spec],[packaging_description],[sort_order],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],
     [is_deleted],[deleted_by],[deleted_at]
   )
@@ -343,8 +363,8 @@ WHEN NOT MATCHED THEN
     S.[regulatory_condition_code],S.[tariff_rate_type],
     S.[gross_weight],S.[net_weight],S.[weight_unit],S.[business_volume],S.[volume_unit],
     S.[size_dimension],S.[packaging_type],S.[packing_unit],S.[quantity_per_packing],
-    S.[packaging_spec],S.[packaging_description],S.[sort_order],S.[tenant_code],S.[company_code],S.[ext_field],S.[remark],
-    S.[updated_by],@now,S.[updated_by],@now,
+    S.[packaging_spec],S.[packaging_description],S.[sort_order],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
+    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
     S.[is_deleted],
     CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
     CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
@@ -390,9 +410,8 @@ OUTPUT
   INSERTED.[packaging_material_code]
 INTO #soft_deleted_rows ([id], [plant_code], [packaging_material_code])
 FROM [takt_logistics_materials_packaging_material] T
-WHERE T.[tenant_code] = @tenant_code
-  AND T.[company_code] = @company_code
-  AND T.[is_deleted] = 0
+WHERE T.[is_deleted] = 0
+  AND EXISTS (SELECT 1 FROM #st_source S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
   AND NOT EXISTS (
     SELECT 1
     FROM #st_source S
@@ -420,29 +439,31 @@ BEGIN
 END;
 DECLARE @target_count INT = (
   SELECT COUNT(*)
-  FROM [takt_logistics_materials_packaging_material]
-  WHERE [tenant_code] = @tenant_code
-    AND [company_code] = @company_code
-    AND [is_deleted] = 0
+  FROM [takt_logistics_materials_packaging_material] T
+  WHERE T.[is_deleted] = 0
+    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
+);
+DECLARE @source_active_count INT = (
+  SELECT COUNT(*)
+  FROM #st_source
+  WHERE [is_deleted] = 0
 );
 DECLARE @target_physical INT = (
   SELECT COUNT(*)
-  FROM [takt_logistics_materials_packaging_material]
-  WHERE [tenant_code] = @tenant_code
-    AND [company_code] = @company_code
+  FROM [takt_logistics_materials_packaging_material] T
+  WHERE EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 DECLARE @soft_deleted INT = (
   SELECT COUNT(*)
-  FROM [takt_logistics_materials_packaging_material]
-  WHERE [tenant_code] = @tenant_code
-    AND [company_code] = @company_code
-    AND [is_deleted] = 1
+  FROM [takt_logistics_materials_packaging_material] T
+  WHERE T.[is_deleted]=1
+    AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
-IF @target_count <> @source_count
+IF @target_count <> @source_active_count
 BEGIN
   DECLARE @count_msg NVARCHAR(200) = CONCAT(
-    N'有效行数不一致: source=', @source_count, N', active=', @target_count);
+    N'有效行数不一致: source=', @source_active_count, N', active=', @target_count);
   THROW 50002, @count_msg, 1;
 END;
 
@@ -450,7 +471,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -485,7 +506,7 @@ SELECT
   N'MERGE PackagingMaterial Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -515,7 +536,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -529,7 +550,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 SELECT

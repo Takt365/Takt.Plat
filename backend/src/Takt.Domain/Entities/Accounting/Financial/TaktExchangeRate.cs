@@ -17,6 +17,7 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 
 /// <summary>
 /// 汇率实体（租户级主数据；租户内各公司共用同一套汇率；维护自币种至目标币种的折算汇率及生效区间）
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_accounting_financial_exchange_rate", "汇率表")]
 [SugarIndex("ix_exchange_rate_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -25,7 +26,7 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 [SugarIndex("ix_takt_accounting_financial_exchange_rate_from_currency", nameof(TenantCode), OrderByType.Asc, nameof(FromCurrencyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_accounting_financial_exchange_rate_to_currency", nameof(TenantCode), OrderByType.Asc, nameof(ToCurrencyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_accounting_financial_exchange_rate_valid_from", nameof(TenantCode), OrderByType.Asc, nameof(ValidFrom), OrderByType.Desc, false)]
-public class TaktExchangeRate : TaktTenantEntityBase
+public class TaktExchangeRate : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）

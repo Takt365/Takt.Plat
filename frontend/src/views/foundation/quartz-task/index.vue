@@ -138,6 +138,92 @@
         :loading="formLoading"
       />
     </TaktModal>
+
+    <!-- 立即执行：核算月份 + 目标库（BOM / PCB SECT） -->
+    <TaktModal
+      v-model:open="executeMonthVisible"
+      :title="t('foundation.quartz-task.page.executeMonth.modalTitle')"
+      :use-viewport-size="false"
+      width="25vw"
+      :confirm-loading="executeSubmitting"
+      @ok="handleExecuteMonthSubmit"
+      @cancel="handleExecuteMonthCancel"
+    >
+      <a-form layout="horizontal" label-align="right">
+        <a-form-item :label="t('foundation.quartz-task.page.executeDb.targetDatabase')" required>
+          <a-select
+            v-model:value="executeTargetDatabase"
+            :options="databaseSelectOptions"
+            :loading="databaseInfoLoading"
+            allow-clear
+            show-search
+            option-filter-prop="label"
+            :placeholder="t('foundation.quartz-task.page.executeDb.targetDatabase')"
+          />
+        </a-form-item>
+        <a-form-item :label="t('foundation.quartz-task.page.executeMonth.costingMonth')" required>
+          <a-date-picker
+            v-model:value="executeCostingMonth"
+            picker="month"
+            format="YYYY-MM"
+            value-format="YYYY-MM"
+            class="w-full"
+            :placeholder="t('foundation.quartz-task.page.executeMonth.costingMonthPlaceholder')"
+          />
+        </a-form-item>
+        <a-typography-text type="secondary">
+          {{ t('foundation.quartz-task.page.executeMonth.hint') }}
+        </a-typography-text>
+      </a-form>
+    </TaktModal>
+
+    <!-- 立即执行：同步库选择 -->
+    <TaktModal
+      v-model:open="executeDbVisible"
+      :title="t('foundation.quartz-task.page.executeDb.modalTitle')"
+      :use-viewport-size="false"
+      width="25vw"
+      :confirm-loading="executeSubmitting"
+      @ok="handleExecuteDbSubmit"
+      @cancel="handleExecuteDbCancel"
+    >
+      <a-form layout="horizontal" label-align="right">
+        <a-form-item
+          v-if="executeDbNeedsSource"
+          :label="t('foundation.quartz-task.page.executeDb.sourceDatabase')"
+          required
+        >
+          <a-select
+            v-model:value="executeSourceDatabase"
+            :options="databaseSelectOptions"
+            :loading="databaseInfoLoading"
+            allow-clear
+            show-search
+            option-filter-prop="label"
+            :placeholder="t('foundation.quartz-task.page.executeDb.sourceDatabase')"
+          />
+        </a-form-item>
+        <a-form-item :label="t('foundation.quartz-task.page.executeDb.targetDatabase')" required>
+          <a-select
+            v-model:value="executeTargetDatabase"
+            :options="databaseSelectOptions"
+            :loading="databaseInfoLoading"
+            allow-clear
+            show-search
+            option-filter-prop="label"
+            :placeholder="t('foundation.quartz-task.page.executeDb.targetDatabase')"
+          />
+        </a-form-item>
+        <a-typography-text type="secondary">
+          {{
+            executeDbNeedsSource
+              ? t('foundation.quartz-task.page.executeDb.hintSourceTarget')
+              : t('foundation.quartz-task.page.executeDb.hintTargetOnly')
+          }}
+        </a-typography-text>
+      </a-form>
+    </TaktModal>
+
     <!-- 高级查询抽屉 -->
     <TaktQueryDrawer
       v-model:open="advancedQueryVisible"
@@ -547,13 +633,36 @@ import { CreateActionColumn } from '@/components/business/takt-action-column/ind
 import { useI18n } from 'vue-i18n'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageIndex, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import QuartzTaskForm from './components/quartz-task-form.vue'
-import { getQuartzTaskList, getQuartzTaskById, createQuartzTask, updateQuartzTask, deleteQuartzTaskById, deleteQuartzTaskBatch, getQuartzTaskTemplate, importQuartzTask, exportQuartzTask, updateQuartzTaskStatus } from '@/api/foundation/quartz-task'
+import {
+  getQuartzTaskList,
+  getQuartzTaskById,
+  createQuartzTask,
+  updateQuartzTask,
+  deleteQuartzTaskById,
+  deleteQuartzTaskBatch,
+  getQuartzTaskTemplate,
+  importQuartzTask,
+  exportQuartzTask,
+  updateQuartzTaskStatus,
+  executeQuartzTaskNow,
+} from '@/api/foundation/quartz-task'
 import type { QuartzTask, QuartzTaskQuery } from '@/types/foundation/quartz-task'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
 import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
-import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
+import { useQuartzSignalRRefresh } from '@/composables/use-quartz-signalr-refresh'
+import { useDatabaseInfoCatalog } from '@/composables/use-database-info-catalog'
+import {
+  DEFAULT_STAGING_SOURCE_DATABASE,
+  buildBomDbAndMonthExecuteParams,
+  buildSyncExecuteParams,
+  needsBomDbAndMonthPicker,
+  needsSyncSourceTargetPicker,
+  needsSyncTargetOnlyFromTask,
+  parseSyncExecuteDatabaseParams,
+} from './utils/quartz-sync-db-fields'
+import { RiEditLine, RiDeleteBinLine, RiQuestionLine, RiPlayLine, RiPauseLine, RiFlashlightLine } from '@remixicon/vue'
 
 import {
   useQuartzTaskI18n,
@@ -562,6 +671,11 @@ import {
   QUARTZTASK_QUERY_FIELDS,
   QUARTZTASK_SELF_I18N_KEY,
 } from './composables/use-quartz-task-i18n'
+
+/** 任务状态：正常（字典 sys_quartz_task_status） */
+const QUARTZ_TASK_STATUS_NORMAL = 0
+/** 任务状态：暂停（字典 sys_quartz_task_status） */
+const QUARTZ_TASK_STATUS_PAUSED = 1
 
 /** 实体字段 i18n（标签/占位符统一入口） */
 const pi = useQuartzTaskI18n()
@@ -605,6 +719,41 @@ const formData = ref<Partial<QuartzTask> | null>(null)
 const formLoading = ref(false)
 /** 内嵌表单组件 ref（validate / getValues / resetFields） */
 const formRef = ref()
+
+/** 操作列「立即执行」loading 行 Id */
+const executeLoadingId = ref('')
+/** 操作列「启动/暂停」loading 行 Id */
+const statusLoadingId = ref('')
+/** 立即执行提交中（弹窗确认） */
+const executeSubmitting = ref(false)
+/** 当前待执行任务 */
+const executeTargetTask = ref<QuartzTask | null>(null)
+/** 核算月份弹窗 */
+const executeMonthVisible = ref(false)
+/** 核算月份 YYYY-MM */
+const executeCostingMonth = ref<string | undefined>(undefined)
+/** 同步库弹窗 */
+const executeDbVisible = ref(false)
+/** 是否需选源库 */
+const executeDbNeedsSource = ref(false)
+/** 源库 displayName */
+const executeSourceDatabase = ref<string | undefined>(undefined)
+/** 目标库 displayName */
+const executeTargetDatabase = ref<string | undefined>(undefined)
+
+const {
+  databaseInfoList,
+  databaseInfoLoading,
+  loadDatabaseInfoList,
+} = useDatabaseInfoCatalog()
+
+/** 同步库下拉选项（value=displayName） */
+const databaseSelectOptions = computed(() =>
+  (databaseInfoList.value ?? []).map((item) => ({
+    value: item.displayName,
+    label: `${item.displayName} (${item.tenantCode})`,
+  })),
+)
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
@@ -767,7 +916,44 @@ const columns = computed<TableColumnsType>(() => [
   buildQuartzTaskListColumn('quartzTaskId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
   ...QUARTZTASK_LIST_FIELDS.map((key) => buildQuartzTaskListColumn(key, pi.label(key))),
   CreateActionColumn({
+    width: 168,
     actions: [
+      {
+        key: 'execute',
+        label: t('common.page.button.execute'),
+        shape: 'plain',
+        icon: RiFlashlightLine,
+        permission: 'foundation:quartz:task:execute',
+        loadingFn: (record: QuartzTaskRowRecord) =>
+          executeLoadingId.value === getQuartzTaskId(record),
+        onClick: (record: QuartzTaskRowRecord) => handleExecuteNow(record),
+      },
+      {
+        key: 'start',
+        label: t('common.page.button.start'),
+        shape: 'plain',
+        icon: RiPlayLine,
+        permission: 'foundation:quartz:task:start',
+        visible: (record: QuartzTaskRowRecord) =>
+          Number((record as QuartzTask).taskStatus) === QUARTZ_TASK_STATUS_PAUSED,
+        loadingFn: (record: QuartzTaskRowRecord) =>
+          statusLoadingId.value === getQuartzTaskId(record),
+        onClick: (record: QuartzTaskRowRecord) =>
+          handleUpdateTaskStatus(record, QUARTZ_TASK_STATUS_NORMAL),
+      },
+      {
+        key: 'pause',
+        label: t('common.page.button.pause'),
+        shape: 'plain',
+        icon: RiPauseLine,
+        permission: 'foundation:quartz:task:pause',
+        visible: (record: QuartzTaskRowRecord) =>
+          Number((record as QuartzTask).taskStatus) !== QUARTZ_TASK_STATUS_PAUSED,
+        loadingFn: (record: QuartzTaskRowRecord) =>
+          statusLoadingId.value === getQuartzTaskId(record),
+        onClick: (record: QuartzTaskRowRecord) =>
+          handleUpdateTaskStatus(record, QUARTZ_TASK_STATUS_PAUSED),
+      },
       {
         key: 'update',
         label: t('common.page.button.edit'),
@@ -872,6 +1058,185 @@ async function loadData() {
 
 /** 租户/公司切换时由 bootstrap 发出 table:refresh，自动重载列表 */
 useTableRefresh(loadData)
+
+/** Quartz SignalR：定义变更 / 执行完成刷新列表 */
+useQuartzSignalRRefresh(loadData)
+
+/**
+ * 是否为 BOM / PCB SECT 任务（立即执行须选目标库 + 核算月份）
+ * @param record 任务行
+ */
+function needsBomCostingMonthPicker(record: QuartzTask): boolean {
+  return needsBomDbAndMonthPicker(record)
+}
+
+/**
+ * 解析行任务实体
+ * @param record 行数据
+ */
+function asQuartzTask(record: QuartzTaskRowRecord): QuartzTask {
+  return record as QuartzTask
+}
+
+/**
+ * 提交立即执行
+ * @param id 任务 Id
+ * @param executeParams 可选覆盖参数
+ */
+async function submitExecuteNow(id: string, executeParams?: string): Promise<void> {
+  executeLoadingId.value = id
+  executeSubmitting.value = true
+  try {
+    await executeQuartzTaskNow(id, executeParams)
+    message.success(t('foundation.quartz-task.page.executeSubmitted'))
+    await loadData()
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error ?? '')
+    message.error(errMsg || t('common.feedback.failed'))
+  } finally {
+    executeLoadingId.value = ''
+    executeSubmitting.value = false
+  }
+}
+
+/**
+ * 操作列：立即执行（按任务类型弹窗补参数）
+ * @param record 行数据
+ */
+async function handleExecuteNow(record: QuartzTaskRowRecord): Promise<void> {
+  const task = asQuartzTask(record)
+  const id = getQuartzTaskId(record)
+  if (!id) {
+    return
+  }
+  executeTargetTask.value = task
+  if (needsBomCostingMonthPicker(task)) {
+    const now = new Date()
+    const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    executeCostingMonth.value = month
+    const parsed = parseSyncExecuteDatabaseParams(task.executeParams)
+    try {
+      await loadDatabaseInfoList()
+    } catch {
+      // catalog 失败时仍打开弹窗，由用户重试
+    }
+    executeTargetDatabase.value = parsed.targetDatabase
+    executeMonthVisible.value = true
+    return
+  }
+  if (needsSyncTargetOnlyFromTask(task) || needsSyncSourceTargetPicker(task.sqlScript)) {
+    executeDbNeedsSource.value =
+      !needsSyncTargetOnlyFromTask(task) && needsSyncSourceTargetPicker(task.sqlScript)
+    const parsed = parseSyncExecuteDatabaseParams(task.executeParams)
+    try {
+      await loadDatabaseInfoList()
+    } catch {
+      // catalog 失败时仍打开弹窗，由用户重试
+    }
+    executeSourceDatabase.value =
+      parsed.sourceDatabase ||
+      (executeDbNeedsSource.value ? DEFAULT_STAGING_SOURCE_DATABASE : undefined)
+    executeTargetDatabase.value = parsed.targetDatabase
+    executeDbVisible.value = true
+    return
+  }
+  Modal.confirm({
+    title: t('common.page.button.execute'),
+    content: task.taskCode || task.taskName || pi.self(),
+    okText: t('common.page.button.execute'),
+    cancelText: t('common.page.button.cancel'),
+    onOk: () => submitExecuteNow(id),
+  })
+}
+
+/** 核算月份 + 目标库弹窗确认 */
+async function handleExecuteMonthSubmit(): Promise<void> {
+  const id = executeTargetTask.value ? getQuartzTaskId(executeTargetTask.value) : ''
+  const month = executeCostingMonth.value?.trim()
+  const targetDatabase = executeTargetDatabase.value?.trim()
+  if (!id) {
+    return
+  }
+  if (!targetDatabase) {
+    message.warning(t('foundation.quartz-task.page.executeDb.targetRequired'))
+    return
+  }
+  if (!month) {
+    message.warning(t('foundation.quartz-task.page.executeMonth.costingMonthRequired'))
+    return
+  }
+  executeMonthVisible.value = false
+  await submitExecuteNow(
+    id,
+    buildBomDbAndMonthExecuteParams({ targetDatabase, costingPeriod: month }),
+  )
+  executeTargetTask.value = null
+}
+
+/** 关闭核算月份弹窗 */
+function handleExecuteMonthCancel(): void {
+  executeMonthVisible.value = false
+  executeTargetTask.value = null
+}
+
+/** 同步库弹窗确认 */
+async function handleExecuteDbSubmit(): Promise<void> {
+  const id = executeTargetTask.value ? getQuartzTaskId(executeTargetTask.value) : ''
+  if (!id) {
+    return
+  }
+  if (executeDbNeedsSource.value && !executeSourceDatabase.value?.trim()) {
+    message.warning(t('foundation.quartz-task.page.executeDb.sourceRequired'))
+    return
+  }
+  if (!executeTargetDatabase.value?.trim()) {
+    message.warning(t('foundation.quartz-task.page.executeDb.targetRequired'))
+    return
+  }
+  const params = buildSyncExecuteParams({
+    sourceDatabase: executeDbNeedsSource.value ? executeSourceDatabase.value : undefined,
+    targetDatabase: executeTargetDatabase.value,
+  })
+  executeDbVisible.value = false
+  await submitExecuteNow(id, params)
+  executeTargetTask.value = null
+}
+
+/** 关闭同步库弹窗 */
+function handleExecuteDbCancel(): void {
+  executeDbVisible.value = false
+  executeTargetTask.value = null
+}
+
+/**
+ * 操作列：启动 / 暂停（更新 TaskStatus 并挂接调度器）
+ * @param record 行数据
+ * @param taskStatus 目标状态
+ */
+async function handleUpdateTaskStatus(
+  record: QuartzTaskRowRecord,
+  taskStatus: number,
+): Promise<void> {
+  const id = getQuartzTaskId(record)
+  if (!id) {
+    return
+  }
+  statusLoadingId.value = id
+  try {
+    await updateQuartzTaskStatus({ quartzTaskId: id, taskStatus })
+    message.success(
+      taskStatus === QUARTZ_TASK_STATUS_PAUSED
+        ? t('common.feedback.updated', { target: t('common.page.button.pause') })
+        : t('common.feedback.updated', { target: t('common.page.button.start') }),
+    )
+    await loadData()
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error ?? '')
+    message.error(errMsg || t('common.feedback.failed'))
+  } finally {
+    statusLoadingId.value = ''
+  }
+}
 
 /** 快捷查询 */
 function handleSearch() {

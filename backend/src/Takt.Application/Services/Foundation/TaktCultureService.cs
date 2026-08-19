@@ -109,12 +109,12 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
     {
         var list = await _cultureRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.LanguageName ?? string.Empty,
+            x => x.NativeName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
             DictValue = e.CultureCode,
-            DictLabel = e.LanguageName ?? e.CultureCode,
+            DictLabel = e.NativeName ?? e.CultureCode,
         }).ToList();
     }
 
@@ -435,9 +435,7 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords!.Trim();
-            exp = exp.And(x =>
-                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.LanguageName != null && x.LanguageName.Contains(keywords))
+            exp = exp.And(x => (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.NativeName != null && x.NativeName.Contains(keywords))
                 || (x.Icon != null && x.Icon.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
@@ -445,16 +443,10 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.LanguageName))
-        {
-            var languageName = queryDto.LanguageName;
-            exp = exp.And(x => x.LanguageName != null && x.LanguageName.Contains(languageName));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.NativeName))
@@ -523,11 +515,7 @@ public class TaktCultureService : TaktServiceBase, ITaktCultureService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.RelatedPlant))
-        {
-            return true;
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto.LanguageName))
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }

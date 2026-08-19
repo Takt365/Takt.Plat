@@ -11,30 +11,28 @@
 // ========================================
 
 using SqlSugar;
+using Takt.Domain.Interfaces;
 
 namespace Takt.Domain.Entities;
 
 // ========================================
-// 租户级隔离基类
+// 租户级隔离基类（工厂 × 语言四组合，无 Id）
+// 4 都不需要 = TaktTenantCoreEntityScopeBase
+// 2 不要工厂+要语言 = TaktTenantCultureEntityScopeBase
+// 3 要工厂+不要语言 = TaktTenantPlantEntityScopeBase
+// 1 都要 = TaktTenantEntityScopeBase
 // ========================================
 
 /// <summary>
-/// 租户级隔离基类（无 Id）
-/// 仅包含租户隔离(TenantCode) + 区域文化(CultureCode),不包含公司隔离(CompanyCode)
+/// 租户组合 4 Scope：无关联工厂、无语言（TenantCode + 审计）
 /// </summary>
-public abstract class TaktTenantEntityScopeBase
+public abstract class TaktTenantCoreEntityScopeBase
 {
     /// <summary>
     /// 租户编码(第一层数据隔离)
     /// </summary>
     [SugarColumn(ColumnName = "tenant_code", ColumnDescription = "租户编码", ColumnDataType = "varchar", Length = 3, IsNullable = false, CreateTableFieldSort = 100)]
     public string TenantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；行戳记，创建时可由仓储按公司主档注入）
-    /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US", CreateTableFieldSort = 101)]
-    public string CultureCode { get; set; } = "en-US";
 
     /// <summary>
     /// 扩展字段
@@ -94,6 +92,42 @@ public abstract class TaktTenantEntityScopeBase
     public DateTime? DeletedAt { get; set; }
 }
 
+/// <summary>
+/// 租户组合 2 Scope：无关联工厂、有语言（CultureCode 默认 mul）
+/// </summary>
+public abstract class TaktTenantCultureEntityScopeBase : TaktTenantCoreEntityScopeBase
+{
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "mul", CreateTableFieldSort = 101)]
+    public string CultureCode { get; set; } = "mul";
+}
+
+/// <summary>
+/// 租户组合 3 Scope：有关联工厂、无语言
+/// </summary>
+public abstract class TaktTenantPlantEntityScopeBase : TaktTenantCoreEntityScopeBase, ITaktHasRelatedPlant
+{
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false, CreateTableFieldSort = -1)]
+    public string RelatedPlant { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 租户组合 1 Scope：有关联工厂、有语言（默认租户业务）
+/// </summary>
+public abstract class TaktTenantEntityScopeBase : TaktTenantCultureEntityScopeBase, ITaktHasRelatedPlant
+{
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    [SugarColumn(ColumnName = "related_plant", ColumnDescription = "关联工厂", ColumnDataType = "varchar", Length = 4, IsNullable = false, CreateTableFieldSort = -1)]
+    public string RelatedPlant { get; set; } = string.Empty;
+}
+
 // ========================================
 // 公司级隔离基类
 // ========================================
@@ -111,13 +145,13 @@ public abstract class TaktCompanyEntityScopeBase
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码(第二层数据隔离)
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     [SugarColumn(ColumnName = "company_code", ColumnDescription = "公司代码", ColumnDataType = "varchar", Length = 4, IsNullable = false, CreateTableFieldSort = 101)]
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，创建时由仓储注入，如 2300=zh-CN）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US", CreateTableFieldSort = 102)]
     public string CultureCode { get; set; } = "en-US";
@@ -197,13 +231,13 @@ public abstract class TaktApprovalEntityScopeBase
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码(第二层数据隔离)
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     [SugarColumn(ColumnName = "company_code", ColumnDescription = "公司代码", ColumnDataType = "varchar", Length = 4, IsNullable = false, CreateTableFieldSort = 101)]
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US", CreateTableFieldSort = 102)]
     public string CultureCode { get; set; } = "en-US";

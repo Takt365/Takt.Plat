@@ -17,15 +17,17 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 
 /// <summary>
 /// 公司实体
-/// 代表租户下的独立公司/工厂（租户级实体，只需要TenantCode）
+/// 代表租户下的独立公司（第二层数据隔离业务主档）
 /// 参照 SAP Company Code (BUKRS) 设计
+/// 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
 /// </summary>
 [SugarTable("takt_accounting_financial_company", "公司表")]
 [SugarIndex("ix_company_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_company_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_company_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, true)]
 public class TaktCompany : TaktTenantEntityBase
-{    /// <summary>
+{
+    /// <summary>
     /// 公司代码（唯一索引：租户内唯一，见 ix_company_code_unique）
     /// </summary>
     [SugarColumn(ColumnName = "company_code", ColumnDescription = "公司代码", ColumnDataType = "varchar", Length = 4, IsNullable = false)]

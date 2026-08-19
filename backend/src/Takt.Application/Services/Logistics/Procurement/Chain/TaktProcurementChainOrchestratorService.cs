@@ -90,7 +90,11 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         _approvalFlowSubmitService = approvalFlowSubmitService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 采购询价提交会签审批（方案一/二入口）
+    /// </summary>
+    /// <param name="inquiryId">询价主键</param>
+    /// <returns>异步任务</returns>
     public async Task SubmitPurchaseInquiryForCountersignAsync(long inquiryId)
     {
         EnsureThreeLayerContext();
@@ -107,7 +111,11 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         await SubmitCountersignAsync(countersignId);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 采购申请提交会签审批
+    /// </summary>
+    /// <param name="requestId">采购申请主键</param>
+    /// <returns>异步任务</returns>
     public async Task SubmitPurchaseRequestForCountersignAsync(long requestId)
     {
         EnsureThreeLayerContext();
@@ -129,7 +137,12 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         await PatchPurchaseRequestCountersignAsync(request.Id, countersignId);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 方案一：PR 会签通过后人工 PO 决策
+    /// </summary>
+    /// <param name="requestId">采购申请主键</param>
+    /// <param name="generatePo">true=生成 PO 后报销；false=暂不生成 PO 直接报销</param>
+    /// <returns>异步任务</returns>
     public async Task ApplyPurchaseRequestPoDecisionAsync(long requestId, bool generatePo)
     {
         EnsureThreeLayerContext();
@@ -169,7 +182,11 @@ public class TaktProcurementChainOrchestratorService : TaktServiceBase, ITaktPro
         await EnsureExpenseCountersignAndSubmitAsync(expenseId, inquiry);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 会签审批通过后按 BusinessType 分发下游
+    /// </summary>
+    /// <param name="context">审批回写上下文</param>
+    /// <returns>异步任务</returns>
     public async Task OnCountersignApprovedAsync(TaktApprovalFlowCompletedContext context)
     {
         ArgumentNullException.ThrowIfNull(context);

@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 菜单实体 代表系统菜单和权限（树形结构） 支持目录、菜单、按钮三种类型
  * 对应前端 TaktMenuDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Menu
  * @description 对应后端 TaktMenuDto
  */
-export interface Menu extends TenantDtoBase {
+export interface Menu extends TenantCoreDtoBase {
   /**
    * MenuID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */

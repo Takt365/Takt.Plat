@@ -453,7 +453,7 @@ export function findBrowserCultureInAvailableList(
 }
 
 /**
- * 从浏览器 navigator 读取候选区域文化编码（须在租户可选列表内）
+ * 从浏览器 navigator 读取候选 CultureCode（须在租户可选列表内）
  * @param availableCultureCodes 租户会话可选 CultureCode 列表
  * @returns 已规范为 TaktCultureCode 的候选列表
  */
@@ -587,7 +587,7 @@ export function getEchartsInitLocaleOption(cultureCode?: string): { locale: Takt
 
 /**
  * 同步第三方组件库语言（dayjs 全局 + ECharts 注册表）
- * @param cultureCode 区域文化编码（与 vue-i18n locale 一致）
+ * @param cultureCode 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
  */
 export function syncTaktComponentLocales(cultureCode: string): void {
   const normalized = resolveTaktCultureCode(cultureCode);

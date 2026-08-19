@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktGeneralMaterialService.cs
-// 创建时间：2026-08-05
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：全局物料应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
     }
 
     /// <summary>
-    /// 获取全局物料列表（分页）
+    /// 获取全局物料列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktGeneralMaterialDto>> GetGeneralMaterialListAsync(TaktGeneralMaterialQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktGeneralMaterialDto>.Create(
+                new List<TaktGeneralMaterialDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _generalMaterialRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -264,7 +272,15 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportGeneralMaterialAsync(TaktGeneralMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktGeneralMaterialQueryDto());
+        var queryDto = query ?? new TaktGeneralMaterialQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktGeneralMaterialExportDto>(),
+                sheetName ?? "全局物料数据",
+                fileName ?? "全局物料导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _generalMaterialRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -293,9 +309,9 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
     {
         var exp = Expressionable.Create<TaktGeneralMaterial>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.MaterialCode != null && x.MaterialCode.Contains(keywords))
                 || (x.CompleteMaintenanceStatus != null && x.CompleteMaintenanceStatus.Contains(keywords))
@@ -321,10 +337,7 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.IndustryStandardDescription != null && x.IndustryStandardDescription.Contains(keywords))
                 || (x.LaboratoryDesignOffice != null && x.LaboratoryDesignOffice.Contains(keywords))
                 || (x.PurchasingValueKey != null && x.PurchasingValueKey.Contains(keywords))
-                || SqlFunc.ToString(x.GrossWeight).Contains(keywords)
-                || SqlFunc.ToString(x.NetWeight).Contains(keywords)
                 || (x.WeightUnit != null && x.WeightUnit.Contains(keywords))
-                || SqlFunc.ToString(x.Volume).Contains(keywords)
                 || (x.VolumeUnit != null && x.VolumeUnit.Contains(keywords))
                 || (x.ContainerRequirements != null && x.ContainerRequirements.Contains(keywords))
                 || (x.StorageConditions != null && x.StorageConditions.Contains(keywords))
@@ -335,7 +348,6 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.Division != null && x.Division.Contains(keywords))
                 || (x.Competitor != null && x.Competitor.Contains(keywords))
                 || (x.EuropeanArticleNumberObsolete != null && x.EuropeanArticleNumberObsolete.Contains(keywords))
-                || SqlFunc.ToString(x.GrGiSlipQuantity).Contains(keywords)
                 || (x.ProcurementRule != null && x.ProcurementRule.Contains(keywords))
                 || (x.SourceOfSupply != null && x.SourceOfSupply.Contains(keywords))
                 || (x.SeasonCategory != null && x.SeasonCategory.Contains(keywords))
@@ -344,27 +356,18 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.DeactivatedField != null && x.DeactivatedField.Contains(keywords))
                 || (x.InternationalArticleNumber != null && x.InternationalArticleNumber.Contains(keywords))
                 || (x.EanCategory != null && x.EanCategory.Contains(keywords))
-                || SqlFunc.ToString(x.Length).Contains(keywords)
-                || SqlFunc.ToString(x.Width).Contains(keywords)
-                || SqlFunc.ToString(x.Height).Contains(keywords)
                 || (x.DimensionUnit != null && x.DimensionUnit.Contains(keywords))
                 || (x.ProductHierarchy != null && x.ProductHierarchy.Contains(keywords))
                 || (x.StockTransferNetChangeCosting != null && x.StockTransferNetChangeCosting.Contains(keywords))
                 || (x.CadIndicator != null && x.CadIndicator.Contains(keywords))
                 || (x.QmInProcurement != null && x.QmInProcurement.Contains(keywords))
-                || SqlFunc.ToString(x.AllowedPackagingWeight).Contains(keywords)
                 || (x.AllowedPackagingWeightUnit != null && x.AllowedPackagingWeightUnit.Contains(keywords))
-                || SqlFunc.ToString(x.AllowedPackagingVolume).Contains(keywords)
                 || (x.AllowedPackagingVolumeUnit != null && x.AllowedPackagingVolumeUnit.Contains(keywords))
-                || SqlFunc.ToString(x.ExcessWeightTolerance).Contains(keywords)
-                || SqlFunc.ToString(x.ExcessVolumeTolerance).Contains(keywords)
                 || (x.VariablePurchaseOrderUnit != null && x.VariablePurchaseOrderUnit.Contains(keywords))
                 || (x.RevisionLevelAssigned != null && x.RevisionLevelAssigned.Contains(keywords))
                 || (x.ConfigurableMaterial != null && x.ConfigurableMaterial.Contains(keywords))
                 || (x.BatchManagementRequired != null && x.BatchManagementRequired.Contains(keywords))
                 || (x.PackagingMaterialType != null && x.PackagingMaterialType.Contains(keywords))
-                || SqlFunc.ToString(x.MaximumLevelByVolume).Contains(keywords)
-                || SqlFunc.ToString(x.StackingFactor).Contains(keywords)
                 || (x.PackagingMaterialGroup != null && x.PackagingMaterialGroup.Contains(keywords))
                 || (x.AuthorizationGroup != null && x.AuthorizationGroup.Contains(keywords))
                 || (x.SeasonYear != null && x.SeasonYear.Contains(keywords))
@@ -380,14 +383,8 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.CrossDistributionChainStatus != null && x.CrossDistributionChainStatus.Contains(keywords))
                 || (x.TaxClassification != null && x.TaxClassification.Contains(keywords))
                 || (x.CatalogProfile != null && x.CatalogProfile.Contains(keywords))
-                || SqlFunc.ToString(x.MinimumRemainingShelfLife).Contains(keywords)
-                || SqlFunc.ToString(x.TotalShelfLife).Contains(keywords)
-                || SqlFunc.ToString(x.StoragePercentage).Contains(keywords)
                 || (x.ContentUnit != null && x.ContentUnit.Contains(keywords))
-                || SqlFunc.ToString(x.NetContents).Contains(keywords)
-                || SqlFunc.ToString(x.ComparisonPriceUnit).Contains(keywords)
                 || (x.LabelingMaterialGrouping != null && x.LabelingMaterialGrouping.Contains(keywords))
-                || SqlFunc.ToString(x.GrossContents).Contains(keywords)
                 || (x.QuantityConversionMethod != null && x.QuantityConversionMethod.Contains(keywords))
                 || (x.InternalObjectNumber != null && x.InternalObjectNumber.Contains(keywords))
                 || (x.EnvironmentallyRelevant != null && x.EnvironmentallyRelevant.Contains(keywords))
@@ -430,15 +427,9 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.HazardousSubstancesRelevant != null && x.HazardousSubstancesRelevant.Contains(keywords))
                 || (x.HandlingUnitType != null && x.HandlingUnitType.Contains(keywords))
                 || (x.VariableTareWeight != null && x.VariableTareWeight.Contains(keywords))
-                || SqlFunc.ToString(x.MaximumAllowedCapacity).Contains(keywords)
-                || SqlFunc.ToString(x.OvercapacityTolerance).Contains(keywords)
-                || SqlFunc.ToString(x.MaximumPackingLength).Contains(keywords)
-                || SqlFunc.ToString(x.MaximumPackingWidth).Contains(keywords)
-                || SqlFunc.ToString(x.MaximumPackingHeight).Contains(keywords)
                 || (x.MaximumPackingDimensionUnit != null && x.MaximumPackingDimensionUnit.Contains(keywords))
                 || (x.CountryOfOrigin != null && x.CountryOfOrigin.Contains(keywords))
                 || (x.MaterialFreightGroup != null && x.MaterialFreightGroup.Contains(keywords))
-                || SqlFunc.ToString(x.QuarantinePeriod).Contains(keywords)
                 || (x.QuarantinePeriodUnit != null && x.QuarantinePeriodUnit.Contains(keywords))
                 || (x.QualityInspectionGroup != null && x.QualityInspectionGroup.Contains(keywords))
                 || (x.SerialNumberProfile != null && x.SerialNumberProfile.Contains(keywords))
@@ -497,1098 +488,1278 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
                 || (x.FashionGrade != null && x.FashionGrade.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.ValidFromDate).Contains(keywords)
-                || SqlFunc.ToString(x.ValidToDate).Contains(keywords)
-                || SqlFunc.ToString(x.CrossPlantStatusValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.CrossDistributionStatusValidFrom).Contains(keywords)
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CompleteMaintenanceStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CompleteMaintenanceStatus))
         {
-            exp = exp.And(x => x.CompleteMaintenanceStatus != null && x.CompleteMaintenanceStatus.Contains(queryDto.CompleteMaintenanceStatus));
+            var completeMaintenanceStatus = queryDto.CompleteMaintenanceStatus;
+            exp = exp.And(x => x.CompleteMaintenanceStatus != null && x.CompleteMaintenanceStatus.Contains(completeMaintenanceStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaintenanceStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaintenanceStatus))
         {
-            exp = exp.And(x => x.MaintenanceStatus != null && x.MaintenanceStatus.Contains(queryDto.MaintenanceStatus));
+            var maintenanceStatus = queryDto.MaintenanceStatus;
+            exp = exp.And(x => x.MaintenanceStatus != null && x.MaintenanceStatus.Contains(maintenanceStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientDeletionFlag))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClientDeletionFlag))
         {
-            exp = exp.And(x => x.ClientDeletionFlag != null && x.ClientDeletionFlag.Contains(queryDto.ClientDeletionFlag));
+            var clientDeletionFlag = queryDto.ClientDeletionFlag;
+            exp = exp.And(x => x.ClientDeletionFlag != null && x.ClientDeletionFlag.Contains(clientDeletionFlag));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialType))
         {
-            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
+            var materialType = queryDto.MaterialType;
+            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(materialType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IndustrySector))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IndustrySector))
         {
-            exp = exp.And(x => x.IndustrySector != null && x.IndustrySector.Contains(queryDto.IndustrySector));
+            var industrySector = queryDto.IndustrySector;
+            exp = exp.And(x => x.IndustrySector != null && x.IndustrySector.Contains(industrySector));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroup))
         {
-            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(queryDto.MaterialGroup));
+            var materialGroup = queryDto.MaterialGroup;
+            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(materialGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OldMaterialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OldMaterialNumber))
         {
-            exp = exp.And(x => x.OldMaterialNumber != null && x.OldMaterialNumber.Contains(queryDto.OldMaterialNumber));
+            var oldMaterialNumber = queryDto.OldMaterialNumber;
+            exp = exp.And(x => x.OldMaterialNumber != null && x.OldMaterialNumber.Contains(oldMaterialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BaseUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BaseUnit))
         {
-            exp = exp.And(x => x.BaseUnit != null && x.BaseUnit.Contains(queryDto.BaseUnit));
+            var baseUnit = queryDto.BaseUnit;
+            exp = exp.And(x => x.BaseUnit != null && x.BaseUnit.Contains(baseUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OrderUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OrderUnit))
         {
-            exp = exp.And(x => x.OrderUnit != null && x.OrderUnit.Contains(queryDto.OrderUnit));
+            var orderUnit = queryDto.OrderUnit;
+            exp = exp.And(x => x.OrderUnit != null && x.OrderUnit.Contains(orderUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentNumber))
         {
-            exp = exp.And(x => x.DocumentNumber != null && x.DocumentNumber.Contains(queryDto.DocumentNumber));
+            var documentNumber = queryDto.DocumentNumber;
+            exp = exp.And(x => x.DocumentNumber != null && x.DocumentNumber.Contains(documentNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentType))
         {
-            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(queryDto.DocumentType));
+            var documentType = queryDto.DocumentType;
+            exp = exp.And(x => x.DocumentType != null && x.DocumentType.Contains(documentType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentVersion))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentVersion))
         {
-            exp = exp.And(x => x.DocumentVersion != null && x.DocumentVersion.Contains(queryDto.DocumentVersion));
+            var documentVersion = queryDto.DocumentVersion;
+            exp = exp.And(x => x.DocumentVersion != null && x.DocumentVersion.Contains(documentVersion));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentPageFormat))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentPageFormat))
         {
-            exp = exp.And(x => x.DocumentPageFormat != null && x.DocumentPageFormat.Contains(queryDto.DocumentPageFormat));
+            var documentPageFormat = queryDto.DocumentPageFormat;
+            exp = exp.And(x => x.DocumentPageFormat != null && x.DocumentPageFormat.Contains(documentPageFormat));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentChangeNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentChangeNumber))
         {
-            exp = exp.And(x => x.DocumentChangeNumber != null && x.DocumentChangeNumber.Contains(queryDto.DocumentChangeNumber));
+            var documentChangeNumber = queryDto.DocumentChangeNumber;
+            exp = exp.And(x => x.DocumentChangeNumber != null && x.DocumentChangeNumber.Contains(documentChangeNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentPageNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentPageNumber))
         {
-            exp = exp.And(x => x.DocumentPageNumber != null && x.DocumentPageNumber.Contains(queryDto.DocumentPageNumber));
+            var documentPageNumber = queryDto.DocumentPageNumber;
+            exp = exp.And(x => x.DocumentPageNumber != null && x.DocumentPageNumber.Contains(documentPageNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DocumentSheetCount))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DocumentSheetCount))
         {
-            exp = exp.And(x => x.DocumentSheetCount != null && x.DocumentSheetCount.Contains(queryDto.DocumentSheetCount));
+            var documentSheetCount = queryDto.DocumentSheetCount;
+            exp = exp.And(x => x.DocumentSheetCount != null && x.DocumentSheetCount.Contains(documentSheetCount));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionInspectionMemo))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductionInspectionMemo))
         {
-            exp = exp.And(x => x.ProductionInspectionMemo != null && x.ProductionInspectionMemo.Contains(queryDto.ProductionInspectionMemo));
+            var productionInspectionMemo = queryDto.ProductionInspectionMemo;
+            exp = exp.And(x => x.ProductionInspectionMemo != null && x.ProductionInspectionMemo.Contains(productionInspectionMemo));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductionMemoPageFormat))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductionMemoPageFormat))
         {
-            exp = exp.And(x => x.ProductionMemoPageFormat != null && x.ProductionMemoPageFormat.Contains(queryDto.ProductionMemoPageFormat));
+            var productionMemoPageFormat = queryDto.ProductionMemoPageFormat;
+            exp = exp.And(x => x.ProductionMemoPageFormat != null && x.ProductionMemoPageFormat.Contains(productionMemoPageFormat));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SizeDimensions))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SizeDimensions))
         {
-            exp = exp.And(x => x.SizeDimensions != null && x.SizeDimensions.Contains(queryDto.SizeDimensions));
+            var sizeDimensions = queryDto.SizeDimensions;
+            exp = exp.And(x => x.SizeDimensions != null && x.SizeDimensions.Contains(sizeDimensions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BasicMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BasicMaterial))
         {
-            exp = exp.And(x => x.BasicMaterial != null && x.BasicMaterial.Contains(queryDto.BasicMaterial));
+            var basicMaterial = queryDto.BasicMaterial;
+            exp = exp.And(x => x.BasicMaterial != null && x.BasicMaterial.Contains(basicMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IndustryStandardDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IndustryStandardDescription))
         {
-            exp = exp.And(x => x.IndustryStandardDescription != null && x.IndustryStandardDescription.Contains(queryDto.IndustryStandardDescription));
+            var industryStandardDescription = queryDto.IndustryStandardDescription;
+            exp = exp.And(x => x.IndustryStandardDescription != null && x.IndustryStandardDescription.Contains(industryStandardDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LaboratoryDesignOffice))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LaboratoryDesignOffice))
         {
-            exp = exp.And(x => x.LaboratoryDesignOffice != null && x.LaboratoryDesignOffice.Contains(queryDto.LaboratoryDesignOffice));
+            var laboratoryDesignOffice = queryDto.LaboratoryDesignOffice;
+            exp = exp.And(x => x.LaboratoryDesignOffice != null && x.LaboratoryDesignOffice.Contains(laboratoryDesignOffice));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PurchasingValueKey))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PurchasingValueKey))
         {
-            exp = exp.And(x => x.PurchasingValueKey != null && x.PurchasingValueKey.Contains(queryDto.PurchasingValueKey));
+            var purchasingValueKey = queryDto.PurchasingValueKey;
+            exp = exp.And(x => x.PurchasingValueKey != null && x.PurchasingValueKey.Contains(purchasingValueKey));
         }
 
         if (queryDto?.GrossWeight.HasValue == true)
         {
-            exp = exp.And(x => x.GrossWeight == queryDto.GrossWeight);
+            var grossWeight = queryDto.GrossWeight;
+            exp = exp.And(x => x.GrossWeight == grossWeight);
         }
 
         if (queryDto?.NetWeight.HasValue == true)
         {
-            exp = exp.And(x => x.NetWeight == queryDto.NetWeight);
+            var netWeight = queryDto.NetWeight;
+            exp = exp.And(x => x.NetWeight == netWeight);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WeightUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WeightUnit))
         {
-            exp = exp.And(x => x.WeightUnit != null && x.WeightUnit.Contains(queryDto.WeightUnit));
+            var weightUnit = queryDto.WeightUnit;
+            exp = exp.And(x => x.WeightUnit != null && x.WeightUnit.Contains(weightUnit));
         }
 
         if (queryDto?.Volume.HasValue == true)
         {
-            exp = exp.And(x => x.Volume == queryDto.Volume);
+            var volume = queryDto.Volume;
+            exp = exp.And(x => x.Volume == volume);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VolumeUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VolumeUnit))
         {
-            exp = exp.And(x => x.VolumeUnit != null && x.VolumeUnit.Contains(queryDto.VolumeUnit));
+            var volumeUnit = queryDto.VolumeUnit;
+            exp = exp.And(x => x.VolumeUnit != null && x.VolumeUnit.Contains(volumeUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContainerRequirements))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContainerRequirements))
         {
-            exp = exp.And(x => x.ContainerRequirements != null && x.ContainerRequirements.Contains(queryDto.ContainerRequirements));
+            var containerRequirements = queryDto.ContainerRequirements;
+            exp = exp.And(x => x.ContainerRequirements != null && x.ContainerRequirements.Contains(containerRequirements));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.StorageConditions))
+        if (!string.IsNullOrWhiteSpace(queryDto?.StorageConditions))
         {
-            exp = exp.And(x => x.StorageConditions != null && x.StorageConditions.Contains(queryDto.StorageConditions));
+            var storageConditions = queryDto.StorageConditions;
+            exp = exp.And(x => x.StorageConditions != null && x.StorageConditions.Contains(storageConditions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TemperatureConditions))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TemperatureConditions))
         {
-            exp = exp.And(x => x.TemperatureConditions != null && x.TemperatureConditions.Contains(queryDto.TemperatureConditions));
+            var temperatureConditions = queryDto.TemperatureConditions;
+            exp = exp.And(x => x.TemperatureConditions != null && x.TemperatureConditions.Contains(temperatureConditions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LowLevelCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LowLevelCode))
         {
-            exp = exp.And(x => x.LowLevelCode != null && x.LowLevelCode.Contains(queryDto.LowLevelCode));
+            var lowLevelCode = queryDto.LowLevelCode;
+            exp = exp.And(x => x.LowLevelCode != null && x.LowLevelCode.Contains(lowLevelCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TransportationGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TransportationGroup))
         {
-            exp = exp.And(x => x.TransportationGroup != null && x.TransportationGroup.Contains(queryDto.TransportationGroup));
+            var transportationGroup = queryDto.TransportationGroup;
+            exp = exp.And(x => x.TransportationGroup != null && x.TransportationGroup.Contains(transportationGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HazardousMaterialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HazardousMaterialNumber))
         {
-            exp = exp.And(x => x.HazardousMaterialNumber != null && x.HazardousMaterialNumber.Contains(queryDto.HazardousMaterialNumber));
+            var hazardousMaterialNumber = queryDto.HazardousMaterialNumber;
+            exp = exp.And(x => x.HazardousMaterialNumber != null && x.HazardousMaterialNumber.Contains(hazardousMaterialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Division))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Division))
         {
-            exp = exp.And(x => x.Division != null && x.Division.Contains(queryDto.Division));
+            var division = queryDto.Division;
+            exp = exp.And(x => x.Division != null && x.Division.Contains(division));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Competitor))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Competitor))
         {
-            exp = exp.And(x => x.Competitor != null && x.Competitor.Contains(queryDto.Competitor));
+            var competitor = queryDto.Competitor;
+            exp = exp.And(x => x.Competitor != null && x.Competitor.Contains(competitor));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EuropeanArticleNumberObsolete))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EuropeanArticleNumberObsolete))
         {
-            exp = exp.And(x => x.EuropeanArticleNumberObsolete != null && x.EuropeanArticleNumberObsolete.Contains(queryDto.EuropeanArticleNumberObsolete));
+            var europeanArticleNumberObsolete = queryDto.EuropeanArticleNumberObsolete;
+            exp = exp.And(x => x.EuropeanArticleNumberObsolete != null && x.EuropeanArticleNumberObsolete.Contains(europeanArticleNumberObsolete));
         }
 
         if (queryDto?.GrGiSlipQuantity.HasValue == true)
         {
-            exp = exp.And(x => x.GrGiSlipQuantity == queryDto.GrGiSlipQuantity);
+            var grGiSlipQuantity = queryDto.GrGiSlipQuantity;
+            exp = exp.And(x => x.GrGiSlipQuantity == grGiSlipQuantity);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProcurementRule))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProcurementRule))
         {
-            exp = exp.And(x => x.ProcurementRule != null && x.ProcurementRule.Contains(queryDto.ProcurementRule));
+            var procurementRule = queryDto.ProcurementRule;
+            exp = exp.And(x => x.ProcurementRule != null && x.ProcurementRule.Contains(procurementRule));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SourceOfSupply))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SourceOfSupply))
         {
-            exp = exp.And(x => x.SourceOfSupply != null && x.SourceOfSupply.Contains(queryDto.SourceOfSupply));
+            var sourceOfSupply = queryDto.SourceOfSupply;
+            exp = exp.And(x => x.SourceOfSupply != null && x.SourceOfSupply.Contains(sourceOfSupply));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonCategory))
         {
-            exp = exp.And(x => x.SeasonCategory != null && x.SeasonCategory.Contains(queryDto.SeasonCategory));
+            var seasonCategory = queryDto.SeasonCategory;
+            exp = exp.And(x => x.SeasonCategory != null && x.SeasonCategory.Contains(seasonCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LabelType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LabelType))
         {
-            exp = exp.And(x => x.LabelType != null && x.LabelType.Contains(queryDto.LabelType));
+            var labelType = queryDto.LabelType;
+            exp = exp.And(x => x.LabelType != null && x.LabelType.Contains(labelType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LabelForm))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LabelForm))
         {
-            exp = exp.And(x => x.LabelForm != null && x.LabelForm.Contains(queryDto.LabelForm));
+            var labelForm = queryDto.LabelForm;
+            exp = exp.And(x => x.LabelForm != null && x.LabelForm.Contains(labelForm));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeactivatedField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeactivatedField))
         {
-            exp = exp.And(x => x.DeactivatedField != null && x.DeactivatedField.Contains(queryDto.DeactivatedField));
+            var deactivatedField = queryDto.DeactivatedField;
+            exp = exp.And(x => x.DeactivatedField != null && x.DeactivatedField.Contains(deactivatedField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InternationalArticleNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InternationalArticleNumber))
         {
-            exp = exp.And(x => x.InternationalArticleNumber != null && x.InternationalArticleNumber.Contains(queryDto.InternationalArticleNumber));
+            var internationalArticleNumber = queryDto.InternationalArticleNumber;
+            exp = exp.And(x => x.InternationalArticleNumber != null && x.InternationalArticleNumber.Contains(internationalArticleNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EanCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EanCategory))
         {
-            exp = exp.And(x => x.EanCategory != null && x.EanCategory.Contains(queryDto.EanCategory));
+            var eanCategory = queryDto.EanCategory;
+            exp = exp.And(x => x.EanCategory != null && x.EanCategory.Contains(eanCategory));
         }
 
         if (queryDto?.Length.HasValue == true)
         {
-            exp = exp.And(x => x.Length == queryDto.Length);
+            var length = queryDto.Length;
+            exp = exp.And(x => x.Length == length);
         }
 
         if (queryDto?.Width.HasValue == true)
         {
-            exp = exp.And(x => x.Width == queryDto.Width);
+            var width = queryDto.Width;
+            exp = exp.And(x => x.Width == width);
         }
 
         if (queryDto?.Height.HasValue == true)
         {
-            exp = exp.And(x => x.Height == queryDto.Height);
+            var height = queryDto.Height;
+            exp = exp.And(x => x.Height == height);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DimensionUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DimensionUnit))
         {
-            exp = exp.And(x => x.DimensionUnit != null && x.DimensionUnit.Contains(queryDto.DimensionUnit));
+            var dimensionUnit = queryDto.DimensionUnit;
+            exp = exp.And(x => x.DimensionUnit != null && x.DimensionUnit.Contains(dimensionUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductHierarchy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductHierarchy))
         {
-            exp = exp.And(x => x.ProductHierarchy != null && x.ProductHierarchy.Contains(queryDto.ProductHierarchy));
+            var productHierarchy = queryDto.ProductHierarchy;
+            exp = exp.And(x => x.ProductHierarchy != null && x.ProductHierarchy.Contains(productHierarchy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.StockTransferNetChangeCosting))
+        if (!string.IsNullOrWhiteSpace(queryDto?.StockTransferNetChangeCosting))
         {
-            exp = exp.And(x => x.StockTransferNetChangeCosting != null && x.StockTransferNetChangeCosting.Contains(queryDto.StockTransferNetChangeCosting));
+            var stockTransferNetChangeCosting = queryDto.StockTransferNetChangeCosting;
+            exp = exp.And(x => x.StockTransferNetChangeCosting != null && x.StockTransferNetChangeCosting.Contains(stockTransferNetChangeCosting));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CadIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CadIndicator))
         {
-            exp = exp.And(x => x.CadIndicator != null && x.CadIndicator.Contains(queryDto.CadIndicator));
+            var cadIndicator = queryDto.CadIndicator;
+            exp = exp.And(x => x.CadIndicator != null && x.CadIndicator.Contains(cadIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QmInProcurement))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QmInProcurement))
         {
-            exp = exp.And(x => x.QmInProcurement != null && x.QmInProcurement.Contains(queryDto.QmInProcurement));
+            var qmInProcurement = queryDto.QmInProcurement;
+            exp = exp.And(x => x.QmInProcurement != null && x.QmInProcurement.Contains(qmInProcurement));
         }
 
         if (queryDto?.AllowedPackagingWeight.HasValue == true)
         {
-            exp = exp.And(x => x.AllowedPackagingWeight == queryDto.AllowedPackagingWeight);
+            var allowedPackagingWeight = queryDto.AllowedPackagingWeight;
+            exp = exp.And(x => x.AllowedPackagingWeight == allowedPackagingWeight);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AllowedPackagingWeightUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AllowedPackagingWeightUnit))
         {
-            exp = exp.And(x => x.AllowedPackagingWeightUnit != null && x.AllowedPackagingWeightUnit.Contains(queryDto.AllowedPackagingWeightUnit));
+            var allowedPackagingWeightUnit = queryDto.AllowedPackagingWeightUnit;
+            exp = exp.And(x => x.AllowedPackagingWeightUnit != null && x.AllowedPackagingWeightUnit.Contains(allowedPackagingWeightUnit));
         }
 
         if (queryDto?.AllowedPackagingVolume.HasValue == true)
         {
-            exp = exp.And(x => x.AllowedPackagingVolume == queryDto.AllowedPackagingVolume);
+            var allowedPackagingVolume = queryDto.AllowedPackagingVolume;
+            exp = exp.And(x => x.AllowedPackagingVolume == allowedPackagingVolume);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AllowedPackagingVolumeUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AllowedPackagingVolumeUnit))
         {
-            exp = exp.And(x => x.AllowedPackagingVolumeUnit != null && x.AllowedPackagingVolumeUnit.Contains(queryDto.AllowedPackagingVolumeUnit));
+            var allowedPackagingVolumeUnit = queryDto.AllowedPackagingVolumeUnit;
+            exp = exp.And(x => x.AllowedPackagingVolumeUnit != null && x.AllowedPackagingVolumeUnit.Contains(allowedPackagingVolumeUnit));
         }
 
         if (queryDto?.ExcessWeightTolerance.HasValue == true)
         {
-            exp = exp.And(x => x.ExcessWeightTolerance == queryDto.ExcessWeightTolerance);
+            var excessWeightTolerance = queryDto.ExcessWeightTolerance;
+            exp = exp.And(x => x.ExcessWeightTolerance == excessWeightTolerance);
         }
 
         if (queryDto?.ExcessVolumeTolerance.HasValue == true)
         {
-            exp = exp.And(x => x.ExcessVolumeTolerance == queryDto.ExcessVolumeTolerance);
+            var excessVolumeTolerance = queryDto.ExcessVolumeTolerance;
+            exp = exp.And(x => x.ExcessVolumeTolerance == excessVolumeTolerance);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariablePurchaseOrderUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariablePurchaseOrderUnit))
         {
-            exp = exp.And(x => x.VariablePurchaseOrderUnit != null && x.VariablePurchaseOrderUnit.Contains(queryDto.VariablePurchaseOrderUnit));
+            var variablePurchaseOrderUnit = queryDto.VariablePurchaseOrderUnit;
+            exp = exp.And(x => x.VariablePurchaseOrderUnit != null && x.VariablePurchaseOrderUnit.Contains(variablePurchaseOrderUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RevisionLevelAssigned))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RevisionLevelAssigned))
         {
-            exp = exp.And(x => x.RevisionLevelAssigned != null && x.RevisionLevelAssigned.Contains(queryDto.RevisionLevelAssigned));
+            var revisionLevelAssigned = queryDto.RevisionLevelAssigned;
+            exp = exp.And(x => x.RevisionLevelAssigned != null && x.RevisionLevelAssigned.Contains(revisionLevelAssigned));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ConfigurableMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ConfigurableMaterial))
         {
-            exp = exp.And(x => x.ConfigurableMaterial != null && x.ConfigurableMaterial.Contains(queryDto.ConfigurableMaterial));
+            var configurableMaterial = queryDto.ConfigurableMaterial;
+            exp = exp.And(x => x.ConfigurableMaterial != null && x.ConfigurableMaterial.Contains(configurableMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BatchManagementRequired))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BatchManagementRequired))
         {
-            exp = exp.And(x => x.BatchManagementRequired != null && x.BatchManagementRequired.Contains(queryDto.BatchManagementRequired));
+            var batchManagementRequired = queryDto.BatchManagementRequired;
+            exp = exp.And(x => x.BatchManagementRequired != null && x.BatchManagementRequired.Contains(batchManagementRequired));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PackagingMaterialType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PackagingMaterialType))
         {
-            exp = exp.And(x => x.PackagingMaterialType != null && x.PackagingMaterialType.Contains(queryDto.PackagingMaterialType));
+            var packagingMaterialType = queryDto.PackagingMaterialType;
+            exp = exp.And(x => x.PackagingMaterialType != null && x.PackagingMaterialType.Contains(packagingMaterialType));
         }
 
         if (queryDto?.MaximumLevelByVolume.HasValue == true)
         {
-            exp = exp.And(x => x.MaximumLevelByVolume == queryDto.MaximumLevelByVolume);
+            var maximumLevelByVolume = queryDto.MaximumLevelByVolume;
+            exp = exp.And(x => x.MaximumLevelByVolume == maximumLevelByVolume);
         }
 
         if (queryDto?.StackingFactor.HasValue == true)
         {
-            exp = exp.And(x => x.StackingFactor == queryDto.StackingFactor);
+            var stackingFactor = queryDto.StackingFactor;
+            exp = exp.And(x => x.StackingFactor == stackingFactor);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PackagingMaterialGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PackagingMaterialGroup))
         {
-            exp = exp.And(x => x.PackagingMaterialGroup != null && x.PackagingMaterialGroup.Contains(queryDto.PackagingMaterialGroup));
+            var packagingMaterialGroup = queryDto.PackagingMaterialGroup;
+            exp = exp.And(x => x.PackagingMaterialGroup != null && x.PackagingMaterialGroup.Contains(packagingMaterialGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AuthorizationGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AuthorizationGroup))
         {
-            exp = exp.And(x => x.AuthorizationGroup != null && x.AuthorizationGroup.Contains(queryDto.AuthorizationGroup));
+            var authorizationGroup = queryDto.AuthorizationGroup;
+            exp = exp.And(x => x.AuthorizationGroup != null && x.AuthorizationGroup.Contains(authorizationGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonYear))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonYear))
         {
-            exp = exp.And(x => x.SeasonYear != null && x.SeasonYear.Contains(queryDto.SeasonYear));
+            var seasonYear = queryDto.SeasonYear;
+            exp = exp.And(x => x.SeasonYear != null && x.SeasonYear.Contains(seasonYear));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PriceBandCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PriceBandCategory))
         {
-            exp = exp.And(x => x.PriceBandCategory != null && x.PriceBandCategory.Contains(queryDto.PriceBandCategory));
+            var priceBandCategory = queryDto.PriceBandCategory;
+            exp = exp.And(x => x.PriceBandCategory != null && x.PriceBandCategory.Contains(priceBandCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EmptiesBillOfMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EmptiesBillOfMaterial))
         {
-            exp = exp.And(x => x.EmptiesBillOfMaterial != null && x.EmptiesBillOfMaterial.Contains(queryDto.EmptiesBillOfMaterial));
+            var emptiesBillOfMaterial = queryDto.EmptiesBillOfMaterial;
+            exp = exp.And(x => x.EmptiesBillOfMaterial != null && x.EmptiesBillOfMaterial.Contains(emptiesBillOfMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExternalMaterialGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExternalMaterialGroup))
         {
-            exp = exp.And(x => x.ExternalMaterialGroup != null && x.ExternalMaterialGroup.Contains(queryDto.ExternalMaterialGroup));
+            var externalMaterialGroup = queryDto.ExternalMaterialGroup;
+            exp = exp.And(x => x.ExternalMaterialGroup != null && x.ExternalMaterialGroup.Contains(externalMaterialGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CrossPlantConfigurableMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CrossPlantConfigurableMaterial))
         {
-            exp = exp.And(x => x.CrossPlantConfigurableMaterial != null && x.CrossPlantConfigurableMaterial.Contains(queryDto.CrossPlantConfigurableMaterial));
+            var crossPlantConfigurableMaterial = queryDto.CrossPlantConfigurableMaterial;
+            exp = exp.And(x => x.CrossPlantConfigurableMaterial != null && x.CrossPlantConfigurableMaterial.Contains(crossPlantConfigurableMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCategory))
         {
-            exp = exp.And(x => x.MaterialCategory != null && x.MaterialCategory.Contains(queryDto.MaterialCategory));
+            var materialCategory = queryDto.MaterialCategory;
+            exp = exp.And(x => x.MaterialCategory != null && x.MaterialCategory.Contains(materialCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CoProductIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CoProductIndicator))
         {
-            exp = exp.And(x => x.CoProductIndicator != null && x.CoProductIndicator.Contains(queryDto.CoProductIndicator));
+            var coProductIndicator = queryDto.CoProductIndicator;
+            exp = exp.And(x => x.CoProductIndicator != null && x.CoProductIndicator.Contains(coProductIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FollowUpMaterialIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FollowUpMaterialIndicator))
         {
-            exp = exp.And(x => x.FollowUpMaterialIndicator != null && x.FollowUpMaterialIndicator.Contains(queryDto.FollowUpMaterialIndicator));
+            var followUpMaterialIndicator = queryDto.FollowUpMaterialIndicator;
+            exp = exp.And(x => x.FollowUpMaterialIndicator != null && x.FollowUpMaterialIndicator.Contains(followUpMaterialIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PricingReferenceMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PricingReferenceMaterial))
         {
-            exp = exp.And(x => x.PricingReferenceMaterial != null && x.PricingReferenceMaterial.Contains(queryDto.PricingReferenceMaterial));
+            var pricingReferenceMaterial = queryDto.PricingReferenceMaterial;
+            exp = exp.And(x => x.PricingReferenceMaterial != null && x.PricingReferenceMaterial.Contains(pricingReferenceMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CrossPlantMaterialStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CrossPlantMaterialStatus))
         {
-            exp = exp.And(x => x.CrossPlantMaterialStatus != null && x.CrossPlantMaterialStatus.Contains(queryDto.CrossPlantMaterialStatus));
+            var crossPlantMaterialStatus = queryDto.CrossPlantMaterialStatus;
+            exp = exp.And(x => x.CrossPlantMaterialStatus != null && x.CrossPlantMaterialStatus.Contains(crossPlantMaterialStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CrossDistributionChainStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CrossDistributionChainStatus))
         {
-            exp = exp.And(x => x.CrossDistributionChainStatus != null && x.CrossDistributionChainStatus.Contains(queryDto.CrossDistributionChainStatus));
+            var crossDistributionChainStatus = queryDto.CrossDistributionChainStatus;
+            exp = exp.And(x => x.CrossDistributionChainStatus != null && x.CrossDistributionChainStatus.Contains(crossDistributionChainStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TaxClassification))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TaxClassification))
         {
-            exp = exp.And(x => x.TaxClassification != null && x.TaxClassification.Contains(queryDto.TaxClassification));
+            var taxClassification = queryDto.TaxClassification;
+            exp = exp.And(x => x.TaxClassification != null && x.TaxClassification.Contains(taxClassification));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CatalogProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CatalogProfile))
         {
-            exp = exp.And(x => x.CatalogProfile != null && x.CatalogProfile.Contains(queryDto.CatalogProfile));
+            var catalogProfile = queryDto.CatalogProfile;
+            exp = exp.And(x => x.CatalogProfile != null && x.CatalogProfile.Contains(catalogProfile));
         }
 
         if (queryDto?.MinimumRemainingShelfLife.HasValue == true)
         {
-            exp = exp.And(x => x.MinimumRemainingShelfLife == queryDto.MinimumRemainingShelfLife);
+            var minimumRemainingShelfLife = queryDto.MinimumRemainingShelfLife;
+            exp = exp.And(x => x.MinimumRemainingShelfLife == minimumRemainingShelfLife);
         }
 
         if (queryDto?.TotalShelfLife.HasValue == true)
         {
-            exp = exp.And(x => x.TotalShelfLife == queryDto.TotalShelfLife);
+            var totalShelfLife = queryDto.TotalShelfLife;
+            exp = exp.And(x => x.TotalShelfLife == totalShelfLife);
         }
 
         if (queryDto?.StoragePercentage.HasValue == true)
         {
-            exp = exp.And(x => x.StoragePercentage == queryDto.StoragePercentage);
+            var storagePercentage = queryDto.StoragePercentage;
+            exp = exp.And(x => x.StoragePercentage == storagePercentage);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ContentUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ContentUnit))
         {
-            exp = exp.And(x => x.ContentUnit != null && x.ContentUnit.Contains(queryDto.ContentUnit));
+            var contentUnit = queryDto.ContentUnit;
+            exp = exp.And(x => x.ContentUnit != null && x.ContentUnit.Contains(contentUnit));
         }
 
         if (queryDto?.NetContents.HasValue == true)
         {
-            exp = exp.And(x => x.NetContents == queryDto.NetContents);
+            var netContents = queryDto.NetContents;
+            exp = exp.And(x => x.NetContents == netContents);
         }
 
         if (queryDto?.ComparisonPriceUnit.HasValue == true)
         {
-            exp = exp.And(x => x.ComparisonPriceUnit == queryDto.ComparisonPriceUnit);
+            var comparisonPriceUnit = queryDto.ComparisonPriceUnit;
+            exp = exp.And(x => x.ComparisonPriceUnit == comparisonPriceUnit);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LabelingMaterialGrouping))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LabelingMaterialGrouping))
         {
-            exp = exp.And(x => x.LabelingMaterialGrouping != null && x.LabelingMaterialGrouping.Contains(queryDto.LabelingMaterialGrouping));
+            var labelingMaterialGrouping = queryDto.LabelingMaterialGrouping;
+            exp = exp.And(x => x.LabelingMaterialGrouping != null && x.LabelingMaterialGrouping.Contains(labelingMaterialGrouping));
         }
 
         if (queryDto?.GrossContents.HasValue == true)
         {
-            exp = exp.And(x => x.GrossContents == queryDto.GrossContents);
+            var grossContents = queryDto.GrossContents;
+            exp = exp.And(x => x.GrossContents == grossContents);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QuantityConversionMethod))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QuantityConversionMethod))
         {
-            exp = exp.And(x => x.QuantityConversionMethod != null && x.QuantityConversionMethod.Contains(queryDto.QuantityConversionMethod));
+            var quantityConversionMethod = queryDto.QuantityConversionMethod;
+            exp = exp.And(x => x.QuantityConversionMethod != null && x.QuantityConversionMethod.Contains(quantityConversionMethod));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InternalObjectNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InternalObjectNumber))
         {
-            exp = exp.And(x => x.InternalObjectNumber != null && x.InternalObjectNumber.Contains(queryDto.InternalObjectNumber));
+            var internalObjectNumber = queryDto.InternalObjectNumber;
+            exp = exp.And(x => x.InternalObjectNumber != null && x.InternalObjectNumber.Contains(internalObjectNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EnvironmentallyRelevant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EnvironmentallyRelevant))
         {
-            exp = exp.And(x => x.EnvironmentallyRelevant != null && x.EnvironmentallyRelevant.Contains(queryDto.EnvironmentallyRelevant));
+            var environmentallyRelevant = queryDto.EnvironmentallyRelevant;
+            exp = exp.And(x => x.EnvironmentallyRelevant != null && x.EnvironmentallyRelevant.Contains(environmentallyRelevant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductAllocationProcedure))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductAllocationProcedure))
         {
-            exp = exp.And(x => x.ProductAllocationProcedure != null && x.ProductAllocationProcedure.Contains(queryDto.ProductAllocationProcedure));
+            var productAllocationProcedure = queryDto.ProductAllocationProcedure;
+            exp = exp.And(x => x.ProductAllocationProcedure != null && x.ProductAllocationProcedure.Contains(productAllocationProcedure));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariantPricingProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariantPricingProfile))
         {
-            exp = exp.And(x => x.VariantPricingProfile != null && x.VariantPricingProfile.Contains(queryDto.VariantPricingProfile));
+            var variantPricingProfile = queryDto.VariantPricingProfile;
+            exp = exp.And(x => x.VariantPricingProfile != null && x.VariantPricingProfile.Contains(variantPricingProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DiscountInKind))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DiscountInKind))
         {
-            exp = exp.And(x => x.DiscountInKind != null && x.DiscountInKind.Contains(queryDto.DiscountInKind));
+            var discountInKind = queryDto.DiscountInKind;
+            exp = exp.And(x => x.DiscountInKind != null && x.DiscountInKind.Contains(discountInKind));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerPartNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManufacturerPartNumber))
         {
-            exp = exp.And(x => x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(queryDto.ManufacturerPartNumber));
+            var manufacturerPartNumber = queryDto.ManufacturerPartNumber;
+            exp = exp.And(x => x.ManufacturerPartNumber != null && x.ManufacturerPartNumber.Contains(manufacturerPartNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManufacturerNumber))
         {
-            exp = exp.And(x => x.ManufacturerNumber != null && x.ManufacturerNumber.Contains(queryDto.ManufacturerNumber));
+            var manufacturerNumber = queryDto.ManufacturerNumber;
+            exp = exp.And(x => x.ManufacturerNumber != null && x.ManufacturerNumber.Contains(manufacturerNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InventoryManagedMaterialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InventoryManagedMaterialNumber))
         {
-            exp = exp.And(x => x.InventoryManagedMaterialNumber != null && x.InventoryManagedMaterialNumber.Contains(queryDto.InventoryManagedMaterialNumber));
+            var inventoryManagedMaterialNumber = queryDto.InventoryManagedMaterialNumber;
+            exp = exp.And(x => x.InventoryManagedMaterialNumber != null && x.InventoryManagedMaterialNumber.Contains(inventoryManagedMaterialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ManufacturerPartProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ManufacturerPartProfile))
         {
-            exp = exp.And(x => x.ManufacturerPartProfile != null && x.ManufacturerPartProfile.Contains(queryDto.ManufacturerPartProfile));
+            var manufacturerPartProfile = queryDto.ManufacturerPartProfile;
+            exp = exp.And(x => x.ManufacturerPartProfile != null && x.ManufacturerPartProfile.Contains(manufacturerPartProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.UnitsOfMeasureUsage))
+        if (!string.IsNullOrWhiteSpace(queryDto?.UnitsOfMeasureUsage))
         {
-            exp = exp.And(x => x.UnitsOfMeasureUsage != null && x.UnitsOfMeasureUsage.Contains(queryDto.UnitsOfMeasureUsage));
+            var unitsOfMeasureUsage = queryDto.UnitsOfMeasureUsage;
+            exp = exp.And(x => x.UnitsOfMeasureUsage != null && x.UnitsOfMeasureUsage.Contains(unitsOfMeasureUsage));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonRollout))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonRollout))
         {
-            exp = exp.And(x => x.SeasonRollout != null && x.SeasonRollout.Contains(queryDto.SeasonRollout));
+            var seasonRollout = queryDto.SeasonRollout;
+            exp = exp.And(x => x.SeasonRollout != null && x.SeasonRollout.Contains(seasonRollout));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DangerousGoodsProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DangerousGoodsProfile))
         {
-            exp = exp.And(x => x.DangerousGoodsProfile != null && x.DangerousGoodsProfile.Contains(queryDto.DangerousGoodsProfile));
+            var dangerousGoodsProfile = queryDto.DangerousGoodsProfile;
+            exp = exp.And(x => x.DangerousGoodsProfile != null && x.DangerousGoodsProfile.Contains(dangerousGoodsProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HighlyViscous))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HighlyViscous))
         {
-            exp = exp.And(x => x.HighlyViscous != null && x.HighlyViscous.Contains(queryDto.HighlyViscous));
+            var highlyViscous = queryDto.HighlyViscous;
+            exp = exp.And(x => x.HighlyViscous != null && x.HighlyViscous.Contains(highlyViscous));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InBulkLiquid))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InBulkLiquid))
         {
-            exp = exp.And(x => x.InBulkLiquid != null && x.InBulkLiquid.Contains(queryDto.InBulkLiquid));
+            var inBulkLiquid = queryDto.InBulkLiquid;
+            exp = exp.And(x => x.InBulkLiquid != null && x.InBulkLiquid.Contains(inBulkLiquid));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNumberExplicitness))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SerialNumberExplicitness))
         {
-            exp = exp.And(x => x.SerialNumberExplicitness != null && x.SerialNumberExplicitness.Contains(queryDto.SerialNumberExplicitness));
+            var serialNumberExplicitness = queryDto.SerialNumberExplicitness;
+            exp = exp.And(x => x.SerialNumberExplicitness != null && x.SerialNumberExplicitness.Contains(serialNumberExplicitness));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClosedPackaging))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClosedPackaging))
         {
-            exp = exp.And(x => x.ClosedPackaging != null && x.ClosedPackaging.Contains(queryDto.ClosedPackaging));
+            var closedPackaging = queryDto.ClosedPackaging;
+            exp = exp.And(x => x.ClosedPackaging != null && x.ClosedPackaging.Contains(closedPackaging));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ApprovedBatchRecordRequired))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ApprovedBatchRecordRequired))
         {
-            exp = exp.And(x => x.ApprovedBatchRecordRequired != null && x.ApprovedBatchRecordRequired.Contains(queryDto.ApprovedBatchRecordRequired));
+            var approvedBatchRecordRequired = queryDto.ApprovedBatchRecordRequired;
+            exp = exp.And(x => x.ApprovedBatchRecordRequired != null && x.ApprovedBatchRecordRequired.Contains(approvedBatchRecordRequired));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EffectivityParameterOverride))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EffectivityParameterOverride))
         {
-            exp = exp.And(x => x.EffectivityParameterOverride != null && x.EffectivityParameterOverride.Contains(queryDto.EffectivityParameterOverride));
+            var effectivityParameterOverride = queryDto.EffectivityParameterOverride;
+            exp = exp.And(x => x.EffectivityParameterOverride != null && x.EffectivityParameterOverride.Contains(effectivityParameterOverride));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCompletionLevel))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCompletionLevel))
         {
-            exp = exp.And(x => x.MaterialCompletionLevel != null && x.MaterialCompletionLevel.Contains(queryDto.MaterialCompletionLevel));
+            var materialCompletionLevel = queryDto.MaterialCompletionLevel;
+            exp = exp.And(x => x.MaterialCompletionLevel != null && x.MaterialCompletionLevel.Contains(materialCompletionLevel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShelfLifePeriodIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShelfLifePeriodIndicator))
         {
-            exp = exp.And(x => x.ShelfLifePeriodIndicator != null && x.ShelfLifePeriodIndicator.Contains(queryDto.ShelfLifePeriodIndicator));
+            var shelfLifePeriodIndicator = queryDto.ShelfLifePeriodIndicator;
+            exp = exp.And(x => x.ShelfLifePeriodIndicator != null && x.ShelfLifePeriodIndicator.Contains(shelfLifePeriodIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ShelfLifeRoundingRule))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ShelfLifeRoundingRule))
         {
-            exp = exp.And(x => x.ShelfLifeRoundingRule != null && x.ShelfLifeRoundingRule.Contains(queryDto.ShelfLifeRoundingRule));
+            var shelfLifeRoundingRule = queryDto.ShelfLifeRoundingRule;
+            exp = exp.And(x => x.ShelfLifeRoundingRule != null && x.ShelfLifeRoundingRule.Contains(shelfLifeRoundingRule));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ProductCompositionOnPackaging))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ProductCompositionOnPackaging))
         {
-            exp = exp.And(x => x.ProductCompositionOnPackaging != null && x.ProductCompositionOnPackaging.Contains(queryDto.ProductCompositionOnPackaging));
+            var productCompositionOnPackaging = queryDto.ProductCompositionOnPackaging;
+            exp = exp.And(x => x.ProductCompositionOnPackaging != null && x.ProductCompositionOnPackaging.Contains(productCompositionOnPackaging));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GeneralItemCategoryGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GeneralItemCategoryGroup))
         {
-            exp = exp.And(x => x.GeneralItemCategoryGroup != null && x.GeneralItemCategoryGroup.Contains(queryDto.GeneralItemCategoryGroup));
+            var generalItemCategoryGroup = queryDto.GeneralItemCategoryGroup;
+            exp = exp.And(x => x.GeneralItemCategoryGroup != null && x.GeneralItemCategoryGroup.Contains(generalItemCategoryGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LogisticalVariants))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LogisticalVariants))
         {
-            exp = exp.And(x => x.LogisticalVariants != null && x.LogisticalVariants.Contains(queryDto.LogisticalVariants));
+            var logisticalVariants = queryDto.LogisticalVariants;
+            exp = exp.And(x => x.LogisticalVariants != null && x.LogisticalVariants.Contains(logisticalVariants));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialLocked))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialLocked))
         {
-            exp = exp.And(x => x.MaterialLocked != null && x.MaterialLocked.Contains(queryDto.MaterialLocked));
+            var materialLocked = queryDto.MaterialLocked;
+            exp = exp.And(x => x.MaterialLocked != null && x.MaterialLocked.Contains(materialLocked));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ConfigurationManagementRelevant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ConfigurationManagementRelevant))
         {
-            exp = exp.And(x => x.ConfigurationManagementRelevant != null && x.ConfigurationManagementRelevant.Contains(queryDto.ConfigurationManagementRelevant));
+            var configurationManagementRelevant = queryDto.ConfigurationManagementRelevant;
+            exp = exp.And(x => x.ConfigurationManagementRelevant != null && x.ConfigurationManagementRelevant.Contains(configurationManagementRelevant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AssortmentListType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AssortmentListType))
         {
-            exp = exp.And(x => x.AssortmentListType != null && x.AssortmentListType.Contains(queryDto.AssortmentListType));
+            var assortmentListType = queryDto.AssortmentListType;
+            exp = exp.And(x => x.AssortmentListType != null && x.AssortmentListType.Contains(assortmentListType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ExpirationDateType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExpirationDateType))
         {
-            exp = exp.And(x => x.ExpirationDateType != null && x.ExpirationDateType.Contains(queryDto.ExpirationDateType));
+            var expirationDateType = queryDto.ExpirationDateType;
+            exp = exp.And(x => x.ExpirationDateType != null && x.ExpirationDateType.Contains(expirationDateType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GtinVariant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GtinVariant))
         {
-            exp = exp.And(x => x.GtinVariant != null && x.GtinVariant.Contains(queryDto.GtinVariant));
+            var gtinVariant = queryDto.GtinVariant;
+            exp = exp.And(x => x.GtinVariant != null && x.GtinVariant.Contains(gtinVariant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenericMaterialNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenericMaterialNumber))
         {
-            exp = exp.And(x => x.GenericMaterialNumber != null && x.GenericMaterialNumber.Contains(queryDto.GenericMaterialNumber));
+            var genericMaterialNumber = queryDto.GenericMaterialNumber;
+            exp = exp.And(x => x.GenericMaterialNumber != null && x.GenericMaterialNumber.Contains(genericMaterialNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SamePackingReferenceMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SamePackingReferenceMaterial))
         {
-            exp = exp.And(x => x.SamePackingReferenceMaterial != null && x.SamePackingReferenceMaterial.Contains(queryDto.SamePackingReferenceMaterial));
+            var samePackingReferenceMaterial = queryDto.SamePackingReferenceMaterial;
+            exp = exp.And(x => x.SamePackingReferenceMaterial != null && x.SamePackingReferenceMaterial.Contains(samePackingReferenceMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GlobalDataSyncRelevant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GlobalDataSyncRelevant))
         {
-            exp = exp.And(x => x.GlobalDataSyncRelevant != null && x.GlobalDataSyncRelevant.Contains(queryDto.GlobalDataSyncRelevant));
+            var globalDataSyncRelevant = queryDto.GlobalDataSyncRelevant;
+            exp = exp.And(x => x.GlobalDataSyncRelevant != null && x.GlobalDataSyncRelevant.Contains(globalDataSyncRelevant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AcceptanceAtOrigin))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AcceptanceAtOrigin))
         {
-            exp = exp.And(x => x.AcceptanceAtOrigin != null && x.AcceptanceAtOrigin.Contains(queryDto.AcceptanceAtOrigin));
+            var acceptanceAtOrigin = queryDto.AcceptanceAtOrigin;
+            exp = exp.And(x => x.AcceptanceAtOrigin != null && x.AcceptanceAtOrigin.Contains(acceptanceAtOrigin));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.StandardHuType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.StandardHuType))
         {
-            exp = exp.And(x => x.StandardHuType != null && x.StandardHuType.Contains(queryDto.StandardHuType));
+            var standardHuType = queryDto.StandardHuType;
+            exp = exp.And(x => x.StandardHuType != null && x.StandardHuType.Contains(standardHuType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Pilferable))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Pilferable))
         {
-            exp = exp.And(x => x.Pilferable != null && x.Pilferable.Contains(queryDto.Pilferable));
+            var pilferable = queryDto.Pilferable;
+            exp = exp.And(x => x.Pilferable != null && x.Pilferable.Contains(pilferable));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseStorageCondition))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseStorageCondition))
         {
-            exp = exp.And(x => x.WarehouseStorageCondition != null && x.WarehouseStorageCondition.Contains(queryDto.WarehouseStorageCondition));
+            var warehouseStorageCondition = queryDto.WarehouseStorageCondition;
+            exp = exp.And(x => x.WarehouseStorageCondition != null && x.WarehouseStorageCondition.Contains(warehouseStorageCondition));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.WarehouseMaterialGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.WarehouseMaterialGroup))
         {
-            exp = exp.And(x => x.WarehouseMaterialGroup != null && x.WarehouseMaterialGroup.Contains(queryDto.WarehouseMaterialGroup));
+            var warehouseMaterialGroup = queryDto.WarehouseMaterialGroup;
+            exp = exp.And(x => x.WarehouseMaterialGroup != null && x.WarehouseMaterialGroup.Contains(warehouseMaterialGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HandlingIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlingIndicator))
         {
-            exp = exp.And(x => x.HandlingIndicator != null && x.HandlingIndicator.Contains(queryDto.HandlingIndicator));
+            var handlingIndicator = queryDto.HandlingIndicator;
+            exp = exp.And(x => x.HandlingIndicator != null && x.HandlingIndicator.Contains(handlingIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HazardousSubstancesRelevant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HazardousSubstancesRelevant))
         {
-            exp = exp.And(x => x.HazardousSubstancesRelevant != null && x.HazardousSubstancesRelevant.Contains(queryDto.HazardousSubstancesRelevant));
+            var hazardousSubstancesRelevant = queryDto.HazardousSubstancesRelevant;
+            exp = exp.And(x => x.HazardousSubstancesRelevant != null && x.HazardousSubstancesRelevant.Contains(hazardousSubstancesRelevant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.HandlingUnitType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.HandlingUnitType))
         {
-            exp = exp.And(x => x.HandlingUnitType != null && x.HandlingUnitType.Contains(queryDto.HandlingUnitType));
+            var handlingUnitType = queryDto.HandlingUnitType;
+            exp = exp.And(x => x.HandlingUnitType != null && x.HandlingUnitType.Contains(handlingUnitType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariableTareWeight))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariableTareWeight))
         {
-            exp = exp.And(x => x.VariableTareWeight != null && x.VariableTareWeight.Contains(queryDto.VariableTareWeight));
+            var variableTareWeight = queryDto.VariableTareWeight;
+            exp = exp.And(x => x.VariableTareWeight != null && x.VariableTareWeight.Contains(variableTareWeight));
         }
 
         if (queryDto?.MaximumAllowedCapacity.HasValue == true)
         {
-            exp = exp.And(x => x.MaximumAllowedCapacity == queryDto.MaximumAllowedCapacity);
+            var maximumAllowedCapacity = queryDto.MaximumAllowedCapacity;
+            exp = exp.And(x => x.MaximumAllowedCapacity == maximumAllowedCapacity);
         }
 
         if (queryDto?.OvercapacityTolerance.HasValue == true)
         {
-            exp = exp.And(x => x.OvercapacityTolerance == queryDto.OvercapacityTolerance);
+            var overcapacityTolerance = queryDto.OvercapacityTolerance;
+            exp = exp.And(x => x.OvercapacityTolerance == overcapacityTolerance);
         }
 
         if (queryDto?.MaximumPackingLength.HasValue == true)
         {
-            exp = exp.And(x => x.MaximumPackingLength == queryDto.MaximumPackingLength);
+            var maximumPackingLength = queryDto.MaximumPackingLength;
+            exp = exp.And(x => x.MaximumPackingLength == maximumPackingLength);
         }
 
         if (queryDto?.MaximumPackingWidth.HasValue == true)
         {
-            exp = exp.And(x => x.MaximumPackingWidth == queryDto.MaximumPackingWidth);
+            var maximumPackingWidth = queryDto.MaximumPackingWidth;
+            exp = exp.And(x => x.MaximumPackingWidth == maximumPackingWidth);
         }
 
         if (queryDto?.MaximumPackingHeight.HasValue == true)
         {
-            exp = exp.And(x => x.MaximumPackingHeight == queryDto.MaximumPackingHeight);
+            var maximumPackingHeight = queryDto.MaximumPackingHeight;
+            exp = exp.And(x => x.MaximumPackingHeight == maximumPackingHeight);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaximumPackingDimensionUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaximumPackingDimensionUnit))
         {
-            exp = exp.And(x => x.MaximumPackingDimensionUnit != null && x.MaximumPackingDimensionUnit.Contains(queryDto.MaximumPackingDimensionUnit));
+            var maximumPackingDimensionUnit = queryDto.MaximumPackingDimensionUnit;
+            exp = exp.And(x => x.MaximumPackingDimensionUnit != null && x.MaximumPackingDimensionUnit.Contains(maximumPackingDimensionUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CountryOfOrigin))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountryOfOrigin))
         {
-            exp = exp.And(x => x.CountryOfOrigin != null && x.CountryOfOrigin.Contains(queryDto.CountryOfOrigin));
+            var countryOfOrigin = queryDto.CountryOfOrigin;
+            exp = exp.And(x => x.CountryOfOrigin != null && x.CountryOfOrigin.Contains(countryOfOrigin));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialFreightGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialFreightGroup))
         {
-            exp = exp.And(x => x.MaterialFreightGroup != null && x.MaterialFreightGroup.Contains(queryDto.MaterialFreightGroup));
+            var materialFreightGroup = queryDto.MaterialFreightGroup;
+            exp = exp.And(x => x.MaterialFreightGroup != null && x.MaterialFreightGroup.Contains(materialFreightGroup));
         }
 
         if (queryDto?.QuarantinePeriod.HasValue == true)
         {
-            exp = exp.And(x => x.QuarantinePeriod == queryDto.QuarantinePeriod);
+            var quarantinePeriod = queryDto.QuarantinePeriod;
+            exp = exp.And(x => x.QuarantinePeriod == quarantinePeriod);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QuarantinePeriodUnit))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QuarantinePeriodUnit))
         {
-            exp = exp.And(x => x.QuarantinePeriodUnit != null && x.QuarantinePeriodUnit.Contains(queryDto.QuarantinePeriodUnit));
+            var quarantinePeriodUnit = queryDto.QuarantinePeriodUnit;
+            exp = exp.And(x => x.QuarantinePeriodUnit != null && x.QuarantinePeriodUnit.Contains(quarantinePeriodUnit));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.QualityInspectionGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.QualityInspectionGroup))
         {
-            exp = exp.And(x => x.QualityInspectionGroup != null && x.QualityInspectionGroup.Contains(queryDto.QualityInspectionGroup));
+            var qualityInspectionGroup = queryDto.QualityInspectionGroup;
+            exp = exp.And(x => x.QualityInspectionGroup != null && x.QualityInspectionGroup.Contains(qualityInspectionGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SerialNumberProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SerialNumberProfile))
         {
-            exp = exp.And(x => x.SerialNumberProfile != null && x.SerialNumberProfile.Contains(queryDto.SerialNumberProfile));
+            var serialNumberProfile = queryDto.SerialNumberProfile;
+            exp = exp.And(x => x.SerialNumberProfile != null && x.SerialNumberProfile.Contains(serialNumberProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FormName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FormName))
         {
-            exp = exp.And(x => x.FormName != null && x.FormName.Contains(queryDto.FormName));
+            var formName = queryDto.FormName;
+            exp = exp.And(x => x.FormName != null && x.FormName.Contains(formName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.LogisticsUnitOfMeasure))
+        if (!string.IsNullOrWhiteSpace(queryDto?.LogisticsUnitOfMeasure))
         {
-            exp = exp.And(x => x.LogisticsUnitOfMeasure != null && x.LogisticsUnitOfMeasure.Contains(queryDto.LogisticsUnitOfMeasure));
+            var logisticsUnitOfMeasure = queryDto.LogisticsUnitOfMeasure;
+            exp = exp.And(x => x.LogisticsUnitOfMeasure != null && x.LogisticsUnitOfMeasure.Contains(logisticsUnitOfMeasure));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CatchWeightMaterial))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CatchWeightMaterial))
         {
-            exp = exp.And(x => x.CatchWeightMaterial != null && x.CatchWeightMaterial.Contains(queryDto.CatchWeightMaterial));
+            var catchWeightMaterial = queryDto.CatchWeightMaterial;
+            exp = exp.And(x => x.CatchWeightMaterial != null && x.CatchWeightMaterial.Contains(catchWeightMaterial));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CatchWeightProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CatchWeightProfile))
         {
-            exp = exp.And(x => x.CatchWeightProfile != null && x.CatchWeightProfile.Contains(queryDto.CatchWeightProfile));
+            var catchWeightProfile = queryDto.CatchWeightProfile;
+            exp = exp.And(x => x.CatchWeightProfile != null && x.CatchWeightProfile.Contains(catchWeightProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CatchWeightToleranceGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CatchWeightToleranceGroup))
         {
-            exp = exp.And(x => x.CatchWeightToleranceGroup != null && x.CatchWeightToleranceGroup.Contains(queryDto.CatchWeightToleranceGroup));
+            var catchWeightToleranceGroup = queryDto.CatchWeightToleranceGroup;
+            exp = exp.And(x => x.CatchWeightToleranceGroup != null && x.CatchWeightToleranceGroup.Contains(catchWeightToleranceGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AdjustmentProfile))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AdjustmentProfile))
         {
-            exp = exp.And(x => x.AdjustmentProfile != null && x.AdjustmentProfile.Contains(queryDto.AdjustmentProfile));
+            var adjustmentProfile = queryDto.AdjustmentProfile;
+            exp = exp.And(x => x.AdjustmentProfile != null && x.AdjustmentProfile.Contains(adjustmentProfile));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IntellectualPropertyId))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IntellectualPropertyId))
         {
-            exp = exp.And(x => x.IntellectualPropertyId != null && x.IntellectualPropertyId.Contains(queryDto.IntellectualPropertyId));
+            var intellectualPropertyId = queryDto.IntellectualPropertyId;
+            exp = exp.And(x => x.IntellectualPropertyId != null && x.IntellectualPropertyId.Contains(intellectualPropertyId));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.VariantPriceAllowed))
+        if (!string.IsNullOrWhiteSpace(queryDto?.VariantPriceAllowed))
         {
-            exp = exp.And(x => x.VariantPriceAllowed != null && x.VariantPriceAllowed.Contains(queryDto.VariantPriceAllowed));
+            var variantPriceAllowed = queryDto.VariantPriceAllowed;
+            exp = exp.And(x => x.VariantPriceAllowed != null && x.VariantPriceAllowed.Contains(variantPriceAllowed));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Medium))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Medium))
         {
-            exp = exp.And(x => x.Medium != null && x.Medium.Contains(queryDto.Medium));
+            var medium = queryDto.Medium;
+            exp = exp.And(x => x.Medium != null && x.Medium.Contains(medium));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PhysicalCommodity))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PhysicalCommodity))
         {
-            exp = exp.And(x => x.PhysicalCommodity != null && x.PhysicalCommodity.Contains(queryDto.PhysicalCommodity));
+            var physicalCommodity = queryDto.PhysicalCommodity;
+            exp = exp.And(x => x.PhysicalCommodity != null && x.PhysicalCommodity.Contains(physicalCommodity));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AnimalOrigin))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AnimalOrigin))
         {
-            exp = exp.And(x => x.AnimalOrigin != null && x.AnimalOrigin.Contains(queryDto.AnimalOrigin));
+            var animalOrigin = queryDto.AnimalOrigin;
+            exp = exp.And(x => x.AnimalOrigin != null && x.AnimalOrigin.Contains(animalOrigin));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TextileCompositionFunction))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TextileCompositionFunction))
         {
-            exp = exp.And(x => x.TextileCompositionFunction != null && x.TextileCompositionFunction.Contains(queryDto.TextileCompositionFunction));
+            var textileCompositionFunction = queryDto.TextileCompositionFunction;
+            exp = exp.And(x => x.TextileCompositionFunction != null && x.TextileCompositionFunction.Contains(textileCompositionFunction));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SegmentationStructure))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SegmentationStructure))
         {
-            exp = exp.And(x => x.SegmentationStructure != null && x.SegmentationStructure.Contains(queryDto.SegmentationStructure));
+            var segmentationStructure = queryDto.SegmentationStructure;
+            exp = exp.And(x => x.SegmentationStructure != null && x.SegmentationStructure.Contains(segmentationStructure));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SegmentationStrategy))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SegmentationStrategy))
         {
-            exp = exp.And(x => x.SegmentationStrategy != null && x.SegmentationStrategy.Contains(queryDto.SegmentationStrategy));
+            var segmentationStrategy = queryDto.SegmentationStrategy;
+            exp = exp.And(x => x.SegmentationStrategy != null && x.SegmentationStrategy.Contains(segmentationStrategy));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SegmentationStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SegmentationStatus))
         {
-            exp = exp.And(x => x.SegmentationStatus != null && x.SegmentationStatus.Contains(queryDto.SegmentationStatus));
+            var segmentationStatus = queryDto.SegmentationStatus;
+            exp = exp.And(x => x.SegmentationStatus != null && x.SegmentationStatus.Contains(segmentationStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SegmentationScope))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SegmentationScope))
         {
-            exp = exp.And(x => x.SegmentationScope != null && x.SegmentationScope.Contains(queryDto.SegmentationScope));
+            var segmentationScope = queryDto.SegmentationScope;
+            exp = exp.And(x => x.SegmentationScope != null && x.SegmentationScope.Contains(segmentationScope));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SegmentationRelevant))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SegmentationRelevant))
         {
-            exp = exp.And(x => x.SegmentationRelevant != null && x.SegmentationRelevant.Contains(queryDto.SegmentationRelevant));
+            var segmentationRelevant = queryDto.SegmentationRelevant;
+            exp = exp.And(x => x.SegmentationRelevant != null && x.SegmentationRelevant.Contains(segmentationRelevant));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AnpCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AnpCode))
         {
-            exp = exp.And(x => x.AnpCode != null && x.AnpCode.Contains(queryDto.AnpCode));
+            var anpCode = queryDto.AnpCode;
+            exp = exp.And(x => x.AnpCode != null && x.AnpCode.Contains(anpCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FashionAttribute1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FashionAttribute1))
         {
-            exp = exp.And(x => x.FashionAttribute1 != null && x.FashionAttribute1.Contains(queryDto.FashionAttribute1));
+            var fashionAttribute1 = queryDto.FashionAttribute1;
+            exp = exp.And(x => x.FashionAttribute1 != null && x.FashionAttribute1.Contains(fashionAttribute1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FashionAttribute2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FashionAttribute2))
         {
-            exp = exp.And(x => x.FashionAttribute2 != null && x.FashionAttribute2.Contains(queryDto.FashionAttribute2));
+            var fashionAttribute2 = queryDto.FashionAttribute2;
+            exp = exp.And(x => x.FashionAttribute2 != null && x.FashionAttribute2.Contains(fashionAttribute2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FashionAttribute3))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FashionAttribute3))
         {
-            exp = exp.And(x => x.FashionAttribute3 != null && x.FashionAttribute3.Contains(queryDto.FashionAttribute3));
+            var fashionAttribute3 = queryDto.FashionAttribute3;
+            exp = exp.And(x => x.FashionAttribute3 != null && x.FashionAttribute3.Contains(fashionAttribute3));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonUsageIndicator))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonUsageIndicator))
         {
-            exp = exp.And(x => x.SeasonUsageIndicator != null && x.SeasonUsageIndicator.Contains(queryDto.SeasonUsageIndicator));
+            var seasonUsageIndicator = queryDto.SeasonUsageIndicator;
+            exp = exp.And(x => x.SeasonUsageIndicator != null && x.SeasonUsageIndicator.Contains(seasonUsageIndicator));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonActiveInInventory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonActiveInInventory))
         {
-            exp = exp.And(x => x.SeasonActiveInInventory != null && x.SeasonActiveInInventory.Contains(queryDto.SeasonActiveInInventory));
+            var seasonActiveInInventory = queryDto.SeasonActiveInInventory;
+            exp = exp.And(x => x.SeasonActiveInInventory != null && x.SeasonActiveInInventory.Contains(seasonActiveInInventory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CharacteristicConversionId))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CharacteristicConversionId))
         {
-            exp = exp.And(x => x.CharacteristicConversionId != null && x.CharacteristicConversionId.Contains(queryDto.CharacteristicConversionId));
+            var characteristicConversionId = queryDto.CharacteristicConversionId;
+            exp = exp.And(x => x.CharacteristicConversionId != null && x.CharacteristicConversionId.Contains(characteristicConversionId));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PackagingCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PackagingCode))
         {
-            exp = exp.And(x => x.PackagingCode != null && x.PackagingCode.Contains(queryDto.PackagingCode));
+            var packagingCode = queryDto.PackagingCode;
+            exp = exp.And(x => x.PackagingCode != null && x.PackagingCode.Contains(packagingCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DangerousGoodsPackagingStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DangerousGoodsPackagingStatus))
         {
-            exp = exp.And(x => x.DangerousGoodsPackagingStatus != null && x.DangerousGoodsPackagingStatus.Contains(queryDto.DangerousGoodsPackagingStatus));
+            var dangerousGoodsPackagingStatus = queryDto.DangerousGoodsPackagingStatus;
+            exp = exp.And(x => x.DangerousGoodsPackagingStatus != null && x.DangerousGoodsPackagingStatus.Contains(dangerousGoodsPackagingStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialConditionManagement))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialConditionManagement))
         {
-            exp = exp.And(x => x.MaterialConditionManagement != null && x.MaterialConditionManagement.Contains(queryDto.MaterialConditionManagement));
+            var materialConditionManagement = queryDto.MaterialConditionManagement;
+            exp = exp.And(x => x.MaterialConditionManagement != null && x.MaterialConditionManagement.Contains(materialConditionManagement));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReturnCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReturnCode))
         {
-            exp = exp.And(x => x.ReturnCode != null && x.ReturnCode.Contains(queryDto.ReturnCode));
+            var returnCode = queryDto.ReturnCode;
+            exp = exp.And(x => x.ReturnCode != null && x.ReturnCode.Contains(returnCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ReturnToLogisticsLevel))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ReturnToLogisticsLevel))
         {
-            exp = exp.And(x => x.ReturnToLogisticsLevel != null && x.ReturnToLogisticsLevel.Contains(queryDto.ReturnToLogisticsLevel));
+            var returnToLogisticsLevel = queryDto.ReturnToLogisticsLevel;
+            exp = exp.And(x => x.ReturnToLogisticsLevel != null && x.ReturnToLogisticsLevel.Contains(returnToLogisticsLevel));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NatoItemIdentificationNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NatoItemIdentificationNumber))
         {
-            exp = exp.And(x => x.NatoItemIdentificationNumber != null && x.NatoItemIdentificationNumber.Contains(queryDto.NatoItemIdentificationNumber));
+            var natoItemIdentificationNumber = queryDto.NatoItemIdentificationNumber;
+            exp = exp.And(x => x.NatoItemIdentificationNumber != null && x.NatoItemIdentificationNumber.Contains(natoItemIdentificationNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FffClass))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FffClass))
         {
-            exp = exp.And(x => x.FffClass != null && x.FffClass.Contains(queryDto.FffClass));
+            var fffClass = queryDto.FffClass;
+            exp = exp.And(x => x.FffClass != null && x.FffClass.Contains(fffClass));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SupersessionChainNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SupersessionChainNumber))
         {
-            exp = exp.And(x => x.SupersessionChainNumber != null && x.SupersessionChainNumber.Contains(queryDto.SupersessionChainNumber));
+            var supersessionChainNumber = queryDto.SupersessionChainNumber;
+            exp = exp.And(x => x.SupersessionChainNumber != null && x.SupersessionChainNumber.Contains(supersessionChainNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SeasonalProcurementCreationStatus))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SeasonalProcurementCreationStatus))
         {
-            exp = exp.And(x => x.SeasonalProcurementCreationStatus != null && x.SeasonalProcurementCreationStatus.Contains(queryDto.SeasonalProcurementCreationStatus));
+            var seasonalProcurementCreationStatus = queryDto.SeasonalProcurementCreationStatus;
+            exp = exp.And(x => x.SeasonalProcurementCreationStatus != null && x.SeasonalProcurementCreationStatus.Contains(seasonalProcurementCreationStatus));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ColorCharacteristicInternalNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ColorCharacteristicInternalNumber))
         {
-            exp = exp.And(x => x.ColorCharacteristicInternalNumber != null && x.ColorCharacteristicInternalNumber.Contains(queryDto.ColorCharacteristicInternalNumber));
+            var colorCharacteristicInternalNumber = queryDto.ColorCharacteristicInternalNumber;
+            exp = exp.And(x => x.ColorCharacteristicInternalNumber != null && x.ColorCharacteristicInternalNumber.Contains(colorCharacteristicInternalNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MainSizeCharacteristicInternalNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MainSizeCharacteristicInternalNumber))
         {
-            exp = exp.And(x => x.MainSizeCharacteristicInternalNumber != null && x.MainSizeCharacteristicInternalNumber.Contains(queryDto.MainSizeCharacteristicInternalNumber));
+            var mainSizeCharacteristicInternalNumber = queryDto.MainSizeCharacteristicInternalNumber;
+            exp = exp.And(x => x.MainSizeCharacteristicInternalNumber != null && x.MainSizeCharacteristicInternalNumber.Contains(mainSizeCharacteristicInternalNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SecondSizeCharacteristicInternalNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SecondSizeCharacteristicInternalNumber))
         {
-            exp = exp.And(x => x.SecondSizeCharacteristicInternalNumber != null && x.SecondSizeCharacteristicInternalNumber.Contains(queryDto.SecondSizeCharacteristicInternalNumber));
+            var secondSizeCharacteristicInternalNumber = queryDto.SecondSizeCharacteristicInternalNumber;
+            exp = exp.And(x => x.SecondSizeCharacteristicInternalNumber != null && x.SecondSizeCharacteristicInternalNumber.Contains(secondSizeCharacteristicInternalNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Color))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Color))
         {
-            exp = exp.And(x => x.Color != null && x.Color.Contains(queryDto.Color));
+            var color = queryDto.Color;
+            exp = exp.And(x => x.Color != null && x.Color.Contains(color));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MainSize))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MainSize))
         {
-            exp = exp.And(x => x.MainSize != null && x.MainSize.Contains(queryDto.MainSize));
+            var mainSize = queryDto.MainSize;
+            exp = exp.And(x => x.MainSize != null && x.MainSize.Contains(mainSize));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SecondSize))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SecondSize))
         {
-            exp = exp.And(x => x.SecondSize != null && x.SecondSize.Contains(queryDto.SecondSize));
+            var secondSize = queryDto.SecondSize;
+            exp = exp.And(x => x.SecondSize != null && x.SecondSize.Contains(secondSize));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EvaluationCharacteristicValue))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EvaluationCharacteristicValue))
         {
-            exp = exp.And(x => x.EvaluationCharacteristicValue != null && x.EvaluationCharacteristicValue.Contains(queryDto.EvaluationCharacteristicValue));
+            var evaluationCharacteristicValue = queryDto.EvaluationCharacteristicValue;
+            exp = exp.And(x => x.EvaluationCharacteristicValue != null && x.EvaluationCharacteristicValue.Contains(evaluationCharacteristicValue));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CareCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CareCode))
         {
-            exp = exp.And(x => x.CareCode != null && x.CareCode.Contains(queryDto.CareCode));
+            var careCode = queryDto.CareCode;
+            exp = exp.And(x => x.CareCode != null && x.CareCode.Contains(careCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BrandId))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BrandId))
         {
-            exp = exp.And(x => x.BrandId != null && x.BrandId.Contains(queryDto.BrandId));
+            var brandId = queryDto.BrandId;
+            exp = exp.And(x => x.BrandId != null && x.BrandId.Contains(brandId));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberCode1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberCode1))
         {
-            exp = exp.And(x => x.FiberCode1 != null && x.FiberCode1.Contains(queryDto.FiberCode1));
+            var fiberCode1 = queryDto.FiberCode1;
+            exp = exp.And(x => x.FiberCode1 != null && x.FiberCode1.Contains(fiberCode1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberPart1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberPart1))
         {
-            exp = exp.And(x => x.FiberPart1 != null && x.FiberPart1.Contains(queryDto.FiberPart1));
+            var fiberPart1 = queryDto.FiberPart1;
+            exp = exp.And(x => x.FiberPart1 != null && x.FiberPart1.Contains(fiberPart1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberCode2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberCode2))
         {
-            exp = exp.And(x => x.FiberCode2 != null && x.FiberCode2.Contains(queryDto.FiberCode2));
+            var fiberCode2 = queryDto.FiberCode2;
+            exp = exp.And(x => x.FiberCode2 != null && x.FiberCode2.Contains(fiberCode2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberPart2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberPart2))
         {
-            exp = exp.And(x => x.FiberPart2 != null && x.FiberPart2.Contains(queryDto.FiberPart2));
+            var fiberPart2 = queryDto.FiberPart2;
+            exp = exp.And(x => x.FiberPart2 != null && x.FiberPart2.Contains(fiberPart2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberCode3))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberCode3))
         {
-            exp = exp.And(x => x.FiberCode3 != null && x.FiberCode3.Contains(queryDto.FiberCode3));
+            var fiberCode3 = queryDto.FiberCode3;
+            exp = exp.And(x => x.FiberCode3 != null && x.FiberCode3.Contains(fiberCode3));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberPart3))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberPart3))
         {
-            exp = exp.And(x => x.FiberPart3 != null && x.FiberPart3.Contains(queryDto.FiberPart3));
+            var fiberPart3 = queryDto.FiberPart3;
+            exp = exp.And(x => x.FiberPart3 != null && x.FiberPart3.Contains(fiberPart3));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberCode4))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberCode4))
         {
-            exp = exp.And(x => x.FiberCode4 != null && x.FiberCode4.Contains(queryDto.FiberCode4));
+            var fiberCode4 = queryDto.FiberCode4;
+            exp = exp.And(x => x.FiberCode4 != null && x.FiberCode4.Contains(fiberCode4));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberPart4))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberPart4))
         {
-            exp = exp.And(x => x.FiberPart4 != null && x.FiberPart4.Contains(queryDto.FiberPart4));
+            var fiberPart4 = queryDto.FiberPart4;
+            exp = exp.And(x => x.FiberPart4 != null && x.FiberPart4.Contains(fiberPart4));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberCode5))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberCode5))
         {
-            exp = exp.And(x => x.FiberCode5 != null && x.FiberCode5.Contains(queryDto.FiberCode5));
+            var fiberCode5 = queryDto.FiberCode5;
+            exp = exp.And(x => x.FiberCode5 != null && x.FiberCode5.Contains(fiberCode5));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FiberPart5))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FiberPart5))
         {
-            exp = exp.And(x => x.FiberPart5 != null && x.FiberPart5.Contains(queryDto.FiberPart5));
+            var fiberPart5 = queryDto.FiberPart5;
+            exp = exp.And(x => x.FiberPart5 != null && x.FiberPart5.Contains(fiberPart5));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FashionGrade))
+        if (!string.IsNullOrWhiteSpace(queryDto?.FashionGrade))
         {
-            exp = exp.And(x => x.FashionGrade != null && x.FashionGrade.Contains(queryDto.FashionGrade));
-        }
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var fashionGrade = queryDto.FashionGrade;
+            exp = exp.And(x => x.FashionGrade != null && x.FashionGrade.Contains(fashionGrade));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
         }
 
-        var rangeStart = queryDto?.ValidFromDateStart;
-        var rangeEnd = queryDto?.ValidFromDateEnd;
-        if (!rangeStart.HasValue && !rangeEnd.HasValue && !HasFiltersBesidesDefaultListScope(queryDto))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
         {
-            var monthBounds = GetCurrentMonthRangeBounds();
-            rangeStart = monthBounds.Start;
-            rangeEnd = monthBounds.End;
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
-        if (rangeStart.HasValue)
+        if (queryDto?.ValidFromDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFromDate >= rangeStart.Value);
+            var validFromDateStart = queryDto.ValidFromDateStart;
+            exp = exp.And(x => x.ValidFromDate >= validFromDateStart);
         }
 
-        if (rangeEnd.HasValue)
+        if (queryDto?.ValidFromDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidFromDate <= rangeEnd.Value);
+            var validFromDateEnd = queryDto.ValidFromDateEnd;
+            exp = exp.And(x => x.ValidFromDate <= validFromDateEnd);
         }
 
         if (queryDto?.ValidToDateStart.HasValue == true)
         {
-            exp = exp.And(x => x.ValidToDate >= queryDto.ValidToDateStart);
+            var validToDateStart = queryDto.ValidToDateStart;
+            exp = exp.And(x => x.ValidToDate >= validToDateStart);
         }
 
         if (queryDto?.ValidToDateEnd.HasValue == true)
         {
-            exp = exp.And(x => x.ValidToDate <= queryDto.ValidToDateEnd);
+            var validToDateEnd = queryDto.ValidToDateEnd;
+            exp = exp.And(x => x.ValidToDate <= validToDateEnd);
         }
 
         if (queryDto?.CrossPlantStatusValidFromStart.HasValue == true)
         {
-            exp = exp.And(x => x.CrossPlantStatusValidFrom >= queryDto.CrossPlantStatusValidFromStart);
+            var crossPlantStatusValidFromStart = queryDto.CrossPlantStatusValidFromStart;
+            exp = exp.And(x => x.CrossPlantStatusValidFrom >= crossPlantStatusValidFromStart);
         }
 
         if (queryDto?.CrossPlantStatusValidFromEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CrossPlantStatusValidFrom <= queryDto.CrossPlantStatusValidFromEnd);
+            var crossPlantStatusValidFromEnd = queryDto.CrossPlantStatusValidFromEnd;
+            exp = exp.And(x => x.CrossPlantStatusValidFrom <= crossPlantStatusValidFromEnd);
         }
 
         if (queryDto?.CrossDistributionStatusValidFromStart.HasValue == true)
         {
-            exp = exp.And(x => x.CrossDistributionStatusValidFrom >= queryDto.CrossDistributionStatusValidFromStart);
+            var crossDistributionStatusValidFromStart = queryDto.CrossDistributionStatusValidFromStart;
+            exp = exp.And(x => x.CrossDistributionStatusValidFrom >= crossDistributionStatusValidFromStart);
         }
 
         if (queryDto?.CrossDistributionStatusValidFromEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CrossDistributionStatusValidFrom <= queryDto.CrossDistributionStatusValidFromEnd);
+            var crossDistributionStatusValidFromEnd = queryDto.CrossDistributionStatusValidFromEnd;
+            exp = exp.And(x => x.CrossDistributionStatusValidFrom <= crossDistributionStatusValidFromEnd);
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
     }
 
     /// <summary>
-    /// 当前自然月起止（含月末最后一刻），用于列表无参默认过滤、避免全表扫描
-    /// </summary>
-    /// <returns>起、止</returns>
-    private static (DateTime Start, DateTime End) GetCurrentMonthRangeBounds()
-    {
-        var today = DateTime.Today;
-        var start = new DateTime(today.Year, today.Month, 1);
-        var end = start.AddMonths(1).AddTicks(-1);
-        return (start, end);
-    }
-    /// <summary>
-    /// 是否存在除默认当前月/当前期间外的查询条件（有参则不强制默认范围）
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
-    /// <returns>有其它条件为 true</returns>
-    private static bool HasFiltersBesidesDefaultListScope(TaktGeneralMaterialQueryDto? queryDto)
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktGeneralMaterialQueryDto? queryDto)
     {
         if (queryDto == null)
         {
@@ -2395,6 +2566,10 @@ public class TaktGeneralMaterialService : TaktServiceBase, ITaktGeneralMaterialS
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.ValidFromDateStart.HasValue || queryDto.ValidFromDateEnd.HasValue)
         {
             return true;
         }

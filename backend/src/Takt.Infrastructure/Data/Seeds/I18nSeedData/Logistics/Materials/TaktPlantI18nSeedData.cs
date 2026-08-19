@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPlantI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPlant 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -496,13 +496,13 @@ public class TaktPlantI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.plant.factorycalendar", "zh-HK", "工厂日历_hk", "工厂日历"),
 
             // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "en-US", "关联公司_us", "关联公司（选项 TaktCompanies/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.plant.relatedcompany", "en-US", "关联公司_us", "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）"),
             // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "ja-JP", "关联公司_jp", "关联公司（选项 TaktCompanies/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.plant.relatedcompany", "ja-JP", "关联公司_jp", "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）"),
             // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "zh-CN", "关联公司", "关联公司（选项 TaktCompanies/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.plant.relatedcompany", "zh-CN", "关联公司", "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）"),
             // entity.plant.relatedcompany
-            new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司_hk", "关联公司（选项 TaktCompanies/options；DictValue=Id）"),
+            new TranslationSeedItem("entity.plant.relatedcompany", "zh-HK", "关联公司_hk", "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）"),
 
             // entity.plant.sortorder
             new TranslationSeedItem("entity.plant.sortorder", "en-US", "排序号_us", "排序号（越小越靠前）"),

@@ -1,6 +1,8 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -10,7 +12,7 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- 源表 / 目标表：同名 + 列与实体一致（TaktPurchasePrice / Item / ScaleQuantity / ScaleValue）
 -- {{SourceDatabase}}.dbo.takt_logistics_procurement_purchase_price* → 当前租户库同名表
 -- 业务唯一键：CompanyCode + PlantCode + PurchasePriceCode（与租户库唯一索引对齐）
--- company_code / plant_code 取自源表；源 company 为空时回退 {{CompanyCode}}；完整同步（无公司白名单）
+-- company_code / plant_code 取自源表（主表/明细/数量等级/价值等级各自表均有 plant_code；源=目标列一致）；tenant/company/plant/culture 取自源表本列；空值丢弃，不回退任务参数
 -- 源/目标币种列与实体一致：scale_currency_code / condition_currency_code
 
 IF OBJECT_ID('tempdb..#hdr') IS NOT NULL DROP TABLE #hdr;
@@ -25,6 +27,7 @@ IF OBJECT_ID('tempdb..#sv_delta') IS NOT NULL DROP TABLE #sv_delta;
 CREATE TABLE #hdr (
   [rn] INT, [id] BIGINT,
   [company_code] NVARCHAR(4),
+  [tenant_code] NVARCHAR(3), [culture_code] NVARCHAR(5),
   [plant_code] NVARCHAR(4), [purchase_price_code] NVARCHAR(20), [price_type] NVARCHAR(4),
   [supplier_code] NVARCHAR(40), [material_code] NVARCHAR(40), [material_description] NVARCHAR(40),
   [purchase_group] NVARCHAR(3), [tax_code] NVARCHAR(4),
@@ -36,7 +39,7 @@ CREATE TABLE #hdr (
 
 CREATE TABLE #item (
   [rn] INT, [id] BIGINT, [purchase_price_id] BIGINT,
-  [company_code] NVARCHAR(4),
+  [company_code] NVARCHAR(4), [plant_code] NVARCHAR(4), [tenant_code] NVARCHAR(3), [culture_code] NVARCHAR(5),
   [purchase_price_code] NVARCHAR(20), [purchase_price_seq] INT, [price_type] NVARCHAR(4),
   [scale_type] NVARCHAR(1), [scale_basis] NVARCHAR(1),
   [scale_quantity] DECIMAL(18,4), [scale_unit] NVARCHAR(5),
@@ -50,7 +53,7 @@ CREATE TABLE #item (
 
 CREATE TABLE #sq (
   [rn] INT, [id] BIGINT, [purchase_price_item_id] BIGINT,
-  [company_code] NVARCHAR(4),
+  [company_code] NVARCHAR(4), [plant_code] NVARCHAR(4), [tenant_code] NVARCHAR(3), [culture_code] NVARCHAR(5),
   [purchase_price_code] NVARCHAR(20), [purchase_price_seq] INT, [purchase_scale_seq] INT,
   [scale_quantity] DECIMAL(18,4), [price] DECIMAL(18,5),
   [untaxed_price] DECIMAL(18,5), [tax_included_price] DECIMAL(18,5), [tax_amount] DECIMAL(18,5), [is_obsolete] INT,
@@ -59,7 +62,7 @@ CREATE TABLE #sq (
 
 CREATE TABLE #sv (
   [rn] INT, [id] BIGINT, [purchase_price_item_id] BIGINT,
-  [company_code] NVARCHAR(4),
+  [company_code] NVARCHAR(4), [plant_code] NVARCHAR(4), [tenant_code] NVARCHAR(3), [culture_code] NVARCHAR(5),
   [purchase_price_code] NVARCHAR(20), [purchase_price_seq] INT, [purchase_scale_seq] INT,
   [scale_value] DECIMAL(18,5), [price] DECIMAL(18,5),
   [untaxed_price] DECIMAL(18,5), [tax_included_price] DECIMAL(18,5), [tax_amount] DECIMAL(18,5), [is_obsolete] INT,
@@ -74,6 +77,7 @@ CREATE TABLE #sv_delta (rn INT, oper_type NVARCHAR(10), id BIGINT, price_code NV
 INSERT INTO #hdr
 SELECT S.rn, @base_id + S.rn,
   S.[company_code],
+  S.[tenant_code], S.[culture_code],
   S.[plant_code], S.[purchase_price_code], S.[price_type], S.[supplier_code], S.[material_code], S.[material_description],
   S.[purchase_group], S.[tax_code],
   S.[gr_based_invoice_inspection], S.[pricing_date_control],
@@ -84,13 +88,12 @@ FROM (
     ROW_NUMBER() OVER (ORDER BY N.[company_code], N.[plant_code], N.[purchase_price_code]) AS rn
   FROM (
     SELECT
-      ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      ) AS [company_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
       LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
       LTRIM(RTRIM(R.[purchase_price_code])) AS [purchase_price_code],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[price_type])), N''), N'PB00') AS [price_type],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[price_type])), N''), N'') AS [price_type],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[supplier_code])), N''), N'') AS [supplier_code],
       CASE
         WHEN LEN(LTRIM(RTRIM(R.[material_code]))) = 18
@@ -111,10 +114,7 @@ FROM (
       CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
       ROW_NUMBER() OVER (
         PARTITION BY
-          ISNULL(
-            NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-            @company_code
-          ),
+          LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
           LTRIM(RTRIM(R.[plant_code])),
           LTRIM(RTRIM(R.[purchase_price_code]))
         ORDER BY LEN(ISNULL(LTRIM(RTRIM(R.[material_code])), N'')) DESC
@@ -122,6 +122,9 @@ FROM (
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price] R
     WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
   ) N
   WHERE N.dup_rn = 1
 ) S
@@ -153,7 +156,7 @@ END;
 
 INSERT INTO #item
 SELECT S.rn, @base_id + 1000000000 + S.rn, 0,
-  S.[company_code],
+  S.[company_code], S.[plant_code], S.[tenant_code], S.[culture_code],
   S.[purchase_price_code], S.[purchase_price_seq], S.[price_type],
   S.[scale_type], S.[scale_basis], S.[scale_quantity], S.[scale_unit],
   S.[scale_value], S.[scale_currency_code], S.[calculation_type], S.[price],
@@ -161,27 +164,27 @@ SELECT S.rn, @base_id + 1000000000 + S.rn, 0,
   S.[min_order_quantity], S.[rounding_value], S.[planned_delivery_time_days], S.[is_obsolete], S.[is_deleted]
 FROM (
   SELECT
-    ISNULL(
-      NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-      @company_code
-    ) AS [company_code],
+    LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
+    LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
     LTRIM(RTRIM(R.[purchase_price_code])) AS [purchase_price_code],
     COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10) AS [purchase_price_seq],
-    ISNULL(NULLIF(LTRIM(RTRIM(R.[price_type])), N''), N'PB00') AS [price_type],
+    ISNULL(NULLIF(LTRIM(RTRIM(R.[price_type])), N''), N'') AS [price_type],
     NULLIF(LTRIM(RTRIM(R.[scale_type])), N'') AS [scale_type],
     NULLIF(LTRIM(RTRIM(R.[scale_basis])), N'') AS [scale_basis],
     ROUND(COALESCE(TRY_CAST(R.[scale_quantity] AS DECIMAL(18,8)), 0), 4) AS [scale_quantity],
     NULLIF(LTRIM(RTRIM(R.[scale_unit])), N'') AS [scale_unit],
     ROUND(COALESCE(TRY_CAST(R.[scale_value] AS DECIMAL(18,8)), 0), 5) AS [scale_value],
     NULLIF(LTRIM(RTRIM(R.[scale_currency_code])), N'') AS [scale_currency_code],
-    ISNULL(NULLIF(LTRIM(RTRIM(R.[calculation_type])), N''), N'A') AS [calculation_type],
+    ISNULL(NULLIF(LTRIM(RTRIM(R.[calculation_type])), N''), N'') AS [calculation_type],
     ROUND(COALESCE(TRY_CAST(R.[price] AS DECIMAL(18,8)), 0), 5) AS [price],
     ROUND(COALESCE(TRY_CAST(R.[untaxed_price] AS DECIMAL(18,8)), 0), 5) AS [untaxed_price],
     ROUND(COALESCE(TRY_CAST(R.[tax_included_price] AS DECIMAL(18,8)), 0), 5) AS [tax_included_price],
     ROUND(COALESCE(TRY_CAST(R.[tax_amount] AS DECIMAL(18,8)), 0), 5) AS [tax_amount],
-    ISNULL(NULLIF(LTRIM(RTRIM(R.[condition_currency_code])), N''), N'CNY') AS [condition_currency_code],
-    COALESCE(TRY_CAST(R.[price_unit] AS INT), 1000) AS [price_unit],
-    ISNULL(NULLIF(LTRIM(RTRIM(R.[unit_of_measure])), N''), N'PC') AS [unit_of_measure],
+    ISNULL(NULLIF(LTRIM(RTRIM(R.[condition_currency_code])), N''), N'') AS [condition_currency_code],
+    COALESCE(TRY_CAST(R.[price_unit] AS INT), 0) AS [price_unit],
+    ISNULL(NULLIF(LTRIM(RTRIM(R.[unit_of_measure])), N''), N'') AS [unit_of_measure],
     COALESCE(TRY_CAST(R.[min_order_quantity] AS INT), 0) AS [min_order_quantity],
     COALESCE(TRY_CAST(R.[rounding_value] AS INT), 0) AS [rounding_value],
     COALESCE(TRY_CAST(R.[planned_delivery_time_days] AS INT), 0) AS [planned_delivery_time_days],
@@ -189,22 +192,19 @@ FROM (
     CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
     ROW_NUMBER() OVER (
       ORDER BY
-        ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        ),
+        LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
+        LTRIM(RTRIM(R.[plant_code])),
         LTRIM(RTRIM(R.[purchase_price_code])),
         COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)
     ) AS rn
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_item] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #hdr H
       WHERE H.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
-        AND H.[company_code] = ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        )
+        AND H.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
+        AND H.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
     )
 ) S;
 
@@ -212,13 +212,12 @@ DECLARE @item_source INT = (SELECT COUNT(*) FROM #item);
 DECLARE @item_sap_raw INT = (
   SELECT COUNT(*) FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_item] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #hdr H
       WHERE H.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
-        AND H.[company_code] = ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        )
+        AND H.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
+        AND H.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
     )
 );
 IF @item_source <> @item_sap_raw
@@ -226,25 +225,25 @@ BEGIN
   DECLARE @item_src_msg NVARCHAR(200) = CONCAT(N'明细装入不一致: sap=', @item_sap_raw, N', loaded=', @item_source);
   THROW 50003, @item_src_msg, 1;
 END;
-IF EXISTS (SELECT 1 FROM #item GROUP BY [company_code], [purchase_price_code], [purchase_price_seq] HAVING COUNT(*) > 1)
+IF EXISTS (SELECT 1 FROM #item GROUP BY [company_code], [plant_code], [purchase_price_code], [purchase_price_seq] HAVING COUNT(*) > 1)
 BEGIN
   DECLARE @item_dup NVARCHAR(400);
-  SELECT TOP 1 @item_dup = CONCAT([company_code], N' / ', [purchase_price_code], N' / ', [purchase_price_seq], N' x', COUNT(*))
-  FROM #item GROUP BY [company_code], [purchase_price_code], [purchase_price_seq] HAVING COUNT(*) > 1;
+  SELECT TOP 1 @item_dup = CONCAT([company_code], N' / ', [plant_code], N' / ', [purchase_price_code], N' / ', [purchase_price_seq], N' x', COUNT(*))
+  FROM #item GROUP BY [company_code], [plant_code], [purchase_price_code], [purchase_price_seq] HAVING COUNT(*) > 1;
   THROW 50001, @item_dup, 1;
 END;
 
 INSERT INTO #sq
 SELECT S.rn, @base_id + 2000000000 + S.rn, 0,
-  S.[company_code],
+  S.[company_code], S.[plant_code], S.[tenant_code], S.[culture_code],
   S.[purchase_price_code], S.[purchase_price_seq], S.[purchase_scale_seq],
   S.[scale_quantity], S.[price], S.[untaxed_price], S.[tax_included_price], S.[tax_amount], S.[is_obsolete], S.[is_deleted]
 FROM (
   SELECT
-    ISNULL(
-      NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-      @company_code
-    ) AS [company_code],
+    LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
+    LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
     LTRIM(RTRIM(R.[purchase_price_code])) AS [purchase_price_code],
     COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10) AS [purchase_price_seq],
     COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10) AS [purchase_scale_seq],
@@ -257,10 +256,8 @@ FROM (
     CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
     ROW_NUMBER() OVER (
       ORDER BY
-        ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        ),
+        LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
+        LTRIM(RTRIM(R.[plant_code])),
         LTRIM(RTRIM(R.[purchase_price_code])),
         COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10),
         COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10),
@@ -269,26 +266,24 @@ FROM (
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_scale_quantity] R
   INNER JOIN #item I
     ON I.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
+   AND I.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
    AND I.[purchase_price_seq] = COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)
-   AND I.[company_code] = ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      )
+   AND I.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
 ) S;
 
 DECLARE @sq_source INT = (SELECT COUNT(*) FROM #sq);
 DECLARE @sq_sap_raw INT = (
   SELECT COUNT(*) FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_scale_quantity] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
       WHERE I.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
+        AND I.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
         AND I.[purchase_price_seq] = COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)
-        AND I.[company_code] = ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        )
+        AND I.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
     )
 );
 IF @sq_source <> @sq_sap_raw
@@ -299,15 +294,15 @@ END;
 
 INSERT INTO #sv
 SELECT S.rn, @base_id + 3000000000 + S.rn, 0,
-  S.[company_code],
+  S.[company_code], S.[plant_code], S.[tenant_code], S.[culture_code],
   S.[purchase_price_code], S.[purchase_price_seq], S.[purchase_scale_seq],
   S.[scale_value], S.[price], S.[untaxed_price], S.[tax_included_price], S.[tax_amount], S.[is_obsolete], S.[is_deleted]
 FROM (
   SELECT
-    ISNULL(
-      NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-      @company_code
-    ) AS [company_code],
+    LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
+    LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
     LTRIM(RTRIM(R.[purchase_price_code])) AS [purchase_price_code],
     COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10) AS [purchase_price_seq],
     COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10) AS [purchase_scale_seq],
@@ -320,10 +315,8 @@ FROM (
     CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
     ROW_NUMBER() OVER (
       ORDER BY
-        ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        ),
+        LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
+        LTRIM(RTRIM(R.[plant_code])),
         LTRIM(RTRIM(R.[purchase_price_code])),
         COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10),
         COALESCE(TRY_CAST(R.[purchase_scale_seq] AS INT), 10),
@@ -332,26 +325,24 @@ FROM (
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_scale_value] R
   INNER JOIN #item I
     ON I.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
+   AND I.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
    AND I.[purchase_price_seq] = COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)
-   AND I.[company_code] = ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      )
+   AND I.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
 ) S;
 
 DECLARE @sv_source INT = (SELECT COUNT(*) FROM #sv);
 DECLARE @sv_sap_raw INT = (
   SELECT COUNT(*) FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_purchase_price_scale_value] R
   WHERE LTRIM(RTRIM(ISNULL(R.[purchase_price_code], N''))) <> N''
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
     AND EXISTS (
       SELECT 1 FROM #item I
       WHERE I.[purchase_price_code] = LTRIM(RTRIM(R.[purchase_price_code]))
+        AND I.[plant_code] = LTRIM(RTRIM(R.[plant_code]))
         AND I.[purchase_price_seq] = COALESCE(TRY_CAST(R.[purchase_price_seq] AS INT), 10)
-        AND I.[company_code] = ISNULL(
-          NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-          @company_code
-        )
+        AND I.[company_code] = LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4)
     )
 );
 IF @sv_source <> @sv_sap_raw
@@ -384,14 +375,14 @@ DECLARE @sv_before INT = (
 UPDATE S SET S.[id] = COALESCE(T.[id], S.[id])
 FROM #hdr S
 LEFT JOIN [takt_logistics_procurement_purchase_price] T
-  ON T.[tenant_code] = @tenant_code
- AND T.[company_code] = S.[company_code]
+  ON T.[tenant_code]=S.[tenant_code]
+ AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
  AND LTRIM(RTRIM(T.[purchase_price_code])) = S.[purchase_price_code];
 
 MERGE INTO [takt_logistics_procurement_purchase_price] AS T
 USING #hdr AS S
-ON T.[tenant_code] = @tenant_code AND T.[company_code]=S.[company_code]
+ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[plant_code]))=S.[plant_code]
  AND LTRIM(RTRIM(T.[purchase_price_code]))=S.[purchase_price_code]
 WHEN MATCHED AND (
@@ -409,23 +400,34 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[purchase_inquiry_code],N'')))<>LTRIM(RTRIM(ISNULL(S.[purchase_inquiry_code],N'')))
   OR LTRIM(RTRIM(ISNULL(T.[variable_key],N'')))<>LTRIM(RTRIM(ISNULL(S.[variable_key],N'')))
 ) THEN UPDATE SET
-  T.[price_type]=S.[price_type], T.[supplier_code]=S.[supplier_code], T.[material_code]=S.[material_code],
+  T.[price_type]=S.[price_type],
+  T.[supplier_code]=S.[supplier_code],
+  T.[material_code]=S.[material_code],
   T.[material_description]=S.[material_description],
-  T.[purchase_group]=S.[purchase_group], T.[tax_code]=S.[tax_code],
-  T.[gr_based_invoice_inspection]=S.[gr_based_invoice_inspection], T.[pricing_date_control]=S.[pricing_date_control],
-  T.[valid_from]=S.[valid_from], T.[valid_to]=S.[valid_to],
-  T.[purchase_inquiry_id]=S.[purchase_inquiry_id], T.[purchase_inquiry_code]=S.[purchase_inquiry_code],
+  T.[purchase_group]=S.[purchase_group],
+  T.[tax_code]=S.[tax_code],
+  T.[gr_based_invoice_inspection]=S.[gr_based_invoice_inspection],
+  T.[pricing_date_control]=S.[pricing_date_control],
+  T.[valid_from]=S.[valid_from],
+  T.[valid_to]=S.[valid_to],
+  T.[purchase_inquiry_id]=S.[purchase_inquiry_id],
+  T.[purchase_inquiry_code]=S.[purchase_inquiry_code],
   T.[variable_key]=S.[variable_key],
-    T.[updated_by] =@sync_user_id, T.[updated_at]=@now, T.[is_deleted]=S.[is_deleted], T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END, T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[culture_code]=S.[culture_code],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN INSERT (
   [id],[plant_code],[purchase_price_code],[price_type],[supplier_code],[material_code],[material_description],
   [purchase_group],[tax_code],[gr_based_invoice_inspection],[pricing_date_control],
-  [valid_from],[valid_to],[purchase_inquiry_id],[purchase_inquiry_code],[variable_key],[tenant_code],[company_code],[ext_field],[remark],
+  [valid_from],[valid_to],[purchase_inquiry_id],[purchase_inquiry_code],[variable_key],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
   [created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at]
 ) VALUES (
   S.[id],S.[plant_code],S.[purchase_price_code],S.[price_type],S.[supplier_code],S.[material_code],S.[material_description],
   S.[purchase_group],S.[tax_code],S.[gr_based_invoice_inspection],S.[pricing_date_control],
-  S.[valid_from],S.[valid_to],S.[purchase_inquiry_id],S.[purchase_inquiry_code],S.[variable_key],@tenant_code,S.[company_code],N'{}',N'',
+  S.[valid_from],S.[valid_to],S.[purchase_inquiry_id],S.[purchase_inquiry_code],S.[variable_key],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',
   @sync_user_id,@now,@sync_user_id,@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[plant_code], INSERTED.[purchase_price_code]
@@ -434,7 +436,7 @@ INTO #hdr_delta(rn, oper_type, id, plant_code, price_code);
 UPDATE S SET S.[id]=T.[id]
 FROM #hdr S
 INNER JOIN [takt_logistics_procurement_purchase_price] T
-  ON T.[tenant_code]=@tenant_code AND T.[company_code]=S.[company_code] AND T.[is_deleted]=0
+  ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code] AND T.[is_deleted]=0
  AND LTRIM(RTRIM(T.[plant_code]))=S.[plant_code] AND LTRIM(RTRIM(T.[purchase_price_code]))=S.[purchase_price_code];
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
@@ -451,19 +453,19 @@ DECLARE @hdr_del INT = @@ROWCOUNT;
 
 UPDATE I SET I.[purchase_price_id]=H.[id]
 FROM #item I
-INNER JOIN (
-  SELECT [company_code], [purchase_price_code], [id],
-    ROW_NUMBER() OVER (PARTITION BY [company_code], [purchase_price_code] ORDER BY [plant_code], [id]) AS rn
-  FROM #hdr
-) H ON H.[company_code]=I.[company_code] AND H.[purchase_price_code]=I.[purchase_price_code] AND H.rn=1;
+INNER JOIN #hdr H
+  ON H.[company_code]=I.[company_code]
+ AND H.[plant_code]=I.[plant_code]
+ AND H.[purchase_price_code]=I.[purchase_price_code];
 DELETE FROM #item WHERE [purchase_price_id]=0 OR [purchase_price_id] IS NULL;
 
 MERGE INTO [takt_logistics_procurement_purchase_price_item] AS T
 USING #item AS S
-ON T.[tenant_code] = @tenant_code AND T.[company_code]=S.[company_code]
+ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND T.[purchase_price_id]=S.[purchase_price_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
 WHEN MATCHED AND (
   ISNULL(T.[is_deleted],0)<>S.[is_deleted]
+  OR LTRIM(RTRIM(ISNULL(T.[plant_code],N'')))<>S.[plant_code]
   OR LTRIM(RTRIM(ISNULL(T.[purchase_price_code],N'')))<>S.[purchase_price_code]
   OR LTRIM(RTRIM(ISNULL(T.[price_type],N'')))<>S.[price_type]
   OR LTRIM(RTRIM(ISNULL(T.[scale_type],N'')))<>LTRIM(RTRIM(ISNULL(S.[scale_type],N'')))
@@ -485,30 +487,46 @@ WHEN MATCHED AND (
   OR T.[planned_delivery_time_days]<>S.[planned_delivery_time_days]
   OR T.[is_obsolete]<>S.[is_obsolete]
 ) THEN UPDATE SET
-  T.[purchase_price_code]=S.[purchase_price_code], T.[price_type]=S.[price_type],
-  T.[scale_type]=S.[scale_type], T.[scale_basis]=S.[scale_basis],
-  T.[scale_quantity]=S.[scale_quantity], T.[scale_unit]=S.[scale_unit],
-  T.[scale_value]=S.[scale_value], T.[scale_currency_code]=S.[scale_currency_code],
-  T.[calculation_type]=S.[calculation_type], T.[price]=S.[price],
-  T.[untaxed_price]=S.[untaxed_price], T.[tax_included_price]=S.[tax_included_price], T.[tax_amount]=S.[tax_amount],
-  T.[condition_currency_code]=S.[condition_currency_code], T.[price_unit]=S.[price_unit],
-  T.[unit_of_measure]=S.[unit_of_measure], T.[min_order_quantity]=S.[min_order_quantity],
-  T.[rounding_value]=S.[rounding_value], T.[planned_delivery_time_days]=S.[planned_delivery_time_days],
+  T.[plant_code]=S.[plant_code],
+  T.[purchase_price_code]=S.[purchase_price_code],
+  T.[price_type]=S.[price_type],
+  T.[scale_type]=S.[scale_type],
+  T.[scale_basis]=S.[scale_basis],
+  T.[scale_quantity]=S.[scale_quantity],
+  T.[scale_unit]=S.[scale_unit],
+  T.[scale_value]=S.[scale_value],
+  T.[scale_currency_code]=S.[scale_currency_code],
+  T.[calculation_type]=S.[calculation_type],
+  T.[price]=S.[price],
+  T.[untaxed_price]=S.[untaxed_price],
+  T.[tax_included_price]=S.[tax_included_price],
+  T.[tax_amount]=S.[tax_amount],
+  T.[condition_currency_code]=S.[condition_currency_code],
+  T.[price_unit]=S.[price_unit],
+  T.[unit_of_measure]=S.[unit_of_measure],
+  T.[min_order_quantity]=S.[min_order_quantity],
+  T.[rounding_value]=S.[rounding_value],
+  T.[planned_delivery_time_days]=S.[planned_delivery_time_days],
   T.[is_obsolete]=S.[is_obsolete],
-    T.[updated_by] =@sync_user_id, T.[updated_at]=@now, T.[is_deleted]=S.[is_deleted], T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END, T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[culture_code]=S.[culture_code],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN INSERT (
-  [id],[purchase_price_id],[purchase_price_code],[purchase_price_seq],[price_type],
+  [id],[purchase_price_id],[plant_code],[purchase_price_code],[purchase_price_seq],[price_type],
   [scale_type],[scale_basis],[scale_quantity],[scale_unit],[scale_value],[scale_currency_code],
   [calculation_type],[price],[untaxed_price],[tax_included_price],[tax_amount],
   [condition_currency_code],[price_unit],[unit_of_measure],
-  [min_order_quantity],[rounding_value],[planned_delivery_time_days],[is_obsolete],[tenant_code],[company_code],[ext_field],[remark],
+  [min_order_quantity],[rounding_value],[planned_delivery_time_days],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
   [created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at]
 ) VALUES (
-  S.[id],S.[purchase_price_id],S.[purchase_price_code],S.[purchase_price_seq],S.[price_type],
+  S.[id],S.[purchase_price_id],S.[plant_code],S.[purchase_price_code],S.[purchase_price_seq],S.[price_type],
   S.[scale_type],S.[scale_basis],S.[scale_quantity],S.[scale_unit],S.[scale_value],S.[scale_currency_code],
   S.[calculation_type],S.[price],S.[untaxed_price],S.[tax_included_price],S.[tax_amount],
   S.[condition_currency_code],S.[price_unit],S.[unit_of_measure],
-  S.[min_order_quantity],S.[rounding_value],S.[planned_delivery_time_days],S.[is_obsolete],@tenant_code,S.[company_code],N'{}',N'',
+  S.[min_order_quantity],S.[rounding_value],S.[planned_delivery_time_days],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',
   @sync_user_id,@now,@sync_user_id,@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_price_code], INSERTED.[purchase_price_seq]
@@ -517,7 +535,7 @@ INTO #item_delta(rn, oper_type, id, price_code, price_seq);
 UPDATE S SET S.[id]=T.[id]
 FROM #item S
 INNER JOIN [takt_logistics_procurement_purchase_price_item] T
-  ON T.[tenant_code]=@tenant_code AND T.[company_code]=S.[company_code] AND T.[is_deleted]=0
+  ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code] AND T.[is_deleted]=0
  AND T.[purchase_price_id]=S.[purchase_price_id] AND T.[purchase_price_seq]=S.[purchase_price_seq];
 
 UPDATE T SET T.[is_deleted]=1, T.[deleted_by]=@sync_user_id, T.[deleted_at]=@now, T.[updated_by]=@sync_user_id, T.[updated_at]=@now
@@ -536,6 +554,7 @@ UPDATE Q SET Q.[purchase_price_item_id]=I.[id]
 FROM #sq Q
 INNER JOIN #item I
   ON I.[company_code]=Q.[company_code]
+ AND I.[plant_code]=Q.[plant_code]
  AND I.[purchase_price_code]=Q.[purchase_price_code]
  AND I.[purchase_price_seq]=Q.[purchase_price_seq];
 DELETE FROM #sq WHERE [purchase_price_item_id]=0 OR [purchase_price_item_id] IS NULL;
@@ -544,31 +563,44 @@ UPDATE V SET V.[purchase_price_item_id]=I.[id]
 FROM #sv V
 INNER JOIN #item I
   ON I.[company_code]=V.[company_code]
+ AND I.[plant_code]=V.[plant_code]
  AND I.[purchase_price_code]=V.[purchase_price_code]
  AND I.[purchase_price_seq]=V.[purchase_price_seq];
 DELETE FROM #sv WHERE [purchase_price_item_id]=0 OR [purchase_price_item_id] IS NULL;
 
 MERGE INTO [takt_logistics_procurement_purchase_price_scale_quantity] AS T
 USING #sq AS S
-ON T.[tenant_code] = @tenant_code AND T.[company_code]=S.[company_code]
+ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND T.[purchase_price_item_id]=S.[purchase_price_item_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
  AND T.[purchase_scale_seq]=S.[purchase_scale_seq] AND ROUND(T.[scale_quantity],4)=ROUND(S.[scale_quantity],4)
 WHEN MATCHED AND (
-  ISNULL(T.[is_deleted],0)<>S.[is_deleted] OR LTRIM(RTRIM(ISNULL(T.[purchase_price_code],N'')))<>S.[purchase_price_code]
+  ISNULL(T.[is_deleted],0)<>S.[is_deleted]
+  OR LTRIM(RTRIM(ISNULL(T.[plant_code],N'')))<>S.[plant_code]
+  OR LTRIM(RTRIM(ISNULL(T.[purchase_price_code],N'')))<>S.[purchase_price_code]
   OR ROUND(T.[price],5)<>ROUND(S.[price],5) OR ROUND(T.[untaxed_price],5)<>ROUND(S.[untaxed_price],5)
   OR ROUND(T.[tax_included_price],5)<>ROUND(S.[tax_included_price],5) OR ROUND(T.[tax_amount],5)<>ROUND(S.[tax_amount],5)
   OR T.[is_obsolete]<>S.[is_obsolete]
 ) THEN UPDATE SET
-  T.[purchase_price_code]=S.[purchase_price_code], T.[price]=S.[price], T.[untaxed_price]=S.[untaxed_price],
-  T.[tax_included_price]=S.[tax_included_price], T.[tax_amount]=S.[tax_amount], T.[is_obsolete]=S.[is_obsolete],
-    T.[updated_by] =@sync_user_id, T.[updated_at]=@now, T.[is_deleted]=S.[is_deleted], T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END, T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[plant_code]=S.[plant_code],
+  T.[purchase_price_code]=S.[purchase_price_code],
+  T.[price]=S.[price],
+  T.[untaxed_price]=S.[untaxed_price],
+  T.[tax_included_price]=S.[tax_included_price],
+  T.[tax_amount]=S.[tax_amount],
+  T.[is_obsolete]=S.[is_obsolete],
+  T.[culture_code]=S.[culture_code],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN INSERT (
-  [id],[purchase_price_item_id],[purchase_price_code],[purchase_price_seq],[purchase_scale_seq],
-  [scale_quantity],[price],[untaxed_price],[tax_included_price],[tax_amount],[is_obsolete],[tenant_code],[company_code],[ext_field],[remark],
+  [id],[purchase_price_item_id],[plant_code],[purchase_price_code],[purchase_price_seq],[purchase_scale_seq],
+  [scale_quantity],[price],[untaxed_price],[tax_included_price],[tax_amount],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
   [created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at]
 ) VALUES (
-  S.[id],S.[purchase_price_item_id],S.[purchase_price_code],S.[purchase_price_seq],S.[purchase_scale_seq],
-  S.[scale_quantity],S.[price],S.[untaxed_price],S.[tax_included_price],S.[tax_amount],S.[is_obsolete],@tenant_code,S.[company_code],N'{}',N'',
+  S.[id],S.[purchase_price_item_id],S.[plant_code],S.[purchase_price_code],S.[purchase_price_seq],S.[purchase_scale_seq],
+  S.[scale_quantity],S.[price],S.[untaxed_price],S.[tax_included_price],S.[tax_amount],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',
   @sync_user_id,@now,@sync_user_id,@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_price_code], INSERTED.[purchase_price_seq], INSERTED.[purchase_scale_seq]
@@ -594,25 +626,37 @@ DECLARE @sq_del INT = @@ROWCOUNT;
 
 MERGE INTO [takt_logistics_procurement_purchase_price_scale_value] AS T
 USING #sv AS S
-ON T.[tenant_code] = @tenant_code AND T.[company_code]=S.[company_code]
+ON T.[tenant_code]=S.[tenant_code] AND T.[company_code]=S.[company_code]
  AND T.[purchase_price_item_id]=S.[purchase_price_item_id] AND T.[purchase_price_seq]=S.[purchase_price_seq]
  AND T.[purchase_scale_seq]=S.[purchase_scale_seq] AND ROUND(T.[scale_value],5)=ROUND(S.[scale_value],5)
 WHEN MATCHED AND (
-  ISNULL(T.[is_deleted],0)<>S.[is_deleted] OR LTRIM(RTRIM(ISNULL(T.[purchase_price_code],N'')))<>S.[purchase_price_code]
+  ISNULL(T.[is_deleted],0)<>S.[is_deleted]
+  OR LTRIM(RTRIM(ISNULL(T.[plant_code],N'')))<>S.[plant_code]
+  OR LTRIM(RTRIM(ISNULL(T.[purchase_price_code],N'')))<>S.[purchase_price_code]
   OR ROUND(T.[price],5)<>ROUND(S.[price],5) OR ROUND(T.[untaxed_price],5)<>ROUND(S.[untaxed_price],5)
   OR ROUND(T.[tax_included_price],5)<>ROUND(S.[tax_included_price],5) OR ROUND(T.[tax_amount],5)<>ROUND(S.[tax_amount],5)
   OR T.[is_obsolete]<>S.[is_obsolete]
 ) THEN UPDATE SET
-  T.[purchase_price_code]=S.[purchase_price_code], T.[price]=S.[price], T.[untaxed_price]=S.[untaxed_price],
-  T.[tax_included_price]=S.[tax_included_price], T.[tax_amount]=S.[tax_amount], T.[is_obsolete]=S.[is_obsolete],
-    T.[updated_by] =@sync_user_id, T.[updated_at]=@now, T.[is_deleted]=S.[is_deleted], T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END, T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[plant_code]=S.[plant_code],
+  T.[purchase_price_code]=S.[purchase_price_code],
+  T.[price]=S.[price],
+  T.[untaxed_price]=S.[untaxed_price],
+  T.[tax_included_price]=S.[tax_included_price],
+  T.[tax_amount]=S.[tax_amount],
+  T.[is_obsolete]=S.[is_obsolete],
+  T.[culture_code]=S.[culture_code],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN INSERT (
-  [id],[purchase_price_item_id],[purchase_price_code],[purchase_price_seq],[purchase_scale_seq],
-  [scale_value],[price],[untaxed_price],[tax_included_price],[tax_amount],[is_obsolete],[tenant_code],[company_code],[ext_field],[remark],
+  [id],[purchase_price_item_id],[plant_code],[purchase_price_code],[purchase_price_seq],[purchase_scale_seq],
+  [scale_value],[price],[untaxed_price],[tax_included_price],[tax_amount],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
   [created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at]
 ) VALUES (
-  S.[id],S.[purchase_price_item_id],S.[purchase_price_code],S.[purchase_price_seq],S.[purchase_scale_seq],
-  S.[scale_value],S.[price],S.[untaxed_price],S.[tax_included_price],S.[tax_amount],S.[is_obsolete],@tenant_code,S.[company_code],N'{}',N'',
+  S.[id],S.[purchase_price_item_id],S.[plant_code],S.[purchase_price_code],S.[purchase_price_seq],S.[purchase_scale_seq],
+  S.[scale_value],S.[price],S.[untaxed_price],S.[tax_included_price],S.[tax_amount],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',
   @sync_user_id,@now,@sync_user_id,@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN @sync_user_id ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
 )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_price_code], INSERTED.[purchase_price_seq], INSERTED.[purchase_scale_seq]
@@ -709,14 +753,20 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
-) VALUES (
-  @base_id + 1, N'SYSTEM_SYNC', N'SYNC', N'采购价格',
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
+)
+SELECT
+  @base_id + 2000000000 + ROW_NUMBER() OVER (ORDER BY P.[company_code], P.[plant_code], P.[culture_code]),
+  N'SYSTEM_SYNC', N'SYNC', N'采购价格',
   N'exec_sql_merge', 'SQL', N'/sync/purchase-price', CONCAT('batch_size=', @batch_size),
   @json_result, '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now, DATEDIFF(MILLISECOND,@now,GETDATE()), 1, '',
-  @tenant_code, @company_code, @sync_user_id, @now
-);
+  @tenant_code, P.[company_code], P.[plant_code], P.[culture_code], @sync_user_id, @now
+FROM (
+  SELECT DISTINCT [company_code], [plant_code], [culture_code]
+  FROM #hdr
+  WHERE LTRIM(RTRIM(ISNULL([plant_code], N''))) <> N''
+) P;
 
 SELECT N'QUARTZ_SYNC_SUMMARY' AS [summary_tag], CAST(N'hdr' AS NVARCHAR(40)) AS [scope],
   @hdr_sap_raw AS [source_raw_count], @hdr_source AS [source_count], @hdr_before AS [target_before],

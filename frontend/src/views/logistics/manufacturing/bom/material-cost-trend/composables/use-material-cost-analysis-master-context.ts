@@ -20,7 +20,7 @@ export interface BomMaterialCostAnalysisMasterContext {
   queryModelCodes: Ref<string[]>
   /** 查询产品（可选单选；产品成本推移/成本分析） */
   queryProductCode: Ref<string | undefined>
-  /** 查询产品多选（差异成本推移；空=已选机种下全部产品） */
+  /** 查询产品多选（空=已选机种下全部产品） */
   queryProductCodes: Ref<string[]>
   /** 查询物料/组件单选（兼容） */
   queryComponentCode: Ref<string | undefined>

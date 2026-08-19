@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Identity
 // 文件名称：TaktTenant.cs
@@ -18,11 +18,12 @@ namespace Takt.Domain.Entities.Identity;
 /// 租户实体
 /// 代表系统中的独立租户（第一层数据隔离）
 /// 参照 SAP Client (MANDT) 设计
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_identity_tenant", "租户表")]
 [SugarIndex("ix_tenant_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_tenant_code_unique", nameof(TenantCode), OrderByType.Asc, true)]
-public class TaktTenant : TaktTenantEntityBase
+public class TaktTenant : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 租户名称

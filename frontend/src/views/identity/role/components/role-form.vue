@@ -263,13 +263,6 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))

@@ -30,32 +30,21 @@ public static class TaktBomQuartzExecuteParamsHelper
     public static DateTime ResolveAsOfDate(string? executeParams, DateTime? fallback = null)
     {
         var today = TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(fallback ?? DateTime.Today);
+        if (TryResolveCostingPeriodKey(executeParams, out var periodKey))
+        {
+            return FirstDayOfPeriod(periodKey);
+        }
         if (string.IsNullOrWhiteSpace(executeParams))
         {
             return today;
         }
         var raw = executeParams.Trim();
-        if (TryParsePeriodKey(raw, out var barePeriod))
-        {
-            return FirstDayOfPeriod(barePeriod);
-        }
         try
         {
             using var doc = JsonDocument.Parse(raw);
             if (doc.RootElement.ValueKind != JsonValueKind.Object)
             {
                 return today;
-            }
-            if (doc.RootElement.TryGetProperty("costingPeriod", out var periodProp)
-                || doc.RootElement.TryGetProperty("CostingPeriod", out periodProp))
-            {
-                var periodText = periodProp.ValueKind == JsonValueKind.String
-                    ? periodProp.GetString()
-                    : periodProp.ToString();
-                if (TryParsePeriodKey(periodText, out var periodKey))
-                {
-                    return FirstDayOfPeriod(periodKey);
-                }
             }
             if (doc.RootElement.TryGetProperty("asOfDate", out var asOfProp)
                 || doc.RootElement.TryGetProperty("AsOfDate", out asOfProp))
@@ -78,38 +67,42 @@ public static class TaktBomQuartzExecuteParamsHelper
     }
 
     /// <summary>
-    /// 解析是否强制（兼容旧 force 参数）
+    /// 从执行参数解析核算月键 yyyy-MM（可与 targetDatabase 同 JSON）
     /// </summary>
-    /// <param name="executeParams">执行参数</param>
-    /// <returns>是否 force</returns>
-    public static bool TryParseForce(string? executeParams)
+    /// <param name="executeParams">任务执行参数</param>
+    /// <param name="periodKey">规范化 yyyy-MM</param>
+    /// <returns>是否解析成功</returns>
+    public static bool TryResolveCostingPeriodKey(string? executeParams, out string periodKey)
     {
+        periodKey = string.Empty;
         if (string.IsNullOrWhiteSpace(executeParams))
         {
             return false;
         }
         var raw = executeParams.Trim();
-        if (string.Equals(raw, "force", StringComparison.OrdinalIgnoreCase)
-            || string.Equals(raw, "true", StringComparison.OrdinalIgnoreCase))
+        if (TryParsePeriodKey(raw, out periodKey))
         {
             return true;
         }
         try
         {
             using var doc = JsonDocument.Parse(raw);
-            if (doc.RootElement.ValueKind == JsonValueKind.Object
-                && (doc.RootElement.TryGetProperty("force", out var forceProp)
-                    || doc.RootElement.TryGetProperty("Force", out forceProp)))
+            if (doc.RootElement.ValueKind != JsonValueKind.Object)
             {
-                return forceProp.ValueKind == JsonValueKind.True
-                    || (forceProp.ValueKind == JsonValueKind.String
-                        && bool.TryParse(forceProp.GetString(), out var parsed)
-                        && parsed);
+                return false;
+            }
+            if (doc.RootElement.TryGetProperty("costingPeriod", out var periodProp)
+                || doc.RootElement.TryGetProperty("CostingPeriod", out periodProp))
+            {
+                var periodText = periodProp.ValueKind == JsonValueKind.String
+                    ? periodProp.GetString()
+                    : periodProp.ToString();
+                return TryParsePeriodKey(periodText, out periodKey);
             }
         }
         catch (System.Text.Json.JsonException)
         {
-            // 非 JSON 忽略
+            return false;
         }
         return false;
     }

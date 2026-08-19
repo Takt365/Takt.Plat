@@ -317,20 +317,38 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
         return await ValidateUserPasswordCoreAsync(tenantCode, username, password);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 仅校验密码（调用方须已单独通过 ValidateUserTenantAccessAsync）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="password">密码</param>
+    /// <returns>用户 ID；密码错误返回 null</returns>
     public Task<long?> ValidateUserPasswordOnlyAsync(string tenantCode, string username, string password)
     {
         return ValidateUserPasswordCoreAsync(tenantCode, username, password);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 验证用户登录凭据（租户权限 + 密码）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="password">密码</param>
+    /// <returns>用户 ID；验证失败返回 null</returns>
     public async Task<long?> ValidateUserAsync(string tenantCode, string username, string password)
     {
         var authResult = await AuthenticateLoginCredentialsAsync(tenantCode, username, password);
         return authResult.Status == TaktLoginCredentialStatus.Success ? authResult.UserId : null;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 登录凭据统一校验（租户权限、锁定、密码；成功时清零失败计数）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="username">用户名</param>
+    /// <param name="plainPassword">明文密码</param>
+    /// <returns>校验结果（含锁定态）</returns>
     public async Task<TaktLoginCredentialResult> AuthenticateLoginCredentialsAsync(
         string tenantCode,
         string username,
@@ -470,7 +488,7 @@ public class TaktAuthService : TaktServiceBase, ITaktAuthService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">登录所选租户</param>
-    /// <param name="cultureCode">区域文化编码（保留兼容；公司解析不依赖此参数）</param>
+    /// <param name="cultureCode">区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）</param>
     /// <param name="requestedCompanyCode">前端指定公司（可选）</param>
     /// <returns>生效的租户与公司编码</returns>
     public async Task<(string TenantCode, string CompanyCode)> ResolveLoginTenantAndCompanyAsync(

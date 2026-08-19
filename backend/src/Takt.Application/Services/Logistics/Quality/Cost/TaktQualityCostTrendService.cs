@@ -53,7 +53,11 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     _qualityIncidentRepository = qualityIncidentRepository;
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 获取质量成本月推移转置分析（分页）
+  /// </summary>
+  /// <param name="queryDto">查询 DTO</param>
+  /// <returns>转置分析结果</returns>
   public async Task<TaktQualityCostTrendResultDto> GetQualityCostMonthlyTrendAnalysisAsync(
       TaktQualityCostTrendQueryDto queryDto)
   {
@@ -78,7 +82,13 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     };
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 导出质量成本月推移转置分析 Excel
+  /// </summary>
+  /// <param name="query">查询条件</param>
+  /// <param name="sheetName">工作表名称</param>
+  /// <param name="fileName">导出文件名</param>
+  /// <returns>文件名与内容</returns>
   public async Task<(string fileName, byte[] fileContent)> ExportQualityCostMonthlyTrendAnalysisAsync(
       TaktQualityCostTrendQueryDto query,
       string? sheetName = null,
@@ -666,7 +676,12 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
     /// <summary>单例</summary>
     public static QualityCostTrendRowKeyComparer Instance { get; } = new();
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 判断两行键是否相等（工厂/成本类别/币种，忽略大小写）
+    /// </summary>
+    /// <param name="x">左值</param>
+    /// <param name="y">右值</param>
+    /// <returns>是否相等</returns>
     public bool Equals(QualityCostTrendRowKey? x, QualityCostTrendRowKey? y)
     {
       if (x is null || y is null)
@@ -678,7 +693,11 @@ public class TaktQualityCostTrendService : TaktServiceBase, ITaktQualityCostTren
           && string.Equals(x.CurrencyCode, y.CurrencyCode, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 计算行键哈希（工厂/成本类别/币种大写）
+    /// </summary>
+    /// <param name="obj">行键</param>
+    /// <returns>哈希码</returns>
     public int GetHashCode(QualityCostTrendRowKey obj) =>
         HashCode.Combine(
             obj.PlantCode.ToUpperInvariant(),

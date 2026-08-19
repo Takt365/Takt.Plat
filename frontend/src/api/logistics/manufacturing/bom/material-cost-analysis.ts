@@ -4,7 +4,7 @@
 // 文件名称：material-cost-analysis.ts
 // 创建时间：2026-08-01
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 成本分析 API（转置 / 差异 / 月度涨跌；成本合计/重算/机种月均；三页共用级联选项 URL）
+// 功能描述：BOM 成本分析 API（转置 / 差异 / 月度涨跌；三页共用级联选项 URL）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -15,15 +15,11 @@ import type { TaktSelectOption } from '@/types/common';
 import type {
   BomMaterialCostItemMonthlyTrendQuery,
   BomMaterialCostItemMonthlyTrendResult,
-  BomMaterialCostItemRecalculateSubmitted,
   BomMaterialCostItemTransposedQuery,
   BomMaterialCostItemTransposedResult,
   BomMaterialCostItemVarianceQuery,
   BomMaterialCostItemVarianceResult,
-  BomMaterialCostRefreshModelQuery,
-  BomMaterialCostRefreshModelResult,
 } from '@/types/logistics/manufacturing/bom/material-cost-analysis';
-import type { BomMaterialCostItemQuery } from '@/types/logistics/manufacturing/bom/material-cost-item';
 
 /** API 路由前缀（对应 TaktBomMaterialCostAnalysesController） */
 const BOM_MATERIAL_COST_ANALYSIS_API_BASE = 'TaktBomMaterialCostAnalyses';
@@ -172,43 +168,5 @@ export function getBomMaterialCostItemMonthlyTrendAnalysis(
     url: `${BOM_MATERIAL_COST_ANALYSIS_API_BASE}/monthly-trend-analysis`,
     method: 'get',
     params: queryDto,
-  });
-}
-
-/**
- * 提交后台成本合计/重算（明细 Sync 主表；完成后 SignalR 通知）
- * @param {BomMaterialCostItemQuery} queryDto 筛选（须单个核算月）
- * @param {boolean} [forceRecalculate=false] 是否强制重算
- * @param {number} [processRecordCount=5000] 工厂+产品组上限（0=全部）
- * @returns {Promise<BomMaterialCostItemRecalculateSubmitted>} 已提交回执
- */
-export function recalculateBomMaterialCostItemModelAverage(
-  queryDto: BomMaterialCostItemQuery,
-  forceRecalculate = false,
-  processRecordCount = 5000,
-): Promise<BomMaterialCostItemRecalculateSubmitted> {
-  return request<BomMaterialCostItemRecalculateSubmitted>({
-    url: `${BOM_MATERIAL_COST_ANALYSIS_API_BASE}/recalculate-model-average`,
-    method: 'put',
-    params: {
-      ...queryDto,
-      forceRecalculate,
-      processRecordCount,
-    },
-  });
-}
-
-/**
- * 同步刷新主表机种编码、物料类型与机种月均（不改产品月成本）
- * @param {BomMaterialCostRefreshModelQuery} queryDto 工厂 + 核算期间；机种可选
- * @returns {Promise<BomMaterialCostRefreshModelResult>} 刷新结果
- */
-export function refreshBomMaterialCostModelFields(
-  queryDto: BomMaterialCostRefreshModelQuery,
-): Promise<BomMaterialCostRefreshModelResult> {
-  return request<BomMaterialCostRefreshModelResult>({
-    url: `${BOM_MATERIAL_COST_ANALYSIS_API_BASE}/refresh-model-fields`,
-    method: 'post',
-    data: queryDto,
   });
 }

@@ -204,7 +204,11 @@ public class TaktGenWorkflowService : ITaktGenWorkflowService
         return await LoadGenTableDtoWithColumnsAsync(table).ConfigureAwait(false);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 从数据库同步指定表的列元数据：已存在列更新库表字段属性，新增列插入，库表已删除列物理移除（保留用户生成配置）
+    /// </summary>
+    /// <param name="tableId">代码生成表配置 ID</param>
+    /// <returns>同步后的表配置 DTO（含列列表）</returns>
     public async Task<TaktGenTableDto> SyncTableColumnsFromDatabaseAsync(long tableId)
     {
         if (tableId <= 0)

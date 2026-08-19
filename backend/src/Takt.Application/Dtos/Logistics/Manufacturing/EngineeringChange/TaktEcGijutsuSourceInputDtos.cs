@@ -158,7 +158,7 @@ public class TaktEcGijutsuDraftFromSourceDto
     public string? CompanyDefaultCulture { get; set; }
 
     /// <summary>
-    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; }
 }

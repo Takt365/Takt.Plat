@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/accounting/financial/company/components -->
 <!-- 文件名称：company-form.vue -->
-<!-- 功能描述：公司实体 代表租户下的独立公司/工厂维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：公司实体 代表租户下的独立公司维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -27,6 +27,30 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('relatedPlant')"
+                name="relatedPlant"
+              >
+                <TaktSelect
+                  v-model:value="formState.relatedPlant"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('relatedPlant')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyName1')"
@@ -129,6 +153,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('registrationAddress2')"
@@ -153,16 +187,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/6)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('registrationProvince')"
@@ -261,6 +285,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyEmail')"
@@ -289,16 +323,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/6)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyWebsite')"
@@ -408,6 +432,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-3"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (4/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('companyExistence')"
@@ -420,28 +454,6 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('cultureCode')"
-                name="cultureCode"
-              >
-                <TaktSelect
-                  v-model:value="formState.cultureCode"
-                  dict-type="sys_culture_code"
-                  :placeholder="pi.ph('cultureCode')"
-                />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-3"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (4/6)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('codeAlias')"
@@ -562,7 +574,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-4"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (5/6)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('postingPeriodVariant')"
                 name="postingPeriodVariant"
@@ -574,16 +596,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-4"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (5/6)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('fiscalYearVariant')"
@@ -617,18 +629,6 @@
                   v-model:value="formState.financialManagementArea"
                   api-url="TaktCompanies/options"
                   :placeholder="pi.ph('financialManagementArea')"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="pi.label('relatedPlant')"
-                name="relatedPlant"
-              >
-                <TaktSelect
-                  v-model:value="formState.relatedPlant"
-                  api-url="TaktPlants/options"
-                  :placeholder="pi.ph('relatedPlant')"
                 />
               </a-form-item>
             </a-col>
@@ -718,7 +718,7 @@
 
 <script setup lang="ts">
 /**
- * 公司实体 代表租户下的独立公司/工厂维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 公司实体 代表租户下的独立公司维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/accounting/financial/company/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
@@ -733,15 +733,18 @@ import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
+ * 上下文隔离字段：租户 / RelatedPlant（登录或公司切换注入；关联工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -749,15 +752,18 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
   if (force || !target.relatedPlant) {
     target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -777,13 +783,13 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  cultureCode: "ZH-CN",
   enterpriseNature: "150",
   industryAttribute: "C",
   enterpriseScale: "M",
   registrationRegion: "CN",
   businessRegion: "CN",
   companyExistence: 1,
-  cultureCode: "zh-CN",
   currencyCode: "CNY",
   chartOfAccounts: "INT",
   inputTaxCode: "J2",
@@ -831,7 +837,7 @@ watch(
 
 /** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => tenantStore.tenantCode,
+  () => [tenantStore.tenantCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.companyId) {
       applyScopeDefaults(formState, true)
@@ -841,6 +847,13 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  relatedPlant: [
+    {
+      required: true,
+      message: pi.ph('relatedPlant'),
+      trigger: 'change'
+    }
+  ],
   companyName1: [
     {
       required: true,
@@ -1028,13 +1041,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
-  cultureCode: [
-    {
-      required: true,
-      message: pi.ph('cultureCode'),
-      trigger: 'change'
-    }
-  ],
   codeAlias: [
     {
       required: true,
@@ -1123,13 +1129,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('financialManagementArea'),
-      trigger: 'change'
-    }
-  ],
-  relatedPlant: [
-    {
-      required: true,
-      message: pi.ph('relatedPlant'),
       trigger: 'change'
     }
   ],

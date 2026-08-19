@@ -105,7 +105,6 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("accounting_posting_period_variant","记帐期间变式","过帐期间变式（TaktCompany.PostingPeriodVariant；SAP PERIV）。原则上一个公司对应一个变式；DictValue=0001/Z001～Z009",416),
             ("accounting_fiscal_year_variant","会计年度变式","会计年度变式（TaktCompany.FiscalYearVariant）。DictValue=K4/Z1/Z2",417),
             ("accounting_exchange_rate_type","汇率类型","SAP 汇率类型（TaktExchangeRate.ExchangeRateType）。M=平均汇率，B=银行买入价，G=历史汇率，P=计划汇率，Z=自定义汇率，E=期末汇率，K=现金余额汇率，X=平均买入价",379),
-            ("accounting_financial_year_category","财务年度类别","财务年度类别（TaktFinancialPeriod.FinancialYearCategory）。CN=中国财年（1/1～12/31），JP=日本财年（4/1～3/31），HK=香港财年（4/1～3/31），US=美国财年（10/1～9/30）",394),
             ("accounting_balance_sheet_line_category","资产负债表行类别","资产负债表行类别（TaktBalanceSheet.LineCategory）。1=流动资产，2=非流动资产，3=流动负债，4=非流动负债，5=所有者权益。对齐 CAS/IAS 1",400),
             ("accounting_profit_loss_line_category","利润表行类别","利润表行类别（TaktProfitLoss.LineCategory）。1营业收入～12综合收益总额。对齐 CAS 利润表与 IAS 1/OCI",401),
             ("accounting_budget_type","预算类型","预算类型（TaktBudgetActual.BudgetType）。1=经营预算，2=资本预算，3=财务预算",402),
@@ -309,7 +308,7 @@ public class TaktDictTypeSeedData : ITaktSeedDataCoordinator
             ("sys_lifecycle_status","生命周期状态","通用文档/版本生命周期状态（SOP等共用）。1=编制中，2=审核中，3=已生效，4=已废止",144),
             ("sys_attachment_file_type","附件文件类型","通用多媒体附件类型（字典 sys_attachment_file_type；SOP/新闻/公告/通知/文管等共用）。1=图片，2=视频，3=文档",146),
             ("sys_workstation_type","工位类型","通用制造工位类型。1=装配，2=检验，3=包装，4=测试，5=其他",147),
-            ("sys_iso_code_category","ISO编码类别","ISO编码类别（与 TaktIsoCode.IsoCodeCategory 一致，字典 sys_iso_code_category）。0=不使用，1=部门",148),
+            ("sys_numbering_dept_code","编码规则部门短码","编码规则 DeptCode 段（字典 sys_numbering_dept_code）。DictValue=部门短码（如 R/F/D）；与组织架构对照见 Remark",148),
 
             ("hr_benefit_category","福利大类","福利大类。1=保险，2=补贴，3=休假，4=其他",149),
             ("hr_benefit_type","福利类型","福利类型。1=社保，2=公积金，3=商业保险，4=年假额度，5=餐补，6=培训补贴，7=员工折扣",150),

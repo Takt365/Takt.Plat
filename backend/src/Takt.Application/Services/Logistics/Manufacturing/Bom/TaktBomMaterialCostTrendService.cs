@@ -56,7 +56,11 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         _modelDestinationRepository = modelDestinationRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 产品成本推移：单个产品下明细组件×月材料成本并算环比
+    /// </summary>
+    /// <param name="queryDto">查询 DTO（PlantCode + ProductCode 必填；ModelCode 可选）</param>
+    /// <returns>明细组件×月材料成本结果</returns>
     public async Task<TaktBomMaterialCostTrendComponentMovingPriceResultDto> GetBomMaterialCostTrendComponentMovingPriceAnalysisAsync(
         TaktBomMaterialCostTrendComponentMovingPriceQueryDto queryDto)
     {
@@ -88,7 +92,9 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// ExportBomMaterialCostTrendComponentMovingPriceAnalysisAsync
+    /// </summary>
     public async Task<(string fileName, byte[] fileContent)> ExportBomMaterialCostTrendComponentMovingPriceAnalysisAsync(
         TaktBomMaterialCostTrendComponentMovingPriceQueryDto query,
         string? sheetName = null,
@@ -120,14 +126,14 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         var columnKeys = new List<string>
         {
             "plantCode", "modelCode", "productCode", "productDescription",
-            "sequenceCode", "bomLevel", "bomItemCode",
+            "lineNumber", "bomLevel", "bomItemCode",
             "componentCode", "componentDescription", "componentQuantity",
             "productionRelated", "purchaseType", "currencyCode",
         };
         var columnLabels = new List<string>
         {
             "工厂代码", "机种编码", "产品编码", "产品描述",
-            "序号", "层级", "BOM项目号",
+            "行号", "层级", "BOM项目号",
             "组件编码", "组件描述", "组件数量",
             "生产相关", "采购类型", "币种",
         };
@@ -148,7 +154,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
                     ["modelCode"] = row.ModelCode,
                     ["productCode"] = row.ProductCode,
                     ["productDescription"] = row.ProductDescription,
-                    ["sequenceCode"] = row.SequenceCode,
+                    ["lineNumber"] = row.LineNumber,
                     ["bomLevel"] = row.BomLevel,
                     ["bomItemCode"] = row.BomItemCode,
                     ["componentCode"] = row.ComponentCode,
@@ -219,7 +225,15 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         return string.IsNullOrEmpty(trimmed) ? null : trimmed;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 从主表取机种下产品编码（可按核算月过滤；按条件全量，不截断）
+    /// </summary>
+    /// <param name="plantCode">工厂</param>
+    /// <param name="modelCode">机种</param>
+    /// <param name="costingMonthStart">核算月起（月初，含；空=不限）</param>
+    /// <param name="costingMonthEnd">核算月止（月初，含该月整月；空=不限）</param>
+    /// <param name="materialType">物料类型（本表 MaterialType；空=不按类型过滤）</param>
+    /// <returns>产品编码列表</returns>
     private async Task<List<string>> LoadModelProductCodesAsync(
         string plantCode,
         string modelCode,
@@ -260,7 +274,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 加载机种产品 BOM 明细（仅 ProductionRelated=X 且 PurchaseType=F；可按核算月过滤；按条件全量，不截断）
+    /// 加载机种产品 BOM 明细（全量展开后 Filter：生产相关=X、PCB SECT 标识为空、采购类型=F；可按核算月过滤；按条件全量，不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCodes">产品编码</param>
@@ -494,7 +508,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
             .ToList();
 
         var filtered = FilterComponentMovingPriceRows(allRows, queryDto.TrendFilter);
-        var ordered = OrderComponentMovingPriceRows(filtered, queryDto.SortBy);
+        var ordered = OrderComponentMovingPriceRows(filtered);
         return new ComponentMovingPriceAnalysisBuilt
         {
             OrderedRows = ordered,
@@ -750,7 +764,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
             ModelCode = modelCode,
             ProductCode = productCode,
             ProductDescription = description,
-            SequenceCode = identity.SequenceCode?.Trim() ?? string.Empty,
+            LineNumber = identity.LineNumber,
             BomLevel = identity.BomLevel?.Trim() ?? string.Empty,
             BomItemCode = identity.BomItemCode?.Trim() ?? string.Empty,
             ComponentCode = identity.ComponentCode?.Trim() ?? string.Empty,
@@ -943,48 +957,22 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 产品成本明细全量排序（分页前）：bom（默认）/ trend / varianceDesc
+    /// 产品成本明细全量排序（分页前）：ProductCode 升序，再 LineNumber 升序
     /// </summary>
     /// <param name="rows">已筛选行</param>
-    /// <param name="sortBy">排序码</param>
     /// <returns>排序后列表</returns>
     private static List<TaktBomMaterialCostTrendComponentMovingPriceDto> OrderComponentMovingPriceRows(
-        IReadOnlyList<TaktBomMaterialCostTrendComponentMovingPriceDto> rows,
-        string? sortBy)
+        IReadOnlyList<TaktBomMaterialCostTrendComponentMovingPriceDto> rows)
     {
-        static int TrendRank(string? trend) => trend switch
-        {
-            "up" => 0,
-            "down" => 1,
-            "flat" => 2,
-            "new" => 3,
-            "removed" => 4,
-            _ => 5,
-        };
-        static int CompareBom(TaktBomMaterialCostTrendComponentMovingPriceDto a, TaktBomMaterialCostTrendComponentMovingPriceDto b) =>
-            TaktBomMaterialCostItemLineCostHelper.CompareBomExplosionOrder(
-                a.ProductCode,
-                a.SequenceCode,
-                a.BomLevel,
-                b.ProductCode,
-                b.SequenceCode,
-                b.BomLevel);
-        var mode = (sortBy ?? string.Empty).Trim().ToLowerInvariant();
-        IOrderedEnumerable<TaktBomMaterialCostTrendComponentMovingPriceDto> ordered = mode switch
-        {
-            "trend" => rows
-                .OrderBy(r => TrendRank(r.Trend))
-                .ThenByDescending(r => Math.Abs(r.VarianceAmount ?? 0m)),
-            "variancedesc" => rows
-                .OrderByDescending(r => Math.Abs(r.VarianceAmount ?? 0m))
-                .ThenBy(r => TrendRank(r.Trend)),
-            _ => rows.OrderBy(r => r, Comparer<TaktBomMaterialCostTrendComponentMovingPriceDto>.Create(CompareBom)),
-        };
-        return ordered
-            .ThenBy(r => r, Comparer<TaktBomMaterialCostTrendComponentMovingPriceDto>.Create(CompareBom))
+        return rows
+            .OrderBy(r => r, Comparer<TaktBomMaterialCostTrendComponentMovingPriceDto>.Create(
+                (a, b) => TaktBomMaterialCostItemLineCostHelper.CompareProductCodeThenLineNumber(
+                    a.ProductCode,
+                    a.LineNumber,
+                    b.ProductCode,
+                    b.LineNumber)))
             .ThenBy(r => r.BomItemCode, StringComparer.Ordinal)
             .ThenBy(r => r.ComponentCode, StringComparer.Ordinal)
-            .ThenBy(r => r.PurchaseType, StringComparer.Ordinal)
             .ToList();
     }
 

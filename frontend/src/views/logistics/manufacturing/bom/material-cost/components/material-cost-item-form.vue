@@ -57,7 +57,7 @@ const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-con
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["plantCode","productCode","sequenceCode","productDescription","bomLevel","bomItemCode","componentCode","componentDescription","componentQuantity","batchIndicator","productionRelated","purchaseType","specialProcurementType","profitCenterCode","movingAveragePrice","movingPriceUnit","movingPriceCurrencyCode","purchaseOrganization","purchaseGroup","supplierCode","netPurchasePrice","purchasePriceUnit","purchaseCurrencyCode","costingDate"]
+const formFields = ["plantCode","bomLevel","bomItemCode","productCode","lineNumber","productDescription","componentCode","componentDescription","componentQuantity","batchIndicator","productionRelated","purchaseType","specialProcurementType","profitCenterCode","movingAveragePrice","movingPriceUnit","movingPriceCurrencyCode","purchaseOrganization","purchaseGroup","supplierCode","netPurchasePrice","purchasePriceUnit","purchaseCurrencyCode","costingDate"]
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -77,6 +77,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  lineNumber: 10,
   movingPriceCurrencyCode: "CNY",
   purchaseCurrencyCode: "CNY"
 }
@@ -125,27 +126,6 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  productCode: [
-    {
-      required: true,
-      message: pi.ph('productCode'),
-      trigger: 'blur'
-    }
-  ],
-  sequenceCode: [
-    {
-      required: true,
-      message: pi.ph('sequenceCode'),
-      trigger: 'blur'
-    }
-  ],
-  productDescription: [
-    {
-      required: true,
-      message: pi.ph('productDescription'),
-      trigger: 'blur'
-    }
-  ],
   bomLevel: [
     {
       required: true,
@@ -157,6 +137,33 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     {
       required: true,
       message: pi.ph('bomItemCode'),
+      trigger: 'blur'
+    }
+  ],
+  productCode: [
+    {
+      required: true,
+      message: pi.ph('productCode'),
+      trigger: 'blur'
+    }
+  ],
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num) || num <= 0) {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  productDescription: [
+    {
+      required: true,
+      message: pi.ph('productDescription'),
       trigger: 'blur'
     }
   ],
@@ -306,6 +313,10 @@ async function validate() {
 /** 映射为 Create/Update DTO（无汇总表外键；由明细业务键再 Sync 汇总） */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
   if ('componentQuantity' in payload) {
     const rawcomponentQuantity = payload.componentQuantity
     payload.componentQuantity = typeof rawcomponentQuantity === 'number' ? rawcomponentQuantity : Number(rawcomponentQuantity)

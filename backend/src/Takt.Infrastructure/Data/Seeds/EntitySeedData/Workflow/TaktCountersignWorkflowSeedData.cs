@@ -40,10 +40,17 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
         NullValueHandling = NullValueHandling.Ignore
     };
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行顺序（数字越小越先执行）
+    /// </summary>
     public int Order => 67;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行种子写入（幂等）
+    /// </summary>
+    /// <param name="serviceProvider">服务提供器</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>插入与更新计数</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(
         IServiceProvider serviceProvider,
         string? tenantCode = null)
@@ -81,7 +88,8 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
                 formRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode);
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -91,7 +99,8 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -170,6 +179,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
@@ -194,6 +204,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedFormField = relatedField,
                 SortOrder = 12,
                 FormStatus = 1,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
@@ -206,6 +217,8 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;
         form.FormStatus = 1;
+        form.PlantCode = plantCode;
+        form.CultureCode = cultureCode;
         await repository.UpdateAsync(form);
         return (form, 0, 1);
     }
@@ -214,6 +227,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktFlowForm form,
         string processContent)
@@ -243,6 +257,7 @@ public class TaktCountersignWorkflowSeedData : ITaktSeedDataCoordinator
                 FormId = form.Id,
                 FormCode = form.FormCode,
                 SortOrder = 12,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);

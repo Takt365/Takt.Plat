@@ -51,7 +51,7 @@ public class TaktNumberingDto : TaktCompanyDtoBase
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 
@@ -138,7 +138,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -163,7 +163,7 @@ public class TaktNumberingQueryDto : TaktPagedQuery
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -263,12 +263,12 @@ public class TaktNumberingCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -297,9 +297,9 @@ public class TaktNumberingCreateDto
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
-    [Required(ErrorMessage = "部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）不能为空")]
+    [Required(ErrorMessage = "部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）不能为空")]
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -435,12 +435,12 @@ public class TaktNumberingTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -465,7 +465,7 @@ public class TaktNumberingTemplateDto
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -552,12 +552,12 @@ public class TaktNumberingImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -583,7 +583,7 @@ public class TaktNumberingImportDto
     public string? DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
 
@@ -696,7 +696,7 @@ public class TaktNumberingExportDto
     public string DocumentType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
 

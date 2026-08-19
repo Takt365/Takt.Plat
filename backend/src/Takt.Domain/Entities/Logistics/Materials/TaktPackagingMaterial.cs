@@ -63,7 +63,7 @@ public class TaktPackagingMaterial : TaktCompanyEntityBase
     public string? AdditionalCode { get; set; }
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     [SugarColumn(ColumnName = "origin_country_region_code", ColumnDescription = "原产国/地区编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? OriginCountryRegionCode { get; set; }
@@ -75,7 +75,7 @@ public class TaktPackagingMaterial : TaktCompanyEntityBase
     public string? OriginCountryRegionName { get; set; }
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     [SugarColumn(ColumnName = "destination_country_region_code", ColumnDescription = "目的国/地区编码", ColumnDataType = "nvarchar", Length = 2, IsNullable = true)]
     public string? DestinationCountryRegionCode { get; set; }

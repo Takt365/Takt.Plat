@@ -15,7 +15,7 @@
         api-url="TaktPlants/options"
         class="cost-trend-query-bar__control cost-trend-query-bar__control--plant"
         allow-clear
-        :placeholder="t('entity.qualityassurance.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
       />
       <a-range-picker
         v-model:value="periodRange"

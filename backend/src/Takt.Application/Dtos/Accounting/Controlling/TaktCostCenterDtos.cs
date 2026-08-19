@@ -35,6 +35,63 @@ public class TaktCostCenterDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CostCenterId { get; set; }
 
+    /// <summary>
+    /// 成本中心编码（4位，租户+公司内唯一）
+    /// </summary>
+    public string CostCenterCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心名称
+    /// </summary>
+    public string CostCenterName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父级 ID（0 表示根节点）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 成本中心类型（0=成本中心，1=利润中心，2=投资中心）
+    /// </summary>
+    public int CostCenterType { get; set; }
+
+    /// <summary>
+    /// 负责人用户 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ManagerId { get; set; }
+
+    /// <summary>
+    /// 负责人姓名
+    /// </summary>
+    public string? ManagerName { get; set; }
+
+    /// <summary>
+    /// 所属部门 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? DeptId { get; set; }
+
+    /// <summary>
+    /// 所属部门名称
+    /// </summary>
+    public string? DeptName { get; set; }
+
+    /// <summary>
+    /// 成本中心层级
+    /// </summary>
+    public int CostCenterLevel { get; set; } = 1;
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 排序号
@@ -84,7 +141,7 @@ public class TaktCostCenterQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -207,12 +264,12 @@ public class TaktCostCenterCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -381,12 +438,12 @@ public class TaktCostCenterTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -479,12 +536,12 @@ public class TaktCostCenterImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 

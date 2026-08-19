@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍数字工厂 ·Takt Plat (TDF) 
 // 命名空间：Takt.Domain.Entities.Code.Generator
 // 文件名称：TaktGenTableColumn.cs
@@ -17,6 +17,7 @@ namespace Takt.Domain.Entities.Code.Generator;
 
 /// <summary>
 /// Takt代码生成字段配置实体
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_code_generator_gen_table_column", "代码生成数据表列配置")]
 [SugarIndex("ix_gen_table_column_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -24,7 +25,7 @@ namespace Takt.Domain.Entities.Code.Generator;
 [SugarIndex("ix_gen_table_column_column_unique", nameof(TenantCode), OrderByType.Asc, nameof(GenTableId), OrderByType.Asc, nameof(DatabaseColumnName), OrderByType.Asc, true)]
 [SugarIndex("ix_gen_table_column_database_column_name", nameof(TenantCode), OrderByType.Asc, nameof(GenTableId), OrderByType.Asc, nameof(DatabaseColumnName), OrderByType.Asc, false)]
 [SugarIndex("ix_gen_table_column_gen_table_id", nameof(TenantCode), OrderByType.Asc, nameof(GenTableId), OrderByType.Asc, false)]
-public class TaktGenTableColumn : TaktTenantEntityBase
+public class TaktGenTableColumn : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）

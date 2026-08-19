@@ -15,7 +15,7 @@
         class="material-cost-analysis-query-bar__control material-cost-analysis-query-bar__control--plant"
         allow-clear
         show-search
-        :placeholder="t('entity.bommaterialcost.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
         @change="handlePlantChange"
       />
       <a-range-picker

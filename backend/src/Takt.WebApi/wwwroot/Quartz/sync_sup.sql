@@ -1,6 +1,8 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -10,7 +12,8 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- 源表 / 目标表：同名 + 列与实体 TaktSupplier 业务字段一致
 -- {{SourceDatabase}}.dbo.takt_logistics_procurement_supplier → 当前租户库同名表
 -- 业务唯一键：CompanyCode + SupplierCode（与租户库唯一索引对齐）
--- company_code / plant_code 取自源表；源 company 为空时回退 {{CompanyCode}}；全量同步（无公司白名单）
+-- company_code / plant_code 取自源表；tenant/company/plant/culture 取自源表本列；空值丢弃，不回退任务参数；全量同步（无公司白名单）
+-- 源/目标结构相同，以目标实体 TaktSupplier 为准（无 default_culture）
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
 CREATE TABLE #st_source (
@@ -24,8 +27,8 @@ CREATE TABLE #st_source (
   [supplier_type] INT,
   [enterprise_nature] VARCHAR(4),
   [industry_attribute] VARCHAR(4),
-  [default_culture] VARCHAR(5),
   [supplier_tax_number] NVARCHAR(50),
+  [tax_code] NVARCHAR(4),
   [tax_rate] INT,
   [registration_country] NVARCHAR(2),
   [registration_province] NVARCHAR(70),
@@ -63,9 +66,11 @@ CREATE TABLE #st_source (
   [supplier_status] INT,
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
+  [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
   [is_deleted] INT,
+  [created_at] DATETIME,
   [updated_by] BIGINT
 );
 
@@ -81,8 +86,8 @@ SELECT
   S.[supplier_type],
   S.[enterprise_nature],
   S.[industry_attribute],
-  S.[default_culture],
   S.[supplier_tax_number],
+  S.[tax_code],
   S.[tax_rate],
   S.[registration_country],
   S.[registration_province],
@@ -118,11 +123,13 @@ SELECT
   S.[evaluation_score],
   S.[sort_order],
   S.[supplier_status],
-  @tenant_code,
+  S.[tenant_code],
   S.[company_code],
+  S.[culture_code],
   N'{}',
   N'',
   S.[is_deleted],
+  S.[created_at],
   @sync_user_id
 FROM (
   SELECT
@@ -130,21 +137,20 @@ FROM (
     ROW_NUMBER() OVER (ORDER BY N.[company_code], N.[supplier_code]) AS rn
   FROM (
     SELECT
-      ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      ) AS [company_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[plant_code])), N''), N'') AS [plant_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
       LTRIM(RTRIM(R.[supplier_code])) AS [supplier_code],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[supplier_name1])), N''), N'') AS [supplier_name1],
       NULLIF(LTRIM(RTRIM(R.[supplier_name2])), N'') AS [supplier_name2],
       NULLIF(LTRIM(RTRIM(R.[supplier_short_name])), N'') AS [supplier_short_name],
       COALESCE(TRY_CAST(R.[supplier_type] AS INT), 0) AS [supplier_type],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[enterprise_nature])), N''), N'150') AS [enterprise_nature],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[industry_attribute])), N''), N'C') AS [industry_attribute],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[default_culture])), N''), N'en-US') AS [default_culture],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[enterprise_nature])), N''), N'') AS [enterprise_nature],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[industry_attribute])), N''), N'') AS [industry_attribute],
       NULLIF(LTRIM(RTRIM(R.[supplier_tax_number])), N'') AS [supplier_tax_number],
-      COALESCE(TRY_CAST(R.[tax_rate] AS INT), 13) AS [tax_rate],
+      NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[tax_code], N''))), 4), N'') AS [tax_code],
+      COALESCE(TRY_CAST(R.[tax_rate] AS INT), 0) AS [tax_rate],
+      LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) AS [culture_code],
       NULLIF(LTRIM(RTRIM(R.[registration_country])), N'') AS [registration_country],
       NULLIF(LTRIM(RTRIM(R.[registration_province])), N'') AS [registration_province],
       NULLIF(LTRIM(RTRIM(R.[registration_city])), N'') AS [registration_city],
@@ -157,17 +163,17 @@ FROM (
       NULLIF(LTRIM(RTRIM(R.[contact_person])), N'') AS [contact_person],
       NULLIF(LTRIM(RTRIM(R.[contact_phone])), N'') AS [contact_phone],
       NULLIF(LTRIM(RTRIM(R.[contact_email])), N'') AS [contact_email],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), N''), N'CNY') AS [currency_code],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), N''), N'') AS [currency_code],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[reconciliation_account])), N''), N'') AS [reconciliation_account],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[customer_code])), N''), N'') AS [customer_code],
       COALESCE(TRY_CAST(R.[clearing_with_customer] AS INT), 0) AS [clearing_with_customer],
       COALESCE(TRY_CAST(R.[payment_method] AS INT), 1) AS [payment_method],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[payment_terms])), N''), N'cod') AS [payment_terms],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[payment_terms])), N''), N'') AS [payment_terms],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[bank_code])), N''), N'') AS [bank_code],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[bank_account])), N''), N'') AS [bank_account],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[account_holder])), N''), N'') AS [account_holder],
       COALESCE(TRY_CAST(R.[gr_based_invoice_inspection] AS INT), 0) AS [gr_based_invoice_inspection],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[incoterms1])), N''), N'FOB') AS [incoterms1],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[incoterms1])), N''), N'') AS [incoterms1],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[incoterms2])), N''), N'') AS [incoterms2],
       COALESCE(TRY_CAST(R.[automatic_purchase_order] AS INT), 0) AS [automatic_purchase_order],
       COALESCE(TRY_CAST(R.[pricing_date_control] AS INT), 1) AS [pricing_date_control],
@@ -180,12 +186,10 @@ FROM (
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       COALESCE(TRY_CAST(R.[supplier_status] AS INT), 1) AS [supplier_status],
       CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      R.[created_at] AS [created_at],
       ROW_NUMBER() OVER (
         PARTITION BY
-          ISNULL(
-            NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-            @company_code
-          ),
+          LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
           LTRIM(RTRIM(R.[supplier_code]))
         ORDER BY
           LEN(ISNULL(LTRIM(RTRIM(R.[supplier_name1])), N'')) DESC,
@@ -193,6 +197,9 @@ FROM (
       ) AS dup_rn
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_supplier] R
     WHERE LTRIM(RTRIM(ISNULL(R.[supplier_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
   ) N
   WHERE N.dup_rn = 1
 ) S
@@ -208,18 +215,12 @@ DECLARE @sap_key_count INT = (
   SELECT COUNT(*)
   FROM (
     SELECT
-      ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      ) AS [company_code],
+      LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
       LTRIM(RTRIM(R.[supplier_code])) AS [supplier_code]
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_procurement_supplier] R
     WHERE LTRIM(RTRIM(ISNULL(R.[supplier_code], N''))) <> N''
     GROUP BY
-      ISNULL(
-        NULLIF(LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4), N''),
-        @company_code
-      ),
+      LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
       LTRIM(RTRIM(R.[supplier_code]))
   ) K
 );
@@ -250,8 +251,8 @@ UPDATE S
 SET S.[id] = COALESCE(T.[id], S.[id])
 FROM #st_source S
 LEFT JOIN [takt_logistics_procurement_supplier] T
-  ON T.[tenant_code] = @tenant_code
- AND T.[company_code] = S.[company_code]
+  ON T.[tenant_code]=S.[tenant_code]
+ AND T.[company_code]=S.[company_code]
  AND LTRIM(RTRIM(T.[supplier_code])) = S.[supplier_code];
 
 IF OBJECT_ID('tempdb..#delta') IS NOT NULL DROP TABLE #delta;
@@ -294,9 +295,10 @@ WHEN MATCHED AND (
   OR T.[supplier_type] <> S.[supplier_type]
   OR LTRIM(RTRIM(ISNULL(T.[enterprise_nature], N''))) <> S.[enterprise_nature]
   OR LTRIM(RTRIM(ISNULL(T.[industry_attribute], N''))) <> S.[industry_attribute]
-  OR LTRIM(RTRIM(ISNULL(T.[default_culture], N''))) <> S.[default_culture]
   OR LTRIM(RTRIM(ISNULL(T.[supplier_tax_number], N''))) <> LTRIM(RTRIM(ISNULL(S.[supplier_tax_number], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[tax_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[tax_code], N'')))
   OR T.[tax_rate] <> S.[tax_rate]
+  OR LTRIM(RTRIM(ISNULL(T.[culture_code], N''))) <> S.[culture_code]
   OR LTRIM(RTRIM(ISNULL(T.[registration_country], N''))) <> LTRIM(RTRIM(ISNULL(S.[registration_country], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[registration_province], N''))) <> LTRIM(RTRIM(ISNULL(S.[registration_province], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[registration_city], N''))) <> LTRIM(RTRIM(ISNULL(S.[registration_city], N'')))
@@ -333,84 +335,84 @@ WHEN MATCHED AND (
   OR T.[supplier_status] <> S.[supplier_status]
 ) THEN
   UPDATE SET
-    T.[plant_code] = S.[plant_code],
-    T.[supplier_name1] = S.[supplier_name1],
-    T.[supplier_name2] = S.[supplier_name2],
-    T.[supplier_short_name] = S.[supplier_short_name],
-    T.[supplier_type] = S.[supplier_type],
-    T.[enterprise_nature] = S.[enterprise_nature],
-    T.[industry_attribute] = S.[industry_attribute],
-    T.[default_culture] = S.[default_culture],
-    T.[supplier_tax_number] = S.[supplier_tax_number],
-    T.[tax_rate] = S.[tax_rate],
-    T.[registration_country] = S.[registration_country],
-    T.[registration_province] = S.[registration_province],
-    T.[registration_city] = S.[registration_city],
-    T.[registration_address1] = S.[registration_address1],
-    T.[registration_address2] = S.[registration_address2],
-    T.[supplier_phone] = S.[supplier_phone],
-    T.[supplier_fax] = S.[supplier_fax],
-    T.[supplier_email] = S.[supplier_email],
-    T.[supplier_website] = S.[supplier_website],
-    T.[contact_person] = S.[contact_person],
-    T.[contact_phone] = S.[contact_phone],
-    T.[contact_email] = S.[contact_email],
-    T.[currency_code] = S.[currency_code],
-    T.[reconciliation_account] = S.[reconciliation_account],
-    T.[customer_code] = S.[customer_code],
-    T.[clearing_with_customer] = S.[clearing_with_customer],
-    T.[payment_method] = S.[payment_method],
-    T.[payment_terms] = S.[payment_terms],
-    T.[bank_code] = S.[bank_code],
-    T.[bank_account] = S.[bank_account],
-    T.[account_holder] = S.[account_holder],
-    T.[gr_based_invoice_inspection] = S.[gr_based_invoice_inspection],
-    T.[incoterms1] = S.[incoterms1],
-    T.[incoterms2] = S.[incoterms2],
-    T.[automatic_purchase_order] = S.[automatic_purchase_order],
-    T.[pricing_date_control] = S.[pricing_date_control],
-    T.[purchase_group] = S.[purchase_group],
-    T.[planned_delivery_time_days] = S.[planned_delivery_time_days],
-    T.[evaluated_receipt_settlement] = S.[evaluated_receipt_settlement],
-    T.[purchasing_organization] = S.[purchasing_organization],
-    T.[supplier_level] = S.[supplier_level],
-    T.[evaluation_score] = S.[evaluation_score],
-    T.[sort_order] = S.[sort_order],
-    T.[supplier_status] = S.[supplier_status],
-    T.[ext_field] = S.[ext_field],
-    T.[remark] = S.[remark],
-        T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[is_deleted] = S.[is_deleted],
-    T.[deleted_by] = CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    T.[deleted_at] = CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[plant_code]=S.[plant_code],
+  T.[supplier_name1]=S.[supplier_name1],
+  T.[supplier_name2]=S.[supplier_name2],
+  T.[supplier_short_name]=S.[supplier_short_name],
+  T.[supplier_type]=S.[supplier_type],
+  T.[enterprise_nature]=S.[enterprise_nature],
+  T.[industry_attribute]=S.[industry_attribute],
+  T.[supplier_tax_number]=S.[supplier_tax_number],
+  T.[tax_code]=S.[tax_code],
+  T.[tax_rate]=S.[tax_rate],
+  T.[culture_code]=S.[culture_code],
+  T.[registration_country]=S.[registration_country],
+  T.[registration_province]=S.[registration_province],
+  T.[registration_city]=S.[registration_city],
+  T.[registration_address1]=S.[registration_address1],
+  T.[registration_address2]=S.[registration_address2],
+  T.[supplier_phone]=S.[supplier_phone],
+  T.[supplier_fax]=S.[supplier_fax],
+  T.[supplier_email]=S.[supplier_email],
+  T.[supplier_website]=S.[supplier_website],
+  T.[contact_person]=S.[contact_person],
+  T.[contact_phone]=S.[contact_phone],
+  T.[contact_email]=S.[contact_email],
+  T.[currency_code]=S.[currency_code],
+  T.[reconciliation_account]=S.[reconciliation_account],
+  T.[customer_code]=S.[customer_code],
+  T.[clearing_with_customer]=S.[clearing_with_customer],
+  T.[payment_method]=S.[payment_method],
+  T.[payment_terms]=S.[payment_terms],
+  T.[bank_code]=S.[bank_code],
+  T.[bank_account]=S.[bank_account],
+  T.[account_holder]=S.[account_holder],
+  T.[gr_based_invoice_inspection]=S.[gr_based_invoice_inspection],
+  T.[incoterms1]=S.[incoterms1],
+  T.[incoterms2]=S.[incoterms2],
+  T.[automatic_purchase_order]=S.[automatic_purchase_order],
+  T.[pricing_date_control]=S.[pricing_date_control],
+  T.[purchase_group]=S.[purchase_group],
+  T.[planned_delivery_time_days]=S.[planned_delivery_time_days],
+  T.[evaluated_receipt_settlement]=S.[evaluated_receipt_settlement],
+  T.[purchasing_organization]=S.[purchasing_organization],
+  T.[supplier_level]=S.[supplier_level],
+  T.[evaluation_score]=S.[evaluation_score],
+  T.[sort_order]=S.[sort_order],
+  T.[supplier_status]=S.[supplier_status],
+  T.[remark]=S.[remark],
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[supplier_code],[supplier_name1],[supplier_name2],[supplier_short_name],
-    [supplier_type],[enterprise_nature],[industry_attribute],[default_culture],
-    [supplier_tax_number],[tax_rate],[registration_country],[registration_province],[registration_city],
+    [supplier_type],[enterprise_nature],[industry_attribute],
+    [supplier_tax_number],[tax_code],[tax_rate],[registration_country],[registration_province],[registration_city],
     [registration_address1],[registration_address2],[supplier_phone],[supplier_fax],[supplier_email],
     [supplier_website],[contact_person],[contact_phone],[contact_email],[currency_code],
     [reconciliation_account],[customer_code],[clearing_with_customer],[payment_method],[payment_terms],
     [bank_code],[bank_account],[account_holder],[gr_based_invoice_inspection],[incoterms1],[incoterms2],
     [automatic_purchase_order],[pricing_date_control],[purchase_group],[planned_delivery_time_days],
     [evaluated_receipt_settlement],[purchasing_organization],[supplier_level],[evaluation_score],
-    [sort_order],[supplier_status],[tenant_code],[company_code],[ext_field],[remark],
+    [sort_order],[supplier_status],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],
     [is_deleted],[deleted_by],[deleted_at]
   )
   VALUES (
     S.[id],S.[plant_code],S.[supplier_code],S.[supplier_name1],S.[supplier_name2],S.[supplier_short_name],
-    S.[supplier_type],S.[enterprise_nature],S.[industry_attribute],S.[default_culture],
-    S.[supplier_tax_number],S.[tax_rate],S.[registration_country],S.[registration_province],S.[registration_city],
+    S.[supplier_type],S.[enterprise_nature],S.[industry_attribute],
+    S.[supplier_tax_number],S.[tax_code],S.[tax_rate],S.[registration_country],S.[registration_province],S.[registration_city],
     S.[registration_address1],S.[registration_address2],S.[supplier_phone],S.[supplier_fax],S.[supplier_email],
     S.[supplier_website],S.[contact_person],S.[contact_phone],S.[contact_email],S.[currency_code],
     S.[reconciliation_account],S.[customer_code],S.[clearing_with_customer],S.[payment_method],S.[payment_terms],
     S.[bank_code],S.[bank_account],S.[account_holder],S.[gr_based_invoice_inspection],S.[incoterms1],S.[incoterms2],
     S.[automatic_purchase_order],S.[pricing_date_control],S.[purchase_group],S.[planned_delivery_time_days],
     S.[evaluated_receipt_settlement],S.[purchasing_organization],S.[supplier_level],S.[evaluation_score],
-    S.[sort_order],S.[supplier_status],S.[tenant_code],S.[company_code],S.[ext_field],S.[remark],
-    S.[updated_by],@now,S.[updated_by],@now,
+    S.[sort_order],S.[supplier_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
+    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
     S.[is_deleted],
     CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
     CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
@@ -511,11 +513,16 @@ DECLARE @soft_deleted INT = (
       SELECT 1 FROM #st_source S WHERE S.[company_code] = T.[company_code]
     )
 );
+DECLARE @source_active_count INT = (
+  SELECT COUNT(*)
+  FROM #st_source
+  WHERE [is_deleted] = 0
+);
 
-IF @target_count <> @source_count
+IF @target_count <> @source_active_count
 BEGIN
   DECLARE @count_msg NVARCHAR(200) = CONCAT(
-    N'有效行数不一致: source=', @source_count, N', active=', @target_count);
+    N'有效行数不一致: source=', @source_active_count, N', active=', @target_count);
   THROW 50002, @count_msg, 1;
 END;
 
@@ -523,7 +530,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -554,7 +561,7 @@ SELECT
   N'MERGE Supplier Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -575,17 +582,15 @@ DECLARE @json_result NVARCHAR(MAX) =
   + N',"soft_delete_this_run":' + CAST(@delete_count AS NVARCHAR)
   + N',"soft_delete_keys":"' + REPLACE(@soft_deleted_keys, N'"', N'''') + N'"}';
 
-
-
 INSERT INTO [takt_statistics_logging_oper_log] (
   [id],[user_name],[oper_type],[oper_module],[oper_method],
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
-VALUES (
-  @base_id + 1,
+SELECT
+  @base_id + 2000000000 + ROW_NUMBER() OVER (ORDER BY P.[company_code], P.[plant_code], P.[culture_code]),
   N'SYSTEM_SYNC',
   N'SYNC',
   N'供货商信息',
@@ -596,8 +601,12 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
-);
+  @tenant_code,P.[company_code],P.[plant_code],P.[culture_code],@sync_user_id,@now
+FROM (
+  SELECT DISTINCT [company_code], [plant_code], [culture_code]
+  FROM #st_source
+  WHERE LTRIM(RTRIM(ISNULL([plant_code], N''))) <> N''
+) P;
 
 SELECT
   N'QUARTZ_SYNC_SUMMARY' AS [summary_tag],

@@ -12,26 +12,47 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
+
+/**
+ * 指定文化下前端翻译键值包（对应后端 TaktTranslationMessagesDto）
+ * @description GET TaktTranslations/messages
+ */
+export interface TranslationMessages {
+  /**
+   * 区域文化编码（BCP47，如 zh-CN、en-US）
+   */
+  cultureCode: string;
+
+  /**
+   * 扁平翻译：I18nKey → TranslationText（仅 resource_type=frontend）
+   */
+  messages: Record<string, string>;
+}
 
 /**
  * 翻译实体 存储系统界面的多语言翻译文本 租户级实体：翻译数据在租户内共享，不需要公司隔离
  * 对应前端 TaktTranslationDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Translation
  * @description 对应后端 TaktTranslationDto
  */
-export interface Translation extends TenantDtoBase {
+export interface Translation extends TenantCoreDtoBase {
   /**
    * TranslationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   translationId: string;
 
   /**
-   * 文化ID（关联 TaktCulture.Id）
+   * 区域文化（选项 TaktCultures/options；DictValue=Id）
    */
   cultureId: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 文化名称（填充字段）
@@ -84,14 +105,14 @@ export interface TranslationQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 文化ID（关联 TaktCulture.Id）
    */
   cultureId?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -345,14 +366,14 @@ export interface TranslationExport {
   translationId: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
-   * 文化ID（关联 TaktCulture.Id）
+   * 区域文化（选项 TaktCultures/options；DictValue=Id）
    */
   cultureId: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）

@@ -4,7 +4,7 @@
 // 文件名称：TaktCaptchaService.cs
 // 创建时间：2026-05-26
 // 创建人：Takt365(Cursor AI)
-// 功能描述：验证码服务实现（Slider 拼图 / Behavior 行为评分，按 appsettings Captcha 节点）
+// 功能描述：验证码服务实现（Slider 拼图 / Behavior 行为评分，按 appsettings Captcha 节点；图像合成用 SkiaSharp）
 // 
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,10 +16,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 using Takt.Application.Services;
 using Takt.Domain.Interfaces;
 using Takt.Shared.Helpers;
@@ -309,21 +306,25 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
         }
 
         var templateGroup = _availableTemplateGroups[_random.Next(_availableTemplateGroups.Count)];
-        var background = await LoadBackgroundImageAsync(cancellationToken);
+        using var background = await LoadBackgroundImageAsync(cancellationToken);
         var (holeTemplate, sliderTemplate) = await LoadTemplateImagesAsync(templateGroup, cancellationToken);
-        using var backgroundWithHole = ApplyHoleTemplate(background, holeTemplate, targetX, targetY);
-        using var sliderImage = ApplySliderTemplate(sliderTemplate);
-        return (
-            ImageToBase64(backgroundWithHole, _sliderOptions.BackgroundImages.FileExtension),
-            ImageToBase64(sliderImage, ".png"));
+        using (holeTemplate)
+        using (sliderTemplate)
+        {
+            using var backgroundWithHole = ApplyHoleTemplate(background, holeTemplate, targetX, targetY);
+            using var sliderImage = ApplySliderTemplate(sliderTemplate);
+            return (
+                ImageToBase64(backgroundWithHole, _sliderOptions.BackgroundImages.FileExtension),
+                ImageToBase64(sliderImage, ".png"));
+        }
     }
 
     /// <summary>
     /// 从 wwwroot 背景目录随机选取一张图；数量不足时触发下载，仍无则生成随机色块图
     /// </summary>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>背景 Image{Rgba32}</returns>
-    private async Task<Image<Rgba32>> LoadBackgroundImageAsync(CancellationToken cancellationToken)
+    /// <returns>背景 SKBitmap（调用方负责释放）</returns>
+    private async Task<SKBitmap> LoadBackgroundImageAsync(CancellationToken cancellationToken)
     {
         var wwwroot = TaktFileHelper.GetWwwRootPath(_environment.ContentRootPath);
         var storagePath = Path.Combine(wwwroot, NormalizeRelativePath(_sliderOptions.BackgroundImages.StoragePath));
@@ -343,9 +344,13 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
                 .ToArray();
         }
 
-        return imageFiles.Length == 0
-            ? GenerateRandomImage()
-            : await Image.LoadAsync<Rgba32>(imageFiles[_random.Next(imageFiles.Length)], cancellationToken);
+        if (imageFiles.Length == 0)
+        {
+            return GenerateRandomImage();
+        }
+
+        var bytes = await File.ReadAllBytesAsync(imageFiles[_random.Next(imageFiles.Length)], cancellationToken);
+        return DecodeBitmap(bytes);
     }
 
     /// <summary>
@@ -395,8 +400,8 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// </summary>
     /// <param name="templateGroup">模板组编码（1..GroupCount）</param>
     /// <param name="cancellationToken">取消令牌</param>
-    /// <returns>缺口蒙版与滑块贴图</returns>
-    private async Task<(Image<Rgba32> holeTemplate, Image<Rgba32> sliderTemplate)> LoadTemplateImagesAsync(
+    /// <returns>缺口蒙版与滑块贴图（调用方负责释放）</returns>
+    private async Task<(SKBitmap holeTemplate, SKBitmap sliderTemplate)> LoadTemplateImagesAsync(
         int templateGroup,
         CancellationToken cancellationToken)
     {
@@ -413,9 +418,9 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
             throw new FileNotFoundException($"模板图片不存在: Group {templateGroup}");
         }
 
-        var holeTemplate = await Image.LoadAsync<Rgba32>(holePath, cancellationToken);
-        var sliderTemplate = await Image.LoadAsync<Rgba32>(sliderPath, cancellationToken);
-        return (holeTemplate, sliderTemplate);
+        var holeBytes = await File.ReadAllBytesAsync(holePath, cancellationToken);
+        var sliderBytes = await File.ReadAllBytesAsync(sliderPath, cancellationToken);
+        return (DecodeBitmap(holeBytes), DecodeBitmap(sliderBytes));
     }
 
     /// <summary>
@@ -426,20 +431,23 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// <param name="targetX">绘制 X</param>
     /// <param name="targetY">绘制 Y</param>
     /// <returns>带缺口的背景克隆图（调用方负责释放）</returns>
-    private Image<Rgba32> ApplyHoleTemplate(Image<Rgba32> background, Image<Rgba32> holeTemplate, int targetX, int targetY)
+    private SKBitmap ApplyHoleTemplate(SKBitmap background, SKBitmap holeTemplate, int targetX, int targetY)
     {
         var sliderSize = _sliderOptions.SliderHeight > 0 ? _sliderOptions.SliderHeight : _sliderOptions.SliderWidth;
-        var result = background.Clone();
-        result.Mutate(ctx =>
+        var result = background.Copy() ?? throw new InvalidOperationException("背景图克隆失败");
+        using var resizedHole = ResizeStretch(holeTemplate, sliderSize, sliderSize);
+        using var canvas = new SKCanvas(result);
+        using var paint = new SKPaint
         {
-            using var resizedHole = holeTemplate.Clone();
-            resizedHole.Mutate(h => h.Resize(new ResizeOptions
-            {
-                Size = new Size(sliderSize, sliderSize),
-                Mode = ResizeMode.Stretch,
-            }));
-            ctx.DrawImage(resizedHole, new Point(targetX, targetY), 0.8f);
-        });
+            IsAntialias = true,
+            Color = SKColors.White.WithAlpha((byte)(255 * 0.8f)),
+        };
+        canvas.DrawBitmap(
+            resizedHole,
+            targetX,
+            targetY,
+            new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.None),
+            paint);
         return result;
     }
 
@@ -448,39 +456,33 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// </summary>
     /// <param name="sliderTemplate">滑块贴图</param>
     /// <returns>缩放后的滑块图（调用方负责释放）</returns>
-    private Image<Rgba32> ApplySliderTemplate(Image<Rgba32> sliderTemplate)
+    private SKBitmap ApplySliderTemplate(SKBitmap sliderTemplate)
     {
         var sliderSize = _sliderOptions.SliderHeight > 0 ? _sliderOptions.SliderHeight : _sliderOptions.SliderWidth;
-        var sliderImage = sliderTemplate.Clone();
-        sliderImage.Mutate(h => h.Resize(new ResizeOptions
-        {
-            Size = new Size(sliderSize, sliderSize),
-            Mode = ResizeMode.Stretch,
-        }));
-        return sliderImage;
+        return ResizeStretch(sliderTemplate, sliderSize, sliderSize);
     }
 
     /// <summary>
     /// 无可用背景文件时生成随机浅色块图（兜底）
     /// </summary>
     /// <returns>随机 RGB 图像</returns>
-    private Image<Rgba32> GenerateRandomImage()
+    private SKBitmap GenerateRandomImage()
     {
-        var image = new Image<Rgba32>(_sliderOptions.Width, _sliderOptions.Height);
-        image.ProcessPixelRows(accessor =>
+        var image = new SKBitmap(_sliderOptions.Width, _sliderOptions.Height);
+        for (var y = 0; y < image.Height; y++)
         {
-            for (var y = 0; y < accessor.Height; y++)
+            for (var x = 0; x < image.Width; x++)
             {
-                var row = accessor.GetRowSpan(y);
-                for (var x = 0; x < row.Length; x++)
-                {
-                    row[x] = new Rgba32(
+                image.SetPixel(
+                    x,
+                    y,
+                    new SKColor(
                         (byte)_random.Next(200, 256),
                         (byte)_random.Next(200, 256),
-                        (byte)_random.Next(200, 256));
-                }
+                        (byte)_random.Next(200, 256)));
             }
-        });
+        }
+
         return image;
     }
 
@@ -490,17 +492,58 @@ public class TaktCaptchaService : TaktServiceBase, ITaktCaptchaService
     /// <param name="image">源图像</param>
     /// <param name="fileExtension">扩展名（.png / .jpg 等）</param>
     /// <returns>形如 data:image/png;base64,... 的字符串</returns>
-    private static string ImageToBase64(Image<Rgba32> image, string fileExtension)
+    private static string ImageToBase64(SKBitmap image, string fileExtension)
     {
-        using var ms = new MemoryStream();
-        if (fileExtension.Equals(".png", StringComparison.OrdinalIgnoreCase))
+        using var skImage = SKImage.FromBitmap(image);
+        var isPng = fileExtension.Equals(".png", StringComparison.OrdinalIgnoreCase);
+        using var data = skImage.Encode(
+            isPng ? SKEncodedImageFormat.Png : SKEncodedImageFormat.Jpeg,
+            isPng ? 100 : 90);
+        if (data == null)
         {
-            image.SaveAsPng(ms);
-            return $"data:image/png;base64,{Convert.ToBase64String(ms.ToArray())}";
+            throw new InvalidOperationException("图像编码失败");
         }
 
-        image.SaveAsJpeg(ms, new JpegEncoder { Quality = 90 });
-        return $"data:image/jpeg;base64,{Convert.ToBase64String(ms.ToArray())}";
+        var mime = isPng ? "image/png" : "image/jpeg";
+        return $"data:{mime};base64,{Convert.ToBase64String(data.ToArray())}";
+    }
+
+    /// <summary>
+    /// 从字节解码位图；失败抛 InvalidOperationException
+    /// </summary>
+    /// <param name="bytes">图像文件字节</param>
+    /// <returns>解码后的 SKBitmap</returns>
+    private static SKBitmap DecodeBitmap(byte[] bytes)
+    {
+        ArgumentNullException.ThrowIfNull(bytes);
+        var bitmap = SKBitmap.Decode(bytes);
+        if (bitmap == null)
+        {
+            throw new InvalidOperationException("图像解码失败");
+        }
+
+        return bitmap;
+    }
+
+    /// <summary>
+    /// 按目标宽高拉伸缩放位图
+    /// </summary>
+    /// <param name="source">源图</param>
+    /// <param name="width">目标宽</param>
+    /// <param name="height">目标高</param>
+    /// <returns>新位图（调用方负责释放）</returns>
+    private static SKBitmap ResizeStretch(SKBitmap source, int width, int height)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+        var resized = source.Resize(
+            new SKImageInfo(width, height),
+            new SKSamplingOptions(SKFilterMode.Linear, SKMipmapMode.None));
+        if (resized == null)
+        {
+            throw new InvalidOperationException("图像缩放失败");
+        }
+
+        return resized;
     }
 
     /// <summary>

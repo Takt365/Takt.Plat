@@ -38,7 +38,7 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
     public string ModelCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）
+    /// 机种月平均材料成本（同工厂+核算月+机种+物料类型下各产品月计算算术平均）
     /// </summary>
     [SugarColumn(ColumnName = "model_monthly_average_cost", ColumnDescription = "机种月成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ModelMonthlyAverageCost { get; set; } = 0;
@@ -66,10 +66,22 @@ public class TaktBomMaterialCost : TaktCompanyEntityBase
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     [SugarColumn(ColumnName = "product_monthly_cost", ColumnDescription = "产品月成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ProductMonthlyCost { get; set; } = 0;
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F；行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数）
+    /// </summary>
+    [SugarColumn(ColumnName = "product_monthly_calculation", ColumnDescription = "产品月计算", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal ProductMonthlyCalculation { get; set; } = 0;
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径：生产相关=X、PCB SECT 标识为空、采购类型=F、用量 &gt; 0.001；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    [SugarColumn(ColumnName = "latest_purchase_cost", ColumnDescription = "最近采购成本", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
+    public decimal LatestPurchaseCost { get; set; } = 0;
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）

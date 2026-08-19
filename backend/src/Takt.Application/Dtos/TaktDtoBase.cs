@@ -4,7 +4,7 @@
 // 文件名称：TaktDtoBase.cs
 // 创建时间：2026-05-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：DTO 基类，对齐 TaktTenant/Company/ApprovalEntityBase（租户 RelatedPlant+CultureCode；公司/审批 PlantCode+CultureCode）
+// 功能描述：DTO 基类；租户按「工厂×语言」四组合对齐实体 Scope；公司/审批含 PlantCode+CultureCode
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,40 +13,22 @@
 namespace Takt.Application.Dtos;
 
 // ========================================
-// 租户级 DTO 基类（对应 TaktTenantEntityBase）
+// 租户 DTO 四组合（对齐 Scope）
+// 4 Core / 2 Culture / 3 Plant / 1 Tenant(默认)
 // ========================================
 
 /// <summary>
-/// 租户级 DTO 基类
-/// 对应实体基类 TaktTenantEntityBase
-/// 包含租户隔离字段和审计字段
-/// 适用于用户、角色、菜单等跨公司共享的实体 DTO
-/// 注意：不包含 Id，Id 由各具体 DTO 根据需要定义
+/// 租户组合 4 DTO：无关联工厂、无语言（无公司隔离）
 /// </summary>
-public abstract class TaktTenantDtoBase
+public abstract class TaktTenantCoreDtoBase
 {
     /// <summary>
-    /// 租户编码（第一层数据隔离）
+    /// 租户编码
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（租户级实体不使用公司隔离，固定为空字符串）
-    /// </summary>
-    public string CompanyCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；行戳记，创建时可由仓储按公司主档注入）
-    /// </summary>
-    public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 扩展字段JSON
+    /// 扩展字段
     /// </summary>
     public string? ExtField { get; set; }
 
@@ -56,13 +38,13 @@ public abstract class TaktTenantDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 900001）
+    /// 创建人ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }
 
     /// <summary>
-    /// 创建时间（非空）
+    /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
@@ -78,7 +60,7 @@ public abstract class TaktTenantDtoBase
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// 是否删除（软删除标记，0=未删除，1=已删除）
+    /// 是否删除
     /// </summary>
     public int IsDeleted { get; set; } = 0;
 
@@ -94,41 +76,70 @@ public abstract class TaktTenantDtoBase
     public DateTime? DeletedAt { get; set; }
 }
 
+/// <summary>
+/// 租户组合 2 DTO：无关联工厂、有语言
+/// </summary>
+public abstract class TaktTenantCultureDtoBase : TaktTenantCoreDtoBase
+{
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = "mul";
+}
+
+/// <summary>
+/// 租户组合 3 DTO：有关联工厂、无语言
+/// </summary>
+public abstract class TaktTenantPlantDtoBase : TaktTenantCoreDtoBase
+{
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// 租户组合 1 DTO：有关联工厂、有语言（默认）
+/// </summary>
+public abstract class TaktTenantDtoBase : TaktTenantCultureDtoBase
+{
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+}
+
 // ========================================
 // 公司级 DTO 基类（对应 TaktCompanyEntityBase）
 // ========================================
 
 /// <summary>
 /// 公司级 DTO 基类
-/// 对应实体基类 TaktCompanyEntityBase
-/// 包含租户+公司双重隔离和审计字段
-/// 适用于部门、岗位、员工等业务实体 DTO
-/// 注意：不包含 Id，Id 由各具体 DTO 根据需要定义
 /// </summary>
 public abstract class TaktCompanyDtoBase
 {
     /// <summary>
-    /// 租户编码（第一层数据隔离）
+    /// 租户编码
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（第二层数据隔离）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，创建时由仓储注入）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扩展字段JSON
+    /// 扩展字段
     /// </summary>
     public string? ExtField { get; set; }
 
@@ -138,13 +149,13 @@ public abstract class TaktCompanyDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 900001）
+    /// 创建人ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }
 
     /// <summary>
-    /// 创建时间（非空）
+    /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
@@ -160,7 +171,7 @@ public abstract class TaktCompanyDtoBase
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// 是否删除（软删除标记，0=未删除，1=已删除）
+    /// 是否删除
     /// </summary>
     public int IsDeleted { get; set; } = 0;
 
@@ -182,33 +193,31 @@ public abstract class TaktCompanyDtoBase
 
 /// <summary>
 /// 审批级 DTO 基类
-/// 对应实体基类 TaktApprovalEntityBase（含 FlowInstanceId；凡审批必走 TaktFlowEngine）
-/// 注意：不包含 Id，Id 由各具体 DTO 根据需要定义
 /// </summary>
 public abstract class TaktApprovalDtoBase
 {
     /// <summary>
-    /// 租户编码（第一层数据隔离）
+    /// 租户编码
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（第二层数据隔离）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致，创建时由仓储注入）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 扩展字段JSON
+    /// 扩展字段
     /// </summary>
     public string? ExtField { get; set; }
 
@@ -218,7 +227,7 @@ public abstract class TaktApprovalDtoBase
     public string? Remark { get; set; }
 
     /// <summary>
-    /// 审批状态（字典 sys_approval_status；与 TaktApprovalEntityBase.ApprovalStatus 一致）
+    /// 审批状态
     /// </summary>
     public int ApprovalStatus { get; set; } = 0;
 
@@ -234,7 +243,7 @@ public abstract class TaktApprovalDtoBase
     public DateTime? InitiatedAt { get; set; }
 
     /// <summary>
-    /// 审批意见（支持多级审批时多条意见，用JSON数组存储）
+    /// 审批意见
     /// </summary>
     public string? ApprovalOpinion { get; set; }
 
@@ -250,19 +259,19 @@ public abstract class TaktApprovalDtoBase
     public DateTime? ApprovedAt { get; set; }
 
     /// <summary>
-    /// 流程实例 ID（关联工作流流程实例表 takt_workflow_instance；StartFlowInstance 后由业务写入）
+    /// 流程实例ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? FlowInstanceId { get; set; }
 
     /// <summary>
-    /// 创建人ID（非空；无当前用户时仓储填 900001）
+    /// 创建人ID
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CreatedBy { get; set; }
 
     /// <summary>
-    /// 创建时间（非空）
+    /// 创建时间
     /// </summary>
     public DateTime CreatedAt { get; set; }
 
@@ -278,7 +287,7 @@ public abstract class TaktApprovalDtoBase
     public DateTime? UpdatedAt { get; set; }
 
     /// <summary>
-    /// 是否删除（软删除标记，0=未删除，1=已删除）
+    /// 是否删除
     /// </summary>
     public int IsDeleted { get; set; } = 0;
 

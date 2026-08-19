@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/sales
 // 文件名称：seller-material.d.ts
-// 创建时间：2026-08-06
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/sales 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
- * Takt销售商物料实体（租户内共享）
+ * Takt销售商物料实体（租户内共享） 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
  * 对应前端 TaktSellerMaterialDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase
  * 对应前端 SellerMaterial
  * @description 对应后端 TaktSellerMaterialDto
  */
-export interface SellerMaterial extends TenantDtoBase {
+export interface SellerMaterial extends TenantCoreDtoBase {
   /**
    * SellerMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -90,6 +90,7 @@ export interface SellerMaterial extends TenantDtoBase {
 
 }
 
+
 /**
  * SellerMaterial 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -101,11 +102,6 @@ export interface SellerMaterialQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
@@ -189,6 +185,7 @@ export interface SellerMaterialQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建SellerMaterial DTO
  * 对应前端 SellerMaterialCreate
@@ -199,11 +196,6 @@ export interface SellerMaterialCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
@@ -277,6 +269,7 @@ export interface SellerMaterialCreate {
 
 }
 
+
 /**
  * 更新SellerMaterial DTO
  * 继承 TaktSellerMaterialCreateDto，添加 SellerMaterialId 字段
@@ -291,6 +284,7 @@ export interface SellerMaterialUpdate extends SellerMaterialCreate {
 
 }
 
+
 /**
  * SellerMaterial 导入模板行 DTO
  * 对应前端 SellerMaterialTemplate
@@ -301,11 +295,6 @@ export interface SellerMaterialTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
@@ -378,6 +367,7 @@ export interface SellerMaterialTemplate {
   remark?: string;
 
 }
+
 
 /**
  * SellerMaterial 导入 DTO（独立实现，不继承 TemplateDto）
@@ -391,11 +381,6 @@ export interface SellerMaterialImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
    */
   customerCode?: string;
@@ -466,6 +451,7 @@ export interface SellerMaterialImport {
   remark?: string;
 
 }
+
 
 /**
  * SellerMaterial 导出 DTO（独立实现，不继承响应 Dto）

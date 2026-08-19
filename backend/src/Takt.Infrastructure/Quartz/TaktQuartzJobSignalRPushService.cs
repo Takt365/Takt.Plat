@@ -55,7 +55,13 @@ public sealed class TaktQuartzJobSignalRPushService : ITaktQuartzJobSignalRPushS
         _tenantOptions = tenantOptions.Value;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送定时任务执行完成到公司内在线客户端
+    /// </summary>
+    /// <param name="task">定时任务实体（含最新统计字段）</param>
+    /// <param name="log">执行日志</param>
+    /// <param name="triggerUserName">触发用户名（手动触发时有值）</param>
+    /// <returns>任务</returns>
     public async Task PushTaskExecutedAsync(
         TaktQuartzTask task,
         TaktQuartzLog log,

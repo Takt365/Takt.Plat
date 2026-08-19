@@ -18,6 +18,7 @@ scripts/_tmp*
 backend/src/Takt.WebApi/wwwroot/uploads/
 backend/src/Takt.WebApi/logs/
 backend/**/.takt-temp/
+backend/artifacts/
 frontend/logs/
 *.log
 

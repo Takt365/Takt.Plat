@@ -130,7 +130,7 @@ export interface PurchaseOrderItem extends CompanyDtoBase {
   isObsolete?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 

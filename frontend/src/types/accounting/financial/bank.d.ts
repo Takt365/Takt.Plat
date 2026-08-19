@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：bank.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -11,18 +11,18 @@
 // ========================================
 
 import type {
-  TaktPagedQuery,
-  TenantDtoBase
+  CompanyDtoBase,
+  TaktPagedQuery
 } from '@/types/common';
 
 /**
- * 银行信息实体（租户级；租户内各公司共用；按国家地区 + 银行代码唯一）
+ * 银行信息实体（公司级；租户+公司隔离；按国家地区 + 银行代码唯一）
  * 对应前端 TaktBankDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktCompanyDtoBase
  * 对应前端 Bank
  * @description 对应后端 TaktBankDto
  */
-export interface Bank extends TenantDtoBase {
+export interface Bank extends CompanyDtoBase {
   /**
    * BankID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -160,6 +160,7 @@ export interface Bank extends TenantDtoBase {
 
 }
 
+
 /**
  * Bank 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -173,9 +174,19 @@ export interface BankQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
-  relatedPlant?: string;
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode?: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -329,6 +340,7 @@ export interface BankQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建Bank DTO
  * 对应前端 BankCreate
@@ -341,9 +353,19 @@ export interface BankCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
-  relatedPlant: string;
+  companyCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -487,6 +509,7 @@ export interface BankCreate {
 
 }
 
+
 /**
  * 更新Bank DTO
  * 继承 TaktBankCreateDto，添加 BankId 字段
@@ -501,6 +524,7 @@ export interface BankUpdate extends BankCreate {
 
 }
 
+
 /**
  * Bank 导入模板行 DTO
  * 对应前端 BankTemplate
@@ -513,9 +537,19 @@ export interface BankTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
-  relatedPlant?: string;
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -658,6 +692,7 @@ export interface BankTemplate {
   remark?: string;
 
 }
+
 
 /**
  * Bank 导入 DTO（独立实现，不继承 TemplateDto）
@@ -671,9 +706,19 @@ export interface BankImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
-  relatedPlant?: string;
+  companyCode?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
+   */
+  plantCode?: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）
@@ -817,6 +862,7 @@ export interface BankImport {
 
 }
 
+
 /**
  * Bank 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 BankExport
@@ -827,6 +873,21 @@ export interface BankExport {
    * BankID
    */
   bankId: string;
+
+  /**
+   * 公司代码
+   */
+  companyCode: string;
+
+  /**
+   * 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  plantCode: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）

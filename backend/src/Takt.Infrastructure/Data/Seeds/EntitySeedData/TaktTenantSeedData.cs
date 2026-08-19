@@ -109,7 +109,8 @@ public class TaktTenantSeedData : ITaktSeedDataCoordinator
                 SubscriptionEndTime = new DateTime(9999, 12, 31, 23, 59, 59),
                 ContactName = contactName,
                 ContactPhone = contactPhone,
-                ContactEmail = contactEmail
+                ContactEmail = contactEmail,
+                Remark = TaktZeroCharHelper.BrandTakt365
             };
             tenant = await repository.CreateAsync(tenant);
             return (tenant, 1, 0);
@@ -125,6 +126,7 @@ public class TaktTenantSeedData : ITaktSeedDataCoordinator
             tenant.ContactName = contactName;
             tenant.ContactPhone = contactPhone;
             tenant.ContactEmail = contactEmail;
+            tenant.Remark = TaktZeroCharHelper.BrandTakt365;
 
             await repository.UpdateAsync(tenant);
             return (tenant, 0, 1);

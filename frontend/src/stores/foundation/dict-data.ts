@@ -118,8 +118,8 @@ export const useDictDataStore = defineStore('dict-data', () => {
     const uiLocale = resolveRequestLocale().trim().toLowerCase();
     const matchCulture = target || uiLocale;
     return options.filter((item) => {
-      const code = (item.cultureCode ?? '').trim().toLowerCase() || 'eo';
-      return code === 'eo' || code === matchCulture;
+      const code = (item.cultureCode ?? '').trim().toLowerCase() || 'mul';
+      return code === 'mul' || code === matchCulture;
     });
   }
 

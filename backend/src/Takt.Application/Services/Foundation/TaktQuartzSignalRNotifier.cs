@@ -54,7 +54,15 @@ public class TaktQuartzSignalRNotifier : ITaktQuartzSignalRNotifier
         _signalRDispatchService = signalRDispatchService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送定时任务定义变更
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="task">定时任务实体</param>
+    /// <param name="changeType">变更类型</param>
+    /// <param name="operatorUserName">操作人用户名</param>
+    /// <returns>任务</returns>
     public async Task NotifyTaskChangedAsync(
         string tenantCode,
         string companyCode,

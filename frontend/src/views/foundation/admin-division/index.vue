@@ -576,11 +576,34 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'adminDivisionId'
-/** 树节点标题字段名（左侧树 title） */
-const treeTitleField = 'adminDivisionId'
+/** 树节点标题：根=CountryCode，子级=DivisionName（ParentId 递归） */
+const treeTitleField = 'divisionName'
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
+
+/**
+ * 是否为国家根节点（ParentId=0 或层级 1）
+ * @param row 区划行
+ * @returns {boolean} 根国家
+ */
+function isAdminDivisionCountryRoot(row: Pick<AdminDivisionTree, 'parentId' | 'level'>): boolean {
+  const parentId = row.parentId
+  if (parentId == null || parentId === '' || String(parentId) === '0') return true
+  return Number(row.level) === 1
+}
+
+/**
+ * 左侧树标题：国家根显示 CountryCode，其余按 ParentId 递归显示 DivisionName
+ * @param row 区划行
+ * @returns {string} 树节点标题
+ */
+function getAdminDivisionTreeTitle(row: AdminDivisionTree): string {
+  if (isAdminDivisionCountryRoot(row)) {
+    return String(row.countryCode || row.divisionName || row.divisionCode || '')
+  }
+  return String(row[treeTitleField] || row.divisionCode || row.countryCode || '')
+}
 
 /**
  * 将树 API 一层 DTO 映射为左侧懒加载节点
@@ -589,7 +612,7 @@ const dictDataStore = useDictDataStore()
 function mapAdminDivisionLazyNodes(rows: AdminDivisionTree[]): TaktLazyTreeNode[] {
   return mapLazyTreeNodes(rows, {
     getKey: (n) => String(n.adminDivisionId ?? ''),
-    getTitle: (n) => String(n.adminDivisionId || n.adminDivisionCode || n.adminDivisionId || ''),
+    getTitle: (n) => getAdminDivisionTreeTitle(n),
     isLeaf: (n) => taktIsLeafFlag((n as { isLeaf?: unknown }).isLeaf),
   })
 }
@@ -608,7 +631,10 @@ function filterTreeByKeyword(nodes: TaktLazyTreeNode[], keyword: string): TaktLa
     return list
       .map((node) => {
         const title = String(node.title ?? '').toLowerCase()
-        const matched = title.includes(k)
+        const country = String(node.countryCode ?? '').toLowerCase()
+        const name = String(node.divisionName ?? '').toLowerCase()
+        const code = String(node.divisionCode ?? '').toLowerCase()
+        const matched = title.includes(k) || country.includes(k) || name.includes(k) || code.includes(k)
         const filteredChildren = node.children?.length ? filter(node.children as TaktLazyTreeNode[]) : undefined
         const hasMatchInChildren = filteredChildren != null && filteredChildren.length > 0
         if (matched || hasMatchInChildren) {

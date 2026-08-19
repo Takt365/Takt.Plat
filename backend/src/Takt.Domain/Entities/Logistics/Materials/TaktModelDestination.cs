@@ -4,7 +4,7 @@
 // 文件名称：TaktModelDestination.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt型号目的地实体，定义机型/型号与出货目的地的关联
+// 功能描述：Takt型号目的地实体（组合4仅租户）；机型/型号与出货目的地关联
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,12 +17,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_logistics_materials_model_destination", "型号目的地表")]
 [SugarIndex("ix_model_destination_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_model_destination_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_model_destination_order_num", nameof(TenantCode), OrderByType.Asc, nameof(SortOrder), OrderByType.Asc, false)]
-public class TaktModelDestination : TaktTenantEntityBase
+public class TaktModelDestination : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）

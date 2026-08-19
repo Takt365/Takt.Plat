@@ -41,13 +41,13 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('languageName')"
-                name="languageName"
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
               >
                 <TaktSelect
-                  v-model:value="formState.languageName"
+                  v-model:value="formState.cultureCode"
                   dict-type="sys_culture_code"
-                  :placeholder="pi.ph('languageName')"
+                  :placeholder="pi.ph('cultureCode')"
                 />
               </a-form-item>
             </a-col>
@@ -251,16 +251,13 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('companyCode') && (force || !target.companyCode)) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
 }
 /** 表单内容区高度 class（字段多时 tab-10 行） */
 const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
 /** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","relatedPlant","languageName","nativeName","icon","isDefault","extField","remark"]
+const formFields = ["tenantCode","relatedPlant","cultureCode","nativeName","icon","isDefault","extField","remark"]
 
 
 import type { TaktEditableTableColumn } from '@/components/business/takt-editable-table/types'
@@ -346,7 +343,7 @@ function buildSubmitPayload() {
       ...rest,
       tenantCode: tenantStore.tenantCode,
       companyCode: tenantStore.companyCode,
-      cultureCode: userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? '',
+      cultureCode: typeof formState.cultureCode === 'string' ? formState.cultureCode : '',
       cultureId: masterId,
     })),
   }
@@ -370,7 +367,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  languageName: "ZH-CN"
+  cultureCode: "zh-CN"
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -431,10 +428,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
-  languageName: [
+  cultureCode: [
     {
       required: true,
-      message: pi.ph('languageName'),
+      message: pi.ph('cultureCode'),
       trigger: 'change'
     }
   ],

@@ -252,7 +252,7 @@ export interface Vendor extends CompanyDtoBase {
   evaluationScore?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；用于匹配税码等区域字典）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -526,7 +526,7 @@ export interface VendorExport {
   sortOrder: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；用于匹配税码等区域字典）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 

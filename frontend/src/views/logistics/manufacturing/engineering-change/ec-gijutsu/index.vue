@@ -124,10 +124,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.ec.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ec.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -462,7 +462,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.ec.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'ecCode', label: t('entity.ec.no') },
   { key: 'ecIssueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
   { key: 'ecIssueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.ec.issuedate')) },
@@ -621,7 +621,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcField(record, 'ecGijutsuId') ?? ''
   },
   {
-    title: t('entity.ec.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

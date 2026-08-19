@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Identity;
 [SugarIndex("ix_user_role_unique", nameof(TenantCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, nameof(RoleId), OrderByType.Asc, true)]
 [SugarIndex("ix_user_role_role", nameof(TenantCode), OrderByType.Asc, nameof(RoleId), OrderByType.Asc, false)]
 [SugarIndex("ix_user_role_user", nameof(TenantCode), OrderByType.Asc, nameof(UserId), OrderByType.Asc, false)]
-public class TaktUserRole : TaktTenantEntityBase
+public class TaktUserRole : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 用户ID

@@ -12,26 +12,26 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
- * 财务期间（租户级主数据；字典 accounting_financial_year_category 区分 CN/JP/HK/US 财年规则）
+ * 财务期间（租户级主数据；按 CountryCode / sys_country_code 区分各国财年规则）
  * 对应前端 TaktFinancialPeriodDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 FinancialPeriod
  * @description 对应后端 TaktFinancialPeriodDto
  */
-export interface FinancialPeriod extends TenantDtoBase {
+export interface FinancialPeriod extends TenantCoreDtoBase {
   /**
    * FinancialPeriodID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   financialPeriodId: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory: string;
+  countryCode: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -78,9 +78,9 @@ export interface FinancialPeriodQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory?: string;
+  countryCode?: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -146,9 +146,9 @@ export interface FinancialPeriodCreate {
   tenantCode: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory: string;
+  countryCode: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -218,9 +218,9 @@ export interface FinancialPeriodTemplate {
   tenantCode?: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory?: string;
+  countryCode?: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -276,9 +276,9 @@ export interface FinancialPeriodImport {
   tenantCode?: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory?: string;
+  countryCode?: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -334,9 +334,9 @@ export interface FinancialPeriodExport {
   financialPeriodId: string;
 
   /**
-   * 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+   * 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
    */
-  financialYearCategory: string;
+  countryCode: string;
 
   /**
    * 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）

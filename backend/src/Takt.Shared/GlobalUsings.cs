@@ -22,5 +22,6 @@ global using Org.BouncyCastle.Security;
 global using Serilog;
 global using Serilog.Context;
 global using Serilog.Events;
+global using Takt.Shared.Helpers;
 
 

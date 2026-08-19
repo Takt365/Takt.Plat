@@ -58,7 +58,11 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         _signalRDispatchService = signalRDispatchService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 派发变更通知：解析部门、持久化投递记录、SignalR 推送
+    /// </summary>
+    /// <param name="ecNotificationId">通知单 ID</param>
+    /// <returns>异步任务</returns>
     public async Task DispatchEcNotificationAsync(long ecNotificationId)
     {
         EnsureThreeLayerContext();
@@ -105,7 +109,11 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 确认通知投递（部门用户点击确认）
+    /// </summary>
+    /// <param name="dto">确认参数</param>
+    /// <returns>异步任务</returns>
     public async Task ConfirmEcNotificationDeliveryAsync(TaktEcNotificationConfirmDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -137,7 +145,11 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 上报执行任务进度
+    /// </summary>
+    /// <param name="dto">进度参数</param>
+    /// <returns>异步任务</returns>
     public async Task ReportEcExecutionTaskProgressAsync(TaktEcExecutionTaskProgressReportDto dto)
     {
         ArgumentNullException.ThrowIfNull(dto);
@@ -194,7 +206,12 @@ public class TaktEcChangeFlowService : TaktServiceBase, ITaktEcChangeFlowService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 扫描超时/阻塞任务并推送预警（定时任务入口）
+    /// </summary>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司编码</param>
+    /// <returns>处理任务数</returns>
     public async Task<int> ScanOverdueEcExecutionTasksAsync(string tenantCode, string companyCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);

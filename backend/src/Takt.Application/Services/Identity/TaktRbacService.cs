@@ -992,7 +992,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         Expression<Func<TEntity, bool>> scopePredicate,
         List<TEntity> newEntities,
         string logContext)
-        where TEntity : TaktTenantEntityBase, new()
+        where TEntity : TaktTenantCoreEntityBase, new()
     {
         // 【查询】按作用域获取当前未删除的旧关联
         var existing = await repository.GetListAsync(scopePredicate);
@@ -1056,7 +1056,7 @@ public class TaktRbacService : TaktServiceBase, ITaktRbacService
         ITaktTenantRepository<TEntity> repository,
         List<TEntity> existing,
         string logContext)
-        where TEntity : TaktTenantEntityBase, new()
+        where TEntity : TaktTenantCoreEntityBase, new()
     {
         if (existing.Count == 0)
         {

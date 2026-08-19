@@ -59,9 +59,19 @@ export interface BomMaterialCost extends CompanyDtoBase {
   productDescription: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -99,7 +109,7 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -134,9 +144,19 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   productDescription?: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost?: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation?: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost?: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -193,12 +213,12 @@ export interface BomMaterialCostCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -233,9 +253,19 @@ export interface BomMaterialCostCreate {
   productDescription: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -292,12 +322,12 @@ export interface BomMaterialCostTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -332,9 +362,19 @@ export interface BomMaterialCostTemplate {
   productDescription?: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost?: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation?: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost?: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -376,12 +416,12 @@ export interface BomMaterialCostImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -416,9 +456,19 @@ export interface BomMaterialCostImport {
   productDescription?: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost?: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation?: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost?: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -495,9 +545,19 @@ export interface BomMaterialCostExport {
   productDescription: string;
 
   /**
-   * 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
    */
   productMonthlyCost: number;
+
+  /**
+   * 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+   */
+  productMonthlyCalculation: number;
+
+  /**
+   * 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+   */
+  latestPurchaseCost: number;
 
   /**
    * 币种（字典 accounting_currency_code；如 CNY/USD）

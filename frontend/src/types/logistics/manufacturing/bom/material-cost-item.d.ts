@@ -12,7 +12,7 @@
 
 import type {
   CompanyDtoBase,
-  TaktPagedQuery
+  TaktPagedQuery,
 } from '@/types/common';
 
 /**
@@ -39,9 +39,9 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   bomLevel: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode: string;
+  bomItemCode: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -49,14 +49,14 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   productCode: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
    * 产品描述
    */
   productDescription: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -84,7 +84,12 @@ export interface BomMaterialCostItem extends CompanyDtoBase {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType: string;
 
@@ -169,7 +174,7 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -194,9 +199,9 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   bomLevel?: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode?: string;
+  bomItemCode?: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -204,14 +209,14 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   productCode?: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
    * 产品描述
    */
   productDescription?: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode?: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -239,7 +244,12 @@ export interface BomMaterialCostItemQuery extends TaktPagedQuery {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType?: string;
 
@@ -343,12 +353,12 @@ export interface BomMaterialCostItemCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -363,9 +373,9 @@ export interface BomMaterialCostItemCreate {
   bomLevel: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode: string;
+  bomItemCode: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -373,14 +383,14 @@ export interface BomMaterialCostItemCreate {
   productCode: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
    * 产品描述
    */
   productDescription: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -408,7 +418,12 @@ export interface BomMaterialCostItemCreate {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType: string;
 
@@ -512,12 +527,12 @@ export interface BomMaterialCostItemTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -532,9 +547,9 @@ export interface BomMaterialCostItemTemplate {
   bomLevel?: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode?: string;
+  bomItemCode?: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -542,14 +557,14 @@ export interface BomMaterialCostItemTemplate {
   productCode?: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
    * 产品描述
    */
   productDescription?: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode?: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -577,7 +592,12 @@ export interface BomMaterialCostItemTemplate {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType?: string;
 
@@ -666,12 +686,12 @@ export interface BomMaterialCostItemImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -686,9 +706,9 @@ export interface BomMaterialCostItemImport {
   bomLevel?: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode?: string;
+  bomItemCode?: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -696,14 +716,14 @@ export interface BomMaterialCostItemImport {
   productCode?: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber?: number;
+
+  /**
    * 产品描述
    */
   productDescription?: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode?: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -731,7 +751,12 @@ export interface BomMaterialCostItemImport {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType?: string;
 
@@ -835,9 +860,9 @@ export interface BomMaterialCostItemExport {
   bomLevel: string;
 
   /**
-   * 序号（展开行序号，如 0010）
+   * BOM 项目号（子件行项目号，如 0010）
    */
-  sequenceCode: string;
+  bomItemCode: string;
 
   /**
    * 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -845,14 +870,14 @@ export interface BomMaterialCostItemExport {
   productCode: string;
 
   /**
+   * 行号（项号/序号，固定步长=10）
+   */
+  lineNumber: number;
+
+  /**
    * 产品描述
    */
   productDescription: string;
-
-  /**
-   * BOM 项目号（子件行项目号，如 0010）
-   */
-  bomItemCode: string;
 
   /**
    * 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -880,7 +905,12 @@ export interface BomMaterialCostItemExport {
   productionRelated?: string;
 
   /**
-   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+   * PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+   */
+  pcbSectIndicator?: string;
+
+  /**
+   * 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
    */
   purchaseType: string;
 

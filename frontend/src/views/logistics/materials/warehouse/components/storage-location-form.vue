@@ -28,12 +28,12 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.storagelocation.plantcode')"
+                :label="t('common.page.entity.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.plantcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -241,7 +241,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.storagelocation.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
       trigger: 'blur'
     }
   ],

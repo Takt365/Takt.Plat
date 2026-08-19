@@ -69,16 +69,16 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 标准区域文化（与前端 takt-locale-flag / flag-icons 对齐）
     /// Icon 存 fi-xx，前端 resolveCultureFlagClass 会规范为 fi fi-xx
-    /// LanguageName/NativeName 为本族语展示；Remark 为中文说明
+    /// NativeName 为本族语展示；Remark 为中文说明
     /// </summary>
     private static List<TaktCultureSeedItem> GetStandardCultures()
     {
         return
         [
-            new TaktCultureSeedItem("en-US", "English(US)", "English(US)", "fi-us", 1, true, "区域文化编码.英语(美国)"),
-            new TaktCultureSeedItem("ja-JP", "日本語(JP)", "日本語(JP)", "fi-jp", 2, false, "区域文化编码.日语(日本)"),
-            new TaktCultureSeedItem("zh-HK", "中文(香港)", "中文(香港)", "fi-hk", 3, false, "区域文化编码.中文(香港)"),
-            new TaktCultureSeedItem("zh-CN", "中文(简体)", "中文(简体)", "fi-cn", 4, false, "区域文化编码.中文(简体)"),
+            new TaktCultureSeedItem("en-US", "English(US)", "fi-us", 1, true, "区域文化编码.英语(美国)"),
+            new TaktCultureSeedItem("ja-JP", "日本語(JP)", "fi-jp", 2, false, "区域文化编码.日语(日本)"),
+            new TaktCultureSeedItem("zh-HK", "中文(香港)", "fi-hk", 3, false, "区域文化编码.中文(香港)"),
+            new TaktCultureSeedItem("zh-CN", "中文(简体)", "fi-cn", 4, false, "区域文化编码.中文(简体)"),
         ];
     }
 
@@ -98,7 +98,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CultureCode = seed.CultureCode,
-                LanguageName = seed.LanguageName,
                 NativeName = seed.NativeName,
                 Icon = seed.Icon,
                 IsDefault = seed.IsDefault ? 1 : 0,
@@ -109,7 +108,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
             return (culture, 1, 0);
         }
 
-        culture.LanguageName = seed.LanguageName;
         culture.NativeName = seed.NativeName;
         culture.Icon = seed.Icon;
         culture.IsDefault = seed.IsDefault ? 1 : 0;
@@ -124,7 +122,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     /// 区域文化种子项
     /// </summary>
     /// <param name="CultureCode">文化编码</param>
-    /// <param name="LanguageName">语言名称（本族语）</param>
     /// <param name="NativeName">本地化名称（本族语）</param>
     /// <param name="Icon">flag-icons 类后缀（fi-cn / fi-us / fi-jp / fi-hk）</param>
     /// <param name="SortOrder">排序号</param>
@@ -132,7 +129,6 @@ public class TaktCultureSeedData : ITaktSeedDataCoordinator
     /// <param name="Remark">中文备注说明</param>
     private sealed record TaktCultureSeedItem(
         string CultureCode,
-        string LanguageName,
         string NativeName,
         string Icon,
         int SortOrder,

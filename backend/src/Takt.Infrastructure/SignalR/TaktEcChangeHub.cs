@@ -45,7 +45,10 @@ public class TaktEcChangeHub : Hub
         _authService = authService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 客户端连接时调用：写入在线用户记录、加入用户组并推送上线事件
+    /// </summary>
+    /// <returns>任务</returns>
     public override async Task OnConnectedAsync()
     {
         var prevPrincipal = TaktUserContext.HubInvocationPrincipal;
@@ -66,7 +69,11 @@ public class TaktEcChangeHub : Hub
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 客户端断开连接时调用：更新离线状态、移出用户组并通知其他客户端
+    /// </summary>
+    /// <param name="exception">断开异常；正常断开时为 null</param>
+    /// <returns>任务</returns>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var prevPrincipal = TaktUserContext.HubInvocationPrincipal;

@@ -76,6 +76,9 @@ const FRAMEWORK_TS_TYPE_NAMES = new Set([
 
 /** 后端 DTO/Query 基类（映射为 frontend/src/types/common.d.ts 中的类型） */
 const COMMON_TYPES_FROM_COMMON_MODULE = new Set([
+  'TaktTenantCoreDtoBase',
+  'TaktTenantCultureDtoBase',
+  'TaktTenantPlantDtoBase',
   'TaktTenantDtoBase',
   'TaktCompanyDtoBase',
   'TaktApprovalDtoBase',

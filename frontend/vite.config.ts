@@ -238,8 +238,8 @@ function buildDevProxy(
     changeOrigin: requireEnvBoolean(env, 'VITE_API_PROXY_CHANGE_ORIGIN'),
     secure: requireEnvBoolean(env, 'VITE_API_PROXY_SECURE'),
     ws: true,
-    timeout: 180_000,
-    proxyTimeout: 180_000,
+    timeout: 600_000,
+    proxyTimeout: 600_000,
   });
 
   const proxy: Record<string, ProxyOptions> = {

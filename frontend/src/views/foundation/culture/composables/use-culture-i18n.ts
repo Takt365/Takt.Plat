@@ -20,7 +20,7 @@ export const CULTURE_SELF_I18N_KEY = buildEntitySelfI18nKey(CULTURE_ENTITY_SLUG)
 
 /** 列表业务列（不含主键） */
 export const CULTURE_LIST_FIELDS = [
-  'languageName',
+  'cultureCode',
   'nativeName',
   'icon',
   'isDefault',
@@ -30,7 +30,7 @@ export const CULTURE_LIST_FIELDS = [
 export const CULTURE_PLACEHOLDER = {
   tenantCode: 'optional',
   relatedPlant: 'select',
-  languageName: 'select',
+  cultureCode: 'select',
   nativeName: 'required',
   icon: 'optional',
   isDefault: 'select',
@@ -44,7 +44,7 @@ export type CultureField = keyof typeof CULTURE_PLACEHOLDER
 /** 高级查询可 trim 的字符串字段 */
 export const CULTURE_QUERY_STRING_FIELDS = [
   'relatedPlant',
-  'languageName',
+  'cultureCode',
   'nativeName',
   'icon',
   'createdAtStart',

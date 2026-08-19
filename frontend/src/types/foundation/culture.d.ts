@@ -12,26 +12,26 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 区域文化实体 定义系统支持的多语言区域文化，如：zh-CN（简体中文）、en-US（美式英文）、ja-JP（日文）等 租户级实体：区域文化定义在租户内共享，不需要公司隔离
  * 对应前端 TaktCultureDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Culture
  * @description 对应后端 TaktCultureDto
  */
-export interface Culture extends TenantDtoBase {
+export interface Culture extends TenantCoreDtoBase {
   /**
    * CultureID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   cultureId: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName: string;
+  cultureCode: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -79,9 +79,9 @@ export interface CultureQuery extends TaktPagedQuery {
   relatedPlant?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName?: string;
+  cultureCode?: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -143,9 +143,9 @@ export interface CultureCreate {
   relatedPlant: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName: string;
+  cultureCode: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -236,9 +236,9 @@ export interface CultureTemplate {
   relatedPlant?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName?: string;
+  cultureCode?: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -290,9 +290,9 @@ export interface CultureImport {
   relatedPlant?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName?: string;
+  cultureCode?: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -344,9 +344,9 @@ export interface CultureExport {
   relatedPlant: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  languageName: string;
+  cultureCode: string;
 
   /**
    * 本地化名称（用该语言显示的自身名称，如：中文、English）

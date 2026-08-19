@@ -218,7 +218,7 @@ public class TaktLoginSessionService : ITaktLoginSessionService
             return list.Select(e => new TaktSelectOption
             {
                 DictValue = e.CultureCode,
-                DictLabel = e.LanguageName,
+                DictLabel = e.NativeName,
                 ExtValue = e.Icon,
                 ExtLabel = ((int)e.IsDefault).ToString(),
                 SortOrder = e.SortOrder,

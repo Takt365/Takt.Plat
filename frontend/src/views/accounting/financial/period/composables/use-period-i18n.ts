@@ -20,7 +20,7 @@ export const FINANCIALPERIOD_SELF_I18N_KEY = buildEntitySelfI18nKey(FINANCIALPER
 
 /** 列表业务列（不含主键） */
 export const FINANCIALPERIOD_LIST_FIELDS = [
-  'financialYearCategory',
+  'countryCode',
   'financialYearCode',
   'periodCode',
   'calendarYear',
@@ -32,7 +32,7 @@ export const FINANCIALPERIOD_LIST_FIELDS = [
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const FINANCIALPERIOD_PLACEHOLDER = {
   tenantCode: 'optional',
-  financialYearCategory: 'select',
+  countryCode: 'select',
   financialYearCode: 'required',
   periodCode: 'required',
   calendarYear: 'select',
@@ -48,7 +48,7 @@ export type FinancialPeriodField = keyof typeof FINANCIALPERIOD_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const FINANCIALPERIOD_QUERY_STRING_FIELDS = [
-  'financialYearCategory',
+  'countryCode',
   'financialYearCode',
   'periodCode',
   'financialQuarterCode',

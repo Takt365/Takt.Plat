@@ -21,6 +21,8 @@ const {
   resolveDtoBaseFromEntityBase,
   isTenantEntityBase,
   isCompanyOrApprovalEntityBase,
+  entityBaseHasRelatedPlant,
+  entityBaseHasCultureCode,
   ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
 const {
@@ -272,7 +274,11 @@ function appendEntityIdProperty(lines, idProp, options = {}) {
  * @param {string} entityBase
  * @param {{ forImport?: boolean, entityShort?: string }} [options]
  *   forImport=true 时字段可空（Excel 导入）
- *   CultureCode / PlantCode 仅公司/审批级；RelatedPlant 仅租户级（TaktPlant 除外：主档即 PlantCode）
+ *   公司/审批：CompanyCode + CultureCode + PlantCode
+ *   租户组合 1：RelatedPlant + CultureCode（TaktPlant 除外 RelatedPlant）
+ *   组合 2 Culture：CultureCode（Query/Create/Template/Import 必须）
+ *   组合 3 Plant：RelatedPlant（同上必须）
+ *   组合 4 Core：仅 TenantCode
  */
 function appendTenantCompanyCreateImportProperties(lines, entityBase, options = {}) {
   const { forImport = false, entityShort = '' } = options;
@@ -284,12 +290,12 @@ function appendTenantCompanyCreateImportProperties(lines, entityBase, options = 
   lines.push('');
   if (isCompanyOrApprovalEntityBase(entityBase)) {
     lines.push('    /// <summary>');
-    lines.push('    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）');
+    lines.push('    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）');
     lines.push('    /// </summary>');
     lines.push(`    public ${stringType} CompanyCode { get; set; } = string.Empty;`);
     lines.push('');
     lines.push('    /// <summary>');
-    lines.push('    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）');
+    lines.push('    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
     lines.push('    /// </summary>');
     lines.push(`    public ${stringType} CultureCode { get; set; } = string.Empty;`);
     lines.push('');
@@ -298,11 +304,25 @@ function appendTenantCompanyCreateImportProperties(lines, entityBase, options = 
     lines.push('    /// </summary>');
     lines.push(`    public ${stringType} PlantCode { get; set; } = string.Empty;`);
     lines.push('');
-  } else if (isTenantEntityBase(entityBase) && entityShort !== 'Plant') {
+    return;
+  }
+  if (!isTenantEntityBase(entityBase)) {
+    return;
+  }
+  // 组合 1 / 3：有工厂 → RelatedPlant（工厂主档 TaktPlant 自身除外）
+  if (entityBaseHasRelatedPlant(entityBase) && entityShort !== 'Plant') {
     lines.push('    /// <summary>');
     lines.push('    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）');
     lines.push('    /// </summary>');
     lines.push(`    public ${stringType} RelatedPlant { get; set; } = string.Empty;`);
+    lines.push('');
+  }
+  // 组合 1 / 2：有语言 → CultureCode（Query/Create/Template/Import 必须）
+  if (entityBaseHasCultureCode(entityBase)) {
+    lines.push('    /// <summary>');
+    lines.push('    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
+    lines.push('    /// </summary>');
+    lines.push(`    public ${stringType} CultureCode { get; set; } = string.Empty;`);
     lines.push('');
   }
 }
@@ -452,19 +472,27 @@ function appendTenantCompanyQueryProperties(lines, entityBase, entityShort = '')
   appendQueryStringProperty(lines, 'TenantCode', '租户编码');
 
   if (isCompanyOrApprovalEntityBase(entityBase)) {
-    appendQueryStringProperty(lines, 'CompanyCode', '公司代码');
-    appendQueryStringProperty(lines, 'CultureCode', '区域文化编码（字典 sys_culture_code）');
+    appendQueryStringProperty(lines, 'CompanyCode', '公司（选项 TaktCompanies/options；DictValue=CompanyCode）');
+    appendQueryStringProperty(lines, 'CultureCode', '区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
     appendQueryStringProperty(
       lines,
       'PlantCode',
       '工厂代码（选项 TaktPlants/options；DictValue=PlantCode）',
     );
-  } else if (isTenantEntityBase(entityBase) && entityShort !== 'Plant') {
+    return;
+  }
+  if (!isTenantEntityBase(entityBase)) {
+    return;
+  }
+  if (entityBaseHasRelatedPlant(entityBase) && entityShort !== 'Plant') {
     appendQueryStringProperty(
       lines,
       'RelatedPlant',
       '关联工厂（选项 TaktPlants/options；DictValue=PlantCode）',
     );
+  }
+  if (entityBaseHasCultureCode(entityBase)) {
+    appendQueryStringProperty(lines, 'CultureCode', '区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
   }
 }
 
@@ -1356,12 +1384,26 @@ function generateAggregateDtoFileContent(entity, entityRegistry, options = {}) {
       lines.push('    /// </summary>');
       lines.push('    public string PlantCode { get; set; } = string.Empty;');
       lines.push('');
-    } else if (isTenantEntityBase(entity.entityBase) && entityShort !== 'Plant') {
       lines.push('    /// <summary>');
-      lines.push('    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）');
+      lines.push('    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
       lines.push('    /// </summary>');
-      lines.push('    public string RelatedPlant { get; set; } = string.Empty;');
+      lines.push('    public string CultureCode { get; set; } = string.Empty;');
       lines.push('');
+    } else if (isTenantEntityBase(entity.entityBase)) {
+      if (entityBaseHasRelatedPlant(entity.entityBase) && entityShort !== 'Plant') {
+        lines.push('    /// <summary>');
+        lines.push('    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）');
+        lines.push('    /// </summary>');
+        lines.push('    public string RelatedPlant { get; set; } = string.Empty;');
+        lines.push('');
+      }
+      if (entityBaseHasCultureCode(entity.entityBase)) {
+        lines.push('    /// <summary>');
+        lines.push('    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）');
+        lines.push('    /// </summary>');
+        lines.push('    public string CultureCode { get; set; } = string.Empty;');
+        lines.push('');
+      }
     }
     appendEmittedProperties(lines, entity.properties);
     lines.push('    /// <summary>');
@@ -1531,11 +1573,15 @@ function printUsage() {
       2) 业务字段（TemplateDto / ImportDto 与 CreateDto 全量一致，导入列可空）
       3) 主子表 List<子CreateDto>?、RBAC 反向 *Ids/*Codes（与 CreateDto 一致）
       4) ExtField、Remark
-    租户级（TaktTenantEntityBase）TenantCode + RelatedPlant；公司/审批级含 TenantCode + CompanyCode + CultureCode + PlantCode；
+    租户四组合（Query/Create/Template/Import 必须）：
+    Core 仅 TenantCode；Culture 必含 CultureCode；Plant 必含 RelatedPlant；
+    默认 TenantEntity 必含 RelatedPlant + CultureCode；
+    公司/审批级含 TenantCode + CompanyCode + CultureCode + PlantCode；
     租户级实体若自身声明 CultureCode（User/Translation 等）作为业务字段生成；
     TenantCode / CompanyCode / CultureCode / PlantCode / RelatedPlant 由登录或公司切换注入，不加 [Required]
     ❌ 禁止再生成 CompanyDefaultCulture（与 CultureCode 重复）
     ❌ PlantCode（工厂代码，公司/审批行）≠ RelatedPlant（关联工厂，租户行）
+    Entity→Dto：Core/Culture/Plant/TenantEntity → 对应 *DtoBase；Company/Approval 同理
   - QueryDto 日期：实体含 DateTime/DateOnly 业务字段 → 各字段 XxxStart/XxxEnd；
     且始终追加 CreatedAtStart/CreatedAtEnd（基类创建时间）
   - 生成前自动执行 generate-entity-rbac-navigations（rbac-parent-config → 实体导航属性区域）

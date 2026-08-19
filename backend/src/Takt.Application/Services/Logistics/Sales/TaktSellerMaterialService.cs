@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Sales
 // 文件名称：TaktSellerMaterialService.cs
-// 创建时间：2026-08-06
+// 创建时间：2026-08-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：销售商物料应用服务实现
 // 
@@ -51,12 +51,20 @@ public class TaktSellerMaterialService : TaktServiceBase, ITaktSellerMaterialSer
     }
 
     /// <summary>
-    /// 获取销售商物料列表（分页）
+    /// 获取销售商物料列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktSellerMaterialDto>> GetSellerMaterialListAsync(TaktSellerMaterialQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktSellerMaterialDto>.Create(
+                new List<TaktSellerMaterialDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _sellerMaterialRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -251,6 +259,13 @@ public class TaktSellerMaterialService : TaktServiceBase, ITaktSellerMaterialSer
     public async Task<(string fileName, byte[] fileContent)> ExportSellerMaterialAsync(TaktSellerMaterialQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
         var queryDto = query ?? new TaktSellerMaterialQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktSellerMaterialExportDto>(),
+                sheetName ?? "销售商物料数据",
+                fileName ?? "销售商物料导出.xlsx");
+        }
         var predicate = QueryExpression(queryDto);
         var list = await _sellerMaterialRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
@@ -280,9 +295,9 @@ public class TaktSellerMaterialService : TaktServiceBase, ITaktSellerMaterialSer
     {
         var exp = Expressionable.Create<TaktSellerMaterial>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.CustomerCode != null && x.CustomerCode.Contains(keywords))
                 || (x.CustomerShortName != null && x.CustomerShortName.Contains(keywords))
@@ -301,92 +316,180 @@ public class TaktSellerMaterialService : TaktServiceBase, ITaktSellerMaterialSer
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerCode))
         {
-            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(queryDto.CustomerCode));
+            var customerCode = queryDto.CustomerCode;
+            exp = exp.And(x => x.CustomerCode != null && x.CustomerCode.Contains(customerCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CustomerShortName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CustomerShortName))
         {
-            exp = exp.And(x => x.CustomerShortName != null && x.CustomerShortName.Contains(queryDto.CustomerShortName));
+            var customerShortName = queryDto.CustomerShortName;
+            exp = exp.And(x => x.CustomerShortName != null && x.CustomerShortName.Contains(customerShortName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClientCode))
         {
-            exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(queryDto.ClientCode));
+            var clientCode = queryDto.ClientCode;
+            exp = exp.And(x => x.ClientCode != null && x.ClientCode.Contains(clientCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ClientShortName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ClientShortName))
         {
-            exp = exp.And(x => x.ClientShortName != null && x.ClientShortName.Contains(queryDto.ClientShortName));
+            var clientShortName = queryDto.ClientShortName;
+            exp = exp.And(x => x.ClientShortName != null && x.ClientShortName.Contains(clientShortName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialType))
         {
-            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(queryDto.MaterialType));
+            var materialType = queryDto.MaterialType;
+            exp = exp.And(x => x.MaterialType != null && x.MaterialType.Contains(materialType));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroup))
         {
-            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(queryDto.MaterialGroup));
+            var materialGroup = queryDto.MaterialGroup;
+            exp = exp.And(x => x.MaterialGroup != null && x.MaterialGroup.Contains(materialGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.InternalMaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.InternalMaterialCode))
         {
-            exp = exp.And(x => x.InternalMaterialCode != null && x.InternalMaterialCode.Contains(queryDto.InternalMaterialCode));
+            var internalMaterialCode = queryDto.InternalMaterialCode;
+            exp = exp.And(x => x.InternalMaterialCode != null && x.InternalMaterialCode.Contains(internalMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialCode))
         {
-            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(queryDto.MaterialCode));
+            var materialCode = queryDto.MaterialCode;
+            exp = exp.And(x => x.MaterialCode != null && x.MaterialCode.Contains(materialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialDescription))
         {
-            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(queryDto.MaterialDescription));
+            var materialDescription = queryDto.MaterialDescription;
+            exp = exp.And(x => x.MaterialDescription != null && x.MaterialDescription.Contains(materialDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SellerMaterialCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SellerMaterialCode))
         {
-            exp = exp.And(x => x.SellerMaterialCode != null && x.SellerMaterialCode.Contains(queryDto.SellerMaterialCode));
+            var sellerMaterialCode = queryDto.SellerMaterialCode;
+            exp = exp.And(x => x.SellerMaterialCode != null && x.SellerMaterialCode.Contains(sellerMaterialCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SellerMaterialDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SellerMaterialDescription))
         {
-            exp = exp.And(x => x.SellerMaterialDescription != null && x.SellerMaterialDescription.Contains(queryDto.SellerMaterialDescription));
+            var sellerMaterialDescription = queryDto.SellerMaterialDescription;
+            exp = exp.And(x => x.SellerMaterialDescription != null && x.SellerMaterialDescription.Contains(sellerMaterialDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SellerMaterialSpecification))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SellerMaterialSpecification))
         {
-            exp = exp.And(x => x.SellerMaterialSpecification != null && x.SellerMaterialSpecification.Contains(queryDto.SellerMaterialSpecification));
-        }
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var sellerMaterialSpecification = queryDto.SellerMaterialSpecification;
+            exp = exp.And(x => x.SellerMaterialSpecification != null && x.SellerMaterialSpecification.Contains(sellerMaterialSpecification));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
     }
 
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktSellerMaterialQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CustomerShortName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ClientCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ClientShortName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialType))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.InternalMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SellerMaterialCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SellerMaterialDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SellerMaterialSpecification))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
+    }
 }

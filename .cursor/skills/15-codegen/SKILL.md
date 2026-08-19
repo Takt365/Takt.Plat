@@ -51,6 +51,17 @@ description: >-
 
 识别：`generate-services-from-dtos.cjs` → `identifyCrudType`。
 
+## 租户实体基类四组合（生成脚本强制）
+
+| 组合 | Domain | Application DTO | Query/Create/Template/Import 必须字段 |
+|------|--------|-----------------|--------------------------------------|
+| 1 默认 | `TaktTenantEntityBase` | `TaktTenantDtoBase` | `RelatedPlant` + `CultureCode` |
+| 2 | `TaktTenantCultureEntityBase` | `TaktTenantCultureDtoBase` | `CultureCode` |
+| 3 | `TaktTenantPlantEntityBase` | `TaktTenantPlantDtoBase` | `RelatedPlant` |
+| 4 | `TaktTenantCoreEntityBase` | `TaktTenantCoreDtoBase` | 仅 `TenantCode` |
+
+权威解析：`generate-script-common.cjs` → `ENTITY_CLASS_HEADER_REGEX` / `ENTITY_BASE_TO_DTO_BASE`。
+
 ## 单脚本命令（调试/局部生成）
 
 ```bash

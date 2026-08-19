@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Accounting.Financial
 // 文件名称：TaktBankService.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：银行信息应用服务实现
 // 
@@ -29,7 +29,7 @@ namespace Takt.Application.Services.Accounting.Financial;
 /// </summary>
 public class TaktBankService : TaktServiceBase, ITaktBankService
 {
-    private readonly ITaktTenantRepository<TaktBank> _bankRepository;
+    private readonly ITaktCompanyRepository<TaktBank> _bankRepository;
     private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
@@ -40,7 +40,7 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBankService(
-        ITaktTenantRepository<TaktBank> bankRepository,
+        ITaktCompanyRepository<TaktBank> bankRepository,
         ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
@@ -51,12 +51,20 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     }
 
     /// <summary>
-    /// 获取银行信息列表（分页）
+    /// 获取银行信息列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktBankDto>> GetBankListAsync(TaktBankQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktBankDto>.Create(
+                new List<TaktBankDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _bankRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -77,7 +85,7 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     public async Task<TaktBankDto?> GetBankByIdAsync(long id)
     {
         var entity = await _bankRepository.GetByIdAsync(id);
-        if (entity == null || entity.TenantCode != CurrentTenantCode)
+        if (entity == null || entity.TenantCode != CurrentTenantCode || entity.CompanyCode != CurrentCompanyCode)
         {
             return null;
         }
@@ -91,7 +99,7 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     public async Task<List<TaktSelectOption>> GetBankOptionsAsync()
     {
         var list = await _bankRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode,
+            x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode,
             x => x.BankCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -250,7 +258,15 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportBankAsync(TaktBankQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktBankQueryDto());
+        var queryDto = query ?? new TaktBankQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktBankExportDto>(),
+                sheetName ?? "银行信息数据",
+                fileName ?? "银行信息导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _bankRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -279,11 +295,13 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
     {
         var exp = Expressionable.Create<TaktBank>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.CountryRegion != null && x.CountryRegion.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.CountryRegion != null && x.CountryRegion.Contains(keywords))
                 || (x.BankCode != null && x.BankCode.Contains(keywords))
                 || (x.BankName1 != null && x.BankName1.Contains(keywords))
                 || (x.BankName2 != null && x.BankName2.Contains(keywords))
@@ -296,7 +314,6 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
                 || (x.Address2 != null && x.Address2.Contains(keywords))
                 || (x.SwiftBic != null && x.SwiftBic.Contains(keywords))
                 || (x.BankGroup != null && x.BankGroup.Contains(keywords))
-                || SqlFunc.ToString(x.PobkCurAc).Contains(keywords)
                 || (x.BankNumber != null && x.BankNumber.Contains(keywords))
                 || (x.PostalBank != null && x.PostalBank.Contains(keywords))
                 || (x.AddressNumber != null && x.AddressNumber.Contains(keywords))
@@ -304,172 +321,347 @@ public class TaktBankService : TaktServiceBase, ITaktBankService
                 || (x.BankMethod != null && x.BankMethod.Contains(keywords))
                 || (x.BankFormat != null && x.BankFormat.Contains(keywords))
                 || (x.IbanRule != null && x.IbanRule.Contains(keywords))
-                || SqlFunc.ToString(x.SddB2b).Contains(keywords)
-                || SqlFunc.ToString(x.SddCore).Contains(keywords)
-                || SqlFunc.ToString(x.SddRtrans).Contains(keywords)
                 || (x.BicPlusNumber != null && x.BicPlusNumber.Contains(keywords))
                 || (x.PathCode != null && x.PathCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.CountryRegion))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.CountryRegion != null && x.CountryRegion.Contains(queryDto.CountryRegion));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
-            exp = exp.And(x => x.BankCode != null && x.BankCode.Contains(queryDto.BankCode));
+            var plantCode = queryDto.PlantCode;
+            exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankName1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CountryRegion))
         {
-            exp = exp.And(x => x.BankName1 != null && x.BankName1.Contains(queryDto.BankName1));
+            var countryRegion = queryDto.CountryRegion;
+            exp = exp.And(x => x.CountryRegion != null && x.CountryRegion.Contains(countryRegion));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankName2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankCode))
         {
-            exp = exp.And(x => x.BankName2 != null && x.BankName2.Contains(queryDto.BankName2));
+            var bankCode = queryDto.BankCode;
+            exp = exp.And(x => x.BankCode != null && x.BankCode.Contains(bankCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Province))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankName1))
         {
-            exp = exp.And(x => x.Province != null && x.Province.Contains(queryDto.Province));
+            var bankName1 = queryDto.BankName1;
+            exp = exp.And(x => x.BankName1 != null && x.BankName1.Contains(bankName1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Prefecture))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankName2))
         {
-            exp = exp.And(x => x.Prefecture != null && x.Prefecture.Contains(queryDto.Prefecture));
+            var bankName2 = queryDto.BankName2;
+            exp = exp.And(x => x.BankName2 != null && x.BankName2.Contains(bankName2));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.District))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Province))
         {
-            exp = exp.And(x => x.District != null && x.District.Contains(queryDto.District));
+            var province = queryDto.Province;
+            exp = exp.And(x => x.Province != null && x.Province.Contains(province));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Township))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Prefecture))
         {
-            exp = exp.And(x => x.Township != null && x.Township.Contains(queryDto.Township));
+            var prefecture = queryDto.Prefecture;
+            exp = exp.And(x => x.Prefecture != null && x.Prefecture.Contains(prefecture));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Village))
+        if (!string.IsNullOrWhiteSpace(queryDto?.District))
         {
-            exp = exp.And(x => x.Village != null && x.Village.Contains(queryDto.Village));
+            var district = queryDto.District;
+            exp = exp.And(x => x.District != null && x.District.Contains(district));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Address1))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Township))
         {
-            exp = exp.And(x => x.Address1 != null && x.Address1.Contains(queryDto.Address1));
+            var township = queryDto.Township;
+            exp = exp.And(x => x.Township != null && x.Township.Contains(township));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Address2))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Village))
         {
-            exp = exp.And(x => x.Address2 != null && x.Address2.Contains(queryDto.Address2));
+            var village = queryDto.Village;
+            exp = exp.And(x => x.Village != null && x.Village.Contains(village));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SwiftBic))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Address1))
         {
-            exp = exp.And(x => x.SwiftBic != null && x.SwiftBic.Contains(queryDto.SwiftBic));
+            var address1 = queryDto.Address1;
+            exp = exp.And(x => x.Address1 != null && x.Address1.Contains(address1));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Address2))
         {
-            exp = exp.And(x => x.BankGroup != null && x.BankGroup.Contains(queryDto.BankGroup));
+            var address2 = queryDto.Address2;
+            exp = exp.And(x => x.Address2 != null && x.Address2.Contains(address2));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.SwiftBic))
+        {
+            var swiftBic = queryDto.SwiftBic;
+            exp = exp.And(x => x.SwiftBic != null && x.SwiftBic.Contains(swiftBic));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankGroup))
+        {
+            var bankGroup = queryDto.BankGroup;
+            exp = exp.And(x => x.BankGroup != null && x.BankGroup.Contains(bankGroup));
         }
 
         if (queryDto?.PobkCurAc.HasValue == true)
         {
-            exp = exp.And(x => x.PobkCurAc == queryDto.PobkCurAc);
+            var pobkCurAc = queryDto.PobkCurAc;
+            exp = exp.And(x => x.PobkCurAc == pobkCurAc);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankNumber))
         {
-            exp = exp.And(x => x.BankNumber != null && x.BankNumber.Contains(queryDto.BankNumber));
+            var bankNumber = queryDto.BankNumber;
+            exp = exp.And(x => x.BankNumber != null && x.BankNumber.Contains(bankNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostalBank))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostalBank))
         {
-            exp = exp.And(x => x.PostalBank != null && x.PostalBank.Contains(queryDto.PostalBank));
+            var postalBank = queryDto.PostalBank;
+            exp = exp.And(x => x.PostalBank != null && x.PostalBank.Contains(postalBank));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.AddressNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.AddressNumber))
         {
-            exp = exp.And(x => x.AddressNumber != null && x.AddressNumber.Contains(queryDto.AddressNumber));
+            var addressNumber = queryDto.AddressNumber;
+            exp = exp.And(x => x.AddressNumber != null && x.AddressNumber.Contains(addressNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Branch))
+        if (!string.IsNullOrWhiteSpace(queryDto?.Branch))
         {
-            exp = exp.And(x => x.Branch != null && x.Branch.Contains(queryDto.Branch));
+            var branch = queryDto.Branch;
+            exp = exp.And(x => x.Branch != null && x.Branch.Contains(branch));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankMethod))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankMethod))
         {
-            exp = exp.And(x => x.BankMethod != null && x.BankMethod.Contains(queryDto.BankMethod));
+            var bankMethod = queryDto.BankMethod;
+            exp = exp.And(x => x.BankMethod != null && x.BankMethod.Contains(bankMethod));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BankFormat))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BankFormat))
         {
-            exp = exp.And(x => x.BankFormat != null && x.BankFormat.Contains(queryDto.BankFormat));
+            var bankFormat = queryDto.BankFormat;
+            exp = exp.And(x => x.BankFormat != null && x.BankFormat.Contains(bankFormat));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IbanRule))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IbanRule))
         {
-            exp = exp.And(x => x.IbanRule != null && x.IbanRule.Contains(queryDto.IbanRule));
+            var ibanRule = queryDto.IbanRule;
+            exp = exp.And(x => x.IbanRule != null && x.IbanRule.Contains(ibanRule));
         }
 
         if (queryDto?.SddB2b.HasValue == true)
         {
-            exp = exp.And(x => x.SddB2b == queryDto.SddB2b);
+            var sddB2b = queryDto.SddB2b;
+            exp = exp.And(x => x.SddB2b == sddB2b);
         }
 
         if (queryDto?.SddCore.HasValue == true)
         {
-            exp = exp.And(x => x.SddCore == queryDto.SddCore);
+            var sddCore = queryDto.SddCore;
+            exp = exp.And(x => x.SddCore == sddCore);
         }
 
         if (queryDto?.SddRtrans.HasValue == true)
         {
-            exp = exp.And(x => x.SddRtrans == queryDto.SddRtrans);
+            var sddRtrans = queryDto.SddRtrans;
+            exp = exp.And(x => x.SddRtrans == sddRtrans);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.BicPlusNumber))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BicPlusNumber))
         {
-            exp = exp.And(x => x.BicPlusNumber != null && x.BicPlusNumber.Contains(queryDto.BicPlusNumber));
+            var bicPlusNumber = queryDto.BicPlusNumber;
+            exp = exp.And(x => x.BicPlusNumber != null && x.BicPlusNumber.Contains(bicPlusNumber));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PathCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PathCode))
         {
-            exp = exp.And(x => x.PathCode != null && x.PathCode.Contains(queryDto.PathCode));
-        }
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var pathCode = queryDto.PathCode;
+            exp = exp.And(x => x.PathCode != null && x.PathCode.Contains(pathCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktBankQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CountryRegion))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankName1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankName2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Province))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Prefecture))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.District))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Township))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Village))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Address1))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Address2))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SwiftBic))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankGroup))
+        {
+            return true;
+        }
+        if (queryDto.PobkCurAc.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostalBank))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.AddressNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Branch))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankMethod))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BankFormat))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IbanRule))
+        {
+            return true;
+        }
+        if (queryDto.SddB2b.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SddCore.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SddRtrans.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.BicPlusNumber))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PathCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

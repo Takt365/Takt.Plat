@@ -4,7 +4,7 @@
 // 文件名称：TaktGeneralMaterial.cs
 // 创建时间：2026-06-15
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt全局物料实体（通用物料主数据；租户级；多语言描述见 TaktMaterialDescription）
+// 功能描述：Takt全局物料实体（通用物料主数据；组合4仅租户；多语言描述见 TaktMaterialDescription）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,12 +17,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription）
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
 /// </summary>
 [SugarTable("takt_logistics_materials_general_material", "全局物料表")]
 [SugarIndex("ix_takt_logistics_materials_general_material_tenant", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_general_material_unique", nameof(TenantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_materials_general_material_type", nameof(TenantCode), OrderByType.Asc, nameof(MaterialType), OrderByType.Asc, false)]
-public class TaktGeneralMaterial : TaktTenantEntityBase
+public class TaktGeneralMaterial : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 物料编码（租户内唯一）

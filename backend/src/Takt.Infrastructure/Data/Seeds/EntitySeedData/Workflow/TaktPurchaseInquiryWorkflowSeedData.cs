@@ -40,10 +40,17 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         NullValueHandling = NullValueHandling.Ignore
     };
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行顺序（数字越小越先执行）
+    /// </summary>
     public int Order => 68;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行种子写入（幂等）
+    /// </summary>
+    /// <param name="serviceProvider">服务提供器</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <returns>插入与更新计数</returns>
     public async Task<(int InsertCount, int UpdateCount)> SeedAsync(
         IServiceProvider serviceProvider,
         string? tenantCode = null)
@@ -81,7 +88,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 formRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode);
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -91,7 +99,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -165,6 +174,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
@@ -189,6 +199,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedFormField = relatedField,
                 SortOrder = 14,
                 FormStatus = 1,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
@@ -201,6 +212,8 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;
         form.FormStatus = 1;
+        form.PlantCode = plantCode;
+        form.CultureCode = cultureCode;
         await repository.UpdateAsync(form);
         return (form, 0, 1);
     }
@@ -209,6 +222,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktFlowForm form,
         string processContent)
@@ -238,6 +252,7 @@ public class TaktPurchaseInquiryWorkflowSeedData : ITaktSeedDataCoordinator
                 FormId = form.Id,
                 FormCode = form.FormCode,
                 SortOrder = 14,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);

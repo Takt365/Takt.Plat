@@ -20,7 +20,7 @@
     <div class="culture-table flex min-h-0 flex-col">
       <TaktQueryBar
         v-model="queryKeyword"
-        :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.culture.languagename'), t('entity.culture.code')].join(t('common.tip.or')) })"
+        :placeholder="t('common.page.form.placeholder.search', { keyword: [t('entity.culture.nativename'), t('entity.culture.code')].join(t('common.tip.or')) })"
         :loading="loading"
         @search="handleSearch"
         @reset="handleReset"
@@ -101,15 +101,6 @@
           <a-input
             v-model:value="advancedQueryForm.cultureCode"
             :placeholder="t('common.page.form.placeholder.input', { field: t('entity.culture.code') })"
-            allow-clear
-          />
-        </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('languageName')">
-        <a-form-item :label="t('entity.culture.languagename')">
-          <a-input
-            v-model:value="advancedQueryForm.languageName"
-            :placeholder="t('common.page.form.placeholder.input', { field: t('entity.culture.languagename') })"
             allow-clear
           />
         </a-form-item>
@@ -298,7 +289,6 @@ const advancedQueryVisible = ref(false)
 /** 高级查询表单 */
 const advancedQueryForm = ref({
   cultureCode: '',
-  languageName: '',
   nativeName: '',
   icon: '',
   sortOrder: undefined as number | undefined,
@@ -313,7 +303,6 @@ const visibleQueryFieldKeys = ref<string[]>([])
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
   { key: 'cultureCode', label: t('entity.culture.code') },
-  { key: 'languageName', label: t('entity.culture.languagename') },
   { key: 'nativeName', label: t('entity.culture.nativename') },
   { key: 'icon', label: t('entity.culture.icon') },
   { key: 'sortOrder', label: t('entity.culture.sortorder') },
@@ -353,7 +342,6 @@ const getCultureRowKey = (record: unknown): string => {
 function createEmptyAdvancedQueryForm() {
   return {
     cultureCode: '',
-    languageName: '',
     nativeName: '',
     icon: '',
     sortOrder: undefined as number | undefined,
@@ -386,7 +374,6 @@ function buildCultureQuery(): CultureQuery {
     }
   }
   assignTrimmed('cultureCode', form.cultureCode)
-  assignTrimmed('languageName', form.languageName)
   assignTrimmed('nativeName', form.nativeName)
   assignTrimmed('icon', form.icon)
   if (form.sortOrder !== undefined && form.sortOrder !== null) {
@@ -409,13 +396,6 @@ const columns = computed<TableColumnsType<Culture>>(() => [
     dataIndex: 'cultureId',
     key: 'cultureId',
     width: 120,
-    fixed: 'left'
-  },
-  {
-    title: t('entity.culture.languagename'),
-    dataIndex: 'languageName',
-    key: 'languageName',
-    width: 150,
     fixed: 'left'
   },
   {

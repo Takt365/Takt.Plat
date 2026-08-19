@@ -158,7 +158,7 @@ const summaryText = computed(() => {
 const columns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
     {
-      title: t('entity.ipqcorder.plantcode'),
+      title: t('common.page.entity.plantcode'),
       dataIndex: 'plantCode',
       key: 'plantCode',
       width: 90,

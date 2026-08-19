@@ -2,6 +2,7 @@ SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @now DATETIME = GETDATE();
@@ -226,14 +227,29 @@ DECLARE @main_target_before INT = (
   FROM [takt_logistics_manufacturing_ec_source]
   WHERE [tenant_code] = @tenant_code
     AND [company_code] = @company_code
+    AND [plant_code] = @plant_code
     AND [is_deleted] = 0
 );
 
--- 主表：存在则更新（有变化或恢复软删），不存在则插入；唯一键 Tenant+Company+SourceEcNo
+-- 回填本司历史空工厂码，再按 Tenant+Company+Plant+SourceEcCode 对齐唯一索引做 MERGE
+UPDATE [takt_logistics_manufacturing_ec_source]
+SET [plant_code] = @plant_code
+WHERE [tenant_code] = @tenant_code
+  AND [company_code] = @company_code
+  AND NULLIF(LTRIM(RTRIM([plant_code])), N'') IS NULL;
+
+UPDATE [takt_logistics_manufacturing_ec_source_detail]
+SET [plant_code] = @plant_code
+WHERE [tenant_code] = @tenant_code
+  AND [company_code] = @company_code
+  AND NULLIF(LTRIM(RTRIM([plant_code])), N'') IS NULL;
+
+-- 主表：存在则更新（有变化或恢复软删），不存在则插入；唯一键 Tenant+Company+Plant+SourceEcCode
 MERGE INTO [takt_logistics_manufacturing_ec_source] AS T
 USING #source_main AS S
 ON T.[tenant_code] = @tenant_code
 AND T.[company_code] = @company_code
+AND T.[plant_code] = @plant_code
 AND LTRIM(RTRIM(T.[source_ec_code])) = S.[source_ec_code]
 WHEN MATCHED AND (
   T.[is_deleted] <> 0
@@ -265,38 +281,39 @@ WHEN MATCHED AND (
   OR ISNULL(CAST(T.[source_ec_content] AS NVARCHAR(MAX)), N'') <> ISNULL(S.[source_ec_content], N'')
 ) THEN
   UPDATE SET
-    T.[source_model] = S.[source_model],
-    T.[source_title] = S.[source_title],
-    T.[source_status] = S.[source_status],
-    T.[source_issue_date] = S.[source_issue_date],
-    T.[source_tcj_owner] = S.[source_tcj_owner],
-    T.[source_tcj_dependency] = S.[source_tcj_dependency],
-    T.[source_ec_meeting] = S.[source_ec_meeting],
-    T.[source_pp_code] = S.[source_pp_code],
-    T.[source_technical_notice_code] = S.[source_technical_notice_code],
-    T.[source_implementation] = S.[source_implementation],
-    T.[source_main_change_reason] = S.[source_main_change_reason],
-    T.[source_secondary_change_reason] = S.[source_secondary_change_reason],
-    T.[source_safety_regulation] = S.[source_safety_regulation],
-    T.[source_progress_status] = S.[source_progress_status],
-    T.[source_serial_number_control] = S.[source_serial_number_control],
-    T.[source_customer_approval] = S.[source_customer_approval],
-    T.[source_service_manual_revision] = S.[source_service_manual_revision],
-    T.[source_user_manual_revision] = S.[source_user_manual_revision],
-    T.[source_promotion_manual_revision] = S.[source_promotion_manual_revision],
-    T.[source_standard_document_revision] = S.[source_standard_document_revision],
-    T.[source_information_release] = S.[source_information_release],
-    T.[source_cost_change] = S.[source_cost_change],
-    T.[source_unit_cost] = S.[source_unit_cost],
-    T.[source_mold_modification_cost] = S.[source_mold_modification_cost],
-    T.[source_related_drawing] = S.[source_related_drawing],
-    T.[source_ec_content] = S.[source_ec_content],
-    T.[updated_by] = @sync_user_id,
-    T.[updated_at] = @now,
-    T.[culture_code] = @culture_code,
-    T.[is_deleted] = 0,
-    T.[deleted_by] = NULL,
-    T.[deleted_at] = NULL
+  T.[source_model]=S.[source_model],
+  T.[source_title]=S.[source_title],
+  T.[source_status]=S.[source_status],
+  T.[source_issue_date]=S.[source_issue_date],
+  T.[source_tcj_owner]=S.[source_tcj_owner],
+  T.[source_tcj_dependency]=S.[source_tcj_dependency],
+  T.[source_ec_meeting]=S.[source_ec_meeting],
+  T.[source_pp_code]=S.[source_pp_code],
+  T.[source_technical_notice_code]=S.[source_technical_notice_code],
+  T.[source_implementation]=S.[source_implementation],
+  T.[source_main_change_reason]=S.[source_main_change_reason],
+  T.[source_secondary_change_reason]=S.[source_secondary_change_reason],
+  T.[source_safety_regulation]=S.[source_safety_regulation],
+  T.[source_progress_status]=S.[source_progress_status],
+  T.[source_serial_number_control]=S.[source_serial_number_control],
+  T.[source_customer_approval]=S.[source_customer_approval],
+  T.[source_service_manual_revision]=S.[source_service_manual_revision],
+  T.[source_user_manual_revision]=S.[source_user_manual_revision],
+  T.[source_promotion_manual_revision]=S.[source_promotion_manual_revision],
+  T.[source_standard_document_revision]=S.[source_standard_document_revision],
+  T.[source_information_release]=S.[source_information_release],
+  T.[source_cost_change]=S.[source_cost_change],
+  T.[source_unit_cost]=S.[source_unit_cost],
+  T.[source_mold_modification_cost]=S.[source_mold_modification_cost],
+  T.[source_related_drawing]=S.[source_related_drawing],
+  T.[source_ec_content]=S.[source_ec_content],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[plant_code]=@plant_code,
+  T.[culture_code]=@culture_code,
+  T.[is_deleted]=0,
+  T.[deleted_by]=NULL,
+  T.[deleted_at]=NULL
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[source_ec_code],[source_model],[source_title],[source_status],
@@ -310,7 +327,7 @@ WHEN NOT MATCHED THEN
     [source_standard_document_revision],[source_information_release],
     [source_cost_change],[source_unit_cost],
     [source_mold_modification_cost],[source_related_drawing],
-    [source_ec_content],[tenant_code],[company_code],[culture_code],
+    [source_ec_content],[tenant_code],[company_code],[plant_code],[culture_code],
     [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
   )
   VALUES (
@@ -325,7 +342,7 @@ WHEN NOT MATCHED THEN
     S.[source_standard_document_revision],S.[source_information_release],
     S.[source_cost_change],S.[source_unit_cost],
     S.[source_mold_modification_cost],S.[source_related_drawing],
-    S.[source_ec_content],@tenant_code,@company_code,@culture_code,
+    S.[source_ec_content],@tenant_code,@company_code,@plant_code,@culture_code,
     @sync_user_id,@now,@sync_user_id,@now,0
   )
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[source_ec_code]
@@ -350,6 +367,7 @@ INTO #main_soft_deleted_rows ([id], [source_ec_code])
 FROM [takt_logistics_manufacturing_ec_source] T
 WHERE T.[tenant_code] = @tenant_code
   AND T.[company_code] = @company_code
+  AND T.[plant_code] = @plant_code
   AND T.[is_deleted] = 0
   AND NOT EXISTS (
     SELECT 1
@@ -370,15 +388,15 @@ SET @main_soft_deleted_keys = ISNULL(@main_soft_deleted_keys, N'');
 
 DECLARE @main_target_count INT = (
   SELECT COUNT(*) FROM [takt_logistics_manufacturing_ec_source]
-  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code AND [is_deleted] = 0
+  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code AND [plant_code] = @plant_code AND [is_deleted] = 0
 );
 DECLARE @main_target_physical INT = (
   SELECT COUNT(*) FROM [takt_logistics_manufacturing_ec_source]
-  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code
+  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code AND [plant_code] = @plant_code
 );
 DECLARE @main_soft_deleted INT = (
   SELECT COUNT(*) FROM [takt_logistics_manufacturing_ec_source]
-  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code AND [is_deleted] = 1
+  WHERE [tenant_code] = @tenant_code AND [company_code] = @company_code AND [plant_code] = @plant_code AND [is_deleted] = 1
 );
 
 DECLARE @detail_target_before INT = (
@@ -386,6 +404,7 @@ DECLARE @detail_target_before INT = (
   FROM [takt_logistics_manufacturing_ec_source_detail]
   WHERE [tenant_code] = @tenant_code
     AND [company_code] = @company_code
+    AND [plant_code] = @plant_code
     AND [is_deleted] = 0
 );
 
@@ -409,6 +428,7 @@ INTO #detail_soft_deleted_rows ([id], [source_ec_id], [source_legacy_part_code])
 FROM [takt_logistics_manufacturing_ec_source_detail] T
 WHERE T.[tenant_code] = @tenant_code
   AND T.[company_code] = @company_code
+  AND T.[plant_code] = @plant_code
   AND T.[is_deleted] = 0;
 
 DECLARE @detail_delete_count INT = @@ROWCOUNT;
@@ -421,7 +441,7 @@ INSERT INTO [takt_logistics_manufacturing_ec_source_detail] (
   [source_replacement_mounting_position],[source_bom_code],
   [source_compatibility],[source_distinction],
   [source_instruction],[source_legacy_part_disposition],
-  [source_bom_effective_date],[tenant_code],[company_code],[culture_code],
+  [source_bom_effective_date],[tenant_code],[company_code],[plant_code],[culture_code],
   [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
 )
 SELECT
@@ -445,6 +465,7 @@ SELECT
   S.[source_bom_effective_date],
   @tenant_code,
   @company_code,
+  @plant_code,
   @culture_code,
   @sync_user_id,
   @now,
@@ -455,6 +476,7 @@ FROM #source_detail S
 INNER JOIN [takt_logistics_manufacturing_ec_source] M
   ON M.[tenant_code] = @tenant_code
  AND M.[company_code] = @company_code
+ AND M.[plant_code] = @plant_code
  AND M.[source_ec_code] = S.[source_ec_code]
  AND M.[is_deleted] = 0;
 
@@ -469,6 +491,7 @@ FROM #source_detail S
 INNER JOIN [takt_logistics_manufacturing_ec_source] M
   ON M.[tenant_code] = @tenant_code
  AND M.[company_code] = @company_code
+ AND M.[plant_code] = @plant_code
  AND M.[source_ec_code] = S.[source_ec_code]
  AND M.[is_deleted] = 0;
 
@@ -496,9 +519,11 @@ DECLARE @detail_target_count INT = (
   INNER JOIN [takt_logistics_manufacturing_ec_source] M ON M.[id] = T.[source_ec_id]
   WHERE T.[tenant_code] = @tenant_code
     AND T.[company_code] = @company_code
+    AND T.[plant_code] = @plant_code
     AND T.[is_deleted] = 0
     AND M.[tenant_code] = @tenant_code
     AND M.[company_code] = @company_code
+    AND M.[plant_code] = @plant_code
     AND M.[is_deleted] = 0
 );
 DECLARE @detail_target_physical INT = (
@@ -506,12 +531,14 @@ DECLARE @detail_target_physical INT = (
   FROM [takt_logistics_manufacturing_ec_source_detail]
   WHERE [tenant_code] = @tenant_code
     AND [company_code] = @company_code
+    AND [plant_code] = @plant_code
 );
 DECLARE @detail_soft_deleted INT = (
   SELECT COUNT(*)
   FROM [takt_logistics_manufacturing_ec_source_detail]
   WHERE [tenant_code] = @tenant_code
     AND [company_code] = @company_code
+    AND [plant_code] = @plant_code
     AND [is_deleted] = 1
 );
 
@@ -552,7 +579,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -561,7 +588,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 -- Quartz 执行器读取此结果集写入 ExecuteMessage / quartz-.log

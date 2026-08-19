@@ -24,9 +24,9 @@ namespace Takt.Application.Dtos.Logistics.Procurement;
 /// <summary>
 /// Takt制造商物料实体（租户内共享）
 /// 对应前端 TaktManufacturerMaterialDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktManufacturerMaterialDto : TaktTenantDtoBase
+public class TaktManufacturerMaterialDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// ManufacturerMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -112,11 +112,6 @@ public class TaktManufacturerMaterialQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
     /// </summary>
@@ -212,11 +207,6 @@ public class TaktManufacturerMaterialCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
     /// </summary>
@@ -330,11 +320,6 @@ public class TaktManufacturerMaterialTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
     /// </summary>
@@ -417,11 +402,6 @@ public class TaktManufacturerMaterialImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
     /// </summary>

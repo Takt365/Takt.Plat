@@ -99,7 +99,7 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
 
     /// <summary>
     /// 获取行政区划树形选项（懒加载：仅 parentId 直接子级一层；DictValue=Id 字符串，供表单 parentId）。
-    /// 不整表、不递归；非叶子 Children=null + IsLeaf=false，前端 TaktTreeSelect loadData 再请求。
+    /// 根层 DictLabel=CountryCode，子级 DictLabel=DivisionName；不整表、不递归。
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
     /// <returns>树形选项（一层）</returns>
@@ -110,14 +110,19 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
             && x.ParentId == parentId
             && x.DivisionStatus == 1);
         return list
-            .OrderBy(x => x.SortOrder)
+            .OrderBy(x => x.CountryCode)
+            .ThenBy(x => x.SortOrder)
             .Select(item =>
             {
                 var isLeaf = TaktLazyTreeHelper.ToAntIsLeaf(item.IsLeaf);
+                var isCountryRoot = item.ParentId == 0 || item.Level == 1;
+                var dictLabel = isCountryRoot
+                    ? (string.IsNullOrWhiteSpace(item.CountryCode) ? item.DivisionName : item.CountryCode)
+                    : (string.IsNullOrWhiteSpace(item.DivisionName) ? item.DivisionCode : item.DivisionName);
                 return new TaktTreeSelectOption
                 {
                     DictValue = item.Id.ToString(),
-                    DictLabel = string.IsNullOrWhiteSpace(item.DivisionName) ? item.DivisionCode : item.DivisionName,
+                    DictLabel = dictLabel,
                     ExtLabel = item.DivisionCode,
                     ExtValue = item.Id.ToString(),
                     SortOrder = item.SortOrder,
@@ -129,7 +134,8 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
     }
 
     /// <summary>
-    /// 获取行政区划树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
+    /// 获取行政区划树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）。
+    /// 根层为国家（ParentId=0），子级按 ParentId 递归；排序 CountryCode、SortOrder。
     /// </summary>
     /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
@@ -141,7 +147,8 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
             : (x => x.TenantCode == CurrentTenantCode && x.ParentId == parentId && x.DivisionStatus == 1);
         var list = await _adminDivisionRepository.GetListAsync(predicate);
         return list
-            .OrderBy(x => x.SortOrder)
+            .OrderBy(x => x.CountryCode)
+            .ThenBy(x => x.SortOrder)
             .Select(item =>
             {
                 var treeDto = item.Adapt<TaktAdminDivisionTreeDto>();
@@ -525,11 +532,6 @@ public class TaktAdminDivisionService : TaktServiceBase, ITaktAdminDivisionServi
         {
             var createdAtEnd = queryDto.CreatedAtEnd;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
         }
 
 

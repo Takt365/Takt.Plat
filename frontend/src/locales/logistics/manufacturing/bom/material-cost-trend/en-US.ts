@@ -29,11 +29,6 @@ export default {
       all: 'All',
       changed: 'Changed only',
     },
-    sort: {
-      bom: 'BOM order (all rows)',
-      trend: 'Trend first (all rows)',
-      varianceDesc: 'Abs. variance ↓ (all rows)',
-    },
     trend: {
       none: '—',
       up: 'Up',

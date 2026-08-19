@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：general-material.d.ts
-// 创建时间：2026-08-05
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -12,24 +12,24 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
- * Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription）
+ * Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription） 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
  * 对应前端 TaktGeneralMaterialDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase
  * 对应前端 GeneralMaterial
  * @description 对应后端 TaktGeneralMaterialDto
  */
-export interface GeneralMaterial extends TenantDtoBase {
+export interface GeneralMaterial extends TenantCoreDtoBase {
   /**
    * GeneralMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   generalMaterialId: string;
 
   /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode: string;
 
@@ -1055,6 +1055,7 @@ export interface GeneralMaterial extends TenantDtoBase {
 
 }
 
+
 /**
  * GeneralMaterial 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -1068,12 +1069,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode?: string;
 
@@ -2124,6 +2120,7 @@ export interface GeneralMaterialQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建GeneralMaterial DTO
  * 对应前端 GeneralMaterialCreate
@@ -2136,12 +2133,7 @@ export interface GeneralMaterialCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode: string;
 
@@ -3162,6 +3154,7 @@ export interface GeneralMaterialCreate {
 
 }
 
+
 /**
  * 更新GeneralMaterial DTO
  * 继承 TaktGeneralMaterialCreateDto，添加 GeneralMaterialId 字段
@@ -3175,6 +3168,7 @@ export interface GeneralMaterialUpdate extends GeneralMaterialCreate {
   generalMaterialId: string;
 
 }
+
 
 /**
  * GeneralMaterial 状态更新 DTO
@@ -3194,6 +3188,7 @@ export interface GeneralMaterialStatus {
 
 }
 
+
 /**
  * GeneralMaterial 导入模板行 DTO
  * 对应前端 GeneralMaterialTemplate
@@ -3206,12 +3201,7 @@ export interface GeneralMaterialTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode?: string;
 
@@ -4231,6 +4221,7 @@ export interface GeneralMaterialTemplate {
   remark?: string;
 
 }
+
 
 /**
  * GeneralMaterial 导入 DTO（独立实现，不继承 TemplateDto）
@@ -4244,12 +4235,7 @@ export interface GeneralMaterialImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode?: string;
 
@@ -5270,6 +5256,7 @@ export interface GeneralMaterialImport {
 
 }
 
+
 /**
  * GeneralMaterial 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 GeneralMaterialExport
@@ -5282,7 +5269,7 @@ export interface GeneralMaterialExport {
   generalMaterialId: string;
 
   /**
-   * 物料编码
+   * 物料编码（租户内唯一）
    */
   materialCode: string;
 

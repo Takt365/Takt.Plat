@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktDictDataI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDictData 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -91,22 +91,22 @@ public class TaktDictDataI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dictdata._self", "zh-HK", "字典数据信息_hk", "实体名称"),
 
             // entity.dictdata.dicttypeid
-            new TranslationSeedItem("entity.dictdata.dicttypeid", "en-US", "字典类型ID_us", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）"),
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "en-US", "字典类型ID_us", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.dictdata.dicttypeid
-            new TranslationSeedItem("entity.dictdata.dicttypeid", "ja-JP", "字典类型ID_jp", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）"),
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "ja-JP", "字典类型ID_jp", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.dictdata.dicttypeid
-            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-CN", "字典类型ID", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）"),
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-CN", "字典类型ID", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
             // entity.dictdata.dicttypeid
-            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-HK", "字典类型ID_hk", "字典类型ID（关联 TaktDictType.Id；唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一）"),
+            new TranslationSeedItem("entity.dictdata.dicttypeid", "zh-HK", "字典类型ID_hk", "字典类型（选项 TaktDictTypes/options；DictValue=Id）"),
 
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "en-US", "字典类型编码_us", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "en-US", "字典类型编码_us", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "ja-JP", "字典类型编码_jp", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "ja-JP", "字典类型编码_jp", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-CN", "字典类型编码", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
             // entity.dictdata.dicttypecode
-            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-HK", "字典类型编码_hk", "字典类型编码（关联 TaktDictType.DictTypeCode）"),
+            new TranslationSeedItem("entity.dictdata.dicttypecode", "zh-HK", "字典类型编码_hk", "字典类型编码（冗余，与 TaktDictType.DictTypeCode 对齐）"),
 
             // entity.dictdata.dictlabel
             new TranslationSeedItem("entity.dictdata.dictlabel", "en-US", "字典项标签_us", "字典项标签（唯一索引：租户内 DictTypeId+CultureCode+DictLabel+I18nKey 唯一；sys_culture_code 等区域文化项用本族语，同语言多地区才加括号，如 English (US)、中文 (简体)）"),

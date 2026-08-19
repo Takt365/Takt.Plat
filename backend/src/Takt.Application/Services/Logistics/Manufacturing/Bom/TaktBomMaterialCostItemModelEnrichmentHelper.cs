@@ -20,7 +20,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 public static class TaktBomMaterialCostItemModelEnrichmentHelper
 {
     /// <summary>
-    /// 计算机种指定月份平均材料成本（仅 ProductionRelated=X 且 PurchaseType=F；各成品有成本的参与算术平均）
+    /// 计算机种指定月份平均材料成本（生产相关=X、PCB SECT 标识为空、采购类型=F；各成品有成本的参与算术平均）
     /// </summary>
     /// <param name="catalogProductCodes">成品编码清单（须与主表产品集一致，勿用型号目的地扩编）</param>
     /// <param name="monthRows">该工厂该月全部 BOM 行</param>
@@ -77,9 +77,9 @@ public static class TaktBomMaterialCostItemModelEnrichmentHelper
     }
 
     /// <summary>
-    /// 按主表已落库的产品月成本计算机种月平均（仅 ProductMonthlyCost &gt; 0 参与）
+    /// 按主表已落库的产品月计算计算机种月平均（仅 ProductMonthlyCalculation &gt; 0 参与）
     /// </summary>
-    /// <param name="productMonthlyCosts">同工厂+机种+核算期间下各成品产品月成本</param>
+    /// <param name="productMonthlyCosts">同工厂+物料类型+机种+月份下各产品月成本</param>
     /// <returns>机种月成本</returns>
     public static decimal ComputeModelMonthlyAverageFromProductCosts(IReadOnlyList<decimal> productMonthlyCosts)
     {

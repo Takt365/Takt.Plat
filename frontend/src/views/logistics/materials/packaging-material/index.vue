@@ -225,7 +225,7 @@
       <a-form-item :label="pi.queryLabel('originCountryRegionCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.originCountryRegionCode"
-          api-url="TaktIsoCodes/options"
+          dict-type="sys_country_code"
           :placeholder="pi.queryPh('originCountryRegionCode', 'select')"
           allow-clear
         />
@@ -246,7 +246,7 @@
       <a-form-item :label="pi.queryLabel('destinationCountryRegionCode')">
         <TaktSelect
           v-model:value="advancedQueryForm.destinationCountryRegionCode"
-          api-url="TaktIsoCodes/options"
+          dict-type="sys_country_code"
           :placeholder="pi.queryPh('destinationCountryRegionCode', 'select')"
           allow-clear
         />

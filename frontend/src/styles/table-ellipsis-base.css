@@ -11,19 +11,32 @@
  * ======================================== */
 
 /**
- * 启用 ellipsis 的数据列：锁定单元格溢出（排除操作列）
+ * 启用 ellipsis 的数据列：仅锁定表体单元格溢出（排除操作列）
+ * 不得作用于 thead：否则裁切 ant-table-resize-handle，列拖宽无法 hover/拖动
  * 根类覆盖 TaktSingleTable / 树表 / 可编辑表 / 主子表内嵌表格
  */
-.takt-single-table .ant-table-cell-ellipsis:not(.takt-action-column),
-.takt-tree-right-table .ant-table-cell-ellipsis:not(.takt-action-column),
-.takt-tree-left-table .ant-table-cell-ellipsis:not(.takt-action-column),
-.takt-editable-table .ant-table-cell-ellipsis:not(.takt-action-column),
-.takt-master-detail-table-lr .ant-table-cell-ellipsis:not(.takt-action-column),
-.takt-master-detail-table-tb .ant-table-cell-ellipsis:not(.takt-action-column) {
+.takt-single-table .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-tree-right-table .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-tree-left-table .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-editable-table .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-master-detail-table-lr .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column),
+.takt-master-detail-table-tb .ant-table-tbody .ant-table-cell-ellipsis:not(.takt-action-column) {
   overflow: hidden !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
   word-break: keep-all;
+}
+
+/**
+ * 表头允许溢出，保证列宽拖动手柄可命中
+ */
+.takt-single-table .ant-table-thead .ant-table-cell,
+.takt-tree-right-table .ant-table-thead .ant-table-cell,
+.takt-tree-left-table .ant-table-thead .ant-table-cell,
+.takt-editable-table .ant-table-thead .ant-table-cell,
+.takt-master-detail-table-lr .ant-table-thead .ant-table-cell,
+.takt-master-detail-table-tb .ant-table-thead .ant-table-cell {
+  overflow: visible;
 }
 
 /**

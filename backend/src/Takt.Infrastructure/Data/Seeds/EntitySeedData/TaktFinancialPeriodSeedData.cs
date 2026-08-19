@@ -4,7 +4,7 @@
 // 文件名称：TaktFinancialPeriodSeedData.cs
 // 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
-// 功能描述：财务期间种子（FY2000～FY2099；四类财年；幂等创建或更新）
+// 功能描述：财务期间种子（FY2000～FY2099；CN/JP/HK/US 四国；幂等创建或更新）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -19,24 +19,24 @@ using Takt.Shared.Helpers;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// 财务期间种子（租户级；CN/JP/HK/US 四类财年，FY2000～FY2099）
+/// 财务期间种子（租户级；CN/JP/HK/US 四国财年规则，FY2000～FY2099）
 /// </summary>
 public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
 {
     private const int IsBuiltInYes = 1;
     private const int FiscalYearStart = 2000;
     private const int FiscalYearEnd = 2099;
-    private const string CategoryChina = "CN";
-    private const string CategoryJapan = "JP";
-    private const string CategoryHongKong = "HK";
-    private const string CategoryUnitedStates = "US";
+    private const string CountryChina = "CN";
+    private const string CountryJapan = "JP";
+    private const string CountryHongKong = "HK";
+    private const string CountryUnitedStates = "US";
 
-    private static readonly string[] FinancialYearCategories =
+    private static readonly string[] SeedCountryCodes =
     [
-        CategoryChina,
-        CategoryJapan,
-        CategoryHongKong,
-        CategoryUnitedStates,
+        CountryChina,
+        CountryJapan,
+        CountryHongKong,
+        CountryUnitedStates,
     ];
 
     /// <summary>
@@ -91,26 +91,26 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
     private static List<FinancialPeriodSeedItem> BuildFinancialPeriods()
     {
         var items = new List<FinancialPeriodSeedItem>();
-        foreach (var category in FinancialYearCategories)
+        foreach (var countryCode in SeedCountryCodes)
         {
-            items.AddRange(BuildPeriodsForCategory(category));
+            items.AddRange(BuildPeriodsForCountry(countryCode));
         }
         return items;
     }
 
     /// <summary>
-    /// 按财年类别生成期间
+    /// 按国家代码生成期间
     /// </summary>
-    /// <param name="category">财年类别 DictValue</param>
-    /// <returns>该类别期间种子项</returns>
-    private static IEnumerable<FinancialPeriodSeedItem> BuildPeriodsForCategory(string category)
+    /// <param name="countryCode">国家代码（ISO alpha-2）</param>
+    /// <returns>该国期间种子项</returns>
+    private static IEnumerable<FinancialPeriodSeedItem> BuildPeriodsForCountry(string countryCode)
     {
-        return category switch
+        return countryCode switch
         {
-            CategoryChina => BuildChinaCalendarYearPeriods(),
-            CategoryJapan or CategoryHongKong => BuildAprilMarchYearPeriods(category),
-            CategoryUnitedStates => BuildOctoberSeptemberYearPeriods(),
-            _ => throw new InvalidOperationException($"未支持的财务年度类别 {category}"),
+            CountryChina => BuildChinaCalendarYearPeriods(),
+            CountryJapan or CountryHongKong => BuildAprilMarchYearPeriods(countryCode),
+            CountryUnitedStates => BuildOctoberSeptemberYearPeriods(),
+            _ => throw new InvalidOperationException($"未支持的国家代码 {countryCode}"),
         };
     }
 
@@ -124,7 +124,7 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
         while (cursor <= end)
         {
             yield return CreateSeedItem(
-                CategoryChina,
+                CountryChina,
                 cursor.Year,
                 cursor.Month,
                 $"FY{cursor.Year}",
@@ -136,8 +136,8 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
     /// <summary>
     /// 日本/香港财年（4/1～次年 3/31；FY2000=1999/4/1～2000/3/31）
     /// </summary>
-    /// <param name="category">JP 或 HK</param>
-    private static IEnumerable<FinancialPeriodSeedItem> BuildAprilMarchYearPeriods(string category)
+    /// <param name="countryCode">JP 或 HK</param>
+    private static IEnumerable<FinancialPeriodSeedItem> BuildAprilMarchYearPeriods(string countryCode)
     {
         var cursor = new DateTime(FiscalYearStart - 1, 4, 1);
         var end = new DateTime(FiscalYearEnd, 3, 1);
@@ -147,7 +147,7 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
             var calendarMonth = cursor.Month;
             var fiscalYearNumber = calendarMonth >= 4 ? calendarYear + 1 : calendarYear;
             yield return CreateSeedItem(
-                category,
+                countryCode,
                 calendarYear,
                 calendarMonth,
                 $"FY{fiscalYearNumber}",
@@ -169,7 +169,7 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
             var calendarMonth = cursor.Month;
             var fiscalYearNumber = calendarMonth >= 10 ? calendarYear + 1 : calendarYear;
             yield return CreateSeedItem(
-                CategoryUnitedStates,
+                CountryUnitedStates,
                 calendarYear,
                 calendarMonth,
                 $"FY{fiscalYearNumber}",
@@ -182,14 +182,14 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
     /// 组装单条期间种子项
     /// </summary>
     private static FinancialPeriodSeedItem CreateSeedItem(
-        string category,
+        string countryCode,
         int calendarYear,
         int calendarMonth,
         string financialYearCode,
         string financialQuarterCode)
     {
         return new FinancialPeriodSeedItem(
-            category,
+            countryCode,
             financialYearCode,
             $"{calendarYear:D4}{calendarMonth:D2}",
             calendarYear,
@@ -252,14 +252,14 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
     {
         var period = await repository.FirstAsync(x =>
             x.TenantCode == tenantCode
-            && x.FinancialYearCategory == seed.FinancialYearCategory
+            && x.CountryCode == seed.CountryCode
             && x.PeriodCode == seed.PeriodCode);
         if (period == null)
         {
             period = new TaktFinancialPeriod
             {
                 TenantCode = tenantCode,
-                FinancialYearCategory = seed.FinancialYearCategory,
+                CountryCode = seed.CountryCode,
                 FinancialYearCode = seed.FinancialYearCode,
                 PeriodCode = seed.PeriodCode,
                 CalendarYear = seed.CalendarYear,
@@ -308,7 +308,7 @@ public class TaktFinancialPeriodSeedData : ITaktSeedDataCoordinator
     /// 财务期间种子项
     /// </summary>
     private sealed record FinancialPeriodSeedItem(
-        string FinancialYearCategory,
+        string CountryCode,
         string FinancialYearCode,
         string PeriodCode,
         int CalendarYear,

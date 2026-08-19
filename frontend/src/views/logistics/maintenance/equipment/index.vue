@@ -119,10 +119,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.equipment.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.equipment.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -677,7 +677,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.equipment.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'EquipCode', label: t('entity.equipment.code') },
   { key: 'equipmentName', label: t('entity.equipment.name') },
   { key: 'equipmentType', label: t('entity.equipment.type') },
@@ -825,7 +825,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEquipmentField(record, 'equipmentId') ?? ''
   },
   {
-    title: t('entity.equipment.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

@@ -19,6 +19,7 @@ namespace Takt.Domain.Entities.Foundation;
 /// 行政区划实体（租户级共享；世界通用六级树）
 /// 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type）
 /// 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
 [SugarTable("takt_foundation_admin_division", "行政区划表")]
 [SugarIndex("ix_admin_division_tenant", nameof(TenantCode), OrderByType.Asc, false)]
@@ -27,7 +28,7 @@ namespace Takt.Domain.Entities.Foundation;
 [SugarIndex("ix_admin_division_parent", nameof(TenantCode), OrderByType.Asc, nameof(ParentId), OrderByType.Asc, false)]
 [SugarIndex("ix_admin_division_country", nameof(TenantCode), OrderByType.Asc, nameof(CountryCode), OrderByType.Asc, false)]
 [SugarIndex("ix_admin_division_level", nameof(TenantCode), OrderByType.Asc, nameof(Level), OrderByType.Asc, false)]
-public class TaktAdminDivision : TaktTenantEntityBase
+public class TaktAdminDivision : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）

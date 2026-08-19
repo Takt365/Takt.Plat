@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPackagingMaterialI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPackagingMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,13 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.additionalcode", "zh-HK", "附加编码_hk", "附加编码（如 CIQ 检验检疫附加码，3位，用于满足特定监管要求）"),
 
             // entity.packagingmaterial.origincountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "en-US", "原产国/地区编码_us", "原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "en-US", "原产国/地区编码_us", "原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.origincountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "ja-JP", "原产国/地区编码_jp", "原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "ja-JP", "原产国/地区编码_jp", "原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.origincountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "zh-CN", "原产国/地区编码", "原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "zh-CN", "原产国/地区编码", "原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.origincountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "zh-HK", "原产国/地区编码_hk", "原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.origincountryregioncode", "zh-HK", "原产国/地区编码_hk", "原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
 
             // entity.packagingmaterial.origincountryregionname
             new TranslationSeedItem("entity.packagingmaterial.origincountryregionname", "en-US", "原产国/地区名称_us", "原产国/地区名称"),
@@ -163,13 +163,13 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.origincountryregionname", "zh-HK", "原产国/地区名称_hk", "原产国/地区名称"),
 
             // entity.packagingmaterial.destinationcountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "en-US", "目的国/地区编码_us", "目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "en-US", "目的国/地区编码_us", "目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.destinationcountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "ja-JP", "目的国/地区编码_jp", "目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "ja-JP", "目的国/地区编码_jp", "目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.destinationcountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "zh-CN", "目的国/地区编码", "目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "zh-CN", "目的国/地区编码", "目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
             // entity.packagingmaterial.destinationcountryregioncode
-            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "zh-HK", "目的国/地区编码_hk", "目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）"),
+            new TranslationSeedItem("entity.packagingmaterial.destinationcountryregioncode", "zh-HK", "目的国/地区编码_hk", "目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）"),
 
             // entity.packagingmaterial.destinationcountryregionname
             new TranslationSeedItem("entity.packagingmaterial.destinationcountryregionname", "en-US", "目的国/地区名称_us", "目的国/地区名称"),

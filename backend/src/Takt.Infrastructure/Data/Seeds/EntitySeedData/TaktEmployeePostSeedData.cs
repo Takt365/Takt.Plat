@@ -46,7 +46,8 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
         var postRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktPost>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
+        var database = configuration.RequireDatabase();
+        var configuredCompanyCodes = database.CompanyCodes;
         var companies = await companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         var orderedCompanies = TaktDatabaseOptions.OrderByConfiguredCodes(
@@ -68,6 +69,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
                     postRepository,
                     tenantCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
                     EmployeeCode,
                     postCode);
@@ -113,6 +115,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktPost> postRepository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         string EmployeeCode,
         string postCode)
@@ -140,6 +143,7 @@ public class TaktEmployeePostSeedData : ITaktSeedDataCoordinator
             {
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
+                PlantCode = plantCode,
                 CultureCode = cultureCode,
                 EmployeeId = employee.Id,
                 PostId = post.Id

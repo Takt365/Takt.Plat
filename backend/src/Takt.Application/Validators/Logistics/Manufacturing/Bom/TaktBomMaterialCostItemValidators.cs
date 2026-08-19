@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostItemValidators.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：BomMaterialCostItem 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktBomMaterialCostItem 生成，请按需审阅）
 // 
@@ -44,18 +44,17 @@ public class TaktBomMaterialCostItemCreateValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.BomLevel)
             .NotEmpty().WithMessage("层级不能为空")
             .MaximumLength(20).WithMessage("层级长度不能超过20个字符");
-        RuleFor(x => x.SequenceCode)
-            .NotEmpty().WithMessage("序号不能为空")
-            .MaximumLength(4).WithMessage("序号长度不能超过4个字符");
-        RuleFor(x => x.ProductCode)
-            .NotEmpty().WithMessage("产品编码不能为空")
-            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
-        RuleFor(x => x.ProductDescription)
-            .NotEmpty().WithMessage("产品描述不能为空")
-            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.BomItemCode)
             .NotEmpty().WithMessage("BOM 项目号不能为空")
             .MaximumLength(4).WithMessage("BOM 项目号长度不能超过4个字符");
+        RuleFor(x => x.ProductCode)
+            .NotEmpty().WithMessage("产品编码不能为空")
+            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
+        RuleFor(x => x.LineNumber)
+            .GreaterThan(0).WithMessage("行号必须大于0");
+        RuleFor(x => x.ProductDescription)
+            .NotEmpty().WithMessage("产品描述不能为空")
+            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.ComponentCode)
             .NotEmpty().WithMessage("组件编码不能为空")
             .MaximumLength(20).WithMessage("组件编码长度不能超过20个字符");
@@ -65,6 +64,8 @@ public class TaktBomMaterialCostItemCreateValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.PurchaseType)
             .NotEmpty().WithMessage("采购类型不能为空")
             .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.PcbSectIndicator)
+            .MaximumLength(1).WithMessage("PCB SECT 标识长度不能超过1个字符");
         RuleFor(x => x.ProfitCenterCode)
             .NotEmpty().WithMessage("利润中心不能为空")
             .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");
@@ -121,18 +122,17 @@ public class TaktBomMaterialCostItemUpdateValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.BomLevel)
             .NotEmpty().WithMessage("层级不能为空")
             .MaximumLength(20).WithMessage("层级长度不能超过20个字符");
-        RuleFor(x => x.SequenceCode)
-            .NotEmpty().WithMessage("序号不能为空")
-            .MaximumLength(4).WithMessage("序号长度不能超过4个字符");
-        RuleFor(x => x.ProductCode)
-            .NotEmpty().WithMessage("产品编码不能为空")
-            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
-        RuleFor(x => x.ProductDescription)
-            .NotEmpty().WithMessage("产品描述不能为空")
-            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.BomItemCode)
             .NotEmpty().WithMessage("BOM 项目号不能为空")
             .MaximumLength(4).WithMessage("BOM 项目号长度不能超过4个字符");
+        RuleFor(x => x.ProductCode)
+            .NotEmpty().WithMessage("产品编码不能为空")
+            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
+        RuleFor(x => x.LineNumber)
+            .GreaterThan(0).WithMessage("行号必须大于0");
+        RuleFor(x => x.ProductDescription)
+            .NotEmpty().WithMessage("产品描述不能为空")
+            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.ComponentCode)
             .NotEmpty().WithMessage("组件编码不能为空")
             .MaximumLength(20).WithMessage("组件编码长度不能超过20个字符");
@@ -142,6 +142,8 @@ public class TaktBomMaterialCostItemUpdateValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.PurchaseType)
             .NotEmpty().WithMessage("采购类型不能为空")
             .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.PcbSectIndicator)
+            .MaximumLength(1).WithMessage("PCB SECT 标识长度不能超过1个字符");
         RuleFor(x => x.ProfitCenterCode)
             .NotEmpty().WithMessage("利润中心不能为空")
             .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");
@@ -192,18 +194,17 @@ public class TaktBomMaterialCostItemImportValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.BomLevel)
             .NotEmpty().WithMessage("层级不能为空")
             .MaximumLength(20).WithMessage("层级长度不能超过20个字符");
-        RuleFor(x => x.SequenceCode)
-            .NotEmpty().WithMessage("序号不能为空")
-            .MaximumLength(4).WithMessage("序号长度不能超过4个字符");
-        RuleFor(x => x.ProductCode)
-            .NotEmpty().WithMessage("产品编码不能为空")
-            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
-        RuleFor(x => x.ProductDescription)
-            .NotEmpty().WithMessage("产品描述不能为空")
-            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.BomItemCode)
             .NotEmpty().WithMessage("BOM 项目号不能为空")
             .MaximumLength(4).WithMessage("BOM 项目号长度不能超过4个字符");
+        RuleFor(x => x.ProductCode)
+            .NotEmpty().WithMessage("产品编码不能为空")
+            .MaximumLength(20).WithMessage("产品编码长度不能超过20个字符");
+        RuleFor(x => x.LineNumber)
+            .GreaterThan(0).WithMessage("行号必须大于0");
+        RuleFor(x => x.ProductDescription)
+            .NotEmpty().WithMessage("产品描述不能为空")
+            .MaximumLength(40).WithMessage("产品描述长度不能超过40个字符");
         RuleFor(x => x.ComponentCode)
             .NotEmpty().WithMessage("组件编码不能为空")
             .MaximumLength(20).WithMessage("组件编码长度不能超过20个字符");
@@ -213,6 +214,8 @@ public class TaktBomMaterialCostItemImportValidator : AbstractValidator<TaktBomM
         RuleFor(x => x.PurchaseType)
             .NotEmpty().WithMessage("采购类型不能为空")
             .MaximumLength(1).WithMessage("采购类型长度不能超过1个字符");
+        RuleFor(x => x.PcbSectIndicator)
+            .MaximumLength(1).WithMessage("PCB SECT 标识长度不能超过1个字符");
         RuleFor(x => x.ProfitCenterCode)
             .NotEmpty().WithMessage("利润中心不能为空")
             .MaximumLength(4).WithMessage("利润中心长度不能超过4个字符");

@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Foundation;
 /// <summary>
 /// 字典类型实体 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等 租户级实体：字典类型在租户内共享，不需要公司隔离
 /// 对应前端 TaktDictTypeDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktDictTypeDto : TaktTenantDtoBase
+public class TaktDictTypeDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// DictTypeID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -92,12 +93,6 @@ public class TaktDictTypeQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -167,12 +162,6 @@ public class TaktDictTypeCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -327,12 +316,6 @@ public class TaktDictTypeTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
@@ -389,12 +372,6 @@ public class TaktDictTypeImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>

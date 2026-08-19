@@ -20,6 +20,8 @@ const {
   parseEntityClassHeaderFromCsContent,
   isTenantEntityBase,
   isCompanyOrApprovalEntityBase,
+  entityBaseHasRelatedPlant,
+  entityBaseHasCultureCode,
   ENTITY_CLASS_HEADER_REGEX,
 } = require('./generate-script-common.cjs');
 const { isRbacJunctionEntity, isManualDtoEntity } = require('./generate-entity-exclusions.cjs');
@@ -534,7 +536,7 @@ function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
     lines.push(`            .MaximumLength(5).WithMessage("区域文化编码长度不能超过5个字符")${cultureWhen};`);
   } else if (
     isTenantEntityBase(entityBase) &&
-    entity.properties.some((p) => p.name === 'CultureCode') &&
+    entityBaseHasCultureCode(entityBase) &&
     (!dtoPropNames || dtoPropNames.has('CultureCode'))
   ) {
     const cultureWhen =
@@ -558,7 +560,7 @@ function emitTenantCompanyScopeRules(entity, entityBase, mode, dtoPropNames) {
     lines.push(`            .MaximumLength(4).WithMessage("工厂代码长度不能超过4个字符")${plantWhen};`);
   }
   if (
-    isTenantEntityBase(entityBase) &&
+    entityBaseHasRelatedPlant(entityBase) &&
     entity.className !== 'TaktPlant' &&
     (!dtoPropNames || dtoPropNames.has('RelatedPlant'))
   ) {

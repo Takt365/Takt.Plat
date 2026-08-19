@@ -127,7 +127,6 @@ import {
   type TaktTableLayoutMode,
 } from '@/utils/table-columns'
 import {
-  applyTableColumnPresentation,
   isTableColumnEllipsisEnabled,
   resolveTableCellEllipsisTitle,
   resolveTableScrollConfig,
@@ -140,6 +139,7 @@ import {
 import TaktTableBodyCellFallback from '@/components/business/takt-table-body-cell-fallback/index'
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
 import { useTaktMasterDetailLrScrollY } from '@/composables/use-takt-master-detail-lr-scroll-y'
+import { useTableColumnResize } from '@/composables/use-table-column-resize'
 import { useI18n } from 'vue-i18n'
 import { useAttrs, computed, nextTick, onBeforeUnmount, onMounted, ref, useSlots, watch } from 'vue'
 
@@ -396,17 +396,31 @@ const displayColumnSource = computed((): TableColumnsType => {
   })
 })
 
-/** 最终传给 a-table 的列 */
-const resolvedDisplayColumns = computed(() =>
-  applyTableColumnPresentation(displayColumnSource.value, props.defaultEllipsis),
+/** 列宽拖拽：稳定列引用，拖动时就地改 width（不重建列数组） */
+const {
+  displayColumns: resolvedDisplayColumns,
+  rebuildDisplayColumns,
+  handleResizeColumn: applyResizeColumnWidth,
+} = useTableColumnResize()
+
+watch(
+  [displayColumnSource, () => props.defaultEllipsis],
+  ([source, defaultEllipsis]) => {
+    rebuildDisplayColumns(source, defaultEllipsis)
+  },
+  { immediate: true },
 )
 
+/**
+ * a-table 列宽拖拽：就地改宽并通知父级
+ * @param w 新宽度
+ * @param col 当前列
+ */
 const handleResizeColumn = (w: number, col: ColumnType<unknown>) => {
   const mutableCol = col as ResizableColumn & { resizable?: boolean }
-  if (mutableCol.resizable !== true) {
+  if (!applyResizeColumnWidth(w, mutableCol)) {
     return
   }
-  mutableCol.width = w
   emit('resize-column', w, mutableCol)
 }
 
@@ -576,8 +590,17 @@ defineExpose({
  */
 .takt-single-table__body--fixed-y :deep(.ant-table-tbody-virtual-scrollbar-horizontal) {
   display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: 10px !important;
+  bottom: 0 !important;
+  z-index: 10;
+  pointer-events: auto !important;
+}
+
+.takt-single-table__body--fixed-y :deep(.ant-table-tbody-virtual-scrollbar-horizontal .ant-table-tbody-virtual-scrollbar-thumb) {
   height: 8px !important;
-  z-index: 4;
+  border-radius: 4px;
 }
 
 .takt-single-table__body--fixed-y :deep(.ant-table-tbody-virtual-holder) {

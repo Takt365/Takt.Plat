@@ -19,24 +19,19 @@ namespace Takt.Domain.Entities.Foundation;
 /// 区域文化实体
 /// 定义系统支持的多语言区域文化，如：zh-CN（简体中文）、en-US（美式英文）、ja-JP（日文）等
 /// 租户级实体：区域文化定义在租户内共享，不需要公司隔离
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_foundation_culture", "区域表")]
 [SugarIndex("ix_culture_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_culture_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_culture_culture_unique", nameof(TenantCode), OrderByType.Asc, nameof(CultureCode), OrderByType.Asc, true)]
-public class TaktCulture : TaktTenantEntityBase
+public class TaktCulture : TaktTenantCoreEntityBase
 {
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "en-US")]
-    public new string CultureCode { get; set; } = "en-US";
-
-    /// <summary>
-    /// 语言名称（如：简体中文、English）
-    /// </summary>
-    [SugarColumn(ColumnName = "language_name", ColumnDescription = "语言名称", ColumnDataType = "nvarchar", Length = 50, IsNullable = false)]
-    public string LanguageName { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "mul")]
+    public string CultureCode { get; set; } = "mul";
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）

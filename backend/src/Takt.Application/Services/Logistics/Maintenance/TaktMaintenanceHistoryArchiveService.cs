@@ -55,7 +55,11 @@ public class TaktMaintenanceHistoryArchiveService : TaktServiceBase, ITaktMainte
         _maintenanceHistoryRepository = maintenanceHistoryRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 维护工单状态变更后尝试归档（已完工/已结算/已关闭且未归档时写入履历）
+    /// </summary>
+    /// <param name="workOrderId">维护工单ID</param>
+    /// <returns>归档后的履历 DTO；不满足条件时返回 null</returns>
     public async Task<TaktMaintenanceHistoryDto?> TryArchiveFromWorkOrderAsync(long workOrderId)
     {
         var workOrder = await _workOrderRepository.GetByIdAsync(workOrderId);
@@ -71,7 +75,13 @@ public class TaktMaintenanceHistoryArchiveService : TaktServiceBase, ITaktMainte
         return await TryArchiveFromWorkOrderAsync(workOrder, materials, labors);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 根据内存中的工单实体归档（含子表数据已加载时使用）
+    /// </summary>
+    /// <param name="workOrder">维护工单实体</param>
+    /// <param name="materials">领料明细</param>
+    /// <param name="labors">报工明细</param>
+    /// <returns>归档后的履历 DTO；不满足条件时返回 null</returns>
     public async Task<TaktMaintenanceHistoryDto?> TryArchiveFromWorkOrderAsync(
         TaktMaintenanceWorkOrder workOrder,
         IReadOnlyList<TaktMaintenanceWorkOrderMaterial>? materials,

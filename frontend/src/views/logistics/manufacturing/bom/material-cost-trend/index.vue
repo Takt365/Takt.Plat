@@ -44,7 +44,6 @@
       v-model:has-rows="hasRows"
       class="min-h-0 min-w-0 flex-1"
       :trend-filter="trendFilter"
-      :sort-by="sortBy"
     />
   </div>
 </template>
@@ -60,10 +59,7 @@ import {
   RiArrowDownLine,
   RiArrowUpDownLine,
   RiArrowUpLine,
-  RiLineChartLine,
   RiListCheck,
-  RiNodeTree,
-  RiSortNumberDesc,
 } from '@remixicon/vue'
 import { ensureTaktPaginationConfigAsync, getTaktDefaultPageSize } from '@/utils/takt-paged'
 import { getBomMaterialCostAnalysisPlantOptions } from '@/api/logistics/manufacturing/bom/material-cost-analysis'
@@ -95,31 +91,8 @@ const exportLoading = ref(false)
 const hasRows = ref(false)
 /** 涨跌筛选 */
 const trendFilter = ref('')
-/** 全量排序（分页前） */
-const sortBy = ref('bom')
-/** 右侧：全量排序 + 涨跌筛选 */
+/** 右侧：涨跌筛选（行序固定 ProductCode + 行号升序） */
 const toolbarRightActions = computed<ToolBarAction[]>(() => [
-  {
-    key: 'sort-bom',
-    icon: RiNodeTree,
-    tooltip: t(`${localePrefix}.sort.bom`),
-    active: sortBy.value === 'bom',
-    onClick: () => setSortBy('bom'),
-  },
-  {
-    key: 'sort-trend',
-    icon: RiLineChartLine,
-    tooltip: t(`${localePrefix}.sort.trend`),
-    active: sortBy.value === 'trend',
-    onClick: () => setSortBy('trend'),
-  },
-  {
-    key: 'sort-variance-desc',
-    icon: RiSortNumberDesc,
-    tooltip: t(`${localePrefix}.sort.varianceDesc`),
-    active: sortBy.value === 'varianceDesc',
-    onClick: () => setSortBy('varianceDesc'),
-  },
   {
     key: 'trend-all',
     icon: RiListCheck,
@@ -150,7 +123,7 @@ const toolbarRightActions = computed<ToolBarAction[]>(() => [
   }])
 /** 明细面板 */
 const panelRef = ref<{
-  reload?: (trendFilterOverride?: string, sortByOverride?: string) => Promise<void>
+  reload?: (trendFilterOverride?: string) => Promise<void>
   handleExport?: () => Promise<void>
   clear?: () => void
 } | null>(null)
@@ -193,19 +166,7 @@ function setTrendFilter(value: string) {
     return
   }
   trendFilter.value = value
-  void panelRef.value?.reload?.(value, sortBy.value)
-}
-
-/**
- * 全量排序（分页前作用于整表）
- * @param value bom / trend / varianceDesc
- */
-function setSortBy(value: string) {
-  if (sortBy.value === value) {
-    return
-  }
-  sortBy.value = value
-  void panelRef.value?.reload?.(trendFilter.value, value)
+  void panelRef.value?.reload?.(value)
 }
 
 /** 刷新 */
@@ -248,7 +209,6 @@ async function handleReset() {
   queryMaterialType.value = undefined
   applyDefaultPeriodRange()
   trendFilter.value = ''
-  sortBy.value = 'bom'
   hasRows.value = false
   panelRef.value?.clear?.()
 }

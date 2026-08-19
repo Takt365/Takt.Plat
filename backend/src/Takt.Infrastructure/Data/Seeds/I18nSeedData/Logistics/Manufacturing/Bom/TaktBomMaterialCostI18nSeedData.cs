@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktBomMaterialCostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcost.modelcode", "zh-HK", "机种编码_hk", "机种编码（选项 TaktModelDestinations/model-options；DictValue=ModelCode） <para>分析/成本推移查询栏「机种」下拉：须用 TaktBomMaterialCostAnalyses/model-options（本表 ModelCode 去重，可按 PlantCode/MaterialType 过滤），❌ 勿用 TaktModelDestinations/model-options。</para>"),
 
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "en-US", "机种月成本_us", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "en-US", "机种月成本_us", "机种月平均材料成本（同工厂+核算月+机种+物料类型下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "ja-JP", "机种月成本_jp", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "ja-JP", "机种月成本_jp", "机种月平均材料成本（同工厂+核算月+机种+物料类型下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-CN", "机种月成本", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-CN", "机种月成本", "机种月平均材料成本（同工厂+核算月+机种+物料类型下各产品月成本算术平均）"),
             // entity.bommaterialcost.modelmonthlyaveragecost
-            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-HK", "机种月成本_hk", "机种月平均材料成本（同工厂+物料类型+机种+核算月份下各产品月成本算术平均）"),
+            new TranslationSeedItem("entity.bommaterialcost.modelmonthlyaveragecost", "zh-HK", "机种月成本_hk", "机种月平均材料成本（同工厂+核算月+机种+物料类型下各产品月成本算术平均）"),
 
             // entity.bommaterialcost.materialtype
             new TranslationSeedItem("entity.bommaterialcost.materialtype", "en-US", "物料类型_us", "物料类型（存 ROH/HALB/FERT 等码） <para>CRUD 表单：字典 logistics_material_type。</para> <para>分析/推移查询栏：本表 MaterialType 去重 options（TaktBomMaterialCostAnalyses/material-type-options，含全部类型），❌ 勿与 CRUD 字典下拉混用；查询栏可空=不过滤。</para>"),
@@ -136,13 +136,31 @@ public class TaktBomMaterialCostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcost.productdescription", "zh-HK", "产品描述_hk", "产品描述"),
 
             // entity.bommaterialcost.productmonthlycost
-            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "en-US", "产品月成本_us", "产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）"),
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "en-US", "产品月成本_us", "产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）"),
             // entity.bommaterialcost.productmonthlycost
-            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "ja-JP", "产品月成本_jp", "产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）"),
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "ja-JP", "产品月成本_jp", "产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）"),
             // entity.bommaterialcost.productmonthlycost
-            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "zh-CN", "产品月成本", "产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）"),
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "zh-CN", "产品月成本", "产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）"),
             // entity.bommaterialcost.productmonthlycost
-            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "zh-HK", "产品月成本_hk", "产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）"),
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycost", "zh-HK", "产品月成本_hk", "产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）"),
+
+            // entity.bommaterialcost.productmonthlycalculation
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycalculation", "en-US", "产品月计算_us", "产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）"),
+            // entity.bommaterialcost.productmonthlycalculation
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycalculation", "ja-JP", "产品月计算_jp", "产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）"),
+            // entity.bommaterialcost.productmonthlycalculation
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycalculation", "zh-CN", "产品月计算", "产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）"),
+            // entity.bommaterialcost.productmonthlycalculation
+            new TranslationSeedItem("entity.bommaterialcost.productmonthlycalculation", "zh-HK", "产品月计算_hk", "产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）"),
+
+            // entity.bommaterialcost.latestpurchasecost
+            new TranslationSeedItem("entity.bommaterialcost.latestpurchasecost", "en-US", "最近采购成本_us", "最近采购成本（与产品月计算同一快照口径：生产相关=X、PCB SECT 标识为空、采购类型=F、用量 &gt; 0.001；行金额=组件数量×(净价÷采购价格单位)）"),
+            // entity.bommaterialcost.latestpurchasecost
+            new TranslationSeedItem("entity.bommaterialcost.latestpurchasecost", "ja-JP", "最近采购成本_jp", "最近采购成本（与产品月计算同一快照口径：生产相关=X、PCB SECT 标识为空、采购类型=F、用量 &gt; 0.001；行金额=组件数量×(净价÷采购价格单位)）"),
+            // entity.bommaterialcost.latestpurchasecost
+            new TranslationSeedItem("entity.bommaterialcost.latestpurchasecost", "zh-CN", "最近采购成本", "最近采购成本（与产品月计算同一快照口径：生产相关=X、PCB SECT 标识为空、采购类型=F、用量 &gt; 0.001；行金额=组件数量×(净价÷采购价格单位)）"),
+            // entity.bommaterialcost.latestpurchasecost
+            new TranslationSeedItem("entity.bommaterialcost.latestpurchasecost", "zh-HK", "最近采购成本_hk", "最近采购成本（与产品月计算同一快照口径：生产相关=X、PCB SECT 标识为空、采购类型=F、用量 &gt; 0.001；行金额=组件数量×(净价÷采购价格单位)）"),
 
             // entity.bommaterialcost.currencycode
             new TranslationSeedItem("entity.bommaterialcost.currencycode", "en-US", "币种_us", "币种（字典 accounting_currency_code；如 CNY/USD）"),

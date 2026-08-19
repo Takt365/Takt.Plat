@@ -41,12 +41,12 @@
               </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.warehouse.plantcode')"
+                :label="t('common.page.entity.plantcode')"
                 name="plantCode"
               >
                 <a-input
                   v-model:value="formState.plantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.plantcode') })"
+                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -333,7 +333,7 @@ const storageLocationTableRef = ref<{
 const storageLocationFormColumns = computed<TaktEditableTableColumn[]>(() => [
   {
     key: 'plantCode',
-    title: t('entity.storagelocation.plantcode'),
+    title: t('common.page.entity.plantcode'),
     editor: 'input',
     width: 140,
   },
@@ -493,7 +493,7 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   plantCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.warehouse.plantcode') }),
+      message: t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') }),
       trigger: 'blur'
     }
   ],

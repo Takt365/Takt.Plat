@@ -90,7 +90,8 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 formRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode);
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -102,7 +103,8 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -198,6 +200,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
@@ -222,6 +225,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedFormField = relatedField,
                 SortOrder = 11,
                 FormStatus = 1,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
@@ -234,6 +238,8 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
         form.RelatedFormField = relatedField;
         form.IsDatasource = 1;
         form.FormStatus = 1;
+        form.PlantCode = plantCode;
+        form.CultureCode = cultureCode;
         await repository.UpdateAsync(form);
         return (form, 0, 1);
     }
@@ -242,6 +248,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktFlowForm form,
         string processContent)
@@ -271,6 +278,7 @@ public class TaktOvertimeWorkflowSeedData : ITaktSeedDataCoordinator
                 FormId = form.Id,
                 FormCode = form.FormCode,
                 SortOrder = 11,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);

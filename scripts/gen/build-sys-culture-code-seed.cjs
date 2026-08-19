@@ -82,7 +82,7 @@ const lines = [];
 let sort = 1;
 for (const item of rows) {
   lines.push(
-    `            ("sys_culture_code","${escapeCs(item.label)}","${item.dictValue}","${item.i18nKey}",1,1,${item.isDefault},"区域文化编码.${escapeCs(item.remarkZh)}",${sort},"eo","${escapeCs(item.extLabel)}","${escapeCs(item.extValue)}"),`,
+    `            ("sys_culture_code","${escapeCs(item.label)}","${item.dictValue}","${item.i18nKey}",1,1,${item.isDefault},"区域文化编码.${escapeCs(item.remarkZh)}",${sort},"mul","${escapeCs(item.extLabel)}","${escapeCs(item.extValue)}"),`,
   );
   sort += 1;
 }

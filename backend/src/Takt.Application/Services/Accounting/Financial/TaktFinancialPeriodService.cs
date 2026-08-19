@@ -118,11 +118,11 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         entity.IsBuiltIn = 0;
         var isUnique_ix_takt_accounting_financial_period_period_unique = await _uniqueValidator.IsUniqueAsync(
             _financialPeriodRepository,
-            x => x.FinancialYearCategory == entity.FinancialYearCategory
+            x => x.CountryCode == entity.CountryCode
                 && x.PeriodCode == entity.PeriodCode);
         if (!isUnique_ix_takt_accounting_financial_period_period_unique)
         {
-            throw new TaktBusinessException("财务期间的FinancialYearCategory、PeriodCode已存在");
+            throw new TaktBusinessException("财务期间的CountryCode、PeriodCode已存在");
         }
         entity = await _financialPeriodRepository.CreateAsync(entity);
         return await GetFinancialPeriodByIdAsync(entity.Id) ?? entity.Adapt<TaktFinancialPeriodDto>();
@@ -146,12 +146,12 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         entity.IsBuiltIn = originalIsBuiltIn;
         var isUnique_ix_takt_accounting_financial_period_period_unique = await _uniqueValidator.IsUniqueAsync(
             _financialPeriodRepository,
-            x => x.FinancialYearCategory == entity.FinancialYearCategory
+            x => x.CountryCode == entity.CountryCode
                 && x.PeriodCode == entity.PeriodCode,
             id);
         if (!isUnique_ix_takt_accounting_financial_period_period_unique)
         {
-            throw new TaktBusinessException("财务期间的FinancialYearCategory、PeriodCode已存在");
+            throw new TaktBusinessException("财务期间的CountryCode、PeriodCode已存在");
         }
         await _financialPeriodRepository.UpdateAsync(entity);
         return await GetFinancialPeriodByIdAsync(id) ?? throw new TaktBusinessException("财务期间不存在");
@@ -239,18 +239,18 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
             {
                 var entity = rows[i].Adapt<TaktFinancialPeriod>();
                 entity.IsBuiltIn = 0;
-                var importKey = $"{entity.FinancialYearCategory}|{entity.PeriodCode}";
+                var importKey = $"{entity.CountryCode}|{entity.PeriodCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（FinancialYearCategory、PeriodCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（CountryCode、PeriodCode）");
                 }
                 var isUnique_ix_takt_accounting_financial_period_period_unique = await _uniqueValidator.IsUniqueAsync(
                     _financialPeriodRepository,
-                    x => x.FinancialYearCategory == entity.FinancialYearCategory
+                    x => x.CountryCode == entity.CountryCode
                         && x.PeriodCode == entity.PeriodCode);
                 if (!isUnique_ix_takt_accounting_financial_period_period_unique)
                 {
-                    throw new TaktBusinessException("财务期间的FinancialYearCategory、PeriodCode已存在");
+                    throw new TaktBusinessException("财务期间的CountryCode、PeriodCode已存在");
                 }
                 await _financialPeriodRepository.CreateAsync(entity);
                 success += 1;
@@ -306,7 +306,7 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         {
             var keywords = queryDto.KeyWords;
             exp = exp.And(x =>
-                (x.FinancialYearCategory != null && x.FinancialYearCategory.Contains(keywords))
+                (x.CountryCode != null && x.CountryCode.Contains(keywords))
                 || (x.FinancialYearCode != null && x.FinancialYearCode.Contains(keywords))
                 || (x.PeriodCode != null && x.PeriodCode.Contains(keywords))
                 || SqlFunc.ToString(x.CalendarYear).Contains(keywords)
@@ -319,9 +319,9 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.FinancialYearCategory))
+        if (!string.IsNullOrEmpty(queryDto?.CountryCode))
         {
-            exp = exp.And(x => x.FinancialYearCategory != null && x.FinancialYearCategory.Contains(queryDto.FinancialYearCategory));
+            exp = exp.And(x => x.CountryCode != null && x.CountryCode.Contains(queryDto.CountryCode));
         }
 
         if (!string.IsNullOrEmpty(queryDto?.FinancialYearCode))
@@ -372,12 +372,6 @@ public class TaktFinancialPeriodService : TaktServiceBase, ITaktFinancialPeriodS
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
     }

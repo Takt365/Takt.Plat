@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Identity
 // 文件名称：TaktRole.cs
@@ -19,12 +19,13 @@ namespace Takt.Domain.Entities.Identity;
 /// 角色实体
 /// 代表系统角色（RBAC权限模型）
 /// 参照 SAP Role (AGR_NAME) 设计
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_identity_role", "角色表")]
 [SugarIndex("ix_role_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_role_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_role_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(RoleCode), OrderByType.Asc, true)]
-public class TaktRole : TaktTenantEntityBase
+public class TaktRole : TaktTenantCoreEntityBase
 {    /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>

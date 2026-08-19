@@ -131,38 +131,3 @@ export interface BomMaterialCostItemMonthlyTrendResult {
   allMaterialsUnderModel: boolean;
   lines: BomMaterialCostItemMonthlyTrendLine[];
 }
-
-/** 成本合计/重算提交回执 */
-export interface BomMaterialCostItemRecalculateSubmitted {
-  /** 核算月份 yyyy-MM */
-  processedMonth: string;
-  /** 是否强制重算 */
-  forceRecalculate: boolean;
-}
-
-/** 成本合计/重算结果统计（同步调用时；后台完成见 SignalR） */
-export interface BomMaterialCostItemRecalculateModelAverageResult {
-  scannedRowCount: number;
-  refreshedGroupCount: number;
-  skippedGroupCount: number;
-  resetGroupCount: number;
-  processedMonthCount: number;
-  processedMonth: string;
-}
-
-/** 刷新主表机种/物料类型/机种月均查询 */
-export interface BomMaterialCostRefreshModelQuery {
-  plantCode: string;
-  costingPeriod: string;
-  modelCode?: string;
-}
-
-/** 刷新主表机种字段结果 */
-export interface BomMaterialCostRefreshModelResult {
-  scannedRowCount: number;
-  modelCodeUpdatedCount: number;
-  materialTypeUpdatedCount: number;
-  averageUpdatedCount: number;
-  modelGroupCount: number;
-  costingPeriod: string;
-}

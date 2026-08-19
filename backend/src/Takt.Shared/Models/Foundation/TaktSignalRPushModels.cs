@@ -109,7 +109,7 @@ public class TaktSignalRPrivateMessagePush
 public class TaktSignalRBroadcastPush
 {
     /// <summary>
-    /// 公司编码（广播范围）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 

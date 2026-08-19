@@ -44,7 +44,10 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
         _salesOrderRepository = salesOrderRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：销售订单本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendPlantOptionsAsync()
     {
         EnsureThreeLayerContext();
@@ -64,7 +67,11 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂去重客户（级联第 2 级，查询时可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesMonthlyTrendCustomerOptionsAsync(string plantCode)
     {
         EnsureThreeLayerContext();
@@ -96,7 +103,11 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取月销售推移转置分析（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktSalesMonthlyTrendResultDto> GetSalesMonthlyTrendAnalysisAsync(
         TaktSalesMonthlyTrendQueryDto queryDto)
     {
@@ -121,7 +132,13 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出月销售推移转置分析 Excel
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">导出文件名</param>
+    /// <returns>文件名与内容</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesMonthlyTrendAnalysisAsync(
         TaktSalesMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -498,7 +515,12 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
         /// <summary>单例</summary>
         public static SalesMonthlyTrendRowKeyComparer Instance { get; } = new();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 判断两行键是否相等（工厂/客户，忽略大小写）
+        /// </summary>
+        /// <param name="x">左值</param>
+        /// <param name="y">右值</param>
+        /// <returns>是否相等</returns>
         public bool Equals(SalesMonthlyTrendRowKey? x, SalesMonthlyTrendRowKey? y)
         {
             if (x is null || y is null)
@@ -509,7 +531,11 @@ public class TaktSalesMonthlyTrendService : TaktServiceBase, ITaktSalesMonthlyTr
                 && string.Equals(x.CustomerCode, y.CustomerCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 计算行键哈希（工厂/客户大写）
+        /// </summary>
+        /// <param name="obj">行键</param>
+        /// <returns>哈希码</returns>
         public int GetHashCode(SalesMonthlyTrendRowKey obj) =>
             HashCode.Combine(
                 obj.PlantCode.ToUpperInvariant(),

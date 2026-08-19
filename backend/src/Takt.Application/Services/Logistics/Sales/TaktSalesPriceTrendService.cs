@@ -75,7 +75,10 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         _modelDestinationRepository = modelDestinationRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：销售价格本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesPriceTrendPlantOptionsAsync()
     {
         EnsureThreeLayerContext();
@@ -95,7 +98,11 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂去重条件类型（级联第 2 级）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesPriceTrendPriceTypeOptionsAsync(string plantCode)
     {
         EnsureThreeLayerContext();
@@ -121,7 +128,12 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型去重客户（级联第 3 级）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesPriceTrendCustomerOptionsAsync(
         string plantCode,
         string? priceType = null)
@@ -151,7 +163,13 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂+条件类型+客户去重物料（级联第 4 级，查询时可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="priceType">条件类型</param>
+    /// <param name="customerCode">客户编码</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetSalesPriceTrendMaterialOptionsAsync(
         string plantCode,
         string? priceType = null,
@@ -190,7 +208,11 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 销售价格月推移转置分析（工厂×物料×客户×月份）
+    /// </summary>
+    /// <param name="queryDto">查询条件</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktSalesPriceMonthlyTrendResultDto> GetSalesPriceMonthlyTrendAnalysisAsync(
         TaktSalesPriceMonthlyTrendQueryDto queryDto)
     {
@@ -215,7 +237,13 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出销售价格月推移转置分析（全量）
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesPriceMonthlyTrendAnalysisAsync(
         TaktSalesPriceMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -281,7 +309,11 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
             fileName ?? $"销售价格推移清单_{query.PlantCode}.xlsx");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 销售机种价格推移转置分析（月推移 + BOM 机种/产品组）
+    /// </summary>
+    /// <param name="queryDto">查询条件</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktSalesPriceModelTrendResultDto> GetSalesPriceModelTrendAnalysisAsync(
         TaktSalesPriceMonthlyTrendQueryDto queryDto)
     {
@@ -322,7 +354,9 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// ExportSalesPriceModelTrendAnalysisAsync
+    /// </summary>
     public async Task<(string fileName, byte[] fileContent)> ExportSalesPriceModelTrendAnalysisAsync(
         TaktSalesPriceMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -977,7 +1011,16 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
         /// <summary>单例</summary>
         public static SalesPriceTrendRowKeyComparer Instance { get; } = new();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 月生产推移行键比较器
+        /// </summary>
+        /// <summary>单例</summary>
+        /// <summary>
+        /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+        /// </summary>
+        /// <param name="x">左值</param>
+        /// <param name="y">右值</param>
+        /// <returns>是否相等</returns>
         public bool Equals(SalesPriceTrendRowKey? x, SalesPriceTrendRowKey? y)
         {
             if (x is null || y is null)
@@ -989,7 +1032,11 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
                 && string.Equals(x.CustomerCode, y.CustomerCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 计算行键哈希（工厂/机种/产出类别大写）
+        /// </summary>
+        /// <param name="obj">行键</param>
+        /// <returns>哈希码</returns>
         public int GetHashCode(SalesPriceTrendRowKey obj) =>
             HashCode.Combine(
                 StringComparer.OrdinalIgnoreCase.GetHashCode(obj.PlantCode),

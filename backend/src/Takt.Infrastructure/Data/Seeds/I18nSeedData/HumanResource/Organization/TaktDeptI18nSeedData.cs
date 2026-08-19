@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktDeptI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -98,6 +98,15 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.code", "zh-CN", "部门编码", "部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）"),
             // entity.dept.code
             new TranslationSeedItem("entity.dept.code", "zh-HK", "部门编码_hk", "部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）"),
+
+            // entity.dept.shortname
+            new TranslationSeedItem("entity.dept.shortname", "en-US", "部门简称_us", "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）"),
+            // entity.dept.shortname
+            new TranslationSeedItem("entity.dept.shortname", "ja-JP", "部门简称_jp", "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）"),
+            // entity.dept.shortname
+            new TranslationSeedItem("entity.dept.shortname", "zh-CN", "部门简称", "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）"),
+            // entity.dept.shortname
+            new TranslationSeedItem("entity.dept.shortname", "zh-HK", "部门简称_hk", "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）"),
 
             // entity.dept.name
             new TranslationSeedItem("entity.dept.name", "en-US", "部门名称_us", "部门名称"),

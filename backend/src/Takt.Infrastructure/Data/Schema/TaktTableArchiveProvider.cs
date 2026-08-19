@@ -43,7 +43,12 @@ public class TaktTableArchiveProvider : ITaktTableArchiveProvider
         _sugarDbType = configuration.GetSugarDbType();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 预览将归档行数（不迁移）
+    /// </summary>
+    /// <param name="options">归档选项</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>预览结果</returns>
     public async Task<TaktTableArchivePreview> PreviewAsync(
         TaktTableArchiveOptions options,
         CancellationToken cancellationToken = default)
@@ -73,7 +78,12 @@ public class TaktTableArchiveProvider : ITaktTableArchiveProvider
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行按年归档（基表 DELETE OUTPUT INTO 年分表 {table}_{yyyy}，分批）
+    /// </summary>
+    /// <param name="options">归档选项</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>执行结果</returns>
     public async Task<TaktTableArchiveResult> ArchiveAsync(
         TaktTableArchiveOptions options,
         CancellationToken cancellationToken = default)
@@ -122,7 +132,13 @@ public class TaktTableArchiveProvider : ITaktTableArchiveProvider
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 按年份列表预建年分表（SELECT TOP 0 * INTO {table}_{year}，已存在则跳过）
+    /// </summary>
+    /// <param name="options">建表选项（含基表与租户库）</param>
+    /// <param name="years">年份列表</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>已创建或已存在的年分表名</returns>
     public async Task<IReadOnlyList<string>> EnsureYearTablesAsync(
         TaktTableArchiveOptions options,
         IReadOnlyList<int> years,

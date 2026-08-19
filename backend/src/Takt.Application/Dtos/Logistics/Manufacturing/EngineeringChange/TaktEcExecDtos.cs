@@ -227,7 +227,7 @@ public class TaktEcExecQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -458,12 +458,12 @@ public class TaktEcExecCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -674,7 +674,7 @@ public class TaktEcSeizougijutsumplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -857,12 +857,12 @@ public class TaktEcExecImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -1303,7 +1303,7 @@ public class TaktEcExecTransposedQueryDto : TaktPagedQuery
     public int? IsImplemented { get; set; }
 
     /// <summary>
-    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; }
 

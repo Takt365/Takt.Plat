@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/plant -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -25,7 +25,7 @@
       delete-permission="logistics:materials:plant:delete"
       import-permission="logistics:materials:plant:import"
       export-permission="logistics:materials:plant:export"
-      :show-create="true"
+      :show-create="false"
       :show-update="true"
       :show-delete="true"
       :show-import="true"
@@ -77,12 +77,6 @@
             :checked="getPlantDictValue(record, 'plantStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handlePlantStatusChange(record, Boolean(checked))"
-          />
-        </template>
-        <template v-else-if="column.key === 'cultureCode'">
-          <TaktDictTag
-            :value="getPlantDictValue(record, 'cultureCode')"
-            dict-type="sys_culture_code"
           />
         </template>
         <template v-else-if="column.key === 'enterpriseNature'">
@@ -162,13 +156,12 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="pi.queryLabel('plantCode')">
-        <a-input
-          v-model:value="advancedQueryForm.plantCode"
-          :placeholder="pi.queryPh('plantCode', 'required')"
-          show-count
-          :maxlength="4"
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -213,16 +206,6 @@
           :placeholder="pi.queryPh('codeAlias', 'required')"
           show-count
           :maxlength="3"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('cultureCode')">
-      <a-form-item :label="pi.queryLabel('cultureCode')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.cultureCode"
-          api-url="TaktCultures/options"
-          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -797,7 +780,7 @@
 
 <script setup lang="ts">
 /**
- * Takt工厂实体 代表租户下的独立工厂管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/plant
  */
 import { ref, computed, onMounted } from 'vue'
@@ -869,7 +852,34 @@ const formRef = ref()
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
 /**
- * 创建空的高级查询表单
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of PLANT_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.registeredCapital !== undefined && form.registeredCapital !== null) {
+    return true
+  }
+  if (form.plantExistence !== undefined && form.plantExistence !== null) {
+    return true
+  }
+  if (form.plantStatus !== undefined && form.plantStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
  * @returns {Record<string, unknown>} 高级查询初始模型
  */
 function createEmptyAdvancedQueryForm() {
@@ -881,8 +891,7 @@ function createEmptyAdvancedQueryForm() {
     ...form,
     registeredCapital: undefined as number | undefined,
     plantExistence: undefined as number | undefined,
-    plantStatus: undefined as number | undefined,
-  }
+    plantStatus: undefined as number | undefined,  }
 }
 /** 高级查询表单模型 */
 const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
@@ -908,8 +917,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PlantQuery} 查询 DTO
  */
@@ -944,12 +954,13 @@ function buildListQuery(overrides?: Partial<PlantQuery>): PlantQuery {
   }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
+
 
 /**
  * 构建列表标准文本列
@@ -1026,6 +1037,8 @@ const toPlantNumber = (value: string | number | undefined | null): number => {
   return Number.isFinite(num) ? num : 0
 }
 
+
+
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
@@ -1068,6 +1081,11 @@ const onClickRow = (record: PlantRowRecord) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPlantList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -1200,6 +1218,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPlant(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,

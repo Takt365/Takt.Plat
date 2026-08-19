@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
  * 对应前端 TaktModelDestinationDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 ModelDestination
  * @description 对应后端 TaktModelDestinationDto
  */
-export interface ModelDestination extends TenantDtoBase {
+export interface ModelDestination extends TenantCoreDtoBase {
   /**
    * ModelDestinationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -76,11 +76,6 @@ export interface ModelDestinationQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 物料编码
@@ -149,11 +144,6 @@ export interface ModelDestinationCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 物料编码
@@ -241,11 +231,6 @@ export interface ModelDestinationTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 物料编码
    */
   materialCode?: string;
@@ -297,11 +282,6 @@ export interface ModelDestinationImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 物料编码

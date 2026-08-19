@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 角色实体 代表系统角色（RBAC权限模型） 参照 SAP Role (AGR_NAME) 设计
  * 对应前端 TaktRoleDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Role
  * @description 对应后端 TaktRoleDto
  */
-export interface Role extends TenantDtoBase {
+export interface Role extends TenantCoreDtoBase {
   /**
    * RoleID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */

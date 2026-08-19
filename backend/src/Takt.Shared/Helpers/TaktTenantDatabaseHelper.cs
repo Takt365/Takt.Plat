@@ -38,22 +38,84 @@ public static class TaktTenantDatabaseHelper
     }
 
     /// <summary>
-    /// 判断异常是否为 SqlSugar 连库/缺表类基础设施错误
+    /// 判断异常是否为 SqlSugar 连库/缺表类基础设施错误（不含表达式翻译等 ORM 逻辑错误）
     /// </summary>
     /// <param name="ex">捕获的异常</param>
     /// <returns>基础设施错误为 true</returns>
     public static bool IsInfrastructureFailure(Exception ex)
     {
         ArgumentNullException.ThrowIfNull(ex);
+        var hasSqlSugar = false;
         for (var current = ex; current != null; current = current.InnerException)
         {
             if (current is SqlSugarException)
             {
-                return true;
+                hasSqlSugar = true;
+                break;
             }
         }
+        if (!hasSqlSugar)
+        {
+            return false;
+        }
 
-        return false;
+        var text = CollectExceptionText(ex);
+        if (IsOrmExpressionOrLogicError(text))
+        {
+            return false;
+        }
+
+        var kind = ClassifyFailure(ex);
+        if (kind is TenantDatabaseFailureKind.DatabaseMissing
+            or TenantDatabaseFailureKind.TableMissing
+            or TenantDatabaseFailureKind.LoginFailed)
+        {
+            return true;
+        }
+
+        return LooksLikeConnectionFailure(text);
+    }
+
+    /// <summary>
+    /// SqlSugar 表达式/导航等逻辑错误（非缺库缺表）
+    /// </summary>
+    /// <param name="text">异常链文本</param>
+    /// <returns>是否为 ORM 逻辑错误</returns>
+    private static bool IsOrmExpressionOrLogicError(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+        return text.Contains("不支持", StringComparison.Ordinal)
+            || text.Contains("no support", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("Includes()", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("导航", StringComparison.Ordinal)
+            || text.Contains("表达式", StringComparison.Ordinal)
+            || text.Contains("Check if the navigation", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 文本是否像真实连库失败（超时、网络、无法连接等）
+    /// </summary>
+    /// <param name="text">异常链文本</param>
+    /// <returns>是否像连库失败</returns>
+    private static bool LooksLikeConnectionFailure(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+        return text.Contains("无法打开登录所请求的数据库", StringComparison.Ordinal)
+            || text.Contains("Cannot open database", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("无法连接", StringComparison.Ordinal)
+            || text.Contains("A network-related", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("error occurred while establishing a connection", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("Connection refused", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("timeout", StringComparison.OrdinalIgnoreCase)
+            || text.Contains("超时", StringComparison.Ordinal)
+            || text.Contains("登录失败", StringComparison.Ordinal)
+            || text.Contains("Login failed", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>

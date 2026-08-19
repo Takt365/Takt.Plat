@@ -55,12 +55,12 @@ public class TaktLoginRequestDto
     public string? TenantCode { get; set; }
 
     /// <summary>
-    /// 公司编码（可选；未传时后端按 takt_identity_user_company.is_default 解析）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; }
 
     /// <summary>
-    /// 区域文化编码（zh-CN / en-US / ja-JP；界面语言，登录公司解析不依赖此字段）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; }
 
@@ -462,7 +462,7 @@ public class TaktLoginPreviewLocaleDto
     public string CompanyDefaultCulture { get; set; } = string.Empty;
 
     /// <summary>
-    /// /// 区域文化编码（字典 sys_culture_code；租户→公司→工厂固定映射，如 2300/C100=zh-CN、2400/H100=zh-HK、1000/T100=ja-JP、3000/A300=en-US） ///
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; }
 }
@@ -520,7 +520,7 @@ public class TaktLoginPreviewLocaleResponseDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 用户区域文化代码（takt_identity_user.culture_code；登录页 UI 语言仅用此字段）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 }

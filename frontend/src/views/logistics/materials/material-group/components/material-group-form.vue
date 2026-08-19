@@ -16,29 +16,25 @@
     layout="horizontal"
     label-align="right"
   >
-      <a-row :gutter="24">
+    <a-tabs
+      v-model:active-key="activeTab"
+      class="material-group-form-tabs"
+    >
+      <a-tab-pane
+        key="tab-0"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.tenantcode')"
-                name="tenantCode"
-              >
-                <a-input
-                  v-model:value="formState.tenantCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.tenantcode') })"
-                  show-count
-                  :maxlength="20"
-                  disabled
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item
-                :label="t('entity.materialgroup.code')"
+                :label="pi.label('materialGroupCode')"
                 name="materialGroupCode"
               >
                 <a-input
                   v-model:value="formState.materialGroupCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialgroup.code') })"
+                  :placeholder="pi.ph('materialGroupCode')"
                   show-count
                   :maxlength="20"
                   allow-clear
@@ -48,12 +44,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.materialgroup.name')"
+                :label="pi.label('materialGroupName')"
                 name="materialGroupName"
               >
                 <a-input
                   v-model:value="formState.materialGroupName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialgroup.name') })"
+                  :placeholder="pi.ph('materialGroupName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -62,13 +58,37 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.materialgroup.description')"
+                :label="pi.label('materialGroupDescription')"
                 name="materialGroupDescription"
               >
                 <a-textarea
                   v-model:value="formState.materialGroupDescription"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.materialgroup.description') })"
+                  :placeholder="pi.ph('materialGroupDescription')"
                   :rows="2"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/2)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
                 />
               </a-form-item>
             </a-col>
@@ -85,7 +105,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -100,12 +120,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -113,7 +133,10 @@
                 />
               </a-form-item>
             </a-col>
-      </a-row>
+          </a-row>
+        </div>
+      </a-tab-pane>
+    </a-tabs>
   </a-form>
 </template>
 
@@ -125,41 +148,35 @@
 import { reactive, watch, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { useMaterialGroupI18n } from '../composables/use-material-group-i18n'
+
+/** 实体字段 i18n */
+const pi = useMaterialGroupI18n()
 import type { MaterialGroupCreate } from '@/types/logistics/materials/material-group'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useTenantStore } from '@/stores/identity/tenant'
-import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
 }
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","materialGroupCode","materialGroupName","materialGroupDescription","extField","remark"]
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
+/** 当前激活的 Tab key */
+const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -181,6 +198,7 @@ const formState = reactive<Record<string, any>>({})
 function applyFormDefaults(target: Record<string, unknown>) {
   void target
 }
+
 
 /** 编辑态灌入 formData；新增态恢复默认值（须含 materialGroupId 才视为编辑） */
 watch(
@@ -206,12 +224,11 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
+/** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => tenantStore.tenantCode,
   () => {
-    const isCreate = !props.formData?.materialGroupId
-    if (isCreate) {
+    if (!props.formData?.materialGroupId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -222,14 +239,14 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   materialGroupCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.materialgroup.code') }),
+      message: pi.ph('materialGroupCode'),
       trigger: 'blur'
     }
   ],
   materialGroupName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.materialgroup.name') }),
+      message: pi.ph('materialGroupName'),
       trigger: 'blur'
     }
   ],
@@ -257,9 +274,19 @@ function resetFields() {
   applyFormDefaults(formState)
   applyScopeDefaults(formState as Record<string, unknown>, !props.formData?.materialGroupId)
 
+  activeTab.value = 'tab-0'
   formRef.value?.clearValidate()
 }
 
 defineExpose({ validate, getValues, resetFields })
 </script>
 
+<style scoped lang="css">
+:deep(.ant-tabs-content-holder) {
+  min-height: 50vh;
+}
+
+:deep(.ant-tabs-tabpane) {
+  min-height: 50vh;
+}
+</style>

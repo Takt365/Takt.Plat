@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-group.d.ts
-// 创建时间：2026-06-23
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -12,24 +12,24 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
- * Takt物料组主数据实体（租户级）
+ * Takt物料组主数据实体（租户级） 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
  * 对应前端 TaktMaterialGroupDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase
  * 对应前端 MaterialGroup
  * @description 对应后端 TaktMaterialGroupDto
  */
-export interface MaterialGroup extends TenantDtoBase {
+export interface MaterialGroup extends TenantCoreDtoBase {
   /**
    * MaterialGroupID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   materialGroupId: string;
 
   /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode: string;
 
@@ -50,6 +50,7 @@ export interface MaterialGroup extends TenantDtoBase {
 
 }
 
+
 /**
  * MaterialGroup 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -63,12 +64,7 @@ export interface MaterialGroupQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode?: string;
 
@@ -109,6 +105,7 @@ export interface MaterialGroupQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建MaterialGroup DTO
  * 对应前端 MaterialGroupCreate
@@ -121,12 +118,7 @@ export interface MaterialGroupCreate {
   tenantCode: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
-
-  /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode: string;
 
@@ -152,6 +144,7 @@ export interface MaterialGroupCreate {
 
 }
 
+
 /**
  * 更新MaterialGroup DTO
  * 继承 TaktMaterialGroupCreateDto，添加 MaterialGroupId 字段
@@ -165,6 +158,7 @@ export interface MaterialGroupUpdate extends MaterialGroupCreate {
   materialGroupId: string;
 
 }
+
 
 /**
  * MaterialGroup 排序更新 DTO
@@ -184,6 +178,7 @@ export interface MaterialGroupSort {
 
 }
 
+
 /**
  * MaterialGroup 导入模板行 DTO
  * 对应前端 MaterialGroupTemplate
@@ -196,12 +191,7 @@ export interface MaterialGroupTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode?: string;
 
@@ -226,6 +216,7 @@ export interface MaterialGroupTemplate {
   remark?: string;
 
 }
+
 
 /**
  * MaterialGroup 导入 DTO（独立实现，不继承 TemplateDto）
@@ -239,12 +230,7 @@ export interface MaterialGroupImport {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode?: string;
 
@@ -270,6 +256,7 @@ export interface MaterialGroupImport {
 
 }
 
+
 /**
  * MaterialGroup 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 MaterialGroupExport
@@ -282,7 +269,7 @@ export interface MaterialGroupExport {
   materialGroupId: string;
 
   /**
-   * 物料组编码（group_code；租户内唯一；与物料 material_group_code 对齐）
+   * 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
    */
   materialGroupCode: string;
 

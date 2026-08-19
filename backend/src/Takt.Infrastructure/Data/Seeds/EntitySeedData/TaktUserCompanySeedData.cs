@@ -108,7 +108,9 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
                     userCompanyRepository,
                     tenantCode,
                     user.Username,
-                    company.CompanyCode, company.CultureCode,
+                    company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                     isDefault);
                 insertCount += inserted;
                 updateCount += updated;
@@ -138,6 +140,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
         string tenantCode,
         string username,
         string companyCode,
+        string plantCode,
         string cultureCode,
         bool isDefault)
     {
@@ -162,6 +165,7 @@ public class TaktUserCompanySeedData : ITaktSeedDataCoordinator
                 UserId = user.Id,
                 CompanyCode = companyCode,
                 IsDefault = isDefaultValue,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             });
             return (1, 0);

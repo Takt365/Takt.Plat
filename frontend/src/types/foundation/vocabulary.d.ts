@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 敏感词实体（租户内共享，供新闻、公告评论等模块引用）
  * 对应前端 TaktVocabularyDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Vocabulary
  * @description 对应后端 TaktVocabularyDto
  */
-export interface Vocabulary extends TenantDtoBase {
+export interface Vocabulary extends TenantCoreDtoBase {
   /**
    * VocabularyID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -66,11 +66,6 @@ export interface VocabularyQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 敏感词文本（租户内唯一）
@@ -129,11 +124,6 @@ export interface VocabularyCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 敏感词文本（租户内唯一）
@@ -216,11 +206,6 @@ export interface VocabularyTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 敏感词文本（租户内唯一）
    */
   wordText?: string;
@@ -267,11 +252,6 @@ export interface VocabularyImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 敏感词文本（租户内唯一）

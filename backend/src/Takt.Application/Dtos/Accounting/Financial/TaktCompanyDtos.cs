@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Accounting.Financial
 // 文件名称：TaktCompanyDtos.cs
-// 创建时间：2026-07-23
+// 创建时间：2026-08-15
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Company 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktCompany 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 // ========================================
 
 /// <summary>
-/// 公司实体 代表租户下的独立公司/工厂（租户级实体，只需要TenantCode） 参照 SAP Company Code (BUKRS) 设计
+/// 公司实体 代表租户下的独立公司（第二层数据隔离业务主档） 参照 SAP Company Code (BUKRS) 设计 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
 /// 对应前端 TaktCompanyDto
 /// 继承 TaktTenantDtoBase
 /// </summary>
@@ -181,11 +181,6 @@ public class TaktCompanyDto : TaktTenantDtoBase
     public int CompanyExistence { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string CodeAlias { get; set; } = string.Empty;
@@ -260,18 +255,6 @@ public class TaktCompanyDto : TaktTenantDtoBase
     /// </summary>
     public int CompanyStatus { get; set; } = 0;
 
-    /// <summary>
-    /// 可访问该公司的角色关联（RBAC，表 takt_identity_role_company）
-    /// （子表：TaktRoleCompany）
-    /// </summary>
-    public List<TaktRoleCompanyDto>? RoleCompanies { get; set; }
-
-    /// <summary>
-    /// 可访问该公司的用户关联（RBAC，表 takt_identity_user_company）
-    /// （子表：TaktUserCompany）
-    /// </summary>
-    public List<TaktUserCompanyDto>? UserCompanies { get; set; }
-
 }
 
 // ========================================
@@ -290,7 +273,12 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -450,11 +438,6 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public int? CompanyExistence { get; set; }
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
@@ -520,11 +503,6 @@ public class TaktCompanyQueryDto : TaktPagedQuery
     public string? FinancialManagementArea { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
     /// 排序号（越小越靠前）
     /// </summary>
     public int? SortOrder { get; set; }
@@ -570,7 +548,12 @@ public class TaktCompanyCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -742,12 +725,6 @@ public class TaktCompanyCreateDto
     public int CompanyExistence { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；即语言/区域文化）不能为空")]
-    public string DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     [Required(ErrorMessage = "编码代号（如 TKC、TCJ、DTA；前端字典录入）不能为空")]
@@ -824,12 +801,6 @@ public class TaktCompanyCreateDto
     /// </summary>
     [Required(ErrorMessage = "财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）不能为空")]
     public string FinancialManagementArea { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    [Required(ErrorMessage = "关联工厂（选项 TaktPlants/options；DictValue=Id）不能为空")]
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司状态（字典 sys_normal_disable_status）
@@ -941,7 +912,12 @@ public class TaktCompanyTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -1091,11 +1067,6 @@ public class TaktCompanyTemplateDto
     public int? CompanyExistence { get; set; }
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
@@ -1159,11 +1130,6 @@ public class TaktCompanyTemplateDto
     /// 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? FinancialManagementArea { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司状态（字典 sys_normal_disable_status）
@@ -1203,7 +1169,12 @@ public class TaktCompanyImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string? RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -1353,11 +1324,6 @@ public class TaktCompanyImportDto
     public int? CompanyExistence { get; set; }
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    public string? DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string? CodeAlias { get; set; } = string.Empty;
@@ -1421,11 +1387,6 @@ public class TaktCompanyImportDto
     /// 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? FinancialManagementArea { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司状态（字典 sys_normal_disable_status）
@@ -1469,6 +1430,16 @@ public class TaktCompanyExportDto
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CompanyId { get; set; }
+
+    /// <summary>
+    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string RelatedPlant { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 公司名称1
@@ -1616,11 +1587,6 @@ public class TaktCompanyExportDto
     public int CompanyExistence { get; set; } = 0;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-    /// </summary>
-    public string DefaultCulture { get; set; } = string.Empty;
-
-    /// <summary>
     /// 编码代号（如 TKC、TCJ、DTA；前端字典录入）
     /// </summary>
     public string CodeAlias { get; set; } = string.Empty;
@@ -1684,11 +1650,6 @@ public class TaktCompanyExportDto
     /// 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string FinancialManagementArea { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=Id）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序号（越小越靠前）

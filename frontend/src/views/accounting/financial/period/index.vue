@@ -71,10 +71,10 @@
     >
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'financialYearCategory'">
+        <template v-if="column.key === 'countryCode'">
           <TaktDictTag
-            :value="getFinancialPeriodDictValue(record, 'financialYearCategory')"
-            dict-type="accounting_financial_year_category"
+            :value="getFinancialPeriodDictValue(record, 'countryCode')"
+            dict-type="sys_country_code"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
@@ -124,12 +124,12 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
-      <div v-show="isFieldVisible('financialYearCategory')">
-      <a-form-item :label="pi.queryLabel('financialYearCategory')">
+      <div v-show="isFieldVisible('countryCode')">
+      <a-form-item :label="pi.queryLabel('countryCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.financialYearCategory"
-          dict-type="accounting_financial_year_category"
-          :placeholder="pi.queryPh('financialYearCategory', 'select')"
+          v-model:value="advancedQueryForm.countryCode"
+          dict-type="sys_country_code"
+          :placeholder="pi.queryPh('countryCode', 'select')"
           allow-clear
         />
       </a-form-item>

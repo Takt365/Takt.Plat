@@ -23,22 +23,70 @@ import type {
  * @description 对应后端 TaktCostElementDto
  */
 export interface CostElement extends CompanyDtoBase {
-
+  /**
+   * CostElementID
+   */
+  costElementId: string;
+  /**
+   * 成本要素编码
+   */
+  costElementCode: string;
+  /**
+   * 成本要素名称
+   */
+  costElementName: string;
+  /**
+   * 成本要素类型（字典 accounting_cost_element_type；0=初级，1=次级）
+   */
+  costElementType: number;
+  /**
+   * 成本要素类别（字典 accounting_cost_element_category）
+   */
+  costElementCategory: number;
+  /**
+   * 父级 ID
+   */
+  parentId: string;
+  /**
+   * 成本要素层级
+   */
+  costElementLevel: number;
+  /**
+   * 生效日期
+   */
+  validFrom: string;
+  /**
+   * 失效日期
+   */
+  validTo: string;
+  /**
+   * 排序号
+   */
+  sortOrder: number;
   /**
    * 成本要素状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   costElementStatus?: number;
-
   /**
    * 扩展字段JSON
    */
   extField?: string;
-
   /**
    * 备注
    */
   remark?: string;
+}
 
+/**
+ * CostElement 树形列表/树选择 DTO（含子节点）
+ * 对应 GetCostElementTreeAsync 等接口
+ * @description 对应后端 TaktCostElementTreeDto
+ */
+export interface CostElementTree extends CostElement {
+  /**
+   * 子节点
+   */
+  children: CostElementTree[];
 }
 
 /**

@@ -353,25 +353,75 @@ function findDomainEntityFile(entityPascal, backendRoot = DEFAULT_BACKEND_ROOT) 
 }
 
 /**
- * 实体类头正则（含 Increment / Guid 主键变体）
+ * 实体类头正则（租户四组合 Core/Culture/Plant/默认 + Company/Approval；含 Increment / Guid）
+ * 组合：4 Core / 2 Culture / 3 Plant / 1 TenantEntity（默认）
  */
-const ENTITY_CLASS_HEADER_REGEX = /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant|Company|Approval)Entity(?:Increment|Guid)?Base)\s*\{/;
+const ENTITY_CLASS_HEADER_REGEX =
+  /public\s+(?:sealed\s+|abstract\s+)?class\s+(Takt\w+)\s*:\s*(Takt(?:Tenant(?:Core|Culture|Plant)?|Company|Approval)Entity(?:Increment|Guid)?Base)\s*\{/;
 
-/** EntityBase / EntityIncrementBase / EntityGuidBase → DTO 基类 */
+/** EntityBase / EntityIncrementBase / EntityGuidBase → DTO 基类（对齐 TaktDtoBase 四组合） */
 const ENTITY_BASE_TO_DTO_BASE = {
+  TaktTenantCoreEntityBase: 'TaktTenantCoreDtoBase',
+  TaktTenantCultureEntityBase: 'TaktTenantCultureDtoBase',
+  TaktTenantPlantEntityBase: 'TaktTenantPlantDtoBase',
   TaktTenantEntityBase: 'TaktTenantDtoBase',
   TaktCompanyEntityBase: 'TaktCompanyDtoBase',
   TaktApprovalEntityBase: 'TaktApprovalDtoBase',
+  TaktTenantCoreEntityIncrementBase: 'TaktTenantCoreDtoBase',
+  TaktTenantCultureEntityIncrementBase: 'TaktTenantCultureDtoBase',
+  TaktTenantPlantEntityIncrementBase: 'TaktTenantPlantDtoBase',
   TaktTenantEntityIncrementBase: 'TaktTenantDtoBase',
   TaktCompanyEntityIncrementBase: 'TaktCompanyDtoBase',
   TaktApprovalEntityIncrementBase: 'TaktApprovalDtoBase',
+  TaktTenantCoreEntityGuidBase: 'TaktTenantCoreDtoBase',
+  TaktTenantCultureEntityGuidBase: 'TaktTenantCultureDtoBase',
+  TaktTenantPlantEntityGuidBase: 'TaktTenantPlantDtoBase',
   TaktTenantEntityGuidBase: 'TaktTenantDtoBase',
   TaktCompanyEntityGuidBase: 'TaktCompanyDtoBase',
   TaktApprovalEntityGuidBase: 'TaktApprovalDtoBase',
 };
 
 /**
- * 是否租户级实体基类（含 Increment / Guid）
+ * 去掉 Increment / Guid 主键变体后缀，得到标准 EntityBase 名
+ * @param {string|null|undefined} entityBase
+ * @returns {string}
+ */
+function stripEntityBasePkVariant(entityBase) {
+  if (typeof entityBase !== 'string' || !entityBase) {
+    return '';
+  }
+  return entityBase.replace(/Increment|Guid/g, '');
+}
+
+/**
+ * 租户基类是否含 RelatedPlant（组合 1 默认 / 组合 3 Plant）
+ * @param {string|null|undefined} entityBase
+ * @returns {boolean}
+ */
+function entityBaseHasRelatedPlant(entityBase) {
+  const normalized = stripEntityBasePkVariant(entityBase);
+  return (
+    normalized === 'TaktTenantEntityBase' || normalized === 'TaktTenantPlantEntityBase'
+  );
+}
+
+/**
+ * 租户/公司/审批基类是否含 CultureCode（组合 1·2；公司/审批）
+ * @param {string|null|undefined} entityBase
+ * @returns {boolean}
+ */
+function entityBaseHasCultureCode(entityBase) {
+  if (isCompanyOrApprovalEntityBase(entityBase)) {
+    return true;
+  }
+  const normalized = stripEntityBasePkVariant(entityBase);
+  return (
+    normalized === 'TaktTenantEntityBase' || normalized === 'TaktTenantCultureEntityBase'
+  );
+}
+
+/**
+ * 是否租户级实体基类（含四组合与 Increment / Guid）
  * @param {string|null|undefined} entityBase
  * @returns {boolean}
  */
@@ -392,23 +442,24 @@ function isCompanyOrApprovalEntityBase(entityBase) {
 }
 
 /**
- * 归一化为三种标准 EntityBase（去掉 Increment / Guid 后缀）
+ * 归一化为标准 EntityBase（去掉 Increment / Guid；保留租户四组合名）
  * @param {string|null|undefined} entityBase
- * @returns {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'|null}
+ * @returns {string|null}
  */
 function normalizeEntityBaseKind(entityBase) {
-  if (typeof entityBase !== 'string' || !entityBase) {
+  const normalized = stripEntityBasePkVariant(entityBase);
+  if (!normalized) {
     return null;
   }
-  const normalized = entityBase.replace(/Increment|Guid/g, '');
   if (
+    normalized === 'TaktTenantCoreEntityBase' ||
+    normalized === 'TaktTenantCultureEntityBase' ||
+    normalized === 'TaktTenantPlantEntityBase' ||
     normalized === 'TaktTenantEntityBase' ||
     normalized === 'TaktCompanyEntityBase' ||
     normalized === 'TaktApprovalEntityBase'
   ) {
-    return /** @type {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'} */ (
-      normalized
-    );
+    return normalized;
   }
   return null;
 }
@@ -444,38 +495,43 @@ function resolveDtoBaseFromEntityBase(entityBase) {
 }
 
 /**
- * 从 C# 实体文件解析 EntityBase
+ * 从 C# 实体文件解析 EntityBase（保留租户四组合；去掉 Increment/Guid）
  * @param {string} entityFilePath
- * @returns {'TaktTenantEntityBase'|'TaktCompanyEntityBase'|'TaktApprovalEntityBase'}
+ * @returns {string}
  */
 function parseEntityBaseFromCsFile(entityFilePath) {
   const content = fs.readFileSync(entityFilePath, 'utf-8');
   const header = parseEntityClassHeaderFromCsContent(content);
   if (header) {
     return (
-      normalizeEntityBaseKind(header.entityBase) || 'TaktCompanyEntityBase'
+      normalizeEntityBaseKind(header.entityBase) || stripEntityBasePkVariant(header.entityBase) || 'TaktCompanyEntityBase'
     );
   }
-  if (
-    content.includes(': TaktApprovalEntityIncrementBase') ||
-    content.includes(': TaktApprovalEntityGuidBase') ||
-    content.includes(': TaktApprovalEntityBase')
-  ) {
-    return 'TaktApprovalEntityBase';
-  }
-  if (
-    content.includes(': TaktCompanyEntityIncrementBase') ||
-    content.includes(': TaktCompanyEntityGuidBase') ||
-    content.includes(': TaktCompanyEntityBase')
-  ) {
-    return 'TaktCompanyEntityBase';
-  }
-  if (
-    content.includes(': TaktTenantEntityIncrementBase') ||
-    content.includes(': TaktTenantEntityGuidBase') ||
-    content.includes(': TaktTenantEntityBase')
-  ) {
-    return 'TaktTenantEntityBase';
+  // 回退：按专名优先（Culture/Plant/Core 须先于裸 TenantEntity）
+  const fallbackOrdered = [
+    'TaktTenantCultureEntityIncrementBase',
+    'TaktTenantCultureEntityGuidBase',
+    'TaktTenantCultureEntityBase',
+    'TaktTenantPlantEntityIncrementBase',
+    'TaktTenantPlantEntityGuidBase',
+    'TaktTenantPlantEntityBase',
+    'TaktTenantCoreEntityIncrementBase',
+    'TaktTenantCoreEntityGuidBase',
+    'TaktTenantCoreEntityBase',
+    'TaktTenantEntityIncrementBase',
+    'TaktTenantEntityGuidBase',
+    'TaktTenantEntityBase',
+    'TaktApprovalEntityIncrementBase',
+    'TaktApprovalEntityGuidBase',
+    'TaktApprovalEntityBase',
+    'TaktCompanyEntityIncrementBase',
+    'TaktCompanyEntityGuidBase',
+    'TaktCompanyEntityBase',
+  ];
+  for (const baseName of fallbackOrdered) {
+    if (content.includes(`: ${baseName}`)) {
+      return normalizeEntityBaseKind(baseName) || baseName;
+    }
   }
   return 'TaktCompanyEntityBase';
 }
@@ -996,6 +1052,9 @@ module.exports = {
   dtoBaseHasCompanyIsolation,
   isTenantEntityBase,
   isCompanyOrApprovalEntityBase,
+  entityBaseHasRelatedPlant,
+  entityBaseHasCultureCode,
+  stripEntityBasePkVariant,
   normalizeEntityBaseKind,
   resolveIsolationDtoBase,
   findDomainEntityFile,

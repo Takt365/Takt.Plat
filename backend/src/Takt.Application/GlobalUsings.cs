@@ -18,6 +18,7 @@ global using System.Linq;
 global using System.Threading;
 global using System.Threading.Tasks;
 global using Takt.Shared.Enums;
+global using Takt.Shared.Helpers;
 global using Takt.Shared.Models;
 global using Takt.Shared.Options;
 global using Mapster;

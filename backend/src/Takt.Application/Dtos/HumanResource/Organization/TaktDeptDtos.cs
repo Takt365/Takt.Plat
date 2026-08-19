@@ -46,6 +46,11 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string DeptShortName { get; set; } = string.Empty;
+
+    /// <summary>
     /// 父部门ID（0表示根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -173,7 +178,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -191,6 +196,11 @@ public class TaktDeptQueryDto : TaktPagedQuery
     /// 部门名称
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门ID（0表示根部门）
@@ -300,12 +310,12 @@ public class TaktDeptCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -326,6 +336,11 @@ public class TaktDeptCreateDto
     /// </summary>
     [Required(ErrorMessage = "部门名称不能为空")]
     public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门ID（0表示根部门）
@@ -489,12 +504,12 @@ public class TaktDeptTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -512,6 +527,11 @@ public class TaktDeptTemplateDto
     /// 部门名称
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门ID（0表示根部门）
@@ -598,12 +618,12 @@ public class TaktDeptImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -622,6 +642,11 @@ public class TaktDeptImportDto
     /// 部门名称
     /// </summary>
     public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门ID（0表示根部门）
@@ -727,6 +752,11 @@ public class TaktDeptExportDto
     /// 部门名称
     /// </summary>
     public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 父部门ID（0表示根部门）

@@ -170,15 +170,24 @@ HTTP 路由、权限末段与前端 API 完整映射见 `@.cursor/rules/12-crud.
 - 导航属性：放在实体文件**末尾**「导航属性区域」；仅必要时 `[Navigate]`
 
 **实体基类选型**（按隔离粒度，❌ 禁止引入 `ConfigId` / `config_id` 列）：
-- 租户级共享：`TaktTenantEntityBase`（用户、角色、菜单、字典类型等；**含 CultureCode 行戳记**）
-- 公司级业务：`TaktCompanyEntityBase`（部门、员工、业务单据等；**含 CultureCode 行戳记**）
-- 带审批流：`TaktApprovalEntityBase`（含 `FlowInstanceId`；凡审批必走 `TaktFlowEngine`，完成后回写 `ApprovalStatus`）
+**实体基类选型**（租户按「关联工厂 × 语言」四组合 Scope，雪花基类仅 +Id）：
+
+| 组合 | 工厂 | 语言 | Scope | 雪花实体基类 |
+|------|------|------|-------|--------------|
+| 1 | 需要 | 需要 | `TaktTenantEntityScopeBase` | `TaktTenantEntityBase`（默认） |
+| 2 | 不需要 | 需要 | `TaktTenantCultureEntityScopeBase` | `TaktTenantCultureEntityBase` |
+| 3 | 需要 | 不需要 | `TaktTenantPlantEntityScopeBase` | `TaktTenantPlantEntityBase` |
+| 4 | 不需要 | 不需要 | `TaktTenantCoreEntityScopeBase` | `TaktTenantCoreEntityBase` |
+
+- 公司级业务：`TaktCompanyEntityBase`；审批：`TaktApprovalEntityBase`
+- ❌ 禁止用 `new` + `[SugarColumn(IsIgnore)]` 伪装去掉 RelatedPlant/CultureCode；须改继承对应组合
+- DTO 镜像：`TaktTenantDtoBase` / `TaktTenantCultureDtoBase` / `TaktTenantPlantDtoBase` / `TaktTenantCoreDtoBase`
 
 **CultureCode 与隔离（强制）**：
-- 数据过滤/隔离仅用 **TenantCode + CompanyCode**；❌ 禁止用 CultureCode 作租户级（Menu/Role/Dict 等）查询隔离
-- `TaktTenantEntityScopeBase` / `TaktCompanyEntityScopeBase` / `TaktApprovalEntityScopeBase` **均有** CultureCode（公司/审批与当前公司主档一致，Create 时由 `TaktCompanyScopeFillHelper` 注入；租户级由 `TaktTenantScopeFillHelper` 在空时按公司主档补齐）
-- 租户级主数据可对 `CultureCode` 使用 `new` 覆盖注释/默认值（如 `TaktDictData` 空串=全局、`TaktCulture`/`TaktPlant`/`TaktCompany` 主档语义）；❌ 禁止对需落库的 `culture_code` 使用 `IsIgnore`
-- 公司主档 `TaktCompany.CultureCode` + `RelatedPlant` 为权威（如 2300/C100→zh-CN）；业务行 `RelatedPlant`/`CultureCode` 空时仓储一并填充
+- 数据过滤/隔离仅用 **TenantCode + CompanyCode**；❌ 禁止用 CultureCode 作租户级查询隔离
+- **权威映射**：`Database:CompanyCodes[i]↔PlantCodes[i]↔CultureCodes[i]`（`GetCultureCodeForCompanyCode` / `GetCultureCodeForPlantCode`）；种子主档与仓储注入须走配置，禁止手写对照表
+- 组合 1/2：`CultureCode` 默认 **`Localization:MultiCultureCode`**（默认 `mul`，多种语言内容，ISO 639-3）；公司/工厂主档及公司级业务行的区域码由上表同序映射写入；字典等种子经 `RequireLocalization().MultiCultureCode` 引用，禁止与 `Database:CultureCodes` 混用
+- FillHelper：仅 `ITaktHasRelatedPlant`（组合 1/3）补齐 RelatedPlant；公司/审批 `PlantCode`/`CultureCode` 按配置映射注入
 
 **Domain 实体禁枚举（硬约束，见 `00-project` §1.8.1）**：
 

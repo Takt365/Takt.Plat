@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Foundation;
 /// <summary>
 /// 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
 /// 对应前端 TaktAdminDivisionDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktAdminDivisionDto : TaktTenantDtoBase
+public class TaktAdminDivisionDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// AdminDivisionID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -133,12 +134,6 @@ public class TaktAdminDivisionQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -274,18 +269,6 @@ public class TaktAdminDivisionCreateDto
     /// 邮政编码（可选；部分国家区划关联邮编）
     /// </summary>
     public string? PostalCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-    /// </summary>
-    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）不能为空")]
-    public string CultureCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
     /// </summary>
@@ -401,12 +384,6 @@ public class TaktAdminDivisionTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
@@ -479,12 +456,6 @@ public class TaktAdminDivisionImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>

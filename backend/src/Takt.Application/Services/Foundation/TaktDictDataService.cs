@@ -98,7 +98,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         var cultureCode = ResolveCurrentRequestCultureCode();
         var list = await _dictDataRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
-                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
+                && (x.CultureCode == "mul" || x.CultureCode == cultureCode),
             x => x.DictTypeCode ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
@@ -348,7 +348,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         var list = await _dictDataRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && codes.Contains(x.DictTypeCode)
-                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
+                && (x.CultureCode == "mul" || x.CultureCode == cultureCode),
             x => x.SortOrder,
             false);
         var rows = list.Select(x => (x.DictTypeCode, x.DictValue, x.DictLabel));
@@ -379,7 +379,7 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         var list = await _dictDataRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && codes.Contains(x.DictTypeCode)
-                && (x.CultureCode == "eo" || x.CultureCode == cultureCode),
+                && (x.CultureCode == "mul" || x.CultureCode == cultureCode),
             x => x.SortOrder,
             false);
         var sortMaps = new Dictionary<string, Dictionary<string, int>>(StringComparer.Ordinal);
@@ -610,11 +610,6 @@ public class TaktDictDataService : TaktServiceBase, ITaktDictDataService
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
             exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
         }
 
 

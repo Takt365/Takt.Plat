@@ -19,13 +19,15 @@ namespace Takt.Domain.Entities.Foundation;
 /// 字典类型实体
 /// 用于定义系统中使用的各种字典分类，如：订单状态、用户类型、审批状态等
 /// 租户级实体：字典类型在租户内共享，不需要公司隔离
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_foundation_dict_type", "字典类型表")]
 [SugarIndex("ix_dict_type_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_dict_type_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_dict_type_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(DictTypeCode), OrderByType.Asc, true)]
-public class TaktDictType : TaktTenantEntityBase
-{    /// <summary>
+public class TaktDictType : TaktTenantCoreEntityBase
+{
+    /// <summary>
     /// 字典类型编码（租户内唯一；命名：{领域}_{业务项}_后缀，如 sys_equipment_status、logistics_supplier_category）
     /// </summary>
     [SugarColumn(ColumnName = "dict_type_code", ColumnDescription = "字典类型编码", ColumnDataType = "varchar", Length = 80, IsNullable = false)]

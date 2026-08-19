@@ -74,9 +74,9 @@
       </template>
       <!-- 字典/开关列渲染 -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.key === 'languageName'">
+        <template v-if="column.key === 'cultureCode'">
           <TaktDictTag
-            :value="getCultureDictValue(record, 'languageName')"
+            :value="getCultureDictValue(record, 'cultureCode')"
             dict-type="sys_culture_code"
           />
         </template>
@@ -133,12 +133,12 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('languageName')">
-      <a-form-item :label="pi.queryLabel('languageName')">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
         <TaktSelect
-          v-model:value="advancedQueryForm.languageName"
+          v-model:value="advancedQueryForm.cultureCode"
           dict-type="sys_culture_code"
-          :placeholder="pi.queryPh('languageName', 'select')"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
           allow-clear
         />
       </a-form-item>
@@ -513,9 +513,9 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getCultureField(record, 'cultureId') ?? ''
   },
   {
-    title: pi.label('languageName'),
-    dataIndex: 'languageName',
-    key: 'languageName',
+    title: pi.label('cultureCode'),
+    dataIndex: 'cultureCode',
+    key: 'cultureCode',
     width: 120,
     resizable: true,
     ellipsis: true,
@@ -660,7 +660,7 @@ function handleReset() {
   queryKeyword.value = ''
   advancedQueryForm.value = {
   relatedPlant: '',
-  languageName: '',
+  cultureCode: '',
   nativeName: '',
   icon: '',
   isDefault: undefined as number | undefined,
@@ -866,7 +866,7 @@ function handleAdvancedQuerySubmit() {
 function handleAdvancedQueryReset() {
   advancedQueryForm.value = {
   relatedPlant: '',
-  languageName: '',
+  cultureCode: '',
   nativeName: '',
   icon: '',
   isDefault: undefined as number | undefined,

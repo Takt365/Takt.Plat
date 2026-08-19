@@ -90,7 +90,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.deptCode"
-                  api-url="TaktIsoCodes/options"
+                  dict-type="sys_numbering_dept_code"
                   :placeholder="t('common.page.form.placeholder.select', { field: t('entity.numbering.deptcode') })"
                   allow-clear
                   :disabled="props.loading"

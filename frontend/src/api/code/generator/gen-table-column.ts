@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/code/generator
 // 文件名称：gen-table-column.ts
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：code/generator 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -18,7 +18,6 @@ import type {
 import type {
   GenTableColumn,
   GenTableColumnCreate,
-  GenTableColumnSort,
   GenTableColumnUpdate
 } from '@/types/code/generator/gen-table-column';
 
@@ -106,19 +105,6 @@ export function deleteGenTableColumnBatch(ids: string[]): Promise<void> {
     url: `${GEN_TABLE_COLUMN_API_BASE}/batch`,
     method: 'delete',
     data: ids,
-  });
-}
-
-/**
- * 更新代码生成数据表列配置排序
- * @param {GenTableColumnSort} dto 排序DTO
- * @returns {Promise<GenTableColumn>} 代码生成数据表列配置DTO
- */
-export function updateGenTableColumnSort(dto: GenTableColumnSort): Promise<GenTableColumn> {
-  return request<GenTableColumn>({
-    url: `${GEN_TABLE_COLUMN_API_BASE}/sort`,
-    method: 'put',
-    data: dto,
   });
 }
 

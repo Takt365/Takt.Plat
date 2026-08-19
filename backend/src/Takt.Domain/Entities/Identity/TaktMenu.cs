@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Identity
 // 文件名称：TaktMenu.cs
@@ -18,13 +18,14 @@ namespace Takt.Domain.Entities.Identity;
 /// 菜单实体
 /// 代表系统菜单和权限（树形结构）
 /// 支持目录、菜单、按钮三种类型
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_identity_menu", "菜单表")]
 [SugarIndex("ix_menu_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_menu_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_menu_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(MenuCode), OrderByType.Asc, true)]
 [SugarIndex("ix_menu_parent", nameof(TenantCode), OrderByType.Asc, nameof(ParentId), OrderByType.Asc, false)]
-public class TaktMenu : TaktTenantEntityBase
+public class TaktMenu : TaktTenantCoreEntityBase
 {    /// <summary>
     /// 菜单编码（唯一索引：租户内唯一，见 ix_menu_code_unique）
     /// </summary>

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.WebApi.Controllers.Code.Generator
 // 文件名称：TaktGenTableColumnsController.cs
-// 创建时间：2026-06-27
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表列配置控制器
 // 
@@ -173,26 +173,6 @@ public class TaktGenTableColumnsController : TaktControllerBase
         {
             await _genTableColumnService.DeleteGenTableColumnBatchAsync(ids);
             return Success("删除成功");
-        }
-        catch (Exception ex)
-        {
-            return HandleException(ex);
-        }
-    }
-
-    /// <summary>
-    /// 更新代码生成数据表列配置排序
-    /// </summary>
-    /// <param name="dto">排序DTO</param>
-    /// <returns>代码生成数据表列配置DTO</returns>
-    [TaktPermission("code:generator:gen:table:update", "更新代码生成数据表列配置排序")]
-    [HttpPut("sort")]
-    public async Task<IActionResult> UpdateGenTableColumnSortAsync([FromBody] TaktGenTableColumnSortDto dto)
-    {
-        try
-        {
-            var result = await _genTableColumnService.UpdateGenTableColumnSortAsync(dto);
-            return Success(result, "更新成功");
         }
         catch (Exception ex)
         {

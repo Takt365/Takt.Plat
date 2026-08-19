@@ -46,7 +46,8 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         var deptRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktDept>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
+        var database = configuration.RequireDatabase();
+        var configuredCompanyCodes = database.CompanyCodes;
         var companies = await companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
@@ -62,7 +63,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         TaktLogger.Information("正在为租户 {TenantCode} 初始化员工-部门关联数据...", tenantCode);
         foreach (var company in orderedCompanies)
         {
-            foreach (var (EmployeeCode, deptCode) in GetEmployeeDeptTemplates())
+            foreach (var (EmployeeCode, deptCode) in GetEmployeeDeptTemplates(company.CompanyCode))
             {
                 insertCount += await CreateEmployeeDeptAsync(
                     repository,
@@ -70,6 +71,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
                     deptRepository,
                     tenantCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
                     EmployeeCode,
                     deptCode);
@@ -82,13 +84,25 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 标准员工-部门关联模板（公司编码由 Database:CompanyCodes 驱动）
+    /// 员工-部门关联模板（按公司独立组织根；制造/品管仅 DTA）
     /// </summary>
-    private static IEnumerable<(string EmployeeCode, string DeptCode)> GetEmployeeDeptTemplates()
+    /// <param name="companyCode">公司代码</param>
+    /// <returns>员工编码与部门编码对</returns>
+    private static IEnumerable<(string EmployeeCode, string DeptCode)> GetEmployeeDeptTemplates(string companyCode)
     {
-        yield return ("900001", "HEAD_OFFICE");
-        yield return ("900002", "D0620");
-        yield return ("900003", "D0820");
+        var rootDeptCode = companyCode switch
+        {
+            "1000" => "1000",
+            "2300" => "2300",
+            "2400" => "2400",
+            _ => companyCode,
+        };
+        yield return ("900001", rootDeptCode);
+        if (companyCode == "2300")
+        {
+            yield return ("900002", "D0620");
+            yield return ("900003", "D0820");
+        }
     }
 
     private static async Task<int> CreateEmployeeDeptAsync(
@@ -97,6 +111,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         string EmployeeCode,
         string deptCode)
@@ -126,6 +141,7 @@ public class TaktEmployeeDeptSeedData : ITaktSeedDataCoordinator
                 CompanyCode = companyCode,
                 EmployeeId = employee.Id,
                 DeptId = dept.Id,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             });
             return 1;

@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 租户实体 代表系统中的独立租户（第一层数据隔离） 参照 SAP Client (MANDT) 设计
  * 对应前端 TaktTenantDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Tenant
  * @description 对应后端 TaktTenantDto
  */
-export interface Tenant extends TenantDtoBase {
+export interface Tenant extends TenantCoreDtoBase {
   /**
    * TenantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */

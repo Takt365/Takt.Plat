@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 /// <summary>
 /// 汇率实体（租户级主数据；租户内各公司共用同一套汇率；维护自币种至目标币种的折算汇率及生效区间）
 /// 对应前端 TaktExchangeRateDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktExchangeRateDto : TaktTenantDtoBase
+public class TaktExchangeRateDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// ExchangeRateID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -97,11 +98,6 @@ public class TaktExchangeRateQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -192,11 +188,6 @@ public class TaktExchangeRateCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -315,11 +306,6 @@ public class TaktExchangeRateTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>
@@ -387,11 +373,6 @@ public class TaktExchangeRateImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 源币种（字典 accounting_currency_code；ISO 4217，如 USD、CNY）
     /// </summary>

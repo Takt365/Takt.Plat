@@ -129,7 +129,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 formRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode);
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode);
             insertCount += fi;
             updateCount += fu;
             var processContent = BuildProcessContent(
@@ -141,7 +142,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 schemeRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 form,
                 processContent);
             insertCount += si;
@@ -151,7 +153,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -168,7 +171,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -185,7 +189,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 leaveRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 demoEmployee,
                 demoDept,
                 demoUser,
@@ -205,7 +210,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 scheme,
                 instanceCodeDraft,
                 "演示：请假草稿",
@@ -219,7 +225,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 scheme,
                 instanceCodeRunning,
                 "演示：年假审批中",
@@ -236,7 +243,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 instanceRepository,
                 tenantCode,
                 company.CompanyCode,
-                company.CultureCode,
+                database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                 scheme,
                 instanceCodeDone,
                 "演示：病假已通过",
@@ -406,6 +414,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowForm> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode)
     {
         var form = await repository.FirstAsync(f =>
@@ -430,6 +439,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 RelatedFormField = relatedField,
                 SortOrder = 10,
                 FormStatus = 1,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             form = await repository.CreateAsync(form);
@@ -446,6 +456,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         form.RelatedFormField = relatedField;
         form.SortOrder = 10;
         form.FormStatus = 1;
+        form.PlantCode = plantCode;
+        form.CultureCode = cultureCode;
         await repository.UpdateAsync(form);
         return (form, 0, 1);
     }
@@ -457,6 +469,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowScheme> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktFlowForm form,
         string processContent)
@@ -486,6 +499,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 FormId = form.Id,
                 FormCode = form.FormCode,
                 SortOrder = 10,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             scheme = await repository.CreateAsync(scheme);
@@ -503,6 +517,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         scheme.FormId = form.Id;
         scheme.FormCode = form.FormCode;
         scheme.SortOrder = 10;
+        scheme.PlantCode = plantCode;
+        scheme.CultureCode = cultureCode;
         await repository.UpdateAsync(scheme);
         return (scheme, 0, 1);
     }
@@ -514,6 +530,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktApprovalSeedRepository<TaktLeave> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktEmployee employee,
         TaktDept? dept,
@@ -552,6 +569,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 InitiatorId = initiator.Id,
                 InitiatedAt = DateTime.Now,
                 FlowInstanceId = flowInstanceId,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             leave = await repository.CreateAsync(leave);
@@ -568,6 +586,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         leave.InitiatorId = initiator.Id;
         leave.InitiatedAt ??= DateTime.Now;
         leave.FlowInstanceId = flowInstanceId;
+        leave.PlantCode = plantCode;
+        leave.CultureCode = cultureCode;
         await repository.UpdateAsync(leave);
         return (leave, 0, 1);
     }
@@ -579,6 +599,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktFlowInstance> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         TaktFlowScheme scheme,
         string instanceCode,
@@ -619,6 +640,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
                 FormId = scheme.FormId,
                 FormCode = scheme.FormCode,
                 ProcessContentSnapshot = scheme.ProcessContent,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             if (status == TaktFlowInstanceStatus.Completed && endTime.HasValue)
@@ -655,6 +677,8 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             instance.DurationMs = null;
             instance.EndTime = null;
         }
+        instance.PlantCode = plantCode;
+        instance.CultureCode = cultureCode;
         await repository.UpdateAsync(instance);
         return (instance, 0, 1);
     }
@@ -694,6 +718,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionTime = startTime,
             TransitionComment = "发起",
             ActionType = TaktFlowActionType.Start,
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
@@ -707,6 +732,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             AssigneeUserName = manager.Nickname ?? manager.Username,
             TaskStatus = TaktFlowTaskStatus.Pending,
             SignType = TaktFlowSignType.Any,
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         return (2, 0);
@@ -742,6 +768,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionTime = startTime,
             TransitionComment = "发起",
             ActionType = TaktFlowActionType.Start,
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         await transitionRepository.CreateAsync(new TaktFlowTransition
@@ -758,6 +785,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionTime = managerDone,
             TransitionComment = "同意",
             ActionType = TaktFlowActionType.Approve,
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         await transitionRepository.CreateAsync(new TaktFlowTransition
@@ -774,6 +802,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             TransitionTime = hrDone,
             TransitionComment = "同意",
             ActionType = TaktFlowActionType.Approve,
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
@@ -789,6 +818,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             SignType = TaktFlowSignType.Any,
             CompletedAt = managerDone,
             Comment = "同意",
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         await taskRepository.CreateAsync(new TaktFlowTask
@@ -804,6 +834,7 @@ public class TaktLeaveWorkflowSeedData : ITaktSeedDataCoordinator
             SignType = TaktFlowSignType.Any,
             CompletedAt = hrDone,
             Comment = "同意",
+            PlantCode = instance.PlantCode,
             CultureCode = instance.CultureCode
         });
         return (5, 0);

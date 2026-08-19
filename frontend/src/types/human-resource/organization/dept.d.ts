@@ -24,12 +24,12 @@ import type {
  */
 export interface Dept extends CompanyDtoBase {
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string
 
   /**
-   * 区域文化编码（登录或公司切换注入）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string
 
@@ -42,6 +42,11 @@ export interface Dept extends CompanyDtoBase {
    * 部门名称
    */
   deptName?: string;
+
+  /**
+   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC）
+   */
+  deptShortName?: string;
 
   /**
    * 父部门ID（0表示根部门）
@@ -140,6 +145,11 @@ export interface DeptExport {
    * 部门名称
    */
   deptName: string;
+
+  /**
+   * 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC）
+   */
+  deptShortName: string;
 
   /**
    * 父部门ID（0表示根部门）

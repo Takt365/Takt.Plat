@@ -27,6 +27,8 @@ export const BOMMATERIALCOST_LIST_FIELDS = [
   'productCode',
   'productDescription',
   'productMonthlyCost',
+  'productMonthlyCalculation',
+  'latestPurchaseCost',
   'currencyCode',
   'costingPeriod',
   'costingDate',
@@ -44,6 +46,8 @@ export const BOMMATERIALCOST_PLACEHOLDER = {
   productCode: 'select',
   productDescription: 'optional',
   productMonthlyCost: 'select',
+  productMonthlyCalculation: 'select',
+  latestPurchaseCost: 'select',
   currencyCode: 'select',
   costingPeriod: 'select',
   costingDate: 'select',
@@ -74,13 +78,15 @@ export const BOMMATERIALCOST_QUERY_STRING_FIELDS = [
 
 export type BomMaterialCostQueryField =
   | (typeof BOMMATERIALCOST_QUERY_STRING_FIELDS)[number]
-  | 'modelMonthlyAverageCost' | 'productMonthlyCost'
+  | 'modelMonthlyAverageCost' | 'productMonthlyCost' | 'productMonthlyCalculation' | 'latestPurchaseCost'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const BOMMATERIALCOST_QUERY_FIELDS: readonly BomMaterialCostQueryField[] = [
   ...BOMMATERIALCOST_QUERY_STRING_FIELDS,
   'modelMonthlyAverageCost',
   'productMonthlyCost',
+  'productMonthlyCalculation',
+  'latestPurchaseCost',
 ]
 
 /**

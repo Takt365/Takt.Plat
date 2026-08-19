@@ -15,7 +15,7 @@
         api-url="TaktPlants/options"
         class="inspection-trend-query-bar__control inspection-trend-query-bar__control--plant"
         allow-clear
-        :placeholder="t('entity.iqcorder.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
       />
       <a-range-picker
         v-model:value="periodRange"

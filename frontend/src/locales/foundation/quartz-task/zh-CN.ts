@@ -14,11 +14,11 @@ export default {
   page: {
     executeSubmitted: '已提交后台执行，完成后将通知并刷新列表',
     executeMonth: {
-      modalTitle: '选择核算月份',
+      modalTitle: '选择核算月份与目标库',
       costingMonth: '核算月份',
       costingMonthPlaceholder: '请选择核算月份',
       costingMonthRequired: '请选择核算月份',
-      hint: '默认当月；Cron 自动执行未传参数时亦按当月计算。',
+      hint: '须同时选择目标库与核算月；Cron 未传参时核算月默认当月、库取任务 ExecuteParams。',
     },
     executeDb: {
       modalTitle: '选择同步数据库',

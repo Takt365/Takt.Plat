@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Foundation;
 /// <summary>
 /// 翻译实体 存储系统界面的多语言翻译文本 租户级实体：翻译数据在租户内共享，不需要公司隔离
 /// 对应前端 TaktTranslationDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktTranslationDto : TaktTenantDtoBase
+public class TaktTranslationDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// TranslationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -36,10 +37,15 @@ public class TaktTranslationDto : TaktTenantDtoBase
     public long TranslationId { get; set; }
 
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 文化名称（填充字段）
@@ -95,15 +101,15 @@ public class TaktTranslationQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
     /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? CultureId { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -164,11 +170,6 @@ public class TaktTranslationCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 文化ID（关联 TaktCulture.Id）
@@ -252,11 +253,6 @@ public class TaktTranslationTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
     /// 文化ID（关联 TaktCulture.Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
@@ -308,11 +304,6 @@ public class TaktTranslationImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
 
     /// <summary>
     /// 文化ID（关联 TaktCulture.Id）
@@ -374,15 +365,15 @@ public class TaktTranslationExportDto
     public long TranslationId { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long CultureId { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
@@ -539,4 +530,24 @@ public class TaktTranslationTransposedBatchDto
     /// 转置行数据
     /// </summary>
     public List<TaktTranslationTransposedDto> Rows { get; set; } = new();
+}
+
+// ========================================
+// Translation 前端动态 messages（vue-i18n 扁平键）
+// ========================================
+
+/// <summary>
+/// 指定文化下前端翻译键值包（供 SPA mergeLocaleMessage）
+/// </summary>
+public class TaktTranslationMessagesDto
+{
+    /// <summary>
+    /// 区域文化编码（BCP47，如 zh-CN、en-US）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 扁平翻译：I18nKey → TranslationText（仅 resource_type=frontend）
+    /// </summary>
+    public Dictionary<string, string> Messages { get; set; } = new();
 }

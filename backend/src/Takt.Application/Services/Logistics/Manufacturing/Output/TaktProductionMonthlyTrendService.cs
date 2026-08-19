@@ -57,7 +57,10 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
     _pcbaOutputDetailRepository = pcbaOutputDetailRepository;
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：组立/PCBA 产出本表工厂去重选项（并集）
+  /// </summary>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendPlantOptionsAsync()
   {
     EnsureThreeLayerContext();
@@ -84,7 +87,11 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
         .ToList();
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：按工厂返回有数据的产出类别（assy / pcba）
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendOutputCategoryOptionsAsync(string plantCode)
   {
     EnsureThreeLayerContext();
@@ -121,7 +128,12 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
     return options;
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：按工厂（及可选产出类别）去重机种
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <param name="outputCategory">产出类别（assy/pcba；空则并集）</param>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetProductionMonthlyTrendModelOptionsAsync(
       string plantCode,
       string? outputCategory = null)
@@ -168,7 +180,11 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
         .ToList();
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 获取月生产推移转置分析（分页）
+  /// </summary>
+  /// <param name="queryDto">查询 DTO</param>
+  /// <returns>转置分析结果</returns>
   public async Task<TaktProductionMonthlyTrendResultDto> GetProductionMonthlyTrendAnalysisAsync(
       TaktProductionMonthlyTrendQueryDto queryDto)
   {
@@ -193,7 +209,13 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
     };
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 导出月生产推移转置分析 Excel
+  /// </summary>
+  /// <param name="query">查询条件</param>
+  /// <param name="sheetName">工作表名称</param>
+  /// <param name="fileName">导出文件名</param>
+  /// <returns>文件名与内容</returns>
   public async Task<(string fileName, byte[] fileContent)> ExportProductionMonthlyTrendAnalysisAsync(
       TaktProductionMonthlyTrendQueryDto query,
       string? sheetName = null,
@@ -811,7 +833,12 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
     /// <summary>单例</summary>
     public static ProductionMonthlyTrendRowKeyComparer Instance { get; } = new();
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+    /// </summary>
+    /// <param name="x">左值</param>
+    /// <param name="y">右值</param>
+    /// <returns>是否相等</returns>
     public bool Equals(ProductionMonthlyTrendRowKey? x, ProductionMonthlyTrendRowKey? y)
     {
       if (x is null || y is null)
@@ -823,7 +850,11 @@ public class TaktProductionMonthlyTrendService : TaktServiceBase, ITaktProductio
           && string.Equals(x.OutputCategory, y.OutputCategory, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 计算行键哈希（工厂/机种/产出类别大写）
+    /// </summary>
+    /// <param name="obj">行键</param>
+    /// <returns>哈希码</returns>
     public int GetHashCode(ProductionMonthlyTrendRowKey obj) =>
         HashCode.Combine(
             obj.PlantCode.ToUpperInvariant(),

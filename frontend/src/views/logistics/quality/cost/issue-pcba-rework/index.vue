@@ -109,10 +109,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.qualityissue.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.qualityissue.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -417,7 +417,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.qualityissue.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'qualityIssueCode', label: t('entity.qualityissue.code') },
   { key: 'issueDateStart', label: t('common.page.entity.createdatstart').replace(t('common.page.entity.createdat'), t('entity.qualityissue.issuedate')) },
   { key: 'issueDateEnd', label: t('common.page.entity.createdatend').replace(t('common.page.entity.createdat'), t('entity.qualityissue.issuedate')) },
@@ -565,7 +565,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getQualityIssueField(record, 'qualityIssueId') ?? ''
   },
   {
-    title: t('entity.qualityissue.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

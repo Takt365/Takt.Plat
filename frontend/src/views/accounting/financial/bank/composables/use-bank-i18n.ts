@@ -51,6 +51,9 @@ export const BANK_LIST_FIELDS = [
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const BANK_PLACEHOLDER = {
   tenantCode: 'optional',
+  companyCode: 'optional',
+  cultureCode: 'optional',
+  plantCode: 'select',
   countryRegion: 'select',
   bankCode: 'required',
   bankName1: 'required',
@@ -79,7 +82,6 @@ export const BANK_PLACEHOLDER = {
   pathCode: 'optional',
   extField: 'optional',
   remark: 'optional',
-  relatedPlant: 'select',
 } as const satisfies Record<string, EntityFieldPlaceholderKind>
 
 /** 表单 ph() 可接受的字段（与 PLACEHOLDER 键一致，避免与 LIST_FIELDS 导航列混用） */
@@ -87,6 +89,8 @@ export type BankField = keyof typeof BANK_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const BANK_QUERY_STRING_FIELDS = [
+  'cultureCode',
+  'plantCode',
   'countryRegion',
   'bankCode',
   'bankName1',

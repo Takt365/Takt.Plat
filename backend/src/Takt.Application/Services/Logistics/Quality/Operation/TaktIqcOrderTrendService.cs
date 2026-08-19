@@ -48,7 +48,11 @@ public class TaktIqcOrderTrendService : TaktServiceBase, ITaktIqcOrderTrendServi
         _supplierRepository = supplierRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// IQC 进货检验月推移转置分析
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分析结果</returns>
     public async Task<TaktQualityInspectionMonthlyTrendResultDto<TaktIqcOrderMonthlyTrendDto>> GetIqcOrderMonthlyTrendAnalysisAsync(
         TaktIqcOrderMonthlyTrendQueryDto queryDto)
     {
@@ -73,7 +77,13 @@ public class TaktIqcOrderTrendService : TaktServiceBase, ITaktIqcOrderTrendServi
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出 IQC 进货检验月推移
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportIqcOrderMonthlyTrendAnalysisAsync(
         TaktIqcOrderMonthlyTrendQueryDto query,
         string? sheetName = null,

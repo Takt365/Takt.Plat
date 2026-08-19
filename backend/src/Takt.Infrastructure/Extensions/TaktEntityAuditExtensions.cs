@@ -47,7 +47,7 @@ public static class TaktEntityAuditExtensions
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplyCreate(
-        this TaktTenantEntityScopeBase entity,
+        this TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId = null,
         DateTime? timestamp = null)
         => ApplyCreateCore(entity, operatorUserId, timestamp);
@@ -80,7 +80,7 @@ public static class TaktEntityAuditExtensions
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplyUpdate(
-        this TaktTenantEntityScopeBase entity,
+        this TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId = null,
         DateTime? timestamp = null)
         => ApplyUpdateCore(entity, operatorUserId, timestamp);
@@ -113,7 +113,7 @@ public static class TaktEntityAuditExtensions
     /// <param name="timestamp">删除时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
     public static void ApplySoftDelete(
-        this TaktTenantEntityScopeBase entity,
+        this TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId = null,
         DateTime? timestamp = null)
         => ApplySoftDeleteCore(entity, operatorUserId, timestamp);
@@ -144,7 +144,7 @@ public static class TaktEntityAuditExtensions
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
-    public static void ApplySeedCreate(this TaktTenantEntityScopeBase entity, DateTime? timestamp = null)
+    public static void ApplySeedCreate(this TaktTenantCoreEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyCreate(TaktConstants.SystemAuditUser.Id, timestamp);
 
     /// <summary>种子/调度无 HTTP 上下文时写入创建审计（固定系统审计用户）</summary>
@@ -165,7 +165,7 @@ public static class TaktEntityAuditExtensions
     /// <param name="entity">待写入的租户级实体</param>
     /// <param name="timestamp">审计时间；为空时使用 DateTime.Now</param>
     /// <exception cref="ArgumentNullException"><paramref name="entity"/> 为 null</exception>
-    public static void ApplySeedUpdate(this TaktTenantEntityScopeBase entity, DateTime? timestamp = null)
+    public static void ApplySeedUpdate(this TaktTenantCoreEntityScopeBase entity, DateTime? timestamp = null)
         => entity.ApplyUpdate(TaktConstants.SystemAuditUser.Id, timestamp);
 
     /// <summary>种子/调度无 HTTP 上下文时写入更新审计（固定系统审计用户）</summary>
@@ -183,7 +183,7 @@ public static class TaktEntityAuditExtensions
         => entity.ApplyUpdate(TaktConstants.SystemAuditUser.Id, timestamp);
 
     private static void ApplyCreateCore(
-        TaktTenantEntityScopeBase entity,
+        TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId,
         DateTime? timestamp)
     {
@@ -234,7 +234,7 @@ public static class TaktEntityAuditExtensions
     }
 
     private static void ApplyUpdateCore(
-        TaktTenantEntityScopeBase entity,
+        TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId,
         DateTime? timestamp)
     {
@@ -264,7 +264,7 @@ public static class TaktEntityAuditExtensions
     }
 
     private static void ApplySoftDeleteCore(
-        TaktTenantEntityScopeBase entity,
+        TaktTenantCoreEntityScopeBase entity,
         long? operatorUserId,
         DateTime? timestamp)
     {

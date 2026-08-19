@@ -4,7 +4,7 @@
 // 文件名称：TaktStandardOperationRateSeedData.cs
 // 创建时间：2026-07-06
 // 创建人：Takt365(Cursor AI)
-// 功能描述：标准生产稼动率种子（FY2000～FY2099；类型1人员稼动率0.85；生产工厂 C100/T100；幂等创建或更新）
+// 功能描述：标准生产稼动率种子（FY2000～FY2099；类型1人员稼动率0.85；生产工厂 C100/J100；幂等创建或更新）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -22,7 +22,7 @@ using Takt.Shared.Options;
 namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
-/// 标准生产稼动率种子（FY2000～FY2099；生产工厂 C100/T100；类型 1 人员；稼动率 0.85）
+/// 标准生产稼动率种子（FY2000～FY2099；生产工厂 C100/J100；类型 1 人员；稼动率 0.85）
 /// </summary>
 public class TaktStandardOperationRateSeedData : ITaktSeedDataCoordinator
 {
@@ -35,7 +35,7 @@ public class TaktStandardOperationRateSeedData : ITaktSeedDataCoordinator
     private static readonly HashSet<string> ManufacturingPlantCodes = new(StringComparer.Ordinal)
     {
         "C100",
-        "T100",
+        "J100",
     };
 
     /// <summary>

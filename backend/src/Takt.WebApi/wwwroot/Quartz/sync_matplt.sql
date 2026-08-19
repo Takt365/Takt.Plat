@@ -2,6 +2,7 @@ SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -241,48 +242,46 @@ WHEN MATCHED AND (
   OR T.[is_batch] <> S.[is_batch]
   OR LTRIM(RTRIM(ISNULL(T.[is_end_of_life], N''))) <> LTRIM(RTRIM(ISNULL(S.[is_end_of_life], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[material_status], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_status], N'')))
-  OR LTRIM(RTRIM(ISNULL(T.[ext_field], N''))) <> LTRIM(RTRIM(ISNULL(S.[ext_field], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> LTRIM(RTRIM(ISNULL(S.[remark], N'')))
 ) THEN
   UPDATE SET
-    T.[material_description] = S.[material_description],
-    T.[material_specification] = S.[material_specification],
-    T.[industry_sector] = S.[industry_sector],
-    T.[material_hierarchy] = S.[material_hierarchy],
-    T.[material_group] = S.[material_group],
-    T.[material_type] = S.[material_type],
-    T.[base_unit] = S.[base_unit],
-    T.[purchase_group] = S.[purchase_group],
-    T.[purchase_type] = S.[purchase_type],
-    T.[special_procurement] = S.[special_procurement],
-    T.[is_bulk] = S.[is_bulk],
-    T.[min_order_quantity] = S.[min_order_quantity],
-    T.[rounding_value] = S.[rounding_value],
-    T.[planned_delivery_time_days] = S.[planned_delivery_time_days],
-    T.[in_house_production_days] = S.[in_house_production_days],
-    T.[manufacturer] = S.[manufacturer],
-    T.[manufacturer_material_code] = S.[manufacturer_material_code],
-    T.[currency_code] = S.[currency],
-    T.[price_control] = S.[price_control],
-    T.[price_unit] = S.[price_unit],
-    T.[valuation] = S.[valuation],
-    T.[moving_price] = S.[moving_price],
-    T.[difference_code] = S.[difference_code],
-    T.[profit_center] = S.[profit_center],
-    T.[current_stock] = S.[current_stock],
-    T.[production_location] = S.[production_location],
-    T.[purchasing_location] = S.[purchasing_location],
-    T.[storage_location] = S.[storage_location],
-    T.[is_inspection] = S.[is_inspection],
-    T.[is_batch] = S.[is_batch],
-    T.[is_end_of_life] = S.[is_end_of_life],
-    T.[material_status] = S.[material_status],
-    T.[ext_field] = S.[ext_field],
-    T.[remark] = S.[remark],
-    T.[culture_code] = @culture_code,
-    T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[is_deleted] = 0
+  T.[material_description]=S.[material_description],
+  T.[material_specification]=S.[material_specification],
+  T.[industry_sector]=S.[industry_sector],
+  T.[material_hierarchy]=S.[material_hierarchy],
+  T.[material_group]=S.[material_group],
+  T.[material_type]=S.[material_type],
+  T.[base_unit]=S.[base_unit],
+  T.[purchase_group]=S.[purchase_group],
+  T.[purchase_type]=S.[purchase_type],
+  T.[special_procurement]=S.[special_procurement],
+  T.[is_bulk]=S.[is_bulk],
+  T.[min_order_quantity]=S.[min_order_quantity],
+  T.[rounding_value]=S.[rounding_value],
+  T.[planned_delivery_time_days]=S.[planned_delivery_time_days],
+  T.[in_house_production_days]=S.[in_house_production_days],
+  T.[manufacturer]=S.[manufacturer],
+  T.[manufacturer_material_code]=S.[manufacturer_material_code],
+  T.[currency_code]=S.[currency],
+  T.[price_control]=S.[price_control],
+  T.[price_unit]=S.[price_unit],
+  T.[valuation]=S.[valuation],
+  T.[moving_price]=S.[moving_price],
+  T.[difference_code]=S.[difference_code],
+  T.[profit_center]=S.[profit_center],
+  T.[current_stock]=S.[current_stock],
+  T.[production_location]=S.[production_location],
+  T.[purchasing_location]=S.[purchasing_location],
+  T.[storage_location]=S.[storage_location],
+  T.[is_inspection]=S.[is_inspection],
+  T.[is_batch]=S.[is_batch],
+  T.[is_end_of_life]=S.[is_end_of_life],
+  T.[material_status]=S.[material_status],
+  T.[remark]=S.[remark],
+  T.[culture_code]=@culture_code,
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[is_deleted]=0
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[material_code],[material_description],[material_specification],
@@ -303,8 +302,7 @@ WHEN NOT MATCHED THEN
     S.[manufacturer_material_code],S.[currency],S.[price_control],S.[price_unit],S.[valuation],
     S.[moving_price],S.[difference_code],S.[profit_center],S.[current_stock],S.[production_location],
     S.[purchasing_location],S.[storage_location],S.[is_inspection],S.[is_batch],S.[is_end_of_life],
-    S.[material_status],S.[tenant_code],S.[company_code],@culture_code,S.[ext_field],S.[remark],S.[updated_by],
-    @now,S.[updated_by],@now,0
+    S.[material_status],S.[tenant_code],S.[company_code],@culture_code,S.[ext_field],S.[remark],S.[updated_by],@now,S.[updated_by],@now,0
   )
 OUTPUT
   S.rn,
@@ -411,7 +409,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -450,7 +448,7 @@ SELECT
   N'MERGE MaterialPlant Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -476,7 +474,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -490,7 +488,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 -- Quartz 执行器读取此结果集写入 ExecuteMessage / quartz-.log

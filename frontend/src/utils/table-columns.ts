@@ -186,6 +186,7 @@ export function getTableColumnKey(col: ColumnItem | Record<string, unknown>): st
 /** 合计文案不得落在这些列（序号等） */
 const TABLE_SUMMARY_LABEL_SKIP_KEY_SET = new Set([
   'sequenceCode',
+  'lineNumber',
   'seqNo',
   'serialCode',
   'rowNo',

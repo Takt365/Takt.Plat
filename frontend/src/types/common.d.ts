@@ -62,7 +62,7 @@ export type TaktDictSelectOption = TaktSelectOption & {
 export type SignalRMessageWithId = SignalRMessage & { messageId?: string | number };
 
 /**
- * 区域文化编码 BCP47（运行时以租户 GetCultureOptions / cultureOptions 为准）
+ * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
  */
 export type TaktCultureCode = string;
 
@@ -284,7 +284,7 @@ export interface TaktSelectOption {
   dictTypeCode?: string;
 
   /**
-   * 区域文化编码（eo=全局；与 Accept-Language 对齐的区域项；批量加载去重时区域项优先于 eo）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -353,7 +353,7 @@ export interface TaktTenantEntityBase {
   relatedPlant: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；行戳记）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -431,12 +431,12 @@ export interface TaktCompanyEntityBase {
   tenantCode: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -509,12 +509,12 @@ export interface TaktApprovalEntityBase {
   tenantCode: string;
 
   /**
-   * 公司代码
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；与当前公司 CultureCode 一致）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -600,6 +600,44 @@ export interface TaktApprovalEntityBase {
 }
 
 /**
+ * 租户组合 4 DTO 基类（对应后端 TaktTenantCoreDtoBase：无关联工厂、无语言）
+ */
+export type TenantCoreDtoBase = {
+  /**
+   * 租户编码
+   */
+  tenantCode: string;
+} & Omit<TaktTenantEntityBase, 'id' | 'relatedPlant' | 'cultureCode' | 'tenantCode'>;
+
+/**
+ * 租户组合 2 DTO 基类（对应后端 TaktTenantCultureDtoBase：无关联工厂、有语言）
+ */
+export type TenantCultureDtoBase = {
+  /**
+   * 租户编码
+   */
+  tenantCode: string;
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
+} & Omit<TaktTenantEntityBase, 'id' | 'relatedPlant' | 'cultureCode' | 'tenantCode'>;
+
+/**
+ * 租户组合 3 DTO 基类（对应后端 TaktTenantPlantDtoBase：有关联工厂、无语言）
+ */
+export type TenantPlantDtoBase = {
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+  /**
+   * 租户编码
+   */
+  tenantCode: string;
+} & Omit<TaktTenantEntityBase, 'id' | 'relatedPlant' | 'cultureCode' | 'tenantCode'>;
+
+/**
  * 租户级 DTO 基类（对应后端 TaktTenantDtoBase，公共字段对齐 TaktTenantEntityBase，不含实体主键 id）
  * 无 id 时 relatedPlant 仍居首（对齐 Domain：主键后即关联工厂）
  */
@@ -612,10 +650,6 @@ export type TenantDtoBase = {
    * 租户编码
    */
   tenantCode: string;
-  /**
-   * 公司代码（租户级 DTO 不使用公司隔离，后端固定为空字符串）
-   */
-  companyCode: string;
 } & Omit<TaktTenantEntityBase, 'id' | 'relatedPlant' | 'tenantCode'>;
 
 /**

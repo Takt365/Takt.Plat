@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Shared.Helpers
 // 文件名称：TaktRegexHelper.cs
@@ -364,7 +364,7 @@ public static class TaktRegexHelper
     /// </summary>
     public static readonly Regex PlantCode = new(@"^[A-Z0-9]\d00$", Opt);
     /// <summary>
-    /// 公司代码（4位，第1-2位数字，第3-4位固定00）。
+    /// 公司代码（4位，数字或大写字母开头，形如 2300）。
     /// </summary>
     public static readonly Regex CompanyCode = new(@"^\d{2}00$", Opt);
     /// <summary>

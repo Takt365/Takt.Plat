@@ -87,38 +87,6 @@
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('productCode')">
-      <a-form-item :label="pi.queryLabel('productCode')">
-        <a-input
-          v-model:value="advancedQueryForm.productCode"
-          :placeholder="pi.queryPh('productCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('sequenceCode')">
-      <a-form-item :label="pi.queryLabel('sequenceCode')">
-        <a-input
-          v-model:value="advancedQueryForm.sequenceCode"
-          :placeholder="pi.queryPh('sequenceCode', 'required')"
-          show-count
-          :maxlength="20"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
-      <div v-show="isFieldVisible('productDescription')">
-      <a-form-item :label="pi.queryLabel('productDescription')">
-        <a-textarea
-          v-model:value="advancedQueryForm.productDescription"
-          :placeholder="pi.queryPh('productDescription', 'optional')"
-          :rows="2"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('bomLevel')">
       <a-form-item :label="pi.queryLabel('bomLevel')">
         <a-input
@@ -137,6 +105,38 @@
           :placeholder="pi.queryPh('bomItemCode', 'required')"
           show-count
           :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productCode')">
+      <a-form-item :label="pi.queryLabel('productCode')">
+        <a-input
+          v-model:value="advancedQueryForm.productCode"
+          :placeholder="pi.queryPh('productCode', 'required')"
+          show-count
+          :maxlength="20"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('lineNumber')">
+      <a-form-item :label="pi.queryLabel('lineNumber')">
+        <a-input-number
+          v-model:value="advancedQueryForm.lineNumber"
+          :placeholder="pi.queryPh('lineNumber', 'required')"
+          :min="1"
+          :step="10"
+          style="width: 100%"
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('productDescription')">
+      <a-form-item :label="pi.queryLabel('productDescription')">
+        <a-textarea
+          v-model:value="advancedQueryForm.productDescription"
+          :placeholder="pi.queryPh('productDescription', 'optional')"
+          :rows="2"
           allow-clear
         />
       </a-form-item>
@@ -461,6 +461,7 @@ import {
   formatBomMaterialCostAmount,
   sumBomMaterialCostItemLineCosts,
 } from '../utils/bom-material-cost-item-line-cost'
+import { sortBomMaterialCostItemRowsByProductCodeLineNumber } from '../utils/bom-material-cost-item-sort'
 import {
   getBomMaterialCostItemList,
   getBomMaterialCostItemById,
@@ -564,6 +565,7 @@ function createEmptyAdvancedQueryForm() {
     ...form,
     productionRelated: DEFAULT_ITEM_PRODUCTION_RELATED,
     purchaseType: DEFAULT_ITEM_PURCHASE_TYPE,
+    lineNumber: undefined as number | undefined,
     componentQuantity: undefined as number | undefined,
     movingAveragePrice: undefined as number | undefined,
     movingPriceUnit: undefined as number | undefined,
@@ -719,7 +721,7 @@ const summaryLabel = computed(() => t('components.business.page.editabletable.su
 
 /**
  * 当前页移动价格合计：Σ componentQuantity×(movingAveragePrice÷movingPriceUnit)，
- * 仅 productionRelated=X 且 purchaseType=F（与后端 LineCostHelper 一致）
+ * 仅 productionRelated=X、pcbSectIndicator 为空、purchaseType=F（与后端 LineCostHelper 一致）
  */
 const movingPriceCostTotal = computed(() => sumBomMaterialCostItemLineCosts(dataSource.value))
 
@@ -805,6 +807,9 @@ function buildListQuery(overrides?: Partial<BomMaterialCostItemQuery>): BomMater
   for (const key of BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS) {
     assignTrimmed(key, form[key])
   }
+  if (form.lineNumber !== undefined && form.lineNumber !== null) {
+    query.lineNumber = form.lineNumber
+  }
   if (form.componentQuantity !== undefined && form.componentQuantity !== null) {
     query.componentQuantity = form.componentQuantity
   }
@@ -842,7 +847,7 @@ async function loadData() {
   loading.value = true
   try {
     const res = await getBomMaterialCostItemList(buildListQuery())
-    dataSource.value = res.data ?? []
+    dataSource.value = sortBomMaterialCostItemRowsByProductCodeLineNumber(res.data ?? [])
     total.value = res.total ?? 0
   } catch (error: unknown) {
     const err = error as { message?: string }

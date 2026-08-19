@@ -13,6 +13,7 @@
 using System.Linq.Expressions;
 using SqlSugar;
 using Takt.Domain.Entities;
+using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
 using Takt.Infrastructure.Data.Context;
 using Takt.Infrastructure.Extensions;
@@ -29,8 +30,8 @@ namespace Takt.Infrastructure.Repositories;
 /// 3. 支持精确控制租户和公司编码
 /// 4. 根据配置处理主键类型
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承 TaktTenantEntityBase）</typeparam>
-public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
+/// <typeparam name="TEntity">实体类型（必须实现 ITaktTenantEntity）</typeparam>
+public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantCoreEntityScopeBase, ITaktTenantEntity, new()
 {
     /// <summary>
     /// 种子数据数据库上下文
@@ -43,6 +44,11 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
 
     /// <summary>
+    /// Database 配置（CompanyCodes↔PlantCodes 同序映射）
+    /// </summary>
+    private readonly TaktDatabaseOptions _database;
+
+    /// <summary>
     /// 数据库客户端
     /// </summary>
     protected ISqlSugarClient Db => _dbContext.Db;
@@ -52,10 +58,16 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// </summary>
     /// <param name="dbContext">种子数据上下文</param>
     /// <param name="idRuleOptions">主键类型配置</param>
-    public TaktTenantSeedRepository(TaktSeedContext dbContext, Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> idRuleOptions)
+    /// <param name="databaseOptions">Database 配置</param>
+    public TaktTenantSeedRepository(
+        TaktSeedContext dbContext,
+        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> idRuleOptions,
+        Microsoft.Extensions.Options.IOptions<TaktDatabaseOptions> databaseOptions)
     {
         _dbContext = dbContext;
         _primaryKeyTypeOptions = idRuleOptions.Value;
+        _database = databaseOptions.Value;
+        _database.NormalizeAndValidate();
     }
 
     // ========================================
@@ -70,7 +82,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         var now = DateTime.Now;
-        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
+        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(entity, _database);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -87,7 +99,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(entity, _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -104,7 +116,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(entity, _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -121,7 +133,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
     /// <returns>是否有行被更新</returns>
     public virtual async Task<bool> UpdateAsync(TEntity entity)
     {
-        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
+        await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(entity, _database);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -137,7 +149,7 @@ public class TaktTenantSeedRepository<TEntity> : ITaktTenantSeedRepository<TEnti
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
-            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(Db, entity);
+            await TaktTenantScopeFillHelper.ApplyRelatedPlantAsync(entity, _database);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
@@ -226,6 +238,11 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
 
     /// <summary>
+    /// Database 配置（CompanyCodes↔PlantCodes 同序映射）
+    /// </summary>
+    private readonly TaktDatabaseOptions _database;
+
+    /// <summary>
     /// 数据库客户端
     /// </summary>
     protected ISqlSugarClient Db => _dbContext.Db;
@@ -235,10 +252,16 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
     /// </summary>
     /// <param name="dbContext">种子数据上下文</param>
     /// <param name="primaryKeyTypeOptions">主键类型配置</param>
-    public TaktCompanySeedRepository(TaktSeedContext dbContext, Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
+    /// <param name="databaseOptions">Database 配置</param>
+    public TaktCompanySeedRepository(
+        TaktSeedContext dbContext,
+        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions,
+        Microsoft.Extensions.Options.IOptions<TaktDatabaseOptions> databaseOptions)
     {
         _dbContext = dbContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
+        _database = databaseOptions.Value;
+        _database.NormalizeAndValidate();
     }
 
     // ========================================
@@ -257,7 +280,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
             Db,
             entity,
             entity.TenantCode,
-            entity.CompanyCode);
+            entity.CompanyCode,
+            _database);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -278,7 +302,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -299,7 +324,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -320,7 +346,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
             Db,
             entity,
             entity.TenantCode,
-            entity.CompanyCode);
+            entity.CompanyCode,
+            _database);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -340,7 +367,8 @@ public class TaktCompanySeedRepository<TEntity> : ITaktCompanySeedRepository<TEn
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();
@@ -417,6 +445,11 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     private readonly PrimaryKeyTypeOptions _primaryKeyTypeOptions;
 
     /// <summary>
+    /// Database 配置（CompanyCodes↔PlantCodes 同序映射）
+    /// </summary>
+    private readonly TaktDatabaseOptions _database;
+
+    /// <summary>
     /// 数据库客户端
     /// </summary>
     protected ISqlSugarClient Db => _dbContext.Db;
@@ -426,10 +459,16 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
     /// </summary>
     /// <param name="dbContext">种子数据上下文</param>
     /// <param name="primaryKeyTypeOptions">主键类型配置</param>
-    public TaktApprovalSeedRepository(TaktSeedContext dbContext, Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions)
+    /// <param name="databaseOptions">Database 配置</param>
+    public TaktApprovalSeedRepository(
+        TaktSeedContext dbContext,
+        Microsoft.Extensions.Options.IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions,
+        Microsoft.Extensions.Options.IOptions<TaktDatabaseOptions> databaseOptions)
     {
         _dbContext = dbContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
+        _database = databaseOptions.Value;
+        _database.NormalizeAndValidate();
     }
 
     // ========================================
@@ -448,7 +487,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
             Db,
             entity,
             entity.TenantCode,
-            entity.CompanyCode);
+            entity.CompanyCode,
+            _database);
         entity.ApplySeedCreate(now);
         await TaktPrimaryKeyInsertHelper.InsertEntityAsync(Db, entity, _primaryKeyTypeOptions);
         return entity;
@@ -469,7 +509,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -490,7 +531,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedCreate(now);
         }
         return await TaktPrimaryKeyInsertHelper.InsertEntitiesAsync(Db, entities, _primaryKeyTypeOptions);
@@ -511,7 +553,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
             Db,
             entity,
             entity.TenantCode,
-            entity.CompanyCode);
+            entity.CompanyCode,
+            _database);
         entity.ApplySeedUpdate();
         return await Db.Updateable(entity).ExecuteCommandHasChangeAsync();
     }
@@ -531,7 +574,8 @@ public class TaktApprovalSeedRepository<TEntity> : ITaktApprovalSeedRepository<T
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
             entity.ApplySeedUpdate(now);
         }
         return await Db.Updateable(entities).ExecuteCommandAsync();

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Foundation
 // 文件名称：TaktCultureI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktCulture 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -89,15 +89,6 @@ public class TaktCultureI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.culture._self", "zh-CN", "区域文化信息", "实体名称"),
             // entity.culture._self
             new TranslationSeedItem("entity.culture._self", "zh-HK", "区域文化信息_hk", "实体名称"),
-
-            // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "en-US", "语言名称_us", "语言名称（如：简体中文、English）"),
-            // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "ja-JP", "语言名称_jp", "语言名称（如：简体中文、English）"),
-            // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "zh-CN", "语言名称", "语言名称（如：简体中文、English）"),
-            // entity.culture.languagename
-            new TranslationSeedItem("entity.culture.languagename", "zh-HK", "语言名称_hk", "语言名称（如：简体中文、English）"),
 
             // entity.culture.nativename
             new TranslationSeedItem("entity.culture.nativename", "en-US", "本地化名称_us", "本地化名称（用该语言显示的自身名称，如：中文、English）"),

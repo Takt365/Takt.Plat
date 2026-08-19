@@ -24,10 +24,11 @@ namespace Takt.Application.Dtos.Foundation;
 /// <summary>
 /// 区域文化实体 定义系统支持的多语言区域文化，如：zh-CN（简体中文）、en-US（美式英文）、ja-JP（日文）等 租户级实体：区域文化定义在租户内共享，不需要公司隔离
 /// 对应前端 TaktCultureDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktCultureDto : TaktTenantDtoBase
+public class TaktCultureDto : TaktTenantCoreDtoBase
 {
+
     /// <summary>
     /// CultureID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
@@ -36,9 +37,9 @@ public class TaktCultureDto : TaktTenantDtoBase
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string LanguageName { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -84,14 +85,9 @@ public class TaktCultureQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    public string? LanguageName { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -149,15 +145,10 @@ public class TaktCultureCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    [Required(ErrorMessage = "区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）不能为空")]
-    public string LanguageName { get; set; } = string.Empty;
+    [Required(ErrorMessage = "区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）不能为空")]
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -256,14 +247,9 @@ public class TaktCultureTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    public string? LanguageName { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -308,14 +294,9 @@ public class TaktCultureImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    public string? LanguageName { get; set; } = string.Empty;
+    public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）
@@ -366,14 +347,9 @@ public class TaktCultureExportDto
     public long CultureId { get; set; }
 
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 区域文化编码（字典 sys_culture_code；BCP47，如 zh-CN、en-US、ja-JP、zh-HK）
-    /// </summary>
-    public string LanguageName { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 本地化名称（用该语言显示的自身名称，如：中文、English）

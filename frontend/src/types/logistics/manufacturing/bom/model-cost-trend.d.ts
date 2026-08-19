@@ -56,6 +56,8 @@ export interface BomMaterialCostItemModelCostTrend {
   /** detail 模式 */
   batchIndicator?: string | null;
   productionRelated?: string | null;
+  /** PCB SECT 标识（空参与；X 不参与） */
+  pcbSectIndicator?: string | null;
   purchaseType: string;
   /** detail 模式 */
   specialProcurementType?: string | null;

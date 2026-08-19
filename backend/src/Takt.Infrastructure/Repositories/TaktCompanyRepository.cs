@@ -52,6 +52,11 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     private readonly TaktExcelOptions _excelOptions;
 
     /// <summary>
+    /// Database 配置（CompanyCodes↔PlantCodes 同序映射）
+    /// </summary>
+    private readonly TaktDatabaseOptions _database;
+
+    /// <summary>
     /// 当前租户编码
     /// </summary>
     protected string CurrentTenantCode => _userContext.TenantCode ?? string.Empty;
@@ -148,16 +153,20 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <param name="userContext">用户上下文</param>
     /// <param name="primaryKeyTypeOptions">主键类型配置</param>
     /// <param name="excelOptions">Excel 导入导出配置</param>
+    /// <param name="databaseOptions">Database 配置</param>
     public TaktCompanyRepository(
         TaktSqlSugarContext dbContext,
         ITaktUserContext userContext,
         IOptions<PrimaryKeyTypeOptions> primaryKeyTypeOptions,
-        IOptions<TaktExcelOptions> excelOptions)
+        IOptions<TaktExcelOptions> excelOptions,
+        IOptions<TaktDatabaseOptions> databaseOptions)
     {
         _dbContext = dbContext;
         _userContext = userContext;
         _primaryKeyTypeOptions = primaryKeyTypeOptions.Value;
         _excelOptions = excelOptions.Value;
+        _database = databaseOptions.Value;
+        _database.NormalizeAndValidate();
     }
 
     // ========================================
@@ -206,9 +215,17 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 根据条件查询列表
     /// </summary>
-    public virtual async Task<List<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate, string? asTableName = null)
+    /// <param name="predicate">查询条件</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
+    /// <param name="includeSoftDeleted">为 true 时含已软删行（仅租户/公司隔离，不过滤 IsDeleted）</param>
+    /// <returns>实体列表</returns>
+    public virtual async Task<List<TEntity>> GetListAsync(
+        Expression<Func<TEntity, bool>> predicate,
+        string? asTableName = null,
+        bool includeSoftDeleted = false)
     {
-        return await CreateScopedQuery(asTableName).Where(predicate)
+        return await CreateListQuery(asTableName, includeSoftDeleted)
+            .Where(predicate)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
@@ -216,17 +233,37 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 根据条件查询列表（带排序）
     /// </summary>
+    /// <param name="predicate">查询条件</param>
+    /// <param name="orderBy">排序字段</param>
+    /// <param name="isDesc">是否降序</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
+    /// <param name="includeSoftDeleted">为 true 时含已软删行（仅租户/公司隔离，不过滤 IsDeleted）</param>
+    /// <returns>实体列表</returns>
     public virtual async Task<List<TEntity>> GetListAsync(
         Expression<Func<TEntity, bool>> predicate,
         Expression<Func<TEntity, object>> orderBy,
         bool isDesc = true,
-        string? asTableName = null)
+        string? asTableName = null,
+        bool includeSoftDeleted = false)
     {
-        var query = CreateScopedQuery(asTableName).Where(predicate);
-
+        var query = CreateListQuery(asTableName, includeSoftDeleted).Where(predicate);
         return isDesc
             ? await query.OrderByDescending(orderBy).ToListAsync()
             : await query.OrderBy(orderBy).ToListAsync();
+    }
+
+    /// <summary>
+    /// 列表查询：默认读隔离（含 IsDeleted=0）；includeSoftDeleted 时仅租户/公司写隔离
+    /// </summary>
+    /// <param name="asTableName">可选物理表名</param>
+    /// <param name="includeSoftDeleted">是否含已软删</param>
+    /// <returns>可查询对象</returns>
+    private ISugarQueryable<TEntity> CreateListQuery(string? asTableName, bool includeSoftDeleted)
+    {
+        var query = string.IsNullOrWhiteSpace(asTableName)
+            ? Db.Queryable<TEntity>()
+            : Db.Queryable<TEntity>().AS(asTableName.Trim());
+        return includeSoftDeleted ? ApplyWriteScope(query) : ApplyReadScope(query);
     }
 
     /// <summary>
@@ -292,7 +329,9 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         int pageSize,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool isDesc = true,
-        string? asTableName = null)
+        string? asTableName = null,
+        Expression<Func<TEntity, object>>? thenBy = null,
+        bool thenByDesc = false)
     {
         pageIndex = TaktPagedClamp.NormalizePageIndex(pageIndex);
         pageSize = TaktPagedClamp.NormalizePageSize(pageSize);
@@ -304,6 +343,10 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         if (orderBy != null)
         {
             pageQuery = isDesc ? pageQuery.OrderByDescending(orderBy) : pageQuery.OrderBy(orderBy);
+            if (thenBy != null)
+            {
+                pageQuery = thenByDesc ? pageQuery.OrderByDescending(thenBy) : pageQuery.OrderBy(thenBy);
+            }
         }
         else
         {
@@ -342,7 +385,8 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
             Db,
             entity,
             entity.TenantCode,
-            entity.CompanyCode);
+            entity.CompanyCode,
+            _database);
 
         // 自动设置审计字段
         entity.ApplyCreate(CurrentUserId);
@@ -382,7 +426,8 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
                 Db,
                 entity,
                 entity.TenantCode,
-                entity.CompanyCode);
+                entity.CompanyCode,
+                _database);
 
             entity.ApplyCreate(CurrentUserId, now);
         }
@@ -412,15 +457,24 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
     /// <summary>
     /// 批量更新实体
     /// </summary>
-    public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities)
+    /// <param name="entities">实体列表</param>
+    /// <param name="asTableName">可选物理表名（年分表路由）</param>
+    /// <returns>更新的实体数量</returns>
+    public virtual async Task<int> UpdateRangeAsync(List<TEntity> entities, string? asTableName = null)
     {
+        if (entities == null || entities.Count == 0)
+        {
+            return 0;
+        }
         var now = DateTime.Now;
         foreach (var entity in entities)
         {
             entity.ApplyUpdate(CurrentUserId, now);
         }
-
-        return await Db.Updateable(entities).ExecuteCommandAsync();
+        var updateable = string.IsNullOrWhiteSpace(asTableName)
+            ? Db.Updateable(entities)
+            : Db.Updateable(entities).AS(asTableName.Trim());
+        return await updateable.ExecuteCommandAsync();
     }
 
     /// <summary>
@@ -550,31 +604,56 @@ public class TaktCompanyRepository<TEntity> : ITaktCompanyRepository<TEntity> wh
         return query;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 取字段最大值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最大值；无记录时为类型默认值</returns>
     public virtual Task<TResult> MaxAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) =>
         BuildAggregateReadQuery(predicate).MaxAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 取字段最小值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>最小值；无记录时为类型默认值</returns>
     public virtual Task<TResult> MinAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) =>
         BuildAggregateReadQuery(predicate).MinAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段之和（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>求和结果；无记录时为类型默认值</returns>
     public virtual Task<TResult> SumAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
         BuildAggregateReadQuery(predicate).SumAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段平均值（当前租户与公司范围内、未删除）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>平均值；无记录时为类型默认值</returns>
     public virtual Task<TResult> AvgAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>
         BuildAggregateReadQuery(predicate).AvgAsync(fieldSelector);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 求字段中位数（当前租户与公司范围内、未删除；SqlServer/PostgreSQL/Oracle 等走 PERCENTILE_CONT，MySql/Sqlite 有序切片回退）
+    /// </summary>
+    /// <param name="fieldSelector">聚合字段</param>
+    /// <param name="predicate">查询条件</param>
+    /// <returns>中位数；无记录时为类型默认值</returns>
     public virtual Task<TResult> MedianAsync<TResult>(
         Expression<Func<TEntity, TResult>> fieldSelector,
         Expression<Func<TEntity, bool>>? predicate = null) where TResult : struct =>

@@ -48,7 +48,7 @@ export function resolveRequestLocale(): string {
 }
 
 /**
- * 区域文化编码（dictValue = CultureCode）
+ * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
  * @param option 语言选项
  */
 export function resolveCultureCode(option: TaktSelectOption): string {
@@ -210,7 +210,7 @@ export const useLocaleStore = defineStore('locale', () => {
 
   /**
    * 应用语言（vue-i18n + localStorage + 后续请求 Accept-Language）
-   * @param cultureCode 区域文化编码（dictValue）
+   * @param cultureCode 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    * @param persist 是否写入 localStorage（用户主动选择时为 true）
    */
   function applyLocale(cultureCode: string, persist = true): void {
@@ -233,7 +233,7 @@ export const useLocaleStore = defineStore('locale', () => {
 
   /**
    * 切换当前语言（用户选择；同步后端 Accept-Language）
-   * @param cultureCode 区域文化编码（dictValue）
+   * @param cultureCode 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   function setLocale(cultureCode: string): void {
     const availableCodes = listAvailableCultureCodes();

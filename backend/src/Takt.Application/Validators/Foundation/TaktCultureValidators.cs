@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Foundation
 // 文件名称：TaktCultureValidators.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Culture 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktCulture 生成，请按需审阅）
 // 
@@ -32,12 +32,6 @@ public class TaktCultureCreateValidator : AbstractValidator<TaktCultureCreateDto
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
-        RuleFor(x => x.LanguageName)
-            .NotEmpty().WithMessage("语言名称不能为空")
-            .MaximumLength(50).WithMessage("语言名称长度不能超过50个字符");
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
             .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");
@@ -67,12 +61,6 @@ public class TaktCultureUpdateValidator : AbstractValidator<TaktCultureUpdateDto
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
-        RuleFor(x => x.LanguageName)
-            .NotEmpty().WithMessage("语言名称不能为空")
-            .MaximumLength(50).WithMessage("语言名称长度不能超过50个字符");
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
             .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");
@@ -99,11 +87,6 @@ public class TaktCultureImportValidator : AbstractValidator<TaktCultureImportDto
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
-        RuleFor(x => x.RelatedPlant)
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
-        RuleFor(x => x.LanguageName)
-            .NotEmpty().WithMessage("语言名称不能为空")
-            .MaximumLength(50).WithMessage("语言名称长度不能超过50个字符");
         RuleFor(x => x.NativeName)
             .NotEmpty().WithMessage("本地化名称不能为空")
             .MaximumLength(50).WithMessage("本地化名称长度不能超过50个字符");

@@ -118,6 +118,30 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('productMonthlyCalculation')"
+                name="productMonthlyCalculation"
+              >
+                <a-input-number
+                  v-model:value="formState.productMonthlyCalculation"
+                  :placeholder="pi.ph('productMonthlyCalculation')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('latestPurchaseCost')"
+                name="latestPurchaseCost"
+              >
+                <a-input-number
+                  v-model:value="formState.latestPurchaseCost"
+                  :placeholder="pi.ph('latestPurchaseCost')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('currencyCode')"
                 name="currencyCode"
               >
@@ -437,6 +461,32 @@ const rules = computed<Record<string, Rule[]>>(() => ({
     },
     trigger: 'change'
   }],
+  productMonthlyCalculation: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('productMonthlyCalculation'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('productMonthlyCalculation'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  latestPurchaseCost: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('latestPurchaseCost'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('latestPurchaseCost'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   currencyCode: [
     {
       required: true,
@@ -476,6 +526,14 @@ function getValues(): Record<string, any> {
   if ('productMonthlyCost' in payload) {
     const rawproductMonthlyCost = payload.productMonthlyCost
     payload.productMonthlyCost = typeof rawproductMonthlyCost === 'number' ? rawproductMonthlyCost : Number(rawproductMonthlyCost)
+  }
+  if ('productMonthlyCalculation' in payload) {
+    const rawproductMonthlyCalculation = payload.productMonthlyCalculation
+    payload.productMonthlyCalculation = typeof rawproductMonthlyCalculation === 'number' ? rawproductMonthlyCalculation : Number(rawproductMonthlyCalculation)
+  }
+  if ('latestPurchaseCost' in payload) {
+    const rawlatestPurchaseCost = payload.latestPurchaseCost
+    payload.latestPurchaseCost = typeof rawlatestPurchaseCost === 'number' ? rawlatestPurchaseCost : Number(rawlatestPurchaseCost)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

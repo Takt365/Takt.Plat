@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.Linq;
 using System.Linq.Expressions;
 using Mapster;
 using SqlSugar;
@@ -91,9 +92,13 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _bomMaterialCostItemRepository.GetPagedAsync(
+            predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            predicate);
+            x => x.ProductCode,
+            isDesc: false,
+            thenBy: x => x.LineNumber,
+            thenByDesc: false);
         return TaktPagedResult<TaktBomMaterialCostItemDto>.Create(
             data.Adapt<List<TaktBomMaterialCostItemDto>>(),
             total,
@@ -285,7 +290,10 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
                 sheetName ?? "BOM物料成本明细数据",
                 fileName ?? "BOM物料成本明细导出.xlsx");
         }
-        var exportData = list.Adapt<List<TaktBomMaterialCostItemExportDto>>();
+        var exportData = list
+            .OrderBy(x => x.ProductCode, StringComparer.OrdinalIgnoreCase)
+            .ThenBy(x => x.LineNumber)
+            .Adapt<List<TaktBomMaterialCostItemExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
             sheetName ?? "BOM物料成本明细数据",
@@ -312,14 +320,15 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
                 (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.PlantCode != null && x.PlantCode.Contains(keywords))
                 || (x.BomLevel != null && x.BomLevel.Contains(keywords))
-                || (x.SequenceCode != null && x.SequenceCode.Contains(keywords))
-                || (x.ProductCode != null && x.ProductCode.Contains(keywords))
-                || (x.ProductDescription != null && x.ProductDescription.Contains(keywords))
                 || (x.BomItemCode != null && x.BomItemCode.Contains(keywords))
+                || (x.ProductCode != null && x.ProductCode.Contains(keywords))
+                || SqlFunc.ToString(x.LineNumber).Contains(keywords)
+                || (x.ProductDescription != null && x.ProductDescription.Contains(keywords))
                 || (x.ComponentCode != null && x.ComponentCode.Contains(keywords))
                 || (x.ComponentDescription != null && x.ComponentDescription.Contains(keywords))
                 || (x.BatchIndicator != null && x.BatchIndicator.Contains(keywords))
                 || (x.ProductionRelated != null && x.ProductionRelated.Contains(keywords))
+                || (x.PcbSectIndicator != null && x.PcbSectIndicator.Contains(keywords))
                 || (x.PurchaseType != null && x.PurchaseType.Contains(keywords))
                 || (x.SpecialProcurementType != null && x.SpecialProcurementType.Contains(keywords))
                 || (x.ProfitCenterCode != null && x.ProfitCenterCode.Contains(keywords))
@@ -351,10 +360,10 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             exp = exp.And(x => x.BomLevel != null && x.BomLevel.Contains(bomLevel));
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.SequenceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.BomItemCode))
         {
-            var sequenceCode = queryDto.SequenceCode;
-            exp = exp.And(x => x.SequenceCode != null && x.SequenceCode.Contains(sequenceCode));
+            var bomItemCode = queryDto.BomItemCode;
+            exp = exp.And(x => x.BomItemCode != null && x.BomItemCode.Contains(bomItemCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ProductCode))
@@ -369,16 +378,16 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             exp = exp.And(x => productCodes.Contains(x.ProductCode));
         }
 
+        if (queryDto?.LineNumber.HasValue == true)
+        {
+            var lineNumber = queryDto.LineNumber.Value;
+            exp = exp.And(x => x.LineNumber == lineNumber);
+        }
+
         if (!string.IsNullOrWhiteSpace(queryDto?.ProductDescription))
         {
             var productDescription = queryDto.ProductDescription;
             exp = exp.And(x => x.ProductDescription != null && x.ProductDescription.Contains(productDescription));
-        }
-
-        if (!string.IsNullOrWhiteSpace(queryDto?.BomItemCode))
-        {
-            var bomItemCode = queryDto.BomItemCode;
-            exp = exp.And(x => x.BomItemCode != null && x.BomItemCode.Contains(bomItemCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.ComponentCode))
@@ -409,6 +418,12 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         {
             var productionRelated = queryDto.ProductionRelated;
             exp = exp.And(x => x.ProductionRelated != null && x.ProductionRelated.Contains(productionRelated));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PcbSectIndicator))
+        {
+            var pcbSectIndicator = queryDto.PcbSectIndicator;
+            exp = exp.And(x => x.PcbSectIndicator != null && x.PcbSectIndicator.Contains(pcbSectIndicator));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.PurchaseType))
@@ -549,7 +564,7 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.SequenceCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.BomItemCode))
         {
             return true;
         }
@@ -562,11 +577,11 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.ProductDescription))
+        if (queryDto.LineNumber.HasValue)
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.BomItemCode))
+        if (!string.IsNullOrWhiteSpace(queryDto.ProductDescription))
         {
             return true;
         }
@@ -587,6 +602,10 @@ public class TaktBomMaterialCostItemService : TaktServiceBase, ITaktBomMaterialC
             return true;
         }
         if (!string.IsNullOrWhiteSpace(queryDto.ProductionRelated))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PcbSectIndicator))
         {
             return true;
         }

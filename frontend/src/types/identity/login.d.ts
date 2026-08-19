@@ -52,12 +52,12 @@ export interface LoginRequest {
   tenantCode?: string;
 
   /**
-   * 公司编码（可选；未传时后端按 takt_identity_user_company.is_default 解析）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（zh-CN / en-US / ja-JP；界面语言，登录公司解析不依赖此字段）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 

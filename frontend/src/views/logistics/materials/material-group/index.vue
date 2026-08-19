@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getMaterialGroupId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -110,10 +111,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('materialGroupCode')">
-      <a-form-item :label="t('entity.materialgroup.code')">
+      <a-form-item :label="pi.queryLabel('materialGroupCode')">
         <a-input
           v-model:value="advancedQueryForm.materialGroupCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialgroup.code') })"
+          :placeholder="pi.queryPh('materialGroupCode', 'required')"
           show-count
           :maxlength="20"
           allow-clear
@@ -121,10 +122,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialGroupName')">
-      <a-form-item :label="t('entity.materialgroup.name')">
+      <a-form-item :label="pi.queryLabel('materialGroupName')">
         <a-input
           v-model:value="advancedQueryForm.materialGroupName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.materialgroup.name') })"
+          :placeholder="pi.queryPh('materialGroupName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -132,20 +133,20 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('materialGroupDescription')">
-      <a-form-item :label="t('entity.materialgroup.description')">
+      <a-form-item :label="pi.queryLabel('materialGroupDescription')">
         <a-textarea
           v-model:value="advancedQueryForm.materialGroupDescription"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.materialgroup.description') })"
+          :placeholder="pi.queryPh('materialGroupDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -153,10 +154,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -178,7 +179,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -192,10 +193,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -209,14 +210,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.materialgroup._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.materialgroup._self"
+        v-if="importVisible"
+        :entity-i18n-key="MATERIALGROUP_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -258,15 +260,28 @@ import { getMaterialGroupList, getMaterialGroupById, createMaterialGroup, update
 import type { MaterialGroup, MaterialGroupQuery } from '@/types/logistics/materials/material-group'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  useMaterialGroupI18n,
+  MATERIALGROUP_LIST_FIELDS,
+  MATERIALGROUP_QUERY_STRING_FIELDS,
+  MATERIALGROUP_QUERY_FIELDS,
+  MATERIALGROUP_SELF_I18N_KEY,
+} from './composables/use-material-group-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = useMaterialGroupI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type MaterialGroupRowRecord = MaterialGroup | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktMaterialGroup')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.materialgroup._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -282,9 +297,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<MaterialGroup | null>(null)
+const selectedRow = ref<MaterialGroupRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<MaterialGroup[]>([])
+const selectedRows = ref<MaterialGroupRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -301,25 +316,44 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of MATERIALGROUP_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(MATERIALGROUP_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof MATERIALGROUP_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  materialGroupCode: '',
-  materialGroupName: '',
-  materialGroupDescription: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'materialGroupCode', label: t('entity.materialgroup.code') },
-  { key: 'materialGroupName', label: t('entity.materialgroup.name') },
-  { key: 'materialGroupDescription', label: t('entity.materialgroup.description') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  MATERIALGROUP_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -335,8 +369,10 @@ const updateDisabled = computed(() => selectedRows.value.length !== 1)
 /** 工具栏「删除」是否禁用（未选中任何行） */
 const deleteDisabled = computed(() => selectedRows.value.length === 0)
 
+
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {MaterialGroupQuery} 查询 DTO
  */
@@ -357,60 +393,44 @@ function buildListQuery(overrides?: Partial<MaterialGroupQuery>): MaterialGroupQ
       query[key] = v as never
     }
   }
-  assignTrimmed('materialGroupCode', form.materialGroupCode)
-  assignTrimmed('materialGroupName', form.materialGroupName)
-  assignTrimmed('materialGroupDescription', form.materialGroupDescription)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  for (const key of MATERIALGROUP_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildMaterialGroupListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'materialGroupId',
-    key: 'materialGroupId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getMaterialGroupField(record, 'materialGroupId') ?? ''
-  },
-  {
-    title: t('entity.materialgroup.code'),
-    dataIndex: 'materialGroupCode',
-    key: 'materialGroupCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialGroupField(record, 'materialGroupCode') ?? ''
-  },
-  {
-    title: t('entity.materialgroup.name'),
-    dataIndex: 'materialGroupName',
-    key: 'materialGroupName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialGroupField(record, 'materialGroupName') ?? ''
-  },
-  {
-    title: t('entity.materialgroup.description'),
-    dataIndex: 'materialGroupDescription',
-    key: 'materialGroupDescription',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getMaterialGroupField(record, 'materialGroupDescription') ?? ''
-  },
+  buildMaterialGroupListColumn('materialGroupId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...MATERIALGROUP_LIST_FIELDS.map((key) => buildMaterialGroupListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -419,7 +439,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'logistics:materials:material:group:update',
-        onClick: (record: MaterialGroup) => handleEdit(record)
+        onClick: (record: MaterialGroupRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -427,43 +447,42 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'logistics:materials:material:group:delete',
-        onClick: (record: MaterialGroup) => handleDeleteOne(record)
+        onClick: (record: MaterialGroupRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getMaterialGroupId = (record: any): string => record?.[entityIdName] ?? ''
-/**
- * 读取行字段值
- * @param record 行数据
- * @param field 字段名
- */
-const getMaterialGroupField = (record: any, field: string): any => record?.[field]
+const getMaterialGroupId = (record: MaterialGroupRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: MaterialGroup[]) => {
+  onChange: (keys: (string | number)[], rows: MaterialGroupRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: MaterialGroup, selected: boolean) => {
+  onSelect: (record: MaterialGroupRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getMaterialGroupId(selectedRow.value) === getMaterialGroupId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: MaterialGroup[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: MaterialGroupRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: MaterialGroup) => ({
+const onClickRow = (record: MaterialGroupRowRecord) => ({
   onClick: () => {
     const key = getMaterialGroupId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -484,6 +503,11 @@ const onClickRow = (record: MaterialGroup) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getMaterialGroupList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -509,39 +533,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  materialGroupCode: '',
-  materialGroupName: '',
-  materialGroupDescription: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.materialgroup._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: MaterialGroup) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.materialgroup._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: MaterialGroupRowRecord) {
+  const id = getMaterialGroupId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getMaterialGroupById(id)
+    formData.value = detail ?? ({ ...record } as Partial<MaterialGroup>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.materialgroup._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -559,10 +587,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updateMaterialGroup(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.materialgroup._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createMaterialGroup(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.materialgroup._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -590,15 +618,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importMaterialGroup(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importMaterialGroup(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -609,6 +640,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportMaterialGroup(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -632,24 +666,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.materialgroup._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[MaterialGroup] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.materialgroup._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: MaterialGroup) {
+async function handleDeleteOne(record: MaterialGroupRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.materialgroup._self'), name: t('common.tip.this.target', { target: t('entity.materialgroup._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deleteMaterialGroupById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.materialgroup._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -657,18 +691,18 @@ async function handleDeleteOne(record: MaterialGroup) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.materialgroup._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.materialgroup._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deleteMaterialGroupBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.materialgroup._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -686,15 +720,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  materialGroupCode: '',
-  materialGroupName: '',
-  materialGroupDescription: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

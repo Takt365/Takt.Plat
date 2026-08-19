@@ -53,10 +53,10 @@ public class TaktSeedContext : IDisposable
     {
         var domainAssembly = typeof(TaktTenantEntityBase).Assembly;
         _entityTypes = domainAssembly.GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && 
-                       (typeof(TaktTenantEntityBase).IsAssignableFrom(t) || 
-                        typeof(TaktCompanyEntityBase).IsAssignableFrom(t) ||
-                        typeof(TaktApprovalEntityBase).IsAssignableFrom(t)))
+            .Where(t => t.IsClass && !t.IsAbstract &&
+                       (typeof(TaktTenantCoreEntityScopeBase).IsAssignableFrom(t) ||
+                        typeof(TaktCompanyEntityScopeBase).IsAssignableFrom(t) ||
+                        typeof(TaktApprovalEntityScopeBase).IsAssignableFrom(t)))
             .ToArray();
     }
 

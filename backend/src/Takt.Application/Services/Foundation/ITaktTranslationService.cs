@@ -105,4 +105,11 @@ public interface ITaktTranslationService
     /// </summary>
     Task<int> SaveTranslationTransposedBatchAsync(TaktTranslationTransposedBatchDto dto);
 
+    /// <summary>
+    /// 获取指定文化下的前端动态翻译键值（扁平 I18nKey → 文本）
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码（BCP47）</param>
+    /// <returns>前端 messages 包</returns>
+    Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode);
+
 }

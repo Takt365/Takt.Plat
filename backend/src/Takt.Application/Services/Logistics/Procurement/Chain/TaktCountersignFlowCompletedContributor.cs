@@ -31,10 +31,16 @@ public class TaktCountersignFlowCompletedContributor : ITaktApprovalFlowComplete
         _procurementChainOrchestrator = procurementChainOrchestrator;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 审批数据源物理表名（与实体 SugarTable、TaktFlowForm.RelatedTableName 一致；全应用唯一）
+    /// </summary>
     public string RelatedTableName => TaktProcurementConstants.CountersignTableName;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 审批通过后执行业务投影/归档（在 TaktApprovalFlowBusinessService 通用补丁之后调用）
+    /// </summary>
+    /// <param name="context">回写上下文（租户/公司与 Gateway 同源）</param>
+    /// <returns>异步任务</returns>
     public Task OnApprovalFlowCompletedAsync(TaktApprovalFlowCompletedContext context)
         => _procurementChainOrchestrator.OnCountersignApprovedAsync(context);
 }

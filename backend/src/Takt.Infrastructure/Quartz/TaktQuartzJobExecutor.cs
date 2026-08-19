@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Quartz;
 using SqlSugar;
 using Takt.Application.Services.Foundation;
+using Takt.Application.Services.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Foundation;
 using Takt.Domain.Entities.Statistics.Logging;
 using Takt.Domain.Interfaces;
@@ -215,6 +216,7 @@ public sealed class TaktQuartzJobExecutor
         string? userName,
         CancellationToken cancellationToken)
     {
+        EnsureAssemblyTargetDatabaseMatchesTask(task, executeParams);
         var handler = _handlers.FirstOrDefault(x =>
             string.Equals(x.HandlerKey, task.ClassName, StringComparison.OrdinalIgnoreCase));
         if (handler == null)
@@ -291,6 +293,11 @@ public sealed class TaktQuartzJobExecutor
         CancellationToken cancellationToken)
     {
         var (sourceDatabase, targetDatabase) = TaktQuartzSyncExecuteParamsHelper.Parse(executeParams);
+        var costingPeriod = TaktBomQuartzExecuteParamsHelper.TryResolveCostingPeriodKey(
+            executeParams,
+            out var periodKey)
+            ? periodKey
+            : null;
         var isSyncScript = IsQuartzSyncSqlScript(task.SqlScript);
         if (isSyncScript)
         {
@@ -301,13 +308,20 @@ public sealed class TaktQuartzJobExecutor
             }
             TaktQuartzSyncExecuteParamsHelper.ValidateDatabaseName(targetDatabase);
         }
+        var database = _configuration.RequireDatabase();
+        var plantCode = database.GetPlantCodeForCompanyCode(task.CompanyCode);
+        var cultureCode = string.IsNullOrWhiteSpace(task.CultureCode)
+            ? database.GetCultureCodeForCompanyCode(task.CompanyCode)
+            : task.CultureCode;
         var sql = await TaktQuartzSqlScriptHelper.ResolveExecutableSqlAsync(
             task.SqlScript,
             task.TenantCode,
             task.CompanyCode,
-            task.CultureCode,
+            cultureCode,
+            plantCode,
             sourceDatabase,
             targetDatabase,
+            costingPeriod,
             cancellationToken);
         var dbHint = string.IsNullOrWhiteSpace(targetDatabase)
             ? string.Empty
@@ -342,7 +356,7 @@ public sealed class TaktQuartzJobExecutor
             }
             TaktSqlExecutorValidator.Validate(sql, TaktSqlExecuteOptions.NonQueryDefault);
             var previousTimeout = executeDb.Ado.CommandTimeOut;
-            executeDb.Ado.CommandTimeOut = 1800;
+            executeDb.Ado.CommandTimeOut = ResolveSqlCommandTimeoutSeconds();
             try
             {
                 var message = await TaktQuartzSqlResultReader.ExecuteAndFormatSummaryAsync(
@@ -383,6 +397,42 @@ public sealed class TaktQuartzJobExecutor
             return false;
         }
         return !normalized.EndsWith("sync_data_create_tables.sql", StringComparison.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 读取 Quartz:SqlCommandTimeoutSeconds（缺省 7200；0=无限制；负值回退默认）
+    /// </summary>
+    /// <returns>命令超时秒数</returns>
+    private int ResolveSqlCommandTimeoutSeconds()
+    {
+        var configured = _configuration.GetValue<int?>("Quartz:SqlCommandTimeoutSeconds");
+        if (!configured.HasValue)
+        {
+            return TaktQuartzConstants.DefaultSqlCommandTimeoutSeconds;
+        }
+        return configured.Value < 0
+            ? TaktQuartzConstants.DefaultSqlCommandTimeoutSeconds
+            : configured.Value;
+    }
+
+    /// <summary>
+    /// 程序集任务若 ExecuteParams 含 targetDatabase，须与任务租户 ConnectionStrings:Tenant_* 的 Database 一致
+    /// </summary>
+    /// <param name="task">定时任务</param>
+    /// <param name="executeParams">有效执行参数</param>
+    private void EnsureAssemblyTargetDatabaseMatchesTask(TaktQuartzTask task, string? executeParams)
+    {
+        var (_, targetDatabase) = TaktQuartzSyncExecuteParamsHelper.Parse(executeParams);
+        if (string.IsNullOrWhiteSpace(targetDatabase))
+        {
+            return;
+        }
+        var (resolvedTenant, _) = ResolveTenantConnectionByDatabaseName(targetDatabase);
+        if (!string.Equals(resolvedTenant, task.TenantCode, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"ExecuteParams.targetDatabase={targetDatabase} 对应租户 {resolvedTenant}，与任务租户 {task.TenantCode} 不一致");
+        }
     }
 
     /// <summary>

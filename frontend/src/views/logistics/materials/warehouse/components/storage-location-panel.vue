@@ -107,10 +107,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.storagelocation.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.storagelocation.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -349,7 +349,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.storagelocation.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'warehouseCode', label: t('entity.storagelocation.warehousecode') },
   { key: 'locationCode', label: t('entity.storagelocation.locationcode') },
   { key: 'locationName', label: t('entity.storagelocation.locationname') },
@@ -437,7 +437,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getStorageLocationField(record, 'storageLocationId') ?? ''),
   },
   {
-    title: t('entity.storagelocation.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

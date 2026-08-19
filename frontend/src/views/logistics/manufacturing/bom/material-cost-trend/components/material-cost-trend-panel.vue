@@ -184,12 +184,11 @@ import {
   useMaterialCostAnalysis,
 } from '../composables/use-material-cost-item-analysis'
 import { useBomMaterialCostAnalysisMasterContext } from '../composables/use-material-cost-analysis-master-context'
+import { sortBomMaterialCostItemRowsByProductCodeLineNumber } from '@/views/logistics/manufacturing/bom/material-cost/utils/bom-material-cost-item-sort'
 
 const props = defineProps<{
   /** 涨跌筛选 */
   trendFilter?: string
-  /** 全量排序：bom / trend / varianceDesc */
-  sortBy?: string
 }>()
 
 const loading = defineModel<boolean>('loading', { default: false })
@@ -249,9 +248,9 @@ const summaryText = computed(() => {
 const columns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
     {
-      title: t('entity.bommaterialcostitem.sequencecode'),
-      dataIndex: 'sequenceCode',
-      key: 'sequenceCode',
+      title: t('entity.bommaterialcostitem.linenumber'),
+      dataIndex: 'lineNumber',
+      key: 'lineNumber',
       width: 72,
       fixed: 'left',
     },
@@ -363,7 +362,7 @@ function getRowKey(record: BomMaterialCostItemComponentMovingPrice): string {
   return [
     record.plantCode,
     record.productCode,
-    record.sequenceCode ?? '',
+    record.lineNumber ?? '',
     record.bomLevel ?? '',
     record.bomItemCode ?? '',
     record.componentCode,
@@ -414,10 +413,9 @@ function hasPeriodCost(record: BomMaterialCostItemComponentMovingPrice, columnKe
 /**
  * 构建查询（单个产品，不按机种合并）
  * @param trendFilterOverride 涨跌筛选覆盖值（工具栏点击时显式传入）
- * @param sortByOverride 全量排序覆盖值
  * @returns 查询或 null
  */
-function buildQuery(trendFilterOverride?: string, sortByOverride?: string) {
+function buildQuery(trendFilterOverride?: string) {
   const plantCode = queryPlantCode.value?.trim()
   const productCode = queryProductCode.value?.trim()
   const materialType = queryMaterialType.value?.trim()
@@ -427,8 +425,6 @@ function buildQuery(trendFilterOverride?: string, sortByOverride?: string) {
   const rangeEnd = periodRange.value?.[1]?.trim() || periodRange.value?.[0]?.trim()
   const filter =
     trendFilterOverride !== undefined ? trendFilterOverride : props.trendFilter
-  const sort =
-    (sortByOverride !== undefined ? sortByOverride : props.sortBy)?.trim() || 'bom'
   return {
     plantCode,
     materialType,
@@ -436,7 +432,6 @@ function buildQuery(trendFilterOverride?: string, sortByOverride?: string) {
     productCode,
     focusPeriod: rangeEnd || undefined,
     trendFilter: filter || undefined,
-    sortBy: sort,
     pageIndex: pageIndex.value,
     pageSize: pageSize.value,
     ...periodRangeToMovingPricePeriodQuery(periodRange.value),
@@ -465,10 +460,9 @@ function clear() {
 /**
  * 加载
  * @param trendFilterOverride 涨跌筛选覆盖值
- * @param sortByOverride 全量排序覆盖值
  */
-async function loadData(trendFilterOverride?: string, sortByOverride?: string) {
-  const query = buildQuery(trendFilterOverride, sortByOverride)
+async function loadData(trendFilterOverride?: string) {
+  const query = buildQuery(trendFilterOverride)
   if (!query) {
     clear()
     return
@@ -476,7 +470,7 @@ async function loadData(trendFilterOverride?: string, sortByOverride?: string) {
   loading.value = true
   try {
     const result = await getBomMaterialCostItemComponentMovingPriceAnalysis(query)
-    rows.value = result.paged?.data ?? []
+    rows.value = sortBomMaterialCostItemRowsByProductCodeLineNumber(result.paged?.data ?? [])
     total.value = result.paged?.total ?? 0
     periodOrder.value = result.periodOrder ?? []
     periodCostTotals.value = result.periodCostTotals ?? {}
@@ -504,11 +498,10 @@ async function loadData(trendFilterOverride?: string, sortByOverride?: string) {
 /**
  * 重新加载（重置页码）
  * @param trendFilterOverride 涨跌筛选覆盖值
- * @param sortByOverride 全量排序覆盖值
  */
-async function reload(trendFilterOverride?: string, sortByOverride?: string) {
+async function reload(trendFilterOverride?: string) {
   pageIndex.value = getTaktDefaultPageIndex()
-  await loadData(trendFilterOverride, sortByOverride)
+  await loadData(trendFilterOverride)
 }
 
 /**

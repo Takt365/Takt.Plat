@@ -42,9 +42,9 @@ public class TaktBomMaterialCostItemDto : TaktCompanyDtoBase
     public string BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    public string SequenceCode { get; set; } = string.Empty;
+    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -52,14 +52,14 @@ public class TaktBomMaterialCostItemDto : TaktCompanyDtoBase
     public string ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 10;
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     public string ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -87,7 +87,12 @@ public class TaktBomMaterialCostItemDto : TaktCompanyDtoBase
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     public string PurchaseType { get; set; } = string.Empty;
 
@@ -174,7 +179,7 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -194,14 +199,19 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     public string? BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    public string? SequenceCode { get; set; } = string.Empty;
+    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
     /// </summary>
     public string? ProductCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
 
     /// <summary>
     /// 共用产品编码集合（由 ModelCode 回填；不显式指定产品时用于缩小范围）
@@ -212,11 +222,6 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     /// 产品描述
     /// </summary>
     public string? ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -244,7 +249,12 @@ public class TaktBomMaterialCostItemQueryDto : TaktPagedQuery
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     public string? PurchaseType { get; set; } = string.Empty;
 
@@ -349,12 +359,12 @@ public class TaktBomMaterialCostItemCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -371,10 +381,10 @@ public class TaktBomMaterialCostItemCreateDto
     public string BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    [Required(ErrorMessage = "序号（展开行序号，如 0010）不能为空")]
-    public string SequenceCode { get; set; } = string.Empty;
+    [Required(ErrorMessage = "BOM 项目号（子件行项目号，如 0010）不能为空")]
+    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -383,16 +393,15 @@ public class TaktBomMaterialCostItemCreateDto
     public string ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 10;
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     [Required(ErrorMessage = "产品描述不能为空")]
     public string ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    [Required(ErrorMessage = "BOM 项目号（子件行项目号，如 0010）不能为空")]
-    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -422,9 +431,14 @@ public class TaktBomMaterialCostItemCreateDto
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
     /// </summary>
-    [Required(ErrorMessage = "采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数不能为空")]
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// </summary>
+    [Required(ErrorMessage = "采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数不能为空")]
     public string PurchaseType { get; set; } = string.Empty;
 
     /// <summary>
@@ -540,12 +554,12 @@ public class TaktBomMaterialCostItemTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -560,9 +574,9 @@ public class TaktBomMaterialCostItemTemplateDto
     public string? BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    public string? SequenceCode { get; set; } = string.Empty;
+    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -570,14 +584,14 @@ public class TaktBomMaterialCostItemTemplateDto
     public string? ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     public string? ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -605,7 +619,12 @@ public class TaktBomMaterialCostItemTemplateDto
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     public string? PurchaseType { get; set; } = string.Empty;
 
@@ -692,12 +711,12 @@ public class TaktBomMaterialCostItemImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -712,9 +731,9 @@ public class TaktBomMaterialCostItemImportDto
     public string? BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    public string? SequenceCode { get; set; } = string.Empty;
+    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -722,14 +741,14 @@ public class TaktBomMaterialCostItemImportDto
     public string? ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int? LineNumber { get; set; }
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     public string? ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    public string? BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -757,7 +776,12 @@ public class TaktBomMaterialCostItemImportDto
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     public string? PurchaseType { get; set; } = string.Empty;
 
@@ -865,9 +889,9 @@ public class TaktBomMaterialCostItemExportDto
     public string BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    public string SequenceCode { get; set; } = string.Empty;
+    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -875,14 +899,14 @@ public class TaktBomMaterialCostItemExportDto
     public string ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    public int LineNumber { get; set; } = 10;
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     public string ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -910,7 +934,12 @@ public class TaktBomMaterialCostItemExportDto
     public string? ProductionRelated { get; set; } = string.Empty;
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    public string? PcbSectIndicator { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     public string PurchaseType { get; set; } = string.Empty;
 

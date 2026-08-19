@@ -45,7 +45,7 @@ export const defaultSetting: AppSetting = {
   persistTabs: false,
   maxTabs: 10,
   showFooter: true,
-  copyright: '© 2026 Takt Plat. All rights reserved.',
+  copyright: '© 2026 Takt Technologies Co., Ltd. All rights reserved.',
   contentWidth: 'fluid',
   multiTab: true,
   watermark: false,
@@ -118,6 +118,25 @@ export function validateFontSize(size: number): number {
 }
 
 /**
+ * 是否为历史废弃版权文案（须回写为法定公司名）
+ * @param {string | undefined} copyright 当前版权串
+ * @returns {boolean} 是否废弃
+ */
+function isObsoleteCopyright(copyright: string | undefined): boolean {
+  if (!copyright?.trim()) {
+    return true;
+  }
+  const text = copyright.trim();
+  if (/Takt\s+Digital\s+Factory/i.test(text)) {
+    return true;
+  }
+  if (/Takt\s+Plat\.?\s+All\s+rights\s+reserved/i.test(text)) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * 合并并规范化应用设置
  * @param {Partial<AppSetting>} raw 原始片段
  * @returns {AppSetting} 有效设置
@@ -127,6 +146,10 @@ export function normalizeSetting(raw: Partial<AppSetting>): AppSetting {
 
   if (raw.themeColor && typeof raw.themeColor === 'object') {
     base.themeColor = { ...defaultSetting.themeColor, ...raw.themeColor };
+  }
+
+  if (isObsoleteCopyright(base.copyright)) {
+    base.copyright = defaultSetting.copyright;
   }
 
   if (typeof base.fontSize === 'number') {
@@ -168,7 +191,12 @@ export function readSettingFromStorage(): AppSetting {
       return defaultSetting;
     }
     const parsed = JSON.parse(stored) as Partial<AppSetting>;
-    return normalizeSetting(parsed);
+    const normalized = normalizeSetting(parsed);
+    // 废弃版权等迁移：写回 localStorage，避免下次仍读到旧串
+    if (isObsoleteCopyright(parsed.copyright)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
+    }
+    return normalized;
   } catch (error) {
     settingLogger.warn('读取/解析偏好设置失败，使用默认值', { action: 'read' }, error);
     return defaultSetting;

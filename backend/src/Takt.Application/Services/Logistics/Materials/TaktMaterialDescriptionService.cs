@@ -353,11 +353,6 @@ public class TaktMaterialDescriptionService : TaktServiceBase, ITaktMaterialDesc
         {
             exp = exp.And(x => x.CreatedAt <= rangeEnd.Value);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
 
 
         return exp.ToExpression();

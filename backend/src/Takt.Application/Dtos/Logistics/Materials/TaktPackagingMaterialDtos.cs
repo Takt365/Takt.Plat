@@ -66,7 +66,7 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -76,7 +76,7 @@ public class TaktPackagingMaterialDto : TaktCompanyDtoBase
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -178,7 +178,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -218,7 +218,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -228,7 +228,7 @@ public class TaktPackagingMaterialQueryDto : TaktPagedQuery
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -343,12 +343,12 @@ public class TaktPackagingMaterialCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -391,7 +391,7 @@ public class TaktPackagingMaterialCreateDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -401,7 +401,7 @@ public class TaktPackagingMaterialCreateDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -550,12 +550,12 @@ public class TaktPackagingMaterialTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -595,7 +595,7 @@ public class TaktPackagingMaterialTemplateDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -605,7 +605,7 @@ public class TaktPackagingMaterialTemplateDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -702,12 +702,12 @@ public class TaktPackagingMaterialImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -747,7 +747,7 @@ public class TaktPackagingMaterialImportDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -757,7 +757,7 @@ public class TaktPackagingMaterialImportDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 
@@ -900,7 +900,7 @@ public class TaktPackagingMaterialExportDto
     public string? AdditionalCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? OriginCountryRegionCode { get; set; } = string.Empty;
 
@@ -910,7 +910,7 @@ public class TaktPackagingMaterialExportDto
     public string? OriginCountryRegionName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+    /// 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
     /// </summary>
     public string? DestinationCountryRegionCode { get; set; } = string.Empty;
 

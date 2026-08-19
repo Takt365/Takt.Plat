@@ -29,11 +29,6 @@ export default {
       all: 'すべて',
       changed: '変動のみ',
     },
-    sort: {
-      bom: 'BOM展開順（全件）',
-      trend: '騰落優先（全件）',
-      varianceDesc: '差額絶対値降順（全件）',
-    },
     trend: {
       none: '—',
       up: '上昇',

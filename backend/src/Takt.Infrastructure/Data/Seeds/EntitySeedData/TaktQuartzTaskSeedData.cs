@@ -33,7 +33,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
     private const string TaskTypeHttp = TaktConstants.QuartzTaskType.Http;
     private const int TriggerTypeSimple = 0;
     private const int TriggerTypeCron = 1;
-    /// <summary>Sap_Data 日链 / sync_desc：仅目标库</summary>
+    /// <summary>日链 / 回填类：仅目标库</summary>
     private const string SyncTargetOnlyParams = "{\"targetDatabase\":\"zTakt_000_Dev\"}";
     /// <summary>zTakt_900 暂存同步：源库 + 目标库</summary>
     private const string SyncStagingParams =
@@ -107,11 +107,14 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateQuartzTaskAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode, company.CultureCode,
+                    company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
             }
+            await RetireObsoleteSyncTasksAsync(repository, tenantCode, company.CompanyCode);
         }
         TaktLogger.Information(
             "Quartz 定时任务示例种子完成: 插入 {InsertCount} 条，更新 {UpdateCount} 条",
@@ -306,7 +309,19 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 30 2 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncStagingParams,
-                Description: "每月 3 日 02:30：采购价格（月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 02:30：采购价格（源表原样同步；空物料描述回填见 QT_SYNC_PUP_BK；月度；以手动为主；默认暂停）"),
+            new(
+                TaskCode: "QT_SYNC_PUP_BK",
+                TaskName: "源数据同步：采购价格物料描述回填",
+                JobName: "sync_pup_bk",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sync_pup_bk.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 35 2 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 02:35：仅回填采购价格空物料描述（已有值不覆盖；culture=ja-JP；写入 ext_field._bk.pup）；建议在 QT_SYNC_PUP 之后；默认暂停"),
             new(
                 TaskCode: "QT_SYNC_SP",
                 TaskName: "源数据同步：销售价格",
@@ -318,19 +333,19 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 40 2 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncStagingParams,
-                Description: "每月 3 日 02:40：销售价格（月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 02:40：销售价格（源表原样同步；空物料描述回填见 QT_SYNC_SP_BK；月度；以手动为主；默认暂停）"),
             new(
-                TaskCode: "QT_SYNC_DESC",
-                TaskName: "源数据同步：采销/机种物料描述回填",
-                JobName: "sync_desc",
+                TaskCode: "QT_SYNC_SP_BK",
+                TaskName: "源数据同步：销售价格物料描述回填",
+                JobName: "sync_sp_bk",
                 TaskType: TaskTypeSql,
-                SqlScript: "Quartz/sync_desc.sql",
+                SqlScript: "Quartz/sync_sp_bk.sql",
                 TriggerType: TriggerTypeCron,
                 IntervalSeconds: 0,
                 CronExpression: "0 45 2 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncTargetOnlyParams,
-                Description: "每月 3 日 02:45：回填销售/采购价格空物料描述（zh-CN→Z1→ja-JP）；机种 MaterialDescription=ja-JP（按物料码）、ModelName=Z1（按机种码）；建议在 QT_SYNC_PUP/SP/MDL 之后；默认暂停"),
+                Description: "每月 3 日 02:45：仅回填销售价格空物料描述（已有值不覆盖；zh-CN→Z1→ja-JP；写入 ext_field._bk.sp）；建议在 QT_SYNC_SP 之后；默认暂停"),
             new(
                 TaskCode: "QT_SYNC_MATDOC",
                 TaskName: "源数据同步：物料凭证",
@@ -344,11 +359,11 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 ExecuteParams: SyncStagingParams,
                 Description: "每月 3 日 02:50：物料凭证（月度；以手动为主；默认暂停）"),
             new(
-                TaskCode: "QT_SYNC_PUINV",
+                TaskCode: "QT_SYNC_MIRO",
                 TaskName: "源数据同步：采购发票",
-                JobName: "sync_puinv",
+                JobName: "sync_miro",
                 TaskType: TaskTypeSql,
-                SqlScript: "Quartz/sync_puinv.sql",
+                SqlScript: "Quartz/sync_miro.sql",
                 TriggerType: TriggerTypeCron,
                 IntervalSeconds: 0,
                 CronExpression: "0 0 1 3 * ?",
@@ -356,11 +371,11 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 ExecuteParams: SyncStagingParams,
                 Description: "每月 3 日 01:00：采购发票（月度；以手动为主；默认暂停）"),
             new(
-                TaskCode: "QT_SYNC_SDINV",
+                TaskCode: "QT_SYNC_BILLING",
                 TaskName: "源数据同步：销售发票",
-                JobName: "sync_sdinv",
+                JobName: "sync_billing",
                 TaskType: TaskTypeSql,
-                SqlScript: "Quartz/sync_sdinv.sql",
+                SqlScript: "Quartz/sync_billing.sql",
                 TriggerType: TriggerTypeCron,
                 IntervalSeconds: 0,
                 CronExpression: "0 10 1 3 * ?",
@@ -368,17 +383,29 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 ExecuteParams: SyncStagingParams,
                 Description: "每月 3 日 01:10：销售发票（月度；以手动为主；默认暂停）"),
             new(
-                TaskCode: "QT_SYNC_FC",
-                TaskName: "源数据同步：销售预测",
-                JobName: "sync_fc",
+                TaskCode: "QT_SYNC_PO",
+                TaskName: "源数据同步：采购订单",
+                JobName: "sync_po",
                 TaskType: TaskTypeSql,
-                SqlScript: "Quartz/sync_fc.sql",
+                SqlScript: "Quartz/sync_po.sql",
                 TriggerType: TriggerTypeCron,
                 IntervalSeconds: 0,
-                CronExpression: "0 20 1 3 * ?",
+                CronExpression: "0 25 1 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncStagingParams,
-                Description: "每月 3 日 01:20：销售预测（月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 01:25：采购订单（主子表；源库回填 purchase_order_id；月度；以手动为主；默认暂停）"),
+            new(
+                TaskCode: "QT_SYNC_SO",
+                TaskName: "源数据同步：销售订单",
+                JobName: "sync_so",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sync_so.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 35 1 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                ExecuteParams: SyncStagingParams,
+                Description: "每月 3 日 01:35：销售订单（主子表；源库回填 sales_order_id；月度；以手动为主；默认暂停）"),
             new(
                 TaskCode: "QT_SYNC_AD",
                 TaskName: "源数据同步：行政区划",
@@ -450,7 +477,31 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 30 3 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncStagingParams,
-                Description: "每月 3 日 03:30：BOM物料成本明细（月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 03:30：BOM物料成本明细（源表原样同步；采购价回填见 QT_SYNC_BC_BK；PCB SECT 标识回填见 QT_SYNC_BC_PCB_SECT_BK；月度；以手动为主；默认暂停）"),
+            new(
+                TaskCode: "QT_SYNC_BC_BK",
+                TaskName: "源数据同步：BOM明细采购价回填",
+                JobName: "sync_bc_bk",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sync_bc_bk.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 35 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 03:35：仅空回填 BOM 明细采购价（ValidFrom≤核算日；不用未来价；不写 0；写入 ext_field._bk.bc；对齐 Helper；建议在 QT_SYNC_BC/PUP 之后；默认暂停）"),
+            new(
+                TaskCode: "QT_SYNC_BC_PCB_SECT_BK",
+                TaskName: "回填：BOM明细PCB SECT整树标识",
+                JobName: "sync_bc_pcb_sect_bk",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sync_bc_pcb_sect_bk.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 40 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 03:40：按 BOM 展开树将「描述含 PCB SECT」节点及其子孙写入 pcb_sect_indicator=X（已有 X 跳过；对齐 LineCostHelper；立即执行须选目标库+核算月；建议在 QT_SYNC_BC 之后、成本合计之前；默认暂停）"),
             new(
                 TaskCode: "QT_SYNC_BV",
                 TaskName: "源数据同步：BOM物料成本汇总",
@@ -462,7 +513,19 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 CronExpression: "0 45 3 3 * ?",
                 TaskStatus: TaskStatusPaused,
                 ExecuteParams: SyncStagingParams,
-                Description: "每月 3 日 03:45：BOM物料成本汇总（先回填机种+物料类型再同步，再按物料类型+机种重算月均；须先 QT_SYNC_MDL；月度；以手动为主；默认暂停）"),
+                Description: "每月 3 日 03:45：BOM物料成本汇总（源表原样同步；机种/物料类型回填见 QT_SYNC_BV_BK；月度；以手动为主；默认暂停）"),
+            new(
+                TaskCode: "QT_SYNC_BV_BK",
+                TaskName: "源数据同步：BOM机种与物料类型回填",
+                JobName: "sync_bv_bk",
+                TaskType: TaskTypeSql,
+                SqlScript: "Quartz/sync_bv_bk.sql",
+                TriggerType: TriggerTypeCron,
+                IntervalSeconds: 0,
+                CronExpression: "0 50 3 3 * ?",
+                TaskStatus: TaskStatusPaused,
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 03:50：仅回填 BOM 成本主表空机种/空物料类型（已有值不覆盖；写入 ext_field._bk.bv；model_destination；general_material→material_plant）；建议在 QT_SYNC_MAT/MATPLT/MDL/BV 之后；默认暂停"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_SUM",
                 TaskName: "BOM物料成本合计",
@@ -474,7 +537,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus: TaskStatusPaused,
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomMaterialCostSumJobHandler),
-                Description: "每月 3 日 04:00 合计 CostingDate 当月（月度；以手动为主；默认暂停）"),
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 04:00 合计 CostingDate 当月（立即执行须选目标库+核算月；月度；以手动为主；默认暂停）"),
             new(
                 TaskCode: "QT_BOM_MATERIAL_COST_RECALC",
                 TaskName: "BOM物料成本重算",
@@ -486,7 +550,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus: TaskStatusPaused,
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomMaterialCostRecalculateJobHandler),
-                Description: "每月 3 日 04:30 force 重算 CostingDate 当月（月度；以手动为主；默认暂停）"),
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 04:30 force 重算 CostingDate 当月（立即执行须选目标库+核算月；月度；以手动为主；默认暂停）"),
             new(
                 TaskCode: "QT_BOM_MODEL_AVG_COST",
                 TaskName: "BOM机种平均成本",
@@ -498,7 +563,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 TaskStatus: TaskStatusPaused,
                 AssemblyName: "Takt.Infrastructure",
                 ClassName: nameof(TaktBomModelAvgCostJobHandler),
-                Description: "每月 3 日 05:00：先回填机种+物料类型，再按物料类型+机种+核算月份重算机种月均（须先 QT_SYNC_MDL/MATPLT 与主表有当月数据；月度；以手动为主；默认暂停）"),
+                ExecuteParams: SyncTargetOnlyParams,
+                Description: "每月 3 日 05:00：先回填机种+物料类型，再按工厂+物料类型+机种+月份重算机种月均（立即执行须选目标库+核算月；须先 QT_SYNC_MDL/MATPLT 与主表有当月数据；月度；以手动为主；默认暂停）"),
         };
     }
 
@@ -522,21 +588,24 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
             new("QT_SAP_SYNC_MAT", "QT_SYNC_MAT", "源数据同步：物料主数据", "sync_mat", "Quartz/sync_mat.sql", "0 0 2 3 * ?", "每月 3 日 02:00：物料主数据（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_CUS", "QT_SYNC_CUS", "源数据同步：客户信息", "sync_cus", "Quartz/sync_cus.sql", "0 10 2 3 * ?", "每月 3 日 02:10：客户信息（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_SUP", "QT_SYNC_SUP", "源数据同步：供货商信息", "sync_sup", "Quartz/sync_sup.sql", "0 20 2 3 * ?", "每月 3 日 02:20：供货商信息（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_PP", "QT_SYNC_PUP", "源数据同步：采购价格", "sync_pup", "Quartz/sync_pup.sql", "0 30 2 3 * ?", "每月 3 日 02:30：采购价格（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_PUP", "QT_SYNC_PUP", "源数据同步：采购价格", "sync_pup", "Quartz/sync_pup.sql", "0 30 2 3 * ?", "每月 3 日 02:30：采购价格（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_SP", "QT_SYNC_SP", "源数据同步：销售价格", "sync_sp", "Quartz/sync_sp.sql", "0 40 2 3 * ?", "每月 3 日 02:40：销售价格（月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_PP", "QT_SYNC_PUP", "源数据同步：采购价格", "sync_pup", "Quartz/sync_pup.sql", "0 30 2 3 * ?", "每月 3 日 02:30：采购价格（源表原样同步；空物料描述回填见 QT_SYNC_PUP_BK；月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_PUP", "QT_SYNC_PUP", "源数据同步：采购价格", "sync_pup", "Quartz/sync_pup.sql", "0 30 2 3 * ?", "每月 3 日 02:30：采购价格（源表原样同步；空物料描述回填见 QT_SYNC_PUP_BK；月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_SP", "QT_SYNC_SP", "源数据同步：销售价格", "sync_sp", "Quartz/sync_sp.sql", "0 40 2 3 * ?", "每月 3 日 02:40：销售价格（源表原样同步；空物料描述回填见 QT_SYNC_SP_BK；月度；以手动为主；默认暂停）"),
+            new("QT_SYNC_DESC", "QT_SYNC_SP_BK", "回填：销售价格物料描述", "sync_sp_bk", "Quartz/sync_sp_bk.sql", "0 45 2 3 * ?", "每月 3 日 02:45：仅空回填销售价格 material_description（语言 zh-CN→Z1→ja-JP；仅目标库；默认暂停）"),
             new("QT_SAP_SYNC_MATDOC", "QT_SYNC_MATDOC", "源数据同步：物料凭证", "sync_matdoc", "Quartz/sync_matdoc.sql", "0 50 2 3 * ?", "每月 3 日 02:50：物料凭证（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_PUINV", "QT_SYNC_PUINV", "源数据同步：采购发票", "sync_puinv", "Quartz/sync_puinv.sql", "0 0 1 3 * ?", "每月 3 日 01:00：采购发票（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_SDINV", "QT_SYNC_SDINV", "源数据同步：销售发票", "sync_sdinv", "Quartz/sync_sdinv.sql", "0 10 1 3 * ?", "每月 3 日 01:10：销售发票（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_FC", "QT_SYNC_FC", "源数据同步：销售预测", "sync_fc", "Quartz/sync_fc.sql", "0 20 1 3 * ?", "每月 3 日 01:20：销售预测（月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_PUINV", "QT_SYNC_MIRO", "源数据同步：采购发票", "sync_miro", "Quartz/sync_miro.sql", "0 0 1 3 * ?", "每月 3 日 01:00：采购发票（月度；以手动为主；默认暂停）"),
+            new("QT_SYNC_PUINV", "QT_SYNC_MIRO", "源数据同步：采购发票", "sync_miro", "Quartz/sync_miro.sql", "0 0 1 3 * ?", "每月 3 日 01:00：采购发票（月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_SDINV", "QT_SYNC_BILLING", "源数据同步：销售发票", "sync_billing", "Quartz/sync_billing.sql", "0 10 1 3 * ?", "每月 3 日 01:10：销售发票（月度；以手动为主；默认暂停）"),
+            new("QT_SYNC_SDINV", "QT_SYNC_BILLING", "源数据同步：销售发票", "sync_billing", "Quartz/sync_billing.sql", "0 10 1 3 * ?", "每月 3 日 01:10：销售发票（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_AD", "QT_SYNC_AD", "源数据同步：行政区划", "sync_ad", "Quartz/sync_ad.sql", "0 0 2 1 * ?", "每月 1 日 02:00：行政区划（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_MB", "QT_SYNC_MAP", "源数据同步：移动价格", "sync_map", "Quartz/sync_map.sql", "0 0 3 3 * ?", "每月 3 日 03:00：移动价格（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_MAP", "QT_SYNC_MAP", "源数据同步：移动价格", "sync_map", "Quartz/sync_map.sql", "0 0 3 3 * ?", "每月 3 日 03:00：移动价格（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_MATPKG", "QT_SYNC_MATPKG", "源数据同步：包装物料", "sync_matpkg", "Quartz/sync_matpkg.sql", "0 5 3 3 * ?", "每月 3 日 03:05：包装物料（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_MFRMAT", "QT_SYNC_MFRMAT", "源数据同步：制造商物料", "sync_mfrmat", "Quartz/sync_mfrmat.sql", "0 10 3 3 * ?", "每月 3 日 03:10：制造商物料（月度；以手动为主；默认暂停）"),
             new("QT_SAP_SYNC_DISTMAT", "QT_SYNC_DISTMAT", "源数据同步：销售商物料", "sync_distmat", "Quartz/sync_distmat.sql", "0 15 3 3 * ?", "每月 3 日 03:15：销售商物料（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_BC", "QT_SYNC_BC", "源数据同步：BOM物料成本明细", "sync_bc", "Quartz/sync_bc.sql", "0 30 3 3 * ?", "每月 3 日 03:30：BOM物料成本明细（月度；以手动为主；默认暂停）"),
-            new("QT_SAP_SYNC_BV", "QT_SYNC_BV", "源数据同步：BOM物料成本汇总", "sync_bv", "Quartz/sync_bv.sql", "0 45 3 3 * ?", "每月 3 日 03:45：BOM物料成本汇总（先回填机种+物料类型再同步，再按物料类型+机种重算月均；须先 QT_SYNC_MDL；月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_BC", "QT_SYNC_BC", "源数据同步：BOM物料成本明细", "sync_bc", "Quartz/sync_bc.sql", "0 30 3 3 * ?", "每月 3 日 03:30：BOM物料成本明细（源表原样同步；采购价回填见 QT_SYNC_BC_BK；PCB SECT 标识回填见 QT_SYNC_BC_PCB_SECT_BK；月度；以手动为主；默认暂停）"),
+            new("QT_SAP_SYNC_BV", "QT_SYNC_BV", "源数据同步：BOM物料成本汇总", "sync_bv", "Quartz/sync_bv.sql", "0 45 3 3 * ?", "每月 3 日 03:45：BOM物料成本汇总（源表原样同步；机种/物料类型回填见 QT_SYNC_BV_BK；月度；以手动为主；默认暂停）"),
+            new("QT_SYNC_BOM_BK", "QT_SYNC_BV_BK", "源数据同步：BOM机种与物料类型回填", "sync_bv_bk", "Quartz/sync_bv_bk.sql", "0 50 3 3 * ?", "每月 3 日 03:50：仅回填 BOM 成本主表空机种/空物料类型（已有值不覆盖；model_destination；general_material→material_plant）；建议在 QT_SYNC_MAT/MATPLT/MDL/BV 之后；默认暂停"),
         };
     }
 
@@ -598,6 +667,45 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
+    /// 软删已废弃的源数据同步任务（销售预测不同步：QT_SYNC_FC / QT_SAP_SYNC_FC / JobName=sync_fc）
+    /// </summary>
+    /// <param name="repository">定时任务仓储</param>
+    /// <param name="tenantCode">租户编码</param>
+    /// <param name="companyCode">公司代码</param>
+    private static async Task RetireObsoleteSyncTasksAsync(
+        ITaktCompanySeedRepository<TaktQuartzTask> repository,
+        string tenantCode,
+        string companyCode)
+    {
+        var obsolete = await repository.GetListAsync(x =>
+            x.TenantCode == tenantCode
+            && x.CompanyCode == companyCode
+            && x.IsDeleted == 0
+            && (x.TaskCode == "QT_SYNC_FC"
+                || x.TaskCode == "QT_SAP_SYNC_FC"
+                || x.JobName == "sync_fc"
+                || x.SqlScript == "Quartz/sync_fc.sql"));
+        if (obsolete == null || obsolete.Count == 0)
+        {
+            return;
+        }
+        foreach (var task in obsolete)
+        {
+            task.IsDeleted = 1;
+            task.DeletedAt = DateTime.Now;
+            task.TaskStatus = TaskStatusPaused;
+            task.TaskDescription = "已废弃：销售预测不同步（已移除 sync_fc）";
+            await repository.UpdateAsync(task);
+            TaktLogger.Information(
+                "已软删废弃 Quartz 任务 {TaskCode}/{JobName}（Tenant={TenantCode}, Company={CompanyCode}）",
+                task.TaskCode,
+                task.JobName,
+                tenantCode,
+                companyCode);
+        }
+    }
+
+    /// <summary>
     /// 旧同步任务迁移项
     /// </summary>
     private sealed record LegacySyncTaskMigration(
@@ -621,6 +729,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktQuartzTask> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         QuartzTaskSeedTemplate template)
     {
@@ -653,6 +762,7 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
                 MisfirePolicy = 0,
                 TaskDescription = template.Description,
                 Remark = "系统内置示例任务种子",
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             entity = await repository.CreateAsync(entity);
@@ -674,6 +784,8 @@ public class TaktQuartzTaskSeedData : ITaktSeedDataCoordinator
         entity.ExecuteParams = template.ExecuteParams;
         entity.TaskDescription = template.Description;
         entity.Remark = "系统内置示例任务种子";
+        entity.PlantCode = plantCode;
+        entity.CultureCode = cultureCode;
         await repository.UpdateAsync(entity);
         return (entity, 0, 1);
     }

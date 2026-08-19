@@ -17,12 +17,13 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt物料组主数据实体（租户级）
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
 [SugarTable("takt_logistics_materials_material_group", "物料组主数据表")]
 [SugarIndex("ix_material_group_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_material_group_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_materials_material_group_unique", nameof(TenantCode), OrderByType.Asc, nameof(MaterialGroupCode), OrderByType.Asc, true)]
-public class TaktMaterialGroup : TaktTenantEntityBase
+public class TaktMaterialGroup : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）

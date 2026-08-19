@@ -66,10 +66,13 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
                 queryDto.PageSize);
         }
         var predicate = QueryExpression(queryDto);
+        // 默认按核算期间（yyyy-MM）降序，最近期间在前
         var (data, total) = await _bomMaterialCostRepository.GetPagedAsync(
+            predicate,
             queryDto.PageIndex,
             queryDto.PageSize,
-            predicate);
+            x => x.CostingPeriod,
+            isDesc: true);
         return TaktPagedResult<TaktBomMaterialCostDto>.Create(
             data.Adapt<List<TaktBomMaterialCostDto>>(),
             total,
@@ -282,6 +285,9 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
                 sheetName ?? "BOM物料成本数据",
                 fileName ?? "BOM物料成本导出.xlsx");
         }
+        list = list
+            .OrderByDescending(x => x.CostingPeriod, StringComparer.Ordinal)
+            .ToList();
         var exportData = list.Adapt<List<TaktBomMaterialCostExportDto>>();
         return await TaktExcelHelper.ExportAsync(
             exportData,
@@ -365,6 +371,18 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
         {
             var productMonthlyCost = queryDto.ProductMonthlyCost;
             exp = exp.And(x => x.ProductMonthlyCost == productMonthlyCost);
+        }
+
+        if (queryDto?.ProductMonthlyCalculation.HasValue == true)
+        {
+            var productMonthlyCalculation = queryDto.ProductMonthlyCalculation;
+            exp = exp.And(x => x.ProductMonthlyCalculation == productMonthlyCalculation);
+        }
+
+        if (queryDto?.LatestPurchaseCost.HasValue == true)
+        {
+            var latestPurchaseCost = queryDto.LatestPurchaseCost;
+            exp = exp.And(x => x.LatestPurchaseCost == latestPurchaseCost);
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.CurrencyCode))
@@ -462,6 +480,14 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
             return true;
         }
         if (queryDto.ProductMonthlyCost.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ProductMonthlyCalculation.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.LatestPurchaseCost.HasValue)
         {
             return true;
         }

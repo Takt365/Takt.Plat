@@ -50,7 +50,10 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         _ecExecutionTaskRepository = ecExecutionTaskRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：工厂去重选项（设变主表 PlantCode；执行任务无工厂列）
+    /// </summary>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetEcMonthlyTrendPlantOptionsAsync()
     {
         EnsureThreeLayerContext();
@@ -71,7 +74,11 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂去重部门（级联第 2 级；来自执行任务）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetEcMonthlyTrendDeptOptionsAsync(string plantCode)
     {
         EnsureThreeLayerContext();
@@ -102,7 +109,12 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂+部门去重设变单号（级联第 3 级；部门可空；来自执行任务）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="deptCode">部门编码（可空）</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetEcMonthlyTrendEcCodeOptionsAsync(
         string plantCode,
         string? deptCode = null)
@@ -151,7 +163,11 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         return gijutsuRecords.Select(x => x.Id).Distinct().ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取月设变推移转置分析（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktEcMonthlyTrendResultDto> GetEcMonthlyTrendAnalysisAsync(
         TaktEcMonthlyTrendQueryDto queryDto)
     {
@@ -176,7 +192,13 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出月设变推移转置分析 Excel
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">导出文件名</param>
+    /// <returns>文件名与内容</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportEcMonthlyTrendAnalysisAsync(
         TaktEcMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -222,7 +244,11 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
             fileName ?? "月设变推移表.xlsx");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取月实施推移转置分析（分页）
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktEcImplementationMonthlyTrendResultDto> GetEcImplementationMonthlyTrendAnalysisAsync(
         TaktEcImplementationMonthlyTrendQueryDto queryDto)
     {
@@ -247,7 +273,9 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// ExportEcImplementationMonthlyTrendAnalysisAsync
+    /// </summary>
     public async Task<(string fileName, byte[] fileContent)> ExportEcImplementationMonthlyTrendAnalysisAsync(
         TaktEcImplementationMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -866,7 +894,16 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         /// <summary>单例</summary>
         public static EcMonthlyTrendRowKeyComparer Instance { get; } = new();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 月生产推移行键比较器
+        /// </summary>
+        /// <summary>单例</summary>
+        /// <summary>
+        /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+        /// </summary>
+        /// <param name="x">左值</param>
+        /// <param name="y">右值</param>
+        /// <returns>是否相等</returns>
         public bool Equals(EcMonthlyTrendRowKey? x, EcMonthlyTrendRowKey? y)
         {
             if (x is null || y is null)
@@ -878,7 +915,11 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
                 && string.Equals(x.DeptCode, y.DeptCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 计算行键哈希（工厂/机种/产出类别大写）
+        /// </summary>
+        /// <param name="obj">行键</param>
+        /// <returns>哈希码</returns>
         public int GetHashCode(EcMonthlyTrendRowKey obj) =>
             HashCode.Combine(
                 obj.PlantCode.ToUpperInvariant(),
@@ -950,7 +991,16 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
         /// <summary>单例</summary>
         public static EcImplementationMonthlyTrendRowKeyComparer Instance { get; } = new();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 月生产推移行键比较器
+        /// </summary>
+        /// <summary>单例</summary>
+        /// <summary>
+        /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+        /// </summary>
+        /// <param name="x">左值</param>
+        /// <param name="y">右值</param>
+        /// <returns>是否相等</returns>
         public bool Equals(EcImplementationMonthlyTrendRowKey? x, EcImplementationMonthlyTrendRowKey? y)
         {
             if (x is null || y is null)
@@ -961,7 +1011,11 @@ public class TaktEcMonthlyTrendService : TaktServiceBase, ITaktEcMonthlyTrendSer
                 && string.Equals(x.DeptCode, y.DeptCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// 计算行键哈希（工厂/机种/产出类别大写）
+        /// </summary>
+        /// <param name="obj">行键</param>
+        /// <returns>哈希码</returns>
         public int GetHashCode(EcImplementationMonthlyTrendRowKey obj) =>
             HashCode.Combine(obj.PlantCode.ToUpperInvariant(), obj.DeptCode.ToUpperInvariant());
     }

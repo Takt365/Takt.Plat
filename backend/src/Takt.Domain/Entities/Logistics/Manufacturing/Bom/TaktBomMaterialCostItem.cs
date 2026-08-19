@@ -25,8 +25,8 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
     "ix_takt_logistics_manufacturing_bom_material_cost_item_line_unique",
     new[]
     {
-        nameof(TenantCode), nameof(CompanyCode), nameof(PlantCode), nameof(ProductCode),
-        nameof(SequenceCode), nameof(BomLevel), nameof(BomItemCode), nameof(ComponentCode),
+        nameof(TenantCode), nameof(CompanyCode), nameof(PlantCode), nameof(BomLevel),
+        nameof(BomItemCode), nameof(ProductCode), nameof(LineNumber), nameof(ComponentCode),
         nameof(ComponentQuantity), nameof(BatchIndicator), nameof(ProductionRelated),
         nameof(PurchaseType), nameof(SpecialProcurementType), nameof(CostingDate)
     },
@@ -52,10 +52,10 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string BomLevel { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（展开行序号，如 0010）
+    /// BOM 项目号（子件行项目号，如 0010）
     /// </summary>
-    [SugarColumn(ColumnName = "sequence_code", ColumnDescription = "序号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string SequenceCode { get; set; } = string.Empty;
+    [SugarColumn(ColumnName = "bom_item_code", ColumnDescription = "BOM项目号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
+    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -64,16 +64,16 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string ProductCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 行号（项号/序号，固定步长=10）
+    /// </summary>
+    [SugarColumn(ColumnName = "line_number", ColumnDescription = "行号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
+    public int LineNumber { get; set; } = 10;
+
+    /// <summary>
     /// 产品描述
     /// </summary>
     [SugarColumn(ColumnName = "product_description", ColumnDescription = "产品描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string ProductDescription { get; set; } = string.Empty;
-
-    /// <summary>
-    /// BOM 项目号（子件行项目号，如 0010）
-    /// </summary>
-    [SugarColumn(ColumnName = "bom_item_code", ColumnDescription = "BOM项目号", ColumnDataType = "nvarchar", Length = 4, IsNullable = false)]
-    public string BomItemCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位
@@ -90,7 +90,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     /// <summary>
     /// 组件数量
     /// </summary>
-    [SugarColumn(ColumnName = "component_quantity", ColumnDescription = "组件数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 2, IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "component_quantity", ColumnDescription = "组件数量", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ComponentQuantity { get; set; } = 0;
 
     /// <summary>
@@ -106,7 +106,13 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string? ProductionRelated { get; set; }
 
     /// <summary>
-    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
+    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// </summary>
+    [SugarColumn(ColumnName = "pcb_sect_indicator", ColumnDescription = "PCB SECT标识", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
+    public string? PcbSectIndicator { get; set; }
+
+    /// <summary>
+    /// 采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
     /// </summary>
     [SugarColumn(ColumnName = "purchase_type", ColumnDescription = "采购类型", ColumnDataType = "nvarchar", Length = 1, IsNullable = false, DefaultValue = "F")]
     public string PurchaseType { get; set; } = "F";
@@ -124,7 +130,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string ProfitCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 移动平均价（5 位小数）
+    /// 移动平均价（5 位小数；回填口径=工厂+核算月+组件→全部产品明细强制写回）
     /// </summary>
     [SugarColumn(ColumnName = "moving_average_price", ColumnDescription = "移动平均价", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal MovingAveragePrice { get; set; } = 0;

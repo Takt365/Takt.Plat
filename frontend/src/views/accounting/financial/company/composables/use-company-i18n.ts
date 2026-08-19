@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/views/accounting/financial/company/composables
 // 文件名称：use-company-i18n.ts
-// 功能描述：公司实体 代表租户下的独立公司/工厂字段清单 + useCompanyI18n（字段名映射一次，文案由 entity.company.* 种子动态解析）
+// 功能描述：公司实体 代表租户下的独立公司字段清单 + useCompanyI18n（字段名映射一次，文案由 entity.company.* 种子动态解析）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -49,7 +49,6 @@ export const COMPANY_LIST_FIELDS = [
   'establishmentDate',
   'closingDate',
   'companyExistence',
-  'cultureCode',
   'codeAlias',
   'bankCode',
   'bankAccount',
@@ -63,13 +62,14 @@ export const COMPANY_LIST_FIELDS = [
   'fiscalYearVariant',
   'creditControlArea',
   'financialManagementArea',
-  'relatedPlant',
   'companyStatus',
 ] as const
 
 /** 表单控件默认占位类型（仅 UI/校验语义，不含 i18n 键） */
 export const COMPANY_PLACEHOLDER = {
   tenantCode: 'optional',
+  cultureCode: 'optional',
+  relatedPlant: 'select',
   companyName1: 'required',
   companyName2: 'optional',
   companyShortName: 'required',
@@ -99,7 +99,6 @@ export const COMPANY_PLACEHOLDER = {
   establishmentDate: 'select',
   closingDate: 'optional',
   companyExistence: 'select',
-  cultureCode: 'select',
   codeAlias: 'required',
   bankCode: 'select',
   bankAccount: 'required',
@@ -113,7 +112,6 @@ export const COMPANY_PLACEHOLDER = {
   fiscalYearVariant: 'select',
   creditControlArea: 'select',
   financialManagementArea: 'select',
-  relatedPlant: 'select',
   companyStatus: 'select',
   extField: 'optional',
   remark: 'optional',
@@ -124,6 +122,8 @@ export type CompanyField = keyof typeof COMPANY_PLACEHOLDER
 
 /** 高级查询可 trim 的字符串字段 */
 export const COMPANY_QUERY_STRING_FIELDS = [
+  'relatedPlant',
+  'cultureCode',
   'companyName1',
   'companyName2',
   'companyShortName',
@@ -153,7 +153,6 @@ export const COMPANY_QUERY_STRING_FIELDS = [
   'establishmentDateEnd',
   'closingDateStart',
   'closingDateEnd',
-  'cultureCode',
   'codeAlias',
   'bankCode',
   'bankAccount',
@@ -167,7 +166,6 @@ export const COMPANY_QUERY_STRING_FIELDS = [
   'fiscalYearVariant',
   'creditControlArea',
   'financialManagementArea',
-  'relatedPlant',
   'createdAtStart',
   'createdAtEnd',
   'extField',
@@ -187,7 +185,7 @@ export const COMPANY_QUERY_FIELDS: readonly CompanyQueryField[] = [
 ]
 
 /**
- * 公司实体 代表租户下的独立公司/工厂字段 i18n：index / company-form 统一入口
+ * 公司实体 代表租户下的独立公司字段 i18n：index / company-form 统一入口
  */
 export function useCompanyI18n() {
   const ef = useEntityFieldI18n(COMPANY_ENTITY_SLUG)

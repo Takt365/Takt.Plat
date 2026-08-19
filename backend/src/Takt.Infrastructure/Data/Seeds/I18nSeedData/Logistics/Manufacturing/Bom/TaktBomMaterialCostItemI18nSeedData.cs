@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBomMaterialCostItemI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBomMaterialCostItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -99,14 +99,14 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.bomlevel
             new TranslationSeedItem("entity.bommaterialcostitem.bomlevel", "zh-HK", "层级_hk", "层级（BOM 展开层级，如 01/02）"),
 
-            // entity.bommaterialcostitem.sequencecode
-            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "en-US", "序号_us", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequencecode
-            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "ja-JP", "序号_jp", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequencecode
-            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "zh-CN", "序号", "序号（展开行序号，如 0010）"),
-            // entity.bommaterialcostitem.sequencecode
-            new TranslationSeedItem("entity.bommaterialcostitem.sequencecode", "zh-HK", "序号_hk", "序号（展开行序号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "en-US", "BOM项目号_us", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "ja-JP", "BOM项目号_jp", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-CN", "BOM项目号", "BOM 项目号（子件行项目号，如 0010）"),
+            // entity.bommaterialcostitem.bomitemcode
+            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-HK", "BOM项目号_hk", "BOM 项目号（子件行项目号，如 0010）"),
 
             // entity.bommaterialcostitem.productcode
             new TranslationSeedItem("entity.bommaterialcostitem.productcode", "en-US", "产品编码_us", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
@@ -117,6 +117,15 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.productcode
             new TranslationSeedItem("entity.bommaterialcostitem.productcode", "zh-HK", "产品编码_hk", "产品编码（父件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
 
+            // entity.bommaterialcostitem.linenumber
+            new TranslationSeedItem("entity.bommaterialcostitem.linenumber", "en-US", "行号_us", "行号（项号/序号，固定步长=10）"),
+            // entity.bommaterialcostitem.linenumber
+            new TranslationSeedItem("entity.bommaterialcostitem.linenumber", "ja-JP", "行号_jp", "行号（项号/序号，固定步长=10）"),
+            // entity.bommaterialcostitem.linenumber
+            new TranslationSeedItem("entity.bommaterialcostitem.linenumber", "zh-CN", "行号", "行号（项号/序号，固定步长=10）"),
+            // entity.bommaterialcostitem.linenumber
+            new TranslationSeedItem("entity.bommaterialcostitem.linenumber", "zh-HK", "行号_hk", "行号（项号/序号，固定步长=10）"),
+
             // entity.bommaterialcostitem.productdescription
             new TranslationSeedItem("entity.bommaterialcostitem.productdescription", "en-US", "产品描述_us", "产品描述"),
             // entity.bommaterialcostitem.productdescription
@@ -125,15 +134,6 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcostitem.productdescription", "zh-CN", "产品描述", "产品描述"),
             // entity.bommaterialcostitem.productdescription
             new TranslationSeedItem("entity.bommaterialcostitem.productdescription", "zh-HK", "产品描述_hk", "产品描述"),
-
-            // entity.bommaterialcostitem.bomitemcode
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "en-US", "BOM项目号_us", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemcode
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "ja-JP", "BOM项目号_jp", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemcode
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-CN", "BOM项目号", "BOM 项目号（子件行项目号，如 0010）"),
-            // entity.bommaterialcostitem.bomitemcode
-            new TranslationSeedItem("entity.bommaterialcostitem.bomitemcode", "zh-HK", "BOM项目号_hk", "BOM 项目号（子件行项目号，如 0010）"),
 
             // entity.bommaterialcostitem.componentcode
             new TranslationSeedItem("entity.bommaterialcostitem.componentcode", "en-US", "组件编码_us", "组件编码（子件物料编码，选项 TaktMaterialPlants/options，DictValue=MaterialCode，ExtValue=PlantCode）；导入时 18 位纯数字自动归一化为后 10 位"),
@@ -180,14 +180,23 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             // entity.bommaterialcostitem.productionrelated
             new TranslationSeedItem("entity.bommaterialcostitem.productionrelated", "zh-HK", "生产相关_hk", "生产相关（空或 X）"),
 
+            // entity.bommaterialcostitem.pcbsectindicator
+            new TranslationSeedItem("entity.bommaterialcostitem.pcbsectindicator", "en-US", "PCB SECT Indicator_us", "PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）"),
+            // entity.bommaterialcostitem.pcbsectindicator
+            new TranslationSeedItem("entity.bommaterialcostitem.pcbsectindicator", "ja-JP", "PCB SECT 标识_jp", "PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）"),
+            // entity.bommaterialcostitem.pcbsectindicator
+            new TranslationSeedItem("entity.bommaterialcostitem.pcbsectindicator", "zh-CN", "PCB SECT 标识", "PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）"),
+            // entity.bommaterialcostitem.pcbsectindicator
+            new TranslationSeedItem("entity.bommaterialcostitem.pcbsectindicator", "zh-HK", "PCB SECT 标识_hk", "PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）"),
+
             // entity.bommaterialcostitem.purchasetype
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "en-US", "采购类型_us", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "en-US", "采购类型_us", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
             // entity.bommaterialcostitem.purchasetype
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "ja-JP", "采购类型_jp", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "ja-JP", "采购类型_jp", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
             // entity.bommaterialcostitem.purchasetype
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "zh-CN", "采购类型", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "zh-CN", "采购类型", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
             // entity.bommaterialcostitem.purchasetype
-            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "zh-HK", "采购类型_hk", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X 且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
+            new TranslationSeedItem("entity.bommaterialcostitem.purchasetype", "zh-HK", "采购类型_hk", "采购类型（F=外部采购，E=自制生产）；仅生产相关=X、PCB SECT 标识为空且 F 行参与产品 BOM 材料成本汇总，行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数"),
 
             // entity.bommaterialcostitem.specialprocurementtype
             new TranslationSeedItem("entity.bommaterialcostitem.specialprocurementtype", "en-US", "特殊采购类_us", "特殊采购类（空或业务码，最长 50）"),
@@ -208,13 +217,13 @@ public class TaktBomMaterialCostItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.bommaterialcostitem.profitcentercode", "zh-HK", "利润中心_hk", "利润中心（选项 TaktProfitCenters/options；DictValue=Id）"),
 
             // entity.bommaterialcostitem.movingaverageprice
-            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "en-US", "移动平均价_us", "移动平均价（5 位小数）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "en-US", "移动平均价_us", "移动平均价（5 位小数；回填口径=工厂+核算月+组件→全部产品明细强制写回）"),
             // entity.bommaterialcostitem.movingaverageprice
-            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "ja-JP", "移动平均价_jp", "移动平均价（5 位小数）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "ja-JP", "移动平均价_jp", "移动平均价（5 位小数；回填口径=工厂+核算月+组件→全部产品明细强制写回）"),
             // entity.bommaterialcostitem.movingaverageprice
-            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "zh-CN", "移动平均价", "移动平均价（5 位小数）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "zh-CN", "移动平均价", "移动平均价（5 位小数；回填口径=工厂+核算月+组件→全部产品明细强制写回）"),
             // entity.bommaterialcostitem.movingaverageprice
-            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "zh-HK", "移动平均价_hk", "移动平均价（5 位小数）"),
+            new TranslationSeedItem("entity.bommaterialcostitem.movingaverageprice", "zh-HK", "移动平均价_hk", "移动平均价（5 位小数；回填口径=工厂+核算月+组件→全部产品明细强制写回）"),
 
             // entity.bommaterialcostitem.movingpriceunit
             new TranslationSeedItem("entity.bommaterialcostitem.movingpriceunit", "en-US", "移动价格单位_us", "移动价格单位"),

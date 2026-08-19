@@ -179,30 +179,18 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
-const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
-    target.companyCode = tenantStore.companyCode
-  }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
-    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
-  }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
 }
 /** CreateDto 字段名列表（与 formState 键对齐） */
 const formFields = ["tenantCode","materialCode","materialDescription","modelCode","modelName","destinationCode","destinationName","extField","remark"]
@@ -252,9 +240,9 @@ watch(
   { immediate: true }
 )
 
-/** 公司/租户切换时，新增态表单同步隔离字段 */
+/** 租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => tenantStore.tenantCode,
   () => {
     const isCreate = !props.formData?.modelDestinationId
     if (isCreate) {

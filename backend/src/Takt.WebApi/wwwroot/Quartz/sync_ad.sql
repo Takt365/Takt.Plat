@@ -1,6 +1,8 @@
 SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
+DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -27,7 +29,7 @@ CREATE TABLE #st_source (
   [level] INT NOT NULL,
   [division_path] NVARCHAR(500) NOT NULL,
   [is_leaf] INT NOT NULL,
-  [postal_code] NVARCHAR(20) NULLVARCHAR(5) NOT NULL,
+  [postal_code] NVARCHAR(20) NULL,
   [currency_code] VARCHAR(3) NOT NULL,
   [phone_code] VARCHAR(16) NOT NULL,
   [is_built_in] INT NOT NULL,
@@ -37,6 +39,7 @@ CREATE TABLE #st_source (
   [ext_field] NVARCHAR(4000) NULL,
   [remark] NVARCHAR(500) NULL,
   [is_deleted] INT NOT NULL,
+  [created_at] DATETIME NULL,
   [updated_by] BIGINT NOT NULL
 );
 
@@ -56,15 +59,16 @@ SELECT
   N'',
   S.[is_leaf],
   S.[postal_code],
-  S.S.[currency_code],
+  S.[currency_code],
   S.[phone_code],
   S.[is_built_in],
   S.[sort_order],
   S.[division_status],
-  @tenant_code,
+  S.[tenant_code],
   N'{}',
   N'',
   S.[is_deleted],
+  S.[created_at],
   @sync_user_id
 FROM (
   SELECT
@@ -83,17 +87,20 @@ FROM (
       COALESCE(TRY_CAST(R.[level] AS INT), 1) AS [level],
       COALESCE(TRY_CAST(R.[is_leaf] AS INT), 0) AS [is_leaf],
       NULLIF(LTRIM(RTRIM(R.[postal_code])), N'') AS [postal_code],
-      ISNULL(NULLIF(LTRIM(RTRIM(R.[culture_code])), N''), N'') AS ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), N''), N'') AS [currency_code],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), N''), N'') AS [currency_code],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[phone_code])), N''), N'') AS [phone_code],
       COALESCE(TRY_CAST(R.[is_built_in] AS INT), 0) AS [is_built_in],
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       COALESCE(TRY_CAST(R.[division_status] AS INT), 1) AS [division_status],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted]
+      LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      R.[created_at] AS [created_at]
     FROM [{{SourceDatabase}}].[dbo].[takt_foundation_admin_division] R
     LEFT JOIN [{{SourceDatabase}}].[dbo].[takt_foundation_admin_division] P
       ON P.[id] = R.[parent_id]
      AND COALESCE(TRY_CAST(R.[parent_id] AS BIGINT), 0) <> 0
     WHERE LTRIM(RTRIM(ISNULL(R.[division_code], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
   ) N
 ) S
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
@@ -225,8 +232,6 @@ CREATE TABLE #delta (
   is_leaf_new INT,
   postal_code_old NVARCHAR(20),
   postal_code_new NVARCHAR(20),
-  culture_code_old VARCHAR(5),
-  culture_code_new VARCHAR(5),
   currency_code_old VARCHAR(3),
   currency_code_new VARCHAR(3),
   phone_code_old VARCHAR(16),
@@ -259,7 +264,6 @@ WHEN MATCHED AND (
   OR LTRIM(RTRIM(ISNULL(T.[division_path], N''))) <> S.[division_path]
   OR T.[is_leaf] <> S.[is_leaf]
   OR LTRIM(RTRIM(ISNULL(T.[postal_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[postal_code], N'')))
-  OR LTRIM(RTRIM(ISNULL(T.N''))) <> S.[culture_code]
   OR LTRIM(RTRIM(ISNULL(T.[currency_code], N''))) <> S.[currency_code]
   OR LTRIM(RTRIM(ISNULL(T.[phone_code], N''))) <> S.[phone_code]
   OR T.[is_built_in] <> S.[is_built_in]
@@ -267,25 +271,24 @@ WHEN MATCHED AND (
   OR T.[division_status] <> S.[division_status]
 ) THEN
   UPDATE SET
-    T.[country_code] = S.[country_code],
-    T.[division_name] = S.[division_name],
-    T.[parent_id] = S.[parent_id],
-    T.[level] = S.[level],
-    T.[division_path] = S.[division_path],
-    T.[is_leaf] = S.[is_leaf],
-    T.[postal_code] = S.[postal_code],
-    T.[culture_code] = S.T.[currency_code] = S.[currency_code],
-    T.[phone_code] = S.[phone_code],
-    T.[is_built_in] = S.[is_built_in],
-    T.[sort_order] = S.[sort_order],
-    T.[division_status] = S.[division_status],
-    T.[ext_field] = S.[ext_field],
-    T.[remark] = S.[remark],
-    T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[is_deleted] = S.[is_deleted],
-    T.[deleted_by] = CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    T.[deleted_at] = CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[country_code]=S.[country_code],
+  T.[division_name]=S.[division_name],
+  T.[parent_id]=S.[parent_id],
+  T.[level]=S.[level],
+  T.[division_path]=S.[division_path],
+  T.[is_leaf]=S.[is_leaf],
+  T.[postal_code]=S.[postal_code],
+  T.[currency_code]=S.[currency_code],
+  T.[phone_code]=S.[phone_code],
+  T.[is_built_in]=S.[is_built_in],
+  T.[sort_order]=S.[sort_order],
+  T.[division_status]=S.[division_status],
+  T.[remark]=S.[remark],
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[is_deleted]=S.[is_deleted],
+  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
+  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[country_code],[division_code],[division_name],[parent_id],[level],
@@ -297,9 +300,9 @@ WHEN NOT MATCHED THEN
   )
   VALUES (
     S.[id],S.[country_code],S.[division_code],S.[division_name],S.[parent_id],S.[level],
-    S.[division_path],S.[is_leaf],S.[postal_code],S.S.[currency_code],S.[phone_code],
+    S.[division_path],S.[is_leaf],S.[postal_code],S.[currency_code],S.[phone_code],
     S.[is_built_in],S.[sort_order],S.[division_status],S.[tenant_code],S.[ext_field],S.[remark],
-    S.[updated_by],@now,S.[updated_by],@now,
+    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
     S.[is_deleted],
     CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
     CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
@@ -319,7 +322,7 @@ OUTPUT
   DELETED.[division_path], INSERTED.[division_path],
   DELETED.[is_leaf], INSERTED.[is_leaf],
   DELETED.[postal_code], INSERTED.[postal_code],
-  DELETED.INSERTED.DELETED.[currency_code], INSERTED.[currency_code],
+  DELETED.[currency_code], INSERTED.[currency_code],
   DELETED.[phone_code], INSERTED.[phone_code],
   DELETED.[is_built_in], INSERTED.[is_built_in],
   DELETED.[sort_order], INSERTED.[sort_order],
@@ -333,7 +336,6 @@ INTO #delta(
   division_path_old, division_path_new,
   is_leaf_old, is_leaf_new,
   postal_code_old, postal_code_new,
-  culture_code_old, culture_code_new,
   currency_code_old, currency_code_new,
   phone_code_old, phone_code_new,
   is_built_in_old, is_built_in_new,
@@ -384,6 +386,11 @@ DECLARE @target_count INT = (
   WHERE [tenant_code] = @tenant_code
     AND [is_deleted] = 0
 );
+DECLARE @source_active_count INT = (
+  SELECT COUNT(*)
+  FROM #st_source
+  WHERE [is_deleted] = 0
+);
 DECLARE @target_physical INT = (
   SELECT COUNT(*)
   FROM [takt_foundation_admin_division]
@@ -396,10 +403,10 @@ DECLARE @soft_deleted INT = (
     AND [is_deleted] = 1
 );
 
-IF @target_count <> @source_count
+IF @target_count <> @source_active_count
 BEGIN
   DECLARE @count_msg NVARCHAR(200) = CONCAT(
-    N'有效行数不一致: source=', @source_count, N', active=', @target_count);
+    N'有效行数不一致: source=', @source_active_count, N', active=', @target_count);
   THROW 50002, @count_msg, 1;
 END;
 
@@ -407,7 +414,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -446,7 +453,7 @@ SELECT
   N'MERGE AdminDivision Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,@company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -465,14 +472,12 @@ DECLARE @json_result NVARCHAR(MAX) =
   + N',"soft_delete_this_run":' + CAST(@delete_count AS NVARCHAR)
   + N',"soft_delete_keys":"' + REPLACE(@soft_deleted_keys, N'"', N'''') + N'"}';
 
-
-
 INSERT INTO [takt_statistics_logging_oper_log] (
   [id],[user_name],[oper_type],[oper_module],[oper_method],
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -486,7 +491,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 SELECT

@@ -4,7 +4,7 @@
 // 文件名称：TaktCompanyScopeFillHelper.cs
 // 创建时间：2026-08-11
 // 创建人：Takt365(Cursor AI)
-// 功能描述：公司级/审批级实体创建时注入 CultureCode、PlantCode（PlantCode 空则取 TaktCompany.RelatedPlant）
+// 功能描述：公司级/审批级实体创建时注入 CultureCode、PlantCode（均仅 Database 同序映射：Company↔Plant↔Culture）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -12,54 +12,51 @@
 
 using SqlSugar;
 using Takt.Domain.Entities;
-using Takt.Domain.Entities.Accounting.Financial;
+using Takt.Shared.Options;
 
 namespace Takt.Infrastructure.Extensions;
 
 /// <summary>
-/// 公司上下文写入辅助：按当前公司主档强制写入 CultureCode / PlantCode。
+/// 公司上下文写入辅助：CultureCode / PlantCode 空值时严格按 Database 同序映射注入。
 /// </summary>
 public static class TaktCompanyScopeFillHelper
 {
     /// <summary>
-    /// 按公司主档解析并写入 CultureCode / PlantCode。
+    /// 按配置映射写入 CultureCode / PlantCode（不再依赖公司主档读 CultureCode）。
     /// </summary>
-    /// <param name="db">SqlSugar 客户端</param>
+    /// <param name="db">SqlSugar 客户端（保留签名以兼容仓储调用；本方法不读库）</param>
     /// <param name="entity">公司级或审批级实体</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
-    public static async Task ApplyCompanyScopeFromMasterAsync(
+    /// <param name="database">Database 配置（CompanyCodes↔PlantCodes↔CultureCodes）</param>
+    public static Task ApplyCompanyScopeFromMasterAsync(
         ISqlSugarClient db,
         object entity,
         string tenantCode,
-        string companyCode)
+        string companyCode,
+        TaktDatabaseOptions database)
     {
         ArgumentNullException.ThrowIfNull(db);
         ArgumentNullException.ThrowIfNull(entity);
+        ArgumentNullException.ThrowIfNull(database);
         if (string.IsNullOrWhiteSpace(tenantCode) || string.IsNullOrWhiteSpace(companyCode))
         {
-            return;
+            return Task.CompletedTask;
         }
-        var row = await db.Queryable<TaktCompany>()
-            .Where(c => c.TenantCode == tenantCode && c.CompanyCode == companyCode && c.IsDeleted == 0)
-            .Select(c => new { c.CultureCode, c.RelatedPlant })
-            .FirstAsync();
-        if (row == null)
-        {
-            return;
-        }
+        database.NormalizeAndValidate();
         ApplyCompanyScope(
             entity,
-            (row.CultureCode ?? string.Empty).Trim(),
-            (row.RelatedPlant ?? string.Empty).Trim());
+            database.GetCultureCodeForCompanyCode(companyCode),
+            database.GetPlantCodeForCompanyCode(companyCode));
+        return Task.CompletedTask;
     }
 
     /// <summary>
-    /// 按公司主档写入 CultureCode；PlantCode 仅在当前为空时用公司 RelatedPlant 填充。
+    /// 写入 CultureCode；PlantCode 仅在当前为空时用配置映射的工厂编码填充。
     /// </summary>
     /// <param name="entity">公司级或审批级实体</param>
-    /// <param name="cultureCode">当前公司 CultureCode</param>
-    /// <param name="relatedPlant">当前公司 RelatedPlant（用作默认工厂）</param>
+    /// <param name="cultureCode">配置映射得到的 CultureCode</param>
+    /// <param name="relatedPlant">配置映射得到的工厂编码（用作默认 PlantCode）</param>
     public static void ApplyCompanyScope(object entity, string cultureCode, string relatedPlant)
     {
         ArgumentNullException.ThrowIfNull(entity);

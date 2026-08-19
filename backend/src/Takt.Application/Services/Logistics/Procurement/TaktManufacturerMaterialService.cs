@@ -411,11 +411,6 @@ public class TaktManufacturerMaterialService : TaktServiceBase, ITaktManufacture
             var createdAtEnd = queryDto.CreatedAtEnd;
             exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
 
         return exp.ToExpression();
     }

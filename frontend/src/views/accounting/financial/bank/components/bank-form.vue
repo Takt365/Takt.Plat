@@ -29,6 +29,31 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
                 :label="pi.label('countryRegion')"
                 name="countryRegion"
               >
@@ -130,6 +155,16 @@
                 />
               </a-form-item>
             </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item
                 :label="pi.label('village')"
@@ -154,16 +189,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-1"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (2/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('address2')"
@@ -270,7 +295,17 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('bankMethod')"
                 name="bankMethod"
@@ -284,7 +319,7 @@
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
                 :label="pi.label('bankFormat')"
                 name="bankFormat"
@@ -298,16 +333,6 @@
                 />
               </a-form-item>
             </a-col>
-          </a-row>
-        </div>
-      </a-tab-pane>
-      <a-tab-pane
-        key="tab-2"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (3/4)'"
-        force-render
-      >
-        <div :class="formContentClass">
-          <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('ibanRule')"
@@ -413,6 +438,19 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -476,15 +514,18 @@ import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { useTenantStore } from '@/stores/identity/tenant'
+import { useUserStore } from '@/stores/identity/user'
 
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
+const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -492,15 +533,21 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
+  if (force || !target.companyCode) {
+    target.companyCode = tenantStore.companyCode
   }
-
+  if (force || !target.cultureCode) {
+    target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
+  }
+  if (force || !target.plantCode) {
+    target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
+  }
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -561,9 +608,9 @@ watch(
   { immediate: true }
 )
 
-/** 租户切换时，新增态表单同步隔离字段 */
+/** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => tenantStore.tenantCode,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.bankId) {
       applyScopeDefaults(formState, true)
@@ -573,6 +620,13 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   countryRegion: [
     {
       required: true,

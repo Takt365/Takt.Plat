@@ -51,7 +51,9 @@ public static class TaktQuartzSqlResultReader
         await using var command = connection.CreateCommand();
         command.CommandText = sql;
         command.CommandType = CommandType.Text;
-        command.CommandTimeout = db.Ado.CommandTimeOut > 0 ? db.Ado.CommandTimeOut : 1800;
+        command.CommandTimeout = db.Ado.CommandTimeOut >= 0
+            ? db.Ado.CommandTimeOut
+            : TaktQuartzConstants.DefaultSqlCommandTimeoutSeconds;
         if (db.Ado.Transaction is DbTransaction dbTransaction)
         {
             command.Transaction = dbTransaction;

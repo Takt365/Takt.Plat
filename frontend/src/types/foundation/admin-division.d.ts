@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * 行政区划实体（租户级共享；世界通用六级树） 层级：1=国家，2=州省，3=地市，4=区县，5=乡镇街道，6=行政村（字典 sys_admin_division_level_type） 编码可对齐 ISO 3166、ISO 3166-2、GB/T 2260、JIS 等；子节点 CountryCode 冗余自根国家便于过滤
  * 对应前端 TaktAdminDivisionDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 AdminDivision
  * @description 对应后端 TaktAdminDivisionDto
  */
-export interface AdminDivision extends TenantDtoBase {
+export interface AdminDivision extends TenantCoreDtoBase {
   /**
    * AdminDivisionID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -162,16 +162,6 @@ export interface AdminDivisionQuery extends TaktPagedQuery {
   postalCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
@@ -258,16 +248,6 @@ export interface AdminDivisionCreate {
    * 邮政编码（可选；部分国家区划关联邮编）
    */
   postalCode?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
@@ -393,16 +373,6 @@ export interface AdminDivisionTemplate {
   postalCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
    */
   currencyCode?: string;
@@ -474,16 +444,6 @@ export interface AdminDivisionImport {
    * 邮政编码（可选；部分国家区划关联邮编）
    */
   postalCode?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）
@@ -567,11 +527,6 @@ export interface AdminDivisionExport {
    * 邮政编码（可选；部分国家区划关联邮编）
    */
   postalCode?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；如 zh-CN、en-US、ja-JP）
-   */
-  cultureCode: string;
 
   /**
    * 币种（字典 accounting_currency_code；ISO 4217，如 CNY/USD）

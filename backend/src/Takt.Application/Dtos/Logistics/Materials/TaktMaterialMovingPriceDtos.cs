@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialMovingPriceDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialMovingPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialMovingPrice 生成，请按需审阅）
 // 
@@ -34,7 +34,6 @@ public class TaktMaterialMovingPriceDto : TaktCompanyDtoBase
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long MaterialMovingPriceId { get; set; }
-
 
     /// <summary>
     /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
@@ -99,12 +98,12 @@ public class TaktMaterialMovingPriceQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -194,19 +193,18 @@ public class TaktMaterialMovingPriceCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
-    [Required(ErrorMessage = "工厂代码（选项 TaktPlants/options；DictValue=PlantCode）不能为空")]
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
@@ -306,17 +304,17 @@ public class TaktMaterialMovingPriceTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -388,17 +386,17 @@ public class TaktMaterialMovingPriceImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
 
@@ -484,6 +482,11 @@ public class TaktMaterialMovingPriceExportDto
     /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）

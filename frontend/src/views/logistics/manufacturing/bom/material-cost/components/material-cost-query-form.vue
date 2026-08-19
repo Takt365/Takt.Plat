@@ -14,7 +14,7 @@
         api-url="TaktPlants/options"
         class="material-cost-query-bar__control material-cost-query-bar__control--plant"
         allow-clear
-        :placeholder="t('entity.bommaterialcost.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
         @change="handlePlantChange"
       />
       <a-date-picker

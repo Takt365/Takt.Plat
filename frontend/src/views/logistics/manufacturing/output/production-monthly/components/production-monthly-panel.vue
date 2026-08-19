@@ -166,7 +166,7 @@ const summaryText = computed(() => {
 const columns = computed<TableColumnsType>(() => {
   const cols: TableColumnsType = [
     {
-      title: t('entity.assyoutput.plantcode'),
+      title: t('common.page.entity.plantcode'),
       dataIndex: 'plantCode',
       key: 'plantCode',
       width: 100,

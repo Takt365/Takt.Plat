@@ -19,10 +19,39 @@ const SAP_DATA_SYNC_SCRIPTS = new Set([
   'quartz/sync_mo.sql',
 ])
 
-/** 仅目标库（无跨库源占位） */
+/** Sap_Data 日链 JobName（小写；列表缺 sqlScript 时兜底） */
+const SAP_DATA_SYNC_JOB_NAMES = new Set([
+  'sync_matplt',
+  'sync_mdl',
+  'sync_st',
+  'sync_ec',
+  'sync_mo',
+])
+
+/** 仅目标库回填 JobName（小写；仅弹目标库，无核算月） */
+const TARGET_ONLY_BACKFILL_JOB_NAMES = new Set([
+  'sync_pup_bk',
+  'sync_sp_bk',
+  'sync_bv_bk',
+  'sync_bc_bk',
+])
+
+/** 仅目标库（无跨库源占位：日链 + 回填 *_bk；不含需核算月的 pcb_sect） */
 const TARGET_ONLY_SYNC_SCRIPTS = new Set([
   ...SAP_DATA_SYNC_SCRIPTS,
-  'quartz/sync_desc.sql',
+  'quartz/sync_pup_bk.sql',
+  'quartz/sync_sp_bk.sql',
+  'quartz/sync_bv_bk.sql',
+  'quartz/sync_bc_bk.sql',
+])
+
+/** BOM 立即执行须选目标库+核算月的 JobName（小写） */
+const BOM_DB_AND_MONTH_JOB_NAMES = new Set([
+  'bom_material_cost_sum',
+  'bom_material_cost_recalc',
+  'bom_model_avg_cost',
+  'bom_pcb_sect',
+  'sync_bc_pcb_sect_bk',
 ])
 
 /** 默认暂存源库名（三部分标识；列表中可能无 Tenant_900） */
@@ -54,7 +83,7 @@ export function isQuartzSyncSqlScript(sqlScript: string | null | undefined): boo
 }
 
 /**
- * 是否仅需目标库（Sap_Data 日链 + sync_desc）
+ * 是否仅需目标库（Sap_Data 日链 + sync_pup/sp/bv/bc_bk 回填；不含 pcb_sect）
  * @param sqlScript 任务 SqlScript
  * @returns {boolean} 仅目标
  */
@@ -63,11 +92,48 @@ export function needsSyncTargetOnlyPicker(sqlScript: string | null | undefined):
 }
 
 /**
+ * 是否仅需目标库（按任务行：JobName / TaskCode / SqlScript；绝不含核算月）
+ * @param record 任务行
+ * @returns {boolean} 仅目标库弹窗
+ */
+export function needsSyncTargetOnlyFromTask(record: {
+  taskCode?: string | null
+  jobName?: string | null
+  sqlScript?: string | null
+}): boolean {
+  // PCB SECT 走目标库+核算月，不进本分支
+  if (needsBomDbAndMonthPicker(record)) {
+    return false
+  }
+  const jobName = String(record.jobName ?? '')
+    .trim()
+    .toLowerCase()
+  if (SAP_DATA_SYNC_JOB_NAMES.has(jobName) || TARGET_ONLY_BACKFILL_JOB_NAMES.has(jobName)) {
+    return true
+  }
+  const taskCode = String(record.taskCode ?? '').toUpperCase()
+  if (
+    taskCode === 'QT_SYNC_PUP_BK'
+    || taskCode === 'QT_SYNC_SP_BK'
+    || taskCode === 'QT_SYNC_BV_BK'
+    || taskCode === 'QT_SYNC_BC_BK'
+  ) {
+    return true
+  }
+  return needsSyncTargetOnlyPicker(record.sqlScript)
+}
+
+/**
  * 是否需源库+目标库（zTakt_900 暂存族）
  * @param sqlScript 任务 SqlScript
  * @returns {boolean} 源+目标
  */
 export function needsSyncSourceTargetPicker(sqlScript: string | null | undefined): boolean {
+  const path = normalizeQuartzSqlScriptPath(sqlScript)
+  // pcb_sect 由 BOM 合并窗处理，勿当源+目标
+  if (path === 'quartz/sync_bc_pcb_sect_bk.sql') {
+    return false
+  }
   return isQuartzSyncSqlScript(sqlScript) && !needsSyncTargetOnlyPicker(sqlScript)
 }
 
@@ -126,4 +192,50 @@ export function buildSyncExecuteParams(options: {
     return JSON.stringify({ sourceDatabase, targetDatabase })
   }
   return JSON.stringify({ targetDatabase })
+}
+
+/**
+ * 是否为 BOM 类立即执行（须同时选目标库 + 核算月份）
+ * @param record 任务行（含 taskCode / jobName / className / sqlScript）
+ * @returns {boolean} 是否弹合并窗
+ */
+export function needsBomDbAndMonthPicker(record: {
+  taskCode?: string | null
+  jobName?: string | null
+  className?: string | null
+  sqlScript?: string | null
+}): boolean {
+  const jobName = String(record.jobName ?? '')
+    .trim()
+    .toLowerCase()
+  if (BOM_DB_AND_MONTH_JOB_NAMES.has(jobName)) {
+    return true
+  }
+  const taskCode = String(record.taskCode ?? '').toUpperCase()
+  if (taskCode.startsWith('QT_BOM') || taskCode === 'QT_SYNC_BC_PCB_SECT_BK') {
+    return true
+  }
+  const className = String(record.className ?? '')
+  if (/Bom.*(Cost|Avg|PcbSect)/i.test(className)) {
+    return true
+  }
+  return (
+    normalizeQuartzSqlScriptPath(record.sqlScript) === 'quartz/sync_bc_pcb_sect_bk.sql'
+  )
+}
+
+/**
+ * 组装 BOM / PCB SECT 立即执行参数（目标库 + 核算月）
+ * @param options 目标库与核算月
+ * @param options.targetDatabase 目标库
+ * @param options.costingPeriod 核算月 yyyy-MM
+ * @returns {string} executeParams JSON
+ */
+export function buildBomDbAndMonthExecuteParams(options: {
+  targetDatabase: string
+  costingPeriod: string
+}): string {
+  const targetDatabase = options.targetDatabase.trim()
+  const costingPeriod = options.costingPeriod.trim()
+  return JSON.stringify({ targetDatabase, costingPeriod })
 }

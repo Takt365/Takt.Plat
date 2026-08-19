@@ -28,6 +28,9 @@ public static class TaktQuartzSqlScriptHelper
     /// <summary>目标库占位符</summary>
     public const string TargetDatabasePlaceholder = "{{TargetDatabase}}";
 
+    /// <summary>核算月份占位符（yyyy-MM；可空，脚本内自行默认当月）</summary>
+    public const string CostingPeriodPlaceholder = "{{CostingPeriod}}";
+
     /// <summary>
     /// 解析为可执行 SQL：SqlScript 必须为相对 wwwroot 的 .sql 路径，读文件后替换占位符
     /// </summary>
@@ -35,8 +38,10 @@ public static class TaktQuartzSqlScriptHelper
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="cultureCode">区域文化编码</param>
+    /// <param name="plantCode">工厂编码（脚本含 PlantCode 占位时必填；与 Database:CompanyCodes↔PlantCodes 对齐）</param>
     /// <param name="sourceDatabase">源库名（脚本含 SourceDatabase 占位时必填）</param>
     /// <param name="targetDatabase">目标库名（脚本含 TargetDatabase 占位时必填）</param>
+    /// <param name="costingPeriod">核算月 yyyy-MM（脚本含 CostingPeriod 占位时替换；可空）</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>可执行 SQL 文本</returns>
     /// <exception cref="ArgumentException">路径为空或格式非法、缺库名</exception>
@@ -47,8 +52,10 @@ public static class TaktQuartzSqlScriptHelper
         string tenantCode,
         string companyCode,
         string? cultureCode = null,
+        string? plantCode = null,
         string? sourceDatabase = null,
         string? targetDatabase = null,
+        string? costingPeriod = null,
         CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sqlScript);
@@ -61,7 +68,15 @@ public static class TaktQuartzSqlScriptHelper
                 nameof(sqlScript));
         }
         var body = await File.ReadAllTextAsync(ResolveWwwRootSqlFilePath(sqlScript.Trim()), cancellationToken);
-        return BindPlaceholders(body, tenantCode, companyCode, cultureCode, sourceDatabase, targetDatabase);
+        return BindPlaceholders(
+            body,
+            tenantCode,
+            companyCode,
+            cultureCode,
+            plantCode,
+            sourceDatabase,
+            targetDatabase,
+            costingPeriod);
     }
 
     /// <summary>
@@ -101,28 +116,34 @@ public static class TaktQuartzSqlScriptHelper
     }
 
     /// <summary>
-    /// 替换 {{TenantCode}} / {{CompanyCode}} / {{CultureCode}} / {{SyncUserId}} / {{SourceDatabase}} / {{TargetDatabase}}
+    /// 替换 {{TenantCode}} / {{CompanyCode}} / {{CultureCode}} / {{PlantCode}} / {{SyncUserId}} / {{SourceDatabase}} / {{TargetDatabase}} / {{CostingPeriod}}
     /// </summary>
     /// <param name="sqlTemplate">SQL 模板</param>
     /// <param name="tenantCode">租户编码</param>
     /// <param name="companyCode">公司编码</param>
     /// <param name="cultureCode">区域文化编码</param>
+    /// <param name="plantCode">工厂编码</param>
     /// <param name="sourceDatabase">源库名</param>
     /// <param name="targetDatabase">目标库名</param>
+    /// <param name="costingPeriod">核算月 yyyy-MM（可空）</param>
     /// <returns>绑定后的 SQL</returns>
     public static string BindPlaceholders(
         string sqlTemplate,
         string tenantCode,
         string companyCode,
         string? cultureCode = null,
+        string? plantCode = null,
         string? sourceDatabase = null,
-        string? targetDatabase = null)
+        string? targetDatabase = null,
+        string? costingPeriod = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sqlTemplate);
         ArgumentException.ThrowIfNullOrWhiteSpace(tenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
         var needsSource = sqlTemplate.Contains(SourceDatabasePlaceholder, StringComparison.Ordinal);
         var needsTarget = sqlTemplate.Contains(TargetDatabasePlaceholder, StringComparison.Ordinal);
+        var needsPlant = sqlTemplate.Contains("{{PlantCode}}", StringComparison.Ordinal);
+        var needsCostingPeriod = sqlTemplate.Contains(CostingPeriodPlaceholder, StringComparison.Ordinal);
         if (needsSource)
         {
             if (string.IsNullOrWhiteSpace(sourceDatabase))
@@ -143,12 +164,20 @@ public static class TaktQuartzSqlScriptHelper
             }
             TaktQuartzSyncExecuteParamsHelper.ValidateDatabaseName(targetDatabase);
         }
+        if (needsPlant && string.IsNullOrWhiteSpace(plantCode))
+        {
+            throw new ArgumentException(
+                "SQL 脚本含 {{PlantCode}}，须按 Database:CompanyCodes↔PlantCodes 传入 plantCode",
+                nameof(plantCode));
+        }
         if (!sqlTemplate.Contains("{{TenantCode}}", StringComparison.Ordinal)
             && !sqlTemplate.Contains("{{CompanyCode}}", StringComparison.Ordinal)
             && !sqlTemplate.Contains("{{CultureCode}}", StringComparison.Ordinal)
+            && !needsPlant
             && !sqlTemplate.Contains("{{SyncUserId}}", StringComparison.Ordinal)
             && !needsSource
-            && !needsTarget)
+            && !needsTarget
+            && !needsCostingPeriod)
         {
             return sqlTemplate;
         }
@@ -162,6 +191,10 @@ public static class TaktQuartzSqlScriptHelper
                 "{{SyncUserId}}",
                 TaktConstants.SystemAuditUser.Id.ToString(CultureInfo.InvariantCulture),
                 StringComparison.Ordinal);
+        if (needsPlant)
+        {
+            result = result.Replace("{{PlantCode}}", Esc(plantCode!.Trim()), StringComparison.Ordinal);
+        }
         if (needsSource)
         {
             result = result.Replace(
@@ -175,6 +208,11 @@ public static class TaktQuartzSqlScriptHelper
                 TargetDatabasePlaceholder,
                 Esc(targetDatabase!.Trim()),
                 StringComparison.Ordinal);
+        }
+        if (needsCostingPeriod)
+        {
+            var period = string.IsNullOrWhiteSpace(costingPeriod) ? string.Empty : costingPeriod.Trim();
+            result = result.Replace(CostingPeriodPlaceholder, Esc(period), StringComparison.Ordinal);
         }
         return result;
     }

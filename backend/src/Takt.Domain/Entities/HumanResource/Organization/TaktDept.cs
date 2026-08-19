@@ -32,6 +32,11 @@ public class TaktDept : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;
     /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_short_name", ColumnDescription = "部门简称", ColumnDataType = "varchar", Length = 6, IsNullable = false)]
+    public string DeptShortName { get; set; } = string.Empty;
+    /// <summary>
     /// 部门名称
     /// </summary>
     [SugarColumn(ColumnName = "dept_name", ColumnDescription = "部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false)]

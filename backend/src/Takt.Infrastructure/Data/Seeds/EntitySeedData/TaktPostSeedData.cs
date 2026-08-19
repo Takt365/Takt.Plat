@@ -53,7 +53,8 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         var repository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktPost>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<Takt.Domain.Entities.Accounting.Financial.TaktCompany>>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
+        var database = configuration.RequireDatabase();
+        var configuredCompanyCodes = database.CompanyCodes;
 
         int insertCount = 0;
         int updateCount = 0;
@@ -86,7 +87,9 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                     repository,
                     deptRepository,
                     tenantCode,
-                    company.CompanyCode, company.CultureCode,
+                    company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                     postData.PostCode,
                     postData.PostName,
                     postData.PostCategory,
@@ -113,86 +116,68 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 从连接字符串中解析当前租户编码
+    /// 公司组织根部门编码（挂靠各公司组织根）
     /// </summary>
-    private static string GetCurrentTenantCode(TaktSeedContext sqlSugarContext)
+    /// <param name="companyCode">公司代码</param>
+    /// <returns>组织根 DeptCode</returns>
+    private static string ResolveOrgRootDeptCode(string companyCode) => companyCode switch
     {
-        // 从连接字符串中提取租户编码
-        // 格式：Server=fs03;Database=Takt_{TenantCode}_Dev;...
-        var connectionString = sqlSugarContext.Db.Ado.Connection?.ConnectionString;
-        
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            return string.Empty;
-        }
-
-        // 解析 Database=Takt_XXX_Dev 中的 XXX
-        var dbMatch = System.Text.RegularExpressions.Regex.Match(
-            connectionString, 
-            @"Database=Takt_(\d{3})_", 
-            System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        
-        if (dbMatch.Success && dbMatch.Groups.Count > 1)
-        {
-            return dbMatch.Groups[1].Value;
-        }
-
-        return string.Empty;
-    }
+        "1000" => "1000",
+        "2300" => "2300",
+        "2400" => "2400",
+        _ => companyCode,
+    };
 
     /// <summary>
-    /// 获取标准岗位配置
+    /// 获取标准岗位配置（挂靠各公司组织根）
     /// </summary>
     private static IEnumerable<(string PostCode, string PostName, string PostCategory, string PostLevel, int SortOrder, string DeptCode)> GetStandardPosts(string tenantCode, string companyCode)
     {
-        // 所有公司使用统一的岗位清单，统一归属于公司级部门 D0000
+        var rootDeptCode = ResolveOrgRootDeptCode(companyCode);
         // PostCategory：字典 sys_post_category（MGT/PRO/TEC/SUP/OPS）；PostLevel：字典 sys_post_level_category（P1~P4 / M1~M5）
         return new[]
         {
-            // ===== 总经理室（管理岗）=====
-            ("CHAIRMAN", "董事长", "MGT", "M5", 1, "D0000"),
-            ("VICE_CHAIRMAN", "副董事长", "MGT", "M4", 2, "D0000"),
-            ("GENERAL_MANAGER", "总经理", "MGT", "M5", 3, "D0000"),
-            ("VICE_GENERAL_MANAGER", "副总经理", "MGT", "M4", 4, "D0000"),
-            ("FACTORY_DIRECTOR", "厂长", "MGT", "M4", 5, "D0000"),
-            ("BU_HEAD", "本部长", "MGT", "M4", 6, "D0000"),
-            ("DEPUTY_BU_HEAD", "副本部长", "MGT", "M3", 7, "D0000"),
-            ("DEPARTMENT_HEAD", "部长", "MGT", "M3", 8, "D0000"),
-            ("DEPUTY_DEPARTMENT_HEAD", "副部长", "MGT", "M3", 9, "D0000"),
-            ("MANAGER", "经理", "MGT", "M2", 10, "D0000"),
-            ("DEPUTY_MANAGER", "副经理", "MGT", "M2", 11, "D0000"),
-            ("SECTION_CHIEF", "课长", "MGT", "M1", 12, "D0000"),
-            ("DEPUTY_SECTION_CHIEF", "副课长", "MGT", "M1", 13, "D0000"),
-            ("SUBSECTION_CHIEF", "股长", "MGT", "M1", 14, "D0000"),
-            ("TEAM_LEADER", "班长", "MGT", "M1", 15, "D0000"),
-            ("DEPUTY_TEAM_LEADER", "副班长", "MGT", "M1", 16, "D0000"),
-            // ===== IT部（技术岗）=====
-            ("LEVEL4_ENGINEER", "四级工程师", "TEC", "P4", 20, "D0000"),
-            ("LEVEL3_ENGINEER", "三级工程师", "TEC", "P3", 21, "D0000"),
-            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", "TEC", "P3", 22, "D0000"),
-            ("LEVEL2_ENGINEER", "二级工程师", "TEC", "P2", 23, "D0000"),
-            ("LEVEL1_TECHNICIAN", "一级技术员", "TEC", "P1", 24, "D0000"),
-            // ===== 总务部（专业岗 / 支持岗）=====
-            ("LEVEL4_SPECIALIST", "四级专员", "PRO", "P4", 30, "D0000"),
-            ("LEVEL3_SPECIALIST", "三级专员", "PRO", "P3", 31, "D0000"),
-            ("LEVEL2_SPECIALIST", "二级专员", "PRO", "P2", 32, "D0000"),
-            ("LEVEL1_SPECIALIST", "一级专员", "PRO", "P1", 33, "D0000"),
-            ("LEVEL1_CLERK", "一级事务员", "SUP", "P1", 34, "D0000"),
-            // ===== 生产部（操作岗）=====
-            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", "OPS", "P4", 35, "D0000"),
-            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", "OPS", "P1", 36, "D0000"),
-            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", "OPS", "P2", 37, "D0000"),
-            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", "OPS", "P3", 38, "D0000"),
-            ("OPERATOR", "作业员", "OPS", "P1", 60, "D0000"),
-            // ===== 品保部（操作岗）=====
-            ("INSPECTOR", "质检员", "OPS", "P2", 39, "D0000"),
-            // ===== 资材部（操作岗）=====
-            ("WAREHOUSE_KEEPER", "仓管员", "OPS", "P2", 40, "D0000"),
-            // ===== 管理部（支持岗）=====
-            ("SECURITY_CAPTAIN", "保安队长", "SUP", "M1", 50, "D0000"),
-            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", "SUP", "M1", 51, "D0000"),
-            ("LEVEL1_SECURITY_GUARD", "一级保安员", "SUP", "P1", 52, "D0000"),
-            ("CLEANER", "清洁工", "SUP", "P1", 53, "D0000"),
+            // ===== 管理岗 =====
+            ("CHAIRMAN", "董事长", "MGT", "M5", 1, rootDeptCode),
+            ("VICE_CHAIRMAN", "副董事长", "MGT", "M4", 2, rootDeptCode),
+            ("GENERAL_MANAGER", "总经理", "MGT", "M5", 3, rootDeptCode),
+            ("VICE_GENERAL_MANAGER", "副总经理", "MGT", "M4", 4, rootDeptCode),
+            ("FACTORY_DIRECTOR", "厂长", "MGT", "M4", 5, rootDeptCode),
+            ("BU_HEAD", "本部长", "MGT", "M4", 6, rootDeptCode),
+            ("DEPUTY_BU_HEAD", "副本部长", "MGT", "M3", 7, rootDeptCode),
+            ("DEPARTMENT_HEAD", "部长", "MGT", "M3", 8, rootDeptCode),
+            ("DEPUTY_DEPARTMENT_HEAD", "副部长", "MGT", "M3", 9, rootDeptCode),
+            ("MANAGER", "经理", "MGT", "M2", 10, rootDeptCode),
+            ("DEPUTY_MANAGER", "副经理", "MGT", "M2", 11, rootDeptCode),
+            ("SECTION_CHIEF", "课长", "MGT", "M1", 12, rootDeptCode),
+            ("DEPUTY_SECTION_CHIEF", "副课长", "MGT", "M1", 13, rootDeptCode),
+            ("SUBSECTION_CHIEF", "股长", "MGT", "M1", 14, rootDeptCode),
+            ("TEAM_LEADER", "班长", "MGT", "M1", 15, rootDeptCode),
+            ("DEPUTY_TEAM_LEADER", "副班长", "MGT", "M1", 16, rootDeptCode),
+            // ===== 技术岗 =====
+            ("LEVEL4_ENGINEER", "四级工程师", "TEC", "P4", 20, rootDeptCode),
+            ("LEVEL3_ENGINEER", "三级工程师", "TEC", "P3", 21, rootDeptCode),
+            ("LEVEL3_TECH_ENGINEER", "三级技术工程师", "TEC", "P3", 22, rootDeptCode),
+            ("LEVEL2_ENGINEER", "二级工程师", "TEC", "P2", 23, rootDeptCode),
+            ("LEVEL1_TECHNICIAN", "一级技术员", "TEC", "P1", 24, rootDeptCode),
+            // ===== 专业岗 / 支持岗 =====
+            ("LEVEL4_SPECIALIST", "四级专员", "PRO", "P4", 30, rootDeptCode),
+            ("LEVEL3_SPECIALIST", "三级专员", "PRO", "P3", 31, rootDeptCode),
+            ("LEVEL2_SPECIALIST", "二级专员", "PRO", "P2", 32, rootDeptCode),
+            ("LEVEL1_SPECIALIST", "一级专员", "PRO", "P1", 33, rootDeptCode),
+            ("LEVEL1_CLERK", "一级事务员", "SUP", "P1", 34, rootDeptCode),
+            // ===== 操作岗 =====
+            ("SENIOR_MULTI_SKILL_WORKER", "资深多能工", "OPS", "P4", 35, rootDeptCode),
+            ("LEVEL1_MULTI_SKILL_WORKER", "一级多能工", "OPS", "P1", 36, rootDeptCode),
+            ("LEVEL2_MULTI_SKILL_WORKER", "二级多能工", "OPS", "P2", 37, rootDeptCode),
+            ("LEVEL3_MULTI_SKILL_WORKER", "三级多能工", "OPS", "P3", 38, rootDeptCode),
+            ("OPERATOR", "作业员", "OPS", "P1", 60, rootDeptCode),
+            ("INSPECTOR", "质检员", "OPS", "P2", 39, rootDeptCode),
+            ("WAREHOUSE_KEEPER", "仓管员", "OPS", "P2", 40, rootDeptCode),
+            ("SECURITY_CAPTAIN", "保安队长", "SUP", "M1", 50, rootDeptCode),
+            ("SECURITY_DEPUTY_CAPTAIN", "保安副队长", "SUP", "M1", 51, rootDeptCode),
+            ("LEVEL1_SECURITY_GUARD", "一级保安员", "SUP", "P1", 52, rootDeptCode),
+            ("CLEANER", "清洁工", "SUP", "P1", 53, rootDeptCode),
         };
     }
 
@@ -215,6 +200,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<Takt.Domain.Entities.HumanResource.Organization.TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         string postCode,
         string postName,
@@ -253,6 +239,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 PostStatus = 1,
                 SortOrder = sortOrder,
                 IsBuiltIn = 1,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             post = await repository.CreateAsync(post);
@@ -289,6 +276,16 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
             if (post.IsBuiltIn != 1)
             {
                 post.IsBuiltIn = 1;
+                needUpdate = true;
+            }
+            if (post.PlantCode != plantCode)
+            {
+                post.PlantCode = plantCode;
+                needUpdate = true;
+            }
+            if (post.CultureCode != cultureCode)
+            {
+                post.CultureCode = cultureCode;
                 needUpdate = true;
             }
             

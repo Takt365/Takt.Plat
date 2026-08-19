@@ -65,7 +65,7 @@ public interface ITaktBomMaterialCostAnalysisService
         TaktBomMaterialCostAnalysisTransposedQueryDto queryDto);
 
     /// <summary>
-    /// 导出成本分析转置 Excel
+    /// 导出成本分析转置 Excel（筛选命中的全部行，不截断）
     /// </summary>
     /// <param name="query">查询条件</param>
     /// <param name="sheetName">工作表名称</param>
@@ -115,55 +115,4 @@ public interface ITaktBomMaterialCostAnalysisService
         TaktBomMaterialCostAnalysisMonthlyTrendQueryDto query,
         string? sheetName = null,
         string? fileName = null);
-
-    /// <summary>
-    /// 成本合计/重算：明细按工厂+产品+核算月合计写入主表（仅 FERT），再刷新机种月均
-    /// </summary>
-    /// <param name="queryDto">筛选（PlantCode/ModelCode 可选；须单个核算月）</param>
-    /// <param name="forceRecalculate">为 true 时 ResetGroupCount 计入已同步组（与合计同 Sync 范围）</param>
-    /// <param name="processRecordCount">处理工厂+产品组上限（0=全部）</param>
-    /// <returns>重算统计</returns>
-    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto> RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
-        TaktBomMaterialCostItemQueryDto queryDto,
-        bool forceRecalculate = false,
-        int processRecordCount = 5000);
-
-    /// <summary>
-    /// Quartz 成本合计：仅合计判定日所在自然月（CostingDate 当月）
-    /// </summary>
-    /// <param name="force">保留参数（兼容旧调用）</param>
-    /// <param name="asOfDate">判定日；默认今天</param>
-    /// <param name="nthWorkingDay">保留参数（兼容旧调用）</param>
-    /// <returns>合计统计</returns>
-    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostSumAsync(
-        bool force = false,
-        DateTime? asOfDate = null,
-        int nthWorkingDay = 3);
-
-    /// <summary>
-    /// Quartz 重算成本：force 重算判定日所在自然月（CostingDate 当月）
-    /// </summary>
-    /// <param name="force">保留参数（兼容旧调用）</param>
-    /// <param name="asOfDate">判定日；默认今天</param>
-    /// <param name="nthWorkingDay">保留参数（兼容旧调用）</param>
-    /// <returns>重算统计</returns>
-    Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostRecalculateAsync(
-        bool force = false,
-        DateTime? asOfDate = null,
-        int nthWorkingDay = 3);
-
-    /// <summary>
-    /// 仅按型号目的地回写主表机种编码，并按工厂物料回写物料类型，再重算机种月平均（不改产品月成本、不扫明细）
-    /// </summary>
-    /// <param name="queryDto">工厂 + 核算期间；机种可选</param>
-    /// <returns>刷新结果</returns>
-    Task<TaktBomMaterialCostRefreshModelResultDto> RefreshBomMaterialCostModelFieldsAsync(
-        TaktBomMaterialCostRefreshModelQueryDto queryDto);
-
-    /// <summary>
-    /// Quartz：当月先回填机种+物料类型，再按物料类型+机种重算机种月平均
-    /// </summary>
-    /// <param name="asOfDate">判定日；默认今天（目标月=该日所在月）</param>
-    /// <returns>各工厂汇总结果；当月无主表行时返回 null</returns>
-    Task<TaktBomMaterialCostRefreshModelResultDto?> RunScheduledBomModelAvgCostAsync(DateTime? asOfDate = null);
 }

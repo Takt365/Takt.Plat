@@ -16,7 +16,7 @@
         class="defect-monthly-query-bar__control defect-monthly-query-bar__control--plant"
         allow-clear
         show-search
-        :placeholder="t('entity.assydefect.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
       />
       <a-range-picker
         v-model:value="periodRange"

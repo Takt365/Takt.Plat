@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Code.Generator
 // 文件名称：TaktGenTableColumnDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTableColumn 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktGenTableColumn 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Code.Generator;
 // ========================================
 
 /// <summary>
-/// Takt代码生成字段配置实体
+/// Takt代码生成字段配置实体 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// 对应前端 TaktGenTableColumnDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
-public class TaktGenTableColumnDto : TaktTenantDtoBase
+public class TaktGenTableColumnDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// GenTableColumnID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -137,7 +137,7 @@ public class TaktGenTableColumnDto : TaktTenantDtoBase
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
@@ -147,7 +147,7 @@ public class TaktGenTableColumnDto : TaktTenantDtoBase
     public string HtmlType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     public string? DictType { get; set; } = string.Empty;
 
@@ -174,11 +174,6 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -276,7 +271,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public int? IsQuery { get; set; }
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string? QueryType { get; set; } = string.Empty;
 
@@ -286,7 +281,7 @@ public class TaktGenTableColumnQueryDto : TaktPagedQuery
     public string? HtmlType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     public string? DictType { get; set; } = string.Empty;
 
@@ -325,11 +320,6 @@ public class TaktGenTableColumnCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -344,6 +334,7 @@ public class TaktGenTableColumnCreateDto
     /// <summary>
     /// 数据库列名称（唯一索引：租户内生成表+列名唯一，见 ix_gen_table_column_column_unique；snake_case，如 column_name）
     /// </summary>
+    [Required(ErrorMessage = "数据库列名称（唯一索引：租户内生成表+列名唯一，见 ix_gen_table_column_column_unique；snake_case，如 column_name）不能为空")]
     public string DatabaseColumnName { get; set; } = string.Empty;
 
     /// <summary>
@@ -354,16 +345,19 @@ public class TaktGenTableColumnCreateDto
     /// <summary>
     /// 数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）
     /// </summary>
+    [Required(ErrorMessage = "数据类型（字典 sys_db_data_type；nvarchar/varchar/int/datetime/decimal 等）不能为空")]
     public string DatabaseDataType { get; set; } = string.Empty;
 
     /// <summary>
     /// C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）
     /// </summary>
+    [Required(ErrorMessage = "C#类型（字典 gen_csharp_data_type；string/int/long/datetime/decimal/bool/guid 等）不能为空")]
     public string CsharpDataType { get; set; } = string.Empty;
 
     /// <summary>
     /// C#列名（C#属性名，首字母大写，帕斯卡命名法）
     /// </summary>
+    [Required(ErrorMessage = "C#列名（C#属性名，首字母大写，帕斯卡命名法）不能为空")]
     public string CsharpColumnName { get; set; } = string.Empty;
 
     /// <summary>
@@ -427,17 +421,19 @@ public class TaktGenTableColumnCreateDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
+    [Required(ErrorMessage = "查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq不能为空")]
     public string QueryType { get; set; } = string.Empty;
 
     /// <summary>
     /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
     /// </summary>
+    [Required(ErrorMessage = "显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）不能为空")]
     public string HtmlType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     public string? DictType { get; set; } = string.Empty;
 
@@ -466,33 +462,11 @@ public class TaktGenTableColumnUpdateDto : TaktGenTableColumnCreateDto
     /// <summary>
     /// GenTableColumnID（标识要更新的实体）
     /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long GenTableColumnId { get; set; }
 
-}
-
-// ========================================
-// GenTableColumn 排序 DTO
-// ========================================
-
-/// <summary>
-/// GenTableColumn 排序更新 DTO
-/// </summary>
-public class TaktGenTableColumnSortDto
-{
-    /// <summary>
-    /// GenTableColumnID
-    /// </summary>
-    [AdaptMember("Id")]
-    [JsonConverter(typeof(ValueToStringConverter))]
-    public long GenTableColumnId { get; set; }
-
-    /// <summary>
-    /// 行号（项号/序号，固定步长=10）
-    /// </summary>
-    [Required(ErrorMessage = "行号不能为空")]
-    public int LineNumber { get; set; } = 0;
 }
 
 // ========================================
@@ -509,11 +483,6 @@ public class TaktGenTableColumnTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -574,6 +543,56 @@ public class TaktGenTableColumnTemplateDto
     /// 必填（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
+
+    /// <summary>
+    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsCreate { get; set; }
+
+    /// <summary>
+    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUpdate { get; set; }
+
+    /// <summary>
+    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUnique { get; set; }
+
+    /// <summary>
+    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsList { get; set; }
+
+    /// <summary>
+    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsExport { get; set; }
+
+    /// <summary>
+    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// </summary>
+    public int? IsSort { get; set; }
+
+    /// <summary>
+    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsQuery { get; set; }
+
+    /// <summary>
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// </summary>
+    public string? QueryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// </summary>
+    public string? HtmlType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
+    /// </summary>
+    public string? DictType { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -597,11 +616,6 @@ public class TaktGenTableColumnImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 生成表ID（关联代码生成表配置，序列化为string以避免Javascript精度问题）
     /// </summary>
@@ -662,6 +676,56 @@ public class TaktGenTableColumnImportDto
     /// 必填（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsRequired { get; set; }
+
+    /// <summary>
+    /// 新增（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsCreate { get; set; }
+
+    /// <summary>
+    /// 更新（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUpdate { get; set; }
+
+    /// <summary>
+    /// 查重（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUnique { get; set; }
+
+    /// <summary>
+    /// 列表（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsList { get; set; }
+
+    /// <summary>
+    /// 导出（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsExport { get; set; }
+
+    /// <summary>
+    /// 可排序（字典 sys_yes_no_type；0=否 1=是）。控制前端表格列是否显示 sortable 排序图标，与 TaktGenTable.SortField/SortType（默认排序规则）互补。
+    /// </summary>
+    public int? IsSort { get; set; }
+
+    /// <summary>
+    /// 查询（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsQuery { get; set; }
+
+    /// <summary>
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
+    /// </summary>
+    public string? QueryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 显示类型（字典 gen_display_type；input=文本框 select=下拉框 switch=开关 等）
+    /// </summary>
+    public string? HtmlType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
+    /// </summary>
+    public string? DictType { get; set; } = string.Empty;
 
     /// <summary>
     /// 扩展字段JSON
@@ -788,7 +852,7 @@ public class TaktGenTableColumnExportDto
     public int IsQuery { get; set; } = 0;
 
     /// <summary>
-    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between；IsQuery=0 为空，IsQuery=1 必填）
+    /// 查询方式（字典 gen_query_type：eq/ne/gt/gte/lt/lte/like/between）。IsQuery=0 时必须为空串；IsQuery=1 时必填，字符串默认 like、其他类型默认 eq
     /// </summary>
     public string QueryType { get; set; } = string.Empty;
 
@@ -798,7 +862,7 @@ public class TaktGenTableColumnExportDto
     public string HtmlType { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字典类型（关联 TaktDictType.DictTypeCode，选项 TaktDictTypes/options）
+    /// 字典类型（选项 TaktDictTypes/options；DictValue=Id）
     /// </summary>
     public string? DictType { get; set; } = string.Empty;
 

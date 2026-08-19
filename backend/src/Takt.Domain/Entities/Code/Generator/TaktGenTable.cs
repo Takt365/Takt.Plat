@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍数字工厂 ·Takt Plat (TDF) 
 // 命名空间：Takt.Domain.Entities.Code.Generator
 // 文件名称：TaktGenTable.cs
@@ -17,12 +17,13 @@ namespace Takt.Domain.Entities.Code.Generator;
 
 /// <summary>
 /// Takt代码生成表配置实体
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_code_generator_gen_table", "代码生成数据表配置")]
 [SugarIndex("ix_gen_table_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_gen_table_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_gen_table_datasource_table_unique", nameof(TenantCode), OrderByType.Asc, nameof(DataSource), OrderByType.Asc, nameof(TableName), OrderByType.Asc, true)]
-public class TaktGenTable : TaktTenantEntityBase
+public class TaktGenTable : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）

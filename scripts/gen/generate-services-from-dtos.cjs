@@ -69,15 +69,28 @@ const PAGED_QUERY_FIELDS = new Set(['PageIndex', 'PageSize', 'KeyWords']);
  */
 
 /** DTO 基类（与 TaktDtoBase.cs 一致，驱动隔离过滤与仓储接口） */
-const DTO_BASE_NAMES = ['TaktTenantDtoBase', 'TaktCompanyDtoBase', 'TaktApprovalDtoBase'];
+const DTO_BASE_NAMES = [
+  'TaktTenantCoreDtoBase',
+  'TaktTenantCultureDtoBase',
+  'TaktTenantPlantDtoBase',
+  'TaktTenantDtoBase',
+  'TaktCompanyDtoBase',
+  'TaktApprovalDtoBase',
+];
 
 const DTO_BASE_TO_ENTITY_BASE = {
+  TaktTenantCoreDtoBase: 'TaktTenantCoreEntityBase',
+  TaktTenantCultureDtoBase: 'TaktTenantCultureEntityBase',
+  TaktTenantPlantDtoBase: 'TaktTenantPlantEntityBase',
   TaktTenantDtoBase: 'TaktTenantEntityBase',
   TaktCompanyDtoBase: 'TaktCompanyEntityBase',
   TaktApprovalDtoBase: 'TaktApprovalEntityBase',
 };
 
 const DTO_BASE_TO_REPOSITORY = {
+  TaktTenantCoreDtoBase: 'ITaktTenantRepository',
+  TaktTenantCultureDtoBase: 'ITaktTenantRepository',
+  TaktTenantPlantDtoBase: 'ITaktTenantRepository',
   TaktTenantDtoBase: 'ITaktTenantRepository',
   TaktCompanyDtoBase: 'ITaktCompanyRepository',
   TaktApprovalDtoBase: 'ITaktApprovalRepository',
@@ -85,6 +98,9 @@ const DTO_BASE_TO_REPOSITORY = {
 
 /** 实体基类 → 仓储接口（子表注入） */
 const ENTITY_BASE_TO_REPOSITORY = {
+  TaktTenantCoreEntityBase: 'ITaktTenantRepository',
+  TaktTenantCultureEntityBase: 'ITaktTenantRepository',
+  TaktTenantPlantEntityBase: 'ITaktTenantRepository',
   TaktTenantEntityBase: 'ITaktTenantRepository',
   TaktCompanyEntityBase: 'ITaktCompanyRepository',
   TaktApprovalEntityBase: 'ITaktApprovalRepository',
@@ -4245,7 +4261,8 @@ function printUsage() {
   - 扫描 Takt.Application/Dtos/**/*Dtos.cs
   - 仅处理同时具备 TaktXxxDto / QueryDto / CreateDto / UpdateDto 的聚合模块
   - 隔离与仓储由主 DTO / Domain 实体三基类决定（不一致时隔离以实体为准）：
-      TaktTenantEntityBase / TaktTenantDtoBase → ITaktTenantRepository，仅 TenantCode；Options 禁止 CompanyCode / EnsureThreeLayerContext
+      TaktTenant*EntityBase / TaktTenant*DtoBase（四组合 Core/Culture/Plant/默认）→ ITaktTenantRepository，仅 TenantCode；Options 禁止 CompanyCode / EnsureThreeLayerContext
+      RelatedPlant 仅组合 1·3；CultureCode 注入 Create 仅组合 2（Culture）与公司/审批
       TaktCompanyEntityBase / TaktCompanyDtoBase → ITaktCompanyRepository，TenantCode + CompanyCode；Options 必须含 CompanyCode 过滤
       TaktApprovalEntityBase / TaktApprovalDtoBase → ITaktApprovalRepository，TenantCode + CompanyCode；Options 同公司级
   - 排除 User（与 generate-dtos-from-entity.cjs 一致，禁止生成/覆盖）

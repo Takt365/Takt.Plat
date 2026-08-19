@@ -74,7 +74,7 @@ public interface ITaktAuthService
     /// </summary>
     /// <param name="userId">用户 ID</param>
     /// <param name="tenantCode">登录所选租户</param>
-    /// <param name="cultureCode">区域文化编码（保留参数，登录公司解析不再依赖界面语言）</param>
+    /// <param name="cultureCode">区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）</param>
     /// <param name="requestedCompanyCode">前端传入的公司编码（可选）</param>
     /// <returns>租户编码与公司编码</returns>
     Task<(string TenantCode, string CompanyCode)> ResolveLoginTenantAndCompanyAsync(

@@ -60,19 +60,9 @@ public class TaktBomMaterialCostTrendComponentMovingPriceQueryDto : TaktPagedQue
     public string? FocusPeriod { get; set; }
 
     /// <summary>
-    /// 评估类别（明细表无此字段；保留兼容，服务忽略）
-    /// </summary>
-    public string? Valuation { get; set; }
-
-    /// <summary>
     /// 涨跌筛选：空=全部；up/down/flat/none；changed=仅涨或跌
     /// </summary>
     public string? TrendFilter { get; set; }
-
-    /// <summary>
-    /// 全量列表排序（分页前）：bom（默认 BOM 展开序）/ trend / varianceDesc
-    /// </summary>
-    public string? SortBy { get; set; }
 }
 
 /// <summary>
@@ -101,9 +91,9 @@ public class TaktBomMaterialCostTrendComponentMovingPriceDto
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 序号（明细表）
+    /// 行号（项号/序号，固定步长=10）
     /// </summary>
-    public string SequenceCode { get; set; } = string.Empty;
+    public int LineNumber { get; set; }
 
     /// <summary>
     /// BOM 层级（明细表）

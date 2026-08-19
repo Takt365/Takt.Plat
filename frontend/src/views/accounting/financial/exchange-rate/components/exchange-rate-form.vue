@@ -244,10 +244,6 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'

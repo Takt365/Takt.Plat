@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat 
 // 命名空间：Takt.Shared.Options
 // 文件名称：TaktSelectOption.cs
@@ -52,7 +52,7 @@ public class TaktSelectOption
     public string? DictTypeCode { get; set; }
 
     /// <summary>
-    /// 区域文化编码（eo=全局；批量加载时供前端同 DictValue 去重，区域项优先于 eo）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; }
 

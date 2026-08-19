@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：ITaktGeneralMaterialService.cs
-// 创建时间：2026-08-05
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：全局物料应用服务接口
 // 

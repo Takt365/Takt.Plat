@@ -24,7 +24,7 @@ namespace Takt.Domain.Entities.Identity;
 [SugarIndex("ix_role_menu_unique", nameof(TenantCode), OrderByType.Asc, nameof(RoleId), OrderByType.Asc, nameof(MenuId), OrderByType.Asc, true)]
 [SugarIndex("ix_role_menu_menu", nameof(TenantCode), OrderByType.Asc, nameof(MenuId), OrderByType.Asc, false)]
 [SugarIndex("ix_role_menu_role", nameof(TenantCode), OrderByType.Asc, nameof(RoleId), OrderByType.Asc, false)]
-public class TaktRoleMenu : TaktTenantEntityBase
+public class TaktRoleMenu : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 角色ID

@@ -20,22 +20,29 @@ namespace Takt.Infrastructure.Services.Logistics.Manufacturing.Bom.Quartz;
 /// </summary>
 public sealed class TaktBomMaterialCostRecalculateJobHandler : ITaktQuartzJobHandler
 {
-    private readonly ITaktBomMaterialCostAnalysisService _bomMaterialCostAnalysisService;
+    private readonly ITaktBomCalculateService _bomCalculateService;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="bomMaterialCostAnalysisService">BOM 成本分析服务（合计/重算）</param>
-    public TaktBomMaterialCostRecalculateJobHandler(ITaktBomMaterialCostAnalysisService bomMaterialCostAnalysisService)
+    /// <param name="bomCalculateService">BOM 计算服务</param>
+    public TaktBomMaterialCostRecalculateJobHandler(ITaktBomCalculateService bomCalculateService)
     {
-        ArgumentNullException.ThrowIfNull(bomMaterialCostAnalysisService);
-        _bomMaterialCostAnalysisService = bomMaterialCostAnalysisService;
+        ArgumentNullException.ThrowIfNull(bomCalculateService);
+        _bomCalculateService = bomCalculateService;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// nameof
+    /// </summary>
     public string HandlerKey => nameof(TaktBomMaterialCostRecalculateJobHandler);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行任务逻辑
+    /// </summary>
+    /// <param name="context">执行上下文</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>任务</returns>
     public async Task ExecuteAsync(TaktQuartzJobContext context, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(context);
@@ -43,9 +50,7 @@ public sealed class TaktBomMaterialCostRecalculateJobHandler : ITaktQuartzJobHan
         ArgumentException.ThrowIfNullOrWhiteSpace(task.TenantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(task.CompanyCode);
         var asOfDate = TaktBomQuartzExecuteParamsHelper.ResolveAsOfDate(context.ExecuteParams);
-        var result = await _bomMaterialCostAnalysisService.RunScheduledBomMaterialCostRecalculateAsync(
-            force: TaktBomQuartzExecuteParamsHelper.TryParseForce(context.ExecuteParams),
-            asOfDate: asOfDate);
+        var result = await _bomCalculateService.RunScheduledBomCalculateRecalculateAsync(asOfDate);
         if (result == null)
         {
             context.ExecuteMessage = "成本重算无结果（目标月无明细或上下文无效）";

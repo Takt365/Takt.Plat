@@ -38,14 +38,19 @@ public class TaktDatabaseOptions
     public List<string> TenantCodes { get; set; } = null!;
 
     /// <summary>
-    /// 需要初始化的公司编码列表（各租户内顺序与种子一致）
+    /// 需要初始化的公司编码列表（与 <c>PlantCodes</c>/<c>CultureCodes</c> 同序一一对应：CompanyCodes[i]↔PlantCodes[i]↔CultureCodes[i]；唯一合法公司↔工厂↔区域文化映射源）
     /// </summary>
     public List<string> CompanyCodes { get; set; } = null!;
 
     /// <summary>
-    /// 需要初始化的工厂编码列表（各租户内顺序与种子一致）
+    /// 需要初始化的工厂编码列表（与 <c>CompanyCodes</c>/<c>CultureCodes</c> 同序一一对应）
     /// </summary>
     public List<string> PlantCodes { get; set; } = null!;
+
+    /// <summary>
+    /// 区域文化编码列表（与 <c>CompanyCodes</c>/<c>PlantCodes</c> 同序一一对应；BCP47 如 ja-JP、zh-CN、zh-HK）
+    /// </summary>
+    public List<string> CultureCodes { get; set; } = null!;
 
     /// <summary>
     /// 连接字符串模板（{TenantCode} 占位）
@@ -60,6 +65,7 @@ public class TaktDatabaseOptions
         TenantCodes = NormalizeCodeList(TenantCodes);
         CompanyCodes = NormalizeCodeList(CompanyCodes);
         PlantCodes = NormalizeCodeList(PlantCodes);
+        CultureCodes = NormalizeCodeList(CultureCodes);
         SugarDbType = TaktDatabaseTypeHelper.ResolveSugarDbType(DbType);
         Validate();
     }
@@ -77,11 +83,17 @@ public class TaktDatabaseOptions
     public string GetSeedCompanyCode() => CompanyCodes[0];
 
     /// <summary>
-    /// 按 <c>CompanyCodes</c> 与 <c>PlantCodes</c> 同序下标映射工厂代码（如 0001→0001、2300→C100）
+    /// 默认区域文化（CultureCodes 首项；与默认公司同序）
+    /// </summary>
+    /// <returns>默认 CultureCode</returns>
+    public string GetSeedCultureCode() => CultureCodes[0];
+
+    /// <summary>
+    /// 解析公司编码在同序映射中的下标（未找到则抛异常）
     /// </summary>
     /// <param name="companyCode">公司编码</param>
-    /// <returns>对应工厂编码</returns>
-    public string GetPlantCodeForCompanyCode(string companyCode)
+    /// <returns>下标</returns>
+    private int IndexOfCompanyCode(string companyCode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
         var normalized = companyCode.Trim();
@@ -90,8 +102,53 @@ public class TaktDatabaseOptions
         {
             throw new InvalidOperationException($"Database:CompanyCodes 中未找到公司编码 {normalized}");
         }
-        return PlantCodes[index];
+        return index;
     }
+
+    /// <summary>
+    /// 解析工厂编码在同序映射中的下标（未找到则抛异常）
+    /// </summary>
+    /// <param name="plantCode">工厂编码</param>
+    /// <returns>下标</returns>
+    private int IndexOfPlantCode(string plantCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
+        var normalized = plantCode.Trim();
+        var index = PlantCodes.FindIndex(code => string.Equals(code, normalized, StringComparison.OrdinalIgnoreCase));
+        if (index < 0)
+        {
+            throw new InvalidOperationException($"Database:PlantCodes 中未找到工厂编码 {normalized}");
+        }
+        return index;
+    }
+
+    /// <summary>
+    /// 公司→工厂：按同序下标映射（唯一合法映射；禁止手写对照表）
+    /// </summary>
+    /// <param name="companyCode">公司编码（须在 CompanyCodes 中）</param>
+    /// <returns>同下标工厂编码</returns>
+    public string GetPlantCodeForCompanyCode(string companyCode) => PlantCodes[IndexOfCompanyCode(companyCode)];
+
+    /// <summary>
+    /// 公司→区域文化：按同序下标映射（唯一合法映射；禁止手写对照表）
+    /// </summary>
+    /// <param name="companyCode">公司编码（须在 CompanyCodes 中）</param>
+    /// <returns>同下标 CultureCode</returns>
+    public string GetCultureCodeForCompanyCode(string companyCode) => CultureCodes[IndexOfCompanyCode(companyCode)];
+
+    /// <summary>
+    /// 工厂→公司：按同序下标映射（唯一合法映射；禁止手写对照表）
+    /// </summary>
+    /// <param name="plantCode">工厂编码（须在 PlantCodes 中）</param>
+    /// <returns>同下标公司编码</returns>
+    public string GetCompanyCodeForPlantCode(string plantCode) => CompanyCodes[IndexOfPlantCode(plantCode)];
+
+    /// <summary>
+    /// 工厂→区域文化：按同序下标映射（唯一合法映射；禁止手写对照表）
+    /// </summary>
+    /// <param name="plantCode">工厂编码（须在 PlantCodes 中）</param>
+    /// <returns>同下标 CultureCode</returns>
+    public string GetCultureCodeForPlantCode(string plantCode) => CultureCodes[IndexOfPlantCode(plantCode)];
 
     /// <summary>
     /// 获取已解析的 SqlSugar 数据库类型（未缓存时按 DbType 配置即时映射）
@@ -146,9 +203,14 @@ public class TaktDatabaseOptions
         {
             throw new InvalidOperationException($"{SectionName}:PlantCodes 不能为空");
         }
-        if (CompanyCodes.Count != PlantCodes.Count)
+        if (CultureCodes.Count == 0)
         {
-            throw new InvalidOperationException($"{SectionName}:CompanyCodes 与 PlantCodes 数量须一致且同序一一对应");
+            throw new InvalidOperationException($"{SectionName}:CultureCodes 不能为空");
+        }
+        if (CompanyCodes.Count != PlantCodes.Count || CompanyCodes.Count != CultureCodes.Count)
+        {
+            throw new InvalidOperationException(
+                $"{SectionName}:CompanyCodes、PlantCodes、CultureCodes 数量须一致且同序一一对应（Company[i]↔Plant[i]↔Culture[i]）");
         }
         if (string.IsNullOrWhiteSpace(ConnectionStringTemplate))
         {

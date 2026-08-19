@@ -42,6 +42,12 @@ public static class TaktQuartzConstants
     /// </summary>
     public const string SqlSyncSummaryTag = "QUARTZ_SYNC_SUMMARY";
 
+    /// <summary>
+    /// 非查询 SQL（含 sync_*.sql MERGE）默认命令超时秒数；0 表示无限制。
+    /// 可由配置 Quartz:SqlCommandTimeoutSeconds 覆盖。
+    /// </summary>
+    public const int DefaultSqlCommandTimeoutSeconds = 7200;
+
     /// <summary>任务执行完成落库消息类型（字典 sys_message_type DictValue）</summary>
     public const string ExecutedMessageType = "system";
 

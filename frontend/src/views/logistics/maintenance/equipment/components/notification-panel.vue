@@ -107,10 +107,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.maintenancenotification.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.maintenancenotification.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -595,7 +595,7 @@ const visibleQueryFieldKeys = ref<string[]>([])
 
 /** 高级查询字段元数据 */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.maintenancenotification.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'notificationCode', label: t('entity.maintenancenotification.notificationcode') },
   { key: 'EquipCode', label: t('entity.maintenancenotification.EquipCode') },
   { key: 'equipmentName', label: t('entity.maintenancenotification.equipmentname') },
@@ -725,7 +725,7 @@ const columns = computed<TableColumnsType>(() => [
       String(getMaintenanceNotificationField(record, 'maintenanceNotificationId') ?? ''),
   },
   {
-    title: t('entity.maintenancenotification.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

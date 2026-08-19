@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/accounting/financial
 // 文件名称：company.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-15
 // 创建人：Takt365(Auto Generated)
 // 功能描述：accounting/financial 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 公司实体 代表租户下的独立公司/工厂（租户级实体，只需要TenantCode） 参照 SAP Company Code (BUKRS) 设计
+ * 公司实体 代表租户下的独立公司（第二层数据隔离业务主档） 参照 SAP Company Code (BUKRS) 设计 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
  * 对应前端 TaktCompanyDto
  * 继承 TaktTenantDtoBase
  * 对应前端 Company
@@ -239,11 +239,6 @@ export interface Company extends TenantDtoBase {
   financialManagementArea: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；公司主档权威）
-   */
-  cultureCode: string;
-
-  /**
    * 排序号（越小越靠前）
    */
   sortOrder: number;
@@ -253,17 +248,8 @@ export interface Company extends TenantDtoBase {
    */
   companyStatus: number;
 
-  /**
-   * 可访问该公司的角色关联（RBAC，表 takt_identity_role_company） （子表：TaktRoleCompany）
-   */
-  roleCompanies?: RoleCompany[];
-
-  /**
-   * 可访问该公司的用户关联（RBAC，表 takt_identity_user_company） （子表：TaktUserCompany）
-   */
-  userCompanies?: UserCompany[];
-
 }
+
 
 /**
  * Company 分页查询 DTO
@@ -276,6 +262,16 @@ export interface CompanyQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
 
   /**
    * 公司名称1
@@ -433,11 +429,6 @@ export interface CompanyQuery extends TaktPagedQuery {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  cultureCode?: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
@@ -501,11 +492,6 @@ export interface CompanyQuery extends TaktPagedQuery {
    * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   financialManagementArea?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
-   */
-  relatedPlant?: string;
 
   /**
    * 排序号（越小越靠前）
@@ -539,6 +525,7 @@ export interface CompanyQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建Company DTO
  * 对应前端 CompanyCreate
@@ -549,6 +536,16 @@ export interface CompanyCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 公司名称1
@@ -696,11 +693,6 @@ export interface CompanyCreate {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  cultureCode: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
@@ -766,11 +758,6 @@ export interface CompanyCreate {
   financialManagementArea: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
-   */
-  relatedPlant: string;
-
-  /**
    * 公司状态（字典 sys_normal_disable_status）
    */
   companyStatus: number;
@@ -797,6 +784,7 @@ export interface CompanyCreate {
 
 }
 
+
 /**
  * 更新Company DTO
  * 继承 TaktCompanyCreateDto，添加 CompanyId 字段
@@ -810,6 +798,7 @@ export interface CompanyUpdate extends CompanyCreate {
   companyId: string;
 
 }
+
 
 /**
  * Company 状态更新 DTO
@@ -829,6 +818,7 @@ export interface CompanyStatus {
 
 }
 
+
 /**
  * Company 排序更新 DTO
  * 对应前端 CompanySort
@@ -847,6 +837,7 @@ export interface CompanySort {
 
 }
 
+
 /**
  * Company 导入模板行 DTO
  * 对应前端 CompanyTemplate
@@ -857,6 +848,16 @@ export interface CompanyTemplate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
 
   /**
    * 公司名称1
@@ -1004,11 +1005,6 @@ export interface CompanyTemplate {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  cultureCode?: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
@@ -1074,11 +1070,6 @@ export interface CompanyTemplate {
   financialManagementArea?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
-   */
-  relatedPlant?: string;
-
-  /**
    * 公司状态（字典 sys_normal_disable_status）
    */
   companyStatus?: number;
@@ -1104,6 +1095,7 @@ export interface CompanyTemplate {
   remark?: string;
 
 }
+
 
 /**
  * Company 导入 DTO（独立实现，不继承 TemplateDto）
@@ -1117,6 +1109,16 @@ export interface CompanyImport {
   tenantCode?: string;
 
   /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant?: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode?: string;
+
+  /**
    * 公司名称1
    */
   companyName1?: string;
@@ -1262,11 +1264,6 @@ export interface CompanyImport {
   companyExistence?: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  cultureCode?: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
@@ -1332,11 +1329,6 @@ export interface CompanyImport {
   financialManagementArea?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
-   */
-  relatedPlant?: string;
-
-  /**
    * 公司状态（字典 sys_normal_disable_status）
    */
   companyStatus?: number;
@@ -1363,6 +1355,7 @@ export interface CompanyImport {
 
 }
 
+
 /**
  * Company 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 CompanyExport
@@ -1373,6 +1366,16 @@ export interface CompanyExport {
    * CompanyID
    */
   companyId: string;
+
+  /**
+   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+   */
+  relatedPlant: string;
+
+  /**
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+   */
+  cultureCode: string;
 
   /**
    * 公司名称1
@@ -1520,11 +1523,6 @@ export interface CompanyExport {
   companyExistence: number;
 
   /**
-   * 区域文化编码（字典 sys_culture_code；即语言/区域文化）
-   */
-  cultureCode: string;
-
-  /**
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
@@ -1588,11 +1586,6 @@ export interface CompanyExport {
    * 财务管理范围（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   financialManagementArea: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=Id）
-   */
-  relatedPlant: string;
 
   /**
    * 排序号（越小越靠前）

@@ -142,6 +142,8 @@ const productVisibleKeys = ref([
   'productDescription',
   'materialType',
   'productMonthlyCost',
+  'productMonthlyCalculation',
+  'latestPurchaseCost',
   'currencyCode'])
 
 /**
@@ -187,6 +189,24 @@ const productColumns = computed<TableColumnsType>(() => [
     ellipsis: true,
     customRender: ({ record }: { record: BomMaterialCost }) =>
       formatBomMaterialCostAmount(record.productMonthlyCost),
+  },
+  {
+    title: pi.label('productMonthlyCalculation'),
+    dataIndex: 'productMonthlyCalculation',
+    key: 'productMonthlyCalculation',
+    width: 120,
+    ellipsis: true,
+    customRender: ({ record }: { record: BomMaterialCost }) =>
+      formatBomMaterialCostAmount(record.productMonthlyCalculation),
+  },
+  {
+    title: pi.label('latestPurchaseCost'),
+    dataIndex: 'latestPurchaseCost',
+    key: 'latestPurchaseCost',
+    width: 120,
+    ellipsis: true,
+    customRender: ({ record }: { record: BomMaterialCost }) =>
+      formatBomMaterialCostAmount(record.latestPurchaseCost),
   },
   {
     title: pi.label('currencyCode'),

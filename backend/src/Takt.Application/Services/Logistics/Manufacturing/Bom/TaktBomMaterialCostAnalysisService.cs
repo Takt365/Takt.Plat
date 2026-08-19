@@ -11,18 +11,14 @@
 // ========================================
 
 using System.Linq.Expressions;
-using Mapster;
 using OfficeOpenXml;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Accounting.Financial;
-using Takt.Domain.Entities.HumanResource.Attendance;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Materials;
-using Takt.Domain.Entities.Logistics.Procurement;
 using Takt.Domain.Interfaces;
 using Takt.Domain.Repositories;
-using Takt.Shared.Constants;
 using Takt.Shared.Exceptions;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -37,74 +33,48 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMaterialCostAnalysisService
 {
     /// <summary>
-    /// 转置/涨跌分析加载成本汇总行上限
+    /// BOM 成本明细按年分表基表名（与 SugarTable 一致）
     /// </summary>
-    private const int MaxAnalysisRowLoad = 20000;
-
-    /// <summary>BOM 成本明细按年分表基表名（与 SugarTable 一致）</summary>
     private const string BomItemYearShardBaseTable = "takt_logistics_manufacturing_bom_material_cost_item";
-
-    /// <summary>移动价格按年分表基表名</summary>
-    private const string MovingPriceYearShardBaseTable = "takt_logistics_materials_material_moving_price";
-
-    /// <summary>按 Id 探测年分表向前/后年数（含当年）</summary>
-    private const int YearShardProbeYears = 6;
-
+    /// <summary>
+    /// BOM 成本明细仓储
+    /// </summary>
     private readonly ITaktCompanyRepository<TaktBomMaterialCostItem> _bomMaterialCostItemRepository;
+    /// <summary>
+    /// BOM 成本汇总仓储（转置/涨跌分析数据源）
+    /// </summary>
     private readonly ITaktCompanyRepository<TaktBomMaterialCost> _bomMaterialCostRepository;
-    private readonly ITaktCompanyRepository<TaktMaterialPlant> _materialPlantRepository;
-    private readonly ITaktCompanyRepository<TaktMaterialMovingPrice> _materialMovingPriceRepository;
-    private readonly ITaktCompanyRepository<TaktCalendar> _calendarRepository;
-    private readonly ITaktCompanyRepository<TaktPurchasePrice> _purchasePriceRepository;
-    private readonly ITaktCompanyRepository<TaktPurchasePriceItem> _purchasePriceItemRepository;
-    private readonly ITaktCompanyRepository<TaktSupplier> _supplierRepository;
+    /// <summary>
+    /// 型号目的地仓储（机种名称）
+    /// </summary>
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
+    /// <summary>
+    /// 公司仓储（读取 RelatedPlant）
+    /// </summary>
     private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
-    private readonly ITaktUniqueValidator _uniqueValidator;
 
     /// <summary>
     /// 构造函数
     /// </summary>
-    /// <param name="bomMaterialCostItemRepository">BOM物料成本明细仓储</param>
-    /// <param name="bomMaterialCostRepository">BOM物料成本汇总仓储（转置/涨跌分析数据源）</param>
-    /// <param name="materialPlantRepository">工厂物料仓储（成本合计仅 FERT）</param>
-    /// <param name="materialMovingPriceRepository">移动价格仓储（组件单价期间转置）</param>
-    /// <param name="calendarRepository">工厂日历仓储（第 N 工作日判定）</param>
-    /// <param name="purchasePriceRepository">采购价格主表仓储</param>
-    /// <param name="purchasePriceItemRepository">采购价格明细仓储</param>
-    /// <param name="supplierRepository">供应商仓储（回填采购组织）</param>
+    /// <param name="bomMaterialCostItemRepository">BOM 物料成本明细仓储</param>
+    /// <param name="bomMaterialCostRepository">BOM 物料成本汇总仓储（转置/涨跌分析数据源）</param>
     /// <param name="modelDestinationRepository">型号目的地仓储</param>
     /// <param name="companyRepository">公司仓储（读取 RelatedPlant）</param>
-    /// <param name="uniqueValidator">唯一性验证器</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBomMaterialCostAnalysisService(
         ITaktCompanyRepository<TaktBomMaterialCostItem> bomMaterialCostItemRepository,
         ITaktCompanyRepository<TaktBomMaterialCost> bomMaterialCostRepository,
-        ITaktCompanyRepository<TaktMaterialPlant> materialPlantRepository,
-        ITaktCompanyRepository<TaktMaterialMovingPrice> materialMovingPriceRepository,
-        ITaktCompanyRepository<TaktCalendar> calendarRepository,
-        ITaktCompanyRepository<TaktPurchasePrice> purchasePriceRepository,
-        ITaktCompanyRepository<TaktPurchasePriceItem> purchasePriceItemRepository,
-        ITaktCompanyRepository<TaktSupplier> supplierRepository,
         ITaktTenantRepository<TaktModelDestination> modelDestinationRepository,
         ITaktTenantRepository<TaktCompany> companyRepository,
-        ITaktUniqueValidator uniqueValidator,
         ITaktUserContext? userContext = null,
         ITaktLocalizationService? localizationService = null)
         : base(userContext, localizationService)
     {
         _bomMaterialCostItemRepository = bomMaterialCostItemRepository;
         _bomMaterialCostRepository = bomMaterialCostRepository;
-        _materialPlantRepository = materialPlantRepository;
-        _materialMovingPriceRepository = materialMovingPriceRepository;
-        _calendarRepository = calendarRepository;
-        _purchasePriceRepository = purchasePriceRepository;
-        _purchasePriceItemRepository = purchasePriceItemRepository;
-        _supplierRepository = supplierRepository;
         _modelDestinationRepository = modelDestinationRepository;
         _companyRepository = companyRepository;
-        _uniqueValidator = uniqueValidator;
     }
 
     // ========================================
@@ -326,18 +296,33 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         ArgumentNullException.ThrowIfNull(queryDto);
         EnsureThreeLayerContext();
         var pageIndex = TaktPagedClamp.NormalizePageIndex(queryDto.PageIndex);
-        // 列表仍受 MaxPageSize 约束；导出可传更大 PageSize（硬封顶 MaxAnalysisRowLoad）
-        var requestedPageSize = queryDto.PageSize <= 0
-            ? TaktPagedClamp.DefaultPageSize
-            : queryDto.PageSize;
-        var pageSize = requestedPageSize > TaktPagedClamp.DefaultMaxPageSize
-            ? Math.Min(requestedPageSize, MaxAnalysisRowLoad)
-            : TaktPagedClamp.NormalizePageSize(requestedPageSize);
+        var pageSize = TaktPagedClamp.NormalizePageSize(queryDto.PageSize);
         var skip = TaktPagedClamp.ComputeSkip(pageIndex, pageSize);
+        var full = await BuildBomMaterialCostAnalysisTransposedAsync(queryDto);
+        var total = full.Paged.Total;
+        var transposedRows = full.Paged.Data.Skip(skip).Take(pageSize).ToList();
+        return new TaktBomMaterialCostAnalysisTransposedResultDto
+        {
+            Paged = TaktPagedResult<TaktBomMaterialCostAnalysisTransposedDto>.Create(
+                transposedRows, total, pageIndex, pageSize),
+            PeriodOrder = full.PeriodOrder,
+            ModelSummary = full.ModelSummary,
+            PeriodCostTotals = full.PeriodCostTotals,
+            VarianceAmountTotal = full.VarianceAmountTotal,
+        };
+    }
+
+    /// <summary>
+    /// 构建转置全量结果（筛选命中的全部产品行，不分页、不截断）
+    /// </summary>
+    /// <param name="queryDto">转置查询</param>
+    /// <returns>全量转置结果（Paged.Data 为全部行）</returns>
+    private async Task<TaktBomMaterialCostAnalysisTransposedResultDto> BuildBomMaterialCostAnalysisTransposedAsync(
+        TaktBomMaterialCostAnalysisTransposedQueryDto queryDto)
+    {
         var focusPeriod = string.IsNullOrWhiteSpace(queryDto.FocusPeriod) ? null : queryDto.FocusPeriod.Trim();
         var plantCode = queryDto.PlantCode?.Trim() ?? string.Empty;
         var modelCode = queryDto.ModelCode?.Trim();
-        // 环比需取关注月上月成本：加载区间向前扩 1 个月；展示列仍用原核算期间
         var loadQuery = CloneTransposedQueryForMomLoad(queryDto, focusPeriod);
         var rows = await LoadTransposedCostHeadersAsync(loadQuery);
         var periodOrder = BuildCostHeaderPeriodOrder(
@@ -392,11 +377,11 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         var filteredRows = FilterTransposedRowsByTrend(allTransposedRows, queryDto.TrendFilter);
         var orderedRows = OrderTransposedRows(filteredRows, queryDto.SortBy);
         var total = orderedRows.Count;
-        var transposedRows = orderedRows.Skip(skip).Take(pageSize).ToList();
         var (periodCostTotals, varianceAmountTotal) = SumTransposedRowGrandTotals(orderedRows, periodOrder);
         return new TaktBomMaterialCostAnalysisTransposedResultDto
         {
-            Paged = TaktPagedResult<TaktBomMaterialCostAnalysisTransposedDto>.Create(transposedRows, total, pageIndex, pageSize),
+            Paged = TaktPagedResult<TaktBomMaterialCostAnalysisTransposedDto>.Create(
+                orderedRows, total, 1, Math.Max(1, total)),
             PeriodOrder = periodOrder,
             ModelSummary = modelSummary,
             PeriodCostTotals = periodCostTotals,
@@ -406,7 +391,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
 
     /// <summary>
     /// 导出成本分析转置 Excel（机种/产品/品名 + 各月成本 + 涨跌/环比）
-    /// <para>导出取全量转置行（PageSize=MaxAnalysisRowLoad），勿套用列表 MaxPageSize(100)。</para>
+    /// <para>导出筛选命中的全部转置行，不分页、不截断。</para>
     /// </summary>
     /// <param name="query">查询条件；空则用默认查询 DTO</param>
     /// <param name="sheetName">工作表名称；空则默认「DTA BOM成本推移表」</param>
@@ -418,10 +403,8 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         string? fileName = null)
     {
         query ??= new TaktBomMaterialCostAnalysisTransposedQueryDto();
-        // 导出取全量转置行，勿套用列表 MaxPageSize(100)
-        query.PageIndex = 1;
-        query.PageSize = Math.Max(TaktPagedClamp.DefaultMaxPageSize, MaxAnalysisRowLoad);
-        var result = await GetBomMaterialCostAnalysisTransposedListAsync(query);
+        EnsureThreeLayerContext();
+        var result = await BuildBomMaterialCostAnalysisTransposedAsync(query);
         var periodOrder = result.PeriodOrder;
         var columnKeys = new List<string> { "modelCode", "productCode", "productDescription" };
         var columnLabels = new List<string> { "机种", "产品", "品名" };
@@ -486,10 +469,13 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         var rangeStart = baseStart < compareStart ? baseStart : compareStart;
         var rangeEnd = baseEnd > compareEnd ? baseEnd : compareEnd;
         var rows = await LoadVarianceItemRowsAsync(plantCode, productCode, rangeStart, rangeEnd);
-        var baseSnapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, basePeriod);
-        var compareSnapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, comparePeriod);
-        var productDescription = compareSnapshot.FirstOrDefault()?.ProductDescription
-            ?? baseSnapshot.FirstOrDefault()?.ProductDescription
+        var baseSnapshotRaw = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, basePeriod);
+        var compareSnapshotRaw = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, comparePeriod);
+        // 全量快照上按参与资格 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F），保证差异明细与合计口径一致
+        var baseSnapshot = TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(baseSnapshotRaw).ToList();
+        var compareSnapshot = TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(compareSnapshotRaw).ToList();
+        var productDescription = compareSnapshotRaw.FirstOrDefault()?.ProductDescription
+            ?? baseSnapshotRaw.FirstOrDefault()?.ProductDescription
             ?? string.Empty;
         var baseMap = baseSnapshot.ToDictionary(TaktBomMaterialCostItemLineCostHelper.BuildComponentKey, StringComparer.Ordinal);
         var compareMap = compareSnapshot.ToDictionary(TaktBomMaterialCostItemLineCostHelper.BuildComponentKey, StringComparer.Ordinal);
@@ -503,8 +489,11 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
             })
             .OrderByDescending(l => Math.Abs(l.VarianceAmount))
             .ToList();
-        var baseTotal = TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(baseSnapshot);
-        var compareTotal = TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(compareSnapshot);
+        // base/compare 已是参与资格 Filter 后的行，直接合计
+        var baseTotal = TaktBomMaterialCostItemLineCostHelper.RoundCost(
+            baseSnapshot.Sum(TaktBomMaterialCostItemLineCostHelper.CalculateLineCost));
+        var compareTotal = TaktBomMaterialCostItemLineCostHelper.RoundCost(
+            compareSnapshot.Sum(TaktBomMaterialCostItemLineCostHelper.CalculateLineCost));
         return new TaktBomMaterialCostAnalysisVarianceResultDto
         {
             PlantCode = plantCode,
@@ -745,669 +734,8 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
             fileName ?? $"BOM材料月度涨跌_{result.ModelCode}.xlsx");
     }
 
-    // ========================================
-    // 成本合计 / 重算 / 机种月均（非 CRUD；避免 generate-all 覆盖 Item/Cost 服务）
-    // ========================================
-
     /// <summary>
-    /// 规范化重算查询为单个核算月（供后台任务与合计入口共用）
-    /// </summary>
-    /// <param name="queryDto">查询</param>
-    /// <returns>规范化查询与核算月份标签</returns>
-    public static TaktBomMaterialCostItemRecalculatePreparedQueryDto PrepareRecalculateModelAverageQuery(
-        TaktBomMaterialCostItemQueryDto queryDto)
-    {
-        queryDto ??= new TaktBomMaterialCostItemQueryDto();
-        var normalized = queryDto.Adapt<TaktBomMaterialCostItemQueryDto>();
-        if (!normalized.CostingDateStart.HasValue || !normalized.CostingDateEnd.HasValue)
-        {
-            throw new TaktBusinessException("请选择核算月份后再重算");
-        }
-        var startMonth = new DateTime(
-            normalized.CostingDateStart.Value.Year,
-            normalized.CostingDateStart.Value.Month,
-            1);
-        var endMonth = new DateTime(
-            normalized.CostingDateEnd.Value.Year,
-            normalized.CostingDateEnd.Value.Month,
-            1);
-        if (startMonth != endMonth)
-        {
-            throw new TaktBusinessException("重算仅支持单个核算月份，请缩小日期范围");
-        }
-        var lastDay = DateTime.DaysInMonth(startMonth.Year, startMonth.Month);
-        normalized.CostingDateStart = startMonth;
-        normalized.CostingDateEnd = new DateTime(startMonth.Year, startMonth.Month, lastDay, 23, 59, 59, 999);
-        normalized.PageIndex = 1;
-        normalized.PageSize = 1;
-        return new TaktBomMaterialCostItemRecalculatePreparedQueryDto
-        {
-            Query = normalized,
-            ProcessedMonth = $"{startMonth.Year:D4}-{startMonth.Month:D2}",
-        };
-    }
-
-    /// <inheritdoc />
-    public async Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto> RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
-        TaktBomMaterialCostItemQueryDto queryDto,
-        bool forceRecalculate = false,
-        int processRecordCount = 5000)
-    {
-        EnsureThreeLayerContext();
-        if (processRecordCount < 0)
-        {
-            throw new TaktBusinessException("处理记录数不能为负数（0 表示全部）");
-        }
-        var prepared = PrepareRecalculateModelAverageQuery(queryDto);
-        await ApplyModelCodeProductScopeAsync(prepared.Query);
-        var periodKey = prepared.ProcessedMonth;
-        var filterModel = prepared.Query.ModelCode?.Trim();
-        var itemRows = await LoadItemsForRecalculateQueryAsync(prepared.Query);
-        var groupedKeys = itemRows
-            .Where(r => !string.IsNullOrWhiteSpace(r.PlantCode) && !string.IsNullOrWhiteSpace(r.ProductCode))
-            .GroupBy(
-                r =>
-                {
-                    var plant = r.PlantCode!.Trim();
-                    var product = r.ProductCode!.Trim();
-                    var period = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(r.CostingDate);
-                    return $"{plant}|{product}|{period}";
-                },
-                StringComparer.OrdinalIgnoreCase)
-            .Select(g =>
-            {
-                var latest = g.OrderByDescending(x => x.CostingDate).First();
-                return (
-                    PlantCode: latest.PlantCode!.Trim(),
-                    ProductCode: latest.ProductCode!.Trim(),
-                    CostingDate: latest.CostingDate,
-                    Period: TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(latest.CostingDate));
-            })
-            .Where(k => string.Equals(k.Period, periodKey, StringComparison.Ordinal))
-            .OrderBy(k => k.PlantCode, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(k => k.ProductCode, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var plantCodes = groupedKeys
-            .Select(k => k.PlantCode)
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var materialPlants = plantCodes.Count == 0
-            ? new List<TaktMaterialPlant>()
-            : await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && plantCodes.Contains(x.PlantCode));
-        var destinations = await _modelDestinationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var syncKeys = new List<(string PlantCode, string ProductCode, DateTime CostingDate)>();
-        var skippedCount = 0;
-        foreach (var key in groupedKeys)
-        {
-            if (!TaktBomMaterialCostItemLineCostHelper.IsFertPlantProduct(
-                    materialPlants, key.PlantCode, key.ProductCode))
-            {
-                skippedCount = checked(skippedCount + 1);
-                continue;
-            }
-            if (!string.IsNullOrWhiteSpace(filterModel))
-            {
-                var resolvedModel = ResolveModelCodeFromDestinations(destinations, key.ProductCode);
-                if (!string.Equals(resolvedModel, filterModel, StringComparison.OrdinalIgnoreCase))
-                {
-                    skippedCount = checked(skippedCount + 1);
-                    continue;
-                }
-            }
-            syncKeys.Add((key.PlantCode, key.ProductCode, key.CostingDate));
-        }
-        var totalFertGroupCount = syncKeys.Count;
-        if (processRecordCount > 0 && syncKeys.Count > processRecordCount)
-        {
-            syncKeys = syncKeys.Take(processRecordCount).ToList();
-        }
-        if (syncKeys.Count > 0)
-        {
-            await SyncBomMaterialCostFromItemsBatchAsync(syncKeys, destinations, materialPlants);
-        }
-        return new TaktBomMaterialCostItemRecalculateModelAverageResultDto
-        {
-            ScannedRowCount = itemRows.Count,
-            RefreshedGroupCount = syncKeys.Count,
-            SkippedGroupCount = skippedCount + Math.Max(0, totalFertGroupCount - syncKeys.Count),
-            ResetGroupCount = forceRecalculate ? syncKeys.Count : 0,
-            ProcessedMonthCount = 1,
-            ProcessedMonth = prepared.ProcessedMonth,
-        };
-    }
-
-    /// <inheritdoc />
-    public async Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostSumAsync(
-        bool force = false,
-        DateTime? asOfDate = null,
-        int nthWorkingDay = 3)
-    {
-        _ = force;
-        _ = nthWorkingDay;
-        var query = BuildScheduledCurrentMonthQuery(asOfDate);
-        return await RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
-            query,
-            forceRecalculate: false,
-            processRecordCount: 0);
-    }
-
-    /// <inheritdoc />
-    public async Task<TaktBomMaterialCostItemRecalculateModelAverageResultDto?> RunScheduledBomMaterialCostRecalculateAsync(
-        bool force = false,
-        DateTime? asOfDate = null,
-        int nthWorkingDay = 3)
-    {
-        _ = force;
-        _ = nthWorkingDay;
-        var query = BuildScheduledCurrentMonthQuery(asOfDate);
-        return await RecalculateBomMaterialCostItemModelMonthlyAverageAsync(
-            query,
-            forceRecalculate: true,
-            processRecordCount: 0);
-    }
-
-    /// <inheritdoc />
-    public async Task<TaktBomMaterialCostRefreshModelResultDto> RefreshBomMaterialCostModelFieldsAsync(
-        TaktBomMaterialCostRefreshModelQueryDto queryDto)
-    {
-        EnsureThreeLayerContext();
-        ArgumentNullException.ThrowIfNull(queryDto);
-        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.PlantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(queryDto.CostingPeriod);
-        var plant = queryDto.PlantCode.Trim();
-        var periodKey = queryDto.CostingPeriod.Trim();
-        var filterModel = string.IsNullOrWhiteSpace(queryDto.ModelCode) ? null : queryDto.ModelCode.Trim();
-        var headerExp = Expressionable.Create<TaktBomMaterialCost>();
-        headerExp = headerExp.And(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.PlantCode == plant
-            && x.CostingPeriod == periodKey);
-        if (filterModel != null)
-        {
-            headerExp = headerExp.And(x => x.ModelCode == filterModel);
-        }
-        var headers = await _bomMaterialCostRepository.GetListAsync(headerExp.ToExpression());
-        var destinations = await _modelDestinationRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        var materialPlants = await _materialPlantRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plant);
-        var modelCodeUpdated = 0;
-        var materialTypeUpdated = 0;
-        var touchedGroups = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        foreach (var header in headers)
-        {
-            var previousModel = header.ModelCode?.Trim() ?? string.Empty;
-            var previousType = string.IsNullOrWhiteSpace(header.MaterialType)
-                ? TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode
-                : header.MaterialType.Trim();
-            if (!string.IsNullOrWhiteSpace(previousModel))
-            {
-                touchedGroups.Add($"{previousType}|{previousModel}");
-            }
-            var resolvedModel = ResolveModelCodeFromDestinations(destinations, header.ProductCode);
-            var resolvedType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromPlant(
-                materialPlants, plant, header.ProductCode);
-            if (string.IsNullOrWhiteSpace(resolvedType))
-            {
-                resolvedType = previousType;
-            }
-            var nextModel = string.IsNullOrWhiteSpace(resolvedModel) ? previousModel : resolvedModel.Trim();
-            var nextType = resolvedType.Trim();
-            var modelChanged = !string.IsNullOrWhiteSpace(resolvedModel)
-                && !string.Equals(resolvedModel, previousModel, StringComparison.OrdinalIgnoreCase);
-            var typeChanged = !string.Equals(nextType, previousType, StringComparison.OrdinalIgnoreCase);
-            if (!modelChanged && !typeChanged)
-            {
-                if (!string.IsNullOrWhiteSpace(nextModel))
-                {
-                    touchedGroups.Add($"{nextType}|{nextModel}");
-                }
-                continue;
-            }
-            if (modelChanged)
-            {
-                var clash = await _bomMaterialCostRepository.FirstAsync(
-                    x => x.TenantCode == CurrentTenantCode
-                        && x.CompanyCode == CurrentCompanyCode
-                        && x.PlantCode == plant
-                        && x.ModelCode == resolvedModel
-                        && x.ProductCode == header.ProductCode
-                        && x.CostingPeriod == periodKey
-                        && x.Id != header.Id);
-                if (clash != null)
-                {
-                    ThrowBusinessException(
-                        $"产品 {header.ProductCode} 在期间 {periodKey} 已存在机种 {resolvedModel} 的主表行，无法更新机种编码");
-                }
-                header.ModelCode = resolvedModel;
-                modelCodeUpdated = checked(modelCodeUpdated + 1);
-            }
-            if (typeChanged)
-            {
-                header.MaterialType = nextType;
-                materialTypeUpdated = checked(materialTypeUpdated + 1);
-            }
-            await _bomMaterialCostRepository.UpdateAsync(header);
-            if (!string.IsNullOrWhiteSpace(header.ModelCode))
-            {
-                touchedGroups.Add($"{header.MaterialType?.Trim() ?? nextType}|{header.ModelCode.Trim()}");
-            }
-        }
-        if (filterModel != null && touchedGroups.Count == 0)
-        {
-            var fallbackType = TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode;
-            touchedGroups.Add($"{fallbackType}|{filterModel}");
-        }
-        var averageUpdated = 0;
-        foreach (var key in touchedGroups.OrderBy(k => k, StringComparer.OrdinalIgnoreCase))
-        {
-            var sep = key.IndexOf('|');
-            if (sep <= 0 || sep >= key.Length - 1)
-            {
-                continue;
-            }
-            var mt = key[..sep];
-            var model = key[(sep + 1)..];
-            averageUpdated = checked(
-                averageUpdated + await RefreshModelMonthlyAverageForPeriodAsync(plant, mt, model, periodKey));
-        }
-        return new TaktBomMaterialCostRefreshModelResultDto
-        {
-            ScannedRowCount = headers.Count,
-            ModelCodeUpdatedCount = modelCodeUpdated,
-            MaterialTypeUpdatedCount = materialTypeUpdated,
-            AverageUpdatedCount = averageUpdated,
-            ModelGroupCount = touchedGroups.Count,
-            CostingPeriod = periodKey,
-        };
-    }
-
-    /// <inheritdoc />
-    public async Task<TaktBomMaterialCostRefreshModelResultDto?> RunScheduledBomModelAvgCostAsync(
-        DateTime? asOfDate = null)
-    {
-        EnsureThreeLayerContext();
-        var asOf = TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(asOfDate ?? DateTime.Today);
-        var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(asOf);
-        var periodHeaders = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.CostingPeriod == periodKey);
-        if (periodHeaders.Count == 0)
-        {
-            return null;
-        }
-        var plantCodes = periodHeaders
-            .Select(x => x.PlantCode?.Trim() ?? string.Empty)
-            .Where(p => !string.IsNullOrWhiteSpace(p))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
-            .ToList();
-        var scanned = 0;
-        var modelUpdated = 0;
-        var typeUpdated = 0;
-        var averageUpdated = 0;
-        var modelGroups = 0;
-        foreach (var plant in plantCodes)
-        {
-            var result = await RefreshBomMaterialCostModelFieldsAsync(
-                new TaktBomMaterialCostRefreshModelQueryDto
-                {
-                    PlantCode = plant,
-                    CostingPeriod = periodKey,
-                });
-            scanned = checked(scanned + result.ScannedRowCount);
-            modelUpdated = checked(modelUpdated + result.ModelCodeUpdatedCount);
-            typeUpdated = checked(typeUpdated + result.MaterialTypeUpdatedCount);
-            averageUpdated = checked(averageUpdated + result.AverageUpdatedCount);
-            modelGroups = checked(modelGroups + result.ModelGroupCount);
-        }
-        return new TaktBomMaterialCostRefreshModelResultDto
-        {
-            ScannedRowCount = scanned,
-            ModelCodeUpdatedCount = modelUpdated,
-            MaterialTypeUpdatedCount = typeUpdated,
-            AverageUpdatedCount = averageUpdated,
-            ModelGroupCount = modelGroups,
-            CostingPeriod = periodKey,
-        };
-    }
-
-    /// <summary>
-    /// 构建定时任务目标月查询：仅判定日所在自然月
-    /// </summary>
-    /// <param name="asOfDate">判定日；默认今天</param>
-    /// <returns>当月查询</returns>
-    private TaktBomMaterialCostItemQueryDto BuildScheduledCurrentMonthQuery(DateTime? asOfDate)
-    {
-        EnsureThreeLayerContext();
-        var asOf = TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(asOfDate ?? DateTime.Today);
-        var costingStart = new DateTime(asOf.Year, asOf.Month, 1);
-        var costingEnd = new DateTime(
-            asOf.Year,
-            asOf.Month,
-            DateTime.DaysInMonth(asOf.Year, asOf.Month),
-            23,
-            59,
-            59,
-            999);
-        return new TaktBomMaterialCostItemQueryDto
-        {
-            CostingDateStart = costingStart,
-            CostingDateEnd = costingEnd,
-        };
-    }
-
-    /// <summary>
-    /// 按重算查询加载明细（年分表优先；含工厂/产品/产品集过滤）
-    /// </summary>
-    /// <param name="query">已规范化单月查询</param>
-    /// <returns>明细行</returns>
-    private async Task<List<TaktBomMaterialCostItem>> LoadItemsForRecalculateQueryAsync(
-        TaktBomMaterialCostItemQueryDto query)
-    {
-        ArgumentNullException.ThrowIfNull(query);
-        var start = query.CostingDateStart
-            ?? throw new TaktBusinessException("请选择核算月份后再重算");
-        var end = query.CostingDateEnd
-            ?? throw new TaktBusinessException("请选择核算月份后再重算");
-        var yearTable = await ResolveBomItemPhysicalTableAsync(start.Year);
-        var exp = Expressionable.Create<TaktBomMaterialCostItem>();
-        exp = exp.And(x =>
-            x.TenantCode == CurrentTenantCode
-            && x.CompanyCode == CurrentCompanyCode
-            && x.CostingDate >= start
-            && x.CostingDate <= end);
-        if (!string.IsNullOrWhiteSpace(query.PlantCode))
-        {
-            var plant = query.PlantCode.Trim();
-            exp = exp.And(x => x.PlantCode == plant);
-        }
-        if (!string.IsNullOrWhiteSpace(query.ProductCode))
-        {
-            var product = query.ProductCode.Trim();
-            exp = exp.And(x => x.ProductCode == product);
-        }
-        else if (query.ProductCodes != null && query.ProductCodes.Count > 0)
-        {
-            var codes = query.ProductCodes
-                .Where(c => !string.IsNullOrWhiteSpace(c))
-                .Select(c => c.Trim())
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-            if (codes.Count > 0)
-            {
-                exp = exp.And(x => codes.Contains(x.ProductCode));
-            }
-        }
-        return await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
-    }
-
-    /// <summary>
-    /// 批量：明细回算主表（同月同产品 Upsert）
-    /// </summary>
-    /// <param name="keys">工厂+产品+核算日</param>
-    /// <param name="destinations">型号目的地（可空则内查）</param>
-    /// <param name="materialPlants">工厂物料（可空则按工厂内查）</param>
-    /// <returns>任务</returns>
-    private async Task SyncBomMaterialCostFromItemsBatchAsync(
-        IEnumerable<(string PlantCode, string ProductCode, DateTime CostingDate)> keys,
-        IReadOnlyList<TaktModelDestination>? destinations = null,
-        IReadOnlyList<TaktMaterialPlant>? materialPlants = null)
-    {
-        ArgumentNullException.ThrowIfNull(keys);
-        var distinct = keys
-            .Where(k => !string.IsNullOrWhiteSpace(k.PlantCode) && !string.IsNullOrWhiteSpace(k.ProductCode))
-            .Select(k => (
-                PlantCode: k.PlantCode.Trim(),
-                ProductCode: k.ProductCode.Trim(),
-                Period: TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(k.CostingDate),
-                CostingDate: k.CostingDate))
-            .GroupBy(k => $"{k.PlantCode}|{k.ProductCode}|{k.Period}", StringComparer.OrdinalIgnoreCase)
-            .Select(g => g.OrderByDescending(x => x.CostingDate).First())
-            .ToList();
-        var destList = destinations
-            ?? await _modelDestinationRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
-        foreach (var key in distinct)
-        {
-            await SyncBomMaterialCostFromItemsAsync(
-                key.PlantCode,
-                key.ProductCode,
-                key.CostingDate,
-                destList,
-                materialPlants);
-        }
-    }
-
-    /// <summary>
-    /// 单组：明细回算主表（同工厂+产品+核算月 Upsert；无明细外键）
-    /// </summary>
-    /// <param name="plantCode">工厂</param>
-    /// <param name="productCode">产品</param>
-    /// <param name="costingDate">核算日</param>
-    /// <param name="destinations">型号目的地</param>
-    /// <param name="materialPlants">工厂物料（可空）</param>
-    /// <returns>任务</returns>
-    private async Task SyncBomMaterialCostFromItemsAsync(
-        string plantCode,
-        string productCode,
-        DateTime costingDate,
-        IReadOnlyList<TaktModelDestination> destinations,
-        IReadOnlyList<TaktMaterialPlant>? materialPlants)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
-        ArgumentException.ThrowIfNullOrWhiteSpace(productCode);
-        ArgumentNullException.ThrowIfNull(destinations);
-        var plant = plantCode.Trim();
-        var product = TaktStringHelper.NormalizeSapNumericMaterialCode(productCode.Trim());
-        if (string.IsNullOrWhiteSpace(product))
-        {
-            product = productCode.Trim();
-        }
-        var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(costingDate);
-        var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
-        var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
-        var monthItems = await _bomMaterialCostItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plant
-                && x.CostingDate >= monthStart
-                && x.CostingDate <= monthEnd
-                && x.ProductCode != null,
-            yearTable);
-        var productItems = monthItems
-            .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
-            .ToList();
-        var modelCode = ResolveModelCodeFromDestinations(destinations, product);
-        var plants = materialPlants
-            ?? await _materialPlantRepository.GetListAsync(
-                x => x.TenantCode == CurrentTenantCode
-                    && x.CompanyCode == CurrentCompanyCode
-                    && x.PlantCode == plant);
-        var materialType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromPlant(plants, plant, product);
-        if (string.IsNullOrWhiteSpace(materialType))
-        {
-            materialType = TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode;
-        }
-        var existing = await FindHeaderByMonthKeyAsync(plant, modelCode, product, periodKey);
-        if (productItems.Count == 0)
-        {
-            if (existing == null)
-            {
-                return;
-            }
-            existing.ProductMonthlyCost = 0;
-            existing.ModelMonthlyAverageCost = 0;
-            existing.CostingDate = costingDate;
-            existing.CostingPeriod = periodKey;
-            if (!string.IsNullOrWhiteSpace(modelCode))
-            {
-                existing.ModelCode = modelCode;
-            }
-            existing.MaterialType = materialType;
-            await _bomMaterialCostRepository.UpdateAsync(existing);
-            await RefreshModelMonthlyAverageForPeriodAsync(
-                plant,
-                existing.MaterialType,
-                existing.ModelCode,
-                periodKey);
-            return;
-        }
-        var snapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(
-            productItems, plant, product, periodKey);
-        var latestCostingDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
-            productItems, plant, product, periodKey) ?? costingDate;
-        var productMonthlyCost = TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(snapshot);
-        var currency = snapshot
-            .Select(TaktBomMaterialCostItemLineCostHelper.ResolveCurrency)
-            .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c))
-            ?? productItems
-                .Select(x => x.MovingPriceCurrencyCode)
-                .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c))
-            ?? string.Empty;
-        var productDescription = snapshot.FirstOrDefault()?.ProductDescription
-            ?? productItems.OrderByDescending(x => x.CostingDate).First().ProductDescription
-            ?? string.Empty;
-        if (existing == null)
-        {
-            existing = new TaktBomMaterialCost
-            {
-                PlantCode = plant,
-                ModelCode = modelCode,
-                MaterialType = materialType,
-                ProductCode = product,
-                ProductDescription = productDescription,
-                ProductMonthlyCost = productMonthlyCost,
-                ModelMonthlyAverageCost = 0,
-                CurrencyCode = currency,
-                CostingPeriod = periodKey,
-                CostingDate = latestCostingDate,
-            };
-            existing = await _bomMaterialCostRepository.CreateAsync(existing);
-        }
-        else
-        {
-            existing.ModelCode = string.IsNullOrWhiteSpace(modelCode) ? existing.ModelCode : modelCode;
-            existing.MaterialType = materialType;
-            existing.ProductCode = product;
-            existing.ProductDescription = productDescription;
-            existing.ProductMonthlyCost = productMonthlyCost;
-            existing.CurrencyCode = currency;
-            existing.CostingPeriod = periodKey;
-            existing.CostingDate = latestCostingDate;
-            await _bomMaterialCostRepository.UpdateAsync(existing);
-        }
-        var effectiveModel = string.IsNullOrWhiteSpace(existing.ModelCode) ? modelCode : existing.ModelCode;
-        var effectiveType = string.IsNullOrWhiteSpace(existing.MaterialType) ? materialType : existing.MaterialType;
-        await RefreshModelMonthlyAverageForPeriodAsync(plant, effectiveType, effectiveModel, periodKey);
-    }
-
-    /// <summary>
-    /// 查找同月主表行（工厂+产品+期间；机种空时放宽）
-    /// </summary>
-    /// <param name="plantCode">工厂</param>
-    /// <param name="modelCode">机种</param>
-    /// <param name="productCode">产品</param>
-    /// <param name="periodKey">期间 yyyy-MM</param>
-    /// <returns>主表实体</returns>
-    private async Task<TaktBomMaterialCost?> FindHeaderByMonthKeyAsync(
-        string plantCode,
-        string modelCode,
-        string productCode,
-        string periodKey)
-    {
-        var list = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plantCode
-                && x.CostingPeriod == periodKey
-                && x.ProductCode != null);
-        return list.FirstOrDefault(x =>
-            TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, productCode)
-            && (string.IsNullOrWhiteSpace(modelCode)
-                || string.Equals(x.ModelCode, modelCode, StringComparison.OrdinalIgnoreCase)
-                || string.IsNullOrWhiteSpace(x.ModelCode)));
-    }
-
-    /// <summary>
-    /// 刷新同工厂+物料类型+机种+核算期间下全部主表行的机种月平均成本
-    /// </summary>
-    /// <param name="plantCode">工厂</param>
-    /// <param name="materialType">物料类型</param>
-    /// <param name="modelCode">机种</param>
-    /// <param name="periodKey">期间</param>
-    /// <returns>实际更新的行数</returns>
-    private async Task<int> RefreshModelMonthlyAverageForPeriodAsync(
-        string plantCode,
-        string materialType,
-        string modelCode,
-        string periodKey)
-    {
-        if (string.IsNullOrWhiteSpace(modelCode) || string.IsNullOrWhiteSpace(materialType))
-        {
-            return 0;
-        }
-        var mt = materialType.Trim();
-        var headers = await _bomMaterialCostRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plantCode
-                && x.MaterialType == mt
-                && x.ModelCode == modelCode
-                && x.CostingPeriod == periodKey);
-        if (headers.Count == 0)
-        {
-            return 0;
-        }
-        var costs = headers
-            .Where(h => h.ProductMonthlyCost > 0)
-            .Select(h => h.ProductMonthlyCost)
-            .ToList();
-        var average = TaktBomMaterialCostItemModelEnrichmentHelper.ComputeModelMonthlyAverageFromProductCosts(costs);
-        var updated = 0;
-        foreach (var header in headers)
-        {
-            if (header.ModelMonthlyAverageCost == average)
-            {
-                continue;
-            }
-            header.ModelMonthlyAverageCost = average;
-            await _bomMaterialCostRepository.UpdateAsync(header);
-            updated = checked(updated + 1);
-        }
-        return updated;
-    }
-
-    /// <summary>
-    /// 从已加载的型号目的地列表解析产品对应机种
-    /// </summary>
-    /// <param name="destinations">型号目的地</param>
-    /// <param name="productCode">产品编码</param>
-    /// <returns>机种编码；未匹配为空</returns>
-    private static string ResolveModelCodeFromDestinations(
-        IReadOnlyList<TaktModelDestination> destinations,
-        string? productCode)
-    {
-        ArgumentNullException.ThrowIfNull(destinations);
-        if (string.IsNullOrWhiteSpace(productCode))
-        {
-            return string.Empty;
-        }
-        var match = destinations.FirstOrDefault(x =>
-            TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.MaterialCode, productCode));
-        return match?.ModelCode?.Trim() ?? string.Empty;
-    }
-
-    /// <summary>
-    /// 加载转置/月度涨跌用成本汇总行（MaterialType 有值才过滤；空=本表全类型）
+    /// 加载转置/月度涨跌用成本汇总行（按筛选全量；MaterialType 有值才过滤；空=本表全类型）
     /// </summary>
     /// <param name="queryDto">查询 DTO</param>
     /// <returns>成本汇总行</returns>
@@ -1453,12 +781,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         {
             exp = exp.And(x => x.CostingDate <= queryDto.CostingDateEnd);
         }
-        var rows = await _bomMaterialCostRepository.GetListForExportAsync(exp.ToExpression(), MaxAnalysisRowLoad);
-        if (rows.Count >= MaxAnalysisRowLoad)
-        {
-            throw new TaktBusinessException(
-                $"分析数据行数为 {rows.Count}，达到上限 {MaxAnalysisRowLoad}，请缩小筛选（工厂/机种/产品/核算期间）");
-        }
+        var rows = await _bomMaterialCostRepository.GetListAsync(exp.ToExpression());
         if (!string.IsNullOrWhiteSpace(queryDto.ProductCode))
         {
             var productCode = queryDto.ProductCode.Trim();
@@ -1493,12 +816,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
             && (x.ProductCode == productCode
                 || x.ProductCode == normalizedProduct
                 || (x.ProductCode != null && x.ProductCode.Contains(productCode)));
-        var rows = await GetBomItemListForRangeAsync(predicate, rangeStart, rangeEnd, MaxAnalysisRowLoad);
-        if (rows.Count >= MaxAnalysisRowLoad)
-        {
-            throw new TaktBusinessException(
-                $"差异分析明细行数为 {rows.Count}，达到上限 {MaxAnalysisRowLoad}，请缩小期间范围");
-        }
+        var rows = await GetBomItemListForRangeAsync(predicate, rangeStart, rangeEnd);
         return rows
             .Where(r => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(r.ProductCode, productCode))
             .ToList();
@@ -1622,7 +940,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 按主表产品目录项构建转置行（PeriodCosts 取自 TaktBomMaterialCost.ProductMonthlyCost）
+    /// 按主表产品目录项构建转置行（PeriodCosts 取自 TaktBomMaterialCost.ProductMonthlyCalculation）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="catalogProductCode">主表产品编码</param>
@@ -1677,7 +995,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 构建单产品转置行（汇总表 ProductMonthlyCost）
+    /// 构建单产品转置行（汇总表 ProductMonthlyCalculation）
     /// </summary>
     /// <param name="plantCode">工厂代码</param>
     /// <param name="productCode">产品编码</param>
@@ -1699,9 +1017,9 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
                 .Where(r => string.Equals(r.CostingPeriod, period, StringComparison.Ordinal))
                 .OrderByDescending(r => r.CostingDate)
                 .FirstOrDefault();
-            if (header != null && header.ProductMonthlyCost > 0m)
+            if (header != null && header.ProductMonthlyCalculation > 0m)
             {
-                periodCosts[period] = header.ProductMonthlyCost;
+                periodCosts[period] = header.ProductMonthlyCalculation;
             }
         }
         var latest = productRows.OrderByDescending(r => r.CostingDate).FirstOrDefault();
@@ -1826,7 +1144,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 解析某产品某月 ProductMonthlyCost（取该月最新核算日）
+    /// 解析某产品某月 ProductMonthlyCalculation（取该月最新核算日）
     /// </summary>
     /// <param name="productRows">产品主表行</param>
     /// <param name="period">yyyy-MM</param>
@@ -1846,7 +1164,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         {
             return false;
         }
-        cost = header.ProductMonthlyCost;
+        cost = header.ProductMonthlyCalculation;
         return true;
     }
 
@@ -2032,7 +1350,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
                 && string.Equals(r.CostingPeriod, period, StringComparison.Ordinal))
             .OrderByDescending(r => r.CostingDate)
             .FirstOrDefault();
-        return header?.ProductMonthlyCost ?? 0m;
+        return header?.ProductMonthlyCalculation ?? 0m;
     }
 
     /// <summary>
@@ -2096,52 +1414,6 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 机种合并组件中间结果
-    /// </summary>
-    private sealed class MergedBomComponent
-    {
-        /// <summary>
-        /// 组件编码
-        /// </summary>
-        public string ComponentCode { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 组件描述
-        /// </summary>
-        public string ComponentDescription { get; set; } = string.Empty;
-
-        /// <summary>
-        /// 共用产品编码集合
-        /// </summary>
-        public HashSet<string> ProductCodes { get; } = new(StringComparer.OrdinalIgnoreCase);
-    }
-
-    /// <summary>
-    /// 机种编码 → 产品编码集合写入查询（明细行无 ModelCode；未显式指定产品时缩小列表/导出范围）
-    /// </summary>
-    /// <param name="queryDto">明细查询条件（含 ModelCode 时回填 ProductCodes）</param>
-    /// <returns>异步任务</returns>
-    private async Task ApplyModelCodeProductScopeAsync(TaktBomMaterialCostItemQueryDto queryDto)
-    {
-        ArgumentNullException.ThrowIfNull(queryDto);
-        if (string.IsNullOrWhiteSpace(queryDto.ModelCode)
-            || !string.IsNullOrWhiteSpace(queryDto.ProductCode)
-            || (queryDto.ProductCodes != null && queryDto.ProductCodes.Count > 0))
-        {
-            return;
-        }
-        var plantCode = queryDto.PlantCode?.Trim() ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(plantCode))
-        {
-            return;
-        }
-        var productCodes = await LoadModelProductCodesAsync(plantCode, queryDto.ModelCode.Trim());
-        queryDto.ProductCodes = productCodes.Count > 0
-            ? productCodes
-            : new List<string> { "__no_model_product__" };
-    }
-
-    /// <summary>
     /// 从主表取机种下产品编码（可按核算月过滤；按条件全量，不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
@@ -2189,7 +1461,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 加载机种产品 BOM 明细（仅 ProductionRelated=X 且 PurchaseType=F；可按核算月过滤；按条件全量，不截断）
+    /// 加载机种产品 BOM 明细（参与资格：生产相关=X、PCB SECT 标识为空、采购类型=F；可按核算月过滤；按条件全量，不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCodes">产品编码</param>
@@ -2224,6 +1496,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
                 x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode
+                && x.IsDeleted == 0
                 && chunk.Contains(x.ProductCode));
             if (costingMonthStart.HasValue)
             {
@@ -2329,14 +1602,6 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         TaktYearShardTableHelper.BuildYearTableName(BomItemYearShardBaseTable, year);
 
     /// <summary>
-    /// 生成移动价格年分表名
-    /// </summary>
-    /// <param name="year">年份</param>
-    /// <returns>物理表名</returns>
-    private static string BuildMovingPriceYearTable(int year) =>
-        TaktYearShardTableHelper.BuildYearTableName(MovingPriceYearShardBaseTable, year);
-
-    /// <summary>
     /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 SAP 同步）
     /// </summary>
     /// <param name="year">自然年</param>
@@ -2345,73 +1610,6 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     {
         var table = BuildBomItemYearTable(year);
         return await _bomMaterialCostItemRepository.PhysicalTableExistsAsync(table) ? table : null;
-    }
-
-    /// <summary>
-    /// 解析移动价格物理表：年分表存在则用之，否则 null（回退基表）
-    /// </summary>
-    /// <param name="year">自然年</param>
-    /// <returns>年分表名；不存在时为 null</returns>
-    private async Task<string?> ResolveMovingPricePhysicalTableAsync(int year)
-    {
-        var table = BuildMovingPriceYearTable(year);
-        return await _materialMovingPriceRepository.PhysicalTableExistsAsync(table) ? table : null;
-    }
-
-    /// <summary>
-    /// 按 Id 在近年分表中定位 BOM 成本明细（跳过未建年分表，最后查基表）
-    /// </summary>
-    /// <param name="id">主键</param>
-    /// <returns>实体与物理表名（基表时 Table 为 null）</returns>
-    private async Task<(TaktBomMaterialCostItem? Entity, string? Table)> FindBomItemByIdAsync(long id)
-    {
-        var now = DateTime.Now.Year;
-        for (var y = now + 1; y >= now - YearShardProbeYears + 1; y--)
-        {
-            var table = await ResolveBomItemPhysicalTableAsync(y);
-            if (table == null)
-            {
-                continue;
-            }
-            var entity = await _bomMaterialCostItemRepository.GetByIdAsync(id, table);
-            if (entity != null)
-            {
-                return (entity, table);
-            }
-        }
-        var baseEntity = await _bomMaterialCostItemRepository.GetByIdAsync(id);
-        return (baseEntity, null);
-    }
-
-    /// <summary>
-    /// 年分表（或基表）内唯一性校验
-    /// </summary>
-    /// <param name="entity">实体</param>
-    /// <param name="yearTable">物理表；null 表示基表</param>
-    /// <param name="excludeId">排除 Id</param>
-    private async Task EnsureBomItemUniqueAsync(
-        TaktBomMaterialCostItem entity,
-        string? yearTable,
-        long? excludeId = null)
-    {
-        var existing = await _bomMaterialCostItemRepository.FirstAsync(
-            x => x.PlantCode == entity.PlantCode
-                && x.ProductCode == entity.ProductCode
-                && x.SequenceCode == entity.SequenceCode
-                && x.BomLevel == entity.BomLevel
-                && x.BomItemCode == entity.BomItemCode
-                && x.ComponentCode == entity.ComponentCode
-                && x.ComponentQuantity == entity.ComponentQuantity
-                && x.BatchIndicator == entity.BatchIndicator
-                && x.ProductionRelated == entity.ProductionRelated
-                && x.PurchaseType == entity.PurchaseType
-                && x.SpecialProcurementType == entity.SpecialProcurementType
-                && x.CostingDate == entity.CostingDate,
-            yearTable);
-        if (existing != null && (!excludeId.HasValue || existing.Id != excludeId.Value))
-        {
-            throw new TaktBusinessException("BOM物料成本明细的PlantCode、ProductCode、SequenceCode、BomLevel、BomItemCode、ComponentCode、ComponentQuantity、BatchIndicator、ProductionRelated、PurchaseType、SpecialProcurementType、CostingDate已存在");
-        }
     }
 
     /// <summary>
@@ -2512,79 +1710,5 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         }
         return result;
     }
-
-    /// <summary>
-    /// 按年分表查询移动价格（可跨年合并；年分表未建时回退基表）
-    /// </summary>
-    /// <param name="predicate">条件</param>
-    /// <param name="valuationPeriodStart">评估期间起（yyyy-MM）</param>
-    /// <param name="valuationPeriodEnd">评估期间止（yyyy-MM）</param>
-    /// <param name="maxRows">总行上限（可选）</param>
-    /// <returns>移动价格列表</returns>
-    private async Task<List<TaktMaterialMovingPrice>> GetMovingPriceListForRangeAsync(
-        Expression<Func<TaktMaterialMovingPrice, bool>> predicate,
-        string? valuationPeriodStart,
-        string? valuationPeriodEnd,
-        int? maxRows = null)
-    {
-        var years = TaktYearShardTableHelper.ResolveYearsFromYyyyMmPeriod(valuationPeriodStart, valuationPeriodEnd);
-        var result = new List<TaktMaterialMovingPrice>();
-        var yearsNeedBase = new List<int>();
-        foreach (var year in years)
-        {
-            var table = await ResolveMovingPricePhysicalTableAsync(year);
-            if (table == null)
-            {
-                yearsNeedBase.Add(year);
-                continue;
-            }
-            if (maxRows.HasValue)
-            {
-                var remaining = maxRows.Value - result.Count;
-                if (remaining <= 0)
-                {
-                    break;
-                }
-                var part = await _materialMovingPriceRepository.GetListForExportAsync(predicate, remaining, table);
-                result.AddRange(part);
-            }
-            else
-            {
-                var part = await _materialMovingPriceRepository.GetListAsync(predicate, table);
-                result.AddRange(part);
-            }
-        }
-        if (yearsNeedBase.Count == 0)
-        {
-            return result;
-        }
-        if (maxRows.HasValue && result.Count >= maxRows.Value)
-        {
-            return result;
-        }
-        List<TaktMaterialMovingPrice> basePart;
-        if (maxRows.HasValue)
-        {
-            var remaining = maxRows.Value - result.Count;
-            basePart = await _materialMovingPriceRepository.GetListForExportAsync(predicate, remaining);
-        }
-        else
-        {
-            basePart = await _materialMovingPriceRepository.GetListAsync(predicate);
-        }
-        if (yearsNeedBase.Count == years.Count)
-        {
-            result.AddRange(basePart);
-        }
-        else
-        {
-            var yearSet = yearsNeedBase.ToHashSet();
-            result.AddRange(basePart.Where(r =>
-                !string.IsNullOrWhiteSpace(r.ValuationPeriod)
-                && r.ValuationPeriod.Length >= 4
-                && int.TryParse(r.ValuationPeriod.AsSpan(0, 4), out var y)
-                && yearSet.Contains(y)));
-        }
-        return result;
-    }
 }
+

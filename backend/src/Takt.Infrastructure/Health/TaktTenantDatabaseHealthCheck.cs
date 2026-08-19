@@ -41,7 +41,12 @@ public sealed class TaktTenantDatabaseHealthCheck : IHealthCheck
         _httpContextAccessor = httpContextAccessor;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 健康检查
+    /// </summary>
+    /// <param name="context">检查上下文</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>检查结果</returns>
     public Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
         CancellationToken cancellationToken = default)

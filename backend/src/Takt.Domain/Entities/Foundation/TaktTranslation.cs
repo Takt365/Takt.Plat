@@ -19,18 +19,26 @@ namespace Takt.Domain.Entities.Foundation;
 /// 翻译实体
 /// 存储系统界面的多语言翻译文本
 /// 租户级实体：翻译数据在租户内共享，不需要公司隔离
+/// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_foundation_translation", "翻译表")]
 [SugarIndex("ix_translation_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_translation_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_translation_key_culture_unique", nameof(TenantCode), OrderByType.Asc, nameof(I18nKey), OrderByType.Asc, nameof(CultureCode), OrderByType.Asc, true)]
-public class TaktTranslation : TaktTenantEntityBase
+public class TaktTranslation : TaktTenantCoreEntityBase
 {
     /// <summary>
-    /// 文化ID（关联 TaktCulture.Id）
+    /// 区域文化（选项 TaktCultures/options；DictValue=Id）
     /// </summary>
     [SugarColumn(ColumnName = "culture_id", ColumnDescription = "文化ID", ColumnDataType = "bigint", IsNullable = false)]
     public long CultureId { get; set; }
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    [SugarColumn(ColumnName = "culture_code", ColumnDescription = "区域文化", ColumnDataType = "varchar", Length = 5, IsNullable = false, DefaultValue = "mul")]
+    public string CultureCode { get; set; } = "mul";
+
     /// <summary>
     /// 翻译键（唯一索引：租户内键+文化唯一，见 ix_translation_key_culture_unique；如 common.confirm）
     /// </summary>

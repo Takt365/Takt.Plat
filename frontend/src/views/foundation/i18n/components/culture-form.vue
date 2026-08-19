@@ -22,16 +22,6 @@
       label-align="right"
     >
       <a-form-item
-        :label="t('entity.culture.languagename')"
-        name="languageName"
-      >
-        <a-input
-          v-model:value="formState.languageName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.culture.languagename') })"
-          :disabled="props.loading"
-        />
-      </a-form-item>
-      <a-form-item
         :label="t('entity.culture.code')"
         name="cultureCode"
       >
@@ -134,9 +124,6 @@ const formRules = computed<Record<string, Rule[]>>(() => ({
   cultureCode: [
     { required: true, message: t('common.page.form.placeholder.select', { field: t('entity.culture.code') }), trigger: 'change' }
   ],
-  languageName: [
-    { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.culture.languagename') }), trigger: 'blur' }
-  ],
   nativeName: [
     { required: true, message: t('common.page.form.placeholder.required', { field: t('entity.culture.nativename') }), trigger: 'blur' }
   ]
@@ -148,7 +135,6 @@ const formRules = computed<Record<string, Rule[]>>(() => ({
  */
 function createEmptyFormState(): CultureFormState {
   return {
-    languageName: '',
     cultureCode: '',
     nativeName: '',
     icon: '',
@@ -165,7 +151,6 @@ function applyFormData(data: Culture | null | undefined) {
   if (data) {
     Object.assign(formState, {
       cultureId: data.cultureId,
-      languageName: data.languageName || '',
       cultureCode: data.cultureCode || '',
       nativeName: data.nativeName || '',
       icon: data.icon || '',
@@ -237,7 +222,6 @@ function getFormData(): CultureCreate | CultureUpdate {
   const tenantCode = tenantStore.tenantCode?.trim() || ''
   const base = {
     tenantCode,
-    languageName: formState.languageName,
     cultureCode: formState.cultureCode,
     nativeName: formState.nativeName,
     icon: formState.icon || undefined,

@@ -22,7 +22,8 @@ namespace Takt.Infrastructure.Data.Seeds.EntitySeedData;
 
 /// <summary>
 /// 公司种子数据初始化
-/// 各租户（<c>TenantCodes</c> 如 000/100/500）均按 <c>Database:CompanyCodes</c> 顺序初始化全部公司主档
+/// 各租户按 <c>Database:CompanyCodes</c> 顺序初始化公司主档；
+/// <c>RelatedPlant</c>/<c>CultureCode</c> 仅由 CompanyCodes↔PlantCodes↔CultureCodes 同序映射解析，禁止手写对照
 /// 幂等性操作：存在则更新，不存在则创建
 /// </summary>
 public class TaktCompanySeedData : ITaktSeedDataCoordinator
@@ -71,6 +72,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
             {
                 SortOrder = index + 1,
                 RelatedPlant = database.GetPlantCodeForCompanyCode(companyCode),
+                CultureCode = database.GetCultureCodeForCompanyCode(companyCode),
             };
             var (_, inserted, updated) = await CreateOrUpdateCompanyAsync(repository, tenantCode, seed);
             insertCount += inserted;
@@ -97,7 +99,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "91110108MA01234567", "91110108MA01234567", "张三", "李四",
                 1000000m, new DateTime(2010, 1, 1), 1),
             new TaktCompanySeedItem(
-                "1000", "ティアック株式会社", "TCJ", "TCJ", "ja-JP", "T100",
+                "1000", "ティアック株式会社", "TCJ", "TCJ", "ja-JP", "J100",
                 "160", "C", "S",
                 "音響機器事業：プレミアムオーディオ機器（ESOTERICブランド）、ハイエンドオーディオ製品（TEACブランド）、業務用・音楽制作用音響機器（TASCAMブランド）の開発・製造・販売、情報機器事業：計測機器（データレコーダー、センサー・トランスデューサー）、医用画像記録再生機器、航空機搭載用記録再生機器（IFE）、産業用光ドライブ等の開発・製造・販売、ならびにソリューションビジネス・EMS事業",
                 "JP", "东京都", "多摩市", "〒206-8530　東京都多摩市落合1丁目47番地", "TEAC本社",
@@ -124,7 +126,7 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
                 "12345678-000-08-23-A", "12345678-000-08-23-A", "赵六", "钱七",
                 500000m, new DateTime(1995, 12, 1), 4),
             new TaktCompanySeedItem(
-                "2700", "蒂雅克商贸(深圳)有限公司", "TSZ", "TSZ", "zh-CN", "C700",
+                "2700", "蒂雅克商贸(深圳)有限公司", "TSZ", "TSZ", "zh-CN", "C270",
                 "330", "C", "S",
                 "音响设备及其零配件、电子产品及其零配件、电子元器件的研发、批发、佣金代理（拍卖除外）、进出口及相关配套服务。",
                 "CN", "广东省", "深圳市", "深圳市福田区深南大道南泰然九路西喜年中心A座817房", "喜年中心A座",
@@ -204,8 +206,11 @@ public class TaktCompanySeedData : ITaktSeedDataCoordinator
         company.EstablishmentDate = seed.EstablishmentDate;
         company.ClosingDate = null;
         company.CompanyExistence = 1;
+        company.CreditControlArea = seed.CompanyCode;
+        company.FinancialManagementArea = seed.CompanyCode;
         company.CompanyStatus = 1;
         company.SortOrder = seed.SortOrder;
+        company.Remark = TaktZeroCharHelper.InterleaveDisplayName(seed.CompanyName1);
     }
 
     /// <summary>

@@ -12,7 +12,7 @@
     <!-- 工厂与查询 -->
     <a-form layout="inline" class="flex flex-wrap gap-y-2">
       <a-form-item
-        :label="t('entity.ec.plantcode')"
+        :label="t('common.page.entity.plantcode')"
       >
         <a-input
           :value="mappedPlantCode"

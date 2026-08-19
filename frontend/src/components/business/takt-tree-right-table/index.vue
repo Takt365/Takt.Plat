@@ -105,7 +105,6 @@ import {
   type TaktTableLayoutMode,
 } from '@/utils/table-columns'
 import {
-  applyTableColumnPresentation,
   isTableColumnEllipsisEnabled,
   resolveTableCellEllipsisTitle,
   resolveTableScrollConfig,
@@ -116,6 +115,7 @@ import {
 } from '@/utils/table-scroll'
 import TaktTableBodyCellFallback from '@/components/business/takt-table-body-cell-fallback/index'
 import { useTaktTableViewportScrollY } from '@/composables/use-takt-table-viewport-scroll-y'
+import { useTableColumnResize } from '@/composables/use-table-column-resize'
 import { useI18n } from 'vue-i18n'
 
 type TableRecord = Record<string, unknown>
@@ -287,8 +287,19 @@ const displayColumnSource = computed((): TableColumnsType => {
   })
 })
 
-const resolvedDisplayColumns = computed(() =>
-  applyTableColumnPresentation(displayColumnSource.value, props.defaultEllipsis),
+/** 列宽拖拽：稳定列引用，拖动时就地改 width（不重建列数组） */
+const {
+  displayColumns: resolvedDisplayColumns,
+  rebuildDisplayColumns,
+  handleResizeColumn: applyResizeColumnWidth,
+} = useTableColumnResize()
+
+watch(
+  [displayColumnSource, () => props.defaultEllipsis],
+  ([source, defaultEllipsis]) => {
+    rebuildDisplayColumns(source, defaultEllipsis)
+  },
+  { immediate: true },
 )
 
 /** 视口动态 scroll.y（px）；与 dataSource 行数无关 */
@@ -333,8 +344,15 @@ const handleTableChange = (pagination: TablePaginationConfig, filters: Record<st
   )
 }
 
+/**
+ * a-table 列宽拖拽：就地改宽并通知父级
+ * @param w 新宽度
+ * @param col 当前列
+ */
 const handleResizeColumn = (w: number, col: ColumnType<any>) => {
-  ;(col as any).width = w
+  if (!applyResizeColumnWidth(w, col)) {
+    return
+  }
   emit('resize-column', w, col as any)
 }
 

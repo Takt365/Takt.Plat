@@ -42,7 +42,7 @@ for (const code of codes) {
   const isDefault = code === 'CN' ? 1 : 0;
   const i18nKey = `dict.sys.country.code.${code.toLowerCase()}`;
   lines.push(
-    `            ("sys_country_code","${escapeCs(nativeLabel)}","${code}","${i18nKey}",1,1,${isDefault},"国家地区.${escapeCs(zhName)}",${sort},"eo","${escapeCs(enName)}","${escapeCs(extValue)}"),`,
+    `            ("sys_country_code","${escapeCs(nativeLabel)}","${code}","${i18nKey}",1,1,${isDefault},"国家地区.${escapeCs(zhName)}",${sort},"mul","${escapeCs(enName)}","${escapeCs(extValue)}"),`,
   );
   sort += 1;
 }

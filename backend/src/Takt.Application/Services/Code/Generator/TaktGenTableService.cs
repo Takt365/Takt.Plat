@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Code.Generator
 // 文件名称：TaktGenTableService.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Cursor AI)
 // 功能描述：代码生成数据表配置应用服务实现
 // 
@@ -59,12 +59,20 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     }
 
     /// <summary>
-    /// 获取代码生成数据表配置列表（分页）
+    /// 获取代码生成数据表配置列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktGenTableDto>> GetGenTableListAsync(TaktGenTableQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktGenTableDto>.Create(
+                new List<TaktGenTableDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _genTableRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -94,19 +102,19 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
         return dto;    }
 
     /// <summary>
-    /// 获取代码生成表配置选项列表
+    /// 获取代码生成数据表配置选项列表
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetGenTableOptionsAsync()
     {
         var list = await _genTableRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode,
-            x => x.TableName ?? string.Empty,
+            x => x.SubTableName ?? string.Empty,
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.TableName ?? e.Id.ToString(),
+            DictValue = e.TreeCode ?? string.Empty,
+            DictLabel = e.SubTableName ?? e.TreeCode ?? string.Empty,
         }).ToList();
     }
 
@@ -127,7 +135,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             throw new TaktBusinessException("代码生成数据表配置的DataSource、TableName已存在");
         }
         entity = await _genTableRepository.CreateAsync(entity);
-        await SaveGenTableChildrenAsync(entity.Id, entity, dto);
+                await SaveGenTableChildrenAsync(entity, dto);
         return await GetGenTableByIdAsync(entity.Id) ?? entity.Adapt<TaktGenTableDto>();
     }
 
@@ -155,7 +163,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             throw new TaktBusinessException("代码生成数据表配置的DataSource、TableName已存在");
         }
         await _genTableRepository.UpdateAsync(entity);
-        await SaveGenTableChildrenAsync(id, entity, dto);
+                await SaveGenTableChildrenAsync(entity, dto);
         return await GetGenTableByIdAsync(id) ?? throw new TaktBusinessException("代码生成数据表配置不存在");
     }
 
@@ -171,7 +179,7 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
         {
             throw new TaktBusinessException("代码生成数据表配置不存在或已删除");
         }
-        await _genTableColumnRepository.DeletePhysicallyAsync(x => x.GenTableId == entity.Id);
+        await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == entity.Id);
         var deleted = await _genTableRepository.DeleteAsync(id);
         if (!deleted)
         {
@@ -267,7 +275,15 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportGenTableAsync(TaktGenTableQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktGenTableQueryDto());
+        var queryDto = query ?? new TaktGenTableQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktGenTableExportDto>(),
+                sheetName ?? "代码生成数据表配置数据",
+                fileName ?? "代码生成数据表配置导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _genTableRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -300,173 +316,105 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
             return;
         }
         // 代码生成数据表列配置 → dto.Columns
-        var columns = await _genTableColumnRepository.GetListAsync(
-            x => x.GenTableId == entity.Id,
-            x => x.LineNumber,
-            false);
+        var columns = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == entity.Id);
         dto.Columns = columns.Adapt<List<TaktGenTableColumnDto>>();
+        dto.MaxGenTableColumnLineNumber = await _genTableColumnRepository.GetMaxIntAsync(
+            x => x.TenantCode == CurrentTenantCode && x.GenTableId == entity.Id,
+            x => x.LineNumber,
+            includeSoftDeleted: true);
     }
 
     /// <summary>
-    /// 保存代码生成数据表配置子表级联（编辑时按 GenTableColumnId 更新已有行，Id=0 新增，未提交行软删；禁止先删后插）
+    /// 保存代码生成数据表配置子表级联（代码生成数据表列配置；按子表 Id 增量新增/更新；未提交行标记作废，禁止先删后插）
     /// </summary>
-    /// <param name="tableId">主表 Id（路由或新建后的实体 Id，避免 Adapt 后主键歧义）</param>
     /// <param name="entity">主表实体</param>
     /// <param name="dto">创建/更新 DTO（含子表集合；UpdateDto 须继承 CreateDto）</param>
     /// <returns>任务</returns>
-    private async Task SaveGenTableChildrenAsync(long tableId, TaktGenTable entity, TaktGenTableCreateDto dto)
+    private async Task SaveGenTableChildrenAsync(TaktGenTable entity, TaktGenTableCreateDto dto)
     {
-        if (tableId <= 0)
+        // 代码生成数据表列配置（Columns）
+        List<TaktGenTableColumnUpdateDto>? columnsForSave;
+        if (dto is TaktGenTableUpdateDto updateDtoForColumns && updateDtoForColumns.Columns != null)
         {
-            throw new TaktBusinessException("代码生成数据表配置主键无效");
+            columnsForSave = updateDtoForColumns.Columns;
         }
-        if (dto.Columns is not { Count: > 0 })
+        else if (dto.Columns != null)
         {
-            await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == tableId);
-            return;
+            columnsForSave = dto.Columns.Adapt<List<TaktGenTableColumnUpdateDto>>();
         }
-        var columnDtos = dto.Columns;
-        for (var i = 0; i < columnDtos.Count; i++)
+        else
         {
-            var col = columnDtos[i];
-            col.DatabaseColumnName = (col.DatabaseColumnName ?? string.Empty).Trim();
-            if (string.IsNullOrEmpty(col.DatabaseColumnName))
+            columnsForSave = null;
+        }
+        if (columnsForSave is not { Count: > 0 })
+        {
+            await _genTableColumnRepository.DeleteAsync(x => x.GenTableId == entity.Id);
+        }
+        else
+        {
+            var existingList = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == entity.Id);
+            var existingById = existingList.ToDictionary(x => x.Id);
+            var submittedIds = new HashSet<long>();
+            var toCreate = new List<TaktGenTableColumn>();
+            var seenLineKeys = new HashSet<string>(StringComparer.Ordinal);
+            for (var i = 0; i < columnsForSave.Count; i++)
             {
-                throw new TaktBusinessException($"代码生成数据表列配置第{i + 1}项数据库列名不能为空");
-            }
-            col.GenTableId = tableId;
-            col.TenantCode = entity.TenantCode;
-        }
-        var seenNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        for (var i = 0; i < columnDtos.Count; i++)
-        {
-            if (!seenNames.Add(columnDtos[i].DatabaseColumnName))
-            {
-                throw new TaktBusinessException($"代码生成数据表列配置第{i + 1}项与本次提交的其他项重复（DatabaseColumnName={columnDtos[i].DatabaseColumnName}）");
-            }
-        }
-        var existing = await _genTableColumnRepository.GetListAsync(x => x.GenTableId == tableId);
-        var existingById = existing.ToDictionary(x => x.Id);
-        var submittedIds = new HashSet<long>();
-        var toCreate = new List<TaktGenTableColumn>();
-        foreach (var colDto in columnDtos)
-        {
-            if (colDto.GenTableColumnId > 0)
-            {
-                if (!existingById.TryGetValue(colDto.GenTableColumnId, out var target))
+                var childDto = columnsForSave[i];
+                childDto.GenTableId = entity.Id;
+                var lineKey = $"{entity.TenantCode}|{entity.Id}|{childDto.LineNumber}";
+                if (!seenLineKeys.Add(lineKey))
                 {
-                    throw new TaktBusinessException($"代码生成数据表列配置不存在（GenTableColumnId={colDto.GenTableColumnId}）");
+                    throw new TaktBusinessException("代码生成数据表列配置第{i + 1}项与本次提交的其他项重复（TenantCode、GenTableId、LineNumber）");
                 }
-                if (target.GenTableId != tableId)
+                if (childDto.GenTableColumnId > 0)
                 {
-                    throw new TaktBusinessException($"代码生成数据表列配置不属于当前表（GenTableColumnId={colDto.GenTableColumnId}）");
+                    if (!existingById.TryGetValue(childDto.GenTableColumnId, out var target))
+                    {
+                        throw new TaktBusinessException("代码生成数据表列配置不存在（GenTableColumnId={childDto.GenTableColumnId}）");
+                    }
+                    if (target.GenTableId != entity.Id)
+                    {
+                        throw new TaktBusinessException("代码生成数据表列配置不属于当前主表（GenTableColumnId={childDto.GenTableColumnId}）");
+                    }
+                    submittedIds.Add(childDto.GenTableColumnId);
+                    childDto.Adapt(target);
+                    target.Id = childDto.GenTableColumnId;
+                    target.GenTableId = entity.Id;
+                    await _genTableColumnRepository.UpdateAsync(target);
                 }
-                submittedIds.Add(colDto.GenTableColumnId);
-                var isUnique_ix_gen_table_column_column_unique = await _uniqueValidator.IsUniqueAsync(
-                    _genTableColumnRepository,
-                    x => x.GenTableId == tableId
-                        && x.DatabaseColumnName == colDto.DatabaseColumnName,
-                    colDto.GenTableColumnId);
-                if (!isUnique_ix_gen_table_column_column_unique)
+                else
                 {
-                    throw new TaktBusinessException("代码生成数据表列配置的GenTableId、DatabaseColumnName已存在");
+                    var child = childDto.Adapt<TaktGenTableColumn>();
+                    child.Id = 0;
+                    child.GenTableId = entity.Id;
+                    toCreate.Add(child);
                 }
-                ApplyIncomingGenTableColumnFields(target, colDto);
-                await _genTableColumnRepository.UpdateAsync(target);
             }
-            else
+            foreach (var removed in existingList.Where(x => !submittedIds.Contains(x.Id)))
             {
-                var isUnique_ix_gen_table_column_column_unique = await _uniqueValidator.IsUniqueAsync(
-                    _genTableColumnRepository,
-                    x => x.GenTableId == tableId
-                        && x.DatabaseColumnName == colDto.DatabaseColumnName);
-                if (!isUnique_ix_gen_table_column_column_unique)
-                {
-                    throw new TaktBusinessException("代码生成数据表列配置的GenTableId、DatabaseColumnName已存在");
-                }
-                var child = colDto.Adapt<TaktGenTableColumn>();
-                child.Id = 0;
-                child.GenTableId = tableId;
-                child.TenantCode = entity.TenantCode;
-                child.LineNumber = 0;
-                child.QueryType = TaktGenQueryTypeHelper.Resolve(child.IsQuery, child.QueryType, child.CsharpDataType);
-                toCreate.Add(child);
+                await _genTableColumnRepository.DeleteAsync(removed.Id);
             }
-        }
-        foreach (var removed in existing.Where(e => !submittedIds.Contains(e.Id)))
-        {
-            await _genTableColumnRepository.DeleteAsync(removed.Id);
-        }
-        if (toCreate.Count > 0)
-        {
-            await AssignGenTableColumnLineNumbersAsync(toCreate, entity, tableId);
-            await _genTableColumnRepository.CreateRangeAsync(toCreate);
-        }
-    }
-
-    /// <summary>
-    /// 将提交列字段合并到已持久化列（保留 Id/GenTableId/TenantCode/审计字段）
-    /// </summary>
-    /// <param name="target">库内已有列</param>
-    /// <param name="source">本次提交列</param>
-    private static void ApplyIncomingGenTableColumnFields(TaktGenTableColumn target, TaktGenTableColumnUpdateDto source)
-    {
-        target.DatabaseColumnName = (source.DatabaseColumnName ?? string.Empty).Trim();
-        if (source.LineNumber > 0)
-        {
-            target.LineNumber = source.LineNumber;
-        }
-        target.ColumnComment = source.ColumnComment;
-        target.DatabaseDataType = source.DatabaseDataType;
-        target.CsharpDataType = source.CsharpDataType;
-        target.CsharpColumnName = source.CsharpColumnName;
-        target.Length = source.Length;
-        target.DecimalDigits = source.DecimalDigits;
-        target.IsPk = source.IsPk;
-        target.IsIncrement = source.IsIncrement;
-        target.IsRequired = source.IsRequired;
-        target.IsCreate = source.IsCreate;
-        target.IsUpdate = source.IsUpdate;
-        target.IsUnique = source.IsUnique;
-        target.IsList = source.IsList;
-        target.IsExport = source.IsExport;
-        target.IsSort = source.IsSort;
-        target.IsQuery = source.IsQuery;
-        target.QueryType = TaktGenQueryTypeHelper.Resolve(source.IsQuery, source.QueryType, source.CsharpDataType);
-        target.HtmlType = source.HtmlType;
-        target.DictType = source.DictType;
-        target.ExtField = source.ExtField;
-        target.Remark = source.Remark;
-    }
-
-    /// <summary>
-    /// 为新增列分配行号（项号/序号，固定步长=10；仅未持久化列 GenTableColumnId/Id≤0 参与；最大行号仍按 GenTableId 作用域查询）
-    /// </summary>
-    /// <param name="columns">待插入列</param>
-    /// <param name="entity">主表实体</param>
-    /// <param name="tableId">主表 Id</param>
-    /// <returns>任务</returns>
-    private async Task AssignGenTableColumnLineNumbersAsync(
-        List<TaktGenTableColumn> columns,
-        TaktGenTable entity,
-        long tableId)
-    {
-        var columnsNeedLine = columns.Where(c => c.Id <= 0).ToList();
-        if (columnsNeedLine.Count == 0)
-        {
-            return;
-        }
-        var businessCode = !string.IsNullOrWhiteSpace(entity.TreeCode) ? entity.TreeCode : tableId.ToString();
-        var maxLine = await _genTableColumnRepository.GetMaxIntAsync(
-            x => x.TenantCode == CurrentTenantCode && x.GenTableId == tableId,
-            x => x.LineNumber);
-        var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, columnsNeedLine.Count, maxLine).ToList();
-        var lineIdx = 0;
-        foreach (var child in columns)
-        {
-            if (child.Id <= 0)
+            if (toCreate.Count > 0)
             {
-                child.LineNumber = lineSeq[lineIdx++];
+                var needLine = toCreate.Where(c => c.LineNumber <= 0).ToList();
+                if (needLine.Count > 0)
+                {
+                    var businessCode = !string.IsNullOrWhiteSpace(entity.TreeCode) ? entity.TreeCode : entity.Id.ToString();
+                    var maxLine = await _genTableColumnRepository.GetMaxIntAsync(
+                        x => x.TenantCode == CurrentTenantCode && x.GenTableId == entity.Id,
+                        x => x.LineNumber,
+                        includeSoftDeleted: true);
+                    var lineSeq = _lineNumberGenerator.GenerateSequence(businessCode, needLine.Count, maxLine).ToList();
+                    var lineIdx = 0;
+                    foreach (var child in toCreate)
+                    {
+                        if (child.LineNumber <= 0)
+                        {
+                            child.LineNumber = lineSeq[lineIdx++];
+                        }
+                    }
+                }
+                await _genTableColumnRepository.CreateRangeAsync(toCreate);
             }
         }
     }
@@ -483,9 +431,9 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
     {
         var exp = Expressionable.Create<TaktGenTable>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.DataSource != null && x.DataSource.Contains(keywords))
                 || (x.TableName != null && x.TableName.Contains(keywords))
@@ -495,7 +443,6 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
                 || (x.TreeCode != null && x.TreeCode.Contains(keywords))
                 || (x.TreeParentCode != null && x.TreeParentCode.Contains(keywords))
                 || (x.TreeName != null && x.TreeName.Contains(keywords))
-                || SqlFunc.ToString(x.InDatabase).Contains(keywords)
                 || (x.GenTemplateCategory != null && x.GenTemplateCategory.Contains(keywords))
                 || (x.GenModuleName != null && x.GenModuleName.Contains(keywords))
                 || (x.GenBusinessName != null && x.GenBusinessName.Contains(keywords))
@@ -512,294 +459,545 @@ public class TaktGenTableService : TaktServiceBase, ITaktGenTableService
                 || (x.ServiceClassName != null && x.ServiceClassName.Contains(keywords))
                 || (x.ControllerNamespace != null && x.ControllerNamespace.Contains(keywords))
                 || (x.ControllerClassName != null && x.ControllerClassName.Contains(keywords))
-                || SqlFunc.ToString(x.IsRepository).Contains(keywords)
                 || (x.RepositoryInterfaceNamespace != null && x.RepositoryInterfaceNamespace.Contains(keywords))
                 || (x.IRepositoryClassName != null && x.IRepositoryClassName.Contains(keywords))
                 || (x.RepositoryNamespace != null && x.RepositoryNamespace.Contains(keywords))
                 || (x.RepositoryClassName != null && x.RepositoryClassName.Contains(keywords))
                 || (x.GenFunction != null && x.GenFunction.Contains(keywords))
-                || SqlFunc.ToString(x.GenMethod).Contains(keywords)
                 || (x.GenPath != null && x.GenPath.Contains(keywords))
-                || SqlFunc.ToString(x.IsGenMenu).Contains(keywords)
-                || SqlFunc.ToString(x.ParentMenuId).Contains(keywords)
-                || SqlFunc.ToString(x.IsGenTranslation).Contains(keywords)
                 || (x.SortField != null && x.SortField.Contains(keywords))
                 || (x.SortType != null && x.SortType.Contains(keywords))
-                || SqlFunc.ToString(x.FrontUi).Contains(keywords)
-                || SqlFunc.ToString(x.FrontFormLayout).Contains(keywords)
-                || SqlFunc.ToString(x.FrontBtnStyle).Contains(keywords)
-                || SqlFunc.ToString(x.IsGenCode).Contains(keywords)
-                || SqlFunc.ToString(x.GenCodeCount).Contains(keywords)
-                || SqlFunc.ToString(x.IsUseTabs).Contains(keywords)
-                || SqlFunc.ToString(x.TabsFieldCount).Contains(keywords)
                 || (x.GenAuthor != null && x.GenAuthor.Contains(keywords))
                 || (x.OtherGenOptions != null && x.OtherGenOptions.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DataSource))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DataSource))
         {
-            exp = exp.And(x => x.DataSource != null && x.DataSource.Contains(queryDto.DataSource));
+            var dataSource = queryDto.DataSource;
+            exp = exp.And(x => x.DataSource != null && x.DataSource.Contains(dataSource));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TableName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TableName))
         {
-            exp = exp.And(x => x.TableName != null && x.TableName.Contains(queryDto.TableName));
+            var tableName = queryDto.TableName;
+            exp = exp.And(x => x.TableName != null && x.TableName.Contains(tableName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TableComment))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TableComment))
         {
-            exp = exp.And(x => x.TableComment != null && x.TableComment.Contains(queryDto.TableComment));
+            var tableComment = queryDto.TableComment;
+            exp = exp.And(x => x.TableComment != null && x.TableComment.Contains(tableComment));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SubTableName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubTableName))
         {
-            exp = exp.And(x => x.SubTableName != null && x.SubTableName.Contains(queryDto.SubTableName));
+            var subTableName = queryDto.SubTableName;
+            exp = exp.And(x => x.SubTableName != null && x.SubTableName.Contains(subTableName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SubTableFkName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SubTableFkName))
         {
-            exp = exp.And(x => x.SubTableFkName != null && x.SubTableFkName.Contains(queryDto.SubTableFkName));
+            var subTableFkName = queryDto.SubTableFkName;
+            exp = exp.And(x => x.SubTableFkName != null && x.SubTableFkName.Contains(subTableFkName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TreeCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TreeCode))
         {
-            exp = exp.And(x => x.TreeCode != null && x.TreeCode.Contains(queryDto.TreeCode));
+            var treeCode = queryDto.TreeCode;
+            exp = exp.And(x => x.TreeCode != null && x.TreeCode.Contains(treeCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TreeParentCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TreeParentCode))
         {
-            exp = exp.And(x => x.TreeParentCode != null && x.TreeParentCode.Contains(queryDto.TreeParentCode));
+            var treeParentCode = queryDto.TreeParentCode;
+            exp = exp.And(x => x.TreeParentCode != null && x.TreeParentCode.Contains(treeParentCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.TreeName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.TreeName))
         {
-            exp = exp.And(x => x.TreeName != null && x.TreeName.Contains(queryDto.TreeName));
+            var treeName = queryDto.TreeName;
+            exp = exp.And(x => x.TreeName != null && x.TreeName.Contains(treeName));
         }
 
         if (queryDto?.InDatabase.HasValue == true)
         {
-            exp = exp.And(x => x.InDatabase == queryDto.InDatabase);
+            var inDatabase = queryDto.InDatabase;
+            exp = exp.And(x => x.InDatabase == inDatabase);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenTemplateCategory))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenTemplateCategory))
         {
-            exp = exp.And(x => x.GenTemplateCategory != null && x.GenTemplateCategory.Contains(queryDto.GenTemplateCategory));
+            var genTemplateCategory = queryDto.GenTemplateCategory;
+            exp = exp.And(x => x.GenTemplateCategory != null && x.GenTemplateCategory.Contains(genTemplateCategory));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenModuleName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenModuleName))
         {
-            exp = exp.And(x => x.GenModuleName != null && x.GenModuleName.Contains(queryDto.GenModuleName));
+            var genModuleName = queryDto.GenModuleName;
+            exp = exp.And(x => x.GenModuleName != null && x.GenModuleName.Contains(genModuleName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenBusinessName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenBusinessName))
         {
-            exp = exp.And(x => x.GenBusinessName != null && x.GenBusinessName.Contains(queryDto.GenBusinessName));
+            var genBusinessName = queryDto.GenBusinessName;
+            exp = exp.And(x => x.GenBusinessName != null && x.GenBusinessName.Contains(genBusinessName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenFunctionName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenFunctionName))
         {
-            exp = exp.And(x => x.GenFunctionName != null && x.GenFunctionName.Contains(queryDto.GenFunctionName));
+            var genFunctionName = queryDto.GenFunctionName;
+            exp = exp.And(x => x.GenFunctionName != null && x.GenFunctionName.Contains(genFunctionName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PermsPrefix))
+        if (!string.IsNullOrWhiteSpace(queryDto?.PermsPrefix))
         {
-            exp = exp.And(x => x.PermsPrefix != null && x.PermsPrefix.Contains(queryDto.PermsPrefix));
+            var permsPrefix = queryDto.PermsPrefix;
+            exp = exp.And(x => x.PermsPrefix != null && x.PermsPrefix.Contains(permsPrefix));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MenuButtonGroup))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MenuButtonGroup))
         {
-            exp = exp.And(x => x.MenuButtonGroup != null && x.MenuButtonGroup.Contains(queryDto.MenuButtonGroup));
+            var menuButtonGroup = queryDto.MenuButtonGroup;
+            exp = exp.And(x => x.MenuButtonGroup != null && x.MenuButtonGroup.Contains(menuButtonGroup));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.NamePrefix))
+        if (!string.IsNullOrWhiteSpace(queryDto?.NamePrefix))
         {
-            exp = exp.And(x => x.NamePrefix != null && x.NamePrefix.Contains(queryDto.NamePrefix));
+            var namePrefix = queryDto.NamePrefix;
+            exp = exp.And(x => x.NamePrefix != null && x.NamePrefix.Contains(namePrefix));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EntityNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EntityNamespace))
         {
-            exp = exp.And(x => x.EntityNamespace != null && x.EntityNamespace.Contains(queryDto.EntityNamespace));
+            var entityNamespace = queryDto.EntityNamespace;
+            exp = exp.And(x => x.EntityNamespace != null && x.EntityNamespace.Contains(entityNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.EntityClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.EntityClassName))
         {
-            exp = exp.And(x => x.EntityClassName != null && x.EntityClassName.Contains(queryDto.EntityClassName));
+            var entityClassName = queryDto.EntityClassName;
+            exp = exp.And(x => x.EntityClassName != null && x.EntityClassName.Contains(entityClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DtoNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DtoNamespace))
         {
-            exp = exp.And(x => x.DtoNamespace != null && x.DtoNamespace.Contains(queryDto.DtoNamespace));
+            var dtoNamespace = queryDto.DtoNamespace;
+            exp = exp.And(x => x.DtoNamespace != null && x.DtoNamespace.Contains(dtoNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DtoClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.DtoClassName))
         {
-            exp = exp.And(x => x.DtoClassName != null && x.DtoClassName.Contains(queryDto.DtoClassName));
+            var dtoClassName = queryDto.DtoClassName;
+            exp = exp.And(x => x.DtoClassName != null && x.DtoClassName.Contains(dtoClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceNamespace))
         {
-            exp = exp.And(x => x.ServiceNamespace != null && x.ServiceNamespace.Contains(queryDto.ServiceNamespace));
+            var serviceNamespace = queryDto.ServiceNamespace;
+            exp = exp.And(x => x.ServiceNamespace != null && x.ServiceNamespace.Contains(serviceNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IServiceClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IServiceClassName))
         {
-            exp = exp.And(x => x.IServiceClassName != null && x.IServiceClassName.Contains(queryDto.IServiceClassName));
+            var iServiceClassName = queryDto.IServiceClassName;
+            exp = exp.And(x => x.IServiceClassName != null && x.IServiceClassName.Contains(iServiceClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ServiceClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ServiceClassName))
         {
-            exp = exp.And(x => x.ServiceClassName != null && x.ServiceClassName.Contains(queryDto.ServiceClassName));
+            var serviceClassName = queryDto.ServiceClassName;
+            exp = exp.And(x => x.ServiceClassName != null && x.ServiceClassName.Contains(serviceClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ControllerNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ControllerNamespace))
         {
-            exp = exp.And(x => x.ControllerNamespace != null && x.ControllerNamespace.Contains(queryDto.ControllerNamespace));
+            var controllerNamespace = queryDto.ControllerNamespace;
+            exp = exp.And(x => x.ControllerNamespace != null && x.ControllerNamespace.Contains(controllerNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.ControllerClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ControllerClassName))
         {
-            exp = exp.And(x => x.ControllerClassName != null && x.ControllerClassName.Contains(queryDto.ControllerClassName));
+            var controllerClassName = queryDto.ControllerClassName;
+            exp = exp.And(x => x.ControllerClassName != null && x.ControllerClassName.Contains(controllerClassName));
         }
 
         if (queryDto?.IsRepository.HasValue == true)
         {
-            exp = exp.And(x => x.IsRepository == queryDto.IsRepository);
+            var isRepository = queryDto.IsRepository;
+            exp = exp.And(x => x.IsRepository == isRepository);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RepositoryInterfaceNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepositoryInterfaceNamespace))
         {
-            exp = exp.And(x => x.RepositoryInterfaceNamespace != null && x.RepositoryInterfaceNamespace.Contains(queryDto.RepositoryInterfaceNamespace));
+            var repositoryInterfaceNamespace = queryDto.RepositoryInterfaceNamespace;
+            exp = exp.And(x => x.RepositoryInterfaceNamespace != null && x.RepositoryInterfaceNamespace.Contains(repositoryInterfaceNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.IRepositoryClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.IRepositoryClassName))
         {
-            exp = exp.And(x => x.IRepositoryClassName != null && x.IRepositoryClassName.Contains(queryDto.IRepositoryClassName));
+            var iRepositoryClassName = queryDto.IRepositoryClassName;
+            exp = exp.And(x => x.IRepositoryClassName != null && x.IRepositoryClassName.Contains(iRepositoryClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RepositoryNamespace))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepositoryNamespace))
         {
-            exp = exp.And(x => x.RepositoryNamespace != null && x.RepositoryNamespace.Contains(queryDto.RepositoryNamespace));
+            var repositoryNamespace = queryDto.RepositoryNamespace;
+            exp = exp.And(x => x.RepositoryNamespace != null && x.RepositoryNamespace.Contains(repositoryNamespace));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.RepositoryClassName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.RepositoryClassName))
         {
-            exp = exp.And(x => x.RepositoryClassName != null && x.RepositoryClassName.Contains(queryDto.RepositoryClassName));
+            var repositoryClassName = queryDto.RepositoryClassName;
+            exp = exp.And(x => x.RepositoryClassName != null && x.RepositoryClassName.Contains(repositoryClassName));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenFunction))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenFunction))
         {
-            exp = exp.And(x => x.GenFunction != null && x.GenFunction.Contains(queryDto.GenFunction));
+            var genFunction = queryDto.GenFunction;
+            exp = exp.And(x => x.GenFunction != null && x.GenFunction.Contains(genFunction));
         }
 
         if (queryDto?.GenMethod.HasValue == true)
         {
-            exp = exp.And(x => x.GenMethod == queryDto.GenMethod);
+            var genMethod = queryDto.GenMethod;
+            exp = exp.And(x => x.GenMethod == genMethod);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenPath))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenPath))
         {
-            exp = exp.And(x => x.GenPath != null && x.GenPath.Contains(queryDto.GenPath));
+            var genPath = queryDto.GenPath;
+            exp = exp.And(x => x.GenPath != null && x.GenPath.Contains(genPath));
         }
 
         if (queryDto?.IsGenMenu.HasValue == true)
         {
-            exp = exp.And(x => x.IsGenMenu == queryDto.IsGenMenu);
+            var isGenMenu = queryDto.IsGenMenu;
+            exp = exp.And(x => x.IsGenMenu == isGenMenu);
         }
 
         if (queryDto?.ParentMenuId.HasValue == true)
         {
-            exp = exp.And(x => x.ParentMenuId == queryDto.ParentMenuId);
+            var parentMenuId = queryDto.ParentMenuId;
+            exp = exp.And(x => x.ParentMenuId == parentMenuId);
         }
 
         if (queryDto?.IsGenTranslation.HasValue == true)
         {
-            exp = exp.And(x => x.IsGenTranslation == queryDto.IsGenTranslation);
+            var isGenTranslation = queryDto.IsGenTranslation;
+            exp = exp.And(x => x.IsGenTranslation == isGenTranslation);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SortField))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SortField))
         {
-            exp = exp.And(x => x.SortField != null && x.SortField.Contains(queryDto.SortField));
+            var sortField = queryDto.SortField;
+            exp = exp.And(x => x.SortField != null && x.SortField.Contains(sortField));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.SortType))
+        if (!string.IsNullOrWhiteSpace(queryDto?.SortType))
         {
-            exp = exp.And(x => x.SortType != null && x.SortType.Contains(queryDto.SortType));
+            var sortType = queryDto.SortType;
+            exp = exp.And(x => x.SortType != null && x.SortType.Contains(sortType));
         }
 
         if (queryDto?.FrontUi.HasValue == true)
         {
-            exp = exp.And(x => x.FrontUi == queryDto.FrontUi);
+            var frontUi = queryDto.FrontUi;
+            exp = exp.And(x => x.FrontUi == frontUi);
         }
 
         if (queryDto?.FrontFormLayout.HasValue == true)
         {
-            exp = exp.And(x => x.FrontFormLayout == queryDto.FrontFormLayout);
+            var frontFormLayout = queryDto.FrontFormLayout;
+            exp = exp.And(x => x.FrontFormLayout == frontFormLayout);
         }
 
         if (queryDto?.FrontBtnStyle.HasValue == true)
         {
-            exp = exp.And(x => x.FrontBtnStyle == queryDto.FrontBtnStyle);
+            var frontBtnStyle = queryDto.FrontBtnStyle;
+            exp = exp.And(x => x.FrontBtnStyle == frontBtnStyle);
         }
 
         if (queryDto?.IsGenCode.HasValue == true)
         {
-            exp = exp.And(x => x.IsGenCode == queryDto.IsGenCode);
+            var isGenCode = queryDto.IsGenCode;
+            exp = exp.And(x => x.IsGenCode == isGenCode);
         }
 
         if (queryDto?.GenCodeCount.HasValue == true)
         {
-            exp = exp.And(x => x.GenCodeCount == queryDto.GenCodeCount);
+            var genCodeCount = queryDto.GenCodeCount;
+            exp = exp.And(x => x.GenCodeCount == genCodeCount);
         }
 
         if (queryDto?.IsUseTabs.HasValue == true)
         {
-            exp = exp.And(x => x.IsUseTabs == queryDto.IsUseTabs);
+            var isUseTabs = queryDto.IsUseTabs;
+            exp = exp.And(x => x.IsUseTabs == isUseTabs);
         }
 
         if (queryDto?.TabsFieldCount.HasValue == true)
         {
-            exp = exp.And(x => x.TabsFieldCount == queryDto.TabsFieldCount);
+            var tabsFieldCount = queryDto.TabsFieldCount;
+            exp = exp.And(x => x.TabsFieldCount == tabsFieldCount);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.GenAuthor))
+        if (!string.IsNullOrWhiteSpace(queryDto?.GenAuthor))
         {
-            exp = exp.And(x => x.GenAuthor != null && x.GenAuthor.Contains(queryDto.GenAuthor));
+            var genAuthor = queryDto.GenAuthor;
+            exp = exp.And(x => x.GenAuthor != null && x.GenAuthor.Contains(genAuthor));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.OtherGenOptions))
+        if (!string.IsNullOrWhiteSpace(queryDto?.OtherGenOptions))
         {
-            exp = exp.And(x => x.OtherGenOptions != null && x.OtherGenOptions.Contains(queryDto.OtherGenOptions));
-        }
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var otherGenOptions = queryDto.OtherGenOptions;
+            exp = exp.And(x => x.OtherGenOptions != null && x.OtherGenOptions.Contains(otherGenOptions));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktGenTableQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DataSource))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TableName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TableComment))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubTableName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SubTableFkName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TreeCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TreeParentCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.TreeName))
+        {
+            return true;
+        }
+        if (queryDto.InDatabase.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenTemplateCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenModuleName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenBusinessName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenFunctionName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PermsPrefix))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MenuButtonGroup))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.NamePrefix))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EntityNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.EntityClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DtoNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DtoClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IServiceClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ServiceClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ControllerNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ControllerClassName))
+        {
+            return true;
+        }
+        if (queryDto.IsRepository.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RepositoryInterfaceNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IRepositoryClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RepositoryNamespace))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.RepositoryClassName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenFunction))
+        {
+            return true;
+        }
+        if (queryDto.GenMethod.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenPath))
+        {
+            return true;
+        }
+        if (queryDto.IsGenMenu.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ParentMenuId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsGenTranslation.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SortField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.SortType))
+        {
+            return true;
+        }
+        if (queryDto.FrontUi.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.FrontFormLayout.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.FrontBtnStyle.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsGenCode.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.GenCodeCount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsUseTabs.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.TabsFieldCount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.GenAuthor))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.OtherGenOptions))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

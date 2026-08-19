@@ -457,7 +457,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         TaktSignalRLogging.LogQuartzPushed("task-executed", companyCode, push.TaskCode);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 向触发用户推送 BOM 物料成本机种月平均重算完成事件
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushBomMaterialCostItemRecalculateCompletedToUserAsync(TaktSignalRBomMaterialCostItemRecalculatePush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -491,7 +495,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         TaktSignalRLogging.LogWorkflowPushed("bom-material-cost-item-recalculate", companyCode, push.ProcessedMonth, userName);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送工程变更通知到部门组（SendChangeNotification）
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcChangeNotificationAsync(TaktEcChangeNotificationPush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -500,7 +508,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         await _ecChangeHubContext.Clients.Group(group).SendAsync("ChangeNotification", push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送工程变更执行任务分配到部门组
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcExecutionTaskAssignedAsync(TaktEcExecutionTaskAssignedPush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -511,7 +523,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         await _ecChangeHubContext.Clients.Group(taskGroup).SendAsync("TaskAssigned", push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送工程变更任务进度到任务组与部门组
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcExecutionTaskProgressAsync(TaktEcExecutionTaskProgressPush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -522,7 +538,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         await _ecChangeHubContext.Clients.Group(deptGroup).SendAsync("TaskProgress", push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送工程变更闭环完成（公司广播组）
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcChangeClosedAsync(TaktEcChangeClosedPush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -532,7 +552,11 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             .SendAsync("ChangeClosed", push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推送工程变更任务超时/阻塞预警
+    /// </summary>
+    /// <param name="push">推送模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcExecutionTaskAlertAsync(TaktEcExecutionTaskAlertPush push)
     {
         ArgumentNullException.ThrowIfNull(push);
@@ -546,7 +570,13 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
             .SendAsync("TaskAlert", push);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 向发起人推送部门确认通知
+    /// </summary>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="userName">发起人用户名</param>
+    /// <param name="payload">载荷</param>
+    /// <returns>任务</returns>
     public async Task PushEcNotificationConfirmedToUserAsync(string companyCode, string userName, object payload)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);
@@ -555,7 +585,13 @@ public class TaktSignalRDispatchService : ITaktSignalRDispatchService
         await _ecChangeHubContext.Clients.Group(userGroup).SendAsync("NotificationConfirmed", payload);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 向发起人推送变更闭环完成
+    /// </summary>
+    /// <param name="companyCode">公司编码</param>
+    /// <param name="userName">发起人用户名</param>
+    /// <param name="push">闭环模型</param>
+    /// <returns>任务</returns>
     public async Task PushEcChangeClosedToUserAsync(string companyCode, string userName, TaktEcChangeClosedPush push)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(companyCode);

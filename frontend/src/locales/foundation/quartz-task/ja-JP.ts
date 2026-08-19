@@ -14,11 +14,11 @@ export default {
   page: {
     executeSubmitted: 'バックグラウンド実行を受け付けました。完了後に通知します',
     executeMonth: {
-      modalTitle: '原価計算月を選択',
+      modalTitle: '原価計算月とターゲット DB を選択',
       costingMonth: '原価計算月',
       costingMonthPlaceholder: '原価計算月を選択',
       costingMonthRequired: '原価計算月を選択してください',
-      hint: '既定は当月です。パラメータなしの Cron 実行も当月で計算します。',
+      hint: 'ターゲット DB と原価計算月の両方が必須です。パラメータなしの Cron は当月、DB はタスク ExecuteParams を使用します。',
     },
     executeDb: {
       modalTitle: '同期データベースを選択',

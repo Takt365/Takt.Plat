@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：plant.d.ts
-// 创建时间：2026-07-23
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -12,26 +12,21 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCultureDtoBase
 } from '@/types/common';
 
 /**
- * Takt工厂实体 代表租户下的独立工厂（租户级实体，只需要TenantCode） 与公司种子对称，参照 SAP Plant 设计
+ * Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称，参照 SAP Plant 设计 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
  * 对应前端 TaktPlantDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCultureDtoBase
  * 对应前端 Plant
  * @description 对应后端 TaktPlantDto
  */
-export interface Plant extends Omit<TenantDtoBase, 'relatedPlant'> {
+export interface Plant extends TenantCultureDtoBase {
   /**
    * PlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
   plantId: string;
-
-  /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-   */
-  plantCode: string;
 
   /**
    * 工厂名称1
@@ -259,7 +254,7 @@ export interface Plant extends Omit<TenantDtoBase, 'relatedPlant'> {
   factoryCalendar: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany: string;
 
@@ -275,6 +270,7 @@ export interface Plant extends Omit<TenantDtoBase, 'relatedPlant'> {
 
 }
 
+
 /**
  * Plant 分页查询 DTO
  * 继承 TaktPagedQuery
@@ -288,9 +284,9 @@ export interface PlantQuery extends TaktPagedQuery {
   tenantCode?: string;
 
   /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  plantCode?: string;
+  cultureCode?: string;
 
   /**
    * 工厂名称1
@@ -311,11 +307,6 @@ export interface PlantQuery extends TaktPagedQuery {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -533,7 +524,7 @@ export interface PlantQuery extends TaktPagedQuery {
   factoryCalendar?: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany?: string;
 
@@ -569,6 +560,7 @@ export interface PlantQuery extends TaktPagedQuery {
 
 }
 
+
 /**
  * 创建Plant DTO
  * 对应前端 PlantCreate
@@ -581,9 +573,9 @@ export interface PlantCreate {
   tenantCode: string;
 
   /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  plantCode: string;
+  cultureCode: string;
 
   /**
    * 工厂名称1
@@ -604,11 +596,6 @@ export interface PlantCreate {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  cultureCode: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -816,7 +803,7 @@ export interface PlantCreate {
   factoryCalendar: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany: string;
 
@@ -837,6 +824,7 @@ export interface PlantCreate {
 
 }
 
+
 /**
  * 更新Plant DTO
  * 继承 TaktPlantCreateDto，添加 PlantId 字段
@@ -850,6 +838,7 @@ export interface PlantUpdate extends PlantCreate {
   plantId: string;
 
 }
+
 
 /**
  * Plant 状态更新 DTO
@@ -869,6 +858,7 @@ export interface PlantStatus {
 
 }
 
+
 /**
  * Plant 排序更新 DTO
  * 对应前端 PlantSort
@@ -887,6 +877,7 @@ export interface PlantSort {
 
 }
 
+
 /**
  * Plant 导入模板行 DTO
  * 对应前端 PlantTemplate
@@ -899,9 +890,9 @@ export interface PlantTemplate {
   tenantCode?: string;
 
   /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  plantCode?: string;
+  cultureCode?: string;
 
   /**
    * 工厂名称1
@@ -922,11 +913,6 @@ export interface PlantTemplate {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1134,7 +1120,7 @@ export interface PlantTemplate {
   factoryCalendar?: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany?: string;
 
@@ -1154,6 +1140,7 @@ export interface PlantTemplate {
   remark?: string;
 
 }
+
 
 /**
  * Plant 导入 DTO（独立实现，不继承 TemplateDto）
@@ -1167,9 +1154,9 @@ export interface PlantImport {
   tenantCode?: string;
 
   /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  plantCode?: string;
+  cultureCode?: string;
 
   /**
    * 工厂名称1
@@ -1190,11 +1177,6 @@ export interface PlantImport {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias?: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  cultureCode?: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1402,7 +1384,7 @@ export interface PlantImport {
   factoryCalendar?: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany?: string;
 
@@ -1423,6 +1405,7 @@ export interface PlantImport {
 
 }
 
+
 /**
  * Plant 导出 DTO（独立实现，不继承响应 Dto）
  * 对应前端 PlantExport
@@ -1435,9 +1418,9 @@ export interface PlantExport {
   plantId: string;
 
   /**
-   * 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
-  plantCode: string;
+  cultureCode: string;
 
   /**
    * 工厂名称1
@@ -1458,11 +1441,6 @@ export interface PlantExport {
    * 编码代号（如 TKC、TCJ、DTA；前端字典录入）
    */
   codeAlias: string;
-
-  /**
-   * 区域文化编码（字典 sys_culture_code；选项 TaktCultures/options，DictValue=CultureCode；即语言/区域文化）
-   */
-  cultureCode: string;
 
   /**
    * 企业性质（字典 sys_enterprise_nature_type；DictValue=150 等）
@@ -1670,7 +1648,7 @@ export interface PlantExport {
   factoryCalendar: string;
 
   /**
-   * 关联公司（选项 TaktCompanies/options；DictValue=Id）
+   * 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   relatedCompany: string;
 

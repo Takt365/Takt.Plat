@@ -16,7 +16,7 @@
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--plant"
         allow-clear
         show-search
-        :placeholder="t('entity.materialmovingprice.plantcode')"
+        :placeholder="t('common.page.entity.plantcode')"
         @change="handlePlantChange"
       />
       <a-range-picker

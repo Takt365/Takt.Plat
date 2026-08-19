@@ -82,6 +82,7 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
                     tenantCode,
                     role.RoleCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode);
             }
         }
@@ -108,6 +109,7 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
         string tenantCode,
         string roleCode,
         string companyCode,
+        string plantCode,
         string cultureCode)
     {
         var role = await roleRepository.FirstAsync(r => r.TenantCode == tenantCode && r.RoleCode == roleCode);
@@ -128,6 +130,7 @@ public class TaktRoleCompanySeedData : ITaktSeedDataCoordinator
             TenantCode = tenantCode,
             RoleId = role.Id,
             CompanyCode = companyCode,
+            PlantCode = plantCode,
             CultureCode = cultureCode
         });
         return 1;

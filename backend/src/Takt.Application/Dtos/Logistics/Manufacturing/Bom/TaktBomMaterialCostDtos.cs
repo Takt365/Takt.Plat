@@ -62,9 +62,19 @@ public class TaktBomMaterialCostDto : TaktCompanyDtoBase
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -104,7 +114,7 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -139,9 +149,19 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal? ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal? LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -199,12 +219,12 @@ public class TaktBomMaterialCostCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -244,9 +264,19 @@ public class TaktBomMaterialCostCreateDto
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -312,12 +342,12 @@ public class TaktBomMaterialCostTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -352,9 +382,19 @@ public class TaktBomMaterialCostTemplateDto
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal? ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal? LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -394,12 +434,12 @@ public class TaktBomMaterialCostImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -434,9 +474,19 @@ public class TaktBomMaterialCostImportDto
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal? ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal? LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）
@@ -517,9 +567,19 @@ public class TaktBomMaterialCostExportDto
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（该产品在核算月份下 BOM 材料成本明细汇总）
+    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
+
+    /// <summary>
+    /// 产品月计算（本系统按明细合计：生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// </summary>
+    public decimal ProductMonthlyCalculation { get; set; }
+
+    /// <summary>
+    /// 最近采购成本（与产品月计算同一快照口径；行金额=组件数量×(净价÷采购价格单位)）
+    /// </summary>
+    public decimal LatestPurchaseCost { get; set; }
 
     /// <summary>
     /// 币种（字典 accounting_currency_code；如 CNY/USD）

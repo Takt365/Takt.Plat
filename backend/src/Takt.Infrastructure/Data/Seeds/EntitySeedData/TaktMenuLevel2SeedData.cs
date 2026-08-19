@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds
 // 文件名称：TaktMenuLevel2SeedData.cs
@@ -966,26 +966,6 @@ public class TaktMenuLevel2SeedData
             insertCount += insertFoundation1;
             updateCount += updateFoundation1;
 
-            var (insertFoundationIsoCode, updateFoundationIsoCode) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_ISO_CODE", menu =>
-            {
-                menu.MenuName = "ISO编码";
-                menu.MenuCode = "FOUNDATION_ISO_CODE";
-                menu.I18nKey = "menu.foundation.iso.code";
-                menu.Icon = "RiBuilding4Line";
-                menu.ParentId = foundationMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "foundation:iso:code:list";
-                menu.RoutePath = "/foundation/iso-code";
-                menu.ComponentPath = "foundation/iso-code/index";
-                menu.SortOrder = 2;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 1;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertFoundationIsoCode;
-            updateCount += updateFoundationIsoCode;
-
             var (insertFoundation2, updateFoundation2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_DICT", menu =>
             {
                 menu.MenuName = "数据字典";
@@ -1186,6 +1166,26 @@ public class TaktMenuLevel2SeedData
             });
             insertCount += insertFoundationAdminDivision;
             updateCount += updateFoundationAdminDivision;
+
+            var (insertFoundationIpGeolocation, updateFoundationIpGeolocation) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "FOUNDATION_IP_GEOLOCATION", menu =>
+            {
+                menu.MenuName = "IP归属";
+                menu.MenuCode = "FOUNDATION_IP_GEOLOCATION";
+                menu.I18nKey = "menu.foundation.ip.geolocation";
+                menu.Icon = "RiMapPinLine";
+                menu.ParentId = foundationMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "foundation:ip:geolocation:list";
+                menu.RoutePath = "/foundation/ip-geolocation";
+                menu.ComponentPath = "foundation/ip-geolocation/index";
+                menu.SortOrder = 13;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertFoundationIpGeolocation;
+            updateCount += updateFoundationIpGeolocation;
         }
 
         // ========== 统计看板下的二级菜单 (SortOrder: 11) ==========

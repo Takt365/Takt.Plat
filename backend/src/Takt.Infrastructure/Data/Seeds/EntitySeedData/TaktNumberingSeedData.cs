@@ -39,7 +39,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     private const string DomainAccounting = "Accounting";
     private const string DomainLogistics = "Logistics";
 
-    // 与 TaktIsoCodeSeedData.GetStandardIsoCodes 中 IsoCode 一致（DictValue=IsoCode）
+    // 与字典 sys_numbering_dept_code 的 DictValue 一致
     private const string IsoR = "R"; // 总务部 D0100
     private const string IsoF = "F"; // 财务部 D0200
     private const string IsoD = "D"; // IT部 D0300
@@ -100,7 +100,9 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 var (_, inserted, updated) = await CreateOrUpdateNumberingAsync(
                     repository,
                     tenantCode,
-                    company.CompanyCode, company.CultureCode,
+                    company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
+                    company.CultureCode,
                     template);
                 insertCount += inserted;
                 updateCount += updated;
@@ -356,6 +358,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktNumbering> repository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         NumberingSeedTemplate template)
     {
@@ -384,6 +387,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
                 IsBuiltIn = IsBuiltInYes,
                 NumberingStatus = StatusEnabled,
                 Remark = template.Remark,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             };
             ApplyDateFormatResetPeriodAlignment(entity);
@@ -407,6 +411,8 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
         entity.IsBuiltIn = IsBuiltInYes;
         entity.NumberingStatus = StatusEnabled;
         entity.Remark = template.Remark;
+        entity.PlantCode = plantCode;
+        entity.CultureCode = cultureCode;
         ApplyDateFormatResetPeriodAlignment(entity);
         var sequenceForExample = entity.CurrentSequence <= 0
             ? (entity.SequenceStep <= 0 ? 1 : entity.SequenceStep)
@@ -628,7 +634,7 @@ public class TaktNumberingSeedData : ITaktSeedDataCoordinator
     /// <param name="RuleCode">规则编码</param>
     /// <param name="RuleName">规则名称</param>
     /// <param name="DocumentType">单据类型（关联 TaktMenu.Id，选项 TaktMenus/tree-options）</param>
-    /// <param name="DeptCode">部门编码（关联 TaktIsoCode.IsoCode，选项 TaktIsoCodes/options）</param>
+    /// <param name="DeptCode">部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）</param>
     /// <param name="PrefixCode">前缀编码</param>
     /// <param name="DateFormat">日期格式</param>
     /// <param name="ResetPeriod">重置周期</param>

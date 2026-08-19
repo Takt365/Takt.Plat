@@ -12,17 +12,17 @@
 
 import type {
   TaktPagedQuery,
-  TenantDtoBase
+  TenantCoreDtoBase
 } from '@/types/common';
 
 /**
  * Takt制造商物料实体（租户内共享）
  * 对应前端 TaktManufacturerMaterialDto
- * 继承 TaktTenantDtoBase
+ * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 ManufacturerMaterial
  * @description 对应后端 TaktManufacturerMaterialDto
  */
-export interface ManufacturerMaterial extends TenantDtoBase {
+export interface ManufacturerMaterial extends TenantCoreDtoBase {
   /**
    * ManufacturerMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
    */
@@ -101,11 +101,6 @@ export interface ManufacturerMaterialQuery extends TaktPagedQuery {
    * 租户编码
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
@@ -199,11 +194,6 @@ export interface ManufacturerMaterialCreate {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant: string;
 
   /**
    * 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
@@ -303,11 +293,6 @@ export interface ManufacturerMaterialTemplate {
   tenantCode?: string;
 
   /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
-
-  /**
    * 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）
    */
   vendorCode?: string;
@@ -389,11 +374,6 @@ export interface ManufacturerMaterialImport {
    * 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
    */
   tenantCode?: string;
-
-  /**
-   * 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-   */
-  relatedPlant?: string;
 
   /**
    * 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）

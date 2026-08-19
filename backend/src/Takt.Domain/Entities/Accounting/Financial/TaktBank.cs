@@ -4,7 +4,7 @@
 // 文件名称：TaktBank.cs
 // 创建时间：2026-07-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：银行信息实体（租户级；参照 SAP BNKA；字段顺序与长度对齐）
+// 功能描述：银行信息实体（公司级；参照 SAP BNKA；字段顺序与长度对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,15 +16,15 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Accounting.Financial;
 
 /// <summary>
-/// 银行信息实体（租户级；租户内各公司共用；按国家地区 + 银行代码唯一）
+/// 银行信息实体（公司级；租户+公司隔离；按国家地区 + 银行代码唯一）
 /// </summary>
 [SugarTable("takt_accounting_financial_bank", "银行信息表")]
-[SugarIndex("ix_bank_tenant", nameof(TenantCode), OrderByType.Asc, false)]
-[SugarIndex("ix_bank_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_bank_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CountryRegion), OrderByType.Asc, nameof(BankCode), OrderByType.Asc, true)]
-[SugarIndex("ix_takt_accounting_financial_bank_swift", nameof(TenantCode), OrderByType.Asc, nameof(SwiftBic), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_accounting_financial_bank_group", nameof(TenantCode), OrderByType.Asc, nameof(BankGroup), OrderByType.Asc, false)]
-public class TaktBank : TaktTenantEntityBase
+[SugarIndex("ix_bank_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
+[SugarIndex("ix_bank_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_accounting_financial_bank_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CountryRegion), OrderByType.Asc, nameof(BankCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_accounting_financial_bank_swift", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(SwiftBic), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_accounting_financial_bank_group", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(BankGroup), OrderByType.Asc, false)]
+public class TaktBank : TaktCompanyEntityBase
 {
     /// <summary>
     /// 国家地区（选项字典 sys_country_code，DictValue=ISO alpha-2）

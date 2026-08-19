@@ -21,7 +21,7 @@ export default {
     periodRange: '核算年月',
     selectPlantRequired: '請選擇工廠代碼',
     selectModelRequired: '請選擇機種',
-    itemFilterHint: '預設：生產相關=X、採購類型=F（可清空查看全部）',
+    itemFilterHint: '預設：生產相關=X、PCB SECT 標識空、採購類型=F（可清空查看全部）',
     productRowCount: '產品數',
     modalmasterhint: '左機種 → 中產品 → 右明細（不拆實體）；請匯入明細後合計或重算成本。',
     costSum: '成本合計',
@@ -45,17 +45,5 @@ export default {
     refreshModelFieldsSuccess:
       '{month} 回填機種價格完成：掃描 {scanned} 行，機種更新 {modelUpdated}，平均更新 {averageUpdated}（{groups} 組）',
     refreshModelFieldsFailed: '回填機種價格失敗',
-    zeroPrice: {
-      button: '組件零價格',
-      monthTitle: '選擇工廠與核算月份',
-      title: '組件零價格（{month}）',
-      hint: '{month} · 產品 {productCount} · 零價組件 {componentCount}（全部機種 · ProductionRelated=X · PurchaseType=F · 移動平均價=0，按組件合併產品；建議代替=末尾版本字母逆推如 D01446500B→A，取該料最近有價月移動價）',
-      productCodes: '共用產品',
-      productCount: '產品數',
-      suggestedComponentCode: '建議代替組件',
-      suggestedMovingPrice: '建議移動價格',
-      exportSuccess: '組件零價格清單匯出成功',
-      exportFailed: '組件零價格清單匯出失敗',
-    },
   },
 };

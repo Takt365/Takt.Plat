@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Sales
 // 文件名称：TaktSellerMaterialDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：SellerMaterial 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktSellerMaterial 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Logistics.Sales;
 // ========================================
 
 /// <summary>
-/// Takt销售商物料实体（租户内共享）
+/// Takt销售商物料实体（租户内共享） 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// 对应前端 TaktSellerMaterialDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
-public class TaktSellerMaterialDto : TaktTenantDtoBase
+public class TaktSellerMaterialDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// SellerMaterialID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -112,11 +112,6 @@ public class TaktSellerMaterialQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
     /// </summary>
@@ -212,11 +207,6 @@ public class TaktSellerMaterialCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
     /// </summary>
@@ -330,11 +320,6 @@ public class TaktSellerMaterialTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
     /// </summary>
@@ -417,11 +402,6 @@ public class TaktSellerMaterialImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）
     /// </summary>

@@ -56,12 +56,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="pi.label('sequenceCode')"
-                name="sequenceCode"
+                :label="pi.label('bomItemCode')"
+                name="bomItemCode"
               >
                 <a-input
-                  v-model:value="formState.sequenceCode"
-                  :placeholder="pi.ph('sequenceCode')"
+                  v-model:value="formState.bomItemCode"
+                  :placeholder="pi.ph('bomItemCode')"
                   show-count
                   :maxlength="4"
                   allow-clear
@@ -82,6 +82,21 @@
                 />
               </a-form-item>
             </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('lineNumber')"
+                name="lineNumber"
+              >
+                <a-input-number
+                  v-model:value="formState.lineNumber"
+                  :placeholder="pi.ph('lineNumber')"
+                  :min="1"
+                  :step="10"
+                  style="width: 100%"
+                  :disabled="!!formData?.bomMaterialCostItemId"
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 :label="pi.label('productDescription')"
@@ -91,21 +106,6 @@
                   v-model:value="formState.productDescription"
                   :placeholder="pi.ph('productDescription')"
                   :rows="2"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="pi.label('bomItemCode')"
-                name="bomItemCode"
-              >
-                <a-input
-                  v-model:value="formState.bomItemCode"
-                  :placeholder="pi.ph('bomItemCode')"
-                  show-count
-                  :maxlength="4"
-                  allow-clear
-                  :disabled="!!formData?.bomMaterialCostItemId"
                 />
               </a-form-item>
             </a-col>
@@ -528,6 +528,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
+  lineNumber: 10,
   movingPriceCurrencyCode: "CNY",
   purchaseCurrencyCode: "CNY"
 }
@@ -595,10 +596,10 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'blur'
     }
   ],
-  sequenceCode: [
+  bomItemCode: [
     {
       required: true,
-      message: pi.ph('sequenceCode'),
+      message: pi.ph('bomItemCode'),
       trigger: 'blur'
     }
   ],
@@ -609,17 +610,23 @@ const rules = computed<Record<string, Rule[]>>(() => ({
       trigger: 'change'
     }
   ],
+  lineNumber: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num) || num <= 0) {
+        return Promise.reject(pi.ph('lineNumber'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
   productDescription: [
     {
       required: true,
       message: pi.ph('productDescription'),
-      trigger: 'blur'
-    }
-  ],
-  bomItemCode: [
-    {
-      required: true,
-      message: pi.ph('bomItemCode'),
       trigger: 'blur'
     }
   ],
@@ -769,6 +776,10 @@ async function validate() {
 /** 映射为 Create/Update DTO */
 function getValues(): Record<string, any> {
   const payload = { ...formState }
+  if ('lineNumber' in payload) {
+    const rawlineNumber = payload.lineNumber
+    payload.lineNumber = typeof rawlineNumber === 'number' ? rawlineNumber : Number(rawlineNumber)
+  }
   if ('componentQuantity' in payload) {
     const rawcomponentQuantity = payload.componentQuantity
     payload.componentQuantity = typeof rawcomponentQuantity === 'number' ? rawcomponentQuantity : Number(rawcomponentQuantity)

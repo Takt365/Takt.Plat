@@ -481,7 +481,7 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM1;
             updateCount += updateLM1;
 
-            // TaktGeneralMaterial：MenuCode/路由/权限与「全局物料」一致（禁止再用旧码 LOGISTICS_MATERIALS_MATERIAL）
+            // TaktGeneralMaterial：全局物料
             var (insertLM2, updateLM2) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_GENERAL_MATERIAL", menu =>
             {
                 menu.MenuName = "全局物料";
@@ -501,20 +501,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLM2;
             updateCount += updateLM2;
-
-            // 退役旧 MenuCode（TaktMaterial 时代残留）
-            var obsoleteGeneralMaterialMenu = await menuRepository.FirstAsync(m =>
-                m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_MATERIALS_MATERIAL" && m.IsDeleted == 0);
-            if (obsoleteGeneralMaterialMenu != null)
-            {
-                obsoleteGeneralMaterialMenu.IsVisible = 0;
-                obsoleteGeneralMaterialMenu.IsDeleted = 1;
-                obsoleteGeneralMaterialMenu.MenuStatus = 0;
-                obsoleteGeneralMaterialMenu.UpdatedBy = 900001;
-                obsoleteGeneralMaterialMenu.UpdatedAt = DateTime.Now;
-                await menuRepository.UpdateAsync(obsoleteGeneralMaterialMenu);
-                updateCount += 1;
-            }
 
             // TaktMaterialDescription（SAP MAKT）；Permission 与控制器/前端一致：material:description
             var (insertLM2d, updateLM2d) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_DESCRIPTION", menu =>
@@ -639,7 +625,7 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM5;
             updateCount += updateLM5;
 
-            // TaktMaterialDocument：MenuCode 与实体/路由 material-document 一致（禁止再用 TRANSACTION）
+            // TaktMaterialDocument：物料凭证
             var (insertLM7, updateLM7) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_DOCUMENT", menu =>
             {
                 menu.MenuName = "物料凭证";
@@ -659,19 +645,6 @@ public class TaktMenuLevel3SeedData
             });
             insertCount += insertLM7;
             updateCount += updateLM7;
-
-            var obsoleteMaterialDocumentMenu = await menuRepository.FirstAsync(m =>
-                m.TenantCode == tenantCode && m.MenuCode == "LOGISTICS_MATERIALS_MATERIAL_TRANSACTION" && m.IsDeleted == 0);
-            if (obsoleteMaterialDocumentMenu != null)
-            {
-                obsoleteMaterialDocumentMenu.IsVisible = 0;
-                obsoleteMaterialDocumentMenu.IsDeleted = 1;
-                obsoleteMaterialDocumentMenu.MenuStatus = 0;
-                obsoleteMaterialDocumentMenu.UpdatedBy = 900001;
-                obsoleteMaterialDocumentMenu.UpdatedAt = DateTime.Now;
-                await menuRepository.UpdateAsync(obsoleteMaterialDocumentMenu);
-                updateCount += 1;
-            }
 
             // TaktMaterialMovingPrice：按工厂/期间/物料/评估类别维护移动价格
             var (insertLM8, updateLM8) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_MOVING_PRICE", menu =>

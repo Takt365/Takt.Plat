@@ -4,7 +4,7 @@
 // 文件名称：TaktManufacturerMaterial.cs
 // 创建时间：2026-05-13
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt制造商物料实体（租户级）；以经销商/供货商业务编码关联，无外键 Id、无导航
+// 功能描述：Takt制造商物料实体（组合4仅租户；无工厂/无语言）；以经销商/供货商业务编码关联，无外键 Id、无导航
 //
 // 业务语义说明：
 // 记录制造商物料编码与本厂物料的对应关系，不涉及商务价格；
@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
 /// Takt制造商物料实体（租户内共享）
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
 [SugarTable("takt_logistics_procurement_manufacturer_material", "制造商物料表")]
 [SugarIndex("ix_takt_logistics_procurement_manufacturer_material_tenant", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
@@ -28,7 +29,7 @@ namespace Takt.Domain.Entities.Logistics.Procurement;
 [SugarIndex("ix_takt_logistics_procurement_manufacturer_material_vendor_code", nameof(TenantCode), OrderByType.Asc, nameof(VendorCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_procurement_manufacturer_material_supplier_code", nameof(TenantCode), OrderByType.Asc, nameof(SupplierCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_procurement_manufacturer_material_manufacturer_material_code", nameof(TenantCode), OrderByType.Asc, nameof(ManufacturerMaterialCode), OrderByType.Asc, false)]
-public class TaktManufacturerMaterial : TaktTenantEntityBase
+public class TaktManufacturerMaterial : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 经销商编码（选项 TaktVendors/options；DictValue=VendorCode；可空）

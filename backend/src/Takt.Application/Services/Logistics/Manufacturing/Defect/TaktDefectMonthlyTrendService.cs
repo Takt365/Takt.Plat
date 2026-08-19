@@ -52,7 +52,10 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
     _pcbaInspectionDetailRepository = pcbaInspectionDetailRepository;
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：组立不良 ∪ PCBA 检查工厂去重选项
+  /// </summary>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendPlantOptionsAsync()
   {
     EnsureThreeLayerContext();
@@ -79,7 +82,11 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
         .ToList();
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：按工厂可用不良类别（assy / pcba；级联第 2 级）
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendDefectCategoryOptionsAsync(string plantCode)
   {
     EnsureThreeLayerContext();
@@ -116,7 +123,12 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
     return options;
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 推移查询栏：按工厂（及可选不良类别）去重机种（级联第 3 级，查询时可空）
+  /// </summary>
+  /// <param name="plantCode">工厂代码</param>
+  /// <param name="defectCategory">不良类别（assy / pcba；空则两表并集）</param>
+  /// <returns>下拉选项</returns>
   public async Task<List<TaktSelectOption>> GetDefectMonthlyTrendModelOptionsAsync(
       string plantCode,
       string? defectCategory = null)
@@ -163,7 +175,11 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
         .ToList();
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// 获取月生产不良推移转置分析（分页）
+  /// </summary>
+  /// <param name="queryDto">查询 DTO</param>
+  /// <returns>转置分析结果</returns>
   public async Task<TaktDefectMonthlyTrendResultDto> GetDefectMonthlyTrendAnalysisAsync(
       TaktDefectMonthlyTrendQueryDto queryDto)
   {
@@ -188,7 +204,9 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
     };
   }
 
-  /// <inheritdoc />
+  /// <summary>
+  /// ExportDefectMonthlyTrendAnalysisAsync
+  /// </summary>
   public async Task<(string fileName, byte[] fileContent)> ExportDefectMonthlyTrendAnalysisAsync(
       TaktDefectMonthlyTrendQueryDto query,
       string? sheetName = null,
@@ -782,7 +800,16 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
     /// <summary>单例</summary>
     public static DefectMonthlyTrendRowKeyComparer Instance { get; } = new();
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 月生产推移行键比较器
+    /// </summary>
+    /// <summary>单例</summary>
+    /// <summary>
+    /// 判断两行键是否相等（工厂/机种/产出类别，忽略大小写）
+    /// </summary>
+    /// <param name="x">左值</param>
+    /// <param name="y">右值</param>
+    /// <returns>是否相等</returns>
     public bool Equals(DefectMonthlyTrendRowKey? x, DefectMonthlyTrendRowKey? y)
     {
       if (x is null || y is null)
@@ -794,7 +821,11 @@ public class TaktDefectMonthlyTrendService : TaktServiceBase, ITaktDefectMonthly
           && string.Equals(x.DefectCategory, y.DefectCategory, StringComparison.OrdinalIgnoreCase);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 计算行键哈希（工厂/机种/产出类别大写）
+    /// </summary>
+    /// <param name="obj">行键</param>
+    /// <returns>哈希码</returns>
     public int GetHashCode(DefectMonthlyTrendRowKey obj) =>
         HashCode.Combine(
             obj.PlantCode.ToUpperInvariant(),

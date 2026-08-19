@@ -118,7 +118,11 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
         return string.IsNullOrWhiteSpace(modelCode) ? null : modelCode;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 机种选项（分析：工厂 + 期间最后月头表机种去重；❌ 非 CRUD 主数据 TaktModelDestination）
+    /// </summary>
+    /// <param name="queryDto">工厂与 FocusPeriod（yyyy-MM）</param>
+    /// <returns>下拉选项 DictValue=ModelCode</returns>
     public async Task<List<TaktSelectOption>> GetBomModelCostTrendModelOptionsAsync(
         TaktBomModelCostTrendOptionsQueryDto queryDto)
     {
@@ -140,7 +144,11 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 物料/组件选项（工厂 + 期间最后月 + ProductionRelated=X + PurchaseType=F + 未删除去重；支持 keyword 远程搜索）
+    /// </summary>
+    /// <param name="queryDto">工厂、FocusPeriod、可选 Keyword</param>
+    /// <returns>下拉选项 DictValue=ComponentCode</returns>
     public async Task<List<TaktSelectOption>> GetBomModelCostTrendComponentOptionsAsync(
         TaktBomModelCostTrendOptionsQueryDto queryDto)
     {
@@ -290,6 +298,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
               AND plant_code = @plantCode
               AND production_related = N'X'
               AND purchase_type = N'F'
+              AND UPPER(LTRIM(RTRIM(ISNULL(pcb_sect_indicator, N'')))) <> N'X'
               AND component_code IS NOT NULL
               AND LTRIM(RTRIM(component_code)) <> N''
               AND costing_date >= @costingStart
@@ -361,7 +370,11 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
         return Convert.ToString(value)?.Trim() ?? string.Empty;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 机种成本推移分析
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>分析结果</returns>
     public async Task<TaktBomModelCostTrendResultDto> GetBomModelCostTrendAnalysisAsync(
         TaktBomModelCostTrendQueryDto queryDto)
     {
@@ -397,7 +410,13 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出机种成本推移分析
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportBomModelCostTrendAnalysisAsync(
         TaktBomModelCostTrendQueryDto query,
         string? sheetName = null,
@@ -526,7 +545,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
     }
 
     /// <summary>
-    /// 加载机种产品 BOM 明细（仅 ProductionRelated=X 且 PurchaseType=F；可按核算月过滤；不截断）
+    /// 加载机种产品 BOM 明细（全量展开后 Filter：生产相关=X、PCB SECT 标识为空、采购类型=F；可按核算月过滤；不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCodes">产品编码</param>
@@ -560,8 +579,6 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
                 x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode
-                && x.ProductionRelated == "X"
-                && x.PurchaseType == "F"
                 && chunk.Contains(x.ProductCode));
             if (costingMonthStart.HasValue)
             {
@@ -583,7 +600,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
     }
 
     /// <summary>
-    /// 按工厂+期间直查 X+F 明细（全机种路径；不截断）
+    /// 按工厂+期间直查明细（全量展开后 Filter：生产相关=X、PCB SECT 标识为空、采购类型=F；不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="costingMonthStart">核算月起</param>
@@ -602,8 +619,6 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
             x.TenantCode == CurrentTenantCode
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plantCode
-            && x.ProductionRelated == "X"
-            && x.PurchaseType == "F"
             && x.ComponentCode != null
             && x.ComponentCode != "");
         if (costingMonthStart.HasValue)
@@ -624,7 +639,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
     }
 
     /// <summary>
-    /// 按物料/组件编码直查 X+F 明细（查「哪些机种使用」快路径；不截断）
+    /// 按物料/组件编码直查明细（全量展开后 Filter：生产相关=X、PCB SECT 标识为空、采购类型=F；不截断）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="componentCodes">组件编码</param>
@@ -637,7 +652,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
         DateTime? costingMonthStart,
         DateTime? costingMonthEnd)
     {
-        var allItems = new List<TaktBomMaterialCostItem>();
+        var seedItems = new List<TaktBomMaterialCostItem>();
         const int chunkSize = 100;
         DateTime? costingExclusiveEnd = costingMonthEnd.HasValue
             ? costingMonthEnd.Value.AddMonths(1)
@@ -649,7 +664,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
             .ToList();
         if (codes.Count == 0)
         {
-            return allItems;
+            return new List<TaktBomMaterialCostItem>();
         }
         for (var i = 0; i < codes.Count; i += chunkSize)
         {
@@ -659,8 +674,6 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
                 x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode
-                && x.ProductionRelated == "X"
-                && x.PurchaseType == "F"
                 && chunk.Contains(x.ComponentCode));
             if (costingMonthStart.HasValue)
             {
@@ -676,9 +689,24 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
                 exp.ToExpression(),
                 costingMonthStart,
                 costingMonthEnd);
-            allItems.AddRange(TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(part));
+            seedItems.AddRange(part);
         }
-        return allItems;
+        // 按组件命中的产品拉全量展开，再 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）
+        var productCodes = seedItems
+            .Where(x => !string.IsNullOrWhiteSpace(x.ProductCode))
+            .Select(x => x.ProductCode.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        if (productCodes.Count == 0)
+        {
+            return new List<TaktBomMaterialCostItem>();
+        }
+        var filtered = await LoadBomCostItemsForProductsAsync(
+            plantCode, productCodes, costingMonthStart, costingMonthEnd);
+        var codeSet = new HashSet<string>(codes, StringComparer.OrdinalIgnoreCase);
+        return filtered
+            .Where(x => !string.IsNullOrWhiteSpace(x.ComponentCode) && codeSet.Contains(x.ComponentCode.Trim()))
+            .ToList();
     }
 
     /// <summary>

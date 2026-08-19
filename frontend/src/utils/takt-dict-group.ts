@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：@/utils/takt-dict-group
 // 文件名称：takt-dict-group.ts
-// 功能描述：字典扁平列表按 dictTypeCode 分组；同 DictValue 去重（Accept-Language 区域项优先于 eo）
+// 功能描述：字典扁平列表按 dictTypeCode 分组；同 DictValue 去重（Accept-Language 区域项优先于 mul）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -11,8 +11,8 @@
 import type { TaktSelectOption } from '@/types/common';
 import { resolveDictDataIsDefault } from '@/utils/takt-dict-default';
 
-/** 全局通用 CultureCode（世界语） */
-const GLOBAL_CULTURE_CODE = 'eo';
+/** 多种语言内容 CultureCode（IETF BCP 47 / ISO 639-3 mul） */
+const GLOBAL_CULTURE_CODE = 'mul';
 
 /**
  * 计算 CultureCode 去重优先级（越高越优先保留）
@@ -31,7 +31,7 @@ function resolveCultureDedupePriority(cultureCode: string, requestLocale: string
 }
 
 /**
- * 规范化字典项 CultureCode（空串视为 eo，兼容历史数据）
+ * 规范化字典项 CultureCode（空串视为 mul，兼容历史数据）
  * @param cultureCode 原始区域编码
  * @returns 规范化编码
  */

@@ -46,7 +46,8 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
         var deptRepository = serviceProvider.GetRequiredService<ITaktCompanySeedRepository<TaktDept>>();
         var companyRepository = serviceProvider.GetRequiredService<ITaktTenantSeedRepository<TaktCompany>>();
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var configuredCompanyCodes = configuration.RequireDatabase().CompanyCodes;
+        var database = configuration.RequireDatabase();
+        var configuredCompanyCodes = database.CompanyCodes;
         var companies = await companyRepository.GetListAsync(
             c => c.TenantCode == tenantCode && c.CompanyStatus == 1);
         if (companies == null || companies.Count == 0)
@@ -62,7 +63,7 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
         TaktLogger.Information("正在为租户 {TenantCode} 初始化角色-部门关联数据...", tenantCode);
         foreach (var company in orderedCompanies)
         {
-            foreach (var (roleCode, deptCode) in GetRoleDeptTemplates())
+            foreach (var (roleCode, deptCode) in GetRoleDeptTemplates(company.CompanyCode))
             {
                 insertCount += await CreateRoleDeptAsync(
                     repository,
@@ -70,6 +71,7 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
                     deptRepository,
                     tenantCode,
                     company.CompanyCode,
+                    database.GetPlantCodeForCompanyCode(company.CompanyCode),
                     company.CultureCode,
                     roleCode,
                     deptCode);
@@ -82,14 +84,25 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
     }
 
     /// <summary>
-    /// 标准角色-部门关联模板（公司编码由 Database:CompanyCodes 驱动）
+    /// 角色-部门关联模板（按公司独立组织根；DTA 另挂制造2课给普通员工）
     /// </summary>
-    private static IEnumerable<(string RoleCode, string DeptCode)> GetRoleDeptTemplates()
+    /// <param name="companyCode">公司代码</param>
+    /// <returns>角色编码与部门编码对</returns>
+    private static IEnumerable<(string RoleCode, string DeptCode)> GetRoleDeptTemplates(string companyCode)
     {
-        yield return ("ROLE_SUPER_ADMIN", "HEAD_OFFICE");
-        yield return ("ROLE_SUPER_ADMIN", "D0000");
-        yield return ("ROLE_DEPT_ADMIN", "D0000");
-        yield return ("ROLE_EMPLOYEE", "D0620");
+        var rootDeptCode = companyCode switch
+        {
+            "1000" => "1000",
+            "2300" => "2300",
+            "2400" => "2400",
+            _ => companyCode,
+        };
+        yield return ("ROLE_SUPER_ADMIN", rootDeptCode);
+        yield return ("ROLE_DEPT_ADMIN", rootDeptCode);
+        if (companyCode == "2300")
+        {
+            yield return ("ROLE_EMPLOYEE", "D0620");
+        }
     }
 
     private static async Task<int> CreateRoleDeptAsync(
@@ -98,6 +111,7 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
         ITaktCompanySeedRepository<TaktDept> deptRepository,
         string tenantCode,
         string companyCode,
+        string plantCode,
         string cultureCode,
         string roleCode,
         string deptCode)
@@ -126,6 +140,7 @@ public class TaktRoleDeptSeedData : ITaktSeedDataCoordinator
                 CompanyCode = companyCode,
                 RoleId = role.Id,
                 DeptId = dept.Id,
+                PlantCode = plantCode,
                 CultureCode = cultureCode
             });
             return 1;

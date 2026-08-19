@@ -435,6 +435,35 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         return affected;
     }
 
+    /// <summary>
+    /// 获取指定文化下的前端动态翻译键值（扁平 I18nKey → 文本，仅 resource_type=frontend）
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码（BCP47）</param>
+    /// <returns>前端 messages 包</returns>
+    public async Task<TaktTranslationMessagesDto> GetTranslationMessagesAsync(string cultureCode)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(cultureCode);
+        var normalized = cultureCode.Trim();
+        var list = await _translationRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CultureCode == normalized
+                && x.ResourceType == "frontend");
+        var messages = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var item in list)
+        {
+            if (string.IsNullOrWhiteSpace(item.I18nKey))
+            {
+                continue;
+            }
+            messages[item.I18nKey] = item.TranslationText ?? string.Empty;
+        }
+        return new TaktTranslationMessagesDto
+        {
+            CultureCode = normalized,
+            Messages = messages
+        };
+    }
+
     // ========================================
     // 查询表达式
     // ========================================
@@ -451,9 +480,7 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
             var keywords = queryDto.KeyWords!.Trim();
-            exp = exp.And(x =>
-                (x.RelatedPlant != null && x.RelatedPlant.Contains(keywords))
-                || (x.I18nKey != null && x.I18nKey.Contains(keywords))
+            exp = exp.And(x => (x.I18nKey != null && x.I18nKey.Contains(keywords))
                 || (x.TranslationText != null && x.TranslationText.Contains(keywords))
                 || (x.ResourceGroup != null && x.ResourceGroup.Contains(keywords))
                 || (x.ResourceType != null && x.ResourceType.Contains(keywords))
@@ -463,16 +490,16 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
         if (queryDto?.CultureId.HasValue == true)
         {
             var cultureId = queryDto.CultureId;
             exp = exp.And(x => x.CultureId == cultureId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
+        {
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
         if (!string.IsNullOrWhiteSpace(queryDto?.I18nKey))
@@ -547,11 +574,11 @@ public class TaktTranslationService : TaktServiceBase, ITaktTranslationService
         {
             return true;
         }
-        if (!string.IsNullOrWhiteSpace(queryDto.RelatedPlant))
+        if (queryDto.CultureId.HasValue)
         {
             return true;
         }
-        if (queryDto.CultureId.HasValue)
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
         {
             return true;
         }

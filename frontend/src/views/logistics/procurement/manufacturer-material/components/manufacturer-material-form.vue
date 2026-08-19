@@ -294,7 +294,7 @@ const { t } = useI18n()
 const tenantStore = useTenantStore()
 
 /**
- * 上下文隔离字段：租户级实体仅注入 tenantCode，表单只读
+ * 上下文隔离字段：组合 4（仅租户）注入 tenantCode，表单只读
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -302,10 +302,6 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (force || !target.relatedPlant) {
-    target.relatedPlant = tenantStore.currentCompanyRelatedPlant || ''
-  }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'

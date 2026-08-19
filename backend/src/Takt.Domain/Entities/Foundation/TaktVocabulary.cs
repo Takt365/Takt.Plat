@@ -17,13 +17,14 @@ namespace Takt.Domain.Entities.Foundation;
 
 /// <summary>
 /// 敏感词实体（租户内共享，供新闻、公告评论等模块引用）
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
 [SugarTable("takt_foundation_vocabulary", "敏感词表")]
 [SugarIndex("ix_vocabulary_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_vocabulary_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_vocabulary_word_text_unique", nameof(TenantCode), OrderByType.Asc, nameof(WordText), OrderByType.Asc, true)]
 [SugarIndex("ix_vocabulary_word_category", nameof(TenantCode), OrderByType.Asc, nameof(WordCategory), OrderByType.Asc, false)]
-public class TaktVocabulary : TaktTenantEntityBase
+public class TaktVocabulary : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 敏感词文本（租户内唯一）

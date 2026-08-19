@@ -18,7 +18,7 @@ namespace Takt.Application.Dtos.Identity;
 /// <summary>
 /// 角色-菜单关联列表 DTO（对应 TaktRoleMenu）
 /// </summary>
-public class TaktRoleMenuDto : TaktTenantDtoBase
+public class TaktRoleMenuDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// 关联主键（适配实体 Id）

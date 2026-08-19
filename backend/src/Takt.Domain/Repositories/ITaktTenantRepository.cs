@@ -12,6 +12,7 @@
 
 using System.Linq.Expressions;
 using Takt.Domain.Entities;
+using Takt.Domain.Interfaces;
 
 namespace Takt.Domain.Repositories;
 
@@ -21,7 +22,7 @@ namespace Takt.Domain.Repositories;
 /// 适用于：用户、角色、菜单等跨公司共享的实体
 /// </summary>
 /// <typeparam name="TEntity">租户级实体类型</typeparam>
-public interface ITaktTenantRepository<TEntity> : ITaktUniqueExistenceRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
+public interface ITaktTenantRepository<TEntity> : ITaktUniqueExistenceRepository<TEntity> where TEntity : TaktTenantCoreEntityScopeBase, ITaktTenantEntity, new()
 {
     // ========================================
     // 基础查询

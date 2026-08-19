@@ -23,22 +23,98 @@ import type {
  * @description 对应后端 TaktAccountTitleDto
  */
 export interface AccountTitle extends CompanyDtoBase {
-
+  /**
+   * AccountTitleID
+   */
+  accountTitleId: string;
+  /**
+   * 科目编码
+   */
+  accountTitleCode: string;
+  /**
+   * 科目名称
+   */
+  accountTitleName: string;
+  /**
+   * 父级 ID
+   */
+  parentId: string;
+  /**
+   * 科目类型（字典 accounting_account_title_type）
+   */
+  accountTitleType: string;
+  /**
+   * 余额方向（0=借方，1=贷方）
+   */
+  balanceDirection: number;
+  /**
+   * 科目层级
+   */
+  accountTitleLevel: number;
+  /**
+   * 末级科目（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isLeaf: number;
+  /**
+   * 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isAuxiliary: number;
+  /**
+   * 辅助核算类型（字典 accounting_auxiliary_type）
+   */
+  auxiliaryType: string;
+  /**
+   * 数量核算（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isQuantity: number;
+  /**
+   * 外币核算（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isCurrency: number;
+  /**
+   * 现金科目（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isCash: number;
+  /**
+   * 银行科目（字典 sys_yes_no_type；1=是，0=否）
+   */
+  isBank: number;
+  /**
+   * 生效日期
+   */
+  validFrom: string;
+  /**
+   * 失效日期
+   */
+  validTo: string;
+  /**
+   * 排序号
+   */
+  sortOrder: number;
   /**
    * 科目状态（字典 sys_normal_disable_status；1=启用，0=禁用）
    */
   accountTitleStatus?: number;
-
   /**
    * 扩展字段JSON
    */
   extField?: string;
-
   /**
    * 备注
    */
   remark?: string;
+}
 
+/**
+ * AccountTitle 树形列表/树选择 DTO（含子节点）
+ * 对应 GetAccountTitleTreeAsync 等接口
+ * @description 对应后端 TaktAccountTitleTreeDto
+ */
+export interface AccountTitleTree extends AccountTitle {
+  /**
+   * 子节点
+   */
+  children: AccountTitleTree[];
 }
 
 /**

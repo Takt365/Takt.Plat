@@ -12,6 +12,7 @@
 
 using System.Linq.Expressions;
 using Takt.Domain.Entities;
+using Takt.Domain.Interfaces;
 
 namespace Takt.Domain.Repositories;
 
@@ -23,8 +24,8 @@ namespace Takt.Domain.Repositories;
 /// 3. 支持精确控制租户和公司编码
 /// 4. 自动填充雪花ID
 /// </summary>
-/// <typeparam name="TEntity">实体类型（必须继承 TaktTenantEntityBase）</typeparam>
-public interface ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantEntityBase, new()
+/// <typeparam name="TEntity">实体类型（必须实现 ITaktTenantEntity）</typeparam>
+public interface ITaktTenantSeedRepository<TEntity> where TEntity : TaktTenantCoreEntityScopeBase, ITaktTenantEntity, new()
 {
     // ========================================
     // 新增操作（自动填充雪花ID）

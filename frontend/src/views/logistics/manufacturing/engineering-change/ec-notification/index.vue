@@ -110,10 +110,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.ecnotification.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.ecnotification.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -523,7 +523,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.ecnotification.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'ecNotificationCode', label: t('entity.ecnotification.no') },
   { key: 'ecId', label: t('entity.ecnotification.ecid') },
   { key: 'ecCode', label: t('entity.ecnotification.ecCode') },
@@ -637,7 +637,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getEcNotificationField(record, 'ecNotificationId') ?? ''
   },
   {
-    title: t('entity.ecnotification.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

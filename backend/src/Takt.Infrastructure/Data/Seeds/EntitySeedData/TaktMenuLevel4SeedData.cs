@@ -155,6 +155,27 @@ public class TaktMenuLevel4SeedData
             insertCount += insertBOM10;
             updateCount += updateBOM10;
 
+            // BOM零价格
+            var (insertBOM10z, updateBOM10z) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_MATERIAL_ZEROPRICE", menu =>
+            {
+                menu.MenuName = "BOM零价格";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_MATERIAL_ZEROPRICE";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.material.zeroprice";
+                menu.Icon = "RiPriceTag3Line";
+                menu.ParentId = manufacturingBomMenu.Id;
+                menu.MenuType = 1;
+                menu.Permission = "logistics:manufacturing:bom:material:zeroprice:list";
+                menu.RoutePath = "/logistics/manufacturing/bom/material-zero-price";
+                menu.ComponentPath = "logistics/manufacturing/bom/material-zero-price/index";
+                menu.SortOrder = 5;
+                menu.MenuStatus = 1;
+                menu.IsVisible = 1;
+                menu.IsCached = 0;
+                menu.IsExternal = 0;
+            });
+            insertCount += insertBOM10z;
+            updateCount += updateBOM10z;
+
             // BOM 成本分析：按 TaktBomMaterialCostItem.CostingDate 做产品期间成本转置与差异下钻
             var (insertBOM11, updateBOM11) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_MATERIAL_COST_ANALYSIS", menu =>
             {
@@ -167,7 +188,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:bom:material:cost:analysis:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/material-cost-analysis";
                 menu.ComponentPath = "logistics/manufacturing/bom/material-cost-analysis/index";
-                menu.SortOrder = 5;
+                menu.SortOrder = 7;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -188,7 +209,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:bom:material:cost:trend:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/material-cost-trend";
                 menu.ComponentPath = "logistics/manufacturing/bom/material-cost-trend/index";
-                menu.SortOrder = 6;
+                menu.SortOrder = 8;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -209,7 +230,7 @@ public class TaktMenuLevel4SeedData
                 menu.Permission = "logistics:manufacturing:bom:model:cost:trend:list";
                 menu.RoutePath = "/logistics/manufacturing/bom/model-cost-trend";
                 menu.ComponentPath = "logistics/manufacturing/bom/model-cost-trend/index";
-                menu.SortOrder = 7;
+                menu.SortOrder = 9;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
@@ -218,26 +239,26 @@ public class TaktMenuLevel4SeedData
             insertCount += insertBOM13;
             updateCount += updateBOM13;
 
-            // 差异成本推移：机种必选；组件编码/用量月度差异与涨跌
-            var (insertBOM14, updateBOM14) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_VARIANCE_COST_TREND", menu =>
+            // 成本差异推移：产品月成本 + 0价格组 + 价格差异组
+            var (insertBOM15, updateBOM15) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_BOM_PRICE_DELTA_TREND", menu =>
             {
-                menu.MenuName = "差异成本推移";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_VARIANCE_COST_TREND";
-                menu.I18nKey = "menu.logistics.manufacturing.bom.variance.cost.trend";
-                menu.Icon = "RiExchangeFundsLine";
+                menu.MenuName = "成本差异推移";
+                menu.MenuCode = "LOGISTICS_MANUFACTURING_BOM_PRICE_DELTA_TREND";
+                menu.I18nKey = "menu.logistics.manufacturing.bom.pricedelta.trend";
+                menu.Icon = "RiLineChartLine";
                 menu.ParentId = manufacturingBomMenu.Id;
                 menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:bom:variance:cost:trend:list";
-                menu.RoutePath = "/logistics/manufacturing/bom/variance-cost-trend";
-                menu.ComponentPath = "logistics/manufacturing/bom/variance-cost-trend/index";
-                menu.SortOrder = 8;
+                menu.Permission = "logistics:manufacturing:bom:pricedelta:trend:list";
+                menu.RoutePath = "/logistics/manufacturing/bom/price-delta-trend";
+                menu.ComponentPath = "logistics/manufacturing/bom/price-delta-trend/index";
+                menu.SortOrder = 10;
                 menu.MenuStatus = 1;
                 menu.IsVisible = 1;
                 menu.IsCached = 0;
                 menu.IsExternal = 0;
             });
-            insertCount += insertBOM14;
-            updateCount += updateBOM14;
+            insertCount += insertBOM15;
+            updateCount += updateBOM15;
         }
 
         // ========== MDS计划下的四级菜单 ==========
@@ -814,86 +835,6 @@ public class TaktMenuLevel4SeedData
             });
             insertCount += insertAPS6;
             updateCount += updateAPS6;
-
-            var (insertHide1, updateHide1) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_APS_WORK_CENTER", menu =>
-            {
-                menu.MenuName = "工作中心";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_APS_WORK_CENTER";
-                menu.I18nKey = "menu.logistics.manufacturing.aps.work.center";
-                menu.Icon = "RiBuilding4Line";
-                menu.ParentId = manufacturingApsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:aps:work:center:list";
-                menu.RoutePath = "/logistics/manufacturing/aps/work-center";
-                menu.ComponentPath = "logistics/manufacturing/aps/work-center/index";
-                menu.SortOrder = 99;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 0;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHide1;
-            updateCount += updateHide1;
-
-            var (insertHide2, updateHide2) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_APS_CHANGEOVER_MATRIX", menu =>
-            {
-                menu.MenuName = "换型矩阵";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_APS_CHANGEOVER_MATRIX";
-                menu.I18nKey = "menu.logistics.manufacturing.aps.changeover.matrix";
-                menu.Icon = "RiExchangeLine";
-                menu.ParentId = manufacturingApsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:aps:changeover:matrix:list";
-                menu.RoutePath = "/logistics/manufacturing/aps/changeover-matrix";
-                menu.ComponentPath = "logistics/manufacturing/aps/changeover-matrix/index";
-                menu.SortOrder = 99;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 0;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHide2;
-            updateCount += updateHide2;
-
-            var (insertHide3, updateHide3) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_APS_ORDER", menu =>
-            {
-                menu.MenuName = "APS订单";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_APS_ORDER";
-                menu.I18nKey = "menu.logistics.manufacturing.aps.aps.order";
-                menu.Icon = "RiListOrdered";
-                menu.ParentId = manufacturingApsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:aps:schedule:list";
-                menu.RoutePath = "/logistics/manufacturing/aps/aps-order";
-                menu.ComponentPath = "logistics/manufacturing/aps/aps-order/index";
-                menu.SortOrder = 99;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 0;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHide3;
-            updateCount += updateHide3;
-
-            var (insertHide4, updateHide4) = await CreateOrUpdateMenuAsync(menuRepository, sqlSugarContext, tenantCode, "LOGISTICS_MANUFACTURING_APS_PRODUCTION_DISPATCH", menu =>
-            {
-                menu.MenuName = "生产派工";
-                menu.MenuCode = "LOGISTICS_MANUFACTURING_APS_PRODUCTION_DISPATCH";
-                menu.I18nKey = "menu.logistics.manufacturing.aps.production.dispatch";
-                menu.Icon = "RiSendPlaneLine";
-                menu.ParentId = manufacturingApsMenu.Id;
-                menu.MenuType = 1;
-                menu.Permission = "logistics:manufacturing:aps:production:dispatch:list";
-                menu.RoutePath = "/logistics/manufacturing/aps/production-dispatch";
-                menu.ComponentPath = "logistics/manufacturing/aps/production-dispatch/index";
-                menu.SortOrder = 99;
-                menu.MenuStatus = 1;
-                menu.IsVisible = 0;
-                menu.IsCached = 0;
-                menu.IsExternal = 0;
-            });
-            insertCount += insertHide4;
-            updateCount += updateHide4;
         }
 
         // ========== 设变下的四级菜单 ==========

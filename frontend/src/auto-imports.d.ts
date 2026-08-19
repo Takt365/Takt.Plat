@@ -75,6 +75,7 @@ declare global {
   const ref: typeof import('vue').ref
   const resolveComponent: typeof import('vue').resolveComponent
   const resolveCurrentCompanyRelatedPlantCode: typeof import('./composables/use-company-related-plant').resolveCurrentCompanyRelatedPlantCode
+  const resolveTableColumnResizeKey: typeof import('./composables/use-table-column-resize').resolveTableColumnResizeKey
   const setActivePinia: typeof import('pinia').setActivePinia
   const setMapStoreSuffix: typeof import('pinia').setMapStoreSuffix
   const shallowReactive: typeof import('vue').shallowReactive
@@ -106,6 +107,7 @@ declare global {
   const useRoute: typeof import('vue-router').useRoute
   const useRouter: typeof import('vue-router').useRouter
   const useSlots: typeof import('vue').useSlots
+  const useTableColumnResize: typeof import('./composables/use-table-column-resize').useTableColumnResize
   const useTableRefresh: typeof import('./composables/use-table-refresh').useTableRefresh
   const useTaktCaptchaBehavior: typeof import('./composables/use-takt-captcha-behavior').useTaktCaptchaBehavior
   const useTaktCaptchaSlider: typeof import('./composables/use-takt-captcha-slider').useTaktCaptchaSlider
@@ -219,6 +221,7 @@ declare module 'vue' {
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveCurrentCompanyRelatedPlantCode: UnwrapRef<typeof import('./composables/use-company-related-plant')['resolveCurrentCompanyRelatedPlantCode']>
+    readonly resolveTableColumnResizeKey: UnwrapRef<typeof import('./composables/use-table-column-resize')['resolveTableColumnResizeKey']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
@@ -250,6 +253,7 @@ declare module 'vue' {
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
+    readonly useTableColumnResize: UnwrapRef<typeof import('./composables/use-table-column-resize')['useTableColumnResize']>
     readonly useTableRefresh: UnwrapRef<typeof import('./composables/use-table-refresh')['useTableRefresh']>
     readonly useTaktCaptchaBehavior: UnwrapRef<typeof import('./composables/use-takt-captcha-behavior')['useTaktCaptchaBehavior']>
     readonly useTaktCaptchaSlider: UnwrapRef<typeof import('./composables/use-takt-captcha-slider')['useTaktCaptchaSlider']>

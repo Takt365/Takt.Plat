@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialGroupDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-13
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialGroup 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialGroup 生成，请按需审阅）
 // 
@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt物料组主数据实体（租户级）
+/// Takt物料组主数据实体（租户级） 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// 对应前端 TaktMaterialGroupDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
-public class TaktMaterialGroupDto : TaktTenantDtoBase
+public class TaktMaterialGroupDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// MaterialGroupID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -72,11 +72,6 @@ public class TaktMaterialGroupQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
@@ -132,11 +127,6 @@ public class TaktMaterialGroupCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
@@ -224,11 +214,6 @@ public class TaktMaterialGroupTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>
@@ -266,11 +251,6 @@ public class TaktMaterialGroupImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料组编码（group_code；租户内唯一；与物料 material_group 对齐）
     /// </summary>

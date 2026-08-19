@@ -22,11 +22,11 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 // ========================================
 
 /// <summary>
-/// 财务期间（租户级主数据；字典 accounting_financial_year_category 区分 CN/JP/HK/US 财年规则）
+/// 财务期间（租户级主数据；按 CountryCode / sys_country_code 区分各国财年规则）
 /// 对应前端 TaktFinancialPeriodDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktFinancialPeriodDto : TaktTenantDtoBase
+public class TaktFinancialPeriodDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// FinancialPeriodID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -36,9 +36,9 @@ public class TaktFinancialPeriodDto : TaktTenantDtoBase
     public long FinancialPeriodId { get; set; }
 
     /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string FinancialYearCategory { get; set; } = string.Empty;
+    public string CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -87,15 +87,10 @@ public class TaktFinancialPeriodQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
-    /// </summary>
-    public string? FinancialYearCategory { get; set; } = string.Empty;
+    public string? CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -162,16 +157,11 @@ public class TaktFinancialPeriodCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
-    /// </summary>
-    [Required(ErrorMessage = "财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）不能为空")]
-    public string FinancialYearCategory { get; set; } = string.Empty;
+    [Required(ErrorMessage = "国家代码不能为空")]
+    public string CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -252,15 +242,10 @@ public class TaktFinancialPeriodTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
-    /// </summary>
-    public string? FinancialYearCategory { get; set; } = string.Empty;
+    public string? CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -314,15 +299,10 @@ public class TaktFinancialPeriodImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
-    /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
-    /// </summary>
-    public string? FinancialYearCategory { get; set; } = string.Empty;
+    public string? CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）
@@ -383,9 +363,9 @@ public class TaktFinancialPeriodExportDto
     public long FinancialPeriodId { get; set; }
 
     /// <summary>
-    /// 财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）
+    /// 国家代码（字典 sys_country_code；DictValue=ISO alpha-2）
     /// </summary>
-    public string FinancialYearCategory { get; set; } = string.Empty;
+    public string CountryCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）

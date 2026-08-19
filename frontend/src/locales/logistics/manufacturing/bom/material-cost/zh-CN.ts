@@ -21,7 +21,7 @@ export default {
     periodRange: '核算年月',
     selectPlantRequired: '请选择工厂代码',
     selectModelRequired: '请选择机种',
-    itemFilterHint: '默认：生产相关=X、采购类型=F（可清空查看全部）',
+    itemFilterHint: '默认：生产相关=X、PCB SECT 标识空、采购类型=F（可清空查看全部）',
     productRowCount: '产品数',
     modalmasterhint: '左机种 → 中产品 → 右明细（不拆实体）；请导入明细后合计或重算成本。',
     costSum: '成本合计',
@@ -45,17 +45,5 @@ export default {
     refreshModelFieldsSuccess:
       '{month} 回填机种价格完成：扫描 {scanned} 行，机种更新 {modelUpdated}，平均更新 {averageUpdated}（{groups} 组）',
     refreshModelFieldsFailed: '回填机种价格失败',
-    zeroPrice: {
-      button: '组件零价格',
-      monthTitle: '选择工厂与核算月份',
-      title: '组件零价格（{month}）',
-      hint: '{month} · 产品 {productCount} · 零价组件 {componentCount}（全部机种 · ProductionRelated=X · PurchaseType=F · 移动平均价=0，按组件合并产品；建议代替=末尾版本字母逆推如 D01446500B→A，取该料最近有价月移动价）',
-      productCodes: '共用产品',
-      productCount: '产品数',
-      suggestedComponentCode: '建议代替组件',
-      suggestedMovingPrice: '建议移动价格',
-      exportSuccess: '组件零价格清单导出成功',
-      exportFailed: '组件零价格清单导出失败',
-    },
   },
 };

@@ -21,11 +21,11 @@ export const BOMMATERIALCOSTITEM_SELF_I18N_KEY = buildEntitySelfI18nKey(BOMMATER
 /** 列表业务列（不含主键） */
 export const BOMMATERIALCOSTITEM_LIST_FIELDS = [
   'plantCode',
-  'productCode',
-  'sequenceCode',
-  'productDescription',
   'bomLevel',
   'bomItemCode',
+  'productCode',
+  'lineNumber',
+  'productDescription',
   'componentCode',
   'componentDescription',
   'componentQuantity',
@@ -64,11 +64,11 @@ export const BOMMATERIALCOSTITEM_PLACEHOLDER = {
   companyCode: 'optional',
   companyDefaultCulture: 'optional',
   plantCode: 'select',
-  productCode: 'required',
-  sequenceCode: 'required',
-  productDescription: 'optional',
   bomLevel: 'required',
   bomItemCode: 'required',
+  productCode: 'required',
+  lineNumber: 'required',
+  productDescription: 'optional',
   componentCode: 'required',
   componentDescription: 'optional',
   componentQuantity: 'select',
@@ -95,11 +95,10 @@ export type BomMaterialCostItemField = keyof typeof BOMMATERIALCOSTITEM_PLACEHOL
 /** 高级查询可 trim 的字符串字段 */
 export const BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS = [
   'plantCode',
-  'productCode',
-  'sequenceCode',
-  'productDescription',
   'bomLevel',
   'bomItemCode',
+  'productCode',
+  'productDescription',
   'componentCode',
   'componentDescription',
   'batchIndicator',
@@ -122,11 +121,12 @@ export const BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS = [
 
 export type BomMaterialCostItemQueryField =
   | (typeof BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS)[number]
-  | 'componentQuantity' | 'movingAveragePrice' | 'movingPriceUnit' | 'netPurchasePrice' | 'purchasePriceUnit' 
+  | 'lineNumber' | 'componentQuantity' | 'movingAveragePrice' | 'movingPriceUnit' | 'netPurchasePrice' | 'purchasePriceUnit'
 
 /** 高级查询抽屉全部字段（含数值） */
 export const BOMMATERIALCOSTITEM_QUERY_FIELDS: readonly BomMaterialCostItemQueryField[] = [
   ...BOMMATERIALCOSTITEM_QUERY_STRING_FIELDS,
+  'lineNumber',
   'componentQuantity',
   'movingAveragePrice',
   'movingPriceUnit',

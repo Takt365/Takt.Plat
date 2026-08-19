@@ -119,7 +119,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         await FillConfigurableDetailsAsync(dto, entity);
         return dto;    }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取报表下拉选项
+    /// </summary>
     public async Task<List<TaktSelectOption>> GetConfigurableOptionsAsync()
     {
         var currentUserId = CurrentUserId ?? 0;
@@ -601,7 +603,11 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 获取 SQVI 运行时筛选条件定义
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <returns>运行时屏幕 DTO</returns>
     public async Task<TaktConfigurableRuntimeScreenDto> GetConfigurableRuntimeScreenAsync(long id)
     {
         var bundle = await LoadConfigurableRuntimeBundleAsync(id);
@@ -632,7 +638,12 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行报表查询（分页）
+    /// </summary>
+    /// <param name="id">报表主键</param>
+    /// <param name="dto">查询参数与筛选值</param>
+    /// <returns>查询结果</returns>
     public async Task<TaktConfigurableQueryResultDto> ExecuteConfigurableQueryAsync(
         long id,
         TaktConfigurableExecuteQueryDto dto)
@@ -642,7 +653,11 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         return await ExecuteQueryFromBundleAsync(bundle, dto);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 设计态预览查询（未保存报表定义）
+    /// </summary>
+    /// <param name="dto">报表定义与分页参数</param>
+    /// <returns>查询结果</returns>
     public async Task<TaktConfigurableQueryResultDto> PreviewConfigurableQueryAsync(
         TaktConfigurablePreviewQueryDto dto)
     {
@@ -651,7 +666,9 @@ public class TaktConfigurableService : TaktServiceBase, ITaktConfigurableService
         return await ExecuteQueryFromBundleAsync(bundle, dto);
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// ExportConfigurableDataAsync
+    /// </summary>
     public async Task<(string fileName, byte[] content)> ExportConfigurableDataAsync(
         long id,
         TaktConfigurableExportDataDto dto,

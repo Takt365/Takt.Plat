@@ -59,7 +59,7 @@ export interface PackagingMaterial extends CompanyDtoBase {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -69,7 +69,7 @@ export interface PackagingMaterial extends CompanyDtoBase {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 
@@ -169,7 +169,7 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   companyCode?: string;
 
   /**
-   * 区域文化编码（字典 sys_culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -209,7 +209,7 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -219,7 +219,7 @@ export interface PackagingMaterialQuery extends TaktPagedQuery {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 
@@ -333,12 +333,12 @@ export interface PackagingMaterialCreate {
   tenantCode: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode: string;
 
@@ -378,7 +378,7 @@ export interface PackagingMaterialCreate {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -388,7 +388,7 @@ export interface PackagingMaterialCreate {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 
@@ -521,12 +521,12 @@ export interface PackagingMaterialTemplate {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -566,7 +566,7 @@ export interface PackagingMaterialTemplate {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -576,7 +576,7 @@ export interface PackagingMaterialTemplate {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 
@@ -675,12 +675,12 @@ export interface PackagingMaterialImport {
   tenantCode?: string;
 
   /**
-   * 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+   * 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
    */
   companyCode?: string;
 
   /**
-   * 区域文化编码（登录或公司切换注入，对应公司级实体 CultureCode / culture_code）
+   * 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
    */
   cultureCode?: string;
 
@@ -720,7 +720,7 @@ export interface PackagingMaterialImport {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -730,7 +730,7 @@ export interface PackagingMaterialImport {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 
@@ -869,7 +869,7 @@ export interface PackagingMaterialExport {
   additionalCode?: string;
 
   /**
-   * 原产国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 原产国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   originCountryRegionCode?: string;
 
@@ -879,7 +879,7 @@ export interface PackagingMaterialExport {
   originCountryRegionName?: string;
 
   /**
-   * 目的国/地区编码（ISO 3166-1 alpha-2 两位代码，选项 TaktIsoCodes/options，DictValue=IsoCode）
+   * 目的国/地区编码（字典 sys_country_code；DictValue=ISO 3166-1 alpha-2）
    */
   destinationCountryRegionCode?: string;
 

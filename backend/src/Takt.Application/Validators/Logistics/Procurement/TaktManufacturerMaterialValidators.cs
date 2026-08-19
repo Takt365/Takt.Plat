@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Validators.Logistics.Procurement
 // 文件名称：TaktManufacturerMaterialValidators.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：ManufacturerMaterial 模块 FluentValidation 验证器（由 generate-validators-from-entity.cjs 根据 TaktManufacturerMaterial 生成，请按需审阅）
 // 
@@ -32,9 +32,6 @@ public class TaktManufacturerMaterialCreateValidator : AbstractValidator<TaktMan
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.MaterialType)
             .NotEmpty().WithMessage("物料类型不能为空")
             .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
@@ -82,9 +79,6 @@ public class TaktManufacturerMaterialUpdateValidator : AbstractValidator<TaktMan
         RuleFor(x => x.TenantCode)
             .NotEmpty().WithMessage("租户编码不能为空")
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符");
-        RuleFor(x => x.RelatedPlant)
-            .NotEmpty().WithMessage("关联工厂不能为空")
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符");
         RuleFor(x => x.MaterialType)
             .NotEmpty().WithMessage("物料类型不能为空")
             .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");
@@ -129,8 +123,6 @@ public class TaktManufacturerMaterialImportValidator : AbstractValidator<TaktMan
     {
         RuleFor(x => x.TenantCode)
             .MaximumLength(3).WithMessage("租户编码长度不能超过3个字符").When(x => !string.IsNullOrWhiteSpace(x.TenantCode));
-        RuleFor(x => x.RelatedPlant)
-            .MaximumLength(4).WithMessage("关联工厂长度不能超过4个字符").When(x => !string.IsNullOrWhiteSpace(x.RelatedPlant));
         RuleFor(x => x.MaterialType)
             .NotEmpty().WithMessage("物料类型不能为空")
             .MaximumLength(4).WithMessage("物料类型长度不能超过4个字符");

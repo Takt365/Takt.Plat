@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Takt.Application.Dtos.Foundation;
 using Takt.Application.Services.Foundation;
@@ -34,6 +35,26 @@ public class TaktTranslationsController : TaktControllerBase
     public TaktTranslationsController(ITaktTranslationService translationService)
     {
         _translationService = translationService;
+    }
+
+    /// <summary>
+    /// 获取指定文化下的前端动态翻译键值（登录页/SPA 合并 vue-i18n，允许匿名）
+    /// </summary>
+    /// <param name="cultureCode">区域文化编码（BCP47，如 zh-CN）</param>
+    /// <returns>扁平 messages 包</returns>
+    [AllowAnonymous]
+    [HttpGet("messages")]
+    public async Task<IActionResult> GetTranslationMessagesAsync([FromQuery] string cultureCode)
+    {
+        try
+        {
+            var result = await _translationService.GetTranslationMessagesAsync(cultureCode);
+            return Success(result, "查询成功");
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex);
+        }
     }
 
     /// <summary>

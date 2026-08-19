@@ -79,7 +79,10 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
         _modelDestinationRepository = modelDestinationRepository;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：移动价格本表工厂去重选项
+    /// </summary>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetMaterialMovingPriceTrendPlantOptionsAsync()
     {
         EnsureThreeLayerContext();
@@ -99,7 +102,11 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂去重评估类别（级联第 2 级）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetMaterialMovingPriceTrendValuationOptionsAsync(string plantCode)
     {
         EnsureThreeLayerContext();
@@ -125,7 +132,12 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
             .ToList();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 推移查询栏：按工厂+评估类别去重物料（级联第 3 级，查询时可空）
+    /// </summary>
+    /// <param name="plantCode">工厂代码</param>
+    /// <param name="valuation">评估类别</param>
+    /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetMaterialMovingPriceTrendMaterialOptionsAsync(
         string plantCode,
         string? valuation = null)
@@ -155,6 +167,11 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
             .ToList();
     }
 
+    /// <summary>
+    /// 物料月移动价格推移分析（分页）
+    /// </summary>
+    /// <param name="queryDto">查询条件</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktMaterialMovingPriceMonthlyTrendResultDto> GetMaterialMovingPriceMonthlyTrendAnalysisAsync(
         TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
     {
@@ -179,7 +196,13 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出物料月移动价格推移分析（全量）
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceMonthlyTrendAnalysisAsync(
         TaktMaterialMovingPriceMonthlyTrendQueryDto query,
         string? sheetName = null,
@@ -243,7 +266,11 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
             fileName ?? $"物料移动价格推移清单_{query.PlantCode}.xlsx");
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 物料-机种-价格推移分析（物料清单 + BOM 机种/产品组）
+    /// </summary>
+    /// <param name="queryDto">查询条件</param>
+    /// <returns>转置分析结果</returns>
     public async Task<TaktMaterialMovingPriceModelTrendResultDto> GetMaterialMovingPriceModelTrendAnalysisAsync(
         TaktMaterialMovingPriceMonthlyTrendQueryDto queryDto)
     {
@@ -290,7 +317,13 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 导出物料-机种-价格推移分析（全量）
+    /// </summary>
+    /// <param name="query">查询条件</param>
+    /// <param name="sheetName">工作表名称</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaterialMovingPriceModelTrendAnalysisAsync(
         TaktMaterialMovingPriceMonthlyTrendQueryDto query,
         string? sheetName = null,

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktFinancialPeriodI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktFinancialPeriod 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -90,14 +90,14 @@ public class TaktFinancialPeriodI18nSeedData : ITaktSeedDataCoordinator
             // entity.financialperiod._self
             new TranslationSeedItem("entity.financialperiod._self", "zh-HK", "财务期间信息_hk", "实体名称"),
 
-            // entity.financialperiod.financialyearcategory
-            new TranslationSeedItem("entity.financialperiod.financialyearcategory", "en-US", "财务年度类别_us", "财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）"),
-            // entity.financialperiod.financialyearcategory
-            new TranslationSeedItem("entity.financialperiod.financialyearcategory", "ja-JP", "财务年度类别_jp", "财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）"),
-            // entity.financialperiod.financialyearcategory
-            new TranslationSeedItem("entity.financialperiod.financialyearcategory", "zh-CN", "财务年度类别", "财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）"),
-            // entity.financialperiod.financialyearcategory
-            new TranslationSeedItem("entity.financialperiod.financialyearcategory", "zh-HK", "财务年度类别_hk", "财务年度类别（字典 accounting_financial_year_category；CN=中国财年 JP=日本财年 HK=香港财年 US=美国财年）"),
+            // entity.financialperiod.countrycode
+            new TranslationSeedItem("entity.financialperiod.countrycode", "en-US", "国家代码_us", "国家代码（字典 sys_country_code；DictValue=ISO alpha-2）"),
+            // entity.financialperiod.countrycode
+            new TranslationSeedItem("entity.financialperiod.countrycode", "ja-JP", "国家代码_jp", "国家代码（字典 sys_country_code；DictValue=ISO alpha-2）"),
+            // entity.financialperiod.countrycode
+            new TranslationSeedItem("entity.financialperiod.countrycode", "zh-CN", "国家代码", "国家代码（字典 sys_country_code；DictValue=ISO alpha-2）"),
+            // entity.financialperiod.countrycode
+            new TranslationSeedItem("entity.financialperiod.countrycode", "zh-HK", "国家代码_hk", "国家代码（字典 sys_country_code；DictValue=ISO alpha-2）"),
 
             // entity.financialperiod.financialyearcode
             new TranslationSeedItem("entity.financialperiod.financialyearcode", "en-US", "财务年度编码_us", "财务年度编码（如 FY2000、FY2027；日本/香港 FY2027=2026/4/1～2027/3/31；中国 FY2027=2027/1/1～2027/12/31）"),
@@ -136,13 +136,13 @@ public class TaktFinancialPeriodI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.financialperiod.calendarmonth", "zh-HK", "自然月_hk", "自然月（1～12）"),
 
             // entity.financialperiod.financialquartercode
-            new TranslationSeedItem("entity.financialperiod.financialquartercode", "en-US", "财季编码_us", "财季编码（随财年类别变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
+            new TranslationSeedItem("entity.financialperiod.financialquartercode", "en-US", "财季编码_us", "财季编码（随国家财年规则变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
             // entity.financialperiod.financialquartercode
-            new TranslationSeedItem("entity.financialperiod.financialquartercode", "ja-JP", "财季编码_jp", "财季编码（随财年类别变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
+            new TranslationSeedItem("entity.financialperiod.financialquartercode", "ja-JP", "财季编码_jp", "财季编码（随国家财年规则变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
             // entity.financialperiod.financialquartercode
-            new TranslationSeedItem("entity.financialperiod.financialquartercode", "zh-CN", "财季编码", "财季编码（随财年类别变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
+            new TranslationSeedItem("entity.financialperiod.financialquartercode", "zh-CN", "财季编码", "财季编码（随国家财年规则变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
             // entity.financialperiod.financialquartercode
-            new TranslationSeedItem("entity.financialperiod.financialquartercode", "zh-HK", "财季编码_hk", "财季编码（随财年类别变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
+            new TranslationSeedItem("entity.financialperiod.financialquartercode", "zh-HK", "财季编码_hk", "财季编码（随国家财年规则变化；日本/香港 Q1=4～6 月；中国 Q1=1～3 月；美国 Q1=10～12 月）"),
 
             // entity.financialperiod.isbuiltin
             new TranslationSeedItem("entity.financialperiod.isbuiltin", "en-US", "是否内置_us", "是否内置（字典 sys_yes_no；1=是，0=否）"),

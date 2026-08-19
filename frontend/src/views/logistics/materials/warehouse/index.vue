@@ -137,10 +137,10 @@
     >
       <template #default="{ isFieldVisible }">
       <div v-show="isFieldVisible('plantCode')">
-      <a-form-item :label="t('entity.warehouse.plantcode')">
+      <a-form-item :label="t('common.page.entity.plantcode')">
         <a-input
           v-model:value="advancedQueryForm.plantCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.warehouse.plantcode') })"
+          :placeholder="t('common.page.form.placeholder.required', { field: t('common.page.entity.plantcode') })"
           show-count
           :maxlength="4"
           allow-clear
@@ -447,7 +447,7 @@ const advancedQueryForm = ref({
 })
 /** 高级查询字段元数据（列显隐配置） */
 const queryFieldsMeta = computed(() => [
-  { key: 'plantCode', label: t('entity.warehouse.plantcode') },
+  { key: 'plantCode', label: t('common.page.entity.plantcode') },
   { key: 'warehouseCode', label: t('entity.warehouse.code') },
   { key: 'warehouseName', label: t('entity.warehouse.name') },
   { key: 'warehouseShortName', label: t('entity.warehouse.shortname') },
@@ -602,7 +602,7 @@ const columns = computed<TableColumnsType>(() => [
     customRender: ({ record }: { record: any }) => getWarehouseField(record, 'warehouseId') ?? ''
   },
   {
-    title: t('entity.warehouse.plantcode'),
+    title: t('common.page.entity.plantcode'),
     dataIndex: 'plantCode',
     key: 'plantCode',
     width: 120,

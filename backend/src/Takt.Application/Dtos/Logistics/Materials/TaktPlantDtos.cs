@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktPlantDtos.cs
-// 创建时间：2026-08-11
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Plant 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPlant 生成，请按需审阅）
 // 
@@ -22,29 +22,18 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt工厂实体 代表租户下的独立工厂（租户级实体，只需要TenantCode） 与公司种子对称，参照 SAP Plant 设计
+/// Takt工厂实体 代表租户下的独立工厂主档 与公司种子对称，参照 SAP Plant 设计 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
 /// 对应前端 TaktPlantDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCultureDtoBase
 /// </summary>
-public class TaktPlantDto : TaktTenantDtoBase
+public class TaktPlantDto : TaktTenantCultureDtoBase
 {
-    /// <summary>
-    /// 关联工厂（工厂主档不使用；语义即 PlantCode）
-    /// </summary>
-    [JsonIgnore]
-    public new string RelatedPlant { get; set; } = string.Empty;
-
     /// <summary>
     /// PlantID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
     /// </summary>
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long PlantId { get; set; }
-
-    /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-    /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -272,7 +261,7 @@ public class TaktPlantDto : TaktTenantDtoBase
     public string FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string RelatedCompany { get; set; } = string.Empty;
 
@@ -304,14 +293,9 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -549,7 +533,7 @@ public class TaktPlantQueryDto : TaktPagedQuery
     public string? FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? RelatedCompany { get; set; } = string.Empty;
 
@@ -599,15 +583,9 @@ public class TaktPlantCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-    /// </summary>
-    [Required(ErrorMessage = "工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）不能为空")]
-    public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -871,9 +849,9 @@ public class TaktPlantCreateDto
     public string FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
-    [Required(ErrorMessage = "关联公司（选项 TaktCompanies/options；DictValue=Id）不能为空")]
+    [Required(ErrorMessage = "关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）不能为空")]
     public string RelatedCompany { get; set; } = string.Empty;
 
     /// <summary>
@@ -976,14 +954,9 @@ public class TaktPlantTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -1211,7 +1184,7 @@ public class TaktPlantTemplateDto
     public string? FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? RelatedCompany { get; set; } = string.Empty;
 
@@ -1243,14 +1216,9 @@ public class TaktPlantImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
-    /// </summary>
-    public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -1478,7 +1446,7 @@ public class TaktPlantImportDto
     public string? FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? RelatedCompany { get; set; } = string.Empty;
 
@@ -1516,9 +1484,9 @@ public class TaktPlantExportDto
     public long PlantId { get; set; }
 
     /// <summary>
-    /// 工厂代码（唯一索引：租户内唯一，见 ix_plant_code_unique）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
-    public string PlantCode { get; set; } = string.Empty;
+    public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
     /// 工厂名称1
@@ -1746,7 +1714,7 @@ public class TaktPlantExportDto
     public string FactoryCalendar { get; set; } = string.Empty;
 
     /// <summary>
-    /// 关联公司（选项 TaktCompanies/options；DictValue=Id）
+    /// 关联公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string RelatedCompany { get; set; } = string.Empty;
 

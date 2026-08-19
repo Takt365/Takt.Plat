@@ -22,12 +22,10 @@ public interface ITaktBomMaterialCostItemRecalculateBackgroundService
     /// <summary>
     /// 提交后台重算任务（立即返回；完成后通过 SignalR 通知触发用户）
     /// </summary>
-    /// <param name="queryDto">已校验的重算查询条件</param>
-    /// <param name="forceRecalculate">是否先清零再重算</param>
-    /// <param name="processRecordCount">处理记录数上限（工厂+产品组；0=全部；默认 5000）</param>
+    /// <param name="queryDto">已校验的计算查询（含 ProcessRecordCount）</param>
+    /// <param name="forceRecalculate">true=重算（归档旧成本到 ExtField 后重写）；false=计算成本</param>
     /// <returns>任务</returns>
     Task EnqueueRecalculateAsync(
-        TaktBomMaterialCostItemQueryDto queryDto,
-        bool forceRecalculate = false,
-        int processRecordCount = 5000);
+        TaktBomCalculateQueryDto queryDto,
+        bool forceRecalculate = false);
 }

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Code.Generator
 // 文件名称：TaktGenTableDtos.cs
-// 创建时间：2026-06-09
+// 创建时间：2026-08-12
 // 创建人：Takt365(Auto Generated)
 // 功能描述：GenTable 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktGenTable 生成，请按需审阅）
 // 
@@ -10,6 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
+using System.ComponentModel.DataAnnotations;
 using Mapster;
 using Takt.Shared.Helpers;
 using Takt.Shared.Models;
@@ -21,11 +22,11 @@ namespace Takt.Application.Dtos.Code.Generator;
 // ========================================
 
 /// <summary>
-/// Takt代码生成表配置实体
+/// Takt代码生成表配置实体 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// 对应前端 TaktGenTableDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase
 /// </summary>
-public class TaktGenTableDto : TaktTenantDtoBase
+public class TaktGenTableDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// GenTableID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -185,7 +186,7 @@ public class TaktGenTableDto : TaktTenantDtoBase
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。核心设计：决定生成哪些 Controller/Service 能力与 DTO（Query/Create/Update/Status/Sort/Import/Export 等）。
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
@@ -211,7 +212,7 @@ public class TaktGenTableDto : TaktTenantDtoBase
     public long ParentMenuId { get; set; }
 
     /// <summary>
-    /// 上级菜单名称（填充字段）
+    /// 上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
     /// </summary>
     public string? ParentMenuName { get; set; }
 
@@ -281,6 +282,11 @@ public class TaktGenTableDto : TaktTenantDtoBase
     /// </summary>
     public List<TaktGenTableColumnDto>? Columns { get; set; }
 
+    /// <summary>
+    /// 子表列最大行号（含软删；供前端新增列时递增）
+    /// </summary>
+    public int MaxGenTableColumnLineNumber { get; set; }
+
 }
 
 // ========================================
@@ -298,11 +304,6 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -454,7 +455,7 @@ public class TaktGenTableQueryDto : TaktPagedQuery
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。核心设计：决定生成哪些 Controller/Service 能力与 DTO（Query/Create/Update/Status/Sort/Import/Export 等）。
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
@@ -574,19 +575,16 @@ public class TaktGenTableCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
+    [Required(ErrorMessage = "数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）不能为空")]
     public string DataSource { get; set; } = string.Empty;
 
     /// <summary>
     /// 表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）
     /// </summary>
+    [Required(ErrorMessage = "表名称（选项 TaktDatabaseInfos/tables；新建可手输；租户内与 DataSource 唯一）不能为空")]
     public string TableName { get; set; } = string.Empty;
 
     /// <summary>
@@ -627,6 +625,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 生成模板类型（字典 gen_template_type；crud/sub/tree）
     /// </summary>
+    [Required(ErrorMessage = "生成模板类型（字典 gen_template_type；crud/sub/tree）不能为空")]
     public string GenTemplateCategory { get; set; } = string.Empty;
 
     /// <summary>
@@ -637,6 +636,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
     /// </summary>
+    [Required(ErrorMessage = "业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）不能为空")]
     public string GenBusinessName { get; set; } = string.Empty;
 
     /// <summary>
@@ -647,6 +647,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
     /// </summary>
+    [Required(ErrorMessage = "权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。不能为空")]
     public string PermsPrefix { get; set; } = string.Empty;
 
     /// <summary>
@@ -667,6 +668,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 实体类名称（首字母大写，驼峰命名）
     /// </summary>
+    [Required(ErrorMessage = "实体类名称（首字母大写，驼峰命名）不能为空")]
     public string EntityClassName { get; set; } = string.Empty;
 
     /// <summary>
@@ -730,7 +732,7 @@ public class TaktGenTableCreateDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。核心设计：决定生成哪些 Controller/Service 能力与 DTO（Query/Create/Update/Status/Sort/Import/Export 等）。
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 
@@ -742,6 +744,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
     /// </summary>
+    [Required(ErrorMessage = "生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）不能为空")]
     public string GenPath { get; set; } = string.Empty;
 
     /// <summary>
@@ -763,11 +766,13 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 排序字段（选项本表 columnList.databaseColumnName）
     /// </summary>
+    [Required(ErrorMessage = "排序字段（选项本表 columnList.databaseColumnName）不能为空")]
     public string SortField { get; set; } = string.Empty;
 
     /// <summary>
     /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
     /// </summary>
+    [Required(ErrorMessage = "排序类型（字典 sys_sort_type；asc=升序 desc=降序）不能为空")]
     public string SortType { get; set; } = string.Empty;
 
     /// <summary>
@@ -808,6 +813,7 @@ public class TaktGenTableCreateDto
     /// <summary>
     /// 作者
     /// </summary>
+    [Required(ErrorMessage = "作者不能为空")]
     public string GenAuthor { get; set; } = string.Empty;
 
     /// <summary>
@@ -816,9 +822,9 @@ public class TaktGenTableCreateDto
     public string? OtherGenOptions { get; set; } = string.Empty;
 
     /// <summary>
-    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存；GenTableColumnId&gt;0 更新，=0 新增）
+    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
     /// </summary>
-    public List<TaktGenTableColumnUpdateDto>? Columns { get; set; }
+    public List<TaktGenTableColumnCreateDto>? Columns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -843,11 +849,17 @@ public class TaktGenTableCreateDto
 public class TaktGenTableUpdateDto : TaktGenTableCreateDto
 {
     /// <summary>
-    /// GenTableID（标识要更新的实体；以路由 {id} 为准，body 可省略）
+    /// GenTableID（标识要更新的实体）
     /// </summary>
+    [Required(ErrorMessage = "ID不能为空")]
     [AdaptMember("Id")]
     [JsonConverter(typeof(ValueToStringConverter))]
     public long GenTableId { get; set; }
+
+    /// <summary>
+    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
+    /// </summary>
+    public new List<TaktGenTableColumnUpdateDto>? Columns { get; set; }
 
 }
 
@@ -865,11 +877,6 @@ public class TaktGenTableTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -929,6 +936,187 @@ public class TaktGenTableTemplateDto
     /// 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
     /// </summary>
     public string? GenBusinessName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 功能名（用于接口与注释的中文名称，如：公司、部门）
+    /// </summary>
+    public string? GenFunctionName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+    /// </summary>
+    public string? PermsPrefix { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// </summary>
+    public string? MenuButtonGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 命名空间前缀（用于生成类名、方法名等的前缀）
+    /// </summary>
+    public string? NamePrefix { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实体命名空间（默认当前项目：Takt.Domain.Entities）
+    /// </summary>
+    public string? EntityNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实体类名称（首字母大写，驼峰命名）
+    /// </summary>
+    public string? EntityClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+    /// </summary>
+    public string? DtoNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 传输对象 Dto 类名
+    /// </summary>
+    public string? DtoClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务命名空间（默认当前项目：Takt.Application.Services）
+    /// </summary>
+    public string? ServiceNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务接口类名称
+    /// </summary>
+    public string? IServiceClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务类名称
+    /// </summary>
+    public string? ServiceClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+    /// </summary>
+    public string? ControllerNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 控制器类名称
+    /// </summary>
+    public string? ControllerClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsRepository { get; set; }
+
+    /// <summary>
+    /// 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+    /// </summary>
+    public string? RepositoryInterfaceNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储接口类名称
+    /// </summary>
+    public string? IRepositoryClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+    /// </summary>
+    public string? RepositoryNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储类名称
+    /// </summary>
+    public string? RepositoryClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// </summary>
+    public string? GenFunction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// </summary>
+    public int? GenMethod { get; set; }
+
+    /// <summary>
+    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// </summary>
+    public string? GenPath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenMenu { get; set; }
+
+    /// <summary>
+    /// 上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentMenuId { get; set; }
+
+    /// <summary>
+    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenTranslation { get; set; }
+
+    /// <summary>
+    /// 排序字段（选项本表 columnList.databaseColumnName）
+    /// </summary>
+    public string? SortField { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// </summary>
+    public string? SortType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// </summary>
+    public int? FrontUi { get; set; }
+
+    /// <summary>
+    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// </summary>
+    public int? FrontFormLayout { get; set; }
+
+    /// <summary>
+    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// </summary>
+    public int? FrontBtnStyle { get; set; }
+
+    /// <summary>
+    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenCode { get; set; }
+
+    /// <summary>
+    /// 代码生成次数（每次生成成功后自增）
+    /// </summary>
+    public int? GenCodeCount { get; set; }
+
+    /// <summary>
+    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUseTabs { get; set; }
+
+    /// <summary>
+    /// tabs标签中字段的数量
+    /// </summary>
+    public int? TabsFieldCount { get; set; }
+
+    /// <summary>
+    /// 作者
+    /// </summary>
+    public string? GenAuthor { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 其他生成选项（JSON格式，存储其他生成配置）
+    /// </summary>
+    public string? OtherGenOptions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
+    /// </summary>
+    public List<TaktGenTableColumnCreateDto>? Columns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -952,11 +1140,6 @@ public class TaktGenTableImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 数据源（选项 TaktDatabaseInfos/list；持久化 displayName:tenantCode）
     /// </summary>
@@ -1016,6 +1199,187 @@ public class TaktGenTableImportDto
     /// 业务名（用于类名，如 Company，与模块拼接为 Takt.模块+类名）
     /// </summary>
     public string? GenBusinessName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 功能名（用于接口与注释的中文名称，如：公司、部门）
+    /// </summary>
+    public string? GenFunctionName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 权限前缀（与生成控制器/菜单/前端权限一致；对应库列 <c>perms_prefix</c>）。
+    /// </summary>
+    public string? PermsPrefix { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 菜单权限组（字典 gen_button_category 多选逗号；仅用于生成 menu_and_translation.sql 按钮 INSERT，不参与控制器/前端代码生成）
+    /// </summary>
+    public string? MenuButtonGroup { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 命名空间前缀（用于生成类名、方法名等的前缀）
+    /// </summary>
+    public string? NamePrefix { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实体命名空间（默认当前项目：Takt.Domain.Entities）
+    /// </summary>
+    public string? EntityNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 实体类名称（首字母大写，驼峰命名）
+    /// </summary>
+    public string? EntityClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 传输对象Dto命名空间（默认当前项目：Takt.Application.Dtos）
+    /// </summary>
+    public string? DtoNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 传输对象 Dto 类名
+    /// </summary>
+    public string? DtoClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务命名空间（默认当前项目：Takt.Application.Services）
+    /// </summary>
+    public string? ServiceNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务接口类名称
+    /// </summary>
+    public string? IServiceClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 服务类名称
+    /// </summary>
+    public string? ServiceClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 控制器命名空间（默认当前项目：Takt.WebApi.Controllers）
+    /// </summary>
+    public string? ControllerNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 控制器类名称
+    /// </summary>
+    public string? ControllerClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储层（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsRepository { get; set; }
+
+    /// <summary>
+    /// 仓储接口命名空间（默认当前项目：Takt.Domain.Repositories）
+    /// </summary>
+    public string? RepositoryInterfaceNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储接口类名称
+    /// </summary>
+    public string? IRepositoryClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储命名空间（默认当前项目：Takt.Infrastructure.Repositories）
+    /// </summary>
+    public string? RepositoryNamespace { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 仓储类名称
+    /// </summary>
+    public string? RepositoryClassName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
+    /// </summary>
+    public string? GenFunction { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成方式（字典 gen_method_type；0=zip 1=自定义路径 2=当前项目）
+    /// </summary>
+    public int? GenMethod { get; set; }
+
+    /// <summary>
+    /// 生成路径（字典 gen_path_type；GenMethod=1 时选择；0 默认 /；2 由 GenMethod 解析）
+    /// </summary>
+    public string? GenPath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 生成菜单（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenMenu { get; set; }
+
+    /// <summary>
+    /// 上级菜单（关联 TaktMenu.Id，选项 TaktMenus/tree-options）
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long? ParentMenuId { get; set; }
+
+    /// <summary>
+    /// 生成翻译（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenTranslation { get; set; }
+
+    /// <summary>
+    /// 排序字段（选项本表 columnList.databaseColumnName）
+    /// </summary>
+    public string? SortField { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 排序类型（字典 sys_sort_type；asc=升序 desc=降序）
+    /// </summary>
+    public string? SortType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 前端UI框架（字典 gen_frontend_ui_type；1=element plus 2=ant design vue）
+    /// </summary>
+    public int? FrontUi { get; set; }
+
+    /// <summary>
+    /// 前端表单布局（字典 gen_frontend_form_layout_config；12=一行一列 24=一行两列）
+    /// </summary>
+    public int? FrontFormLayout { get; set; }
+
+    /// <summary>
+    /// 前端按钮样式（字典 gen_button_style_config；0=文本 1=标准）
+    /// </summary>
+    public int? FrontBtnStyle { get; set; }
+
+    /// <summary>
+    /// 是否生成（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsGenCode { get; set; }
+
+    /// <summary>
+    /// 代码生成次数（每次生成成功后自增）
+    /// </summary>
+    public int? GenCodeCount { get; set; }
+
+    /// <summary>
+    /// 使用tabs（字典 sys_yes_no_type；0=否 1=是）
+    /// </summary>
+    public int? IsUseTabs { get; set; }
+
+    /// <summary>
+    /// tabs标签中字段的数量
+    /// </summary>
+    public int? TabsFieldCount { get; set; }
+
+    /// <summary>
+    /// 作者
+    /// </summary>
+    public string? GenAuthor { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 其他生成选项（JSON格式，存储其他生成配置）
+    /// </summary>
+    public string? OtherGenOptions { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 字段配置列表（子表，外键：TaktGenTableColumn.GenTableId 关联本表 Id）（子表，级联保存）
+    /// </summary>
+    public List<TaktGenTableColumnCreateDto>? Columns { get; set; }
 
     /// <summary>
     /// 扩展字段JSON
@@ -1196,7 +1560,7 @@ public class TaktGenTableExportDto
     public string? RepositoryClassName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。核心设计：决定生成哪些 Controller/Service 能力与 DTO（Query/Create/Update/Status/Sort/Import/Export 等）。
+    /// 生成功能（字典 gen_function_type 多选逗号；亦支持 JSON/数组）。 核心设计：GenFunction 不仅决定生成哪些 Controller Actions 和 Service Methods，还决定生成哪些 DTO 类。功能与 DTO 的映射关系如下： Query → QueryDto；Create → CreateDto；Update → UpdateDto；Status → StatusDto；Sort → SortDto； Import → TemplateDto + ImportDto；Export → ExportDto；所有功能 → Dto（基础传输对象，包含所有字段）。
     /// </summary>
     public string? GenFunction { get; set; } = string.Empty;
 

@@ -2,6 +2,7 @@ SET NOCOUNT ON;
 DECLARE @tenant_code NVARCHAR(3) = N'{{TenantCode}}';
 DECLARE @company_code NVARCHAR(4) = N'{{CompanyCode}}';
 DECLARE @culture_code NVARCHAR(5) = N'{{CultureCode}}';
+DECLARE @plant_code NVARCHAR(4) = N'{{PlantCode}}';
 DECLARE @sync_user_id BIGINT = {{SyncUserId}};
 
 DECLARE @batch_size INT = 0;
@@ -162,21 +163,21 @@ WHEN MATCHED AND (
   OR ROUND(T.[converted_minutes], 2) <> ROUND(S.[converted_minutes], 2)
 ) THEN
   UPDATE SET
-    T.[operation_desc] = S.[operation_desc],
-    T.[standard_minutes] = S.[standard_minutes],
-    T.[time_unit] = S.[time_unit],
-    T.[standard_shorts] = S.[standard_shorts],
-    T.[points_unit] = S.[points_unit],
-    T.[points_to_minutes_rate] = S.[points_to_minutes_rate],
-    T.[converted_minutes] = S.[converted_minutes],
-    T.[effective_date] = @effective_date,
-    T.[updated_by] = S.[updated_by],
-    T.[updated_at] = @now,
-    T.[approved_by] = T.[created_by],
-    T.[approved_at] = T.[created_at],
-    T.[approval_status] = 2,
-    T.[culture_code] = @culture_code,
-    T.[is_deleted] = 0
+  T.[operation_desc]=S.[operation_desc],
+  T.[standard_minutes]=S.[standard_minutes],
+  T.[time_unit]=S.[time_unit],
+  T.[standard_shorts]=S.[standard_shorts],
+  T.[points_unit]=S.[points_unit],
+  T.[points_to_minutes_rate]=S.[points_to_minutes_rate],
+  T.[converted_minutes]=S.[converted_minutes],
+  T.[effective_date]=@effective_date,
+  T.[updated_by]=S.[updated_by],
+  T.[updated_at]=@now,
+  T.[approved_by]=T.[created_by],
+  T.[approved_at]=T.[created_at],
+  T.[approval_status]=2,
+  T.[culture_code]=@culture_code,
+  T.[is_deleted]=0
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[material_code],[work_center],[operation_desc],
@@ -311,7 +312,7 @@ INSERT INTO [takt_statistics_logging_delta_log] (
   [id],[oper_type],[table_name],[primary_key_id],
   [before_data],[after_data],[diff_data],[sql_statement],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
-  [oper_time],[elapsed_time],[tenant_code],[company_code],
+  [oper_time],[elapsed_time],[tenant_code],[company_code],[plant_code],[culture_code],
   [ext_field],[remark],[created_by],[created_at]
 )
 SELECT
@@ -354,7 +355,7 @@ SELECT
   N'MERGE Manhour Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');
@@ -381,7 +382,7 @@ INSERT INTO [takt_statistics_logging_oper_log] (
   [request_method],[oper_url],[request_param],[json_result],
   [oper_ip],[oper_location],[user_agent],[browser],[os],[device_type],
   [oper_time],[elapsed_time],[oper_status],[error_msg],
-  [tenant_code],[company_code],[created_by],[created_at]
+  [tenant_code],[company_code],[plant_code],[culture_code],[created_by],[created_at]
 )
 VALUES (
   @base_id + 1,
@@ -395,7 +396,7 @@ VALUES (
   @json_result,
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,DATEDIFF(MILLISECOND,@now,GETDATE()),1,'',
-  @tenant_code,@company_code,@sync_user_id,@now
+  @tenant_code,@company_code,@plant_code,@culture_code,@sync_user_id,@now
 );
 
 INSERT INTO @merge_actions SELECT oper_type FROM #delta;

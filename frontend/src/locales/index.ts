@@ -76,7 +76,7 @@ function buildStaticLocaleMessages(): Record<string, TaktLocaleMessages> {
 
 /**
  * 将后端扁平翻译键合并到 vue-i18n（供 useTranslationStore 调用；同名键覆盖静态文案）
- * @param cultureCode 区域文化编码（租户 CultureCode）
+ * @param cultureCode 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
  * @param flatMessages 扁平键值（如 entity.user.name）
  */
 export function mergeDynamicLocaleMessages(

@@ -29,13 +29,13 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
-                :label="pi.label('financialYearCategory')"
-                name="financialYearCategory"
+                :label="pi.label('countryCode')"
+                name="countryCode"
               >
                 <TaktSelect
-                  v-model:value="formState.financialYearCategory"
-                  dict-type="accounting_financial_year_category"
-                  :placeholder="pi.ph('financialYearCategory')"
+                  v-model:value="formState.countryCode"
+                  dict-type="sys_country_code"
+                  :placeholder="pi.ph('countryCode')"
                 />
               </a-form-item>
             </a-col>
@@ -249,7 +249,7 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  financialYearCategory: "JP",
+  countryCode: "JP",
   isBuiltIn: 0
 }
 
@@ -302,10 +302,10 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
-  financialYearCategory: [
+  countryCode: [
     {
       required: true,
-      message: pi.ph('financialYearCategory'),
+      message: pi.ph('countryCode'),
       trigger: 'change'
     }
   ],

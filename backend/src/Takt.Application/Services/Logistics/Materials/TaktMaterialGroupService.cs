@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialGroupService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-13
 // 创建人：Takt365(Cursor AI)
 // 功能描述：物料组主数据应用服务实现
 // 
@@ -55,12 +55,20 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
     }
 
     /// <summary>
-    /// 获取物料组主数据列表（分页）
+    /// 获取物料组主数据列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktMaterialGroupDto>> GetMaterialGroupListAsync(TaktMaterialGroupQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktMaterialGroupDto>.Create(
+                new List<TaktMaterialGroupDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _materialGroupRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -100,8 +108,8 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.MaterialGroupName ?? e.Id.ToString(),
+            DictValue = e.MaterialGroupCode,
+            DictLabel = e.MaterialGroupName ?? e.MaterialGroupCode,
         }).ToList();
     }
 
@@ -283,7 +291,15 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportMaterialGroupAsync(TaktMaterialGroupQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktMaterialGroupQueryDto());
+        var queryDto = query ?? new TaktMaterialGroupQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktMaterialGroupExportDto>(),
+                sheetName ?? "物料组主数据数据",
+                fileName ?? "物料组主数据导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _materialGroupRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -312,65 +328,112 @@ public class TaktMaterialGroupService : TaktServiceBase, ITaktMaterialGroupServi
     {
         var exp = Expressionable.Create<TaktMaterialGroup>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
                 (x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(keywords))
                 || (x.MaterialGroupName != null && x.MaterialGroupName.Contains(keywords))
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.MaterialGroupDescription != null && x.MaterialGroupDescription.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroupCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroupCode))
         {
-            exp = exp.And(x => x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(queryDto.MaterialGroupCode));
+            var materialGroupCode = queryDto.MaterialGroupCode;
+            exp = exp.And(x => x.MaterialGroupCode != null && x.MaterialGroupCode.Contains(materialGroupCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroupName))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroupName))
         {
-            exp = exp.And(x => x.MaterialGroupName != null && x.MaterialGroupName.Contains(queryDto.MaterialGroupName));
+            var materialGroupName = queryDto.MaterialGroupName;
+            exp = exp.And(x => x.MaterialGroupName != null && x.MaterialGroupName.Contains(materialGroupName));
         }
 
         if (queryDto?.SortOrder.HasValue == true)
         {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.MaterialGroupDescription))
+        if (!string.IsNullOrWhiteSpace(queryDto?.MaterialGroupDescription))
         {
-            exp = exp.And(x => x.MaterialGroupDescription != null && x.MaterialGroupDescription.Contains(queryDto.MaterialGroupDescription));
-        }
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
+            var materialGroupDescription = queryDto.MaterialGroupDescription;
+            exp = exp.And(x => x.MaterialGroupDescription != null && x.MaterialGroupDescription.Contains(materialGroupDescription));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
         {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
         }
 
         if (queryDto?.CreatedAtStart.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
         }
 
         if (queryDto?.CreatedAtEnd.HasValue == true)
         {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
         }
-        if (!string.IsNullOrWhiteSpace(queryDto?.RelatedPlant))
-        {
-            var relatedPlant = queryDto.RelatedPlant;
-            exp = exp.And(x => x.RelatedPlant != null && x.RelatedPlant.Contains(relatedPlant));
-        }
-
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktMaterialGroupQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroupCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroupName))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.MaterialGroupDescription))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

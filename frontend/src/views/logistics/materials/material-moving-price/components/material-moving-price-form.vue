@@ -22,23 +22,195 @@
     >
       <a-tab-pane
         key="tab-0"
-        :tab="t('common.page.form.tabs.basicinfo') + ' (1/2)'"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (1/3)'"
         force-render
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('valuationPeriod')"
+                name="valuationPeriod"
+              >
+                <a-input
+                  v-model:value="formState.valuationPeriod"
+                  :placeholder="pi.ph('valuationPeriod')"
+                  show-count
+                  :maxlength="7"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('materialCode')"
+                name="materialCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.materialCode"
+                  api-url="TaktMaterialPlants/options"
+                  :placeholder="pi.ph('materialCode')"
+                  :disabled="!!formData?.materialMovingPriceId"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('valuation')"
+                name="valuation"
+              >
+                <TaktSelect
+                  v-model:value="formState.valuation"
+                  dict-type="logistics_valuation_class_category"
+                  :placeholder="pi.ph('valuation')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('stockQuantity')"
+                name="stockQuantity"
+              >
+                <a-input-number
+                  v-model:value="formState.stockQuantity"
+                  :placeholder="pi.ph('stockQuantity')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('stockAmount')"
+                name="stockAmount"
+              >
+                <a-input-number
+                  v-model:value="formState.stockAmount"
+                  :placeholder="pi.ph('stockAmount')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('priceControl')"
+                name="priceControl"
+              >
+                <TaktSelect
+                  v-model:value="formState.priceControl"
+                  dict-type="logistics_price_control_type"
+                  :placeholder="pi.ph('priceControl')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('movingPrice')"
+                name="movingPrice"
+              >
+                <a-input-number
+                  v-model:value="formState.movingPrice"
+                  :placeholder="pi.ph('movingPrice')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('priceUnit')"
+                name="priceUnit"
+              >
+                <TaktSelect
+                  v-model:value="formState.priceUnit"
+                  dict-type="logistics_price_unit_param"
+                  :placeholder="pi.ph('priceUnit')"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-1"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (2/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('currencyCode')"
+                name="currencyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.currencyCode"
+                  dict-type="accounting_currency_code"
+                  :placeholder="pi.ph('currencyCode')"
+                  :disabled="!!formData?.materialMovingPriceId"
+                />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+      </a-tab-pane>
+      <a-tab-pane
+        key="tab-2"
+        :tab="t('common.page.form.tabs.basicinfo') + ' (3/3)'"
+        force-render
+      >
+        <div :class="formContentClass">
+          <a-row :gutter="24">
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
             <a-col :span="24">
               <a-form-item
                 name="extField"
@@ -111,11 +283,11 @@ const { t } = useI18n()
 
 /** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
  * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
@@ -132,12 +304,12 @@ function applyScopeDefaults(target: Record<string, unknown>, force = false) {
   if (force || !target.plantCode) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
 /** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
 const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -201,7 +373,7 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
     if (!props.formData?.materialMovingPriceId) {
       applyScopeDefaults(formState, true)

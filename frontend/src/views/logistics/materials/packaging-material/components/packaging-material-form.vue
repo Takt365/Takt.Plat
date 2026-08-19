@@ -131,7 +131,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.originCountryRegionCode"
-                  api-url="TaktIsoCodes/options"
+                  dict-type="sys_country_code"
                   :placeholder="pi.ph('originCountryRegionCode')"
                   :disabled="!!formData?.packagingMaterialId"
                 />
@@ -158,7 +158,7 @@
               >
                 <TaktSelect
                   v-model:value="formState.destinationCountryRegionCode"
-                  api-url="TaktIsoCodes/options"
+                  dict-type="sys_country_code"
                   :placeholder="pi.ph('destinationCountryRegionCode')"
                   :disabled="!!formData?.packagingMaterialId"
                 />

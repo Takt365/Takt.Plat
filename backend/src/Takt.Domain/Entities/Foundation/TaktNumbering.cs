@@ -44,7 +44,7 @@ public class TaktNumbering : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "document_type", ColumnDescription = "单据类型", ColumnDataType = "varchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string DocumentType { get; set; } = string.Empty;
     /// <summary>
-    /// 部门编码（选项 TaktIsoCodes/options；DictValue=Id）
+    /// 部门编码（字典 sys_numbering_dept_code；DictValue=部门短码如 R/F/D）
     /// </summary>
     [SugarColumn(ColumnName = "dept_code", ColumnDescription = "部门编码", ColumnDataType = "varchar", Length = 50, IsNullable = false)]
     public string DeptCode { get; set; } = string.Empty;

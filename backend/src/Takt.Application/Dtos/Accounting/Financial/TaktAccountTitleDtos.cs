@@ -35,6 +35,81 @@ public class TaktAccountTitleDto : TaktCompanyDtoBase
     [JsonConverter(typeof(ValueToStringConverter))]
     public long AccountTitleId { get; set; }
 
+    /// <summary>
+    /// 科目编码
+    /// </summary>
+    public string AccountTitleCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 科目名称
+    /// </summary>
+    public string AccountTitleName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父级 ID
+    /// </summary>
+    [JsonConverter(typeof(ValueToStringConverter))]
+    public long ParentId { get; set; }
+
+    /// <summary>
+    /// 科目类型（字典 accounting_account_title_type）
+    /// </summary>
+    public string AccountTitleType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 余额方向（0=借方，1=贷方）
+    /// </summary>
+    public int BalanceDirection { get; set; }
+
+    /// <summary>
+    /// 科目层级
+    /// </summary>
+    public int AccountTitleLevel { get; set; } = 1;
+
+    /// <summary>
+    /// 末级科目（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsLeaf { get; set; } = 1;
+
+    /// <summary>
+    /// 辅助核算（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsAuxiliary { get; set; }
+
+    /// <summary>
+    /// 辅助核算类型（字典 accounting_auxiliary_type）
+    /// </summary>
+    public string AuxiliaryType { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 数量核算（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsQuantity { get; set; }
+
+    /// <summary>
+    /// 外币核算（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsCurrency { get; set; }
+
+    /// <summary>
+    /// 现金科目（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsCash { get; set; }
+
+    /// <summary>
+    /// 银行科目（字典 sys_yes_no_type；1=是，0=否）
+    /// </summary>
+    public int IsBank { get; set; }
+
+    /// <summary>
+    /// 生效日期
+    /// </summary>
+    public DateTime ValidFrom { get; set; }
+
+    /// <summary>
+    /// 失效日期
+    /// </summary>
+    public DateTime ValidTo { get; set; }
 
     /// <summary>
     /// 排序号
@@ -84,7 +159,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（字典 sys_culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -225,12 +300,12 @@ public class TaktAccountTitleCreateDto
     public string TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
@@ -412,12 +487,12 @@ public class TaktAccountTitleTemplateDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
@@ -523,12 +598,12 @@ public class TaktAccountTitleImportDto
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码（登录或公司切换注入，对应请求头 X-Company-Code）
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 区域文化编码（登录或公司切换注入，对应实体基类 CultureCode / 公司 culture_code）
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 

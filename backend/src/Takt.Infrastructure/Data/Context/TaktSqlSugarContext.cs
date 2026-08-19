@@ -74,10 +74,10 @@ public class TaktSqlSugarContext : IDisposable
         // 从 Domain 程序集自动扫描所有继承自实体基类的类型
         var domainAssembly = typeof(TaktTenantEntityBase).Assembly;
         _entityTypes = domainAssembly.GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && 
-                       (typeof(TaktTenantEntityBase).IsAssignableFrom(t) || 
-                        typeof(TaktCompanyEntityBase).IsAssignableFrom(t) ||
-                        typeof(TaktApprovalEntityBase).IsAssignableFrom(t)))
+            .Where(t => t.IsClass && !t.IsAbstract &&
+                       (typeof(TaktTenantCoreEntityScopeBase).IsAssignableFrom(t) ||
+                        typeof(TaktCompanyEntityScopeBase).IsAssignableFrom(t) ||
+                        typeof(TaktApprovalEntityScopeBase).IsAssignableFrom(t)))
             .ToArray();
 
         TaktSqlSugarAuditAop.RegisterGlobalDiffLogSwitch();

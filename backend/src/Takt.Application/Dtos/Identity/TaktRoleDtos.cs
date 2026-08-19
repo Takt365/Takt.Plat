@@ -26,7 +26,7 @@ namespace Takt.Application.Dtos.Identity;
 /// 对应前端 TaktRoleDto
 /// 继承 TaktTenantDtoBase
 /// </summary>
-public class TaktRoleDto : TaktTenantDtoBase
+public class TaktRoleDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// RoleID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -110,12 +110,6 @@ public class TaktRoleQueryDto : TaktPagedQuery
     /// 租户编码
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -185,12 +179,6 @@ public class TaktRoleCreateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -355,12 +343,6 @@ public class TaktRoleTemplateDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>
@@ -427,12 +409,6 @@ public class TaktRoleImportDto
     /// 租户编码（登录上下文注入，对应请求头 X-Tenant-Code）
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
-
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 角色编码（唯一索引：租户内唯一，见 ix_role_code_unique）
     /// </summary>

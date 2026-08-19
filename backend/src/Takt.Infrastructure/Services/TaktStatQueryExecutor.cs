@@ -35,7 +35,15 @@ public sealed class TaktStatQueryExecutor : ITaktStatQueryExecutor
         _dbContext = dbContext;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 分页查询报表数据
+    /// </summary>
+    /// <param name="request">编译请求</param>
+    /// <param name="pageIndex">页码（从 1 开始）</param>
+    /// <param name="pageSize">每页大小</param>
+    /// <param name="maxPageSize">pageSize 上限</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>分页结果</returns>
     public async Task<TaktStatQueryPageResult> ExecutePagedAsync(
         TaktStatQueryBuildRequest request,
         int pageIndex,
@@ -62,7 +70,13 @@ public sealed class TaktStatQueryExecutor : ITaktStatQueryExecutor
         };
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 按行数上限查询报表数据（导出）
+    /// </summary>
+    /// <param name="request">编译请求</param>
+    /// <param name="maxRows">最大行数</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>结果行</returns>
     public async Task<TaktStatQueryPageResult> ExecuteTopAsync(
         TaktStatQueryBuildRequest request,
         int maxRows,

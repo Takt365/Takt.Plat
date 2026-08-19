@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData
 // 文件名称：TaktDictI18nSeedData.cs
-// 创建时间：2026-08-12
+// 创建时间：2026-08-18
 // 创建人：Takt365(Cursor AI)
 // 功能描述：字典项国际化翻译种子（dict.* 键，与 TaktDictDataSeedData I18nKey 对齐）
 // 
@@ -976,42 +976,6 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             ("dict.accounting.exchange.rate.type.x", "zh-CN", "平均买入价", "汇率类型.平均买入价"),
             // dict.accounting.exchange.rate.type.x
             ("dict.accounting.exchange.rate.type.x", "zh-HK", "平均买入价_hk", "汇率类型.平均买入价"),
-
-            // dict.accounting.financial.year.category.cn
-            ("dict.accounting.financial.year.category.cn", "en-US", "中国财年_us", "财务年度类别.中国财年"),
-            // dict.accounting.financial.year.category.cn
-            ("dict.accounting.financial.year.category.cn", "ja-JP", "中国财年_jp", "财务年度类别.中国财年"),
-            // dict.accounting.financial.year.category.cn
-            ("dict.accounting.financial.year.category.cn", "zh-CN", "中国财年", "财务年度类别.中国财年"),
-            // dict.accounting.financial.year.category.cn
-            ("dict.accounting.financial.year.category.cn", "zh-HK", "中国财年_hk", "财务年度类别.中国财年"),
-
-            // dict.accounting.financial.year.category.jp
-            ("dict.accounting.financial.year.category.jp", "en-US", "日本财年_us", "财务年度类别.日本财年"),
-            // dict.accounting.financial.year.category.jp
-            ("dict.accounting.financial.year.category.jp", "ja-JP", "日本财年_jp", "财务年度类别.日本财年"),
-            // dict.accounting.financial.year.category.jp
-            ("dict.accounting.financial.year.category.jp", "zh-CN", "日本财年", "财务年度类别.日本财年"),
-            // dict.accounting.financial.year.category.jp
-            ("dict.accounting.financial.year.category.jp", "zh-HK", "日本财年_hk", "财务年度类别.日本财年"),
-
-            // dict.accounting.financial.year.category.hk
-            ("dict.accounting.financial.year.category.hk", "en-US", "香港财年_us", "财务年度类别.香港财年"),
-            // dict.accounting.financial.year.category.hk
-            ("dict.accounting.financial.year.category.hk", "ja-JP", "香港财年_jp", "财务年度类别.香港财年"),
-            // dict.accounting.financial.year.category.hk
-            ("dict.accounting.financial.year.category.hk", "zh-CN", "香港财年", "财务年度类别.香港财年"),
-            // dict.accounting.financial.year.category.hk
-            ("dict.accounting.financial.year.category.hk", "zh-HK", "香港财年_hk", "财务年度类别.香港财年"),
-
-            // dict.accounting.financial.year.category.us
-            ("dict.accounting.financial.year.category.us", "en-US", "美国财年_us", "财务年度类别.美国财年"),
-            // dict.accounting.financial.year.category.us
-            ("dict.accounting.financial.year.category.us", "ja-JP", "美国财年_jp", "财务年度类别.美国财年"),
-            // dict.accounting.financial.year.category.us
-            ("dict.accounting.financial.year.category.us", "zh-CN", "美国财年", "财务年度类别.美国财年"),
-            // dict.accounting.financial.year.category.us
-            ("dict.accounting.financial.year.category.us", "zh-HK", "美国财年_hk", "财务年度类别.美国财年"),
 
             // dict.accounting.balance.sheet.line.category.current.asset
             ("dict.accounting.balance.sheet.line.category.current.asset", "en-US", "流动资产_us", "资产负债表行类别.流动资产"),
@@ -20921,23 +20885,104 @@ public class TaktDictI18nSeedData : ITaktSeedDataCoordinator
             // dict.sys.word.category.5
             ("dict.sys.word.category.5", "zh-HK", "辱骂歧视_hk", "敏感词词性类别.辱骂歧视"),
 
-            // dict.sys.iso.code.category.0
-            ("dict.sys.iso.code.category.0", "en-US", "不使用_us", "ISO编码类别.不使用"),
-            // dict.sys.iso.code.category.0
-            ("dict.sys.iso.code.category.0", "ja-JP", "不使用_jp", "ISO编码类别.不使用"),
-            // dict.sys.iso.code.category.0
-            ("dict.sys.iso.code.category.0", "zh-CN", "不使用", "ISO编码类别.不使用"),
-            // dict.sys.iso.code.category.0
-            ("dict.sys.iso.code.category.0", "zh-HK", "不使用_hk", "ISO编码类别.不使用"),
+            // dict.sys.numbering.dept.code.r
+            ("dict.sys.numbering.dept.code.r", "en-US", "总务部_us", "编码规则部门短码.总务部.D0100"),
+            // dict.sys.numbering.dept.code.r
+            ("dict.sys.numbering.dept.code.r", "ja-JP", "总务部_jp", "编码规则部门短码.总务部.D0100"),
+            // dict.sys.numbering.dept.code.r
+            ("dict.sys.numbering.dept.code.r", "zh-CN", "总务部", "编码规则部门短码.总务部.D0100"),
+            // dict.sys.numbering.dept.code.r
+            ("dict.sys.numbering.dept.code.r", "zh-HK", "总务部_hk", "编码规则部门短码.总务部.D0100"),
 
-            // dict.sys.iso.code.category.1
-            ("dict.sys.iso.code.category.1", "en-US", "部门_us", "ISO编码类别.部门"),
-            // dict.sys.iso.code.category.1
-            ("dict.sys.iso.code.category.1", "ja-JP", "部门_jp", "ISO编码类别.部门"),
-            // dict.sys.iso.code.category.1
-            ("dict.sys.iso.code.category.1", "zh-CN", "部门", "ISO编码类别.部门"),
-            // dict.sys.iso.code.category.1
-            ("dict.sys.iso.code.category.1", "zh-HK", "部门_hk", "ISO编码类别.部门"),
+            // dict.sys.numbering.dept.code.f
+            ("dict.sys.numbering.dept.code.f", "en-US", "财务部_us", "编码规则部门短码.财务部.D0200"),
+            // dict.sys.numbering.dept.code.f
+            ("dict.sys.numbering.dept.code.f", "ja-JP", "财务部_jp", "编码规则部门短码.财务部.D0200"),
+            // dict.sys.numbering.dept.code.f
+            ("dict.sys.numbering.dept.code.f", "zh-CN", "财务部", "编码规则部门短码.财务部.D0200"),
+            // dict.sys.numbering.dept.code.f
+            ("dict.sys.numbering.dept.code.f", "zh-HK", "财务部_hk", "编码规则部门短码.财务部.D0200"),
+
+            // dict.sys.numbering.dept.code.d
+            ("dict.sys.numbering.dept.code.d", "en-US", "IT部_us", "编码规则部门短码.IT部.D0300"),
+            // dict.sys.numbering.dept.code.d
+            ("dict.sys.numbering.dept.code.d", "ja-JP", "IT部_jp", "编码规则部门短码.IT部.D0300"),
+            // dict.sys.numbering.dept.code.d
+            ("dict.sys.numbering.dept.code.d", "zh-CN", "IT部", "编码规则部门短码.IT部.D0300"),
+            // dict.sys.numbering.dept.code.d
+            ("dict.sys.numbering.dept.code.d", "zh-HK", "IT部_hk", "编码规则部门短码.IT部.D0300"),
+
+            // dict.sys.numbering.dept.code.m
+            ("dict.sys.numbering.dept.code.m", "en-US", "文管中心_us", "编码规则部门短码.文管中心.D0410"),
+            // dict.sys.numbering.dept.code.m
+            ("dict.sys.numbering.dept.code.m", "ja-JP", "文管中心_jp", "编码规则部门短码.文管中心.D0410"),
+            // dict.sys.numbering.dept.code.m
+            ("dict.sys.numbering.dept.code.m", "zh-CN", "文管中心", "编码规则部门短码.文管中心.D0410"),
+            // dict.sys.numbering.dept.code.m
+            ("dict.sys.numbering.dept.code.m", "zh-HK", "文管中心_hk", "编码规则部门短码.文管中心.D0410"),
+
+            // dict.sys.numbering.dept.code.s
+            ("dict.sys.numbering.dept.code.s", "en-US", "生管课_us", "编码规则部门短码.生管课.D0420"),
+            // dict.sys.numbering.dept.code.s
+            ("dict.sys.numbering.dept.code.s", "ja-JP", "生管课_jp", "编码规则部门短码.生管课.D0420"),
+            // dict.sys.numbering.dept.code.s
+            ("dict.sys.numbering.dept.code.s", "zh-CN", "生管课", "编码规则部门短码.生管课.D0420"),
+            // dict.sys.numbering.dept.code.s
+            ("dict.sys.numbering.dept.code.s", "zh-HK", "生管课_hk", "编码规则部门短码.生管课.D0420"),
+
+            // dict.sys.numbering.dept.code.b
+            ("dict.sys.numbering.dept.code.b", "en-US", "部管课_us", "编码规则部门短码.部管课.D0430"),
+            // dict.sys.numbering.dept.code.b
+            ("dict.sys.numbering.dept.code.b", "ja-JP", "部管课_jp", "编码规则部门短码.部管课.D0430"),
+            // dict.sys.numbering.dept.code.b
+            ("dict.sys.numbering.dept.code.b", "zh-CN", "部管课", "编码规则部门短码.部管课.D0430"),
+            // dict.sys.numbering.dept.code.b
+            ("dict.sys.numbering.dept.code.b", "zh-HK", "部管课_hk", "编码规则部门短码.部管课.D0430"),
+
+            // dict.sys.numbering.dept.code.c
+            ("dict.sys.numbering.dept.code.c", "en-US", "资材部_us", "编码规则部门短码.资材部.D0500"),
+            // dict.sys.numbering.dept.code.c
+            ("dict.sys.numbering.dept.code.c", "ja-JP", "资材部_jp", "编码规则部门短码.资材部.D0500"),
+            // dict.sys.numbering.dept.code.c
+            ("dict.sys.numbering.dept.code.c", "zh-CN", "资材部", "编码规则部门短码.资材部.D0500"),
+            // dict.sys.numbering.dept.code.c
+            ("dict.sys.numbering.dept.code.c", "zh-HK", "资材部_hk", "编码规则部门短码.资材部.D0500"),
+
+            // dict.sys.numbering.dept.code.z
+            ("dict.sys.numbering.dept.code.z", "en-US", "制造部_us", "编码规则部门短码.制造部.D0600"),
+            // dict.sys.numbering.dept.code.z
+            ("dict.sys.numbering.dept.code.z", "ja-JP", "制造部_jp", "编码规则部门短码.制造部.D0600"),
+            // dict.sys.numbering.dept.code.z
+            ("dict.sys.numbering.dept.code.z", "zh-CN", "制造部", "编码规则部门短码.制造部.D0600"),
+            // dict.sys.numbering.dept.code.z
+            ("dict.sys.numbering.dept.code.z", "zh-HK", "制造部_hk", "编码规则部门短码.制造部.D0600"),
+
+            // dict.sys.numbering.dept.code.p
+            ("dict.sys.numbering.dept.code.p", "en-US", "制技部_us", "编码规则部门短码.制技部.D0630"),
+            // dict.sys.numbering.dept.code.p
+            ("dict.sys.numbering.dept.code.p", "ja-JP", "制技部_jp", "编码规则部门短码.制技部.D0630"),
+            // dict.sys.numbering.dept.code.p
+            ("dict.sys.numbering.dept.code.p", "zh-CN", "制技部", "编码规则部门短码.制技部.D0630"),
+            // dict.sys.numbering.dept.code.p
+            ("dict.sys.numbering.dept.code.p", "zh-HK", "制技部_hk", "编码规则部门短码.制技部.D0630"),
+
+            // dict.sys.numbering.dept.code.t
+            ("dict.sys.numbering.dept.code.t", "en-US", "技术部_us", "编码规则部门短码.技术部.D0700"),
+            // dict.sys.numbering.dept.code.t
+            ("dict.sys.numbering.dept.code.t", "ja-JP", "技术部_jp", "编码规则部门短码.技术部.D0700"),
+            // dict.sys.numbering.dept.code.t
+            ("dict.sys.numbering.dept.code.t", "zh-CN", "技术部", "编码规则部门短码.技术部.D0700"),
+            // dict.sys.numbering.dept.code.t
+            ("dict.sys.numbering.dept.code.t", "zh-HK", "技术部_hk", "编码规则部门短码.技术部.D0700"),
+
+            // dict.sys.numbering.dept.code.q
+            ("dict.sys.numbering.dept.code.q", "en-US", "品保部_us", "编码规则部门短码.品保部.D0800"),
+            // dict.sys.numbering.dept.code.q
+            ("dict.sys.numbering.dept.code.q", "ja-JP", "品保部_jp", "编码规则部门短码.品保部.D0800"),
+            // dict.sys.numbering.dept.code.q
+            ("dict.sys.numbering.dept.code.q", "zh-CN", "品保部", "编码规则部门短码.品保部.D0800"),
+            // dict.sys.numbering.dept.code.q
+            ("dict.sys.numbering.dept.code.q", "zh-HK", "品保部_hk", "编码规则部门短码.品保部.D0800"),
 
             // dict.sys.word.filter.level.category.1
             ("dict.sys.word.filter.level.category.1", "en-US", "低_us", "敏感词过滤等级.低"),

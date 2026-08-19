@@ -18,7 +18,7 @@ import type {
 import type {
   BomMaterialCostItem,
   BomMaterialCostItemCreate,
-  BomMaterialCostItemUpdate
+  BomMaterialCostItemUpdate,
 } from '@/types/logistics/manufacturing/bom/material-cost-item';
 
 /**

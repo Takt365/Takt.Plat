@@ -1,4 +1,4 @@
-﻿// ========================================
+// ========================================
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Domain.Entities.Identity
 // 文件名称：TaktUser.cs
@@ -18,13 +18,15 @@ namespace Takt.Domain.Entities.Identity;
 /// 用户实体
 /// 代表系统登录账号（身份认证域）
 /// 注意：用户与员工档案分离，用户仅用于认证和权限控制
+/// 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase）
 /// </summary>
 [SugarTable("takt_identity_user", "用户表")]
 [SugarIndex("ix_user_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_user_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
 [SugarIndex("ix_user_username_unique", nameof(TenantCode), OrderByType.Asc, nameof(Username), OrderByType.Asc, true)]
-public class TaktUser : TaktTenantEntityBase
-{    /// <summary>
+public class TaktUser : TaktTenantCultureEntityBase
+{
+    /// <summary>
     /// 用户名（唯一索引：租户内唯一，见 ix_user_username_unique；登录账号，最长 20 位，与 varchar(20) 一致）
     /// </summary>
     [SugarColumn(ColumnName = "username", ColumnDescription = "用户名", ColumnDataType = "varchar", Length = 20, IsNullable = false)]

@@ -52,7 +52,12 @@ public sealed class TaktDatabaseBackupProvider : ITaktDatabaseBackupProvider
         _sugarDbType = configuration.GetSugarDbType();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 执行 BACKUP DATABASE（Full 或 Differential）
+    /// </summary>
+    /// <param name="options">备份选项</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>备份结果</returns>
     public async Task<TaktDatabaseBackupResult> BackupAsync(
         TaktDatabaseBackupOptionsModel options,
         CancellationToken cancellationToken = default)

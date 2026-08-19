@@ -60,6 +60,18 @@ public static class TaktConfigurationExtensions
     }
 
     /// <summary>
+    /// 绑定并校验 <c>Localization</c> 节（默认语言、多种语言内容通用码 mul、资源路径）
+    /// </summary>
+    /// <param name="configuration">应用配置</param>
+    /// <returns>已规范化并校验的本地化配置</returns>
+    public static TaktLocalizationOptions RequireLocalization(this IConfiguration configuration)
+    {
+        var options = configuration.RequireOptions<TaktLocalizationOptions>(TaktLocalizationOptions.SectionName);
+        options.Validate();
+        return options;
+    }
+
+    /// <summary>
     /// 获取已解析的 SqlSugar 数据库类型（经 Database 节一次映射并缓存）
     /// </summary>
     /// <param name="configuration">应用配置</param>

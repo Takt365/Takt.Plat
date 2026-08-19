@@ -4,7 +4,7 @@
 // 文件名称：bom-material-cost-item-line-cost.ts
 // 创建时间：2026-07-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：右表明细行成本纯计算（对齐后端 TaktBomMaterialCostItemLineCostHelper：X/F + qty×(price/unit)，5 位小数）
+// 功能描述：右表明细行成本纯计算（对齐后端 TaktBomMaterialCostItemLineCostHelper：生产相关=X、PCB SECT 标识为空、采购类型=F + qty×(price/unit)，5 位小数）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,6 +17,8 @@ export const COST_DECIMAL_DIGITS = 5
 export type BomMaterialCostItemLineCostFields = {
   productionRelated?: string | null
   purchaseType?: string | null
+  /** PCB SECT 标识（空参与；X 不参与） */
+  pcbSectIndicator?: string | null
   componentQuantity?: number | string | null
   movingAveragePrice?: number | string | null
   movingPriceUnit?: number | string | null
@@ -36,7 +38,7 @@ function roundAwayFromZero(value: number, digits: number): number {
 }
 
 /**
- * 是否参与材料成本合计（productionRelated=X 且 purchaseType=F）
+ * 是否参与材料成本合计（productionRelated=X 且 pcbSectIndicator 为空 且 purchaseType=F）
  * @param row 明细行
  * @returns {boolean} 是否计入
  */
@@ -46,7 +48,12 @@ export function countsTowardBomMaterialCostItem(row: BomMaterialCostItemLineCost
   }
   const productionRelated = String(row.productionRelated ?? '').trim()
   const purchaseType = String(row.purchaseType ?? '').trim()
-  return productionRelated.toUpperCase() === 'X' && purchaseType.toUpperCase() === 'F'
+  const pcbSectIndicator = String(row.pcbSectIndicator ?? '').trim()
+  return (
+    productionRelated.toUpperCase() === 'X'
+    && purchaseType.toUpperCase() === 'F'
+    && pcbSectIndicator.toUpperCase() !== 'X'
+  )
 }
 
 /**
@@ -63,7 +70,7 @@ export function resolveMovingPriceUnit(row: BomMaterialCostItemLineCostFields): 
 }
 
 /**
- * 单行组件成本：componentQuantity×(movingAveragePrice÷movingPriceUnit)；非 X/F 为 0
+ * 单行组件成本：componentQuantity×(movingAveragePrice÷movingPriceUnit)；非参与资格为 0
  * @param row 明细行
  * @returns {number} 行成本（5 位小数）
  */
@@ -81,7 +88,7 @@ export function calculateBomMaterialCostItemLineCost(row: BomMaterialCostItemLin
 }
 
 /**
- * 合计当前页行成本（X/F 公式求和，结果保留 5 位小数）
+ * 合计当前页行成本（参与资格行公式求和，结果保留 5 位小数）
  * @param rows 明细行
  * @returns {number} 合计
  */

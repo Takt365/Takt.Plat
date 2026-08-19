@@ -38,7 +38,7 @@ public interface ITaktCultureService
     /// <summary>
     /// 获取语言切换选项列表（仅启用，TaktSelectOption）
     /// </summary>
-    /// <returns>下拉选项（DictValue=CultureCode，DictLabel=LanguageName，ExtValue=Icon，ExtLabel=IsDefault）</returns>
+    /// <returns>下拉选项（DictValue=CultureCode，DictLabel=NativeName，ExtValue=Icon，ExtLabel=IsDefault）</returns>
     Task<List<TaktSelectOption>> GetCultureOptionsAsync();
 
     /// <summary>

@@ -4,7 +4,7 @@
 // 文件名称：TaktSellerMaterial.cs
 // 创建时间：2026-08-04
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt销售商物料实体（租户级）；以客户/客户端业务编码关联，无外键 Id、无导航
+// 功能描述：Takt销售商物料实体（组合4仅租户；无工厂/无语言）；以客户/客户端业务编码关联，无外键 Id、无导航
 //
 // 业务语义说明：
 // 记录销售商侧物料编码与本厂物料的对应关系，不涉及商务价格；
@@ -21,6 +21,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 
 /// <summary>
 /// Takt销售商物料实体（租户内共享）
+/// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase；仅租户）
 /// </summary>
 [SugarTable("takt_logistics_sales_seller_material", "销售商物料表")]
 [SugarIndex("ix_takt_logistics_sales_seller_material_tenant", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
@@ -28,7 +29,7 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 [SugarIndex("ix_takt_logistics_sales_seller_material_customer_code", nameof(TenantCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_sales_seller_material_client_code", nameof(TenantCode), OrderByType.Asc, nameof(ClientCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_sales_seller_material_seller_material_code", nameof(TenantCode), OrderByType.Asc, nameof(SellerMaterialCode), OrderByType.Asc, false)]
-public class TaktSellerMaterial : TaktTenantEntityBase
+public class TaktSellerMaterial : TaktTenantCoreEntityBase
 {
     /// <summary>
     /// 客户编码（选项 TaktCustomers/options；DictValue=CustomerCode；可空）

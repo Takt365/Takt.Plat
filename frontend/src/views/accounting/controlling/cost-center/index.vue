@@ -526,7 +526,7 @@ const columnSettingVisible = ref(false)
 const visibleColumnKeys = ref<string[]>([])
 /** 实体主键字段名（row-key、API 路径参数） */
 const entityIdName = 'costCenterId'
-/** 树节点标题字段名（左侧树 title 与缩进列） */
+/** 树节点标题字段名（左侧树 title：CostCenterName 按 ParentId 递归） */
 const treeTitleField = 'costCenterName'
 
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */

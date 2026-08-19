@@ -187,7 +187,7 @@ const columns = computed<TableColumnsType>(() => {
   if (props.activeTab === 'implement') {
     const cols: TableColumnsType = [
       {
-        title: t('entity.ecgijutsu.plantcode'),
+        title: t('common.page.entity.plantcode'),
         dataIndex: 'plantCode',
         key: 'plantCode',
         width: 100,
@@ -240,7 +240,7 @@ const columns = computed<TableColumnsType>(() => {
   }
   const cols: TableColumnsType = [
     {
-      title: t('entity.ecgijutsu.plantcode'),
+      title: t('common.page.entity.plantcode'),
       dataIndex: 'plantCode',
       key: 'plantCode',
       width: 100,

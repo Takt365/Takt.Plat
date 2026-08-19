@@ -236,7 +236,7 @@ const getTranslationListRowKey = (record: unknown): string => {
   return id != null && String(id) !== '' ? String(id) : ''
 }
 
-/** 供表格单元格（如 TaktDictTag）安全取行字段，与 iso-code/index.vue 的 getIsoCodeField 一致 */
+/** 供表格单元格（如 TaktDictTag）安全取行字段，安全取行字段 */
 const getTranslationField = (record: any, field: string): any => record?.[field]
 
 const getTransposedTableRowKey = (record: unknown): string => {

@@ -24,9 +24,9 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 /// <summary>
 /// Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
 /// 对应前端 TaktModelDestinationDto
-/// 继承 TaktTenantDtoBase
+/// 继承 TaktTenantCoreDtoBase（组合 4）
 /// </summary>
-public class TaktModelDestinationDto : TaktTenantDtoBase
+public class TaktModelDestinationDto : TaktTenantCoreDtoBase
 {
     /// <summary>
     /// ModelDestinationID（适配实体 Id，序列化为 string 以避免 Javascript 精度问题）
@@ -87,11 +87,6 @@ public class TaktModelDestinationQueryDto : TaktPagedQuery
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
@@ -162,11 +157,6 @@ public class TaktModelDestinationCreateDto
     /// </summary>
     public string TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
@@ -273,11 +263,6 @@ public class TaktModelDestinationTemplateDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
@@ -330,11 +315,6 @@ public class TaktModelDestinationImportDto
     /// </summary>
     public string? TenantCode { get; set; } = string.Empty;
 
-
-    /// <summary>
-    /// 关联工厂（选项 TaktPlants/options；DictValue=PlantCode）
-    /// </summary>
-    public string? RelatedPlant { get; set; } = string.Empty;
     /// <summary>
     /// 物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）
     /// </summary>
