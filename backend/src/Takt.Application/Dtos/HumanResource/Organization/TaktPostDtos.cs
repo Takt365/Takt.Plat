@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktPostDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Post 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktPost 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Organization;
 // ========================================
 
 /// <summary>
-/// 岗位实体 代表组织架构中的岗位/职位 参照 SAP Position (STELL) 设计
+/// 岗位实体 代表组织架构中的岗位/职位
 /// 对应前端 TaktPostDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -46,23 +46,23 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 所属部门名称（填充字段）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
-    public string? DeptName { get; set; }
+    public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string PostLevel { get; set; } = string.Empty;
 
@@ -87,7 +87,7 @@ public class TaktPostDto : TaktCompanyDtoBase
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 
@@ -107,7 +107,7 @@ public class TaktPostDto : TaktCompanyDtoBase
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -122,15 +122,9 @@ public class TaktPostDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 员工岗位关联（RBAC，表 takt_human_resource_organization_employeepost）
-    /// （子表：TaktEmployeePost）
-    /// </summary>
-    public List<TaktEmployeePostDto>? EmployeePosts { get; set; }
 
 }
 
@@ -150,7 +144,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -159,11 +153,11 @@ public class TaktPostQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 岗位编码（唯一索引：租户+公司内唯一，见 ix_post_code_unique）
     /// </summary>
@@ -175,18 +169,23 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -211,7 +210,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -231,7 +230,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -246,7 +245,7 @@ public class TaktPostQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -295,12 +294,11 @@ public class TaktPostCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 岗位编码（唯一索引：租户+公司内唯一，见 ix_post_code_unique）
     /// </summary>
@@ -314,21 +312,27 @@ public class TaktPostCreateDto
     public string PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
     /// </summary>
-    [Required(ErrorMessage = "岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）不能为空")]
+    [Required(ErrorMessage = "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）不能为空")]
+    public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
+    /// </summary>
+    [Required(ErrorMessage = "岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）不能为空")]
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
-    [Required(ErrorMessage = "岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）不能为空")]
+    [Required(ErrorMessage = "岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）不能为空")]
     public string PostLevel { get; set; } = string.Empty;
 
     /// <summary>
@@ -354,7 +358,7 @@ public class TaktPostCreateDto
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 
@@ -374,7 +378,7 @@ public class TaktPostCreateDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -384,7 +388,7 @@ public class TaktPostCreateDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
 
@@ -443,9 +447,9 @@ public class TaktPostStatusDto
     public long PostId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）不能为空")]
     public int PostStatus { get; set; } = 0;
 }
 
@@ -497,11 +501,11 @@ public class TaktPostTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 岗位编码（唯一索引：租户+公司内唯一，见 ix_post_code_unique）
     /// </summary>
@@ -513,18 +517,23 @@ public class TaktPostTemplateDto
     public string? PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -549,7 +558,7 @@ public class TaktPostTemplateDto
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -569,7 +578,7 @@ public class TaktPostTemplateDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -579,7 +588,7 @@ public class TaktPostTemplateDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -620,12 +629,11 @@ public class TaktPostImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 岗位编码（唯一索引：租户+公司内唯一，见 ix_post_code_unique）
     /// </summary>
@@ -637,18 +645,23 @@ public class TaktPostImportDto
     public string? PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>
     public string? PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string? PostLevel { get; set; } = string.Empty;
 
@@ -673,7 +686,7 @@ public class TaktPostImportDto
     public string? Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int? EducationRequired { get; set; }
 
@@ -693,7 +706,7 @@ public class TaktPostImportDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -703,7 +716,7 @@ public class TaktPostImportDto
     public string? PostDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? PostStatus { get; set; }
 
@@ -746,6 +759,16 @@ public class TaktPostExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 岗位编码（唯一索引：租户+公司内唯一，见 ix_post_code_unique）
     /// </summary>
     public string PostCode { get; set; } = string.Empty;
@@ -756,18 +779,23 @@ public class TaktPostExportDto
     public string PostName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 所属部门ID
+    /// 所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 岗位类别（字典 sys_post_category；DictValue：MGT=管理岗，PRO=专业岗，TEC=技术岗，SUP=支持岗，OPS=操作岗）
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
+    /// </summary>
+    public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>
     public string PostCategory { get; set; } = string.Empty;
 
     /// <summary>
-    /// 岗位职级（字典 sys_post_level_category；DictValue：P1~P4 专业序列，M1~M5 管理序列）
+    /// 岗位职级（字典 sys_post_level_category；列存 DictValue：P1~P4 专业序列 M1~M5 管理序列）
     /// </summary>
     public string PostLevel { get; set; } = string.Empty;
 
@@ -792,7 +820,7 @@ public class TaktPostExportDto
     public string Requirements { get; set; } = string.Empty;
 
     /// <summary>
-    /// 学历要求（字典 hr_education_level_category；1=高中及以下，2=大专，3=本科，4=硕士，5=博士）
+    /// 学历要求（字典 hr_education_level_category；1=高中及以下 2=大专 3=本科 4=硕士 5=博士）
     /// </summary>
     public int EducationRequired { get; set; } = 0;
 
@@ -812,7 +840,7 @@ public class TaktPostExportDto
     public decimal? SalaryMax { get; set; }
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子岗位为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子岗位为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -827,7 +855,7 @@ public class TaktPostExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int PostStatus { get; set; } = 0;
 

@@ -1,4 +1,4 @@
-/** SAP 物料移动类型（TaktMaterialDocument.MovementType） */
+/** 物料移动类型（TaktMaterialDocument.MovementType） */
 module.exports = [
   ['101', 'GR 收货'],
   ['102', '为采购订单的收货冲销'],

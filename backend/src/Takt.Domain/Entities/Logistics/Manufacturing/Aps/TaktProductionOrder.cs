@@ -46,7 +46,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialDescription { get; set; } = string.Empty;
@@ -88,7 +88,7 @@ public class TaktProductionOrder : TaktCompanyEntityBase
     public int Priority { get; set; } = 3;
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     [SugarColumn(ColumnName = "work_center", ColumnDescription = "工作中心", ColumnDataType = "nvarchar", Length = 140, IsNullable = true)]
     public string? WorkCenter { get; set; }

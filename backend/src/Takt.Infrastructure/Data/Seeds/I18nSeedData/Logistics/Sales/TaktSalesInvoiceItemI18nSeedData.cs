@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesInvoiceItemI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesInvoiceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.salesinvoiceid", "zh-HK", "销售发票ID_hk", "销售发票ID（选项 TaktSalesInvoices/options；DictValue=Id）"),
 
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "en-US", "开票凭证_us", "开票凭证（冗余）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "en-US", "开票凭证_us", "开票凭证（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "ja-JP", "开票凭证_jp", "开票凭证（冗余）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "ja-JP", "开票凭证_jp", "开票凭证（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-CN", "开票凭证", "开票凭证（冗余）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-CN", "开票凭证", "开票凭证（冗余字段，便于查询）"),
             // entity.salesinvoiceitem.billingdocumentcode
-            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-HK", "开票凭证_hk", "开票凭证（冗余）"),
+            new TranslationSeedItem("entity.salesinvoiceitem.billingdocumentcode", "zh-HK", "开票凭证_hk", "开票凭证（冗余字段，便于查询）"),
 
             // entity.salesinvoiceitem.linenumber
             new TranslationSeedItem("entity.salesinvoiceitem.linenumber", "en-US", "项目_us", "项目（开票凭证项目；行号步长生成器用 int，固定步长=10）"),
@@ -298,13 +298,13 @@ public class TaktSalesInvoiceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesinvoiceitem.materialcode", "zh-HK", "物料_hk", "物料（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.salesinvoiceitem.materialdescription
-            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "en-US", "描述_us", "描述"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesinvoiceitem.materialdescription
-            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "ja-JP", "描述_jp", "描述"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesinvoiceitem.materialdescription
-            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "zh-CN", "描述", "描述"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesinvoiceitem.materialdescription
-            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "zh-HK", "描述_hk", "描述"),
+            new TranslationSeedItem("entity.salesinvoiceitem.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.salesinvoiceitem.pricingreferencematerialcode
             new TranslationSeedItem("entity.salesinvoiceitem.pricingreferencematerialcode", "en-US", "定价参考物料_us", "定价参考物料"),

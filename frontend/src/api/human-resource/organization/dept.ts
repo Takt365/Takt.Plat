@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/api/human-resource/organization
 // 文件名称：dept.ts
-// 创建时间：2026-06-24
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：human-resource/organization 模块 API（自动生成，请勿手改路由常量）
 // 
@@ -60,9 +60,9 @@ export function getDeptById(id: string): Promise<Dept> {
 }
 
 /**
- * 获取部门树形列表
- * @param {string} parentId parentId
- * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 枚举字段，如 TaktCommonStatus.Enabled）
+ * 获取部门树形列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
+ * @param {boolean} includeDisabled 为 false 时过滤禁用项（按实体 *Status 字段）
  * @returns {Promise<DeptTree[]>} 树形数据
  */
 export function getDeptTree(parentId: string, includeDisabled: boolean): Promise<DeptTree[]> {
@@ -159,13 +159,17 @@ export function updateDeptSort(dto: DeptSort): Promise<Dept> {
 // ========================================
 
 /**
- * 获取部门树形选项列表
+ * 获取部门树形选项列表（懒加载：仅 parentId 直接子级一层）
+ * @param {string} parentId 父级ID（0=根；懒加载仅返回直接子级一层）
  * @returns {Promise<TaktTreeSelectOption[]>} 树形选项
  */
-export function getDeptTreeOptions(): Promise<TaktTreeSelectOption[]> {
+export function getDeptTreeOptions(parentId: string): Promise<TaktTreeSelectOption[]> {
   return request<TaktTreeSelectOption[]>({
     url: `${DEPT_API_BASE}/tree-options`,
     method: 'get',
+    params: {
+      parentId
+    },
   });
 }
 

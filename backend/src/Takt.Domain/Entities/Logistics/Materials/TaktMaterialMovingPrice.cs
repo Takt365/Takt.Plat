@@ -17,19 +17,19 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// 移动价格实体
-/// 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别（评估期间存 yyyy-MM）
+/// <para>业务唯一键（新增/更新匹配）：TenantCode+CompanyCode+PlantCode+MaterialCode+ValuationPeriod；Valuation 为业务字段，不参与唯一匹配。</para>
 /// </summary>
 [SugarTable("takt_logistics_materials_material_moving_price", "移动价格表")]
 [SugarIndex("ix_material_moving_price_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_material_moving_price_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_material_moving_price_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ValuationPeriod), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(Valuation), OrderByType.Asc, true)]
+[SugarIndex("ix_material_moving_price_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(ValuationPeriod), OrderByType.Asc, true)]
 [SugarIndex("ix_material_moving_price_plant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_material_moving_price_valuation_period", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ValuationPeriod), OrderByType.Asc, false)]
 public class TaktMaterialMovingPrice : TaktCompanyEntityBase
 {
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     [SugarColumn(ColumnName = "valuation_period", ColumnDescription = "评估期间", ColumnDataType = "nvarchar", Length = 7, IsNullable = false)]
     public string ValuationPeriod { get; set; } = string.Empty;

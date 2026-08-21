@@ -11,7 +11,7 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
 -- 源表 / 目标表：同名 + 列与实体 TaktCustomer 一致（源/目标结构相同，以目标实体为准）
 -- {{SourceDatabase}}.dbo.takt_logistics_sales_customer → 当前租户库同名表
--- 业务唯一键：CompanyCode + PlantCode + CustomerCode（与租户库唯一索引对齐）
+-- 业务唯一键：CompanyCode + CustomerCode（与租户库唯一索引对齐；PlantCode 为业务字段，不参与匹配）
 -- company_code / plant_code 取自源表；tenant/company/plant/culture 取自源表本列；空值丢弃，不回退任务参数；全量同步（无公司白名单）
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -74,10 +74,8 @@ CREATE TABLE #st_source (
   [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 INSERT INTO #st_source
 SELECT
@@ -137,15 +135,13 @@ SELECT
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
-  N'{}',
-  N'',
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field],
+  S.[remark],
+    S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
-    ROW_NUMBER() OVER (ORDER BY N.[company_code], N.[plant_code], N.[customer_code]) AS rn
+    ROW_NUMBER() OVER (ORDER BY N.[company_code], N.[customer_code]) AS rn
   FROM (
     SELECT
       LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
@@ -202,21 +198,28 @@ FROM (
       ROUND(COALESCE(TRY_CAST(R.[evaluation_score] AS DECIMAL(18,8)), 0), 2) AS [evaluation_score],
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       COALESCE(TRY_CAST(R.[customer_status] AS INT), 1) AS [customer_status],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
-          LTRIM(RTRIM(R.[plant_code])),
           LTRIM(RTRIM(R.[customer_code]))
-        ORDER BY LEN(ISNULL(LTRIM(RTRIM(R.[customer_name1])), N'')) DESC
+        ORDER BY
+          LEN(ISNULL(LTRIM(RTRIM(R.[customer_name1])), N'')) DESC,
+          LEN(ISNULL(LTRIM(RTRIM(R.[plant_code])), N'')) DESC
       ) AS dup_rn
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_sales_customer] R
-    WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+    WHERE LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
-      AND LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
   ) N
   WHERE N.dup_rn = 1
 ) S
@@ -226,28 +229,24 @@ DECLARE @source_count INT = (SELECT COUNT(*) FROM #st_source);
 DECLARE @sap_raw_count INT = (
   SELECT COUNT(*)
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_sales_customer] R
-  WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+  WHERE LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
-    AND LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
 );
 DECLARE @sap_key_count INT = (
   SELECT COUNT(*)
   FROM (
     SELECT
       LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4) AS [company_code],
-      LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
       LTRIM(RTRIM(R.[customer_code])) AS [customer_code]
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_sales_customer] R
-    WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
+    WHERE LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[culture_code], N''))) <> N''
-      AND LTRIM(RTRIM(ISNULL(R.[customer_code], N''))) <> N''
     GROUP BY
       LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
-      LTRIM(RTRIM(R.[plant_code])),
       LTRIM(RTRIM(R.[customer_code]))
   ) K
 );
@@ -262,25 +261,25 @@ BEGIN
 END;
 
 IF EXISTS (
-  SELECT 1 FROM #st_source GROUP BY [company_code], [plant_code], [customer_code] HAVING COUNT(*) > 1
+  SELECT 1 FROM #st_source GROUP BY [company_code], [customer_code] HAVING COUNT(*) > 1
 )
 BEGIN
   DECLARE @dup_key NVARCHAR(400);
   SELECT TOP 1
-    @dup_key = CONCAT([company_code], N' / ', [plant_code], N' / ', [customer_code], N' x', COUNT(*))
+    @dup_key = CONCAT([company_code], N' / ', [customer_code], N' x', COUNT(*))
   FROM #st_source
-  GROUP BY [company_code], [plant_code], [customer_code]
+  GROUP BY [company_code], [customer_code]
   HAVING COUNT(*) > 1;
   THROW 50001, @dup_key, 1;
 END;
 
+-- 复用租户库已有 Id（含软删行；按公司+客户码对齐唯一索引）
 UPDATE S
 SET S.[id] = COALESCE(T.[id], S.[id])
 FROM #st_source S
 LEFT JOIN [takt_logistics_sales_customer] T
   ON T.[tenant_code]=S.[tenant_code]
  AND T.[company_code]=S.[company_code]
- AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
  AND LTRIM(RTRIM(T.[customer_code])) = S.[customer_code];
 
 IF OBJECT_ID('tempdb..#delta') IS NOT NULL DROP TABLE #delta;
@@ -313,10 +312,10 @@ MERGE INTO [takt_logistics_sales_customer] AS T
 USING #st_source AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
-AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
 AND LTRIM(RTRIM(T.[customer_code])) = S.[customer_code]
 WHEN MATCHED AND (
   ISNULL(T.[is_deleted], 0) <> S.[is_deleted]
+  OR LTRIM(RTRIM(ISNULL(T.[plant_code], N''))) <> S.[plant_code]
   OR LTRIM(RTRIM(ISNULL(T.[customer_name1], N''))) <> S.[customer_name1]
   OR LTRIM(RTRIM(ISNULL(T.[customer_name2], N''))) <> LTRIM(RTRIM(ISNULL(S.[customer_name2], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[customer_short_name], N''))) <> LTRIM(RTRIM(ISNULL(S.[customer_short_name], N'')))
@@ -367,8 +366,18 @@ WHEN MATCHED AND (
   OR ROUND(T.[evaluation_score], 2) <> ROUND(S.[evaluation_score], 2)
   OR T.[sort_order] <> S.[sort_order]
   OR T.[customer_status] <> S.[customer_status]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
+  T.[plant_code]=S.[plant_code],
   T.[customer_name1]=S.[customer_name1],
   T.[customer_name2]=S.[customer_name2],
   T.[customer_short_name]=S.[customer_short_name],
@@ -419,12 +428,15 @@ WHEN MATCHED AND (
   T.[evaluation_score]=S.[evaluation_score],
   T.[sort_order]=S.[sort_order],
   T.[customer_status]=S.[customer_status],
+  T.[ext_field]=S.[ext_field],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[customer_code],[customer_name1],[customer_name2],[customer_short_name],
@@ -453,10 +465,9 @@ WHEN NOT MATCHED THEN
     S.[delivering_plant],S.[incoterms1],S.[incoterms2],S.[shipping_conditions],S.[customer_pricing_procedure],
     S.[credit_level],S.[credit_amount],S.[discount_rate],S.[sales_by],S.[customer_level],S.[evaluation_score],
     S.[sort_order],S.[customer_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT
   S.rn,
@@ -505,7 +516,6 @@ WHERE T.[tenant_code] = @tenant_code
     SELECT 1
     FROM #st_source S
     WHERE S.[company_code] = T.[company_code]
-      AND S.[plant_code] = LTRIM(RTRIM(T.[plant_code]))
       AND S.[customer_code] = LTRIM(RTRIM(T.[customer_code]))
   );
 
@@ -597,7 +607,7 @@ SELECT
   N'MERGE Customer Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

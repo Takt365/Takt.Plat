@@ -26,7 +26,7 @@ export default {
       targetDatabase: 'Target database',
       sourceRequired: 'Please select a source database',
       targetRequired: 'Please select a target database',
-      hintTargetOnly: 'Source is fixed (Sap_Data or in-DB backfill). Choose the target tenant database.',
+      hintTargetOnly: 'Source is fixed (or in-DB backfill). Choose the target tenant database.',
       hintSourceTarget: 'Choose staging source and target tenant DB. Cron tasks need the same keys in ExecuteParams.',
     },
     signalr: {

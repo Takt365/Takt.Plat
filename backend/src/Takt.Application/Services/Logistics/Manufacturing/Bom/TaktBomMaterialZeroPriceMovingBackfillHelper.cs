@@ -231,6 +231,7 @@ public static class TaktBomMaterialZeroPriceMovingBackfillHelper
             ["price_info"] = priceInfo,
             ["old_model_monthly_average_cost"] = oldAvg,
             ["new_model_monthly_average_cost"] = newAvg,
+            ["material_type"] = header.MaterialType?.Trim() ?? string.Empty,
             ["model_code"] = header.ModelCode?.Trim() ?? string.Empty,
             ["product_code"] = header.ProductCode?.Trim() ?? string.Empty,
         };
@@ -303,27 +304,10 @@ public static class TaktBomMaterialZeroPriceMovingBackfillHelper
     /// <returns>合并后 JSON；超长无法保留时尽量返回原值</returns>
     public static string? AppendMpHistory(string? extField, JsonObject entry)
     {
-        ArgumentNullException.ThrowIfNull(entry);
-        var root = ParseExtFieldObject(extField);
-        var previous = extField?.Trim();
-        if (root[ExtFieldBackfillRootKey] is not JsonObject bk)
-        {
-            bk = new JsonObject();
-            root[ExtFieldBackfillRootKey] = bk;
-        }
-        var hist = ResolveMpHistoryArray(bk);
-        hist.Add(entry.DeepClone());
-        var json = root.ToJsonString();
-        while (json.Length > ExtFieldMaxLength && hist.Count > 1)
-        {
-            hist.RemoveAt(0);
-            json = root.ToJsonString();
-        }
-        if (json.Length <= ExtFieldMaxLength)
-        {
-            return json;
-        }
-        return string.IsNullOrWhiteSpace(previous) ? null : previous;
+        return TaktBomExtFieldBackfillHistoryHelper.Append(
+            extField,
+            TaktBomExtFieldBackfillHistoryHelper.ScopeMp,
+            entry);
     }
 
     /// <summary>
@@ -367,23 +351,4 @@ public static class TaktBomMaterialZeroPriceMovingBackfillHelper
         return new JsonObject();
     }
 
-    /// <summary>
-    /// 取得或创建 _bk.mp 履历数组（若曾为单对象则迁入数组）
-    /// </summary>
-    /// <param name="bk">_bk 对象</param>
-    /// <returns>履历数组</returns>
-    private static JsonArray ResolveMpHistoryArray(JsonObject bk)
-    {
-        if (bk[ExtFieldBackfillMpKey] is JsonArray arr)
-        {
-            return arr;
-        }
-        var hist = new JsonArray();
-        if (bk[ExtFieldBackfillMpKey] is JsonObject single)
-        {
-            hist.Add(single.DeepClone());
-        }
-        bk[ExtFieldBackfillMpKey] = hist;
-        return hist;
-    }
 }

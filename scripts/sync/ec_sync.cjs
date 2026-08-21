@@ -4,7 +4,7 @@
 // 文件名称：ec_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 工程变更同步（PP_SapEcn/PP_SapEcnSub → ec_source + ec_source_detail；增量 INSERT；含 delta/oper 日志）
+// 功能描述：工程变更同步（PP_SapEcn/PP_SapEcnSub → ec_source + ec_source_detail；增量 INSERT；含 delta/oper 日志）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -37,7 +37,7 @@ function parseEcSummaryCounts(text) {
 
 (async () => {
   console.log('==========================================');
-  console.log('  SAP EC main + detail sync');
+  console.log('  EC main + detail sync');
   console.log('  BATCH_SIZE: ' + formatBatchSizeLabel());
   console.log('==========================================');
 
@@ -243,7 +243,7 @@ SELECT
   '{}',
   (SELECT mi.source_ec_no AS source_ec_no FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
   '{}',
-  N'INSERT SAP EC Main',
+  N'INSERT EC Main',
   '127.0.0.1', 'Server',
   'SQLCMD', 'Server', 'Windows', 'Server',
   GETDATE(), 0,
@@ -271,7 +271,7 @@ SELECT
   '{}',
   (SELECT CAST(di.source_ec_id AS NVARCHAR) AS source_ec_id, di.legacy_part_no AS legacy_part_no FOR JSON PATH, WITHOUT_ARRAY_WRAPPER),
   '{}',
-  N'INSERT SAP EC Detail',
+  N'INSERT EC Detail',
   '127.0.0.1', 'Server',
   'SQLCMD', 'Server', 'Windows', 'Server',
   GETDATE(), 0,

@@ -77,4 +77,12 @@ public interface ITaktBomMaterialZeroPriceService
     /// <returns>打标统计</returns>
     Task<TaktBomMaterialZeroPricePcbSectMarkResultDto> MarkBomMaterialZeroPricePcbSectAsync(
         TaktBomMaterialZeroPricePcbSectMarkDto dto);
+
+    /// <summary>
+    /// Quartz：判定日所在自然月，按明细/主表行内 PlantCode 回填零价移动价
+    /// </summary>
+    /// <param name="asOfDate">判定日；默认今天</param>
+    /// <returns>回填统计；无工厂数据时 null</returns>
+    Task<TaktBomMaterialZeroPriceMovingBackfillResultDto?> RunScheduledBomMaterialZeroPriceMovingBackfillAsync(
+        DateTime? asOfDate = null);
 }

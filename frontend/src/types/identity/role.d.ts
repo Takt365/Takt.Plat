@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 角色实体 代表系统角色（RBAC权限模型） 参照 SAP Role (AGR_NAME) 设计
+ * 角色实体 代表系统角色（RBAC权限模型）
  * 对应前端 TaktRoleDto
  * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Role

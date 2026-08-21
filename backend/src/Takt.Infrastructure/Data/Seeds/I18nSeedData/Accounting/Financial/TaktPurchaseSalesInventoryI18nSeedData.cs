@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Accounting.Financial
 // 文件名称：TaktPurchaseSalesInventoryI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchaseSalesInventory 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPurchaseSalesInventoryI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasesalesinventory.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktGeneralMaterials/options 或 TaktMaterialPlants/options；DictValue=MaterialCode）"),
 
             // entity.purchasesalesinventory.materialdescription
-            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "en-US", "物料描述_us", "物料描述（冗余）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.purchasesalesinventory.materialdescription
-            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.purchasesalesinventory.materialdescription
-            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "zh-CN", "物料描述", "物料描述（冗余）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.purchasesalesinventory.materialdescription
-            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余）"),
+            new TranslationSeedItem("entity.purchasesalesinventory.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.purchasesalesinventory.valuation
             new TranslationSeedItem("entity.purchasesalesinventory.valuation", "en-US", "评估类别_us", "评估类别（字典 logistics_valuation_class_category；Z792=成品，Z790=半成品，Z300=原材料）"),

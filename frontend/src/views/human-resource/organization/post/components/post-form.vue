@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/organization/post/components -->
 <!-- 文件名称：post-form.vue -->
-<!-- 功能描述：岗位实体 代表组织架构中的岗位/职位 参照 SAP Position维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
+<!-- 功能描述：岗位实体 代表组织架构中的岗位/职位维护弹窗内嵌表单。由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成；defineExpose 提供 validate、getValues、resetFields -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -27,26 +27,39 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-              <a-col :span="12">
-                <a-form-item
-                  :label="t('common.page.entity.culturecode')"
-                  name="cultureCode"
-                >
-                  <a-input
-                    v-model:value="formState.cultureCode"
-                    disabled
-                    :placeholder="t('common.page.form.placeholder.input')"
-                  />
-                </a-form-item>
-              </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.code')"
+                :label="pi.label('plantCode')"
+                name="plantCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.plantCode"
+                  api-url="TaktPlants/options"
+                  :placeholder="pi.ph('plantCode')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('cultureCode')"
+                name="cultureCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.cultureCode"
+                  dict-type="sys_culture_code"
+                  :placeholder="pi.ph('cultureCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('postCode')"
                 name="postCode"
               >
                 <a-input
                   v-model:value="formState.postCode"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.code') })"
+                  :placeholder="pi.ph('postCode')"
                   show-count
                   :maxlength="50"
                   allow-clear
@@ -56,12 +69,12 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.name')"
+                :label="pi.label('postName')"
                 name="postName"
               >
                 <a-input
                   v-model:value="formState.postName"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.name') })"
+                  :placeholder="pi.ph('postName')"
                   show-count
                   :maxlength="100"
                   allow-clear
@@ -70,62 +83,74 @@
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.deptid')"
+                :label="pi.label('deptId')"
                 name="deptId"
               >
-                <a-input
+                <TaktSelect
                   v-model:value="formState.deptId"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.deptid') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                  api-url="TaktDepts/tree-options"
+                  :placeholder="pi.ph('deptId')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.category')"
+                :label="pi.label('deptName')"
+                name="deptName"
+              >
+                <a-input
+                  v-model:value="formState.deptName"
+                  :placeholder="pi.ph('deptName')"
+                  show-count
+                  :maxlength="100"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item
+                :label="pi.label('postCategory')"
                 name="postCategory"
               >
                 <TaktSelect
                   v-model:value="formState.postCategory"
                   dict-type="sys_post_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.category') })"
+                  :placeholder="pi.ph('postCategory')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.level')"
+                :label="pi.label('postLevel')"
                 name="postLevel"
               >
                 <TaktSelect
                   v-model:value="formState.postLevel"
                   dict-type="sys_post_level_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.level') })"
+                  :placeholder="pi.ph('postLevel')"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.headcount')"
+                :label="pi.label('headcount')"
                 name="headcount"
               >
                 <a-input-number
                   v-model:value="formState.headcount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.headcount') })"
+                  :placeholder="pi.ph('headcount')"
                   style="width: 100%"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="12">
               <a-form-item
-                :label="t('entity.post.currentcount')"
+                :label="pi.label('currentCount')"
                 name="currentCount"
               >
                 <a-input-number
                   v-model:value="formState.currentCount"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.currentcount') })"
+                  :placeholder="pi.ph('currentCount')"
                   style="width: 100%"
                 />
               </a-form-item>
@@ -140,129 +165,115 @@
       >
         <div :class="formContentClass">
           <a-row :gutter="24">
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.post.responsibilities')"
+                :label="pi.label('responsibilities')"
                 name="responsibilities"
               >
                 <a-input
                   v-model:value="formState.responsibilities"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') })"
+                  :placeholder="pi.ph('responsibilities')"
                   show-count
                   :maxlength="2000"
                   allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.requirements')"
-                name="requirements"
-              >
-                <a-input
-                  v-model:value="formState.requirements"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.requirements') })"
-                  show-count
-                  :maxlength="2000"
-                  allow-clear
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.educationrequired')"
-                name="educationRequired"
-              >
-                <TaktSelect
-                  v-model:value="formState.educationRequired"
-                  dict-type="hr_education_level_category"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.experienceyears')"
-                name="experienceYears"
-              >
-                <a-input-number
-                  v-model:value="formState.experienceYears"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.experienceyears') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.salarymin')"
-                name="salaryMin"
-              >
-                <a-input-number
-                  v-model:value="formState.salaryMin"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymin') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.salarymax')"
-                name="salaryMax"
-              >
-                <a-input-number
-                  v-model:value="formState.salaryMax"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymax') })"
-                  style="width: 100%"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.status')"
-                name="postStatus"
-              >
-                <TaktSelect
-                  v-model:value="formState.postStatus"
-                  dict-type="sys_normal_disable_status"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.status') })"
-                />
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item
-                :label="t('entity.post.isbuiltin')"
-                name="isBuiltIn"
-              >
-                <TaktSelect
-                  v-model:value="formState.isBuiltIn"
-                  dict-type="sys_yes_no_type"
-                  :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') })"
                 />
               </a-form-item>
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('entity.post.description')"
-                name="description"
+                :label="pi.label('requirements')"
+                name="requirements"
+              >
+                <a-input
+                  v-model:value="formState.requirements"
+                  :placeholder="pi.ph('requirements')"
+                  show-count
+                  :maxlength="2000"
+                  allow-clear
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('educationRequired')"
+                name="educationRequired"
+              >
+                <TaktSelect
+                  v-model:value="formState.educationRequired"
+                  dict-type="hr_education_level_category"
+                  :placeholder="pi.ph('educationRequired')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('experienceYears')"
+                name="experienceYears"
+              >
+                <a-input-number
+                  v-model:value="formState.experienceYears"
+                  :placeholder="pi.ph('experienceYears')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('salaryMin')"
+                name="salaryMin"
+              >
+                <a-input-number
+                  v-model:value="formState.salaryMin"
+                  :placeholder="pi.ph('salaryMin')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('salaryMax')"
+                name="salaryMax"
+              >
+                <a-input-number
+                  v-model:value="formState.salaryMax"
+                  :placeholder="pi.ph('salaryMax')"
+                  style="width: 100%"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('isBuiltIn')"
+                name="isBuiltIn"
+              >
+                <TaktSelect
+                  v-model:value="formState.isBuiltIn"
+                  dict-type="sys_yes_no_type"
+                  :placeholder="pi.ph('isBuiltIn')"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('postDescription')"
+                name="postDescription"
               >
                 <a-textarea
-                  v-model:value="formState.description"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.post.description') })"
+                  v-model:value="formState.postDescription"
+                  :placeholder="pi.ph('postDescription')"
                   :rows="2"
                 />
               </a-form-item>
             </a-col>
-            <a-col :span="12">
+            <a-col :span="24">
               <a-form-item
-                :label="t('entity.post.employeeids')"
-                name="employeeIds"
+                :label="pi.label('postStatus')"
+                name="postStatus"
               >
-                <a-input
-                  v-model:value="formState.employeeIds"
-                  :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.employeeids') })"
-                  show-count
-                  :maxlength="20"
-                  allow-clear
+                <TaktSelect
+                  v-model:value="formState.postStatus"
+                  dict-type="sys_normal_disable_status"
+                  :placeholder="pi.ph('postStatus')"
                 />
               </a-form-item>
             </a-col>
@@ -278,6 +289,33 @@
           <a-row :gutter="24">
             <a-col :span="24">
               <a-form-item
+                :label="pi.label('tenantCode')"
+                name="tenantCode"
+              >
+                <a-input
+                  v-model:value="formState.tenantCode"
+                  :placeholder="pi.ph('tenantCode')"
+                  show-count
+                  :maxlength="20"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
+                :label="pi.label('companyCode')"
+                name="companyCode"
+              >
+                <TaktSelect
+                  v-model:value="formState.companyCode"
+                  api-url="TaktCompanies/options"
+                  :placeholder="pi.ph('companyCode')"
+                  disabled
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="24">
+              <a-form-item
                 name="extField"
                 class="takt-form-item-ext-field"
               >
@@ -289,7 +327,7 @@
                     >
                       <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
                     </a-tooltip>
-                    <span>{{ t('common.page.entity.extfield') }}</span>
+                    <span>{{ pi.label('extField') }}</span>
                   </span>
                 </template>
                 <a-textarea
@@ -304,12 +342,12 @@
             </a-col>
             <a-col :span="24">
               <a-form-item
-                :label="t('common.page.entity.remark')"
+                :label="pi.label('remark')"
                 name="remark"
               >
                 <a-textarea
                   v-model:value="formState.remark"
-                  :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+                  :placeholder="pi.ph('remark')"
                   :rows="4"
                   show-count
                   :maxlength="400"
@@ -326,12 +364,16 @@
 
 <script setup lang="ts">
 /**
- * 岗位实体 代表组织架构中的岗位/职位 参照 SAP Position维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 岗位实体 代表组织架构中的岗位/职位维护表单 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/organization/post/components
  */
 import { reactive, watch, computed, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Rule } from 'ant-design-vue/es/form'
+import { usePostI18n } from '../composables/use-post-i18n'
+
+/** 实体字段 i18n */
+const pi = usePostI18n()
 import type { PostCreate } from '@/types/human-resource/organization/post'
 import TaktSelect from '@/components/business/takt-select/index.vue'
 import { RiQuestionLine } from '@remixicon/vue'
@@ -342,37 +384,35 @@ import { useUserStore } from '@/stores/identity/user'
 /** i18n 翻译函数 */
 const { t } = useI18n()
 
-/** Pinia：租户/公司上下文 */
+/** Pinia：租户上下文 */
 const tenantStore = useTenantStore()
-/** Pinia：用户上下文 */
+/** Pinia：用户上下文（当前公司 CultureCode 注入源） */
 const userStore = useUserStore()
 
 /**
- * 上下文隔离字段：租户 / 公司 / 公司默认语言（登录或公司切换注入，表单只读）
+ * 上下文隔离字段：租户 / 公司 / CultureCode / PlantCode（登录或公司切换注入；工厂可选改）
  * @param target 表单数据
- * @param force 为 true 时强制覆盖（新增态或公司切换）
+ * @param force 为 true 时强制覆盖（新增态或上下文切换）
  */
 function applyScopeDefaults(target: Record<string, unknown>, force = false) {
-  if (formFields.includes('tenantCode') && (force || !target.tenantCode)) {
+  if (force || !target.tenantCode) {
     target.tenantCode = tenantStore.tenantCode
   }
-  if (formFields.includes('companyCode') && (force || !target.companyCode)) {
+  if (force || !target.companyCode) {
     target.companyCode = tenantStore.companyCode
   }
-  if (formFields.includes('cultureCode') && (force || !target.cultureCode)) {
+  if (force || !target.cultureCode) {
     target.cultureCode = userStore.userInfo?.companyDefaultCulture ?? userStore.userInfo?.cultureCode ?? ''
   }
   if (force || !target.plantCode) {
     target.plantCode = tenantStore.currentCompanyRelatedPlant || ''
   }
-
 }
-/** 表单内容区高度 class（字段多时 tab-10 行） */
-const formContentClass = computed(() => (formFields.length > 10 ? 'takt-form-content-rows-10' : 'takt-form-content-rows-5'))
+/** 表单内容区高度 class（多 Tab 大表单固定 10 行高度） */
+const formContentClass = 'takt-form-content-rows-10'
 /** 当前激活的 Tab key */
 const activeTab = ref('tab-0')
-/** CreateDto 字段名列表（与 formState 键对齐） */
-const formFields = ["tenantCode","companyCode","cultureCode","postCode","postName","deptId","postCategory","postLevel","headcount","currentCount","responsibilities","requirements","educationRequired","experienceYears","salaryMin","salaryMax","postStatus","isBuiltIn","description","employeeIds","extField","remark"]
+
 
 /** 父级传入的编辑 DTO；新增时为 undefined 或空对象 */
 interface Props {
@@ -392,8 +432,8 @@ const formRef = ref()
 const formState = reactive<Record<string, any>>({})
 /** 表单字段默认值（字典 IsDefault=1，来自 TaktDictDataSeedData） */
 const FORM_FIELD_DEFAULTS: Record<string, string | number> = {
-  postStatus: 1,
-  isBuiltIn: 0
+  isBuiltIn: 0,
+  postStatus: 1
 }
 
 /** 写入表单默认值（新增 / resetFields / 弹窗再次打开时） */
@@ -435,10 +475,9 @@ watch(
 
 /** 公司/租户切换时，新增态表单同步隔离字段 */
 watch(
-  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture] as const,
+  () => [tenantStore.tenantCode, tenantStore.companyCode, userStore.userInfo?.companyDefaultCulture, tenantStore.currentCompanyRelatedPlant] as const,
   () => {
-    const isCreate = !props.formData?.postId
-    if (isCreate) {
+    if (!props.formData?.postId) {
       applyScopeDefaults(formState, true)
     }
   },
@@ -446,49 +485,56 @@ watch(
 
 /** 表单校验规则（与 FluentValidation 必填对齐） */
 const rules = computed<Record<string, Rule[]>>(() => ({
+  plantCode: [
+    {
+      required: true,
+      message: pi.ph('plantCode'),
+      trigger: 'change'
+    }
+  ],
   postCode: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.post.code') }),
+      message: pi.ph('postCode'),
       trigger: 'blur'
     }
   ],
   postName: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.post.name') }),
+      message: pi.ph('postName'),
       trigger: 'blur'
     }
   ],
   deptId: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.post.deptid') }),
-      trigger: 'blur'
+      message: pi.ph('deptId'),
+      trigger: 'change'
     }
   ],
   postCategory: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.post.category') }),
+      message: pi.ph('postCategory'),
       trigger: 'change'
     }
   ],
   postLevel: [
     {
       required: true,
-      message: t('common.page.form.placeholder.select', { field: t('entity.post.level') }),
+      message: pi.ph('postLevel'),
       trigger: 'change'
     }
   ],
   headcount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.headcount') }))
+        return Promise.reject(pi.ph('headcount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.headcount') }))
+        return Promise.reject(pi.ph('headcount'))
       }
       return Promise.resolve()
     },
@@ -497,11 +543,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   currentCount: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.currentcount') }))
+        return Promise.reject(pi.ph('currentCount'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.currentcount') }))
+        return Promise.reject(pi.ph('currentCount'))
       }
       return Promise.resolve()
     },
@@ -510,25 +556,25 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   responsibilities: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') }),
+      message: pi.ph('responsibilities'),
       trigger: 'blur'
     }
   ],
   requirements: [
     {
       required: true,
-      message: t('common.page.form.placeholder.required', { field: t('entity.post.requirements') }),
+      message: pi.ph('requirements'),
       trigger: 'blur'
     }
   ],
   educationRequired: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') }))
+        return Promise.reject(pi.ph('educationRequired'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') }))
+        return Promise.reject(pi.ph('educationRequired'))
       }
       return Promise.resolve()
     },
@@ -537,24 +583,11 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   experienceYears: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.experienceyears') }))
+        return Promise.reject(pi.ph('experienceYears'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.experienceyears') }))
-      }
-      return Promise.resolve()
-    },
-    trigger: 'change'
-  }],
-  postStatus: [{
-    validator: async (_rule, value) => {
-      if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.status') }))
-      }
-      const num = typeof value === 'number' ? value : Number(value)
-      if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.status') }))
+        return Promise.reject(pi.ph('experienceYears'))
       }
       return Promise.resolve()
     },
@@ -563,11 +596,24 @@ const rules = computed<Record<string, Rule[]>>(() => ({
   isBuiltIn: [{
     validator: async (_rule, value) => {
       if (value === undefined || value === null || value === '') {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') }))
+        return Promise.reject(pi.ph('isBuiltIn'))
       }
       const num = typeof value === 'number' ? value : Number(value)
       if (!Number.isFinite(num)) {
-        return Promise.reject(t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') }))
+        return Promise.reject(pi.ph('isBuiltIn'))
+      }
+      return Promise.resolve()
+    },
+    trigger: 'change'
+  }],
+  postStatus: [{
+    validator: async (_rule, value) => {
+      if (value === undefined || value === null || value === '') {
+        return Promise.reject(pi.ph('postStatus'))
+      }
+      const num = typeof value === 'number' ? value : Number(value)
+      if (!Number.isFinite(num)) {
+        return Promise.reject(pi.ph('postStatus'))
       }
       return Promise.resolve()
     },
@@ -608,13 +654,13 @@ function getValues(): Record<string, any> {
     const rawsalaryMax = payload.salaryMax
     payload.salaryMax = typeof rawsalaryMax === 'number' ? rawsalaryMax : Number(rawsalaryMax)
   }
-  if ('postStatus' in payload) {
-    const rawpostStatus = payload.postStatus
-    payload.postStatus = typeof rawpostStatus === 'number' ? rawpostStatus : Number(rawpostStatus)
-  }
   if ('isBuiltIn' in payload) {
     const rawisBuiltIn = payload.isBuiltIn
     payload.isBuiltIn = typeof rawisBuiltIn === 'number' ? rawisBuiltIn : Number(rawisBuiltIn)
+  }
+  if ('postStatus' in payload) {
+    const rawpostStatus = payload.postStatus
+    payload.postStatus = typeof rawpostStatus === 'number' ? rawpostStatus : Number(rawpostStatus)
   }
   if ('sortOrder' in payload) delete payload.sortOrder
   return payload

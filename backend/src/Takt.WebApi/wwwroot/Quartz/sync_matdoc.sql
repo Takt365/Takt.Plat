@@ -34,8 +34,9 @@ CREATE TABLE #hdr (
   [bill_of_lading_code] NVARCHAR(16), [delivery_code] NVARCHAR(10),
   [transaction_code] NVARCHAR(40), [posted_by] NVARCHAR(12),
   [tenant_code] NVARCHAR(3), [company_code] NVARCHAR(4), [culture_code] NVARCHAR(5),
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #item (
   [rn] INT, [id] BIGINT, [material_document_id] BIGINT,
@@ -70,8 +71,9 @@ CREATE TABLE #item (
   [mkpf_reference_code] NVARCHAR(32), [im_delivery_code] NVARCHAR(20), [im_delivery_item] INT,
   [posted_by] NVARCHAR(12), [is_obsolete] INT,
   [tenant_code] NVARCHAR(3), [company_code] NVARCHAR(4), [culture_code] NVARCHAR(5),
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #hdr_delta (rn INT, oper_type NVARCHAR(10), id BIGINT, [material_document_year] NVARCHAR(4), [material_document_code] NVARCHAR(10));
 CREATE TABLE #item_delta (rn INT, oper_type NVARCHAR(10), id BIGINT, [material_document_code] NVARCHAR(10), [line_number] INT);
@@ -85,7 +87,7 @@ SELECT S.rn, @base_id + S.rn, S.[plant_code],
   S.[document_date], S.[posting_date],
   S.[reference_code], S.[header_text], S.[bill_of_lading_code], S.[delivery_code],
   S.[transaction_code], S.[posted_by],
-  S.[tenant_code], S.[company_code], S.[culture_code], S.[is_deleted], S.[created_at], @sync_user_id
+  S.[tenant_code], S.[company_code], S.[culture_code], S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[material_document_year], N.[material_document_code]) AS rn
   FROM (
@@ -107,9 +109,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[delivery_code])), 10), N'') AS [delivery_code],
       NULLIF(LEFT(LTRIM(RTRIM(R.[transaction_code])), 40), N'') AS [transaction_code],
       NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[material_document_year])), LTRIM(RTRIM(R.[material_document_code]))
         ORDER BY LTRIM(RTRIM(R.[material_document_year])), LTRIM(RTRIM(R.[material_document_code]))
       ) AS dup_rn
@@ -174,6 +183,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[plant_code],N'')<>ISNULL(S.[plant_code],N'')
   OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'')
   OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[transaction_event_type]=S.[transaction_event_type],
   T.[document_type]=S.[document_type],
@@ -188,14 +206,18 @@ WHEN MATCHED AND (
   T.[posted_by]=S.[posted_by],
   T.[plant_code]=S.[plant_code],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[plant_code],[material_document_code],[material_document_year],[transaction_event_type],[document_type],[revaluation_type],[document_date],[posting_date],[reference_code],[header_text],[bill_of_lading_code],[delivery_code],[transaction_code],[posted_by],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[plant_code],S.[material_document_code],S.[material_document_year],S.[transaction_event_type],S.[document_type],S.[revaluation_type],S.[document_date],S.[posting_date],S.[reference_code],S.[header_text],S.[bill_of_lading_code],S.[delivery_code],S.[transaction_code],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[plant_code],S.[material_document_code],S.[material_document_year],S.[transaction_event_type],S.[document_type],S.[revaluation_type],S.[document_date],S.[posting_date],S.[reference_code],S.[header_text],S.[bill_of_lading_code],S.[delivery_code],S.[transaction_code],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[material_document_year], INSERTED.[material_document_code]
 INTO #hdr_delta (rn, oper_type, id, [material_document_year], [material_document_code]);
 
@@ -256,7 +278,7 @@ SELECT S.rn, @base_id+1000000000+S.rn, 0,
   S.[price_control], S.[manufacturer_part_material_code],
   S.[mkpf_reference_code], S.[im_delivery_code], S.[im_delivery_item],
   S.[posted_by], S.[is_obsolete],
-  S.[tenant_code], S.[company_code], S.[culture_code], S.[is_deleted], S.[created_at], @sync_user_id
+  S.[tenant_code], S.[company_code], S.[culture_code], S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[material_document_year], N.[material_document_code], N.[line_number]) AS rn
   FROM (
@@ -342,9 +364,16 @@ FROM (
       TRY_CAST(R.[im_delivery_item] AS INT) AS [im_delivery_item],
       NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
       ISNULL(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
-      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(SH.[material_document_year])), LTRIM(RTRIM(R.[material_document_code])), COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
         ORDER BY COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
       ) AS dup_rn
@@ -478,6 +507,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[is_obsolete],-1)<>ISNULL(S.[is_obsolete],-1)
   OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'')
   OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[plant_code]=S.[plant_code],
   T.[material_document_code]=S.[material_document_code],
@@ -548,14 +586,18 @@ WHEN MATCHED AND (
   T.[posted_by]=S.[posted_by],
   T.[is_obsolete]=S.[is_obsolete],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[material_document_id],[plant_code],[material_document_code],[line_number],[line_id],[parent_line_id],[line_depth],[movement_type],[auto_created_flag],[material_code],[warehouse_code],[batch_code],[stock_type],[restricted_stock_flag],[special_stock],[supplier_code],[customer_code],[debit_credit_indicator],[currency_code],[local_currency_amount],[alternative_amount],[quantity],[base_unit],[entry_quantity],[entry_unit],[po_price_quantity],[po_price_unit],[purchase_order_code],[purchase_order_item],[reference_document_year],[reference_document_code],[reference_document_item],[original_material_document_year],[original_material_document_code],[original_line_number],[delivery_completed_flag],[item_text],[equipment_code],[goods_recipient],[unloading_point],[business_area_code],[controlling_area_code],[trading_partner_business_area],[production_order_code],[asset_code],[asset_sub_code],[fiscal_year],[post_to_previous_period_flag],[post_to_previous_year_flag],[accounting_document_code],[accounting_document_item],[revaluation_document_code],[revaluation_document_item],[reservation_code],[reservation_item],[final_issue_flag],[reservation_quantity],[receiving_material_code],[receiving_plant_code],[receiving_warehouse_code],[profit_center_code],[valuated_stock_quantity],[total_valuated_stock_value],[price_control],[manufacturer_part_material_code],[mkpf_reference_code],[im_delivery_code],[im_delivery_item],[posted_by],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[material_document_id],S.[plant_code],S.[material_document_code],S.[line_number],S.[line_id],S.[parent_line_id],S.[line_depth],S.[movement_type],S.[auto_created_flag],S.[material_code],S.[warehouse_code],S.[batch_code],S.[stock_type],S.[restricted_stock_flag],S.[special_stock],S.[supplier_code],S.[customer_code],S.[debit_credit_indicator],S.[currency_code],S.[local_currency_amount],S.[alternative_amount],S.[quantity],S.[base_unit],S.[entry_quantity],S.[entry_unit],S.[po_price_quantity],S.[po_price_unit],S.[purchase_order_code],S.[purchase_order_item],S.[reference_document_year],S.[reference_document_code],S.[reference_document_item],S.[original_material_document_year],S.[original_material_document_code],S.[original_line_number],S.[delivery_completed_flag],S.[item_text],S.[equipment_code],S.[goods_recipient],S.[unloading_point],S.[business_area_code],S.[controlling_area_code],S.[trading_partner_business_area],S.[production_order_code],S.[asset_code],S.[asset_sub_code],S.[fiscal_year],S.[post_to_previous_period_flag],S.[post_to_previous_year_flag],S.[accounting_document_code],S.[accounting_document_item],S.[revaluation_document_code],S.[revaluation_document_item],S.[reservation_code],S.[reservation_item],S.[final_issue_flag],S.[reservation_quantity],S.[receiving_material_code],S.[receiving_plant_code],S.[receiving_warehouse_code],S.[profit_center_code],S.[valuated_stock_quantity],S.[total_valuated_stock_value],S.[price_control],S.[manufacturer_part_material_code],S.[mkpf_reference_code],S.[im_delivery_code],S.[im_delivery_item],S.[posted_by],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[material_document_id],S.[plant_code],S.[material_document_code],S.[line_number],S.[line_id],S.[parent_line_id],S.[line_depth],S.[movement_type],S.[auto_created_flag],S.[material_code],S.[warehouse_code],S.[batch_code],S.[stock_type],S.[restricted_stock_flag],S.[special_stock],S.[supplier_code],S.[customer_code],S.[debit_credit_indicator],S.[currency_code],S.[local_currency_amount],S.[alternative_amount],S.[quantity],S.[base_unit],S.[entry_quantity],S.[entry_unit],S.[po_price_quantity],S.[po_price_unit],S.[purchase_order_code],S.[purchase_order_item],S.[reference_document_year],S.[reference_document_code],S.[reference_document_item],S.[original_material_document_year],S.[original_material_document_code],S.[original_line_number],S.[delivery_completed_flag],S.[item_text],S.[equipment_code],S.[goods_recipient],S.[unloading_point],S.[business_area_code],S.[controlling_area_code],S.[trading_partner_business_area],S.[production_order_code],S.[asset_code],S.[asset_sub_code],S.[fiscal_year],S.[post_to_previous_period_flag],S.[post_to_previous_year_flag],S.[accounting_document_code],S.[accounting_document_item],S.[revaluation_document_code],S.[revaluation_document_item],S.[reservation_code],S.[reservation_item],S.[final_issue_flag],S.[reservation_quantity],S.[receiving_material_code],S.[receiving_plant_code],S.[receiving_warehouse_code],S.[profit_center_code],S.[valuated_stock_quantity],S.[total_valuated_stock_value],S.[price_control],S.[manufacturer_part_material_code],S.[mkpf_reference_code],S.[im_delivery_code],S.[im_delivery_item],S.[posted_by],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[material_document_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [material_document_code], [line_number]);
 

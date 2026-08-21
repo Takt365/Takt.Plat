@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/human-resource/organization/post -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：岗位实体 代表组织架构中的岗位/职位 参照 SAP Position管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：岗位实体 代表组织架构中的岗位/职位管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -62,6 +62,7 @@
       :data-source="dataSource"
       :loading="loading"
       :stripe="true"
+      :virtual="true"
       :row-key="getPostId"
       :row-selection="rowSelection"
       :custom-row="onClickRow"
@@ -73,32 +74,32 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'postStatus'">
           <a-switch
-            :checked="getPostField(record, 'postStatus') === 1"
+            :checked="getPostDictValue(record, 'postStatus') === 1"
             :checked-children="t('common.page.button.enable')" :un-checked-children="t('common.page.button.disable')"
             @change="(checked: unknown) => handlePostStatusChange(record, Boolean(checked))"
           />
         </template>
         <template v-else-if="column.key === 'postCategory'">
           <TaktDictTag
-            :value="getPostField(record, 'postCategory')"
+            :value="getPostDictValue(record, 'postCategory')"
             dict-type="sys_post_category"
           />
         </template>
         <template v-else-if="column.key === 'postLevel'">
           <TaktDictTag
-            :value="getPostField(record, 'postLevel')"
+            :value="getPostDictValue(record, 'postLevel')"
             dict-type="sys_post_level_category"
           />
         </template>
         <template v-else-if="column.key === 'educationRequired'">
           <TaktDictTag
-            :value="getPostField(record, 'educationRequired')"
+            :value="getPostDictValue(record, 'educationRequired')"
             dict-type="hr_education_level_category"
           />
         </template>
         <template v-else-if="column.key === 'isBuiltIn'">
           <TaktDictTag
-            :value="getPostField(record, 'isBuiltIn')"
+            :value="getPostDictValue(record, 'isBuiltIn')"
             dict-type="sys_yes_no_type"
           />
         </template>
@@ -143,11 +144,31 @@
       @reset="handleAdvancedQueryReset"
     >
       <template #default="{ isFieldVisible }">
+      <div v-show="isFieldVisible('cultureCode')">
+      <a-form-item :label="pi.queryLabel('cultureCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.cultureCode"
+          dict-type="sys_culture_code"
+          :placeholder="pi.queryPh('cultureCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('plantCode')">
+      <a-form-item :label="pi.queryLabel('plantCode')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.plantCode"
+          api-url="TaktPlants/options"
+          :placeholder="pi.queryPh('plantCode', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('postCode')">
-      <a-form-item :label="t('entity.post.code')">
+      <a-form-item :label="pi.queryLabel('postCode')">
         <a-input
           v-model:value="advancedQueryForm.postCode"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.code') })"
+          :placeholder="pi.queryPh('postCode', 'required')"
           show-count
           :maxlength="50"
           allow-clear
@@ -155,10 +176,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postName')">
-      <a-form-item :label="t('entity.post.name')">
+      <a-form-item :label="pi.queryLabel('postName')">
         <a-input
           v-model:value="advancedQueryForm.postName"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.name') })"
+          :placeholder="pi.queryPh('postName', 'required')"
           show-count
           :maxlength="100"
           allow-clear
@@ -166,59 +187,69 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('deptId')">
-      <a-form-item :label="t('entity.post.deptid')">
-        <a-input
+      <a-form-item :label="pi.queryLabel('deptId')">
+        <TaktSelect
           v-model:value="advancedQueryForm.deptId"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.deptid') })"
+          api-url="TaktDepts/tree-options"
+          :placeholder="pi.queryPh('deptId', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
+      <div v-show="isFieldVisible('deptName')">
+      <a-form-item :label="pi.queryLabel('deptName')">
+        <a-input
+          v-model:value="advancedQueryForm.deptName"
+          :placeholder="pi.queryPh('deptName', 'required')"
           show-count
-          :maxlength="20"
+          :maxlength="100"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postCategory')">
-      <a-form-item :label="t('entity.post.category')">
+      <a-form-item :label="pi.queryLabel('postCategory')">
         <TaktSelect
           v-model:value="advancedQueryForm.postCategory"
           dict-type="sys_post_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.category') })"
+          :placeholder="pi.queryPh('postCategory', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('postLevel')">
-      <a-form-item :label="t('entity.post.level')">
+      <a-form-item :label="pi.queryLabel('postLevel')">
         <TaktSelect
           v-model:value="advancedQueryForm.postLevel"
           dict-type="sys_post_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.level') })"
+          :placeholder="pi.queryPh('postLevel', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('headcount')">
-      <a-form-item :label="t('entity.post.headcount')">
+      <a-form-item :label="pi.queryLabel('headcount')">
         <a-input-number
           v-model:value="advancedQueryForm.headcount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.headcount') })"
+          :placeholder="pi.queryPh('headcount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('currentCount')">
-      <a-form-item :label="t('entity.post.currentcount')">
+      <a-form-item :label="pi.queryLabel('currentCount')">
         <a-input-number
           v-model:value="advancedQueryForm.currentCount"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.currentcount') })"
+          :placeholder="pi.queryPh('currentCount', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('responsibilities')">
-      <a-form-item :label="t('entity.post.responsibilities')">
+      <a-form-item :label="pi.queryLabel('responsibilities')">
         <a-input
           v-model:value="advancedQueryForm.responsibilities"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.responsibilities') })"
+          :placeholder="pi.queryPh('responsibilities', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -226,10 +257,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('requirements')">
-      <a-form-item :label="t('entity.post.requirements')">
+      <a-form-item :label="pi.queryLabel('requirements')">
         <a-input
           v-model:value="advancedQueryForm.requirements"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.requirements') })"
+          :placeholder="pi.queryPh('requirements', 'required')"
           show-count
           :maxlength="2000"
           allow-clear
@@ -237,77 +268,77 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('educationRequired')">
-      <a-form-item :label="t('entity.post.educationrequired')">
+      <a-form-item :label="pi.queryLabel('educationRequired')">
         <TaktSelect
           v-model:value="advancedQueryForm.educationRequired"
           dict-type="hr_education_level_category"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.educationrequired') })"
+          :placeholder="pi.queryPh('educationRequired', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('experienceYears')">
-      <a-form-item :label="t('entity.post.experienceyears')">
+      <a-form-item :label="pi.queryLabel('experienceYears')">
         <a-input-number
           v-model:value="advancedQueryForm.experienceYears"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.experienceyears') })"
+          :placeholder="pi.queryPh('experienceYears', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salaryMin')">
-      <a-form-item :label="t('entity.post.salarymin')">
+      <a-form-item :label="pi.queryLabel('salaryMin')">
         <a-input-number
           v-model:value="advancedQueryForm.salaryMin"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymin') })"
+          :placeholder="pi.queryPh('salaryMin', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('salaryMax')">
-      <a-form-item :label="t('entity.post.salarymax')">
+      <a-form-item :label="pi.queryLabel('salaryMax')">
         <a-input-number
           v-model:value="advancedQueryForm.salaryMax"
-          :placeholder="t('common.page.form.placeholder.required', { field: t('entity.post.salarymax') })"
+          :placeholder="pi.queryPh('salaryMax', 'required')"
           style="width: 100%"
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('postStatus')">
-      <a-form-item :label="t('entity.post.status')">
-        <TaktSelect
-          v-model:value="advancedQueryForm.postStatus"
-          dict-type="sys_normal_disable_status"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.status') })"
-          allow-clear
-        />
-      </a-form-item>
-      </div>
       <div v-show="isFieldVisible('isBuiltIn')">
-      <a-form-item :label="t('entity.post.isbuiltin')">
+      <a-form-item :label="pi.queryLabel('isBuiltIn')">
         <TaktSelect
           v-model:value="advancedQueryForm.isBuiltIn"
           dict-type="sys_yes_no_type"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('entity.post.isbuiltin') })"
+          :placeholder="pi.queryPh('isBuiltIn', 'select')"
           allow-clear
         />
       </a-form-item>
       </div>
-      <div v-show="isFieldVisible('description')">
-      <a-form-item :label="t('entity.post.description')">
+      <div v-show="isFieldVisible('postDescription')">
+      <a-form-item :label="pi.queryLabel('postDescription')">
         <a-textarea
-          v-model:value="advancedQueryForm.description"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('entity.post.description') })"
+          v-model:value="advancedQueryForm.postDescription"
+          :placeholder="pi.queryPh('postDescription', 'optional')"
           :rows="2"
           allow-clear
         />
       </a-form-item>
       </div>
+      <div v-show="isFieldVisible('postStatus')">
+      <a-form-item :label="pi.queryLabel('postStatus')">
+        <TaktSelect
+          v-model:value="advancedQueryForm.postStatus"
+          dict-type="sys_normal_disable_status"
+          :placeholder="pi.queryPh('postStatus', 'select')"
+          allow-clear
+        />
+      </a-form-item>
+      </div>
       <div v-show="isFieldVisible('createdAtStart')">
-      <a-form-item :label="t('common.page.entity.createdatstart')">
+      <a-form-item :label="pi.queryLabel('createdAtStart')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtStart"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatstart') })"
+          :placeholder="pi.queryPh('createdAtStart', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -315,10 +346,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('createdAtEnd')">
-      <a-form-item :label="t('common.page.entity.createdatend')">
+      <a-form-item :label="pi.queryLabel('createdAtEnd')">
         <a-date-picker
           v-model:value="advancedQueryForm.createdAtEnd"
-          :placeholder="t('common.page.form.placeholder.select', { field: t('common.page.entity.createdatend') })"
+          :placeholder="pi.queryPh('createdAtEnd', 'select')"
           value-format="YYYY-MM-DD HH:mm:ss"
             show-time
           style="width: 100%"
@@ -340,7 +371,7 @@
             >
               <span class="takt-form-label-hint-icon"><RiQuestionLine class="takt-remix-icon" /></span>
             </a-tooltip>
-            <span>{{ t('common.page.entity.extfield') }}</span>
+            <span>{{ pi.queryLabel('extField') }}</span>
           </span>
         </template>
         <a-textarea
@@ -354,10 +385,10 @@
       </a-form-item>
       </div>
       <div v-show="isFieldVisible('remark')">
-      <a-form-item :label="t('common.page.entity.remark')">
+      <a-form-item :label="pi.queryLabel('remark')">
         <a-textarea
           v-model:value="advancedQueryForm.remark"
-          :placeholder="t('common.page.form.placeholder.optional', { field: t('common.page.entity.remark') })"
+          :placeholder="pi.queryPh('remark', 'optional')"
             :rows="4"
             show-count
             :maxlength="400"
@@ -371,14 +402,15 @@
     <!-- 导入对话框 -->
     <TaktModal
       v-model:open="importVisible"
-      :title="t('common.dialog.title.import', { entity: t('entity.post._self') })"
+      :title="t('common.dialog.title.import', { entity: pi.self() })"
       :width="600"
       :footer="null"
       :cancel-text="t('common.page.button.close')"
       @cancel="handleImportCancel"
     >
       <TaktImportFile
-        entity-i18n-key="entity.post._self"
+        v-if="importVisible"
+        :entity-i18n-key="POST_SELF_I18N_KEY"
         file-type="xlsx"
         :sheet-name="excelNames.sheet"
         :template-file-name="excelNames.fileBase"
@@ -406,7 +438,7 @@
 
 <script setup lang="ts">
 /**
- * 岗位实体 代表组织架构中的岗位/职位 参照 SAP Position管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 岗位实体 代表组织架构中的岗位/职位管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/human-resource/organization/post
  */
 import { ref, computed, onMounted } from 'vue'
@@ -421,15 +453,28 @@ import type { Post, PostQuery } from '@/types/human-resource/organization/post'
 import { useDictDataStore } from '@/stores/foundation/dict-data'
 import { taktExcelEntityNames } from '@/utils/naming'
 import { resolveExportDownloadFileName } from '@/utils/export-download-name'
+import { normalizeImportResult, type TaktImportResult } from '@/utils/takt-import-result'
 import { RiEditLine, RiDeleteBinLine, RiQuestionLine } from '@remixicon/vue'
 
+import {
+  usePostI18n,
+  POST_LIST_FIELDS,
+  POST_QUERY_STRING_FIELDS,
+  POST_QUERY_FIELDS,
+  POST_SELF_I18N_KEY,
+} from './composables/use-post-i18n'
+
+/** 实体字段 i18n（标签/占位符统一入口） */
+const pi = usePostI18n()
+/** 表格行类型（TaktSingleTable slot record 与 dataSource 行兼容） */
+type PostRowRecord = Post | Record<string, unknown>
 /** i18n 翻译函数 */
 const { t } = useI18n()
 /** Excel 导入/导出默认 sheet 名与文件名前缀 */
 const excelNames = taktExcelEntityNames('TaktPost')
 /** 列表快捷查询占位文案 */
 const searchPlaceholder = computed(
-  () => t('common.page.form.placeholder.search', { keyword: t('entity.post._self') })
+  () => t('common.page.form.placeholder.search', { keyword: pi.self() })
 )
 
 /** 快捷查询关键字 */
@@ -445,9 +490,9 @@ const pageSize = ref(getTaktDefaultPageSize())
 /** 分页 total */
 const total = ref(0)
 /** 工具栏单选时当前行 */
-const selectedRow = ref<Post | null>(null)
+const selectedRow = ref<PostRowRecord | null>(null)
 /** 表格多选行 */
-const selectedRows = ref<Post[]>([])
+const selectedRows = ref<PostRowRecord[]>([])
 /** 表格多选 row-key 集合 */
 const selectedRowKeys = ref<(string | number)[]>([])
 
@@ -464,51 +509,74 @@ const formRef = ref()
 
 /** 高级查询抽屉是否打开 */
 const advancedQueryVisible = ref(false)
+/**
+ * 是否存在任一业务查询条件（分页除外）；无参时不请求列表/导出
+ * @returns {boolean}
+ */
+function hasAnyListQueryFilter(): boolean {
+  const kw = (queryKeyword.value ?? '').trim()
+  if (kw.length > 0) {
+    return true
+  }
+  const form = advancedQueryForm.value
+  for (const key of POST_QUERY_STRING_FIELDS) {
+    if (String(form[key] ?? '').trim().length > 0) {
+      return true
+    }
+  }
+  if (form.headcount !== undefined && form.headcount !== null) {
+    return true
+  }
+  if (form.currentCount !== undefined && form.currentCount !== null) {
+    return true
+  }
+  if (form.educationRequired !== undefined && form.educationRequired !== null) {
+    return true
+  }
+  if (form.experienceYears !== undefined && form.experienceYears !== null) {
+    return true
+  }
+  if (form.salaryMin !== undefined && form.salaryMin !== null) {
+    return true
+  }
+  if (form.salaryMax !== undefined && form.salaryMax !== null) {
+    return true
+  }
+  if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
+    return true
+  }
+  if (form.postStatus !== undefined && form.postStatus !== null) {
+    return true
+  }
+  return false
+}
+
+/**
+ * 创建空的高级查询表单（无默认填充；无参时列表保持空）
+ * @returns {Record<string, unknown>} 高级查询初始模型
+ */
+function createEmptyAdvancedQueryForm() {
+  const form = Object.fromEntries(POST_QUERY_STRING_FIELDS.map((key) => [key, ''])) as Record<
+    (typeof POST_QUERY_STRING_FIELDS)[number],
+    string
+  >
+  return {
+    ...form,
+    headcount: undefined as number | undefined,
+    currentCount: undefined as number | undefined,
+    educationRequired: undefined as number | undefined,
+    experienceYears: undefined as number | undefined,
+    salaryMin: undefined as number | undefined,
+    salaryMax: undefined as number | undefined,
+    isBuiltIn: undefined as number | undefined,
+    postStatus: undefined as number | undefined,  }
+}
 /** 高级查询表单模型 */
-const advancedQueryForm = ref({
-  postCode: '',
-  postName: '',
-  deptId: '',
-  postCategory: '',
-  postLevel: '',
-  headcount: undefined as number | undefined,
-  currentCount: undefined as number | undefined,
-  responsibilities: '',
-  requirements: '',
-  educationRequired: undefined as number | undefined,
-  experienceYears: undefined as number | undefined,
-  salaryMin: undefined as number | undefined,
-  salaryMax: undefined as number | undefined,
-  postStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  description: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-})
+const advancedQueryForm = ref(createEmptyAdvancedQueryForm())
 /** 高级查询字段元数据（列显隐配置） */
-const queryFieldsMeta = computed(() => [
-  { key: 'postCode', label: t('entity.post.code') },
-  { key: 'postName', label: t('entity.post.name') },
-  { key: 'deptId', label: t('entity.post.deptid') },
-  { key: 'postCategory', label: t('entity.post.category') },
-  { key: 'postLevel', label: t('entity.post.level') },
-  { key: 'headcount', label: t('entity.post.headcount') },
-  { key: 'currentCount', label: t('entity.post.currentcount') },
-  { key: 'responsibilities', label: t('entity.post.responsibilities') },
-  { key: 'requirements', label: t('entity.post.requirements') },
-  { key: 'educationRequired', label: t('entity.post.educationrequired') },
-  { key: 'experienceYears', label: t('entity.post.experienceyears') },
-  { key: 'salaryMin', label: t('entity.post.salarymin') },
-  { key: 'salaryMax', label: t('entity.post.salarymax') },
-  { key: 'postStatus', label: t('entity.post.status') },
-  { key: 'isBuiltIn', label: t('entity.post.isbuiltin') },
-  { key: 'description', label: t('entity.post.description') },
-  { key: 'createdAtStart', label: t('common.page.entity.createdatstart') },
-  { key: 'createdAtEnd', label: t('common.page.entity.createdatend') },
-  { key: 'extField', label: t('common.page.entity.extfield') },
-  { key: 'remark', label: t('common.page.entity.remark') }])
+const queryFieldsMeta = computed(() =>
+  POST_QUERY_FIELDS.map((key) => ({ key, label: pi.queryLabel(key) })),
+)
 /** 高级查询当前可见字段 key */
 const visibleQueryFieldKeys = ref<string[]>([])
 /** 列设置抽屉是否打开 */
@@ -527,8 +595,9 @@ const deleteDisabled = computed(() => selectedRows.value.length === 0)
 /** Pinia：字典缓存（列表/查询 dict-type 渲染前预热） */
 const dictDataStore = useDictDataStore()
 
+
 /**
- * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400）
+ * 构建列表/导出查询参数（空字符串与未填数值/日期不下发，避免后端 DateTime? 模型绑定 400；无参不补默认）
  * @param overrides 覆盖分页或导出上限等字段
  * @returns {PostQuery} 查询 DTO
  */
@@ -549,19 +618,15 @@ function buildListQuery(overrides?: Partial<PostQuery>): PostQuery {
       query[key] = v as never
     }
   }
-  assignTrimmed('postCode', form.postCode)
-  assignTrimmed('postName', form.postName)
-  assignTrimmed('deptId', form.deptId)
-  assignTrimmed('postCategory', form.postCategory)
-  assignTrimmed('postLevel', form.postLevel)
+  for (const key of POST_QUERY_STRING_FIELDS) {
+    assignTrimmed(key, form[key])
+  }
   if (form.headcount !== undefined && form.headcount !== null) {
     query.headcount = form.headcount
   }
   if (form.currentCount !== undefined && form.currentCount !== null) {
     query.currentCount = form.currentCount
   }
-  assignTrimmed('responsibilities', form.responsibilities)
-  assignTrimmed('requirements', form.requirements)
   if (form.educationRequired !== undefined && form.educationRequired !== null) {
     query.educationRequired = form.educationRequired
   }
@@ -574,186 +639,48 @@ function buildListQuery(overrides?: Partial<PostQuery>): PostQuery {
   if (form.salaryMax !== undefined && form.salaryMax !== null) {
     query.salaryMax = form.salaryMax
   }
-  if (form.postStatus !== undefined && form.postStatus !== null) {
-    query.postStatus = form.postStatus
-  }
   if (form.isBuiltIn !== undefined && form.isBuiltIn !== null) {
     query.isBuiltIn = form.isBuiltIn
   }
-  assignTrimmed('description', form.description)
-  assignTrimmed('createdAtStart', form.createdAtStart)
-  assignTrimmed('createdAtEnd', form.createdAtEnd)
-  assignTrimmed('extField', form.extField)
-  assignTrimmed('remark', form.remark)
+  if (form.postStatus !== undefined && form.postStatus !== null) {
+    query.postStatus = form.postStatus
+  }
   return query
 }
-/** 页面挂载：租户上下文就绪后加载分页配置，再拉列表 */
+/** 页面挂载：租户上下文就绪后加载分页配置；无查询条件时 loadData 保持空表 */
 onMounted(async () => {
   await ensureTaktPaginationConfigAsync()
   void dictDataStore.loadAllDictDataAsync()
   loadData()
 })
 
+
+/**
+ * 构建列表标准文本列
+ * @param key 列 key / dataIndex
+ * @param title 列标题
+ * @param options 宽度与固定列
+ */
+function buildPostListColumn(
+  key: string,
+  title: string,
+  options?: { width?: number; fixed?: 'left' },
+) {
+  return {
+    title,
+    dataIndex: key,
+    key,
+    width: options?.width ?? 120,
+    resizable: true,
+    ellipsis: true,
+    ...(options?.fixed ? { fixed: options.fixed } : {}),
+  }
+}
+
 /** 表格列定义（i18n 随 locale 变化） */
 const columns = computed<TableColumnsType>(() => [
-  {
-    title: t('common.page.entity.id'),
-    dataIndex: 'postId',
-    key: 'postId',
-    width: 80,
-    resizable: true,
-    ellipsis: true,
-    fixed: 'left',
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postId') ?? ''
-  },
-  {
-    title: t('entity.post.code'),
-    dataIndex: 'postCode',
-    key: 'postCode',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postCode') ?? ''
-  },
-  {
-    title: t('entity.post.name'),
-    dataIndex: 'postName',
-    key: 'postName',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'postName') ?? ''
-  },
-  {
-    title: t('entity.post.deptid'),
-    dataIndex: 'deptId',
-    key: 'deptId',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'deptId') ?? ''
-  },
-  {
-    title: t('entity.post.category'),
-    dataIndex: 'postCategory',
-    key: 'postCategory',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.post.level'),
-    dataIndex: 'postLevel',
-    key: 'postLevel',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.post.headcount'),
-    dataIndex: 'headcount',
-    key: 'headcount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'headcount') ?? ''
-  },
-  {
-    title: t('entity.post.currentcount'),
-    dataIndex: 'currentCount',
-    key: 'currentCount',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'currentCount') ?? ''
-  },
-  {
-    title: t('entity.post.responsibilities'),
-    dataIndex: 'responsibilities',
-    key: 'responsibilities',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'responsibilities') ?? ''
-  },
-  {
-    title: t('entity.post.requirements'),
-    dataIndex: 'requirements',
-    key: 'requirements',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'requirements') ?? ''
-  },
-  {
-    title: t('entity.post.educationrequired'),
-    dataIndex: 'educationRequired',
-    key: 'educationRequired',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.post.experienceyears'),
-    dataIndex: 'experienceYears',
-    key: 'experienceYears',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'experienceYears') ?? ''
-  },
-  {
-    title: t('entity.post.salarymin'),
-    dataIndex: 'salaryMin',
-    key: 'salaryMin',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'salaryMin') ?? ''
-  },
-  {
-    title: t('entity.post.salarymax'),
-    dataIndex: 'salaryMax',
-    key: 'salaryMax',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'salaryMax') ?? ''
-  },
-  {
-    title: t('entity.post.status'),
-    dataIndex: 'postStatus',
-    key: 'postStatus',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.post.isbuiltin'),
-    dataIndex: 'isBuiltIn',
-    key: 'isBuiltIn',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-  },
-  {
-    title: t('entity.post.description'),
-    dataIndex: 'description',
-    key: 'description',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'description') ?? ''
-  },
-  {
-    title: t('entity.post.employeeposts'),
-    dataIndex: 'employeePosts',
-    key: 'employeePosts',
-    width: 120,
-    resizable: true,
-    ellipsis: true,
-    customRender: ({ record }: { record: any }) => getPostField(record, 'employeePosts') ?? ''
-  },
+  buildPostListColumn('postId', t('common.page.entity.id'), { width: 80, fixed: 'left' }),
+  ...POST_LIST_FIELDS.map((key) => buildPostListColumn(key, pi.label(key))),
   CreateActionColumn({
     actions: [
       {
@@ -762,7 +689,7 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiEditLine,
         permission: 'human:resource:organization:post:update',
-        onClick: (record: Post) => handleEdit(record)
+        onClick: (record: PostRowRecord) => handleEdit(record)
       },
       {
         key: 'delete',
@@ -770,43 +697,63 @@ const columns = computed<TableColumnsType>(() => [
         shape: 'plain',
         icon: RiDeleteBinLine,
         permission: 'human:resource:organization:post:delete',
-        onClick: (record: Post) => handleDeleteOne(record)
+        onClick: (record: PostRowRecord) => handleDeleteOne(record)
       }
     ]
   })
 ])
 
 /** 表格 row-key（优先实体主键字段） */
-const getPostId = (record: any): string => record?.[entityIdName] ?? ''
+const getPostId = (record: PostRowRecord): string => {
+  const id = (record as Record<string, unknown>)?.[entityIdName]
+  return id != null ? String(id) : ''
+}
 /**
- * 读取行字段值
+ * 供 TaktDictTag 等组件使用的标量字典值
  * @param record 行数据
  * @param field 字段名
  */
-const getPostField = (record: any, field: string): any => record?.[field]
+const getPostDictValue = (
+  record: PostRowRecord,
+  field: string,
+): string | number | undefined => {
+  const value = (record as Record<string, unknown>)?.[field]
+  if (value === null || value === undefined) return undefined
+  if (typeof value === 'string' || typeof value === 'number') return value
+  return String(value)
+}
+
+/** 将行字段/字典值转为有限 number */
+const toPostNumber = (value: string | number | undefined | null): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  const num = Number(value ?? 0)
+  return Number.isFinite(num) ? num : 0
+}
+
+
 
 /** 行选择配置 */
 const rowSelection = computed(() => ({
   selectedRowKeys: selectedRowKeys.value,
-  onChange: (keys: (string | number)[], rows: Post[]) => {
+  onChange: (keys: (string | number)[], rows: PostRowRecord[]) => {
     selectedRowKeys.value = keys
     selectedRows.value = rows
     selectedRow.value = rows.length === 1 ? (rows[0] ?? null) : null
   },
-  onSelect: (record: Post, selected: boolean) => {
+  onSelect: (record: PostRowRecord, selected: boolean) => {
     if (selected) {
       selectedRow.value = record
     } else if (selectedRow.value && getPostId(selectedRow.value) === getPostId(record)) {
       selectedRow.value = null
     }
   },
-  onSelectAll: (selected: boolean, selectedRowsData: Post[]) => {
+  onSelectAll: (selected: boolean, selectedRowsData: PostRowRecord[]) => {
     selectedRow.value = selected && selectedRowsData.length === 1 ? (selectedRowsData[0] ?? null) : null
   }
 }))
 
 /** 行点击切换选中（与 rowSelection 联动） */
-const onClickRow = (record: Post) => ({
+const onClickRow = (record: PostRowRecord) => ({
   onClick: () => {
     const key = getPostId(record)
     const index = selectedRowKeys.value.indexOf(key)
@@ -827,6 +774,11 @@ const onClickRow = (record: Post) => ({
 async function loadData() {
   loading.value = true
   try {
+    if (!hasAnyListQueryFilter()) {
+      dataSource.value = []
+      total.value = 0
+      return
+    }
     const res = await getPostList(buildListQuery())
     dataSource.value = res.data ?? []
     total.value = res.total ?? 0
@@ -852,52 +804,43 @@ function handleSearch() {
 /** 重置查询条件并刷新列表 */
 function handleReset() {
   queryKeyword.value = ''
-  advancedQueryForm.value = {
-  postCode: '',
-  postName: '',
-  deptId: '',
-  postCategory: '',
-  postLevel: '',
-  headcount: undefined as number | undefined,
-  currentCount: undefined as number | undefined,
-  responsibilities: '',
-  requirements: '',
-  educationRequired: undefined as number | undefined,
-  experienceYears: undefined as number | undefined,
-  salaryMin: undefined as number | undefined,
-  salaryMax: undefined as number | undefined,
-  postStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  description: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
   currentPage.value = getTaktDefaultPageIndex()
   loadData()
 }
 
 /** 打开新增弹窗 */
 function handleCreate() {
-  formTitle.value = t('common.dialog.title.create', { entity: t('entity.post._self') })
+  formTitle.value = t('common.dialog.title.create', { entity: pi.self() })
   formData.value = null
   formVisible.value = true
   nextTick(() => formRef.value?.resetFields())
 }
-/** 打开编辑弹窗 */
-function handleEdit(record: Post) {
-  formTitle.value = t('common.dialog.title.edit', { entity: t('entity.post._self') })
-  formData.value = { ...record }
-  formVisible.value = true
+/** 打开编辑弹窗（拉取详情，避免列表列裁剪字段） */
+async function handleEdit(record: PostRowRecord) {
+  const id = getPostId(record)
+  if (!id) {
+    return
+  }
+  formTitle.value = t('common.dialog.title.edit', { entity: pi.self() })
+  formLoading.value = true
+  try {
+    const detail = await getPostById(id)
+    formData.value = detail ?? ({ ...record } as Partial<Post>)
+    formVisible.value = true
+  } catch (error: unknown) {
+    message.error(t('common.feedback.load.data.failed'))
+  } finally {
+    formLoading.value = false
+  }
 }
 
 /** 工具栏编辑：打开当前单选行 */
 function handleUpdate() {
   if (selectedRow.value) {
-    handleEdit(selectedRow.value)
+    void handleEdit(selectedRow.value)
   } else {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: t('entity.post._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.edit'), entity: pi.self() }))
   }
 }
 /** 提交新增/编辑表单 */
@@ -915,10 +858,10 @@ async function handleFormSubmit() {
     const id = (formData.value as any)?.[entityIdName]
     if (id) {
       await updatePost(id, payload as any)
-      message.success(t('common.feedback.updated', { target: t('entity.post._self') }))
+      message.success(t('common.feedback.updated', { target: pi.self() }))
     } else {
       await createPost(payload as any)
-      message.success(t('common.feedback.created', { target: t('entity.post._self') }))
+      message.success(t('common.feedback.created', { target: pi.self() }))
     }
     formVisible.value = false
     formData.value = null
@@ -946,15 +889,18 @@ async function handleDownloadTemplate(sheetName?: string, fileName?: string): Pr
   return (res as any)?.data ?? res
 }
 
-/** 上传并导入 Excel 文件 */
-async function handleImportFile(file: File, sheetName?: string): Promise<{ success: number; fail: number; errors: string[] }> {
-  return await importPost(file, sheetName)
+/** 上传并导入 Excel 文件（归一化后端 SuccessCount/successCount） */
+async function handleImportFile(file: File, sheetName?: string): Promise<TaktImportResult> {
+  const raw = await importPost(file, sheetName)
+  return normalizeImportResult(raw)
 }
 
-/** 导入完成回调：刷新列表并可选关闭对话框 */
-function handleImportSuccess(result: { success: number; fail: number; errors: string[] }) {
+/** 导入完成回调：刷新列表；全部成功时延迟关闭对话框 */
+function handleImportSuccess(result: TaktImportResult) {
   loadData()
-  if (result.fail === 0) setTimeout(() => { importVisible.value = false }, 2000)
+  if (result.fail === 0 && result.success > 0) {
+    setTimeout(() => { importVisible.value = false }, 2000)
+  }
 }
 
 /** 关闭导入对话框 */
@@ -965,6 +911,9 @@ function handleImportCancel() {
 async function handleExport() {
   try {
     loading.value = true
+    if (!hasAnyListQueryFilter()) {
+      return
+    }
     const exportMeta = await exportPost(
       buildListQuery({ pageIndex: 1, pageSize: 100000 }),
       excelNames.sheet,
@@ -988,24 +937,24 @@ async function handleExport() {
     link.click()
     document.body.removeChild(link)
     setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    message.success(t('common.feedback.export.success', { target: t('entity.post._self') }))
+    message.success(t('common.feedback.export.success', { target: pi.self() }))
   } catch (error: any) {
     logger.error('[Post] 导出失败', { error })
-    message.error(error?.message || t('common.feedback.export.failed', { target: t('entity.post._self') }))
+    message.error(error?.message || t('common.feedback.export.failed', { target: pi.self() }))
   } finally {
     loading.value = false
   }
 }
 /** 删除单行 */
-async function handleDeleteOne(record: Post) {
+async function handleDeleteOne(record: PostRowRecord) {
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.entity', { entity: t('entity.post._self'), name: t('common.tip.this.target', { target: t('entity.post._self') }) }),
+    content: t('common.tip.confirm.delete.entity', { entity: pi.self(), name: t('common.tip.this.target', { target: pi.self() }) }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       await deletePostById((record as any)[entityIdName])
-      message.success(t('common.feedback.deleted', { target: t('entity.post._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1013,18 +962,18 @@ async function handleDeleteOne(record: Post) {
 /** 批量删除选中行 */
 async function handleDelete() {
   if (selectedRows.value.length === 0) {
-    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: t('entity.post._self') }))
+    message.warning(t('common.tip.select.to.action', { action: t('common.page.button.delete'), entity: pi.self() }))
     return
   }
   Modal.confirm({
     title: t('common.tip.confirm.delete.title'),
-    content: t('common.tip.confirm.delete.count', { entity: t('entity.post._self'), count: selectedRows.value.length }),
+    content: t('common.tip.confirm.delete.count', { entity: pi.self(), count: selectedRows.value.length }),
     okText: t('common.page.button.delete'),
     cancelText: t('common.page.button.cancel'),
     onOk: async () => {
       const ids = selectedRows.value.map((r: any) => r[entityIdName]).filter(Boolean)
       await deletePostBatch(ids)
-      message.success(t('common.feedback.deleted', { target: t('entity.post._self') }))
+      message.success(t('common.feedback.deleted', { target: pi.self() }))
       loadData()
     }
   })
@@ -1034,9 +983,9 @@ async function handleDelete() {
  * @param record 当前行
  * @param checked 是否启用
  */
-async function handlePostStatusChange(record: Post, checked: boolean) {
+async function handlePostStatusChange(record: PostRowRecord, checked: boolean) {
   const newVal = checked ? 1 : 0
-  const oldVal = getPostField(record, 'postStatus')
+  const oldVal = toPostNumber(getPostDictValue(record, 'postStatus'))
   const id = getPostId(record)
   const row = dataSource.value.find((item) => getPostId(item) === id)
   if (row) {
@@ -1066,28 +1015,7 @@ function handleAdvancedQuerySubmit() {
 }
 
 function handleAdvancedQueryReset() {
-  advancedQueryForm.value = {
-  postCode: '',
-  postName: '',
-  deptId: '',
-  postCategory: '',
-  postLevel: '',
-  headcount: undefined as number | undefined,
-  currentCount: undefined as number | undefined,
-  responsibilities: '',
-  requirements: '',
-  educationRequired: undefined as number | undefined,
-  experienceYears: undefined as number | undefined,
-  salaryMin: undefined as number | undefined,
-  salaryMax: undefined as number | undefined,
-  postStatus: undefined as number | undefined,
-  isBuiltIn: undefined as number | undefined,
-  description: '',
-  createdAtStart: '',
-  createdAtEnd: '',
-  extField: '',
-  remark: '',
-  }
+  advancedQueryForm.value = createEmptyAdvancedQueryForm()
 }
 
 /** 打开列设置抽屉 */

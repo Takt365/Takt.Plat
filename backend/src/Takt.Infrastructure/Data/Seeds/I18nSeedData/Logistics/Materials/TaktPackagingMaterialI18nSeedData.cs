@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktPackagingMaterialI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPackagingMaterial 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -109,13 +109,13 @@ public class TaktPackagingMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.packagingmaterial.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.packagingmaterial.materialdescription
-            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.packagingmaterial.materialdescription
-            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.packagingmaterial.materialdescription
-            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.packagingmaterial.materialdescription
-            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.packagingmaterial.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.packagingmaterial.hscode
             new TranslationSeedItem("entity.packagingmaterial.hscode", "en-US", "海关商品编码_us", "海关商品编码（HS Code）"),

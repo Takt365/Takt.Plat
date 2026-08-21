@@ -17,7 +17,6 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 /// <summary>
 /// 岗位实体
 /// 代表组织架构中的岗位/职位
-/// 参照 SAP Position (STELL) 设计
 /// </summary>
 [SugarTable("takt_human_resource_organization_post", "岗位表")]
 [SugarIndex("ix_post_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -40,6 +39,11 @@ public class TaktPost : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "dept_id", ColumnDescription = "所属部门ID", ColumnDataType = "bigint", IsNullable = false)]
     public long DeptId { get; set; }
+    /// <summary>
+    /// 所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "dept_name", ColumnDescription = "所属部门名称", ColumnDataType = "nvarchar", Length = 100, IsNullable = false, DefaultValue = "")]
+    public string DeptName { get; set; } = string.Empty;
     /// <summary>
     /// 岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）
     /// </summary>

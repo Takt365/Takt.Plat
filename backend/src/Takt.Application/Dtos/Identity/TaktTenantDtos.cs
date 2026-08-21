@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Identity;
 // ========================================
 
 /// <summary>
-/// 租户实体 代表系统中的独立租户（第一层数据隔离） 参照 SAP Client (MANDT) 设计
+/// 租户实体 代表系统中的独立租户（第一层数据隔离）
 /// 对应前端 TaktTenantDto
 /// 继承 TaktTenantDtoBase
 /// </summary>

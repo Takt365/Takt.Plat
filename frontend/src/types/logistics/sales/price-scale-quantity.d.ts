@@ -49,17 +49,17 @@ export interface SalesPriceScaleQuantity extends CompanyDtoBase {
   salesPriceSeq?: number;
 
   /**
-   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+   * 等级序号（回填：同一明细内阶梯序号，固定步长=10）
    */
   salesScaleSeq?: number;
 
   /**
-   * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+   * 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
    */
   scaleQuantity?: number;
 
   /**
-   * 价格（KBETR）
+   * 价格
    */
   price?: number;
 
@@ -127,17 +127,17 @@ export interface SalesPriceScaleQuantityExport {
   salesPriceSeq: number;
 
   /**
-   * 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+   * 等级序号（回填：同一明细内阶梯序号，固定步长=10）
    */
   salesScaleSeq: number;
 
   /**
-   * 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+   * 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
    */
   scaleQuantity: number;
 
   /**
-   * 价格（KBETR）
+   * 价格
    */
   price: number;
 

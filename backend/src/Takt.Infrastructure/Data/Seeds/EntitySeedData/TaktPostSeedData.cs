@@ -209,13 +209,18 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
         int sortOrder,
         string deptCode)
     {
-        // 根据部门编码查找部门ID
+        // 根据部门编码查找部门ID；冗余 DeptName 按 DeptId 对应部门名称写入（Length=100）
         var dept = await deptRepository.FirstAsync(d => d.TenantCode == tenantCode && d.CompanyCode == companyCode && d.DeptCode == deptCode);
         if (dept == null)
         {
             TaktLogger.Warning("未找到部门 {DeptCode} (租户: {TenantCode}, 公司: {CompanyCode})，跳过岗位 {PostCode}", 
                 deptCode, tenantCode, companyCode, postCode);
             return (null!, false);
+        }
+        var deptName = dept.DeptName ?? string.Empty;
+        if (deptName.Length > 100)
+        {
+            deptName = deptName[..100];
         }
 
         var post = await repository.FirstAsync(p => p.TenantCode == tenantCode && p.CompanyCode == companyCode && p.PostCode == postCode);
@@ -228,6 +233,7 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
                 TenantCode = tenantCode,
                 CompanyCode = companyCode,
                 DeptId = dept.Id,
+                DeptName = deptName,
                 PostCode = postCode,
                 PostName = postName,
                 PostCategory = postCategory,
@@ -250,6 +256,13 @@ public class TaktPostSeedData : ITaktSeedDataCoordinator
             // 存在：检查是否需要更新
             bool needUpdate = false;
             
+            if (post.DeptId != dept.Id || post.DeptName != deptName)
+            {
+                post.DeptId = dept.Id;
+                post.DeptName = deptName;
+                needUpdate = true;
+            }
+
             if (post.PostName != postName)
             {
                 post.PostName = postName;

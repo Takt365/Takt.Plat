@@ -10,7 +10,7 @@
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-/** Sap_Data 日链脚本（源库固定，仅选目标库） */
+/** 源库日链脚本（源库固定，仅选目标库） */
 const SAP_DATA_SYNC_SCRIPTS = new Set([
   'quartz/sync_matplt.sql',
   'quartz/sync_mdl.sql',
@@ -19,7 +19,7 @@ const SAP_DATA_SYNC_SCRIPTS = new Set([
   'quartz/sync_mo.sql',
 ])
 
-/** Sap_Data 日链 JobName（小写；列表缺 sqlScript 时兜底） */
+/** 源库日链 JobName（小写；列表缺 sqlScript 时兜底） */
 const SAP_DATA_SYNC_JOB_NAMES = new Set([
   'sync_matplt',
   'sync_mdl',
@@ -50,6 +50,7 @@ const BOM_DB_AND_MONTH_JOB_NAMES = new Set([
   'bom_material_cost_sum',
   'bom_material_cost_recalc',
   'bom_model_avg_cost',
+  'bom_zero_price_mp_bk',
   'bom_pcb_sect',
   'sync_bc_pcb_sect_bk',
 ])
@@ -83,7 +84,7 @@ export function isQuartzSyncSqlScript(sqlScript: string | null | undefined): boo
 }
 
 /**
- * 是否仅需目标库（Sap_Data 日链 + sync_pup/sp/bv/bc_bk 回填；不含 pcb_sect）
+ * 是否仅需目标库（源库日链 + sync_pup/sp/bv/bc_bk 回填；不含 pcb_sect）
  * @param sqlScript 任务 SqlScript
  * @returns {boolean} 仅目标
  */
@@ -216,7 +217,7 @@ export function needsBomDbAndMonthPicker(record: {
     return true
   }
   const className = String(record.className ?? '')
-  if (/Bom.*(Cost|Avg|PcbSect)/i.test(className)) {
+  if (/Bom.*(Cost|Avg|PcbSect|ZeroPrice)/i.test(className)) {
     return true
   }
   return (

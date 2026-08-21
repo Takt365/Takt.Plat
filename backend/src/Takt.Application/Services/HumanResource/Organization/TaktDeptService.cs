@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktDeptService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：部门应用服务实现
 // 
@@ -64,12 +64,20 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     }
 
     /// <summary>
-    /// 获取部门列表（分页）
+    /// 获取部门列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktDeptDto>> GetDeptListAsync(TaktDeptQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktDeptDto>.Create(
+                new List<TaktDeptDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _deptRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -98,77 +106,53 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         return dto;    }
 
     /// <summary>
-    /// 获取部门树形选项列表
+    /// 获取部门树形选项列表（懒加载：仅 parentId 直接子级一层）
     /// </summary>
-    /// <returns>树形选项</returns>
-    public async Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync()
+    /// <param name="parentId">父级ID（0=根）</param>
+    /// <returns>树形选项（一层）</returns>
+    public async Task<List<TaktTreeSelectOption>> GetDeptTreeOptionsAsync(long parentId = 0)
     {
         EnsureThreeLayerContext();
-        var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.DeptStatus == 1);
-        return BuildDeptTreeOptions(list, 0);
+        var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.DeptStatus == 1);
+        return list
+            .OrderBy(x => x.SortOrder)
+            .Select(item =>
+            {
+                var isLeaf = TaktLazyTreeHelper.ToAntIsLeaf(item.IsLeaf);
+                return new TaktTreeSelectOption
+                {
+                    DictValue = item.Id.ToString(),
+                    DictLabel = item.DeptName,
+                    SortOrder = item.SortOrder,
+                    IsLeaf = isLeaf,
+                    Children = null,
+                };
+            })
+            .ToList();
     }
 
     /// <summary>
-    /// 在内存中构建部门树形选项（递归，按 ParentId）
+    /// 获取部门树形列表（懒加载：仅 parentId 直接子级一层；不整表加载、不递归构树）
     /// </summary>
-    private List<TaktTreeSelectOption> BuildDeptTreeOptions(List<TaktDept> all, long parentId)
-    {
-        var result = new List<TaktTreeSelectOption>();
-        foreach (var item in all.Where(x => x.ParentId == parentId).OrderBy(x => x.SortOrder))
-        {
-            var option = new TaktTreeSelectOption
-            {
-                DictValue = item.Id,
-                DictLabel = item.DeptName ?? item.Id.ToString(),
-                SortOrder = item.SortOrder,
-            };
-            var children = BuildDeptTreeOptions(all, item.Id);
-            if (children.Count > 0)
-            {
-                option.Children = children;
-            }
-            result.Add(option);
-        }
-        return result;
-    }
-
-    /// <summary>
-    /// 获取部门树形列表
-    /// </summary>
-    /// <param name="parentId">父级ID</param>
+    /// <param name="parentId">父级ID（0=根）</param>
     /// <param name="includeDisabled">是否包含禁用项</param>
-    /// <returns>树形列表</returns>
+    /// <returns>树形列表（一层）</returns>
     public async Task<List<TaktDeptTreeDto>> GetDeptTreeAsync(long parentId = 0, bool includeDisabled = false)
     {
         EnsureThreeLayerContext();
-        var list = await _deptRepository.GetListAsync(x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode);
-        var filtered = includeDisabled
-            ? list
-            : list.Where(x => x.DeptStatus == 1).ToList();
-        return BuildDeptTree(filtered, parentId);
-    }
-
-    /// <summary>
-    /// 在内存中构建部门树（递归，按 ParentId）
-    /// </summary>
-    private List<TaktDeptTreeDto> BuildDeptTree(List<TaktDept> allRecords, long parentId)
-    {
-        var children = allRecords
-            .Where(x => x.ParentId == parentId)
+        Expression<Func<TaktDept, bool>> predicate = includeDisabled
+            ? (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId)
+            : (x => x.TenantCode == CurrentTenantCode && x.CompanyCode == CurrentCompanyCode && x.ParentId == parentId && x.DeptStatus == 1);
+        var list = await _deptRepository.GetListAsync(predicate);
+        return list
             .OrderBy(x => x.SortOrder)
-            .ToList();
-        var treeList = new List<TaktDeptTreeDto>();
-        foreach (var item in children)
-        {
-            var treeDto = item.Adapt<TaktDeptTreeDto>();
-            var childTree = BuildDeptTree(allRecords, item.Id);
-            if (childTree.Count > 0)
+            .Select(item =>
             {
-                treeDto.Children = childTree;
-            }
-            treeList.Add(treeDto);
-        }
-        return treeList;
+                var treeDto = item.Adapt<TaktDeptTreeDto>();
+                treeDto.Children = new List<TaktDeptTreeDto>();
+                return treeDto;
+            })
+            .ToList();
     }
 
     /// <summary>
@@ -293,6 +277,12 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
         if (entity.IsBuiltIn == 1)
         {
             throw new TaktBusinessException("内置部门不允许删除");
+        }
+
+        var hasChildren = await _deptRepository.ExistsAsync(x => x.ParentId == id);
+        if (hasChildren)
+        {
+            throw new TaktBusinessException("存在子节点，无法删除");
         }
         var deleted = await _deptRepository.DeleteAsync(id);
         if (!deleted)
@@ -438,7 +428,15 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportDeptAsync(TaktDeptQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktDeptQueryDto());
+        var queryDto = query ?? new TaktDeptQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktDeptExportDto>(),
+                sheetName ?? "部门数据",
+                fileName ?? "部门导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _deptRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -467,150 +465,292 @@ public class TaktDeptService : TaktServiceBase, ITaktDeptService
     {
         var exp = Expressionable.Create<TaktDept>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.DeptCode != null && x.DeptCode.Contains(keywords))
-                || (x.DeptName != null && x.DeptName.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.DeptCode != null && x.DeptCode.Contains(keywords))
                 || (x.DeptShortName != null && x.DeptShortName.Contains(keywords))
-                || SqlFunc.ToString(x.ParentId).Contains(keywords)
-                || SqlFunc.ToString(x.Level).Contains(keywords)
+                || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.DeptPath != null && x.DeptPath.Contains(keywords))
-                || SqlFunc.ToString(x.IsLeaf).Contains(keywords)
+                || (x.IsoCode != null && x.IsoCode.Contains(keywords))
                 || (x.CostCenterCode != null && x.CostCenterCode.Contains(keywords))
-                || SqlFunc.ToString(x.CostCategory).Contains(keywords)
-                || SqlFunc.ToString(x.HeadUserId).Contains(keywords)
+                || (x.HeadUserName != null && x.HeadUserName.Contains(keywords))
                 || (x.Phone != null && x.Phone.Contains(keywords))
                 || (x.Email != null && x.Email.Contains(keywords))
                 || (x.Location != null && x.Location.Contains(keywords))
-                || SqlFunc.ToString(x.DeptStatus).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.DeptDescription != null && x.DeptDescription.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.DeptCode != null && x.DeptCode.Contains(queryDto.DeptCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.DeptName))
-        {
-            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(queryDto.DeptName));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DeptShortName))
-        {
-            exp = exp.And(x => x.DeptShortName != null && x.DeptShortName.Contains(queryDto.DeptShortName));
-        }
-
-        if (queryDto?.ParentId.HasValue == true)
-        {
-            exp = exp.And(x => x.ParentId == queryDto.ParentId);
-        }
-
-        if (queryDto?.Level.HasValue == true)
-        {
-            exp = exp.And(x => x.Level == queryDto.Level);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DeptPath))
-        {
-            exp = exp.And(x => x.DeptPath != null && x.DeptPath.Contains(queryDto.DeptPath));
-        }
-
-        if (queryDto?.IsLeaf.HasValue == true)
-        {
-            exp = exp.And(x => x.IsLeaf == queryDto.IsLeaf);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CostCenterCode))
-        {
-            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(queryDto.CostCenterCode));
-        }
-
-        if (queryDto?.CostCategory.HasValue == true)
-        {
-            exp = exp.And(x => x.CostCategory == queryDto.CostCategory);
-        }
-
-        if (queryDto?.HeadUserId.HasValue == true)
-        {
-            exp = exp.And(x => x.HeadUserId == queryDto.HeadUserId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Phone))
-        {
-            exp = exp.And(x => x.Phone != null && x.Phone.Contains(queryDto.Phone));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Email))
-        {
-            exp = exp.And(x => x.Email != null && x.Email.Contains(queryDto.Email));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Location))
-        {
-            exp = exp.And(x => x.Location != null && x.Location.Contains(queryDto.Location));
-        }
-
-        if (queryDto?.DeptStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.DeptStatus == queryDto.DeptStatus);
-        }
-
-        if (queryDto?.IsBuiltIn.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.DeptDescription))
-        {
-            exp = exp.And(x => x.DeptDescription != null && x.DeptDescription.Contains(queryDto.DeptDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptCode))
+        {
+            var deptCode = queryDto.DeptCode;
+            exp = exp.And(x => x.DeptCode != null && x.DeptCode.Contains(deptCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptShortName))
+        {
+            var deptShortName = queryDto.DeptShortName;
+            exp = exp.And(x => x.DeptShortName != null && x.DeptShortName.Contains(deptShortName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
+        {
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
+        }
+
+        if (queryDto?.ParentId.HasValue == true)
+        {
+            var parentId = queryDto.ParentId;
+            exp = exp.And(x => x.ParentId == parentId);
+        }
+
+        if (queryDto?.Level.HasValue == true)
+        {
+            var level = queryDto.Level;
+            exp = exp.And(x => x.Level == level);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptPath))
+        {
+            var deptPath = queryDto.DeptPath;
+            exp = exp.And(x => x.DeptPath != null && x.DeptPath.Contains(deptPath));
+        }
+
+        if (queryDto?.IsLeaf.HasValue == true)
+        {
+            var isLeaf = queryDto.IsLeaf;
+            exp = exp.And(x => x.IsLeaf == isLeaf);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.IsoCode))
+        {
+            var isoCode = queryDto.IsoCode;
+            exp = exp.And(x => x.IsoCode != null && x.IsoCode.Contains(isoCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.CostCenterCode))
+        {
+            var costCenterCode = queryDto.CostCenterCode;
+            exp = exp.And(x => x.CostCenterCode != null && x.CostCenterCode.Contains(costCenterCode));
+        }
+
+        if (queryDto?.CostCategory.HasValue == true)
+        {
+            var costCategory = queryDto.CostCategory;
+            exp = exp.And(x => x.CostCategory == costCategory);
+        }
+
+        if (queryDto?.HeadUserId.HasValue == true)
+        {
+            var headUserId = queryDto.HeadUserId;
+            exp = exp.And(x => x.HeadUserId == headUserId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.HeadUserName))
+        {
+            var headUserName = queryDto.HeadUserName;
+            exp = exp.And(x => x.HeadUserName != null && x.HeadUserName.Contains(headUserName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Phone))
+        {
+            var phone = queryDto.Phone;
+            exp = exp.And(x => x.Phone != null && x.Phone.Contains(phone));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Email))
+        {
+            var email = queryDto.Email;
+            exp = exp.And(x => x.Email != null && x.Email.Contains(email));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Location))
+        {
+            var location = queryDto.Location;
+            exp = exp.And(x => x.Location != null && x.Location.Contains(location));
+        }
+
+        if (queryDto?.IsBuiltIn.HasValue == true)
+        {
+            var isBuiltIn = queryDto.IsBuiltIn;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptDescription))
+        {
+            var deptDescription = queryDto.DeptDescription;
+            exp = exp.And(x => x.DeptDescription != null && x.DeptDescription.Contains(deptDescription));
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (queryDto?.DeptStatus.HasValue == true)
+        {
+            var deptStatus = queryDto.DeptStatus;
+            exp = exp.And(x => x.DeptStatus == deptStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktDeptQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptShortName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (queryDto.ParentId.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.Level.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptPath))
+        {
+            return true;
+        }
+        if (queryDto.IsLeaf.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.IsoCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CostCenterCode))
+        {
+            return true;
+        }
+        if (queryDto.CostCategory.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.HeadUserId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.HeadUserName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Phone))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Email))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Location))
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptDescription))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.DeptStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

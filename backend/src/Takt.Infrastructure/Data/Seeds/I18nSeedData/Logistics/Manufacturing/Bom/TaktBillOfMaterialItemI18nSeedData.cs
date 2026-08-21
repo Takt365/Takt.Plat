@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialItemI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterialItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktBillOfMaterialItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterialitem.materialcode", "zh-HK", "子项物料编码_hk", "子项物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.billofmaterialitem.materialdescription
-            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "en-US", "子项物料描述_us", "子项物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "en-US", "子项物料描述_us", "子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterialitem.materialdescription
-            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "ja-JP", "子项物料描述_jp", "子项物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "ja-JP", "子项物料描述_jp", "子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterialitem.materialdescription
-            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "zh-CN", "子项物料描述", "子项物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "zh-CN", "子项物料描述", "子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterialitem.materialdescription
-            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "zh-HK", "子项物料描述_hk", "子项物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterialitem.materialdescription", "zh-HK", "子项物料描述_hk", "子项物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.billofmaterialitem.usagequantity
             new TranslationSeedItem("entity.billofmaterialitem.usagequantity", "en-US", "用量_us", "用量（quantity）"),

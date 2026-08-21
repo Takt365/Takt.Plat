@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：frontend/src/types/logistics/materials
 // 文件名称：material-moving-price.d.ts
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：logistics/materials 模块类型定义（自动生成；类型名去 Takt 前缀与末尾 Dto，如 TaktCompanyDto → Company）
 // 
@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别（评估期间存 yyyy-MM）
+ * 移动价格实体 <para>业务唯一键（新增/更新匹配）：TenantCode+CompanyCode+PlantCode+MaterialCode+ValuationPeriod；Valuation 为业务字段，不参与唯一匹配。</para>
  * 对应前端 TaktMaterialMovingPriceDto
  * 继承 TaktCompanyDtoBase
  * 对应前端 MaterialMovingPrice
@@ -29,7 +29,7 @@ export interface MaterialMovingPrice extends CompanyDtoBase {
   materialMovingPriceId: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod: string;
 
@@ -104,7 +104,7 @@ export interface MaterialMovingPriceQuery extends TaktPagedQuery {
   plantCode?: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod?: string;
 
@@ -198,7 +198,7 @@ export interface MaterialMovingPriceCreate {
   plantCode: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod: string;
 
@@ -297,7 +297,7 @@ export interface MaterialMovingPriceTemplate {
   plantCode?: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod?: string;
 
@@ -381,7 +381,7 @@ export interface MaterialMovingPriceImport {
   plantCode?: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod?: string;
 
@@ -465,7 +465,7 @@ export interface MaterialMovingPriceExport {
   cultureCode: string;
 
   /**
-   * 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+   * 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
    */
   valuationPeriod: string;
 

@@ -47,7 +47,7 @@ public class TaktBillOfMaterial : TaktCompanyEntityBase
     public string ParentMaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父物料描述（回填：随物料）
+    /// 父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "parent_material_description", ColumnDescription = "父物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? ParentMaterialDescription { get; set; }

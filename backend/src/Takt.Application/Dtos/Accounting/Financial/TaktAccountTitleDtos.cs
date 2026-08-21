@@ -180,7 +180,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ /// 科目类型（字典 accounting_account_title_type）
     /// </summary>
     public string? AccountTitleType { get; set; }
 
@@ -205,7 +205,7 @@ public class TaktAccountTitleQueryDto : TaktPagedQuery
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ /// 辅助核算类型（字典 accounting_auxiliary_type）
     /// </summary>
     public string? AuxiliaryType { get; set; }
 
@@ -329,7 +329,7 @@ public class TaktAccountTitleCreateDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ /// 科目类型（字典 accounting_account_title_type）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
@@ -349,7 +349,7 @@ public class TaktAccountTitleCreateDto
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ /// 辅助核算类型（字典 accounting_auxiliary_type）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 
@@ -513,7 +513,7 @@ public class TaktAccountTitleTemplateDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ /// 科目类型（字典 accounting_account_title_type）
     /// </summary>
     public string? AccountTitleType { get; set; }
 
@@ -533,7 +533,7 @@ public class TaktAccountTitleTemplateDto
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ /// 辅助核算类型（字典 accounting_auxiliary_type）
     /// </summary>
     public string? AuxiliaryType { get; set; }
 
@@ -625,7 +625,7 @@ public class TaktAccountTitleImportDto
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ /// 科目类型（字典 accounting_account_title_type）
     /// </summary>
     public string? AccountTitleType { get; set; }
 
@@ -645,7 +645,7 @@ public class TaktAccountTitleImportDto
     public int? IsAuxiliary { get; set; }
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ /// 辅助核算类型（字典 accounting_auxiliary_type）
     /// </summary>
     public string? AuxiliaryType { get; set; }
 
@@ -737,7 +737,7 @@ public class TaktAccountTitleExportDto
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ /// 科目类型（字典 accounting_account_title_type）
     /// </summary>
     public string AccountTitleType { get; set; } = string.Empty;
 
@@ -762,7 +762,7 @@ public class TaktAccountTitleExportDto
     public int IsAuxiliary { get; set; } = 0;
 
     /// <summary>
-    /// 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ /// 辅助核算类型（字典 accounting_auxiliary_type）
     /// </summary>
     public string AuxiliaryType { get; set; } = string.Empty;
 

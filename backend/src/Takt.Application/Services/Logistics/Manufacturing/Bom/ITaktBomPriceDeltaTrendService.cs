@@ -21,7 +21,7 @@ namespace Takt.Application.Services.Logistics.Manufacturing.Bom;
 public interface ITaktBomPriceDeltaTrendService
 {
     /// <summary>
-    /// 工厂选项
+    /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
     /// </summary>
     /// <returns>下拉选项</returns>
     Task<List<TaktSelectOption>> GetBomPriceDeltaTrendPlantOptionsAsync();

@@ -62,7 +62,7 @@ public class TaktBomMaterialCostDto : TaktCompanyDtoBase
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
 
@@ -149,7 +149,7 @@ public class TaktBomMaterialCostQueryDto : TaktPagedQuery
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
 
@@ -264,7 +264,7 @@ public class TaktBomMaterialCostCreateDto
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
 
@@ -382,7 +382,7 @@ public class TaktBomMaterialCostTemplateDto
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
 
@@ -474,7 +474,7 @@ public class TaktBomMaterialCostImportDto
     public string? ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal? ProductMonthlyCost { get; set; }
 
@@ -567,7 +567,7 @@ public class TaktBomMaterialCostExportDto
     public string ProductDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ /// 产品月成本
     /// </summary>
     public decimal ProductMonthlyCost { get; set; }
 

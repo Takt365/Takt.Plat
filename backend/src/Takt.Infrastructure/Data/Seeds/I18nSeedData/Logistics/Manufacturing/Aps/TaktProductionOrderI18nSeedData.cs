@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Aps
 // 文件名称：TaktProductionOrderI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktProductionOrder 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -118,13 +118,13 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.productionorder.materialdescription
-            new TranslationSeedItem("entity.productionorder.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.productionorder.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.productionorder.materialdescription
-            new TranslationSeedItem("entity.productionorder.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.productionorder.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.productionorder.materialdescription
-            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.productionorder.materialdescription
-            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.productionorder.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.productionorder.prodorderqty
             new TranslationSeedItem("entity.productionorder.prodorderqty", "en-US", "工单数量_us", "工单数量"),
@@ -181,13 +181,13 @@ public class TaktProductionOrderI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.productionorder.priority", "zh-HK", "优先级_hk", "优先级（字典 sys_priority_level_category；1=最高 2=高 3=普通 4=低）"),
 
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "en-US", "工作中心_us", "工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心_jp", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "ja-JP", "工作中心_jp", "工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "zh-CN", "工作中心", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "zh-CN", "工作中心", "工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）"),
             // entity.productionorder.workcenter
-            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心_hk", "工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）"),
+            new TranslationSeedItem("entity.productionorder.workcenter", "zh-HK", "工作中心_hk", "工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）"),
 
             // entity.productionorder.prodbatch
             new TranslationSeedItem("entity.productionorder.prodbatch", "en-US", "生产批次_us", "生产批次"),

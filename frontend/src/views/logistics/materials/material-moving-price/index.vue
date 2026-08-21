@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-price -->
 <!-- 文件名称：index.vue -->
-<!-- 功能描述：移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
+<!-- 功能描述：移动价格实体 <para>业务唯一键管理页面，含查询、增删改，由 generate-vue-crud-from-api.cjs 根据 types/api 自动生成 -->
 <!-- 版权信息：Copyright (c) 2025 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -349,7 +349,7 @@
 
 <script setup lang="ts">
 /**
- * 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
+ * 移动价格实体 <para>业务唯一键管理页 · 由 generate-vue-crud-from-api.cjs 根据 types/api 生成
  * @module views/logistics/materials/material-moving-price
  */
 import { ref, computed, onMounted } from 'vue'

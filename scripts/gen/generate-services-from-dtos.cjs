@@ -1716,7 +1716,7 @@ function listBusinessStringPropertyNames(entityFile) {
  */
 function getNameFieldName(entityFile, entityShort = '') {
   const names = listBusinessStringPropertyNames(entityFile);
-  /** 非业务显示名（不可作 DictLabel；如 SAP FormName） */
+  /** 非业务显示名（不可作 DictLabel；如 FormName） */
   const nameDenylist = new Set([
     'FormName',
     'FileName',
@@ -3327,9 +3327,6 @@ function generateServiceImplementation(
   content += 'using Takt.Shared.Helpers;\n';
   content += 'using Takt.Shared.Models;\n';
   content += 'using Takt.Shared.Options;\n';
-  if (treeGen?.needsLazyTreeHelper) {
-    content += 'using Takt.Application.Helpers;\n';
-  }
   if (needsSharedEnumsUsing) {
     content += 'using Takt.Shared.Enums;\n';
   }

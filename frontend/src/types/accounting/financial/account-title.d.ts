@@ -149,7 +149,7 @@ export interface AccountTitleExport {
   parentId: string;
 
   /**
-   * 科目类型（字典 accounting_account_title_type；SAP X/P/S/N/C）
+ * 科目类型（字典 accounting_account_title_type）
    */
   accountTitleType: string;
 
@@ -174,7 +174,7 @@ export interface AccountTitleExport {
   isAuxiliary: number;
 
   /**
-   * 辅助核算类型（字典 accounting_auxiliary_type；SAP D/K/A/S/M）
+ * 辅助核算类型（字典 accounting_auxiliary_type）
    */
   auxiliaryType: string;
 

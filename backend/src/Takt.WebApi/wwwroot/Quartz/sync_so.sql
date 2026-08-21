@@ -36,8 +36,9 @@ CREATE TABLE #hdr (
   [shipped_quantity] DECIMAL(18,4), [shipped_amount] DECIMAL(18,2), [received_amount] DECIMAL(18,2),
   [delivery_method] INT, [payment_method] INT, [delivery_address] NVARCHAR(500),
   [order_status] INT, [delivery_status] INT,
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #item (
   [rn] INT, [id] BIGINT, [sales_order_id] BIGINT,
@@ -51,8 +52,9 @@ CREATE TABLE #item (
   [tax_included_amount] DECIMAL(18,5), [untaxed_amount] DECIMAL(18,5), [tax_amount] DECIMAL(18,5),
   [sales_amount] DECIMAL(18,5),
   [delivery_status] INT, [is_obsolete] INT,
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #hdr_delta (
   rn INT, oper_type NVARCHAR(10), id BIGINT,
@@ -81,7 +83,8 @@ SELECT S.rn, @base_id + S.rn,
   S.[shipped_quantity], S.[shipped_amount], S.[received_amount],
   S.[delivery_method], S.[payment_method], S.[delivery_address],
   S.[order_status], S.[delivery_status],
-  S.[is_deleted], S.[created_at], @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[plant_code], N.[sales_order_code]) AS rn
   FROM (
@@ -114,9 +117,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[delivery_address])), 500), N'') AS [delivery_address],
       COALESCE(TRY_CAST(R.[order_status] AS INT), 1) AS [order_status],
       COALESCE(TRY_CAST(R.[delivery_status] AS INT), 0) AS [delivery_status],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LEFT(LTRIM(RTRIM(ISNULL(R.[plant_code], N''))), 4),
           LTRIM(RTRIM(R.[sales_order_code]))
@@ -184,6 +194,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[delivery_address],N'')<>ISNULL(S.[delivery_address],N'')
   OR T.[order_status]<>S.[order_status] OR T.[delivery_status]<>S.[delivery_status]
   OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'') OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[customer_code]=S.[customer_code],
   T.[customer_name1]=S.[customer_name1],
@@ -209,14 +228,18 @@ WHEN MATCHED AND (
   T.[order_status]=S.[order_status],
   T.[delivery_status]=S.[delivery_status],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[plant_code],[sales_order_code],[customer_code],[customer_name1],[order_date],[required_delivery_date],[actual_delivery_date],[sales_by],[total_quantity],[total_amount],[discount_amount],[currency_code],[exchange_rate],[tax_code],[tax_rate],[tax_amount],[actual_amount],[shipped_quantity],[shipped_amount],[received_amount],[delivery_method],[payment_method],[delivery_address],[order_status],[delivery_status],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[plant_code],S.[sales_order_code],S.[customer_code],S.[customer_name1],S.[order_date],S.[required_delivery_date],S.[actual_delivery_date],S.[sales_by],S.[total_quantity],S.[total_amount],S.[discount_amount],S.[currency_code],S.[exchange_rate],S.[tax_code],S.[tax_rate],S.[tax_amount],S.[actual_amount],S.[shipped_quantity],S.[shipped_amount],S.[received_amount],S.[delivery_method],S.[payment_method],S.[delivery_address],S.[order_status],S.[delivery_status],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[plant_code],S.[sales_order_code],S.[customer_code],S.[customer_name1],S.[order_date],S.[required_delivery_date],S.[actual_delivery_date],S.[sales_by],S.[total_quantity],S.[total_amount],S.[discount_amount],S.[currency_code],S.[exchange_rate],S.[tax_code],S.[tax_rate],S.[tax_amount],S.[actual_amount],S.[shipped_quantity],S.[shipped_amount],S.[received_amount],S.[delivery_method],S.[payment_method],S.[delivery_address],S.[order_status],S.[delivery_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[plant_code], INSERTED.[sales_order_code]
 INTO #hdr_delta (rn, oper_type, id, [plant_code], [sales_order_code]);
 
@@ -254,7 +277,8 @@ SELECT S.rn, @base_id+1000000000+S.rn, 0,
   S.[discount_rate], S.[discount_amount],
   S.[tax_included_amount], S.[untaxed_amount], S.[tax_amount], S.[sales_amount],
   S.[delivery_status], S.[is_obsolete],
-  S.[is_deleted], S.[created_at], @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[plant_code], N.[sales_order_code], N.[line_number]) AS rn
   FROM (
@@ -285,9 +309,16 @@ FROM (
       ROUND(COALESCE(TRY_CAST(R.[sales_amount] AS DECIMAL(18,8)), 0), 5) AS [sales_amount],
       COALESCE(TRY_CAST(R.[delivery_status] AS INT), 0) AS [delivery_status],
       ISNULL(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
-      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[sales_order_code])), COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
         ORDER BY COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
       ) AS dup_rn
@@ -360,6 +391,15 @@ WHEN MATCHED AND (
   OR T.[delivery_status]<>S.[delivery_status] OR T.[is_obsolete]<>S.[is_obsolete]
   OR ISNULL(T.[plant_code],N'')<>S.[plant_code] OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'')
   OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[sales_order_code]=S.[sales_order_code],
   T.[material_code]=S.[material_code],
@@ -380,14 +420,18 @@ WHEN MATCHED AND (
   T.[is_obsolete]=S.[is_obsolete],
   T.[plant_code]=S.[plant_code],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[sales_order_id],[plant_code],[sales_order_code],[line_number],[material_code],[material_description],[material_specification],[sales_unit],[order_quantity],[shipped_quantity],[sales_per_unit],[sales_unit_price],[discount_rate],[discount_amount],[tax_included_amount],[untaxed_amount],[tax_amount],[sales_amount],[delivery_status],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[sales_order_id],S.[plant_code],S.[sales_order_code],S.[line_number],S.[material_code],S.[material_description],S.[material_specification],S.[sales_unit],S.[order_quantity],S.[shipped_quantity],S.[sales_per_unit],S.[sales_unit_price],S.[discount_rate],S.[discount_amount],S.[tax_included_amount],S.[untaxed_amount],S.[tax_amount],S.[sales_amount],S.[delivery_status],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[sales_order_id],S.[plant_code],S.[sales_order_code],S.[line_number],S.[material_code],S.[material_description],S.[material_specification],S.[sales_unit],S.[order_quantity],S.[shipped_quantity],S.[sales_per_unit],S.[sales_unit_price],S.[discount_rate],S.[discount_amount],S.[tax_included_amount],S.[untaxed_amount],S.[tax_amount],S.[sales_amount],S.[delivery_status],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[sales_order_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [sales_order_code], [line_number]);
 

@@ -41,7 +41,7 @@ public class TaktInventoryImpairmentProvision : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料描述（冗余展示）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? MaterialDescription { get; set; }

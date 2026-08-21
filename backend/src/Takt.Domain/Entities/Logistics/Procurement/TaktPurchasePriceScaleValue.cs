@@ -4,7 +4,7 @@
 // 文件名称：TaktPurchasePriceScaleValue.cs
 // 创建时间：2025-01-20
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Takt采购价格价值等级实体（SAP KONW：定价记录号/定价序号/等级序号/等级值/价格）
+// 功能描述：Takt采购价格价值等级实体
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Procurement;
 
 /// <summary>
-/// Takt采购价格价值等级实体（；主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
+/// Takt采购价格价值等级实体（主子表：TaktPurchasePriceItem → ScaleValues；与数量等级仅差 ScaleValue↔ScaleQuantity）
 /// </summary>
 [SugarTable("takt_logistics_procurement_purchase_price_scale_value", "采购价格价值等级表")]
 [SugarIndex("ix_purchase_price_scale_value_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -33,31 +33,31 @@ public class TaktPurchasePriceScaleValue : TaktCompanyEntityBase
     public long PurchasePriceItemId { get; set; }
 
     /// <summary>
-    /// 定价记录号（KNUMH；冗余；与主表/明细 PurchasePriceCode 一致，长度 20）
+    /// 定价记录号（冗余：与明细 PurchasePriceCode 一致）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_price_code", ColumnDescription = "定价记录号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string PurchasePriceCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 定价序号（冗余；与明细 PurchasePriceSeq 一致，固定步长=10）
+    /// 定价序号（冗余：与明细 PurchasePriceSeq 一致，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_price_seq", ColumnDescription = "定价序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
     public int PurchasePriceSeq { get; set; } = 10;
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     [SugarColumn(ColumnName = "purchase_scale_seq", ColumnDescription = "等级序号", ColumnDataType = "int", IsNullable = false, DefaultValue = "10")]
     public int PurchaseScaleSeq { get; set; } = 10;
 
     /// <summary>
-    /// 等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）
+    /// 等级值（价值等级门槛；对应数量等级表的 ScaleQuantity）
     /// </summary>
     [SugarColumn(ColumnName = "scale_value", ColumnDescription = "等级值", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal ScaleValue { get; set; } = 0;
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     [SugarColumn(ColumnName = "price", ColumnDescription = "价格", ColumnDataType = "decimal", Length = 18, DecimalDigits = 5, IsNullable = false, DefaultValue = "0")]
     public decimal Price { get; set; } = 0;

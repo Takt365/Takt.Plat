@@ -19,10 +19,20 @@
 
     <a-drawer
       v-model:open="visible"
-      title="通知中心"
+      :title="t('components.navigation.page.systemsetting.notification')"
       placement="right"
       :width="400"
     >
+      <template #extra>
+        <a-space>
+          <a-button type="text" @click="clearAll">
+            {{ t('common.page.button.emptyall') }}
+          </a-button>
+          <a-button type="link" @click="markAllRead">
+            {{ t('components.notification.page.markallread') }}
+          </a-button>
+        </a-space>
+      </template>
       <a-list
         :data-source="notifications"
         item-layout="horizontal"
@@ -50,13 +60,6 @@
           </a-list-item>
         </template>
       </a-list>
-
-      <template #footer>
-        <a-space>
-          <a-button @click="clearAll">清空全部</a-button>
-          <a-button type="primary" @click="markAllRead">全部已读</a-button>
-        </a-space>
-      </template>
     </a-drawer>
   </div>
 </template>
@@ -74,6 +77,7 @@ import {
   RiNotificationLine,
 } from '@remixicon/vue';
 import type { Component } from 'vue';
+import { useI18n } from 'vue-i18n';
 import type { Events, NotificationType } from '@/types/event';
 import { useEventBus } from '@/utils/event-bus';
 import { createLogger } from '@/utils/logger';
@@ -81,6 +85,9 @@ import { getTaktDefaultPageSize } from '@/utils/takt-paged';
 
 /** 通知中心模块日志 */
 const notificationLogger = createLogger('notification-center');
+
+/** i18n */
+const { t } = useI18n();
 
 /**
  * 通知中心列表项

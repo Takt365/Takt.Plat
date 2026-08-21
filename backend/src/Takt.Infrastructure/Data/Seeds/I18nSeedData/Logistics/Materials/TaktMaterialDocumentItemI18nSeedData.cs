@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Materials
 // 文件名称：TaktMaterialDocumentItemI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktMaterialDocumentItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktMaterialDocumentItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.materialdocumentitem.materialdocumentid", "zh-HK", "物料凭证ID_hk", "物料凭证ID（选项 TaktMaterialDocuments/options；DictValue=Id）"),
 
             // entity.materialdocumentitem.materialdocumentcode
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "en-US", "物料凭证_us", "物料凭证（冗余；年份见主表 MaterialDocumentYear）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "en-US", "物料凭证_us", "物料凭证（冗余字段，便于查询）"),
             // entity.materialdocumentitem.materialdocumentcode
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "ja-JP", "物料凭证_jp", "物料凭证（冗余；年份见主表 MaterialDocumentYear）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "ja-JP", "物料凭证_jp", "物料凭证（冗余字段，便于查询）"),
             // entity.materialdocumentitem.materialdocumentcode
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "zh-CN", "物料凭证", "物料凭证（冗余；年份见主表 MaterialDocumentYear）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "zh-CN", "物料凭证", "物料凭证（冗余字段，便于查询）"),
             // entity.materialdocumentitem.materialdocumentcode
-            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "zh-HK", "物料凭证_hk", "物料凭证（冗余；年份见主表 MaterialDocumentYear）"),
+            new TranslationSeedItem("entity.materialdocumentitem.materialdocumentcode", "zh-HK", "物料凭证_hk", "物料凭证（冗余字段，便于查询）"),
 
             // entity.materialdocumentitem.linenumber
             new TranslationSeedItem("entity.materialdocumentitem.linenumber", "en-US", "物料凭证项目_us", "物料凭证项目（行号步长生成器用 int，固定步长=10）"),

@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.Logistics.Materials
 // 文件名称：TaktMaterialMovingPriceDtos.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：MaterialMovingPrice 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktMaterialMovingPrice 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// 移动价格实体 唯一键：租户 + 公司 + 工厂 + 评估期间 + 物料 + 评估类别（评估期间存 yyyy-MM）
+/// 移动价格实体 <para>业务唯一键（新增/更新匹配）：TenantCode+CompanyCode+PlantCode+MaterialCode+ValuationPeriod；Valuation 为业务字段，不参与唯一匹配。</para>
 /// 对应前端 TaktMaterialMovingPriceDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -36,7 +36,7 @@ public class TaktMaterialMovingPriceDto : TaktCompanyDtoBase
     public long MaterialMovingPriceId { get; set; }
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     public string ValuationPeriod { get; set; } = string.Empty;
 
@@ -113,7 +113,7 @@ public class TaktMaterialMovingPriceQueryDto : TaktPagedQuery
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     public string? ValuationPeriod { get; set; } = string.Empty;
 
@@ -208,9 +208,9 @@ public class TaktMaterialMovingPriceCreateDto
     public string PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
-    [Required(ErrorMessage = "评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）不能为空")]
+    [Required(ErrorMessage = "评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）不能为空")]
     public string ValuationPeriod { get; set; } = string.Empty;
 
     /// <summary>
@@ -319,7 +319,7 @@ public class TaktMaterialMovingPriceTemplateDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     public string? ValuationPeriod { get; set; } = string.Empty;
 
@@ -401,7 +401,7 @@ public class TaktMaterialMovingPriceImportDto
     public string? PlantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     public string? ValuationPeriod { get; set; } = string.Empty;
 
@@ -489,7 +489,7 @@ public class TaktMaterialMovingPriceExportDto
     public string CultureCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 评估期间（yyyy-MM；与工厂+物料+评估类别构成唯一键）
+    /// 评估期间（yyyy-MM；与工厂+物料编码构成业务唯一键）
     /// </summary>
     public string ValuationPeriod { get; set; } = string.Empty;
 

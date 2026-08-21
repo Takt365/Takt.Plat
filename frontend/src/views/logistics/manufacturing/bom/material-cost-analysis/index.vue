@@ -468,7 +468,7 @@ function handleRefresh() {
 }
 
 /**
- * 默认工厂：取公司关联工厂，仅当其存在于本表（takt_bom_material_cost）PlantCode 去重列表时选中
+ * 默认工厂：当前公司 RelatedPlant 仅当出现在 plant-options（RelatedPlant∩本表）时选中；无则清空
  * @returns {Promise<void>}
  */
 async function applyDefaultPlantFromCompany(): Promise<void> {

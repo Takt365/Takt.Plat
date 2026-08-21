@@ -86,7 +86,7 @@ public class TaktPurchaseForecast : TaktApprovalEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialDescription { get; set; } = string.Empty;

@@ -16,7 +16,7 @@ using Takt.Domain.Entities;
 namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
-/// Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription）
+/// Takt全局物料实体（租户内共享；字段；多语言描述见 TaktMaterialDescription）
 /// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
 /// </summary>
 [SugarTable("takt_logistics_materials_general_material", "全局物料表")]

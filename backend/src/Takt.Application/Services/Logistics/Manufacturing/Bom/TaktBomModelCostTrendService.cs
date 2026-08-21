@@ -1843,7 +1843,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
         TaktYearShardTableHelper.BuildYearTableName(BomItemYearShardBaseTable, year);
 
     /// <summary>
-    /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 SAP 同步）
+ /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 同步）
     /// </summary>
     /// <param name="year">自然年</param>
     /// <returns>年分表名；不存在时为 null</returns>
@@ -1912,7 +1912,7 @@ public class TaktBomModelCostTrendService : TaktServiceBase, ITaktBomModelCostTr
                 TryAppend(part);
             }
         }
-        // 年分表与基表合并：SAP 同步常写基表，年分表可能仅部分数据；按 Id 去重
+ // 年分表与基表合并： 同步常写基表，年分表可能仅部分数据；按 Id 去重
         if (!maxRows.HasValue || result.Count < maxRows.Value)
         {
             List<TaktBomMaterialCostItem> basePart;

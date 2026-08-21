@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Logistics.Materials;
 // ========================================
 
 /// <summary>
-/// Takt全局物料实体（租户内共享；字段对齐 SAP MARA；多语言描述见 TaktMaterialDescription） 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
+/// Takt全局物料实体（租户内共享；字段；多语言描述见 TaktMaterialDescription） 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）；多语言走 TaktMaterialDescription
 /// 对应前端 TaktGeneralMaterialDto
 /// 继承 TaktTenantCoreDtoBase
 /// </summary>

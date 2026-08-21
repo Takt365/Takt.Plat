@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.Accounting.Financial;
 // ========================================
 
 /// <summary>
-/// 公司实体 代表租户下的独立公司（第二层数据隔离业务主档） 参照 SAP Company Code (BUKRS) 设计 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
+/// 公司实体 代表租户下的独立公司（第二层数据隔离业务主档） 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
 /// 对应前端 TaktCompanyDto
 /// 继承 TaktTenantDtoBase
 /// </summary>

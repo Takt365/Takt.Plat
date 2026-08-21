@@ -31,9 +31,17 @@ namespace Takt.Infrastructure.Data.Context;
 public class TaktSqlSugarContext : IDisposable
 {
     /// <summary>
-    /// SqlSugar 客户端（当前租户连接）
+    /// 构造时绑定的默认租户连接（UseDatabaseConnection 结束后恢复）
     /// </summary>
-    private readonly ISqlSugarClient _db;
+    private readonly ISqlSugarClient _defaultClient;
+    /// <summary>
+    /// 当前生效客户端（默认或临时切库）
+    /// </summary>
+    private ISqlSugarClient _db;
+    /// <summary>
+    /// UseDatabaseConnection 创建的临时客户端（Dispose 切回时释放）
+    /// </summary>
+    private SqlSugarClient? _temporaryClient;
     /// <summary>
     /// 是否已释放
     /// </summary>
@@ -50,6 +58,10 @@ public class TaktSqlSugarContext : IDisposable
     /// 已解析的 SqlSugar 数据库类型（构造时从配置映射一次）
     /// </summary>
     private readonly DbType _sugarDbType;
+    /// <summary>
+    /// HTTP 上下文（审计 AOP；临时切库重建客户端时复用）
+    /// </summary>
+    private readonly IHttpContextAccessor? _httpContextAccessor;
 
     /// <summary>
     /// SqlSugar客户端实例
@@ -102,6 +114,7 @@ public class TaktSqlSugarContext : IDisposable
         
         _configuration = configuration;
         _tenantCode = tenantCode;
+        _httpContextAccessor = httpContextAccessor;
         _sugarDbType = configuration.GetSugarDbType();
         var connectionString = _configuration.GetConnectionString($"Tenant_{tenantCode}");
         if (string.IsNullOrWhiteSpace(connectionString))
@@ -110,11 +123,12 @@ public class TaktSqlSugarContext : IDisposable
                 $"未找到租户 {tenantCode} 的连接字符串配置。请在 appsettings.json 中配置 'ConnectionStrings:Tenant_{tenantCode}'。");
         }
         _db = TaktSqlSugarConnectionHelper.CreateClient(_sugarDbType, tenantCode, connectionString);
+        _defaultClient = _db;
         
         // SqlSugar 内置雪花ID：当实体主键为 long 类型时，插入时自动生成
         // 无需手动配置，SqlSugar 会自动处理
 
-        TaktSqlSugarAuditAop.ConfigureClient(_db, httpContextAccessor);
+        TaktSqlSugarAuditAop.ConfigureClient(_db, _httpContextAccessor);
 
         // 开启日志（开发环境）
 #if DEBUG
@@ -126,6 +140,45 @@ public class TaktSqlSugarContext : IDisposable
     }
 
     /// <summary>
+    /// 临时切换到指定连接（Quartz 选中 targetDatabase 后，本作用域内仓储查询均落该库）
+    /// </summary>
+    /// <param name="configTenantCode">ConnectionConfig.ConfigId（Tenant_* 编码）</param>
+    /// <param name="connectionString">目标库连接串</param>
+    /// <returns>Dispose 时切回默认连接并释放临时客户端</returns>
+    /// <exception cref="InvalidOperationException">已存在未结束的临时切库</exception>
+    public IDisposable UseDatabaseConnection(string configTenantCode, string connectionString)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(configTenantCode);
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+        if (_temporaryClient != null)
+        {
+            throw new InvalidOperationException("已存在未结束的临时数据库连接切换");
+        }
+        var next = TaktSqlSugarConnectionHelper.CreateClient(
+            _sugarDbType,
+            configTenantCode.Trim(),
+            connectionString);
+        TaktSqlSugarAuditAop.ConfigureClient(next, _httpContextAccessor);
+        _temporaryClient = next;
+        _db = next;
+        return new TemporaryDatabaseConnectionScope(this);
+    }
+
+    /// <summary>
+    /// 结束临时切库：释放临时客户端并恢复默认连接
+    /// </summary>
+    private void EndTemporaryDatabaseConnection()
+    {
+        if (_temporaryClient != null)
+        {
+            _temporaryClient.Close();
+            _temporaryClient.Dispose();
+            _temporaryClient = null;
+        }
+        _db = _defaultClient;
+    }
+
+    /// <summary>
     /// 获取实体的Queryable对象
     /// </summary>
     /// <typeparam name="T">实体类型</typeparam>
@@ -133,6 +186,35 @@ public class TaktSqlSugarContext : IDisposable
     public ISugarQueryable<T> Query<T>() where T : class, new()
     {
         return _db.Queryable<T>();
+    }
+
+    /// <summary>
+    /// UseDatabaseConnection 的 Dispose 作用域
+    /// </summary>
+    private sealed class TemporaryDatabaseConnectionScope : IDisposable
+    {
+        private readonly TaktSqlSugarContext _owner;
+        private bool _disposed;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="owner">上下文</param>
+        public TemporaryDatabaseConnectionScope(TaktSqlSugarContext owner)
+        {
+            _owner = owner;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+            _disposed = true;
+            _owner.EndTemporaryDatabaseConnection();
+        }
     }
 
     /// <summary>
@@ -432,10 +514,20 @@ public class TaktSqlSugarContext : IDisposable
             return;
         }
 
-        if (disposing && _db is SqlSugarClient client)
+        if (disposing)
         {
-            client.Close();
-            client.Dispose();
+            if (_temporaryClient != null)
+            {
+                _temporaryClient.Close();
+                _temporaryClient.Dispose();
+                _temporaryClient = null;
+            }
+            if (_defaultClient is SqlSugarClient defaultClient)
+            {
+                defaultClient.Close();
+                defaultClient.Dispose();
+            }
+            _db = _defaultClient;
         }
 
         _disposed = true;

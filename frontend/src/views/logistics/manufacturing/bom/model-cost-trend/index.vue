@@ -247,7 +247,7 @@ function applyDefaultPeriodRange() {
 }
 
 /**
- * 默认工厂
+ * 默认工厂：当前公司 RelatedPlant 仅当出现在 plant-options（RelatedPlant∩本表）时选中；无则清空
  * @returns {Promise<void>}
  */
 async function applyDefaultPlantFromCompany(): Promise<void> {

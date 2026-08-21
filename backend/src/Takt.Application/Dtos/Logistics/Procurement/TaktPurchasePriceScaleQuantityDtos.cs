@@ -57,17 +57,17 @@ public class TaktPurchasePriceScaleQuantityDto : TaktCompanyDtoBase
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal Price { get; set; }
 
@@ -140,17 +140,17 @@ public class TaktPurchasePriceScaleQuantityQueryDto : TaktPagedQuery
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal? Price { get; set; }
 
@@ -242,17 +242,17 @@ public class TaktPurchasePriceScaleQuantityCreateDto
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal Price { get; set; }
 
@@ -377,17 +377,17 @@ public class TaktPurchasePriceScaleQuantityTemplateDto
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal? Price { get; set; }
 
@@ -465,17 +465,17 @@ public class TaktPurchasePriceScaleQuantityImportDto
     public int? PurchasePriceSeq { get; set; }
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int? PurchaseScaleSeq { get; set; }
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal? ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal? Price { get; set; }
 
@@ -549,17 +549,17 @@ public class TaktPurchasePriceScaleQuantityExportDto
     public int PurchasePriceSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）
+    /// 等级序号（回填：同一明细内阶梯序号，固定步长=10）
     /// </summary>
     public int PurchaseScaleSeq { get; set; } = 0;
 
     /// <summary>
-    /// 等级数量（KSTBM；数量等级门槛；对应价值等级表的 ScaleValue）
+    /// 等级数量（数量等级门槛；对应价值等级表的 ScaleValue）
     /// </summary>
     public decimal ScaleQuantity { get; set; }
 
     /// <summary>
-    /// 价格（KBETR）
+    /// 价格
     /// </summary>
     public decimal Price { get; set; }
 

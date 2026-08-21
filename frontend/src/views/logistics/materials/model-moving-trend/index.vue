@@ -15,6 +15,7 @@
       v-model:material-type="materialType"
       v-model:valuation="valuation"
       v-model:material-code="materialCode"
+      :show-material-type="true"
       :loading="panelLoading"
       @search="handleSearch"
       @reset="handleReset"

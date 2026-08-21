@@ -687,7 +687,7 @@ public class TaktMaterialMovingPriceTrendService : TaktServiceBase, ITaktMateria
     }
 
     /// <summary>
-    /// DISTINCT 产品→机种（成本汇总表回退；支持 SAP 物料码归一匹配）
+ /// DISTINCT 产品→机种（成本汇总表回退；支持 物料码归一匹配）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCodes">产品编码</param>

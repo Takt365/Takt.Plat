@@ -17,44 +17,81 @@ CREATE TABLE #cjs_source (
   [destination_code] NVARCHAR(100)
 );
 
--- 源表原样全量装入（行数 = PP_SapModelDest；禁止擅自去重改行数）
--- 描述不在此阶段匹配：先按 Material+Model+Destination 同步，MERGE 后再回填
+-- 源表装入后按业务唯一键 Tenant+Material+Model 去重（Destination 仅业务字段）
+-- 描述不在此阶段匹配：先按 Material+Model 同步，MERGE 后再回填
 INSERT INTO #cjs_source ([rn], [material_code], [model_code], [destination_code])
 SELECT
   S.rn,
-  LTRIM(RTRIM(S.[D_SAP_DEST_Z001])),
-  LTRIM(RTRIM(S.[D_SAP_DEST_Z002])),
-  LTRIM(RTRIM(S.[D_SAP_DEST_Z003]))
+  S.[material_code],
+  S.[model_code],
+  S.[destination_code]
 FROM (
-  SELECT *, ROW_NUMBER() OVER (ORDER BY [D_SAP_DEST_Z001], [D_SAP_DEST_Z002], [D_SAP_DEST_Z003]) AS rn
-  FROM [Sap_Data].[dbo].[PP_SapModelDest]
+  SELECT
+    N.[material_code],
+    N.[model_code],
+    N.[destination_code],
+    ROW_NUMBER() OVER (
+      ORDER BY N.[material_code], N.[model_code]
+    ) AS rn
+  FROM (
+    SELECT
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z001])) AS [material_code],
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z002])) AS [model_code],
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z003])) AS [destination_code],
+      ROW_NUMBER() OVER (
+        PARTITION BY
+          LTRIM(RTRIM(R.[D_SAP_DEST_Z001])),
+          LTRIM(RTRIM(R.[D_SAP_DEST_Z002]))
+        ORDER BY
+          CASE WHEN LTRIM(RTRIM(ISNULL(R.[D_SAP_DEST_Z003], N''))) = N'' THEN 1 ELSE 0 END,
+          LTRIM(RTRIM(R.[D_SAP_DEST_Z003]))
+      ) AS dup_rn
+    FROM [Sap_Data].[dbo].[PP_SapModelDest] R
+    WHERE LTRIM(RTRIM(ISNULL(R.[D_SAP_DEST_Z001], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[D_SAP_DEST_Z002], N''))) <> N''
+  ) N
+  WHERE N.dup_rn = 1
 ) S
 WHERE @batch_size = 0 OR S.rn <= @batch_size;
 
 DECLARE @source_count INT = (SELECT COUNT(*) FROM #cjs_source);
 DECLARE @sap_raw_count INT = (SELECT COUNT(*) FROM [Sap_Data].[dbo].[PP_SapModelDest]);
+DECLARE @sap_key_count INT = (
+  SELECT COUNT(*)
+  FROM (
+    SELECT
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z001])) AS [material_code],
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z002])) AS [model_code]
+    FROM [Sap_Data].[dbo].[PP_SapModelDest] R
+    WHERE LTRIM(RTRIM(ISNULL(R.[D_SAP_DEST_Z001], N''))) <> N''
+      AND LTRIM(RTRIM(ISNULL(R.[D_SAP_DEST_Z002], N''))) <> N''
+    GROUP BY
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z001])),
+      LTRIM(RTRIM(R.[D_SAP_DEST_Z002]))
+  ) K
+);
 
--- 全量同步：临时表行数必须等于源表行数
-IF @source_count <> @sap_raw_count
+IF @batch_size = 0 AND @source_count <> @sap_key_count
 BEGIN
   DECLARE @src_msg NVARCHAR(200) = CONCAT(
-    N'源表行数与装入不一致: source=', @sap_raw_count, N', loaded=', @source_count);
+    N'业务键装入不一致: keys=', @sap_key_count, N', loaded=', @source_count,
+    N', sap_raw=', @sap_raw_count);
   THROW 50003, @src_msg, 1;
 END;
 
--- 业务键 = Material+Model+Destination；源内重复则无法 1:1 落目标表（与 Tenant+Material+Model+Destination 一致）
+-- 业务唯一键 = Material+Model（与 Tenant+Material+Model 一致）
 IF EXISTS (
   SELECT 1
   FROM #cjs_source
-  GROUP BY [material_code], [model_code], [destination_code]
+  GROUP BY [material_code], [model_code]
   HAVING COUNT(*) > 1
 )
 BEGIN
   DECLARE @dup_key NVARCHAR(400);
   SELECT TOP 1
-    @dup_key = CONCAT([material_code], N' / ', [model_code], N' / ', [destination_code], N' x', COUNT(*))
+    @dup_key = CONCAT([material_code], N' / ', [model_code], N' x', COUNT(*))
   FROM #cjs_source
-  GROUP BY [material_code], [model_code], [destination_code]
+  GROUP BY [material_code], [model_code]
   HAVING COUNT(*) > 1;
   THROW 50001, @dup_key, 1;
 END;
@@ -82,7 +119,7 @@ DECLARE @target_before INT = (
     AND [is_deleted] = 0
 );
 
--- 存在则仅在需恢复软删或默认字段偏离时 UPDATE；描述不在 MERGE 内处理（见后置回填）
+-- 存在则仅在仕向地/软删/默认字段变化时 UPDATE；描述不在 MERGE 内处理（见后置回填）
 MERGE INTO [takt_logistics_materials_model_destination] AS T
 USING (
   SELECT
@@ -96,13 +133,14 @@ USING (
 ON T.[tenant_code] = @tenant_code
 AND LTRIM(RTRIM(T.[material_code])) = S.[material_code]
 AND LTRIM(RTRIM(T.[model_code])) = S.[model_code]
-AND LTRIM(RTRIM(T.[destination_code])) = S.[destination_code]
 WHEN MATCHED AND (
   T.[is_deleted] <> 0
   OR T.[sort_order] <> 0
+  OR LTRIM(RTRIM(ISNULL(T.[destination_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[destination_code], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[remark], N''))) <> N'幂等更新'
 ) THEN
   UPDATE SET
+  T.[destination_code]=S.[destination_code],
   T.[sort_order]=0,
   T.[remark]=N'幂等更新',
   T.[updated_by]=@sync_user_id,
@@ -168,8 +206,7 @@ IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_
 CREATE TABLE #soft_deleted_rows (
   [id] BIGINT,
   [material_code] NVARCHAR(100),
-  [model_code] NVARCHAR(100),
-  [destination_code] NVARCHAR(100)
+  [model_code] NVARCHAR(100)
 );
 
 UPDATE T
@@ -182,9 +219,8 @@ SET
 OUTPUT
   INSERTED.[id],
   INSERTED.[material_code],
-  INSERTED.[model_code],
-  INSERTED.[destination_code]
-INTO #soft_deleted_rows ([id], [material_code], [model_code], [destination_code])
+  INSERTED.[model_code]
+INTO #soft_deleted_rows ([id], [material_code], [model_code])
 FROM [takt_logistics_materials_model_destination] T
 WHERE T.[tenant_code] = @tenant_code
   AND T.[is_deleted] = 0
@@ -193,7 +229,6 @@ WHERE T.[tenant_code] = @tenant_code
     FROM #cjs_source S
     WHERE S.[material_code] = LTRIM(RTRIM(T.[material_code]))
       AND S.[model_code] = LTRIM(RTRIM(T.[model_code]))
-      AND S.[destination_code] = LTRIM(RTRIM(T.[destination_code]))
   );
 
 DECLARE @delete_count INT = @@ROWCOUNT;
@@ -203,8 +238,7 @@ SELECT @soft_deleted_keys = STRING_AGG(
     CONCAT(
     CAST([id] AS NVARCHAR(30)), N'|',
     ISNULL([material_code], N''), N'/',
-    ISNULL([model_code], N''), N'/',
-    ISNULL([destination_code], N'')
+    ISNULL([model_code], N'')
   )
   AS NVARCHAR(MAX)),
   N'; '
@@ -317,7 +351,7 @@ SELECT
   N'MERGE Model Destination Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #cjs_delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #cjs_delta WHERE oper_type = 'INSERT');

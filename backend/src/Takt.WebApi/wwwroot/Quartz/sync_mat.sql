@@ -226,10 +226,9 @@ CREATE TABLE #mat_source (
   [fiber_part5] NVARCHAR(3),
   [fashion_grade] NVARCHAR(4),
   [tenant_code] NVARCHAR(3),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #mat_delta (
   rn INT,
@@ -450,9 +449,8 @@ SELECT
   S.[fiber_part5],
   S.[fashion_grade],
   S.[tenant_code],
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -662,9 +660,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[fiber_code5])), 3), N'') AS [fiber_code5],
       NULLIF(LEFT(LTRIM(RTRIM(R.[fiber_part5])), 3), N'') AS [fiber_part5],
       NULLIF(LEFT(LTRIM(RTRIM(R.[fashion_grade])), 4), N'') AS [fashion_grade],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[material_code]))
         ORDER BY LTRIM(RTRIM(R.[material_code]))
       ) AS dup_rn
@@ -1131,6 +1136,12 @@ WHEN MATCHED AND (
       T.[fiber_part5],
       T.[fashion_grade]
   )
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[complete_maintenance_status]=S.[complete_maintenance_status],
@@ -1334,14 +1345,16 @@ WHEN MATCHED AND (
   T.[fiber_code5]=S.[fiber_code5],
   T.[fiber_part5]=S.[fiber_part5],
   T.[fashion_grade]=S.[fashion_grade],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[material_code],[complete_maintenance_status],[maintenance_status],[client_deletion_flag],[material_type],[industry_sector],[material_group],[old_material_number],[base_unit],[order_unit],[document_number],[document_type],[document_version],[document_page_format],[document_change_number],[document_page_number],[document_sheet_count],[production_inspection_memo],[production_memo_page_format],[size_dimensions],[basic_material],[industry_standard_description],[laboratory_design_office],[purchasing_value_key],[gross_weight],[net_weight],[weight_unit],[volume],[volume_unit],[container_requirements],[storage_conditions],[temperature_conditions],[low_level_code],[transportation_group],[hazardous_material_number],[division],[competitor],[european_article_number_obsolete],[gr_gi_slip_quantity],[procurement_rule],[source_of_supply],[season_category],[label_type],[label_form],[deactivated_field],[international_article_number],[ean_category],[length],[width],[height],[dimension_unit],[product_hierarchy],[stock_transfer_net_change_costing],[cad_indicator],[qm_in_procurement],[allowed_packaging_weight],[allowed_packaging_weight_unit],[allowed_packaging_volume],[allowed_packaging_volume_unit],[excess_weight_tolerance],[excess_volume_tolerance],[variable_purchase_order_unit],[revision_level_assigned],[configurable_material],[batch_management_required],[packaging_material_type],[maximum_level_by_volume],[stacking_factor],[packaging_material_group],[authorization_group],[valid_from_date],[valid_to_date],[season_year],[price_band_category],[empties_bill_of_material],[external_material_group],[cross_plant_configurable_material],[material_category],[co_product_indicator],[follow_up_material_indicator],[pricing_reference_material],[cross_plant_material_status],[cross_distribution_chain_status],[cross_plant_status_valid_from],[cross_distribution_status_valid_from],[tax_classification],[catalog_profile],[minimum_remaining_shelf_life],[total_shelf_life],[storage_percentage],[content_unit],[net_contents],[comparison_price_unit],[labeling_material_grouping],[gross_contents],[quantity_conversion_method],[internal_object_number],[environmentally_relevant],[product_allocation_procedure],[variant_pricing_profile],[discount_in_kind],[manufacturer_part_number],[manufacturer_number],[inventory_managed_material_number],[manufacturer_part_profile],[units_of_measure_usage],[season_rollout],[dangerous_goods_profile],[highly_viscous],[in_bulk_liquid],[serial_number_explicitness],[closed_packaging],[approved_batch_record_required],[effectivity_parameter_override],[material_completion_level],[shelf_life_period_indicator],[shelf_life_rounding_rule],[product_composition_on_packaging],[general_item_category_group],[logistical_variants],[material_locked],[configuration_management_relevant],[assortment_list_type],[expiration_date_type],[gtin_variant],[generic_material_number],[same_packing_reference_material],[global_data_sync_relevant],[acceptance_at_origin],[standard_hu_type],[pilferable],[warehouse_storage_condition],[warehouse_material_group],[handling_indicator],[hazardous_substances_relevant],[handling_unit_type],[variable_tare_weight],[maximum_allowed_capacity],[overcapacity_tolerance],[maximum_packing_length],[maximum_packing_width],[maximum_packing_height],[maximum_packing_dimension_unit],[country_of_origin],[material_freight_group],[quarantine_period],[quarantine_period_unit],[quality_inspection_group],[serial_number_profile],[form_name],[logistics_unit_of_measure],[catch_weight_material],[catch_weight_profile],[catch_weight_tolerance_group],[adjustment_profile],[intellectual_property_id],[variant_price_allowed],[medium],[physical_commodity],[animal_origin],[textile_composition_function],[segmentation_structure],[segmentation_strategy],[segmentation_status],[segmentation_scope],[segmentation_relevant],[anp_code],[fashion_attribute1],[fashion_attribute2],[fashion_attribute3],[season_usage_indicator],[season_active_in_inventory],[characteristic_conversion_id],[packaging_code],[dangerous_goods_packaging_status],[material_condition_management],[return_code],[return_to_logistics_level],[nato_item_identification_number],[fff_class],[supersession_chain_number],[seasonal_procurement_creation_status],[color_characteristic_internal_number],[main_size_characteristic_internal_number],[second_size_characteristic_internal_number],[color],[main_size],[second_size],[evaluation_characteristic_value],[care_code],[brand_id],[fiber_code1],[fiber_part1],[fiber_code2],[fiber_part2],[fiber_code3],[fiber_part3],[fiber_code4],[fiber_part4],[fiber_code5],[fiber_part5],[fashion_grade],[tenant_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[material_code],S.[complete_maintenance_status],S.[maintenance_status],S.[client_deletion_flag],S.[material_type],S.[industry_sector],S.[material_group],S.[old_material_number],S.[base_unit],S.[order_unit],S.[document_number],S.[document_type],S.[document_version],S.[document_page_format],S.[document_change_number],S.[document_page_number],S.[document_sheet_count],S.[production_inspection_memo],S.[production_memo_page_format],S.[size_dimensions],S.[basic_material],S.[industry_standard_description],S.[laboratory_design_office],S.[purchasing_value_key],S.[gross_weight],S.[net_weight],S.[weight_unit],S.[volume],S.[volume_unit],S.[container_requirements],S.[storage_conditions],S.[temperature_conditions],S.[low_level_code],S.[transportation_group],S.[hazardous_material_number],S.[division],S.[competitor],S.[european_article_number_obsolete],S.[gr_gi_slip_quantity],S.[procurement_rule],S.[source_of_supply],S.[season_category],S.[label_type],S.[label_form],S.[deactivated_field],S.[international_article_number],S.[ean_category],S.[length],S.[width],S.[height],S.[dimension_unit],S.[product_hierarchy],S.[stock_transfer_net_change_costing],S.[cad_indicator],S.[qm_in_procurement],S.[allowed_packaging_weight],S.[allowed_packaging_weight_unit],S.[allowed_packaging_volume],S.[allowed_packaging_volume_unit],S.[excess_weight_tolerance],S.[excess_volume_tolerance],S.[variable_purchase_order_unit],S.[revision_level_assigned],S.[configurable_material],S.[batch_management_required],S.[packaging_material_type],S.[maximum_level_by_volume],S.[stacking_factor],S.[packaging_material_group],S.[authorization_group],S.[valid_from_date],S.[valid_to_date],S.[season_year],S.[price_band_category],S.[empties_bill_of_material],S.[external_material_group],S.[cross_plant_configurable_material],S.[material_category],S.[co_product_indicator],S.[follow_up_material_indicator],S.[pricing_reference_material],S.[cross_plant_material_status],S.[cross_distribution_chain_status],S.[cross_plant_status_valid_from],S.[cross_distribution_status_valid_from],S.[tax_classification],S.[catalog_profile],S.[minimum_remaining_shelf_life],S.[total_shelf_life],S.[storage_percentage],S.[content_unit],S.[net_contents],S.[comparison_price_unit],S.[labeling_material_grouping],S.[gross_contents],S.[quantity_conversion_method],S.[internal_object_number],S.[environmentally_relevant],S.[product_allocation_procedure],S.[variant_pricing_profile],S.[discount_in_kind],S.[manufacturer_part_number],S.[manufacturer_number],S.[inventory_managed_material_number],S.[manufacturer_part_profile],S.[units_of_measure_usage],S.[season_rollout],S.[dangerous_goods_profile],S.[highly_viscous],S.[in_bulk_liquid],S.[serial_number_explicitness],S.[closed_packaging],S.[approved_batch_record_required],S.[effectivity_parameter_override],S.[material_completion_level],S.[shelf_life_period_indicator],S.[shelf_life_rounding_rule],S.[product_composition_on_packaging],S.[general_item_category_group],S.[logistical_variants],S.[material_locked],S.[configuration_management_relevant],S.[assortment_list_type],S.[expiration_date_type],S.[gtin_variant],S.[generic_material_number],S.[same_packing_reference_material],S.[global_data_sync_relevant],S.[acceptance_at_origin],S.[standard_hu_type],S.[pilferable],S.[warehouse_storage_condition],S.[warehouse_material_group],S.[handling_indicator],S.[hazardous_substances_relevant],S.[handling_unit_type],S.[variable_tare_weight],S.[maximum_allowed_capacity],S.[overcapacity_tolerance],S.[maximum_packing_length],S.[maximum_packing_width],S.[maximum_packing_height],S.[maximum_packing_dimension_unit],S.[country_of_origin],S.[material_freight_group],S.[quarantine_period],S.[quarantine_period_unit],S.[quality_inspection_group],S.[serial_number_profile],S.[form_name],S.[logistics_unit_of_measure],S.[catch_weight_material],S.[catch_weight_profile],S.[catch_weight_tolerance_group],S.[adjustment_profile],S.[intellectual_property_id],S.[variant_price_allowed],S.[medium],S.[physical_commodity],S.[animal_origin],S.[textile_composition_function],S.[segmentation_structure],S.[segmentation_strategy],S.[segmentation_status],S.[segmentation_scope],S.[segmentation_relevant],S.[anp_code],S.[fashion_attribute1],S.[fashion_attribute2],S.[fashion_attribute3],S.[season_usage_indicator],S.[season_active_in_inventory],S.[characteristic_conversion_id],S.[packaging_code],S.[dangerous_goods_packaging_status],S.[material_condition_management],S.[return_code],S.[return_to_logistics_level],S.[nato_item_identification_number],S.[fff_class],S.[supersession_chain_number],S.[seasonal_procurement_creation_status],S.[color_characteristic_internal_number],S.[main_size_characteristic_internal_number],S.[second_size_characteristic_internal_number],S.[color],S.[main_size],S.[second_size],S.[evaluation_characteristic_value],S.[care_code],S.[brand_id],S.[fiber_code1],S.[fiber_part1],S.[fiber_code2],S.[fiber_part2],S.[fiber_code3],S.[fiber_part3],S.[fiber_code4],S.[fiber_part4],S.[fiber_code5],S.[fiber_part5],S.[fashion_grade],S.[tenant_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[material_code],S.[complete_maintenance_status],S.[maintenance_status],S.[client_deletion_flag],S.[material_type],S.[industry_sector],S.[material_group],S.[old_material_number],S.[base_unit],S.[order_unit],S.[document_number],S.[document_type],S.[document_version],S.[document_page_format],S.[document_change_number],S.[document_page_number],S.[document_sheet_count],S.[production_inspection_memo],S.[production_memo_page_format],S.[size_dimensions],S.[basic_material],S.[industry_standard_description],S.[laboratory_design_office],S.[purchasing_value_key],S.[gross_weight],S.[net_weight],S.[weight_unit],S.[volume],S.[volume_unit],S.[container_requirements],S.[storage_conditions],S.[temperature_conditions],S.[low_level_code],S.[transportation_group],S.[hazardous_material_number],S.[division],S.[competitor],S.[european_article_number_obsolete],S.[gr_gi_slip_quantity],S.[procurement_rule],S.[source_of_supply],S.[season_category],S.[label_type],S.[label_form],S.[deactivated_field],S.[international_article_number],S.[ean_category],S.[length],S.[width],S.[height],S.[dimension_unit],S.[product_hierarchy],S.[stock_transfer_net_change_costing],S.[cad_indicator],S.[qm_in_procurement],S.[allowed_packaging_weight],S.[allowed_packaging_weight_unit],S.[allowed_packaging_volume],S.[allowed_packaging_volume_unit],S.[excess_weight_tolerance],S.[excess_volume_tolerance],S.[variable_purchase_order_unit],S.[revision_level_assigned],S.[configurable_material],S.[batch_management_required],S.[packaging_material_type],S.[maximum_level_by_volume],S.[stacking_factor],S.[packaging_material_group],S.[authorization_group],S.[valid_from_date],S.[valid_to_date],S.[season_year],S.[price_band_category],S.[empties_bill_of_material],S.[external_material_group],S.[cross_plant_configurable_material],S.[material_category],S.[co_product_indicator],S.[follow_up_material_indicator],S.[pricing_reference_material],S.[cross_plant_material_status],S.[cross_distribution_chain_status],S.[cross_plant_status_valid_from],S.[cross_distribution_status_valid_from],S.[tax_classification],S.[catalog_profile],S.[minimum_remaining_shelf_life],S.[total_shelf_life],S.[storage_percentage],S.[content_unit],S.[net_contents],S.[comparison_price_unit],S.[labeling_material_grouping],S.[gross_contents],S.[quantity_conversion_method],S.[internal_object_number],S.[environmentally_relevant],S.[product_allocation_procedure],S.[variant_pricing_profile],S.[discount_in_kind],S.[manufacturer_part_number],S.[manufacturer_number],S.[inventory_managed_material_number],S.[manufacturer_part_profile],S.[units_of_measure_usage],S.[season_rollout],S.[dangerous_goods_profile],S.[highly_viscous],S.[in_bulk_liquid],S.[serial_number_explicitness],S.[closed_packaging],S.[approved_batch_record_required],S.[effectivity_parameter_override],S.[material_completion_level],S.[shelf_life_period_indicator],S.[shelf_life_rounding_rule],S.[product_composition_on_packaging],S.[general_item_category_group],S.[logistical_variants],S.[material_locked],S.[configuration_management_relevant],S.[assortment_list_type],S.[expiration_date_type],S.[gtin_variant],S.[generic_material_number],S.[same_packing_reference_material],S.[global_data_sync_relevant],S.[acceptance_at_origin],S.[standard_hu_type],S.[pilferable],S.[warehouse_storage_condition],S.[warehouse_material_group],S.[handling_indicator],S.[hazardous_substances_relevant],S.[handling_unit_type],S.[variable_tare_weight],S.[maximum_allowed_capacity],S.[overcapacity_tolerance],S.[maximum_packing_length],S.[maximum_packing_width],S.[maximum_packing_height],S.[maximum_packing_dimension_unit],S.[country_of_origin],S.[material_freight_group],S.[quarantine_period],S.[quarantine_period_unit],S.[quality_inspection_group],S.[serial_number_profile],S.[form_name],S.[logistics_unit_of_measure],S.[catch_weight_material],S.[catch_weight_profile],S.[catch_weight_tolerance_group],S.[adjustment_profile],S.[intellectual_property_id],S.[variant_price_allowed],S.[medium],S.[physical_commodity],S.[animal_origin],S.[textile_composition_function],S.[segmentation_structure],S.[segmentation_strategy],S.[segmentation_status],S.[segmentation_scope],S.[segmentation_relevant],S.[anp_code],S.[fashion_attribute1],S.[fashion_attribute2],S.[fashion_attribute3],S.[season_usage_indicator],S.[season_active_in_inventory],S.[characteristic_conversion_id],S.[packaging_code],S.[dangerous_goods_packaging_status],S.[material_condition_management],S.[return_code],S.[return_to_logistics_level],S.[nato_item_identification_number],S.[fff_class],S.[supersession_chain_number],S.[seasonal_procurement_creation_status],S.[color_characteristic_internal_number],S.[main_size_characteristic_internal_number],S.[second_size_characteristic_internal_number],S.[color],S.[main_size],S.[second_size],S.[evaluation_characteristic_value],S.[care_code],S.[brand_id],S.[fiber_code1],S.[fiber_part1],S.[fiber_code2],S.[fiber_part2],S.[fiber_code3],S.[fiber_part3],S.[fiber_code4],S.[fiber_part4],S.[fiber_code5],S.[fiber_part5],S.[fashion_grade],S.[tenant_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[material_code]
 INTO #mat_delta (rn, oper_type, id, [material_code]);
@@ -1415,10 +1428,9 @@ CREATE TABLE #desc_source (
   [material_long_description] NVARCHAR(255),
   [culture_code] NVARCHAR(5),
   [tenant_code] NVARCHAR(3),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #desc_delta (
   rn INT,
@@ -1445,9 +1457,8 @@ SELECT
   S.[material_long_description],
   S.[culture_code],
   S.[tenant_code],
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -1461,9 +1472,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[material_model])), 70), N'') AS [material_model],
       NULLIF(LEFT(LTRIM(RTRIM(R.[material_long_description])), 255), N'') AS [material_long_description],
       ISNULL(NULLIF(LEFT(LTRIM(RTRIM(R.[culture_code])), 5), N''), N'zh-CN') AS [culture_code],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[material_code])), LTRIM(RTRIM(R.[culture_code]))
         ORDER BY LTRIM(RTRIM(R.[material_code])), LTRIM(RTRIM(R.[culture_code]))
       ) AS dup_rn
@@ -1539,20 +1557,28 @@ WHEN MATCHED AND (
       T.[material_model],
       T.[material_long_description]
   )
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[material_description]=S.[material_description],
   T.[material_specification]=S.[material_specification],
   T.[material_model]=S.[material_model],
   T.[material_long_description]=S.[material_long_description],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[material_code],[material_description],[material_specification],[material_model],[material_long_description],[culture_code],[tenant_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[material_code],S.[material_description],S.[material_specification],S.[material_model],S.[material_long_description],S.[culture_code],S.[tenant_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[material_code],S.[material_description],S.[material_specification],S.[material_model],S.[material_long_description],S.[culture_code],S.[tenant_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[material_code], INSERTED.[culture_code]
 INTO #desc_delta (rn, oper_type, id, [material_code], [culture_code]);

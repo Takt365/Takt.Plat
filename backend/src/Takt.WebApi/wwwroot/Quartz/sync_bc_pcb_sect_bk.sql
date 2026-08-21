@@ -9,14 +9,12 @@ IF @costing_period IS NULL
 
 -- =============================================================================
 -- QT_SYNC_BC_PCB_SECT_BK：BOM 明细 PCB SECT 整树回填 pcb_sect_indicator
--- 对齐 TaktBomMaterialCostItemLineCostHelper.CollectPcbSectHierarchyRows
---   + TryApplyPcbSectIndicatorMark（写入 X；已有 X 跳过）
--- 树根：component_description 含「PCB SECT」（大小写不敏感），或已标 pcb_sect_indicator=X
--- 子孙：同一工厂+规范化产品码+核算日树上，展开序下深度更深的后代行
--- 展开序：ProductCode → LineNumber → BomLevel 前导点数 → BomLevel 数字段 → BomLevel 原文
--- 产品码：18 位纯数字截末 10 位（与 NormalizeProductCodeForTree 一致）
+-- 对齐 TaktBomMaterialCostItemLineCostHelper.CollectPcbSectHierarchyRows（集合版，禁止逐行 WHILE）
+-- 树根：component_description 含「PCB SECT」，或已标 pcb_sect_indicator=X
+-- 子孙：同工厂+规范化产品码+核算日树上，根节点 rn 起至下一同级/更浅节点之前
 -- 核算月：ExecuteParams.costingPeriod（yyyy-MM）；空则当月
--- 仅目标库；不读源库；建议在 QT_SYNC_BC 之后执行
+-- 仅目标库；须选业务库（如 zTakt_000_Dev），勿选暂存库 zTakt_900_Dev
+-- 本次写入合并到 ext_field：$._bk.pcb_sect[] 追加 { at, pcb_sect_indicator, costing_period }（不覆盖历史）
 -- =============================================================================
 
 IF OBJECT_ID('tempdb..#bc_pcb_src') IS NOT NULL DROP TABLE #bc_pcb_src;
@@ -28,13 +26,10 @@ CREATE TABLE #bc_pcb_src (
   [plant_code] NVARCHAR(4) NOT NULL,
   [product_norm] NVARCHAR(20) NOT NULL,
   [cost_day] DATE NOT NULL,
-  [product_code] NVARCHAR(20) NOT NULL,
-  [line_number] INT NOT NULL,
   [bom_depth] INT NOT NULL,
-  [bom_level_num] INT NOT NULL,
-  [bom_level] NVARCHAR(20) NOT NULL,
   [is_pcb_node] BIT NOT NULL,
-  [already_marked] BIT NOT NULL
+  [already_marked] BIT NOT NULL,
+  CONSTRAINT [pk_bc_pcb_src] PRIMARY KEY CLUSTERED ([rn])
 );
 
 CREATE TABLE #bc_pcb_mark (
@@ -42,8 +37,7 @@ CREATE TABLE #bc_pcb_mark (
 );
 
 INSERT INTO #bc_pcb_src (
-  [rn], [id], [plant_code], [product_norm], [cost_day], [product_code],
-  [line_number], [bom_depth], [bom_level_num], [bom_level], [is_pcb_node], [already_marked]
+  [rn], [id], [plant_code], [product_norm], [cost_day], [bom_depth], [is_pcb_node], [already_marked]
 )
 SELECT
   ROW_NUMBER() OVER (
@@ -62,11 +56,7 @@ SELECT
   x.[plant_code],
   x.[product_norm],
   x.[cost_day],
-  x.[product_code],
-  x.[line_number],
   x.[bom_depth],
-  x.[bom_level_num],
-  x.[bom_level],
   x.[is_pcb_node],
   x.[already_marked]
 FROM (
@@ -98,19 +88,16 @@ FROM (
     END AS [already_marked]
   FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] AS t
   CROSS APPLY (
-    SELECT
-      LTRIM(RTRIM(ISNULL(t.[bom_level], N''))) AS [bom_level]
+    SELECT LTRIM(RTRIM(ISNULL(t.[bom_level], N''))) AS [bom_level]
   ) AS b0
   CROSS APPLY (
     SELECT
       b0.[bom_level],
-      /* 前导点数：1→0，.1→1，..2→2；空层级靠后 */
       CASE
         WHEN b0.[bom_level] = N'' THEN 2147483647
         WHEN PATINDEX(N'%[^.]%', b0.[bom_level]) = 0 THEN LEN(b0.[bom_level])
         ELSE PATINDEX(N'%[^.]%', b0.[bom_level]) - 1
       END AS [bom_depth],
-      /* 去掉前导点后的首段数字；非数字靠后 */
       CASE
         WHEN b0.[bom_level] = N'' THEN 2147483647
         ELSE ISNULL(
@@ -141,67 +128,48 @@ FROM (
     AND LTRIM(RTRIM(ISNULL(t.[product_code], N''))) <> N''
 ) AS x;
 
+CREATE NONCLUSTERED INDEX [ix_bc_pcb_src_tree]
+  ON #bc_pcb_src ([plant_code], [product_norm], [cost_day], [rn])
+  INCLUDE ([bom_depth], [id], [is_pcb_node], [already_marked]);
+
 DECLARE @scanned INT = (SELECT COUNT(*) FROM #bc_pcb_src);
 
-DECLARE @cur_rn INT = 1;
-DECLARE @max_rn INT = ISNULL((SELECT MAX([rn]) FROM #bc_pcb_src), 0);
-DECLARE @prev_plant NVARCHAR(4) = N'';
-DECLARE @prev_product NVARCHAR(20) = N'';
-DECLARE @prev_cost DATE = '19000101';
-DECLARE @id BIGINT;
-DECLARE @plant NVARCHAR(4);
-DECLARE @product NVARCHAR(20);
-DECLARE @cost_day DATE;
-DECLARE @depth INT;
-DECLARE @is_node BIT;
-DECLARE @under BIT;
-
-DECLARE @anc TABLE (
-  [seq] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
-  [depth] INT NOT NULL,
-  [under_pcb] BIT NOT NULL
-);
-
-WHILE @cur_rn <= @max_rn
-BEGIN
+;WITH [pcb_roots] AS (
   SELECT
-    @id = s.[id],
-    @plant = s.[plant_code],
-    @product = s.[product_norm],
-    @cost_day = s.[cost_day],
-    @depth = s.[bom_depth],
-    @is_node = s.[is_pcb_node]
+    s.[rn],
+    s.[plant_code],
+    s.[product_norm],
+    s.[cost_day],
+    s.[bom_depth]
   FROM #bc_pcb_src AS s
-  WHERE s.[rn] = @cur_rn;
-
-  IF @plant <> @prev_plant
-    OR @product <> @prev_product
-    OR @cost_day <> @prev_cost
-  BEGIN
-    DELETE FROM @anc;
-    SET @prev_plant = @plant;
-    SET @prev_product = @product;
-    SET @prev_cost = @cost_day;
-  END;
-
-  WHILE EXISTS (SELECT 1 FROM @anc WHERE [depth] >= @depth)
-  BEGIN
-    DELETE FROM @anc
-    WHERE [seq] = (SELECT MAX([seq]) FROM @anc);
-  END;
-
-  SET @under = CASE WHEN EXISTS (SELECT 1 FROM @anc WHERE [under_pcb] = 1) THEN 1 ELSE 0 END;
-
-  IF @under = 1 OR @is_node = 1
-  BEGIN
-    INSERT INTO #bc_pcb_mark ([id]) VALUES (@id);
-  END;
-
-  INSERT INTO @anc ([depth], [under_pcb])
-  VALUES (@depth, CASE WHEN @under = 1 OR @is_node = 1 THEN 1 ELSE 0 END);
-
-  SET @cur_rn = @cur_rn + 1;
-END;
+  WHERE s.[is_pcb_node] = 1
+),
+[pcb_ranges] AS (
+  SELECT
+    r.[rn] AS [start_rn],
+    r.[plant_code],
+    r.[product_norm],
+    r.[cost_day],
+    ISNULL((
+      SELECT MIN(n.[rn])
+      FROM #bc_pcb_src AS n
+      WHERE n.[plant_code] = r.[plant_code]
+        AND n.[product_norm] = r.[product_norm]
+        AND n.[cost_day] = r.[cost_day]
+        AND n.[rn] > r.[rn]
+        AND n.[bom_depth] <= r.[bom_depth]
+    ), 2147483647) AS [end_rn_exclusive]
+  FROM [pcb_roots] AS r
+)
+INSERT INTO #bc_pcb_mark ([id])
+SELECT DISTINCT s.[id]
+FROM #bc_pcb_src AS s
+INNER JOIN [pcb_ranges] AS r
+  ON s.[plant_code] = r.[plant_code]
+ AND s.[product_norm] = r.[product_norm]
+ AND s.[cost_day] = r.[cost_day]
+ AND s.[rn] >= r.[start_rn]
+ AND s.[rn] < r.[end_rn_exclusive];
 
 DECLARE @pcb_sect_count INT = (SELECT COUNT(*) FROM #bc_pcb_mark);
 DECLARE @unchanged INT = (
@@ -214,10 +182,55 @@ DECLARE @unchanged INT = (
 UPDATE t
 SET
   t.[pcb_sect_indicator] = N'X',
+  t.[ext_field] = LEFT(x.[new_ext], 4000),
   t.[updated_by] = @sync_user_id,
   t.[updated_at] = @now
 FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] AS t
 INNER JOIN #bc_pcb_mark AS m ON m.[id] = t.[id]
+CROSS APPLY (
+  SELECT
+    CASE
+      WHEN ISJSON(NULLIF(LTRIM(RTRIM(ISNULL(t.[ext_field], N''))), N'')) = 1
+      THEN LTRIM(RTRIM(t.[ext_field]))
+      ELSE N'{}'
+    END AS [base_ext]
+) AS e0
+CROSS APPLY (
+  SELECT
+    CASE
+      WHEN JSON_QUERY(e0.[base_ext], N'$._bk') IS NULL
+      THEN JSON_MODIFY(e0.[base_ext], N'lax $._bk', JSON_QUERY(N'{}'))
+      ELSE e0.[base_ext]
+    END AS [with_bk]
+) AS e1
+CROSS APPLY (
+  SELECT
+    CASE
+      WHEN JSON_QUERY(e1.[with_bk], N'$._bk.pcb_sect') IS NULL
+      THEN JSON_MODIFY(e1.[with_bk], N'lax $._bk.pcb_sect', JSON_QUERY(N'[]'))
+      WHEN LEFT(LTRIM(ISNULL(JSON_QUERY(e1.[with_bk], N'$._bk.pcb_sect'), N'')), 1) = N'['
+      THEN e1.[with_bk]
+      ELSE JSON_MODIFY(
+        e1.[with_bk],
+        N'lax $._bk.pcb_sect',
+        JSON_QUERY(N'[' + ISNULL(JSON_QUERY(e1.[with_bk], N'$._bk.pcb_sect'), N'{}') + N']'))
+    END AS [with_arr]
+) AS e2
+CROSS APPLY (
+  SELECT
+    JSON_MODIFY(
+      e2.[with_arr],
+      N'append $._bk.pcb_sect',
+      JSON_QUERY(
+        JSON_MODIFY(
+          JSON_MODIFY(
+            JSON_MODIFY(N'{}', N'$.at', CONVERT(VARCHAR(19), @now, 126)),
+            N'$.pcb_sect_indicator',
+            N'X'),
+          N'$.costing_period',
+          @costing_period)))
+    AS [new_ext]
+) AS x
 WHERE UPPER(LTRIM(RTRIM(ISNULL(t.[pcb_sect_indicator], N'')))) <> N'X';
 
 DECLARE @updated INT = @@ROWCOUNT;
@@ -230,8 +243,12 @@ SELECT
   CAST(N'bc_pcb_sect_bk' AS NVARCHAR(40)) AS [scope],
   @tenant_code AS [tenant_code],
   @company_code AS [company_code],
-  @costing_period AS [costing_period],
-  @scanned AS [scanned_row_count],
-  @pcb_sect_count AS [pcb_sect_row_count],
-  @updated AS [updated_row_count],
-  @unchanged AS [unchanged_row_count];
+  @scanned AS [source_count],
+  @pcb_sect_count AS [target_after],
+  @updated AS [update_count],
+  @unchanged AS [unchanged_count],
+  0 AS [insert_count],
+  0 AS [delete_count],
+  0 AS [target_before],
+  0 AS [target_physical],
+  0 AS [soft_deleted];

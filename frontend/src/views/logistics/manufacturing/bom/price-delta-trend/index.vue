@@ -371,23 +371,24 @@ async function handleReset() {
 }
 
 /**
- * 默认工厂：公司关联工厂须落在本页 plant-options 中
+ * 默认工厂：当前公司 RelatedPlant 仅当出现在本页 plant-options（RelatedPlant∩本表）时选中；无则清空
+ * @returns {Promise<void>}
  */
-async function applyDefaultPlant() {
+async function applyDefaultPlant(): Promise<void> {
   const related = (await resolveCurrentCompanyRelatedPlantCode()).trim()
-  try {
-    const plants = await getBomPriceDeltaTrendPlantOptions()
-    const values = (plants ?? [])
-      .map((p) => String(p.dictValue ?? '').trim())
-      .filter(Boolean)
-    if (related && values.some((v) => v.toUpperCase() === related.toUpperCase())) {
-      plantCode.value = related
-      return
+  let matched: string | undefined
+  if (related) {
+    try {
+      const plants = await getBomPriceDeltaTrendPlantOptions()
+      const hit = (plants ?? []).find(
+        (o) => String(o.dictValue ?? '').trim().toLowerCase() === related.toLowerCase(),
+      )
+      matched = hit ? String(hit.dictValue).trim() : undefined
+    } catch {
+      matched = undefined
     }
-    plantCode.value = values[0]
-  } catch {
-    plantCode.value = related || undefined
   }
+  plantCode.value = matched
 }
 
 /** 刷新 */

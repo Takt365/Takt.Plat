@@ -18,7 +18,6 @@ namespace Takt.Domain.Entities.Identity;
 /// <summary>
 /// 角色实体
 /// 代表系统角色（RBAC权限模型）
-/// 参照 SAP Role (AGR_NAME) 设计
 /// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_identity_role", "角色表")]

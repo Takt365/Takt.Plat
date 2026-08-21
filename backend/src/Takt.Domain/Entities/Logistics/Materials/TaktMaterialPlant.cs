@@ -17,6 +17,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 
 /// <summary>
 /// Takt工厂物料实体
+/// <para>业务唯一键（新增/更新匹配）：TenantCode+CompanyCode+PlantCode+MaterialCode。</para>
 /// </summary>
 [SugarTable("takt_logistics_materials_material_plant", "工厂物料表")]
 [SugarIndex("ix_material_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -33,7 +34,7 @@ public class TaktMaterialPlant : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "material_code", ColumnDescription = "物料编码", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string MaterialCode { get; set; } = string.Empty;
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? MaterialDescription { get; set; }

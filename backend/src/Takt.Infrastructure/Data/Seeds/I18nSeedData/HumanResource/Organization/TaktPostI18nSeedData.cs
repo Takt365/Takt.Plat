@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktPostI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPost 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -116,6 +116,15 @@ public class TaktPostI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.post.deptid", "zh-CN", "所属部门ID", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
             // entity.post.deptid
             new TranslationSeedItem("entity.post.deptid", "zh-HK", "所属部门ID_hk", "所属部门（关联 TaktDept.Id，选项 TaktDepts/tree-options）"),
+
+            // entity.post.deptname
+            new TranslationSeedItem("entity.post.deptname", "en-US", "所属部门名称_us", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
+            // entity.post.deptname
+            new TranslationSeedItem("entity.post.deptname", "ja-JP", "所属部门名称_jp", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
+            // entity.post.deptname
+            new TranslationSeedItem("entity.post.deptname", "zh-CN", "所属部门名称", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
+            // entity.post.deptname
+            new TranslationSeedItem("entity.post.deptname", "zh-HK", "所属部门名称_hk", "所属部门名称（冗余：按 DeptId 取 TaktDept.DeptName联动）"),
 
             // entity.post.category
             new TranslationSeedItem("entity.post.category", "en-US", "岗位类别_us", "岗位类别（字典 sys_post_category；列存 DictValue：MGT=管理岗 PRO=专业岗 TEC=技术岗 SUP=支持岗 OPS=操作岗）"),

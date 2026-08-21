@@ -49,7 +49,7 @@
         type="text"
         @click="handleClearAll"
       >
-        {{ $t('common.page.button.empty') }}
+        {{ $t('common.page.button.emptyall') }}
       </a-button>
     </template>
     <a-list

@@ -68,10 +68,9 @@ CREATE TABLE #hdr (
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
   [culture_code] NVARCHAR(5),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #item (
   [rn] INT,
@@ -137,10 +136,9 @@ CREATE TABLE #item (
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
   [culture_code] NVARCHAR(5),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #hdr_delta (
   rn INT, oper_type NVARCHAR(10), id BIGINT,
@@ -206,9 +204,8 @@ SELECT
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -257,9 +254,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[payment_reference])), 30), N'') AS [payment_reference],
       NULLIF(LEFT(LTRIM(RTRIM(R.[reversal_reason])), 2), N'') AS [reversal_reason],
       NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[billing_document_code]))
         ORDER BY LTRIM(RTRIM(R.[billing_document_code]))
       ) AS dup_rn
@@ -342,6 +346,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[plant_code], N'') <> ISNULL(S.[plant_code], N'')
   OR ISNULL(T.[culture_code], N'') <> ISNULL(S.[culture_code], N'')
   OR T.[is_deleted] <> S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[billing_type]=S.[billing_type],
@@ -383,14 +396,18 @@ WHEN MATCHED AND (
   T.[posted_by]=S.[posted_by],
   T.[plant_code]=S.[plant_code],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[plant_code],[billing_document_code],[billing_type],[billing_category],[document_category],[currency_code],[sales_organization],[distribution_channel],[pricing_procedure],[condition_code],[shipping_conditions],[billing_date],[customer_group],[incoterms1],[incoterms2],[posting_status],[accounting_exchange_rate],[payment_terms],[account_assignment_group],[country_code],[net_amount],[payer_code],[customer_code],[statistics_currency_code],[foreign_trade_code],[cancelled_billing_document],[invoice_list_type],[division],[hierarchy_type_pricing],[trading_partner],[tax_departure_country],[organization_sales_tax_number],[country_sales_tax_number],[reference_code],[cancelled_flag],[exchange_rate_date],[payment_reference],[reversal_reason],[posted_by],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[plant_code],S.[billing_document_code],S.[billing_type],S.[billing_category],S.[document_category],S.[currency_code],S.[sales_organization],S.[distribution_channel],S.[pricing_procedure],S.[condition_code],S.[shipping_conditions],S.[billing_date],S.[customer_group],S.[incoterms1],S.[incoterms2],S.[posting_status],S.[accounting_exchange_rate],S.[payment_terms],S.[account_assignment_group],S.[country_code],S.[net_amount],S.[payer_code],S.[customer_code],S.[statistics_currency_code],S.[foreign_trade_code],S.[cancelled_billing_document],S.[invoice_list_type],S.[division],S.[hierarchy_type_pricing],S.[trading_partner],S.[tax_departure_country],S.[organization_sales_tax_number],S.[country_sales_tax_number],S.[reference_code],S.[cancelled_flag],S.[exchange_rate_date],S.[payment_reference],S.[reversal_reason],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[plant_code],S.[billing_document_code],S.[billing_type],S.[billing_category],S.[document_category],S.[currency_code],S.[sales_organization],S.[distribution_channel],S.[pricing_procedure],S.[condition_code],S.[shipping_conditions],S.[billing_date],S.[customer_group],S.[incoterms1],S.[incoterms2],S.[posting_status],S.[accounting_exchange_rate],S.[payment_terms],S.[account_assignment_group],S.[country_code],S.[net_amount],S.[payer_code],S.[customer_code],S.[statistics_currency_code],S.[foreign_trade_code],S.[cancelled_billing_document],S.[invoice_list_type],S.[division],S.[hierarchy_type_pricing],S.[trading_partner],S.[tax_departure_country],S.[organization_sales_tax_number],S.[country_sales_tax_number],S.[reference_code],S.[cancelled_flag],S.[exchange_rate_date],S.[payment_reference],S.[reversal_reason],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[billing_document_code]
 INTO #hdr_delta (rn, oper_type, id, [billing_document_code]);
@@ -491,9 +508,8 @@ SELECT
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field], S.[remark],
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -570,9 +586,16 @@ FROM (
       TRY_CAST(R.[exchange_rate_date] AS DATETIME) AS [exchange_rate_date],
       NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
       ISNULL(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LTRIM(RTRIM(R.[billing_document_code])),
           COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
@@ -699,6 +722,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[is_obsolete], -1) <> ISNULL(S.[is_obsolete], -1)
   OR ISNULL(T.[culture_code], N'') <> ISNULL(S.[culture_code], N'')
   OR T.[is_deleted] <> S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[plant_code]=S.[plant_code],
@@ -758,14 +790,18 @@ WHEN MATCHED AND (
   T.[posted_by]=S.[posted_by],
   T.[is_obsolete]=S.[is_obsolete],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[sales_invoice_id],[plant_code],[billing_document_code],[line_number],[billing_quantity],[sales_unit],[base_unit],[scale_quantity],[billing_quantity_sku],[net_weight],[gross_weight],[weight_unit],[business_area_code],[pricing_date],[service_rendered_date],[pricing_exchange_rate],[net_amount],[reference_document_code],[reference_document_item],[reference_document_category],[sales_document_code],[sales_document_item],[sales_document_reference_flag],[material_code],[material_description],[pricing_reference_material_code],[batch_code],[material_group],[sales_item_category],[product_hierarchy],[shipping_point],[division],[partner_item],[departure_country],[plant_region],[pricing_flag],[warehouse_code],[cost_amount],[subtotal1],[subtotal2],[subtotal3],[subtotal4],[subtotal5],[subtotal6],[statistics_exchange_rate],[profit_center_code],[credit_price],[customer_group_sales_order],[destination_country_order],[region_order],[sales_organization_order],[distribution_channel_order],[document_category],[tax_amount],[gross_amount],[exchange_rate_date],[posted_by],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[sales_invoice_id],S.[plant_code],S.[billing_document_code],S.[line_number],S.[billing_quantity],S.[sales_unit],S.[base_unit],S.[scale_quantity],S.[billing_quantity_sku],S.[net_weight],S.[gross_weight],S.[weight_unit],S.[business_area_code],S.[pricing_date],S.[service_rendered_date],S.[pricing_exchange_rate],S.[net_amount],S.[reference_document_code],S.[reference_document_item],S.[reference_document_category],S.[sales_document_code],S.[sales_document_item],S.[sales_document_reference_flag],S.[material_code],S.[material_description],S.[pricing_reference_material_code],S.[batch_code],S.[material_group],S.[sales_item_category],S.[product_hierarchy],S.[shipping_point],S.[division],S.[partner_item],S.[departure_country],S.[plant_region],S.[pricing_flag],S.[warehouse_code],S.[cost_amount],S.[subtotal1],S.[subtotal2],S.[subtotal3],S.[subtotal4],S.[subtotal5],S.[subtotal6],S.[statistics_exchange_rate],S.[profit_center_code],S.[credit_price],S.[customer_group_sales_order],S.[destination_country_order],S.[region_order],S.[sales_organization_order],S.[distribution_channel_order],S.[document_category],S.[tax_amount],S.[gross_amount],S.[exchange_rate_date],S.[posted_by],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[sales_invoice_id],S.[plant_code],S.[billing_document_code],S.[line_number],S.[billing_quantity],S.[sales_unit],S.[base_unit],S.[scale_quantity],S.[billing_quantity_sku],S.[net_weight],S.[gross_weight],S.[weight_unit],S.[business_area_code],S.[pricing_date],S.[service_rendered_date],S.[pricing_exchange_rate],S.[net_amount],S.[reference_document_code],S.[reference_document_item],S.[reference_document_category],S.[sales_document_code],S.[sales_document_item],S.[sales_document_reference_flag],S.[material_code],S.[material_description],S.[pricing_reference_material_code],S.[batch_code],S.[material_group],S.[sales_item_category],S.[product_hierarchy],S.[shipping_point],S.[division],S.[partner_item],S.[departure_country],S.[plant_region],S.[pricing_flag],S.[warehouse_code],S.[cost_amount],S.[subtotal1],S.[subtotal2],S.[subtotal3],S.[subtotal4],S.[subtotal5],S.[subtotal6],S.[statistics_exchange_rate],S.[profit_center_code],S.[credit_price],S.[customer_group_sales_order],S.[destination_country_order],S.[region_order],S.[sales_organization_order],S.[distribution_channel_order],S.[document_category],S.[tax_amount],S.[gross_amount],S.[exchange_rate_date],S.[posted_by],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT
   S.rn, $action, INSERTED.[id], INSERTED.[billing_document_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [billing_document_code], [line_number]);

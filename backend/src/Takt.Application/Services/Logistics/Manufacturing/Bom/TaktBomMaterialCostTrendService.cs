@@ -292,7 +292,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         DateTime? costingExclusiveEnd = costingMonthEnd.HasValue
             ? costingMonthEnd.Value.AddMonths(1)
             : null;
-        // 10/18 位 SAP 码互认：展开查询变体后再 Contains，避免明细表空结果
+ // 10/18 位 码互认：展开查询变体后再 Contains，避免明细表空结果
         var lookupCodes = productCodes
             .SelectMany(TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants)
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -320,7 +320,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
                 var endExclusive = costingExclusiveEnd.Value;
                 exp = exp.And(x => x.CostingDate < endExclusive);
             }
-            // 年分表 + 基表回退（与零价/移动价区间查询一致；SAP 同步落基表时年分表空也能命中）
+ // 年分表 + 基表回退（与零价/移动价区间查询一致）
             var part = await GetBomItemListForRangeAsync(
                 exp.ToExpression(),
                 costingMonthStart,
@@ -1052,7 +1052,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
         TaktYearShardTableHelper.BuildYearTableName(BomItemYearShardBaseTable, year);
 
     /// <summary>
-    /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 SAP 同步）
+ /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 同步）
     /// </summary>
     /// <param name="year">自然年</param>
     /// <returns>年分表名；不存在时为 null</returns>
@@ -1121,7 +1121,7 @@ public class TaktBomMaterialCostTrendService : TaktServiceBase, ITaktBomMaterial
                 TryAppend(part);
             }
         }
-        // 年分表与基表合并：SAP 同步常写基表，年分表可能仅部分数据；按 Id 去重
+ // 年分表与基表合并： 同步常写基表，年分表可能仅部分数据；按 Id 去重
         if (!maxRows.HasValue || result.Count < maxRows.Value)
         {
             List<TaktBomMaterialCostItem> basePart;

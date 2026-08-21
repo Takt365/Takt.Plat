@@ -121,7 +121,7 @@ export interface CostElementExport {
   costElementType: number;
 
   /**
-   * 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
+ * 成本要素类别（字典 accounting_cost_element_category）
    */
   costElementCategory: number;
 

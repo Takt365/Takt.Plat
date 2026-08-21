@@ -1,13 +1,13 @@
 'use strict';
 
 /**
- * 统一实体 XML summary 字典/选项注释格式，并去除 SAP 字段码说明。
+ * 统一实体 XML summary 字典/选项注释格式，并去除外部系统字段码说明。
  *
  * 标准（见 .cursor/rules/01-backend.mdc）：
  *   （字典 {code}）
  *   （字典 {code}；0=a 1=b …） / （字典 {code}；DictValue=…）
  *   （选项 TaktXxxs/options；DictValue=…）
- * 字典/选项编码后一律用「；」；禁止在 summary 写 SAP VSBED 等外部字段码。
+ * 字典/选项编码后一律用「；」；禁止在 summary 写外部系统字段码。
  *
  * 用法: node scripts/gen/normalize-entity-dict-xml-comments.cjs
  */
@@ -28,8 +28,8 @@ const entitiesRoot = path.join(
 function normalizeSummaryText(text) {
   let s = text.trim();
 
-  // 去掉 SAP 字段码片段（保留其后的中文业务说明）
-  // 例：；SAP VSBED → 空；SAP INCO2，地点说明 → ，地点说明 → 地点说明
+  // 去掉外部系统字段码片段（保留其后的中文业务说明）
+  // 例：；外系统字段码 → 空；字段码后中文说明予以保留
   s = s.replace(/[；，、/]?\s*SAP\s+[A-Za-z0-9_./]+(?:\s*\/\s*[A-Za-z0-9_./]+)*/g, '');
 
   // 字典/选项后：逗号统一为分号

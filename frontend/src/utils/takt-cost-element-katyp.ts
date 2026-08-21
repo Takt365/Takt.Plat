@@ -4,13 +4,13 @@
 // 文件名称：takt-cost-element-katyp.ts
 // 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP KATYP 成本要素类别与初级/次级类型推导（与 TaktCostElementKatypConstants 对齐）
+// 功能描述：成本要素类别与初级/次级类型推导（与 TaktCostElementKatypConstants 对齐）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
 // ========================================
 
-/** 初级 KATYP 整型值（对应 SAP KATYP 01/03/04/11/12/22/90） */
+/** 初级 KATYP 整型值（对应 01/03/04/11/12/22/90） */
 export const PRIMARY_COST_ELEMENT_KATYP = [1, 3, 4, 11, 12, 22, 90] as const
 
 /** 全部有效 KATYP 整型值 */

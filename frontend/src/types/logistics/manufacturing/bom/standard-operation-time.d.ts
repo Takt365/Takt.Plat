@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 标准工序时间实体（基于 SAP PP 标准工时）
+ * 标准工序时间实体
  * 对应前端 TaktStandardOperationTimeDto
  * 继承 TaktApprovalDtoBase
  * 对应前端 StandardOperationTime

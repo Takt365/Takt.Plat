@@ -1530,13 +1530,14 @@ function isDtoNavigationProperty(field) {
 }
 
 /**
- * 实体 XML/DTO 注释标记为回填、计算结果或固定值（表单须 disabled，禁止选项下拉）
- * 约定：…（回填：…）、…（计算结果：…）或 …（固定值），与 generate-dtos-from-entity / generate-entity-i18n-seed 对齐
+ * 实体 XML/DTO 注释标记为冗余联动、回填（仅排序/行号）、计算结果或固定值（表单须 disabled，禁止选项下拉）
+ * 约定：…（冗余：…联动）、…（回填：…）、…（计算结果：…）或 …（固定值）
+ * 口径：冗余联动=选 FK 后前端带出并落库；回填=仅排序号/行号等服务端生成
  * @param {string} doc
  * @returns {boolean}
  */
 function isEntityDerivedFormField(doc) {
-  return /（回填|回填：|计算结果|（计算结果|固定值|（固定值/.test(doc || '');
+  return /（冗余|冗余：|（联动|联动：|（回填|回填：|计算结果|（计算结果|固定值|（固定值/.test(doc || '');
 }
 
 /** sys_normal_disable_status：注释含「1=启用…0=禁用」的通用状态字段 */

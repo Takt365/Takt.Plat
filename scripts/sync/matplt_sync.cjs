@@ -359,7 +359,7 @@ SELECT
       FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
     )
   ELSE '{}' END,
-  N'MERGE SAP GeneralMaterial Sync',
+  N'MERGE GeneralMaterial Sync',
   '127.0.0.1',
   'Server',
   'SQLCMD',

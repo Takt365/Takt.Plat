@@ -69,7 +69,7 @@ alwaysApply: true
 |----------|----------|--------|
 | 工作中心编码 | `work_center_code`；单码语义的 `work_center` | **10** |
 | 工作中心描述 | `work_center_description` | **70** |
-| 生产工单工作中心汇总（SAP 多值 `code\|\|desc;…`） | `takt_…_production_order.work_center` | **500**（须 XML 注明；≠ 单码 10） |
+| 生产工单工作中心汇总（多值 `code\|\|desc;…`） | `takt_…_production_order.work_center` | **500**（须 XML 注明；≠ 单码 10） |
 | 工序编码 | `process_code` | **4** |
 | 工序名称 | `process_name` | **70** |
 | 工艺路线编码 | `routing_code` | **8** |

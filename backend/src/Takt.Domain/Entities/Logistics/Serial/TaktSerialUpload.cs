@@ -77,7 +77,7 @@ public class TaktSerialUpload : TaktCompanyEntityBase
     public string TransportMode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（最长 40）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_text", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
     public string MaterialText { get; set; } = string.Empty;

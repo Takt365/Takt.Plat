@@ -11,7 +11,7 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
 -- 源表 / 目标表：同名 + 列与实体 TaktMaterialMovingPrice 一致
 -- {{SourceDatabase}}.dbo.takt_logistics_materials_material_moving_price → 当前租户库同名表
--- 业务唯一键：Plant+ValuationPeriod+Material+Valuation
+-- 业务唯一键：Plant+MaterialCode+ValuationPeriod（Valuation 仅业务字段，不参与匹配）
 -- tenant/company/plant/culture 取自源表本列；空值丢弃，不回退任务参数
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -33,15 +33,13 @@ CREATE TABLE #st_source (
   [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 -- 源表装入：
 -- 1) 物料码含全角括号（　）的不参与同步
 -- 2) 18 位纯数字物料截末 10 位
--- 3) 按唯一键 Plant+Period+Material+Valuation 去重（库存金额→移动价→数量 较大者优先）
+-- 3) 按唯一键 Plant+Material+ValuationPeriod 去重（库存金额→移动价→数量 较大者优先）
 INSERT INTO #st_source
 SELECT
   S.rn,
@@ -61,14 +59,12 @@ SELECT
   S.[culture_code],
   '{}',
   '',
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
     ROW_NUMBER() OVER (
-      ORDER BY N.[plant_code], N.[valuation_period], N.[material_code], N.[valuation]
+      ORDER BY N.[plant_code], N.[material_code], N.[valuation_period]
     ) AS rn
   FROM (
     SELECT
@@ -90,9 +86,16 @@ FROM (
       COALESCE(TRY_CAST(R.[moving_price] AS DECIMAL(18,5)), 0) AS [moving_price],
       COALESCE(TRY_CAST(R.[price_unit] AS INT), 0) AS [price_unit],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), ''), '') AS [currency_code],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LTRIM(RTRIM(R.[plant_code])),
           LEFT(LTRIM(RTRIM(ISNULL(R.[valuation_period], N''))), 7),
@@ -101,8 +104,7 @@ FROM (
               AND LTRIM(RTRIM(R.[material_code])) NOT LIKE '%[^0-9]%'
             THEN RIGHT(LTRIM(RTRIM(R.[material_code])), 10)
             ELSE LTRIM(RTRIM(R.[material_code]))
-          END,
-          LTRIM(RTRIM(R.[valuation]))
+          END
         ORDER BY
           COALESCE(TRY_CAST(R.[stock_amount] AS DECIMAL(18,2)), 0) DESC,
           COALESCE(TRY_CAST(R.[moving_price] AS DECIMAL(18,5)), 0) DESC,
@@ -111,6 +113,7 @@ FROM (
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_material_moving_price] R
     WHERE LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%（%'
       AND LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%）%'
+      AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[valuation_period], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[company_code], N''))) <> N''
@@ -133,6 +136,7 @@ DECLARE @sap_eligible_count INT = (
   FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_material_moving_price] R
   WHERE LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%（%'
     AND LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%）%'
+    AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
     AND LTRIM(RTRIM(ISNULL(R.[valuation_period], N''))) <> N''
 );
 DECLARE @sap_key_count INT = (
@@ -146,11 +150,11 @@ DECLARE @sap_key_count INT = (
           AND LTRIM(RTRIM(R.[material_code])) NOT LIKE '%[^0-9]%'
         THEN RIGHT(LTRIM(RTRIM(R.[material_code])), 10)
         ELSE LTRIM(RTRIM(R.[material_code]))
-      END AS [material_code],
-      LTRIM(RTRIM(R.[valuation])) AS [valuation]
+      END AS [material_code]
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_materials_material_moving_price] R
     WHERE LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%（%'
       AND LTRIM(RTRIM(ISNULL(R.[material_code], N''))) NOT LIKE N'%）%'
+      AND LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[valuation_period], N''))) <> N''
     GROUP BY
       LTRIM(RTRIM(R.[plant_code])),
@@ -160,8 +164,7 @@ DECLARE @sap_key_count INT = (
           AND LTRIM(RTRIM(R.[material_code])) NOT LIKE '%[^0-9]%'
         THEN RIGHT(LTRIM(RTRIM(R.[material_code])), 10)
         ELSE LTRIM(RTRIM(R.[material_code]))
-      END,
-      LTRIM(RTRIM(R.[valuation]))
+      END
   ) K
 );
 DECLARE @dedupe_dropped INT = @sap_eligible_count - @sap_key_count;
@@ -175,11 +178,11 @@ BEGIN
   THROW 50003, @src_msg, 1;
 END;
 
--- 唯一键 = Plant+ValuationPeriod+Material+Valuation（去重后仍重复则失败）
+-- 唯一键 = Plant+MaterialCode+ValuationPeriod（去重后仍重复则失败）
 IF EXISTS (
   SELECT 1
   FROM #st_source
-  GROUP BY [plant_code], [valuation_period], [material_code], [valuation]
+  GROUP BY [plant_code], [material_code], [valuation_period]
   HAVING COUNT(*) > 1
 )
 BEGIN
@@ -187,10 +190,10 @@ BEGIN
   SELECT TOP 1
     @dup_key = CONCAT(
       [plant_code], N' / ',
-      [valuation_period], N' / ',
-      [material_code], N' / ', [valuation], N' x', COUNT(*))
+      [material_code], N' / ',
+      [valuation_period], N' x', COUNT(*))
   FROM #st_source
-  GROUP BY [plant_code], [valuation_period], [material_code], [valuation]
+  GROUP BY [plant_code], [material_code], [valuation_period]
   HAVING COUNT(*) > 1;
   THROW 50001, @dup_key, 1;
 END;
@@ -225,16 +228,27 @@ DECLARE @target_before INT = (
     AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+-- 业务键已存在于目标：沿用目标 id（目标 id 本地唯一，与源 id 无关）
+UPDATE S
+SET S.[id] = COALESCE(T.[id], S.[id])
+FROM #st_source S
+LEFT JOIN [takt_logistics_materials_material_moving_price] T
+  ON T.[tenant_code] = S.[tenant_code]
+ AND T.[company_code] = S.[company_code]
+ AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
+ AND LTRIM(RTRIM(T.[material_code])) = S.[material_code]
+ AND T.[valuation_period] = S.[valuation_period];
+
 MERGE INTO [takt_logistics_materials_material_moving_price] AS T
 USING #st_source AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
-AND T.[valuation_period] = S.[valuation_period]
 AND LTRIM(RTRIM(T.[material_code])) = S.[material_code]
-AND LTRIM(RTRIM(T.[valuation])) = S.[valuation]
+AND T.[valuation_period] = S.[valuation_period]
 WHEN MATCHED AND (
   ISNULL(T.[is_deleted], 0) <> S.[is_deleted]
+  OR LTRIM(RTRIM(ISNULL(T.[valuation], N''))) <> LTRIM(RTRIM(ISNULL(S.[valuation], N'')))
   OR ROUND(T.[stock_quantity], 4) <> ROUND(S.[stock_quantity], 4)
   OR ROUND(T.[stock_amount], 2) <> ROUND(S.[stock_amount], 2)
   OR LTRIM(RTRIM(ISNULL(T.[price_control], N''))) <> LTRIM(RTRIM(ISNULL(S.[price_control], N'')))
@@ -242,8 +256,18 @@ WHEN MATCHED AND (
   OR T.[price_unit] <> S.[price_unit]
   OR LTRIM(RTRIM(ISNULL(T.[currency_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[currency_code], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[culture_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[culture_code], N'')))
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
+  T.[valuation]=S.[valuation],
   T.[stock_quantity]=S.[stock_quantity],
   T.[stock_amount]=S.[stock_amount],
   T.[price_control]=S.[price_control],
@@ -251,12 +275,15 @@ WHEN MATCHED AND (
   T.[price_unit]=S.[price_unit],
   T.[currency_code]=S.[currency_code],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[valuation_period],[material_code],[valuation],
@@ -267,10 +294,9 @@ WHEN NOT MATCHED THEN
   VALUES (
     S.[id],S.[plant_code],S.[valuation_period],S.[material_code],S.[valuation],
     S.[stock_quantity],S.[stock_amount],S.[price_control],S.[moving_price],S.[price_unit],S.[currency_code],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT
   S.rn,
@@ -302,7 +328,7 @@ CREATE TABLE #soft_deleted_rows (
   [id] BIGINT,
   [plant_code] NVARCHAR(4),
   [material_code] NVARCHAR(20),
-  [valuation] NVARCHAR(4)
+  [valuation_period] NVARCHAR(7)
 );
 
 UPDATE T
@@ -316,18 +342,19 @@ OUTPUT
   INSERTED.[id],
   INSERTED.[plant_code],
   INSERTED.[material_code],
-  INSERTED.[valuation]
-INTO #soft_deleted_rows ([id], [plant_code], [material_code], [valuation])
+  INSERTED.[valuation_period]
+INTO #soft_deleted_rows ([id], [plant_code], [material_code], [valuation_period])
 FROM [takt_logistics_materials_material_moving_price] T
 WHERE T.[is_deleted] = 0
   AND EXISTS (SELECT 1 FROM #st_source S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
   AND NOT EXISTS (
     SELECT 1
     FROM #st_source S
-    WHERE S.[plant_code] = LTRIM(RTRIM(T.[plant_code]))
-      AND S.[valuation_period] = T.[valuation_period]
+    WHERE S.[tenant_code] = T.[tenant_code]
+      AND S.[company_code] = T.[company_code]
+      AND S.[plant_code] = LTRIM(RTRIM(T.[plant_code]))
       AND S.[material_code] = LTRIM(RTRIM(T.[material_code]))
-      AND S.[valuation] = LTRIM(RTRIM(T.[valuation]))
+      AND S.[valuation_period] = T.[valuation_period]
   );
 
 DECLARE @delete_count INT = @@ROWCOUNT;
@@ -338,7 +365,7 @@ SELECT @soft_deleted_keys = STRING_AGG(
     CAST([id] AS NVARCHAR(30)), N'|',
     ISNULL([plant_code], N''), N'/',
     ISNULL([material_code], N''), N'/',
-    ISNULL([valuation], N'')
+    ISNULL([valuation_period], N'')
   )
   AS NVARCHAR(MAX)),
   N'; '
@@ -416,7 +443,7 @@ SELECT
   N'MERGE MaterialMovingPrice Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

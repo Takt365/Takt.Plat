@@ -4,7 +4,7 @@
 // 文件名称：common_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 同步脚本公共配置与 sqlcmd 工具（供 ma/md/so/st/ec_sync 引用）
+// 功能描述：源数据同步脚本公共配置与 sqlcmd 工具（供 matplt/mdl/so/st/ec_sync 引用）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

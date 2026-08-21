@@ -22,7 +22,6 @@ namespace Takt.Domain.Entities.HumanResource.Personnel;
 /// 上岗日期/试用/转正/主部门岗位→Joined；离职→Resignation；
 /// 合同→Contract；调动→Reassignment；技能→Skill；履历→Experience；
 /// 附件→Attachment；代理→Delegation；入职待办→Onboarding
-/// 参照 SAP Personnel Number (PERNR) 设计
 /// </summary>
 [SugarTable("takt_human_resource_personnel_employee", "员工表")]
 [SugarIndex("ix_employee_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]

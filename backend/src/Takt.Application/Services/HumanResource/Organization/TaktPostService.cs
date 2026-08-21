@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.HumanResource.Organization
 // 文件名称：TaktPostService.cs
-// 创建时间：2026-06-23
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：岗位应用服务实现
 // 
@@ -64,12 +64,20 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     }
 
     /// <summary>
-    /// 获取岗位列表（分页）
+    /// 获取岗位列表（分页；无业务查询条件时返回空结果）
     /// </summary>
     /// <param name="queryDto">查询DTO</param>
     /// <returns>分页结果</returns>
     public async Task<TaktPagedResult<TaktPostDto>> GetPostListAsync(TaktPostQueryDto queryDto)
     {
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return TaktPagedResult<TaktPostDto>.Create(
+                new List<TaktPostDto>(),
+                0,
+                queryDto.PageIndex,
+                queryDto.PageSize);
+        }
         var predicate = QueryExpression(queryDto);
         var (data, total) = await _postRepository.GetPagedAsync(
             queryDto.PageIndex,
@@ -110,8 +118,8 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
             false);
         return list.Select(e => new TaktSelectOption
         {
-            DictValue = e.Id,
-            DictLabel = e.PostName ?? e.Id.ToString(),
+            DictValue = e.PostCode,
+            DictLabel = e.PostName ?? e.PostCode,
         }).ToList();
     }
 
@@ -356,7 +364,15 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     /// <returns>Excel 文件</returns>
     public async Task<(string fileName, byte[] fileContent)> ExportPostAsync(TaktPostQueryDto? query = null, string? sheetName = null, string? fileName = null)
     {
-        var predicate = QueryExpression(query ?? new TaktPostQueryDto());
+        var queryDto = query ?? new TaktPostQueryDto();
+        if (!HasAnyListQueryFilter(queryDto))
+        {
+            return await TaktExcelHelper.ExportAsync(
+                new List<TaktPostExportDto>(),
+                sheetName ?? "岗位数据",
+                fileName ?? "岗位导出.xlsx");
+        }
+        var predicate = QueryExpression(queryDto);
         var list = await _postRepository.GetListAsync(predicate);
         if (list == null || list.Count == 0)
         {
@@ -385,150 +401,279 @@ public class TaktPostService : TaktServiceBase, ITaktPostService
     {
         var exp = Expressionable.Create<TaktPost>();
 
-        if (!string.IsNullOrEmpty(queryDto?.KeyWords))
+        if (!string.IsNullOrWhiteSpace(queryDto?.KeyWords))
         {
-            var keywords = queryDto.KeyWords;
+            var keywords = queryDto.KeyWords!.Trim();
             exp = exp.And(x =>
-                (x.PostCode != null && x.PostCode.Contains(keywords))
+                (x.CultureCode != null && x.CultureCode.Contains(keywords))
+                || (x.PlantCode != null && x.PlantCode.Contains(keywords))
+                || (x.PostCode != null && x.PostCode.Contains(keywords))
                 || (x.PostName != null && x.PostName.Contains(keywords))
-                || SqlFunc.ToString(x.DeptId).Contains(keywords)
+                || (x.DeptName != null && x.DeptName.Contains(keywords))
                 || (x.PostCategory != null && x.PostCategory.Contains(keywords))
                 || (x.PostLevel != null && x.PostLevel.Contains(keywords))
-                || SqlFunc.ToString(x.Headcount).Contains(keywords)
-                || SqlFunc.ToString(x.CurrentCount).Contains(keywords)
                 || (x.Responsibilities != null && x.Responsibilities.Contains(keywords))
                 || (x.Requirements != null && x.Requirements.Contains(keywords))
-                || SqlFunc.ToString(x.EducationRequired).Contains(keywords)
-                || SqlFunc.ToString(x.ExperienceYears).Contains(keywords)
-                || SqlFunc.ToString(x.SalaryMin).Contains(keywords)
-                || SqlFunc.ToString(x.SalaryMax).Contains(keywords)
-                || SqlFunc.ToString(x.PostStatus).Contains(keywords)
-                || SqlFunc.ToString(x.IsBuiltIn).Contains(keywords)
-                || SqlFunc.ToString(x.SortOrder).Contains(keywords)
                 || (x.PostDescription != null && x.PostDescription.Contains(keywords))
-                || (x.CultureCode != null && x.CultureCode.Contains(keywords))
                 || (x.ExtField != null && x.ExtField.Contains(keywords))
                 || (x.Remark != null && x.Remark.Contains(keywords))
-                || SqlFunc.ToString(x.CreatedAt).Contains(keywords)
             );
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostCode))
+        if (!string.IsNullOrWhiteSpace(queryDto?.CultureCode))
         {
-            exp = exp.And(x => x.PostCode != null && x.PostCode.Contains(queryDto.PostCode));
+            var cultureCode = queryDto.CultureCode;
+            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(cultureCode));
         }
 
-        if (!string.IsNullOrEmpty(queryDto?.PostName))
-        {
-            exp = exp.And(x => x.PostName != null && x.PostName.Contains(queryDto.PostName));
-        }
-
-        if (queryDto?.DeptId.HasValue == true)
-        {
-            exp = exp.And(x => x.DeptId == queryDto.DeptId);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PostCategory))
-        {
-            exp = exp.And(x => x.PostCategory != null && x.PostCategory.Contains(queryDto.PostCategory));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PostLevel))
-        {
-            exp = exp.And(x => x.PostLevel != null && x.PostLevel.Contains(queryDto.PostLevel));
-        }
-
-        if (queryDto?.Headcount.HasValue == true)
-        {
-            exp = exp.And(x => x.Headcount == queryDto.Headcount);
-        }
-
-        if (queryDto?.CurrentCount.HasValue == true)
-        {
-            exp = exp.And(x => x.CurrentCount == queryDto.CurrentCount);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Responsibilities))
-        {
-            exp = exp.And(x => x.Responsibilities != null && x.Responsibilities.Contains(queryDto.Responsibilities));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Requirements))
-        {
-            exp = exp.And(x => x.Requirements != null && x.Requirements.Contains(queryDto.Requirements));
-        }
-
-        if (queryDto?.EducationRequired.HasValue == true)
-        {
-            exp = exp.And(x => x.EducationRequired == queryDto.EducationRequired);
-        }
-
-        if (queryDto?.ExperienceYears.HasValue == true)
-        {
-            exp = exp.And(x => x.ExperienceYears == queryDto.ExperienceYears);
-        }
-
-        if (queryDto?.SalaryMin.HasValue == true)
-        {
-            exp = exp.And(x => x.SalaryMin == queryDto.SalaryMin);
-        }
-
-        if (queryDto?.SalaryMax.HasValue == true)
-        {
-            exp = exp.And(x => x.SalaryMax == queryDto.SalaryMax);
-        }
-
-        if (queryDto?.PostStatus.HasValue == true)
-        {
-            exp = exp.And(x => x.PostStatus == queryDto.PostStatus);
-        }
-
-        if (queryDto?.IsBuiltIn.HasValue == true)
-        {
-            exp = exp.And(x => x.IsBuiltIn == queryDto.IsBuiltIn);
-        }
-
-        if (queryDto?.SortOrder.HasValue == true)
-        {
-            exp = exp.And(x => x.SortOrder == queryDto.SortOrder);
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.PostDescription))
-        {
-            exp = exp.And(x => x.PostDescription != null && x.PostDescription.Contains(queryDto.PostDescription));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.CultureCode))
-        {
-            exp = exp.And(x => x.CultureCode != null && x.CultureCode.Contains(queryDto.CultureCode));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.ExtField))
-        {
-            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(queryDto.ExtField));
-        }
-
-        if (!string.IsNullOrEmpty(queryDto?.Remark))
-        {
-            exp = exp.And(x => x.Remark != null && x.Remark.Contains(queryDto.Remark));
-        }
-
-        if (queryDto?.CreatedAtStart.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt >= queryDto.CreatedAtStart);
-        }
-
-        if (queryDto?.CreatedAtEnd.HasValue == true)
-        {
-            exp = exp.And(x => x.CreatedAt <= queryDto.CreatedAtEnd);
-        }
         if (!string.IsNullOrWhiteSpace(queryDto?.PlantCode))
         {
             var plantCode = queryDto.PlantCode;
             exp = exp.And(x => x.PlantCode != null && x.PlantCode.Contains(plantCode));
         }
 
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostCode))
+        {
+            var postCode = queryDto.PostCode;
+            exp = exp.And(x => x.PostCode != null && x.PostCode.Contains(postCode));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostName))
+        {
+            var postName = queryDto.PostName;
+            exp = exp.And(x => x.PostName != null && x.PostName.Contains(postName));
+        }
+
+        if (queryDto?.DeptId.HasValue == true)
+        {
+            var deptId = queryDto.DeptId;
+            exp = exp.And(x => x.DeptId == deptId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.DeptName))
+        {
+            var deptName = queryDto.DeptName;
+            exp = exp.And(x => x.DeptName != null && x.DeptName.Contains(deptName));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostCategory))
+        {
+            var postCategory = queryDto.PostCategory;
+            exp = exp.And(x => x.PostCategory != null && x.PostCategory.Contains(postCategory));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostLevel))
+        {
+            var postLevel = queryDto.PostLevel;
+            exp = exp.And(x => x.PostLevel != null && x.PostLevel.Contains(postLevel));
+        }
+
+        if (queryDto?.Headcount.HasValue == true)
+        {
+            var headcount = queryDto.Headcount;
+            exp = exp.And(x => x.Headcount == headcount);
+        }
+
+        if (queryDto?.CurrentCount.HasValue == true)
+        {
+            var currentCount = queryDto.CurrentCount;
+            exp = exp.And(x => x.CurrentCount == currentCount);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Responsibilities))
+        {
+            var responsibilities = queryDto.Responsibilities;
+            exp = exp.And(x => x.Responsibilities != null && x.Responsibilities.Contains(responsibilities));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Requirements))
+        {
+            var requirements = queryDto.Requirements;
+            exp = exp.And(x => x.Requirements != null && x.Requirements.Contains(requirements));
+        }
+
+        if (queryDto?.EducationRequired.HasValue == true)
+        {
+            var educationRequired = queryDto.EducationRequired;
+            exp = exp.And(x => x.EducationRequired == educationRequired);
+        }
+
+        if (queryDto?.ExperienceYears.HasValue == true)
+        {
+            var experienceYears = queryDto.ExperienceYears;
+            exp = exp.And(x => x.ExperienceYears == experienceYears);
+        }
+
+        if (queryDto?.SalaryMin.HasValue == true)
+        {
+            var salaryMin = queryDto.SalaryMin;
+            exp = exp.And(x => x.SalaryMin == salaryMin);
+        }
+
+        if (queryDto?.SalaryMax.HasValue == true)
+        {
+            var salaryMax = queryDto.SalaryMax;
+            exp = exp.And(x => x.SalaryMax == salaryMax);
+        }
+
+        if (queryDto?.IsBuiltIn.HasValue == true)
+        {
+            var isBuiltIn = queryDto.IsBuiltIn;
+            exp = exp.And(x => x.IsBuiltIn == isBuiltIn);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.PostDescription))
+        {
+            var postDescription = queryDto.PostDescription;
+            exp = exp.And(x => x.PostDescription != null && x.PostDescription.Contains(postDescription));
+        }
+
+        if (queryDto?.SortOrder.HasValue == true)
+        {
+            var sortOrder = queryDto.SortOrder;
+            exp = exp.And(x => x.SortOrder == sortOrder);
+        }
+
+        if (queryDto?.PostStatus.HasValue == true)
+        {
+            var postStatus = queryDto.PostStatus;
+            exp = exp.And(x => x.PostStatus == postStatus);
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.ExtField))
+        {
+            var extField = queryDto.ExtField;
+            exp = exp.And(x => x.ExtField != null && x.ExtField.Contains(extField));
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryDto?.Remark))
+        {
+            var remark = queryDto.Remark;
+            exp = exp.And(x => x.Remark != null && x.Remark.Contains(remark));
+        }
+
+        if (queryDto?.CreatedAtStart.HasValue == true)
+        {
+            var createdAtStart = queryDto.CreatedAtStart;
+            exp = exp.And(x => x.CreatedAt >= createdAtStart);
+        }
+
+        if (queryDto?.CreatedAtEnd.HasValue == true)
+        {
+            var createdAtEnd = queryDto.CreatedAtEnd;
+            exp = exp.And(x => x.CreatedAt <= createdAtEnd);
+        }
 
         return exp.ToExpression();
+    }
+
+    /// <summary>
+    /// 是否存在任一业务查询条件（KeyWords / 字段 / 日期范围）；无参时列表与导出返回空，避免全表扫描
+    /// </summary>
+    /// <param name="queryDto">查询 DTO</param>
+    /// <returns>有条件为 true</returns>
+    private static bool HasAnyListQueryFilter(TaktPostQueryDto? queryDto)
+    {
+        if (queryDto == null)
+        {
+            return false;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.KeyWords))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.CultureCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PlantCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostCode))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostName))
+        {
+            return true;
+        }
+        if (queryDto.DeptId.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.DeptName))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostCategory))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostLevel))
+        {
+            return true;
+        }
+        if (queryDto.Headcount.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.CurrentCount.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Responsibilities))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Requirements))
+        {
+            return true;
+        }
+        if (queryDto.EducationRequired.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.ExperienceYears.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalaryMin.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.SalaryMax.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.IsBuiltIn.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.PostDescription))
+        {
+            return true;
+        }
+        if (queryDto.SortOrder.HasValue)
+        {
+            return true;
+        }
+        if (queryDto.PostStatus.HasValue)
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.ExtField))
+        {
+            return true;
+        }
+        if (!string.IsNullOrWhiteSpace(queryDto.Remark))
+        {
+            return true;
+        }
+        if (queryDto.CreatedAtStart.HasValue || queryDto.CreatedAtEnd.HasValue)
+        {
+            return true;
+        }
+        return false;
     }
 }

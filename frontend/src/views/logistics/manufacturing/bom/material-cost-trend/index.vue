@@ -180,7 +180,7 @@ function applyDefaultPeriodRange() {
 }
 
 /**
- * 默认工厂：公司关联工厂须落在本表 PlantCode 去重列表中；并清空机种/产品
+ * 默认工厂：当前公司 RelatedPlant 仅当出现在 plant-options（RelatedPlant∩本表）时选中；无则清空；并清空机种/产品
  * @returns {Promise<void>}
  */
 async function applyDefaultPlantFromCompany(): Promise<void> {

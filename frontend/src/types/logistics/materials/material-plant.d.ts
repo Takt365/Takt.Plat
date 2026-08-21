@@ -30,7 +30,7 @@ export interface MaterialPlant extends CompanyDtoBase {
   materialCode?: string;
 
   /**
-   * 物料描述（回填：随物料）
+   * 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
    */
   materialDescription?: string;
 
@@ -228,7 +228,7 @@ export interface MaterialPlantExport {
   materialCode: string;
 
   /**
-   * 物料描述（回填：随物料）
+   * 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
    */
   materialDescription?: string;
 

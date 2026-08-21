@@ -42,7 +42,7 @@ public class TaktMaterialPlantDto : TaktCompanyDtoBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -239,7 +239,7 @@ public class TaktMaterialPlantQueryDto : TaktPagedQuery
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -456,7 +456,7 @@ public class TaktMaterialPlantCreateDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -720,7 +720,7 @@ public class TaktMaterialPlantTemplateDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -922,7 +922,7 @@ public class TaktMaterialPlantImportDto
     public string? MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 
@@ -1125,7 +1125,7 @@ public class TaktMaterialPlantExportDto
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：随物料）
+    /// 物料描述（冗余：按 MaterialCode、PlantCode→CultureCode 取 TaktMaterialDescription.MaterialDescription联动）
     /// </summary>
     public string? MaterialDescription { get; set; } = string.Empty;
 

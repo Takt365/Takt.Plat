@@ -59,7 +59,7 @@ export interface BomMaterialCost extends CompanyDtoBase {
   productDescription: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost: number;
 
@@ -144,7 +144,7 @@ export interface BomMaterialCostQuery extends TaktPagedQuery {
   productDescription?: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost?: number;
 
@@ -253,7 +253,7 @@ export interface BomMaterialCostCreate {
   productDescription: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost: number;
 
@@ -362,7 +362,7 @@ export interface BomMaterialCostTemplate {
   productDescription?: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost?: number;
 
@@ -456,7 +456,7 @@ export interface BomMaterialCostImport {
   productDescription?: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost?: number;
 
@@ -545,7 +545,7 @@ export interface BomMaterialCostExport {
   productDescription: string;
 
   /**
-   * 产品月成本（SAP 系统计算后的月成本；合计/重算/零价回填不得覆盖）
+ * 产品月成本
    */
   productMonthlyCost: number;
 

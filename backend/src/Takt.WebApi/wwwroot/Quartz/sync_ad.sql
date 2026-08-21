@@ -38,10 +38,8 @@ CREATE TABLE #st_source (
   [tenant_code] NVARCHAR(3) NOT NULL,
   [ext_field] NVARCHAR(4000) NULL,
   [remark] NVARCHAR(500) NULL,
-  [is_deleted] INT NOT NULL,
-  [created_at] DATETIME NULL,
-  [updated_by] BIGINT NOT NULL
-);
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT NOT NULL);
 
 INSERT INTO #st_source
 SELECT
@@ -65,11 +63,9 @@ SELECT
   S.[sort_order],
   S.[division_status],
   S.[tenant_code],
-  N'{}',
-  N'',
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field],
+  S.[remark],
+    S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -93,6 +89,14 @@ FROM (
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       COALESCE(TRY_CAST(R.[division_status] AS INT), 1) AS [division_status],
       LEFT(LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))), 3) AS [tenant_code],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
+      R.[created_at] AS [created_at],
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
       CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
       R.[created_at] AS [created_at]
     FROM [{{SourceDatabase}}].[dbo].[takt_foundation_admin_division] R
@@ -269,6 +273,15 @@ WHEN MATCHED AND (
   OR T.[is_built_in] <> S.[is_built_in]
   OR T.[sort_order] <> S.[sort_order]
   OR T.[division_status] <> S.[division_status]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[country_code]=S.[country_code],
@@ -283,12 +296,15 @@ WHEN MATCHED AND (
   T.[is_built_in]=S.[is_built_in],
   T.[sort_order]=S.[sort_order],
   T.[division_status]=S.[division_status],
+  T.[ext_field]=S.[ext_field],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[country_code],[division_code],[division_name],[parent_id],[level],
@@ -302,10 +318,9 @@ WHEN NOT MATCHED THEN
     S.[id],S.[country_code],S.[division_code],S.[division_name],S.[parent_id],S.[level],
     S.[division_path],S.[is_leaf],S.[postal_code],S.[currency_code],S.[phone_code],
     S.[is_built_in],S.[sort_order],S.[division_status],S.[tenant_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT
   S.rn,
@@ -453,7 +468,7 @@ SELECT
   N'MERGE AdminDivision Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,@company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,@company_code,@plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

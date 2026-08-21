@@ -4,7 +4,7 @@
 // 文件名称：st_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 标准工时同步（Sap_Data.PP_SapManhour → takt_logistics_manufacturing_bom_standard_operation_time；自动审批；SMT=0.02800/自插=0.04500；effective_date=当前-10天）
+// 功能描述：标准工时同步（源库工时表 → takt_logistics_manufacturing_bom_standard_operation_time；自动审批；SMT=0.02800/自插=0.04500；effective_date=当前-10天）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -240,7 +240,7 @@ SELECT
     WHERE d.oper_type = 'UPDATE'
     FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
   ), '{}'),
-  N'MERGE SAP Manhour Sync',
+  N'MERGE Manhour Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
   d.tenant_code,d.company_code,'{}',N'SAP_SYNC',d.change_by,@now
@@ -292,7 +292,7 @@ SELECT 'UPD', COUNT(*) FROM @merge_actions WHERE [action] = 'UPDATE';
     String(effectiveDate.getDate()).padStart(2, '0'),
   ].join('-');
   console.log('==========================================');
-  console.log('  SAP 工时同步（自动审批 approved=created）');
+  console.log('  工时同步（自动审批 approved=created）');
   console.log(`  effective_date: ${effectiveDateYmd}（当前-10天）`);
   console.log(`  BATCH_SIZE: ${formatBatchSizeLabel()}`);
   console.log('==========================================');

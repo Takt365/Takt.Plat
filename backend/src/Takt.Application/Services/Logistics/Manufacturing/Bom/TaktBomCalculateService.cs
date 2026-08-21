@@ -65,7 +65,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// </summary>
     private readonly ITaktTenantRepository<TaktModelDestination> _modelDestinationRepository;
     /// <summary>
-    /// 公司仓储
+    /// 公司仓储（RelatedPlant）
     /// </summary>
     private readonly ITaktTenantRepository<TaktCompany> _companyRepository;
     /// <summary>
@@ -93,7 +93,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// <param name="materialPlantRepository">工厂物料仓储</param>
     /// <param name="generalMaterialRepository">通用物料仓储</param>
     /// <param name="modelDestinationRepository">型号目的地仓储</param>
-    /// <param name="companyRepository">公司仓储</param>
+    /// <param name="companyRepository">公司仓储（RelatedPlant）</param>
     /// <param name="purchasePriceRepository">采购价格主表仓储</param>
     /// <param name="purchasePriceItemRepository">采购价格条件行仓储</param>
     /// <param name="purchasePriceScaleQuantityRepository">采购价格数量等级仓储</param>
@@ -209,7 +209,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 计算成本：明细按工厂+产品+核算月合计写入主表（按查询所选物料类型，空=全部类型），再刷新机种月均
+    /// 计算成本：明细按工厂+产品+核算月合计写入主表（有则更新；明细有而主表无则回填新建；按查询所选物料类型，空=全部类型），再刷新机种月均
     /// </summary>
     /// <param name="queryDto">工厂/物料类型/机种可选；须单个核算月</param>
     /// <returns>合计统计</returns>
@@ -219,7 +219,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 重算成本：将主表旧产品月计算追加到 ExtField JSON（核算日 yyyy/M/d → 计算值）后按明细重写（按查询所选物料类型，空=全部类型），再刷新机种月均
+    /// 重算成本：将主表旧产品月计算追加到 ExtField JSON（核算日 yyyy/M/d → 计算值）后按明细重写（有则更新；明细有而主表无则回填新建；按查询所选物料类型，空=全部类型），再刷新机种月均
     /// </summary>
     /// <param name="queryDto">工厂/物料类型/机种可选；须单个核算月</param>
     /// <returns>重算统计</returns>
@@ -311,10 +311,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// Quartz 计算成本：判定日所在自然月（不限定物料类型）
+    /// Quartz 计算成本：判定日所在自然月（不传工厂；按明细表行内 PlantCode 分组）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
-    /// <returns>合计统计</returns>
+    /// <returns>合计统计；当月无明细时仍返回统计（扫描 0）</returns>
     public async Task<TaktBomCalculateCostResultDto?> RunScheduledBomCalculateSumAsync(DateTime? asOfDate = null)
     {
         return await ExecuteBomCalculateCostAsync(
@@ -323,7 +323,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// Quartz 重算成本：判定日所在自然月（不限定物料类型；先归档旧成本再重写）
+    /// Quartz 重算成本：判定日所在自然月（不传工厂；按明细表行内 PlantCode 分组）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
     /// <returns>重算统计</returns>
@@ -335,7 +335,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 计算平均成本：先回填空机种/空物料类型，再按工厂+物料类型+机种+月份写机种月均（始终处理全部物料类型，忽略查询栏 MaterialType）
+    /// 计算平均成本：先回填空机种/空物料类型，再按工厂+物料类型+机种+核算月全量重算机种月均
+    /// （固定口径：核算月 &lt; 2026-06 用产品月成本，≥ 2026-06 用产品月计算；比较后有变化才落库并写 ExtField；忽略查询栏 MaterialType）
     /// </summary>
     /// <param name="queryDto">工厂 + 核算期间；机种可选；MaterialType 忽略</param>
     /// <returns>平均结果</returns>
@@ -366,7 +367,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             var models = modelFilters.ToList();
             headerExp = headerExp.And(x => models.Contains(x.ModelCode));
         }
-        var headers = await _bomMaterialCostRepository.GetListAsync(headerExp.ToExpression());
+        var headers = await _bomMaterialCostRepository.GetListAsync(headerExp.ToExpression(), includeSoftDeleted: true);
         if (modelFilters.Count > 1)
         {
             var modelSet = new HashSet<string>(modelFilters, StringComparer.OrdinalIgnoreCase);
@@ -457,11 +458,13 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         var averageUpdated = 0;
         var groupsWithProductCost = 0;
         var groupsWithoutProductCost = 0;
-        var positiveProductCostRows = headers.Count(h => h.ProductMonthlyCalculation > 0m);
+        var positiveProductCostRows = headers.Count(h =>
+            TaktBomMaterialCostItemModelEnrichmentHelper.ResolveProductAmountForModelAverage(h) > 0m);
         foreach (var grp in groups)
         {
             var list = grp.ToList();
-            if (list.Exists(h => h.ProductMonthlyCalculation > 0m))
+            if (list.Exists(h =>
+                TaktBomMaterialCostItemModelEnrichmentHelper.ResolveProductAmountForModelAverage(h) > 0m))
             {
                 groupsWithProductCost = checked(groupsWithProductCost + 1);
             }
@@ -486,7 +489,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// Quartz 计算平均成本：判定日所在自然月（不限定物料类型）
+    /// Quartz 计算平均成本：判定日所在自然月（按主表行 PlantCode 去重工厂）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
     /// <returns>各工厂汇总；当月无主表行时返回 null</returns>
@@ -498,7 +501,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         var periodHeaders = await _bomMaterialCostRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
-                && x.CostingPeriod == periodKey);
+                && x.CostingPeriod == periodKey,
+            includeSoftDeleted: true);
         if (periodHeaders.Count == 0)
         {
             return null;
@@ -509,6 +513,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
             .ToList();
+        if (plantCodes.Count == 0)
+        {
+            return null;
+        }
         var scanned = 0;
         var modelUpdated = 0;
         var typeUpdated = 0;
@@ -577,6 +585,13 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             : prepared.Query.MaterialType.Trim();
         var processRecordCount = prepared.Query.ProcessRecordCount;
         var itemRows = await LoadItemsForCalculateQueryAsync(prepared.Query);
+        TaktLogger.Information(
+            "[BomMaterialCost] 明细已加载 Month={Month} Plant={Plant} Rows={Rows} Tenant={Tenant} Company={Company}",
+            periodKey,
+            prepared.Query.PlantCode ?? string.Empty,
+            itemRows.Count,
+            CurrentTenantCode,
+            CurrentCompanyCode);
         var groupedKeys = itemRows
             .Where(r => !string.IsNullOrWhiteSpace(r.PlantCode) && !string.IsNullOrWhiteSpace(r.ProductCode))
             .GroupBy(
@@ -756,7 +771,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 x => x.TenantCode == CurrentTenantCode
                     && x.CompanyCode == CurrentCompanyCode
                     && x.PlantCode == plantCode
-                    && x.ModelCode == modelCode);
+                    && x.ModelCode == modelCode,
+                includeSoftDeleted: true);
         }
         else
         {
@@ -765,7 +781,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 x => x.TenantCode == CurrentTenantCode
                     && x.CompanyCode == CurrentCompanyCode
                     && x.PlantCode == plantCode
-                    && models.Contains(x.ModelCode));
+                    && models.Contains(x.ModelCode),
+                includeSoftDeleted: true);
             var modelSet = new HashSet<string>(modelCodes, StringComparer.OrdinalIgnoreCase);
             headers = headers
                 .Where(h => !string.IsNullOrWhiteSpace(h.ModelCode)
@@ -781,7 +798,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 按核算月加载明细（可按工厂/产品过滤）
+    /// 按核算月加载明细（可按工厂/产品过滤；明细无软删业务）
     /// </summary>
     /// <param name="query">查询</param>
     /// <returns>明细行</returns>
@@ -821,11 +838,12 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 exp = exp.And(x => codes.Contains(x.ProductCode));
             }
         }
+        // 明细无软删业务（IsDeleted 恒为 0）；读隔离默认即可
         return await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
     }
 
     /// <summary>
-    /// 按工厂+产品+核算月批量同步主表
+    /// 按工厂+产品+核算月批量同步主表（同工厂同月仅加载一次明细与主表缓存；机种月均去重后刷新）
     /// </summary>
     /// <param name="keys">待同步键</param>
     /// <param name="destinations">型号目的地</param>
@@ -858,17 +876,87 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
         var generalList = generalMaterials
             ?? await LoadGeneralMaterialsByProductCodesAsync(distinct.Select(k => k.ProductCode));
-        foreach (var key in distinct)
+        foreach (var plantPeriodGroup in distinct.GroupBy(
+                     k => $"{k.PlantCode}|{k.Period}",
+                     StringComparer.OrdinalIgnoreCase))
         {
-            await SyncBomMaterialCostFromItemsAsync(
-                key.PlantCode,
-                key.ProductCode,
-                key.CostingDate,
-                destList,
-                materialPlants,
-                generalList,
-                archiveOldCost,
-                filterMaterialType);
+            var sample = plantPeriodGroup.First();
+            var plant = sample.PlantCode;
+            var periodKey = sample.Period;
+            var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
+            var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
+            var monthItems = await _bomMaterialCostItemRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plant
+                    && x.CostingDate >= monthStart
+                    && x.CostingDate <= monthEnd
+                    && x.ProductCode != null,
+                yearTable);
+            var headerCache = await _bomMaterialCostRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plant
+                    && x.CostingPeriod == periodKey
+                    && x.ProductCode != null,
+                includeSoftDeleted: true);
+            var averageKeys = new HashSet<(string MaterialType, string ModelCode)>();
+            var done = 0;
+            var total = plantPeriodGroup.Count();
+            TaktLogger.Information(
+                "[BomMaterialCost] 合计批次开始 Plant={Plant} Period={Period} Products={Products} ItemRows={ItemRows} Headers={Headers}",
+                plant,
+                periodKey,
+                total,
+                monthItems.Count,
+                headerCache.Count);
+            foreach (var key in plantPeriodGroup)
+            {
+                var product = TaktStringHelper.NormalizeSapNumericMaterialCode(key.ProductCode);
+                if (string.IsNullOrWhiteSpace(product))
+                {
+                    product = key.ProductCode;
+                }
+                var productItems = monthItems
+                    .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
+                    .ToList();
+                var avgKey = await SyncBomMaterialCostFromItemsAsync(
+                    plant,
+                    product,
+                    key.CostingDate,
+                    destList,
+                    materialPlants,
+                    generalList,
+                    archiveOldCost,
+                    filterMaterialType,
+                    productItems,
+                    headerCache,
+                    skipAverageRefresh: true);
+                if (avgKey.HasValue)
+                {
+                    averageKeys.Add(avgKey.Value);
+                }
+                done = checked(done + 1);
+                if (done == 1 || done == total || done % 50 == 0)
+                {
+                    TaktLogger.Information(
+                        "[BomMaterialCost] 合计进度 Plant={Plant} Period={Period} Done={Done}/{Total}",
+                        plant,
+                        periodKey,
+                        done,
+                        total);
+                }
+            }
+            foreach (var (materialType, modelCode) in averageKeys)
+            {
+                await RefreshModelMonthlyAverageForPeriodAsync(plant, materialType, modelCode, periodKey);
+            }
+            TaktLogger.Information(
+                "[BomMaterialCost] 合计批次完成 Plant={Plant} Period={Period} Products={Products} ModelAvgGroups={AvgGroups}",
+                plant,
+                periodKey,
+                total,
+                averageKeys.Count);
         }
     }
 
@@ -904,16 +992,51 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 x => x.TenantCode == CurrentTenantCode && x.MaterialCode != null);
         var generalList = generalMaterials
             ?? await LoadGeneralMaterialsByProductCodesAsync(distinct.Select(k => k.ProductCode));
-        foreach (var key in distinct)
+        foreach (var plantPeriodGroup in distinct.GroupBy(
+                     k => $"{k.PlantCode}|{k.Period}",
+                     StringComparer.OrdinalIgnoreCase))
         {
-            await SyncLatestPurchaseCostFromItemsAsync(
-                key.PlantCode,
-                key.ProductCode,
-                key.CostingDate,
-                destList,
-                materialPlants,
-                generalList,
-                filterMaterialType);
+            var sample = plantPeriodGroup.First();
+            var plant = sample.PlantCode;
+            var periodKey = sample.Period;
+            var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
+            var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
+            var monthItems = await _bomMaterialCostItemRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plant
+                    && x.CostingDate >= monthStart
+                    && x.CostingDate <= monthEnd
+                    && x.ProductCode != null,
+                yearTable);
+            var headerCache = await _bomMaterialCostRepository.GetListAsync(
+                x => x.TenantCode == CurrentTenantCode
+                    && x.CompanyCode == CurrentCompanyCode
+                    && x.PlantCode == plant
+                    && x.CostingPeriod == periodKey
+                    && x.ProductCode != null,
+                includeSoftDeleted: true);
+            foreach (var key in plantPeriodGroup)
+            {
+                var product = TaktStringHelper.NormalizeSapNumericMaterialCode(key.ProductCode);
+                if (string.IsNullOrWhiteSpace(product))
+                {
+                    product = key.ProductCode;
+                }
+                var productItems = monthItems
+                    .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
+                    .ToList();
+                await SyncLatestPurchaseCostFromItemsAsync(
+                    plant,
+                    product,
+                    key.CostingDate,
+                    destList,
+                    materialPlants,
+                    generalList,
+                    filterMaterialType,
+                    productItems,
+                    headerCache);
+            }
         }
     }
 
@@ -927,6 +1050,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// <param name="materialPlants">工厂物料</param>
     /// <param name="generalMaterials">通用物料</param>
     /// <param name="filterMaterialType">所选物料类型；空则用解析结果，解析不到再保留已有值</param>
+    /// <param name="preloadedProductItems">已按产品筛好的明细；空则按产品变体查库</param>
+    /// <param name="headerCache">同工厂同月主表缓存；空则按产品查库</param>
     /// <returns>任务</returns>
     private async Task SyncLatestPurchaseCostFromItemsAsync(
         string plantCode,
@@ -935,7 +1060,9 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         IReadOnlyList<TaktModelDestination> destinations,
         IReadOnlyList<TaktMaterialPlant>? materialPlants,
         IReadOnlyList<TaktGeneralMaterial>? generalMaterials,
-        string? filterMaterialType)
+        string? filterMaterialType,
+        IReadOnlyList<TaktBomMaterialCostItem>? preloadedProductItems = null,
+        List<TaktBomMaterialCost>? headerCache = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(productCode);
@@ -947,20 +1074,44 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             product = productCode.Trim();
         }
         var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(costingDate);
-        var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
-        var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
-        var monthItems = await _bomMaterialCostItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plant
-                && x.CostingDate >= monthStart
-                && x.CostingDate <= monthEnd
-                && x.ProductCode != null,
-            yearTable);
-        var productItems = monthItems
-            .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
-            .ToList();
-        var modelCode = ResolveModelCodeFromDestinations(destinations, product);
+        List<TaktBomMaterialCostItem> productItems;
+        if (preloadedProductItems != null)
+        {
+            productItems = preloadedProductItems.ToList();
+        }
+        else
+        {
+            var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
+            var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
+            var variants = TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants(product).ToList();
+            var monthItems = variants.Count == 0
+                ? new List<TaktBomMaterialCostItem>()
+                : await _bomMaterialCostItemRepository.GetListAsync(
+                    x => x.TenantCode == CurrentTenantCode
+                        && x.CompanyCode == CurrentCompanyCode
+                        && x.PlantCode == plant
+                        && x.CostingDate >= monthStart
+                        && x.CostingDate <= monthEnd
+                        && x.ProductCode != null
+                        && variants.Contains(x.ProductCode),
+                    yearTable);
+            productItems = monthItems
+                .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
+                .ToList();
+        }
+        // 主表匹配键：工厂+产品+核算日（有明细时取期间最后核算日）
+        var matchCostingDate = costingDate;
+        if (productItems.Count > 0)
+        {
+            matchCostingDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
+                productItems, plant, product, periodKey) ?? costingDate;
+        }
+        var existing = headerCache != null
+            ? FindHeaderInCache(headerCache, plant, product, matchCostingDate)
+            : await FindHeaderByProductCostingDateAsync(plant, product, matchCostingDate);
+        var modelCode = existing != null && !string.IsNullOrWhiteSpace(existing.ModelCode)
+            ? existing.ModelCode.Trim()
+            : ResolveModelCodeFromDestinations(destinations, product);
         var plants = materialPlants
             ?? await _materialPlantRepository.GetListAsync(
                 x => x.TenantCode == CurrentTenantCode
@@ -968,19 +1119,16 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                     && x.PlantCode == plant);
         var generals = generalMaterials
             ?? await LoadGeneralMaterialsByProductCodesAsync(new[] { product });
-        var materialType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-            generals,
-            plants,
-            plant,
-            product);
+        var materialType = existing != null && !string.IsNullOrWhiteSpace(existing.MaterialType)
+            ? existing.MaterialType.Trim()
+            : TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
+                generals,
+                plants,
+                plant,
+                product);
         if (string.IsNullOrWhiteSpace(materialType) && !string.IsNullOrWhiteSpace(filterMaterialType))
         {
             materialType = filterMaterialType.Trim() ?? string.Empty;
-        }
-        var existing = await FindHeaderByMonthKeyAsync(plant, modelCode, product, periodKey);
-        if (string.IsNullOrWhiteSpace(materialType) && existing != null)
-        {
-            materialType = existing.MaterialType?.Trim() ?? string.Empty;
         }
         if (productItems.Count == 0)
         {
@@ -988,6 +1136,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             {
                 return;
             }
+            var oldLpc = existing.LatestPurchaseCost;
             existing.LatestPurchaseCost = 0;
             if (!string.IsNullOrWhiteSpace(modelCode))
             {
@@ -997,21 +1146,31 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             {
                 existing.MaterialType = materialType;
             }
+            existing.ExtField = AppendLatestPurchaseOperationHistory(
+                existing.ExtField,
+                oldLpc,
+                0m,
+                periodKey,
+                plant,
+                product,
+                existing.ModelCode);
             await _bomMaterialCostRepository.UpdateAsync(existing);
             return;
         }
         var snapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(
             productItems, plant, product, periodKey);
-        var latestCostingDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
-            productItems, plant, product, periodKey) ?? costingDate;
+        var latestCostingDate = matchCostingDate;
         var latestPurchaseCost = TaktBomMaterialCostItemLineCostHelper.SumSnapshotPurchaseCost(snapshot);
         var productDescription = snapshot.FirstOrDefault()?.ProductDescription
             ?? productItems.OrderByDescending(x => x.CostingDate).First().ProductDescription
             ?? string.Empty;
-        var purchaseCurrency = TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(snapshot)
+        var purchaseCurrency = TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(snapshot))
             .Select(x => x.PurchaseCurrencyCode)
             .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c))
             ?? string.Empty;
+        // 明细有而主表无：回填新建主表行
         if (existing == null)
         {
             existing = new TaktBomMaterialCost
@@ -1027,16 +1186,25 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 ModelMonthlyAverageCost = 0,
                 CurrencyCode = purchaseCurrency,
                 CostingPeriod = periodKey,
-                CostingDate = latestCostingDate,
+                CostingDate = latestCostingDate.Date,
             };
-            await _bomMaterialCostRepository.CreateAsync(existing);
+            existing.ExtField = AppendLatestPurchaseOperationHistory(
+                null,
+                0m,
+                latestPurchaseCost,
+                periodKey,
+                plant,
+                product,
+                modelCode);
+            existing = await _bomMaterialCostRepository.CreateAsync(existing);
+            headerCache?.Add(existing);
             return;
         }
-        if (!string.IsNullOrWhiteSpace(modelCode))
+        if (string.IsNullOrWhiteSpace(existing.ModelCode) && !string.IsNullOrWhiteSpace(modelCode))
         {
             existing.ModelCode = modelCode;
         }
-        if (!string.IsNullOrWhiteSpace(materialType))
+        if (string.IsNullOrWhiteSpace(existing.MaterialType) && !string.IsNullOrWhiteSpace(materialType))
         {
             existing.MaterialType = materialType;
         }
@@ -1045,14 +1213,23 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         {
             existing.ProductDescription = productDescription;
         }
+        var oldLatest = existing.LatestPurchaseCost;
         existing.LatestPurchaseCost = latestPurchaseCost;
         existing.CostingPeriod = periodKey;
-        existing.CostingDate = latestCostingDate;
+        existing.CostingDate = latestCostingDate.Date;
+        existing.ExtField = AppendLatestPurchaseOperationHistory(
+            existing.ExtField,
+            oldLatest,
+            latestPurchaseCost,
+            periodKey,
+            plant,
+            product,
+            existing.ModelCode);
         await _bomMaterialCostRepository.UpdateAsync(existing);
     }
 
     /// <summary>
-    /// 按工厂+产品+核算月把明细合计写入主表一行
+    /// 按工厂+产品+核算月把明细合计写入主表一行（有则更新；明细有而主表无则回填新建）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCode">产品</param>
@@ -1062,8 +1239,11 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     /// <param name="generalMaterials">通用物料</param>
     /// <param name="archiveOldCost">为 true 时将旧产品月计算写入 ExtField</param>
     /// <param name="filterMaterialType">所选物料类型；空则用解析结果，解析不到再保留已有值</param>
-    /// <returns>任务</returns>
-    private async Task SyncBomMaterialCostFromItemsAsync(
+    /// <param name="preloadedProductItems">已按产品筛好的明细；空则按产品变体查库</param>
+    /// <param name="headerCache">同工厂同月主表缓存（批量路径）；空则按产品查库</param>
+    /// <param name="skipAverageRefresh">为 true 时不刷新机种月均（由批量末尾去重刷新）</param>
+    /// <returns>需刷新机种月均的 (物料类型, 机种)；无需则 null</returns>
+    private async Task<(string MaterialType, string ModelCode)?> SyncBomMaterialCostFromItemsAsync(
         string plantCode,
         string productCode,
         DateTime costingDate,
@@ -1071,7 +1251,10 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         IReadOnlyList<TaktMaterialPlant>? materialPlants,
         IReadOnlyList<TaktGeneralMaterial>? generalMaterials,
         bool archiveOldCost,
-        string? filterMaterialType)
+        string? filterMaterialType,
+        IReadOnlyList<TaktBomMaterialCostItem>? preloadedProductItems = null,
+        List<TaktBomMaterialCost>? headerCache = null,
+        bool skipAverageRefresh = false)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(productCode);
@@ -1083,20 +1266,44 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             product = productCode.Trim();
         }
         var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(costingDate);
-        var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
-        var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
-        var monthItems = await _bomMaterialCostItemRepository.GetListAsync(
-            x => x.TenantCode == CurrentTenantCode
-                && x.CompanyCode == CurrentCompanyCode
-                && x.PlantCode == plant
-                && x.CostingDate >= monthStart
-                && x.CostingDate <= monthEnd
-                && x.ProductCode != null,
-            yearTable);
-        var productItems = monthItems
-            .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
-            .ToList();
-        var modelCode = ResolveModelCodeFromDestinations(destinations, product);
+        List<TaktBomMaterialCostItem> productItems;
+        if (preloadedProductItems != null)
+        {
+            productItems = preloadedProductItems.ToList();
+        }
+        else
+        {
+            var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(periodKey);
+            var yearTable = await ResolveBomItemPhysicalTableAsync(monthStart.Year);
+            var variants = TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants(product).ToList();
+            var monthItems = variants.Count == 0
+                ? new List<TaktBomMaterialCostItem>()
+                : await _bomMaterialCostItemRepository.GetListAsync(
+                    x => x.TenantCode == CurrentTenantCode
+                        && x.CompanyCode == CurrentCompanyCode
+                        && x.PlantCode == plant
+                        && x.CostingDate >= monthStart
+                        && x.CostingDate <= monthEnd
+                        && x.ProductCode != null
+                        && variants.Contains(x.ProductCode),
+                    yearTable);
+            productItems = monthItems
+                .Where(x => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, product))
+                .ToList();
+        }
+        // 主表匹配键：工厂+产品+核算日（有明细时取期间最后核算日）
+        var matchCostingDate = costingDate;
+        if (productItems.Count > 0)
+        {
+            matchCostingDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
+                productItems, plant, product, periodKey) ?? costingDate;
+        }
+        var existing = headerCache != null
+            ? FindHeaderInCache(headerCache, plant, product, matchCostingDate)
+            : await FindHeaderByProductCostingDateAsync(plant, product, matchCostingDate);
+        var modelCode = existing != null && !string.IsNullOrWhiteSpace(existing.ModelCode)
+            ? existing.ModelCode.Trim()
+            : ResolveModelCodeFromDestinations(destinations, product);
         var plants = materialPlants
             ?? await _materialPlantRepository.GetListAsync(
                 x => x.TenantCode == CurrentTenantCode
@@ -1104,51 +1311,61 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                     && x.PlantCode == plant);
         var generals = generalMaterials
             ?? await LoadGeneralMaterialsByProductCodesAsync(new[] { product });
-        var materialType = TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
-            generals,
-            plants,
-            plant,
-            product);
+        var materialType = existing != null && !string.IsNullOrWhiteSpace(existing.MaterialType)
+            ? existing.MaterialType.Trim()
+            : TaktBomMaterialCostItemLineCostHelper.ResolveMaterialTypeFromGeneralThenPlant(
+                generals,
+                plants,
+                plant,
+                product);
         if (string.IsNullOrWhiteSpace(materialType) && !string.IsNullOrWhiteSpace(filterMaterialType))
         {
             materialType = filterMaterialType.Trim();
-        }
-        var existing = await FindHeaderByMonthKeyAsync(plant, modelCode, product, periodKey);
-        if (string.IsNullOrWhiteSpace(materialType) && existing != null)
-        {
-            materialType = existing.MaterialType?.Trim() ?? string.Empty;
         }
         if (productItems.Count == 0)
         {
             if (existing == null)
             {
-                return;
+                return null;
             }
+            var oldZero = existing.ProductMonthlyCalculation;
             if (archiveOldCost)
             {
                 ArchiveOldProductMonthlyCost(existing);
             }
             existing.ProductMonthlyCalculation = 0;
             existing.ModelMonthlyAverageCost = 0;
-            existing.CostingDate = costingDate;
+            existing.CostingDate = matchCostingDate.Date;
             existing.CostingPeriod = periodKey;
             if (!string.IsNullOrWhiteSpace(modelCode))
             {
                 existing.ModelCode = modelCode;
             }
             existing.MaterialType = materialType;
-            await _bomMaterialCostRepository.UpdateAsync(existing);
-            await RefreshModelMonthlyAverageForPeriodAsync(
+            existing.ExtField = AppendProductCostOperationHistory(
+                existing.ExtField,
+                archiveOldCost,
+                oldZero,
+                0m,
+                periodKey,
                 plant,
-                existing.MaterialType,
-                existing.ModelCode,
-                periodKey);
-            return;
+                product,
+                existing.ModelCode);
+            await _bomMaterialCostRepository.UpdateAsync(existing);
+            var zeroType = existing.MaterialType?.Trim() ?? string.Empty;
+            var zeroModel = existing.ModelCode?.Trim() ?? string.Empty;
+            if (!skipAverageRefresh)
+            {
+                await RefreshModelMonthlyAverageForPeriodAsync(plant, zeroType, zeroModel, periodKey);
+                return null;
+            }
+            return string.IsNullOrWhiteSpace(zeroType) || string.IsNullOrWhiteSpace(zeroModel)
+                ? null
+                : (zeroType, zeroModel);
         }
         var snapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(
             productItems, plant, product, periodKey);
-        var latestCostingDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
-            productItems, plant, product, periodKey) ?? costingDate;
+        var latestCostingDate = matchCostingDate;
         var productMonthlyCost = TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(snapshot);
         var currency = snapshot
             .Select(TaktBomMaterialCostItemLineCostHelper.ResolveCurrency)
@@ -1160,6 +1377,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         var productDescription = snapshot.FirstOrDefault()?.ProductDescription
             ?? productItems.OrderByDescending(x => x.CostingDate).First().ProductDescription
             ?? string.Empty;
+        // 明细有而主表无：回填新建主表行（补齐机种/物料类型后写入产品月计算）
         if (existing == null)
         {
             existing = new TaktBomMaterialCost
@@ -1174,56 +1392,114 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 ModelMonthlyAverageCost = 0,
                 CurrencyCode = currency,
                 CostingPeriod = periodKey,
-                CostingDate = latestCostingDate,
+                CostingDate = latestCostingDate.Date,
             };
+            existing.ExtField = AppendProductCostOperationHistory(
+                null,
+                archiveOldCost,
+                0m,
+                productMonthlyCost,
+                periodKey,
+                plant,
+                product,
+                modelCode);
             existing = await _bomMaterialCostRepository.CreateAsync(existing);
+            headerCache?.Add(existing);
         }
         else
         {
+            var oldCalc = existing.ProductMonthlyCalculation;
             if (archiveOldCost)
             {
                 ArchiveOldProductMonthlyCost(existing);
             }
-            existing.ModelCode = string.IsNullOrWhiteSpace(modelCode) ? existing.ModelCode : modelCode;
-            existing.MaterialType = materialType;
+            existing.ModelCode = string.IsNullOrWhiteSpace(existing.ModelCode)
+                ? (modelCode ?? string.Empty)
+                : existing.ModelCode;
+            if (string.IsNullOrWhiteSpace(existing.MaterialType) && !string.IsNullOrWhiteSpace(materialType))
+            {
+                existing.MaterialType = materialType;
+            }
             existing.ProductCode = product;
             existing.ProductDescription = productDescription;
             existing.ProductMonthlyCalculation = productMonthlyCost;
             existing.CurrencyCode = currency;
             existing.CostingPeriod = periodKey;
-            existing.CostingDate = latestCostingDate;
+            existing.CostingDate = latestCostingDate.Date;
+            existing.ExtField = AppendProductCostOperationHistory(
+                existing.ExtField,
+                archiveOldCost,
+                oldCalc,
+                productMonthlyCost,
+                periodKey,
+                plant,
+                product,
+                existing.ModelCode);
             await _bomMaterialCostRepository.UpdateAsync(existing);
         }
-        var effectiveModel = string.IsNullOrWhiteSpace(existing.ModelCode) ? modelCode : existing.ModelCode;
-        var effectiveType = string.IsNullOrWhiteSpace(existing.MaterialType) ? materialType : existing.MaterialType;
-        await RefreshModelMonthlyAverageForPeriodAsync(plant, effectiveType, effectiveModel, periodKey);
+        var effectiveModel = string.IsNullOrWhiteSpace(existing.ModelCode)
+            ? (modelCode ?? string.Empty)
+            : existing.ModelCode.Trim();
+        var effectiveType = string.IsNullOrWhiteSpace(existing.MaterialType)
+            ? (materialType ?? string.Empty)
+            : existing.MaterialType.Trim();
+        if (!skipAverageRefresh)
+        {
+            await RefreshModelMonthlyAverageForPeriodAsync(plant, effectiveType, effectiveModel, periodKey);
+            return null;
+        }
+        return string.IsNullOrWhiteSpace(effectiveType) || string.IsNullOrWhiteSpace(effectiveModel)
+            ? null
+            : (effectiveType, effectiveModel);
     }
 
     /// <summary>
-    /// 按工厂+机种+产品+核算月查找主表行
+    /// 在主表缓存中按工厂+产品+核算日查找（与业务唯一键一致；ModelCode 不参与匹配）
+    /// </summary>
+    private static TaktBomMaterialCost? FindHeaderInCache(
+        List<TaktBomMaterialCost> headers,
+        string plantCode,
+        string productCode,
+        DateTime costingDate)
+    {
+        ArgumentNullException.ThrowIfNull(headers);
+        var day = costingDate.Date;
+        return headers.FirstOrDefault(x =>
+            string.Equals((x.PlantCode ?? string.Empty).Trim(), plantCode, StringComparison.OrdinalIgnoreCase)
+            && x.CostingDate.Date == day
+            && TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, productCode));
+    }
+
+    /// <summary>
+    /// 按工厂+产品+核算日查找主表行（与业务唯一键一致）
     /// </summary>
     /// <param name="plantCode">工厂</param>
-    /// <param name="modelCode">机种</param>
     /// <param name="productCode">产品</param>
-    /// <param name="periodKey">核算月 yyyy-MM</param>
+    /// <param name="costingDate">核算日</param>
     /// <returns>主表行；没有则 null</returns>
-    private async Task<TaktBomMaterialCost?> FindHeaderByMonthKeyAsync(
+    private async Task<TaktBomMaterialCost?> FindHeaderByProductCostingDateAsync(
         string plantCode,
-        string modelCode,
         string productCode,
-        string periodKey)
+        DateTime costingDate)
     {
+        var variants = TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants(productCode).ToList();
+        if (variants.Count == 0)
+        {
+            return null;
+        }
+        var dayStart = costingDate.Date;
+        var dayEnd = dayStart.AddDays(1);
         var list = await _bomMaterialCostRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode
-                && x.CostingPeriod == periodKey
-                && x.ProductCode != null);
+                && x.CostingDate >= dayStart
+                && x.CostingDate < dayEnd
+                && x.ProductCode != null
+                && variants.Contains(x.ProductCode),
+            includeSoftDeleted: true);
         return list.FirstOrDefault(x =>
-            TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, productCode)
-            && (string.IsNullOrWhiteSpace(modelCode)
-                || string.Equals(x.ModelCode, modelCode, StringComparison.OrdinalIgnoreCase)
-                || string.IsNullOrWhiteSpace(x.ModelCode)));
+            TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(x.ProductCode, productCode));
     }
 
     /// <summary>
@@ -1251,7 +1527,8 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plant
-                && x.CostingPeriod == periodKey);
+                && x.CostingPeriod == periodKey,
+            includeSoftDeleted: true);
         var matched = headers
             .Where(h =>
                 string.Equals((h.ModelCode ?? string.Empty).Trim(), model, StringComparison.OrdinalIgnoreCase)
@@ -1261,10 +1538,12 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 按产品月计算算术平均写入机种月均并保存（只写 model_monthly_average_cost；口径=同组 ProductMonthlyCalculation&gt;0 算术平均）
+    /// 按产品金额算术平均写入机种月均并保存。
+    /// 固定口径：核算月 &lt; 2026-06 用产品月成本，≥ 2026-06 用产品月计算；
+    /// 流程：全量算出新均值 → 与行上原机种月成本比较 → 仅「新值≠旧值」才落库并写 ExtField。
     /// </summary>
     /// <param name="headers">同组主表行</param>
-    /// <returns>更新行数</returns>
+    /// <returns>实际更新行数</returns>
     private async Task<int> ApplyModelMonthlyAverageAndSaveAsync(List<TaktBomMaterialCost> headers)
     {
         ArgumentNullException.ThrowIfNull(headers);
@@ -1272,27 +1551,35 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         {
             return 0;
         }
-        var costs = headers
-            .Where(h => h.ProductMonthlyCalculation > 0m)
-            .Select(h => h.ProductMonthlyCalculation)
-            .ToList();
-        var average = TaktBomMaterialCostItemModelEnrichmentHelper.ComputeModelMonthlyAverageFromProductCosts(costs);
+        // 按产品去重；核算月&lt;2026-06 用产品月成本，≥2026-06 用产品月计算 → 算术平均
+        var average = TaktBomMaterialCostItemModelEnrichmentHelper.ComputeModelMonthlyAverageFromHeaders(headers);
         var updated = 0;
         var now = DateTime.Now;
         var operatorUserId = CurrentUserId ?? 0L;
         foreach (var header in headers)
         {
             var current = TaktBomMaterialCostItemLineCostHelper.RoundCost(header.ModelMonthlyAverageCost);
+            // 先全量算 average，再比较：仅新旧相等才跳过（不是「原值非 0 就跳过」）
             if (current == average)
             {
                 continue;
             }
-            // SetColumns 强制写 model_monthly_average_cost，避免整实体 Update 漏列
+            var nextExt = AppendModelAvgOperationHistory(
+                header.ExtField,
+                current,
+                average,
+                header.CostingPeriod,
+                header.PlantCode,
+                header.ProductCode,
+                header.ModelCode,
+                header.MaterialType);
+            // 全量写回：不要求 IsDeleted=0（软删主表同样更新机种月均）
             var rows = await _bomMaterialCostRepository.UpdateAsync(
-                x => x.Id == header.Id && x.IsDeleted == 0,
+                x => x.Id == header.Id,
                 x => new TaktBomMaterialCost
                 {
                     ModelMonthlyAverageCost = average,
+                    ExtField = nextExt,
                     UpdatedAt = now,
                     UpdatedBy = operatorUserId,
                 });
@@ -1301,6 +1588,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
                 continue;
             }
             header.ModelMonthlyAverageCost = average;
+            header.ExtField = nextExt;
             updated = checked(updated + 1);
         }
         return updated;
@@ -1766,6 +2054,102 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
+    /// 追加合计/重算履历到 ExtField._bk.sum 或 _bk.recalc（仅追加）
+    /// </summary>
+    /// <param name="extField">原扩展字段</param>
+    /// <param name="isRecalc">是否重算</param>
+    /// <param name="oldCalc">旧产品月计算</param>
+    /// <param name="newCalc">新产品月计算</param>
+    /// <param name="periodKey">核算月</param>
+    /// <param name="plantCode">工厂</param>
+    /// <param name="productCode">产品</param>
+    /// <param name="modelCode">机种</param>
+    /// <returns>合并后 ExtField</returns>
+    private static string? AppendProductCostOperationHistory(
+        string? extField,
+        bool isRecalc,
+        decimal oldCalc,
+        decimal newCalc,
+        string periodKey,
+        string plantCode,
+        string productCode,
+        string? modelCode)
+    {
+        var scope = isRecalc
+            ? TaktBomExtFieldBackfillHistoryHelper.ScopeRecalc
+            : TaktBomExtFieldBackfillHistoryHelper.ScopeSum;
+        var entry = new JsonObject
+        {
+            ["at"] = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
+            ["costing_period"] = periodKey?.Trim() ?? string.Empty,
+            ["plant_code"] = plantCode?.Trim() ?? string.Empty,
+            ["product_code"] = productCode?.Trim() ?? string.Empty,
+            ["model_code"] = modelCode?.Trim() ?? string.Empty,
+            ["old_product_monthly_calculation"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(oldCalc),
+            ["new_product_monthly_calculation"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(newCalc),
+        };
+        return TaktBomExtFieldBackfillHistoryHelper.Append(extField, scope, entry);
+    }
+
+    /// <summary>
+    /// 追加机种月均履历到 ExtField._bk.model_avg（仅追加；含计算前/后机种月成本）
+    /// </summary>
+    private static string? AppendModelAvgOperationHistory(
+        string? extField,
+        decimal oldAvg,
+        decimal newAvg,
+        string? periodKey,
+        string? plantCode,
+        string? productCode,
+        string? modelCode,
+        string? materialType = null)
+    {
+        var entry = new JsonObject
+        {
+            ["at"] = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
+            ["costing_period"] = periodKey?.Trim() ?? string.Empty,
+            ["plant_code"] = plantCode?.Trim() ?? string.Empty,
+            ["product_code"] = productCode?.Trim() ?? string.Empty,
+            ["model_code"] = modelCode?.Trim() ?? string.Empty,
+            ["material_type"] = materialType?.Trim() ?? string.Empty,
+            ["old_model_monthly_average_cost"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(oldAvg),
+            ["new_model_monthly_average_cost"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(newAvg),
+        };
+        return TaktBomExtFieldBackfillHistoryHelper.Append(
+            extField,
+            TaktBomExtFieldBackfillHistoryHelper.ScopeModelAvg,
+            entry);
+    }
+
+    /// <summary>
+    /// 追加最近采购成本履历到 ExtField._bk.lpc（仅追加）
+    /// </summary>
+    private static string? AppendLatestPurchaseOperationHistory(
+        string? extField,
+        decimal oldCost,
+        decimal newCost,
+        string periodKey,
+        string plantCode,
+        string productCode,
+        string? modelCode)
+    {
+        var entry = new JsonObject
+        {
+            ["at"] = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture),
+            ["costing_period"] = periodKey?.Trim() ?? string.Empty,
+            ["plant_code"] = plantCode?.Trim() ?? string.Empty,
+            ["product_code"] = productCode?.Trim() ?? string.Empty,
+            ["model_code"] = modelCode?.Trim() ?? string.Empty,
+            ["old_latest_purchase_cost"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(oldCost),
+            ["new_latest_purchase_cost"] = TaktBomMaterialCostItemLineCostHelper.RoundCost(newCost),
+        };
+        return TaktBomExtFieldBackfillHistoryHelper.Append(
+            extField,
+            TaktBomExtFieldBackfillHistoryHelper.ScopeLatestPurchase,
+            entry);
+    }
+
+    /// <summary>
     /// 重算前把当前产品月计算写入 ExtField JSON（键=旧核算日 yyyy/M/d，值=旧计算）
     /// </summary>
     /// <param name="existing">已有主表行</param>
@@ -1779,7 +2163,7 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
     }
 
     /// <summary>
-    /// 追加一条旧成本到 ExtField JSON 对象；超过 nvarchar(4000) 时丢弃最早核算日
+    /// 追加一条旧成本到 ExtField JSON 对象；超过 nvarchar(4000) 时丢弃最早核算日（保留 _bk）
     /// </summary>
     /// <param name="extField">当前扩展字段</param>
     /// <param name="oldCostingDate">旧核算日期</param>
@@ -1796,8 +2180,16 @@ public class TaktBomCalculateService : TaktServiceBase, ITaktBomCalculateService
         {
             var oldestKey = obj
                 .Select(p => p.Key)
+                .Where(k => !string.Equals(
+                    k,
+                    TaktBomExtFieldBackfillHistoryHelper.ExtFieldBackfillRootKey,
+                    StringComparison.Ordinal))
                 .OrderBy(ParseOldCostDateKey)
-                .First();
+                .FirstOrDefault();
+            if (string.IsNullOrEmpty(oldestKey))
+            {
+                break;
+            }
             obj.Remove(oldestKey);
             json = obj.ToJsonString();
         }

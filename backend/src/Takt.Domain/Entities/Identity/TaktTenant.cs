@@ -17,7 +17,6 @@ namespace Takt.Domain.Entities.Identity;
 /// <summary>
 /// 租户实体
 /// 代表系统中的独立租户（第一层数据隔离）
-/// 参照 SAP Client (MANDT) 设计
 /// 组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
 /// </summary>
 [SugarTable("takt_identity_tenant", "租户表")]

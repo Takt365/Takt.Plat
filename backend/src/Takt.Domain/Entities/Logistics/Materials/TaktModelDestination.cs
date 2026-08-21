@@ -18,10 +18,12 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 /// <summary>
 /// Takt型号目的地实体（租户级；物料编码/名称、机种编码/名称、仕向地编码/名称）
 /// 特例：继承组合 4：无关联工厂、无语言（TaktTenantCoreEntityBase）
+/// <para>业务唯一键（新增/更新匹配）：TenantCode+MaterialCode+ModelCode；DestinationCode 为业务字段，不参与唯一匹配。</para>
 /// </summary>
 [SugarTable("takt_logistics_materials_model_destination", "型号目的地表")]
 [SugarIndex("ix_model_destination_tenant", nameof(TenantCode), OrderByType.Asc, false)]
 [SugarIndex("ix_model_destination_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
+[SugarIndex("ix_takt_logistics_materials_model_destination_unique", nameof(TenantCode), OrderByType.Asc, nameof(MaterialCode), OrderByType.Asc, nameof(ModelCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_materials_model_destination_order_num", nameof(TenantCode), OrderByType.Asc, nameof(SortOrder), OrderByType.Asc, false)]
 public class TaktModelDestination : TaktTenantCoreEntityBase
 {
@@ -32,7 +34,7 @@ public class TaktModelDestination : TaktTenantCoreEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 物料描述（回填：按 MaterialCode 取物料描述表 culture_code=ja-JP）
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = false)]
     public string MaterialDescription { get; set; } = string.Empty;

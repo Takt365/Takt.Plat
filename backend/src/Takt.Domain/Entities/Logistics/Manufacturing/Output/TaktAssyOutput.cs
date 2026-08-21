@@ -20,12 +20,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Output;
 
 /// <summary>
 /// 组立日报（产出）主表实体
+/// <para>业务唯一键：TenantCode+CompanyCode+PlantCode+ProdDate+ProdOrderCode。</para>
 /// 达成率(%) = 明细实际生产数量合计 ÷ 主表标准产能合计 × 100%。
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_output_assy", "组立日报表")]
 [SugarIndex("ix_assy_output_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_assy_output_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_manufacturing_output_assy_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_date", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdDate), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_team_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(TeamCode), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_manufacturing_output_assy_prod_order_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(ProdOrderCode), OrderByType.Asc, false)]

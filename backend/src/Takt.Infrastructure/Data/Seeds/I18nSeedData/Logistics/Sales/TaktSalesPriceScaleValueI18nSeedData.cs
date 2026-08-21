@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesPriceScaleValueI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesPriceScaleValue 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,49 +100,49 @@ public class TaktSalesPriceScaleValueI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salespricescalevalue.salespriceitemid", "zh-HK", "销售价格明细ID_hk", "销售价格明细 ID（主子表关系；选项 TaktSalesPriceItems/options，DictValue=Id）"),
 
             // entity.salespricescalevalue.salespricecode
-            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "en-US", "定价记录号_us", "定价记录号（KNUMH；冗余；与主表/明细 SalesPriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "en-US", "定价记录号_us", "定价记录号（冗余：与明细 SalesPriceCode 一致）"),
             // entity.salespricescalevalue.salespricecode
-            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "ja-JP", "定价记录号_jp", "定价记录号（KNUMH；冗余；与主表/明细 SalesPriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "ja-JP", "定价记录号_jp", "定价记录号（冗余：与明细 SalesPriceCode 一致）"),
             // entity.salespricescalevalue.salespricecode
-            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "zh-CN", "定价记录号", "定价记录号（KNUMH；冗余；与主表/明细 SalesPriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "zh-CN", "定价记录号", "定价记录号（冗余：与明细 SalesPriceCode 一致）"),
             // entity.salespricescalevalue.salespricecode
-            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "zh-HK", "定价记录号_hk", "定价记录号（KNUMH；冗余；与主表/明细 SalesPriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespricecode", "zh-HK", "定价记录号_hk", "定价记录号（冗余：与明细 SalesPriceCode 一致）"),
 
             // entity.salespricescalevalue.salespriceseq
-            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "en-US", "定价序号_us", "定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "en-US", "定价序号_us", "定价序号（冗余：与明细 SalesPriceSeq 一致，固定步长=10）"),
             // entity.salespricescalevalue.salespriceseq
-            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "ja-JP", "定价序号_jp", "定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "ja-JP", "定价序号_jp", "定价序号（冗余：与明细 SalesPriceSeq 一致，固定步长=10）"),
             // entity.salespricescalevalue.salespriceseq
-            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "zh-CN", "定价序号", "定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "zh-CN", "定价序号", "定价序号（冗余：与明细 SalesPriceSeq 一致，固定步长=10）"),
             // entity.salespricescalevalue.salespriceseq
-            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "zh-HK", "定价序号_hk", "定价序号（冗余；与明细 SalesPriceSeq 一致，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salespriceseq", "zh-HK", "定价序号_hk", "定价序号（冗余：与明细 SalesPriceSeq 一致，固定步长=10）"),
 
             // entity.salespricescalevalue.salesscaleseq
-            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "en-US", "等级序号_us", "等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "en-US", "等级序号_us", "等级序号（回填：同一明细内阶梯序号，固定步长=10）"),
             // entity.salespricescalevalue.salesscaleseq
-            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "ja-JP", "等级序号_jp", "等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "ja-JP", "等级序号_jp", "等级序号（回填：同一明细内阶梯序号，固定步长=10）"),
             // entity.salespricescalevalue.salesscaleseq
-            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "zh-CN", "等级序号", "等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "zh-CN", "等级序号", "等级序号（回填：同一明细内阶梯序号，固定步长=10）"),
             // entity.salespricescalevalue.salesscaleseq
-            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "zh-HK", "等级序号_hk", "等级序号（KOPOS；同一明细内阶梯序号，固定步长=10）"),
+            new TranslationSeedItem("entity.salespricescalevalue.salesscaleseq", "zh-HK", "等级序号_hk", "等级序号（回填：同一明细内阶梯序号，固定步长=10）"),
 
             // entity.salespricescalevalue.scalevalue
-            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "en-US", "等级值_us", "等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）"),
+            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "en-US", "等级值_us", "等级值（价值等级门槛；对应数量等级表的 ScaleQuantity）"),
             // entity.salespricescalevalue.scalevalue
-            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "ja-JP", "等级值_jp", "等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）"),
+            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "ja-JP", "等级值_jp", "等级值（价值等级门槛；对应数量等级表的 ScaleQuantity）"),
             // entity.salespricescalevalue.scalevalue
-            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "zh-CN", "等级值", "等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）"),
+            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "zh-CN", "等级值", "等级值（价值等级门槛；对应数量等级表的 ScaleQuantity）"),
             // entity.salespricescalevalue.scalevalue
-            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "zh-HK", "等级值_hk", "等级值（KSTBW；价值等级门槛；对应数量等级表的 ScaleQuantity）"),
+            new TranslationSeedItem("entity.salespricescalevalue.scalevalue", "zh-HK", "等级值_hk", "等级值（价值等级门槛；对应数量等级表的 ScaleQuantity）"),
 
             // entity.salespricescalevalue.price
-            new TranslationSeedItem("entity.salespricescalevalue.price", "en-US", "价格_us", "价格（KBETR）"),
+            new TranslationSeedItem("entity.salespricescalevalue.price", "en-US", "价格_us", "价格"),
             // entity.salespricescalevalue.price
-            new TranslationSeedItem("entity.salespricescalevalue.price", "ja-JP", "价格_jp", "价格（KBETR）"),
+            new TranslationSeedItem("entity.salespricescalevalue.price", "ja-JP", "价格_jp", "价格"),
             // entity.salespricescalevalue.price
-            new TranslationSeedItem("entity.salespricescalevalue.price", "zh-CN", "价格", "价格（KBETR）"),
+            new TranslationSeedItem("entity.salespricescalevalue.price", "zh-CN", "价格", "价格"),
             // entity.salespricescalevalue.price
-            new TranslationSeedItem("entity.salespricescalevalue.price", "zh-HK", "价格_hk", "价格（KBETR）"),
+            new TranslationSeedItem("entity.salespricescalevalue.price", "zh-HK", "价格_hk", "价格"),
 
             // entity.salespricescalevalue.untaxedprice
             new TranslationSeedItem("entity.salespricescalevalue.untaxedprice", "en-US", "未税价格_us", "未税价格（冗余；可由 Price 与税码推算后回写）"),

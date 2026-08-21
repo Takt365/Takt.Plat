@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Services.Logistics.Materials
 // 文件名称：TaktMaterialMovingPriceService.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Cursor AI)
 // 功能描述：移动价格应用服务实现
 // 
@@ -121,12 +121,11 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
         var isUnique_ix_material_moving_price_unique = await _uniqueValidator.IsUniqueAsync(
             _materialMovingPriceRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ValuationPeriod == entity.ValuationPeriod
                 && x.MaterialCode == entity.MaterialCode
-                && x.Valuation == entity.Valuation);
+                && x.ValuationPeriod == entity.ValuationPeriod);
         if (!isUnique_ix_material_moving_price_unique)
         {
-            throw new TaktBusinessException("移动价格的PlantCode、ValuationPeriod、MaterialCode、Valuation已存在");
+            throw new TaktBusinessException("移动价格的PlantCode、MaterialCode、ValuationPeriod已存在");
         }
         entity = await _materialMovingPriceRepository.CreateAsync(entity);
         return await GetMaterialMovingPriceByIdAsync(entity.Id) ?? entity.Adapt<TaktMaterialMovingPriceDto>();
@@ -149,13 +148,12 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
         var isUnique_ix_material_moving_price_unique = await _uniqueValidator.IsUniqueAsync(
             _materialMovingPriceRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ValuationPeriod == entity.ValuationPeriod
                 && x.MaterialCode == entity.MaterialCode
-                && x.Valuation == entity.Valuation,
+                && x.ValuationPeriod == entity.ValuationPeriod,
             id);
         if (!isUnique_ix_material_moving_price_unique)
         {
-            throw new TaktBusinessException("移动价格的PlantCode、ValuationPeriod、MaterialCode、Valuation已存在");
+            throw new TaktBusinessException("移动价格的PlantCode、MaterialCode、ValuationPeriod已存在");
         }
         await _materialMovingPriceRepository.UpdateAsync(entity);
         return await GetMaterialMovingPriceByIdAsync(id) ?? throw new TaktBusinessException("移动价格不存在");
@@ -229,20 +227,19 @@ public class TaktMaterialMovingPriceService : TaktServiceBase, ITaktMaterialMovi
             try
             {
                 var entity = rows[i].Adapt<TaktMaterialMovingPrice>();
-                var importKey = $"{entity.PlantCode}|{entity.ValuationPeriod}|{entity.MaterialCode}|{entity.Valuation}";
+                var importKey = $"{entity.PlantCode}|{entity.MaterialCode}|{entity.ValuationPeriod}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ValuationPeriod、MaterialCode、Valuation）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、MaterialCode、ValuationPeriod）");
                 }
                 var isUnique_ix_material_moving_price_unique = await _uniqueValidator.IsUniqueAsync(
                     _materialMovingPriceRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.ValuationPeriod == entity.ValuationPeriod
                         && x.MaterialCode == entity.MaterialCode
-                        && x.Valuation == entity.Valuation);
+                        && x.ValuationPeriod == entity.ValuationPeriod);
                 if (!isUnique_ix_material_moving_price_unique)
                 {
-                    throw new TaktBusinessException("移动价格的PlantCode、ValuationPeriod、MaterialCode、Valuation已存在");
+                    throw new TaktBusinessException("移动价格的PlantCode、MaterialCode、ValuationPeriod已存在");
                 }
                 await _materialMovingPriceRepository.CreateAsync(entity);
                 success += 1;

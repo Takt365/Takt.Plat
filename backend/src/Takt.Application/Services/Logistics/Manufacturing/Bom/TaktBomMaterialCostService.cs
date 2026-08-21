@@ -121,15 +121,18 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
     public async Task<TaktBomMaterialCostDto> CreateBomMaterialCostAsync(TaktBomMaterialCostCreateDto dto)
     {
         var entity = dto.Adapt<TaktBomMaterialCost>();
+        entity.CostingDate = entity.CostingDate.Date;
+        var dayStart = entity.CostingDate;
+        var dayEnd = dayStart.AddDays(1);
         var isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique = await _uniqueValidator.IsUniqueAsync(
             _bomMaterialCostRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ModelCode == entity.ModelCode
                 && x.ProductCode == entity.ProductCode
-                && x.CostingPeriod == entity.CostingPeriod);
+                && x.CostingDate >= dayStart
+                && x.CostingDate < dayEnd);
         if (!isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique)
         {
-            throw new TaktBusinessException("BOM物料成本的PlantCode、ModelCode、ProductCode、CostingPeriod已存在");
+            throw new TaktBusinessException("BOM物料成本的PlantCode、ProductCode、CostingDate已存在");
         }
         entity = await _bomMaterialCostRepository.CreateAsync(entity);
         return await GetBomMaterialCostByIdAsync(entity.Id) ?? entity.Adapt<TaktBomMaterialCostDto>();
@@ -149,16 +152,19 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
             throw new TaktBusinessException("BOM物料成本不存在");
         }
         dto.Adapt(entity);
+        entity.CostingDate = entity.CostingDate.Date;
+        var dayStart = entity.CostingDate;
+        var dayEnd = dayStart.AddDays(1);
         var isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique = await _uniqueValidator.IsUniqueAsync(
             _bomMaterialCostRepository,
             x => x.PlantCode == entity.PlantCode
-                && x.ModelCode == entity.ModelCode
                 && x.ProductCode == entity.ProductCode
-                && x.CostingPeriod == entity.CostingPeriod,
+                && x.CostingDate >= dayStart
+                && x.CostingDate < dayEnd,
             id);
         if (!isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique)
         {
-            throw new TaktBusinessException("BOM物料成本的PlantCode、ModelCode、ProductCode、CostingPeriod已存在");
+            throw new TaktBusinessException("BOM物料成本的PlantCode、ProductCode、CostingDate已存在");
         }
         await _bomMaterialCostRepository.UpdateAsync(entity);
         return await GetBomMaterialCostByIdAsync(id) ?? throw new TaktBusinessException("BOM物料成本不存在");
@@ -232,20 +238,23 @@ public class TaktBomMaterialCostService : TaktServiceBase, ITaktBomMaterialCostS
             try
             {
                 var entity = rows[i].Adapt<TaktBomMaterialCost>();
-                var importKey = $"{entity.PlantCode}|{entity.ModelCode}|{entity.ProductCode}|{entity.CostingPeriod}";
+                entity.CostingDate = entity.CostingDate.Date;
+                var importKey = $"{entity.PlantCode}|{entity.ProductCode}|{entity.CostingDate:yyyy-MM-dd}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ModelCode、ProductCode、CostingPeriod）");
+                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、ProductCode、CostingDate）");
                 }
+                var dayStart = entity.CostingDate;
+                var dayEnd = dayStart.AddDays(1);
                 var isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique = await _uniqueValidator.IsUniqueAsync(
                     _bomMaterialCostRepository,
                     x => x.PlantCode == entity.PlantCode
-                        && x.ModelCode == entity.ModelCode
                         && x.ProductCode == entity.ProductCode
-                        && x.CostingPeriod == entity.CostingPeriod);
+                        && x.CostingDate >= dayStart
+                        && x.CostingDate < dayEnd);
                 if (!isUnique_ix_takt_logistics_manufacturing_bom_material_cost_unique)
                 {
-                    throw new TaktBusinessException("BOM物料成本的PlantCode、ModelCode、ProductCode、CostingPeriod已存在");
+                    throw new TaktBusinessException("BOM物料成本的PlantCode、ProductCode、CostingDate已存在");
                 }
                 await _bomMaterialCostRepository.CreateAsync(entity);
                 success += 1;

@@ -17,7 +17,6 @@ namespace Takt.Domain.Entities.HumanResource.Organization;
 /// <summary>
 /// 部门实体
 /// 代表组织架构中的部门（树形结构）
-/// 参照 SAP Organizational Unit (ORGEH) 设计
 /// </summary>
 [SugarTable("takt_human_resource_organization_dept", "部门表")]
 [SugarIndex("ix_dept_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -57,10 +56,15 @@ public class TaktDept : TaktCompanyEntityBase
     [SugarColumn(ColumnName = "dept_path", ColumnDescription = "部门路径", ColumnDataType = "varchar", Length = 500, IsNullable = false, DefaultValue = "")]
     public string DeptPath { get; set; } = string.Empty;
     /// <summary>
-    /// 是否叶子节点（字典 sys_yes_no_type；0=否 1=是）
+    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
-    [SugarColumn(ColumnName = "is_leaf", ColumnDescription = "是否叶子节点", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
+    [SugarColumn(ColumnName = "is_leaf", ColumnDescription = "叶子节点", ColumnDataType = "int", IsNullable = false, DefaultValue = "0")]
     public int IsLeaf { get; set; } = 0;
+    /// <summary>
+    /// ISO 编码
+    /// </summary>
+    [SugarColumn(ColumnName = "iso_code", ColumnDescription = "ISO编码", ColumnDataType = "varchar", Length = 3, IsNullable = false, DefaultValue = "")]
+    public string IsoCode { get; set; } = string.Empty;
     /// <summary>
     /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
@@ -76,6 +80,11 @@ public class TaktDept : TaktCompanyEntityBase
     /// </summary>
     [SugarColumn(ColumnName = "head_user_id", ColumnDescription = "部门负责人ID", ColumnDataType = "bigint", IsNullable = false, DefaultValue = "0")]
     public long HeadUserId { get; set; }
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    [SugarColumn(ColumnName = "head_user_name", ColumnDescription = "部门负责人名称", ColumnDataType = "nvarchar", Length = 40, IsNullable = false, DefaultValue = "")]
+    public string HeadUserName { get; set; } = string.Empty;
     /// <summary>
     /// 联系电话
     /// </summary>

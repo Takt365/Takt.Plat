@@ -4,7 +4,7 @@
 // 文件名称：TaktCostElementKatypConstants.cs
 // 创建时间：2026-06-29
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP CSKB-KATYP 成本要素类别与初级/次级类型推导常量
+// 功能描述：成本要素类别与初级/次级类型推导常量
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -13,7 +13,7 @@
 namespace Takt.Shared.Constants;
 
 /// <summary>
-/// SAP KATYP 成本要素类别与类型（字典 accounting_cost_element_category / accounting_cost_element_type）
+/// 成本要素类别与类型（字典 accounting_cost_element_category / accounting_cost_element_type）
 /// </summary>
 public static class TaktCostElementKatypConstants
 {

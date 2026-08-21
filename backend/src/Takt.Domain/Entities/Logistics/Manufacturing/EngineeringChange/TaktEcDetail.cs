@@ -76,7 +76,7 @@ public class TaktEcDetail : TaktCompanyEntityBase
     public string? EcBomSubItem { get; set; }
 
     /// <summary>
-    /// 上阶物料描述（Ec_bomsubitemtext）
+    /// 上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
     [SugarColumn(ColumnName = "ec_bomsubitemtext", ColumnDescription = "上阶物料描述", Length = 40, ColumnDataType = "nvarchar", IsNullable = true)]
     public string? EcBomSubItemText { get; set; }

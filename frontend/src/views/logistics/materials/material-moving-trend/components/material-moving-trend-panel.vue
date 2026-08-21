@@ -463,6 +463,7 @@ function buildQuery() {
   if (!plant || !val) {
     return null
   }
+  // 机种推移仍须物料类型；物料价格推移仅工厂+评估类别
   if (props.activeTab === 'model' && !type) {
     return null
   }

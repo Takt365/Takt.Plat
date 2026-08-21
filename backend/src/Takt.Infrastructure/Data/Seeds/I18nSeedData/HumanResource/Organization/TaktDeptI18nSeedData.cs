@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.HumanResource.Organization
 // 文件名称：TaktDeptI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktDept 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -145,13 +145,22 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.path", "zh-HK", "部门路径_hk", "部门路径（如：/1/3/5/，用于快速查询子部门）"),
 
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "en-US", "是否叶子节点_us", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "en-US", "叶子节点_us", "叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "ja-JP", "是否叶子节点_jp", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "ja-JP", "叶子节点_jp", "叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "zh-CN", "是否叶子节点", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "zh-CN", "叶子节点", "叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
             // entity.dept.isleaf
-            new TranslationSeedItem("entity.dept.isleaf", "zh-HK", "是否叶子节点_hk", "是否叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
+            new TranslationSeedItem("entity.dept.isleaf", "zh-HK", "叶子节点_hk", "叶子节点（字典 sys_yes_no_type；0=否 1=是）"),
+
+            // entity.dept.isocode
+            new TranslationSeedItem("entity.dept.isocode", "en-US", "ISO编码_us", "ISO 编码"),
+            // entity.dept.isocode
+            new TranslationSeedItem("entity.dept.isocode", "ja-JP", "ISO编码_jp", "ISO 编码"),
+            // entity.dept.isocode
+            new TranslationSeedItem("entity.dept.isocode", "zh-CN", "ISO编码", "ISO 编码"),
+            // entity.dept.isocode
+            new TranslationSeedItem("entity.dept.isocode", "zh-HK", "ISO编码_hk", "ISO 编码"),
 
             // entity.dept.costcentercode
             new TranslationSeedItem("entity.dept.costcentercode", "en-US", "成本中心编码_us", "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）"),
@@ -179,6 +188,15 @@ public class TaktDeptI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.dept.headuserid", "zh-CN", "部门负责人ID", "部门负责人（选项 TaktUsers/options，DictValue=Id）"),
             // entity.dept.headuserid
             new TranslationSeedItem("entity.dept.headuserid", "zh-HK", "部门负责人ID_hk", "部门负责人（选项 TaktUsers/options，DictValue=Id）"),
+
+            // entity.dept.headusername
+            new TranslationSeedItem("entity.dept.headusername", "en-US", "部门负责人名称_us", "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）"),
+            // entity.dept.headusername
+            new TranslationSeedItem("entity.dept.headusername", "ja-JP", "部门负责人名称_jp", "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）"),
+            // entity.dept.headusername
+            new TranslationSeedItem("entity.dept.headusername", "zh-CN", "部门负责人名称", "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）"),
+            // entity.dept.headusername
+            new TranslationSeedItem("entity.dept.headusername", "zh-HK", "部门负责人名称_hk", "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）"),
 
             // entity.dept.phone
             new TranslationSeedItem("entity.dept.phone", "en-US", "联系电话_us", "联系电话"),

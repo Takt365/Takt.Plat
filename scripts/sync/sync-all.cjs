@@ -17,7 +17,7 @@ const SYNC_DIR = __dirname;
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 
 /**
- * SAP 同步流水线（顺序不可打乱；`order` 为唯一权威序号）
+ * 源数据同步流水线（顺序不可打乱；`order` 为唯一权威序号）
  * @type {Array<{ order: number, key: string, label: string, script: string, dependsOn: string[], reason: string }>}
  */
 const PIPELINE = [
@@ -255,7 +255,7 @@ function main() {
   }
   const startedAt = Date.now();
   console.log('==========================================');
-  console.log('  Takt SAP 全量同步（sync-all）');
+  console.log('  Takt 源数据全量同步（sync-all）');
   console.log('==========================================');
   printPipelinePlan(steps);
   console.log('==========================================');

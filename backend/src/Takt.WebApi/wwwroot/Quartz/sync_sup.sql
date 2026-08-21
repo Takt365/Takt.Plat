@@ -69,10 +69,8 @@ CREATE TABLE #st_source (
   [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
-  [is_deleted] INT,
-  [created_at] DATETIME,
-  [updated_by] BIGINT
-);
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 INSERT INTO #st_source
 SELECT
@@ -126,11 +124,9 @@ SELECT
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
-  N'{}',
-  N'',
-  S.[is_deleted],
-  S.[created_at],
-  @sync_user_id
+  S.[ext_field],
+  S.[remark],
+    S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT
     N.*,
@@ -185,9 +181,16 @@ FROM (
       ROUND(COALESCE(TRY_CAST(R.[evaluation_score] AS DECIMAL(18,8)), 0), 2) AS [evaluation_score],
       COALESCE(TRY_CAST(R.[sort_order] AS INT), 0) AS [sort_order],
       COALESCE(TRY_CAST(R.[supplier_status] AS INT), 1) AS [supplier_status],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LEFT(LTRIM(RTRIM(ISNULL(R.[company_code], N''))), 4),
           LTRIM(RTRIM(R.[supplier_code]))
@@ -333,6 +336,15 @@ WHEN MATCHED AND (
   OR ROUND(T.[evaluation_score], 2) <> ROUND(S.[evaluation_score], 2)
   OR T.[sort_order] <> S.[sort_order]
   OR T.[supplier_status] <> S.[supplier_status]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[plant_code]=S.[plant_code],
@@ -380,12 +392,15 @@ WHEN MATCHED AND (
   T.[evaluation_score]=S.[evaluation_score],
   T.[sort_order]=S.[sort_order],
   T.[supplier_status]=S.[supplier_status],
+  T.[ext_field]=S.[ext_field],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[supplier_code],[supplier_name1],[supplier_name2],[supplier_short_name],
@@ -412,10 +427,9 @@ WHEN NOT MATCHED THEN
     S.[automatic_purchase_order],S.[pricing_date_control],S.[purchase_group],S.[planned_delivery_time_days],
     S.[evaluated_receipt_settlement],S.[purchasing_organization],S.[supplier_level],S.[evaluation_score],
     S.[sort_order],S.[supplier_status],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT
   S.rn,
@@ -561,7 +575,7 @@ SELECT
   N'MERGE Supplier Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

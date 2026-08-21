@@ -12,13 +12,11 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 -- =============================================================================
 -- 跨库同结构同步（服务端直读，无客户端中转）
 -- {{SourceDatabase}}.dbo.takt_logistics_manufacturing_bom_material_cost_item
---   → #st_source（源侧规范化一次）→ MERGE → dbo 同名表
--- 性能要点：
---   1) 目标键列禁止 LTRIM/RTRIM/ISNULL/ROUND（必须走唯一索引 line_unique）
---   2) 可空键列 NULL→''、数量统一 5 位，保证与 #st_source 裸等值可命中
---   3) 不写海量 delta_log（仅 oper_log 摘要）
--- 业务唯一键：Plant+BomLevel+BomItemCode+Product+LineNumber+Component
---   +ComponentQuantity+BatchIndicator+ProductionRelated+PurchaseType+SpecialProcurementType+CostingDate
+--   → #st_source（源侧规范化）→ 目标键列对齐 → 按业务键 MERGE（❌ 不按 id、❌ 不强制源 id）
+-- 规则：目标 id 本地唯一；业务键（除 id 外）命中 → UPDATE 并沿用目标 id；未命中 → INSERT 新目标 id
+-- 价格/描述/用量等非键字段变化：WHEN MATCHED UPDATE；禁止因 id 不一致误判新增
+-- 业务唯一键（更新/新增判定）：Tenant+Company+Plant
+--   +BomLevel+BomItemCode+Product+LineNumber+Component+CostingDate(日)
 -- =============================================================================
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -36,6 +34,7 @@ CREATE TABLE #st_source (
   [component_quantity] DECIMAL(18,5) NOT NULL,
   [batch_indicator] NVARCHAR(1) NOT NULL,
   [production_related] NVARCHAR(1) NOT NULL,
+  [pcb_sect_indicator] NVARCHAR(1) NOT NULL,
   [purchase_type] NVARCHAR(1) NOT NULL,
   [special_procurement_type] NVARCHAR(50) NOT NULL,
   [profit_center_code] NVARCHAR(4) NOT NULL,
@@ -55,19 +54,24 @@ CREATE TABLE #st_source (
   [ext_field] NVARCHAR(MAX) NOT NULL,
   [remark] NVARCHAR(MAX) NOT NULL,
   [is_deleted] INT NOT NULL,
+  [created_by] BIGINT NOT NULL,
   [created_at] DATETIME NULL,
-  [updated_by] BIGINT NOT NULL
+  [updated_by] BIGINT NULL,
+  [updated_at] DATETIME NULL,
+  [deleted_by] BIGINT NULL,
+  [deleted_at] DATETIME NULL
 );
 
 -- ② 源库 → #st_source（规范化 + 业务键去重；只做一次）
 INSERT INTO #st_source (
   [rn],[id],[plant_code],[bom_level],[bom_item_code],[product_code],[line_number],[product_description],
   [component_code],[component_description],[component_quantity],
-  [batch_indicator],[production_related],[purchase_type],[special_procurement_type],
+  [batch_indicator],[production_related],[pcb_sect_indicator],[purchase_type],[special_procurement_type],
   [profit_center_code],[moving_average_price],[moving_price_unit],[moving_price_currency_code],
   [purchase_organization],[purchase_group],[supplier_code],[net_purchase_price],
   [purchase_price_unit],[purchase_currency_code],[costing_date],
-  [tenant_code],[company_code],[culture_code],[ext_field],[remark],[is_deleted],[created_at],[updated_by]
+  [tenant_code],[company_code],[culture_code],[ext_field],[remark],[is_deleted],
+  [created_by],[created_at],[updated_by],[updated_at],[deleted_by],[deleted_at]
 )
 SELECT
   S.rn,
@@ -83,6 +87,7 @@ SELECT
   S.[component_quantity],
   S.[batch_indicator],
   S.[production_related],
+  S.[pcb_sect_indicator],
   S.[purchase_type],
   S.[special_procurement_type],
   S.[profit_center_code],
@@ -99,20 +104,22 @@ SELECT
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
-  N'{}',
-  N'',
+  S.[ext_field],
+  S.[remark],
   S.[is_deleted],
+  S.[created_by],
   S.[created_at],
-  @sync_user_id
+  S.[updated_by],
+  S.[updated_at],
+  S.[deleted_by],
+  S.[deleted_at]
 FROM (
   SELECT
     N.*,
     ROW_NUMBER() OVER (
       ORDER BY
         N.[plant_code], N.[bom_level], N.[bom_item_code], N.[product_code], N.[line_number],
-        N.[component_code], N.[component_quantity],
-        N.[batch_indicator], N.[production_related], N.[purchase_type],
-        N.[special_procurement_type], N.[costing_date]
+        N.[component_code], N.[costing_date]
     ) AS rn
   FROM (
     SELECT
@@ -140,6 +147,7 @@ FROM (
       ROUND(COALESCE(TRY_CAST(R.[component_quantity] AS DECIMAL(18,8)), 0), 5) AS [component_quantity],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[batch_indicator])), N''), N'') AS [batch_indicator],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[production_related])), N''), N'') AS [production_related],
+      ISNULL(NULLIF(LTRIM(RTRIM(R.[pcb_sect_indicator])), N''), N'') AS [pcb_sect_indicator],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[purchase_type])), N''), N'F') AS [purchase_type],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[special_procurement_type])), N''), N'') AS [special_procurement_type],
       ISNULL(NULLIF(LTRIM(RTRIM(LEFT(R.[profit_center_code], 4))), N''), N'') AS [profit_center_code],
@@ -152,10 +160,17 @@ FROM (
       ROUND(COALESCE(TRY_CAST(R.[net_purchase_price] AS DECIMAL(18,8)), 0), 5) AS [net_purchase_price],
       COALESCE(TRY_CAST(R.[purchase_price_unit] AS INT), 1) AS [purchase_price_unit],
       ISNULL(NULLIF(LTRIM(RTRIM(R.[purchase_currency_code])), N''), N'') AS [purchase_currency_code],
-      R.[costing_date] AS [costing_date],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      CAST(CAST(R.[costing_date] AS DATE) AS DATETIME) AS [costing_date],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY
           LTRIM(RTRIM(R.[plant_code])),
           ISNULL(NULLIF(LTRIM(RTRIM(R.[bom_level])), N''), N''),
@@ -173,15 +188,11 @@ FROM (
             THEN RIGHT(LTRIM(RTRIM(R.[component_code])), 10)
             ELSE LTRIM(RTRIM(R.[component_code]))
           END,
-          ROUND(COALESCE(TRY_CAST(R.[component_quantity] AS DECIMAL(18,8)), 0), 5),
-          ISNULL(NULLIF(LTRIM(RTRIM(R.[batch_indicator])), N''), N''),
-          ISNULL(NULLIF(LTRIM(RTRIM(R.[production_related])), N''), N''),
-          ISNULL(NULLIF(LTRIM(RTRIM(R.[purchase_type])), N''), N'F'),
-          ISNULL(NULLIF(LTRIM(RTRIM(R.[special_procurement_type])), N''), N''),
-          R.[costing_date]
+          CAST(CAST(R.[costing_date] AS DATE) AS DATETIME)
         ORDER BY
           ROUND(COALESCE(TRY_CAST(R.[moving_average_price] AS DECIMAL(18,8)), 0), 5) DESC,
-          ROUND(COALESCE(TRY_CAST(R.[net_purchase_price] AS DECIMAL(18,8)), 0), 5) DESC
+          ROUND(COALESCE(TRY_CAST(R.[net_purchase_price] AS DECIMAL(18,8)), 0), 5) DESC,
+          ROUND(COALESCE(TRY_CAST(R.[component_quantity] AS DECIMAL(18,8)), 0), 5) DESC
       ) AS dup_rn
     FROM [{{SourceDatabase}}].[dbo].[takt_logistics_manufacturing_bom_material_cost_item] R
     WHERE R.[costing_date] IS NOT NULL
@@ -200,27 +211,74 @@ DECLARE @source_count INT = @@ROWCOUNT;
 
 CREATE UNIQUE CLUSTERED INDEX [ix_st_source_bc_uk] ON #st_source (
   [tenant_code], [company_code], [plant_code], [bom_level], [bom_item_code], [product_code], [line_number],
-  [component_code], [component_quantity], [batch_indicator],
-  [production_related], [purchase_type], [special_procurement_type], [costing_date]
+  [component_code], [costing_date]
 );
 
--- ① 目标键列规范化（装入后按源隔离范围；否则 NULL/精度与源空串无法裸等值匹配）
+-- ① 目标键列与源装入规则对齐（含软删行，便于 MERGE 命中后恢复）
 UPDATE T
 SET
-  T.[bom_level] = ISNULL(T.[bom_level], N''),
-  T.[batch_indicator] = ISNULL(T.[batch_indicator], N''),
-  T.[production_related] = ISNULL(T.[production_related], N''),
-  T.[special_procurement_type] = ISNULL(T.[special_procurement_type], N''),
-  T.[component_quantity] = ROUND(T.[component_quantity], 5)
+  T.[plant_code] = LEFT(LTRIM(RTRIM(ISNULL(T.[plant_code], N''))), 4),
+  T.[bom_level] = ISNULL(NULLIF(LTRIM(RTRIM(T.[bom_level])), N''), N''),
+  T.[bom_item_code] = LEFT(LTRIM(RTRIM(ISNULL(T.[bom_item_code], N''))), 4),
+  T.[product_code] = CASE
+    WHEN LEN(LTRIM(RTRIM(ISNULL(T.[product_code], N'')))) = 18
+      AND LTRIM(RTRIM(T.[product_code])) NOT LIKE '%[^0-9]%'
+    THEN RIGHT(LTRIM(RTRIM(T.[product_code])), 10)
+    ELSE LTRIM(RTRIM(ISNULL(T.[product_code], N'')))
+  END,
+  T.[component_code] = CASE
+    WHEN LEN(LTRIM(RTRIM(ISNULL(T.[component_code], N'')))) = 18
+      AND LTRIM(RTRIM(T.[component_code])) NOT LIKE '%[^0-9]%'
+    THEN RIGHT(LTRIM(RTRIM(T.[component_code])), 10)
+    ELSE LTRIM(RTRIM(ISNULL(T.[component_code], N'')))
+  END,
+  T.[batch_indicator] = ISNULL(NULLIF(LTRIM(RTRIM(T.[batch_indicator])), N''), N''),
+  T.[production_related] = ISNULL(NULLIF(LTRIM(RTRIM(T.[production_related])), N''), N''),
+  T.[purchase_type] = ISNULL(NULLIF(LTRIM(RTRIM(T.[purchase_type])), N''), N'F'),
+  T.[special_procurement_type] = ISNULL(NULLIF(LTRIM(RTRIM(T.[special_procurement_type])), N''), N''),
+  T.[component_quantity] = ROUND(T.[component_quantity], 5),
+  T.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
 FROM [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
-WHERE EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
+WHERE T.[is_deleted] = 0
+  AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
   AND (
-    T.[bom_level] IS NULL
-    OR T.[batch_indicator] IS NULL
-    OR T.[production_related] IS NULL
-    OR T.[special_procurement_type] IS NULL
+    T.[plant_code] <> LEFT(LTRIM(RTRIM(ISNULL(T.[plant_code], N''))), 4)
+    OR ISNULL(T.[bom_level], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[bom_level])), N''), N'')
+    OR ISNULL(T.[bom_item_code], N'') <> LEFT(LTRIM(RTRIM(ISNULL(T.[bom_item_code], N''))), 4)
+    OR ISNULL(T.[product_code], N'') <> CASE
+      WHEN LEN(LTRIM(RTRIM(ISNULL(T.[product_code], N'')))) = 18
+        AND LTRIM(RTRIM(T.[product_code])) NOT LIKE '%[^0-9]%'
+      THEN RIGHT(LTRIM(RTRIM(T.[product_code])), 10)
+      ELSE LTRIM(RTRIM(ISNULL(T.[product_code], N'')))
+    END
+    OR ISNULL(T.[component_code], N'') <> CASE
+      WHEN LEN(LTRIM(RTRIM(ISNULL(T.[component_code], N'')))) = 18
+        AND LTRIM(RTRIM(T.[component_code])) NOT LIKE '%[^0-9]%'
+      THEN RIGHT(LTRIM(RTRIM(T.[component_code])), 10)
+      ELSE LTRIM(RTRIM(ISNULL(T.[component_code], N'')))
+    END
+    OR ISNULL(T.[batch_indicator], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[batch_indicator])), N''), N'')
+    OR ISNULL(T.[production_related], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[production_related])), N''), N'')
+    OR ISNULL(T.[purchase_type], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[purchase_type])), N''), N'F')
+    OR ISNULL(T.[special_procurement_type], N'') <> ISNULL(NULLIF(LTRIM(RTRIM(T.[special_procurement_type])), N''), N'')
     OR T.[component_quantity] <> ROUND(T.[component_quantity], 5)
+    OR T.[costing_date] <> CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
   );
+
+-- ② 业务键已存在于目标：沿用目标 id（目标 id 本地唯一，与源 id 无关）
+UPDATE S
+SET S.[id] = COALESCE(T.[id], S.[id])
+FROM #st_source S
+LEFT JOIN [dbo].[takt_logistics_manufacturing_bom_material_cost_item] T
+  ON T.[tenant_code] = S.[tenant_code]
+ AND T.[company_code] = S.[company_code]
+ AND T.[plant_code] = S.[plant_code]
+ AND T.[bom_level] = S.[bom_level]
+ AND T.[bom_item_code] = S.[bom_item_code]
+ AND T.[product_code] = S.[product_code]
+ AND T.[line_number] = S.[line_number]
+ AND T.[component_code] = S.[component_code]
+ AND T.[costing_date] = S.[costing_date];
 
 -- 源原始行数：同过滤条件简单 COUNT（无 GROUP BY / 去重变换）
 DECLARE @sap_raw_count INT = (
@@ -246,7 +304,7 @@ CREATE TABLE #merge_action (
   [oper_type] NVARCHAR(10) NOT NULL
 );
 
--- ③ MERGE：ON 全部裸等值（对齐唯一索引列序语义；禁止对 T 套函数）
+-- ③ MERGE：按业务键匹配（bom_level+bom_item_code+product+line+component+costing_date；含隔离字段）
 MERGE INTO [dbo].[takt_logistics_manufacturing_bom_material_cost_item] AS T
 USING #st_source AS S
 ON T.[tenant_code] = S.[tenant_code]
@@ -257,17 +315,18 @@ AND T.[bom_item_code] = S.[bom_item_code]
 AND T.[product_code] = S.[product_code]
 AND T.[line_number] = S.[line_number]
 AND T.[component_code] = S.[component_code]
-AND T.[component_quantity] = S.[component_quantity]
-AND T.[batch_indicator] = S.[batch_indicator]
-AND T.[production_related] = S.[production_related]
-AND T.[purchase_type] = S.[purchase_type]
-AND T.[special_procurement_type] = S.[special_procurement_type]
 AND T.[costing_date] = S.[costing_date]
 WHEN MATCHED AND (
   ISNULL(T.[is_deleted], 0) <> S.[is_deleted]
   OR ISNULL(T.[culture_code], N'') <> S.[culture_code]
   OR ISNULL(T.[product_description], N'') <> S.[product_description]
   OR ISNULL(T.[component_description], N'') <> S.[component_description]
+  OR T.[component_quantity] <> S.[component_quantity]
+  OR ISNULL(T.[batch_indicator], N'') <> S.[batch_indicator]
+  OR ISNULL(T.[production_related], N'') <> S.[production_related]
+  OR ISNULL(T.[pcb_sect_indicator], N'') <> S.[pcb_sect_indicator]
+  OR ISNULL(T.[purchase_type], N'') <> S.[purchase_type]
+  OR ISNULL(T.[special_procurement_type], N'') <> S.[special_procurement_type]
   OR ISNULL(T.[profit_center_code], N'') <> S.[profit_center_code]
   OR T.[moving_average_price] <> S.[moving_average_price]
   OR T.[moving_price_unit] <> S.[moving_price_unit]
@@ -278,10 +337,23 @@ WHEN MATCHED AND (
   OR T.[net_purchase_price] <> S.[net_purchase_price]
   OR T.[purchase_price_unit] <> S.[purchase_price_unit]
   OR ISNULL(T.[purchase_currency_code], N'') <> S.[purchase_currency_code]
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
   T.[product_description]=S.[product_description],
   T.[component_description]=S.[component_description],
+  T.[component_quantity]=S.[component_quantity],
+  T.[batch_indicator]=S.[batch_indicator],
+  T.[production_related]=S.[production_related],
+  T.[pcb_sect_indicator]=S.[pcb_sect_indicator],
+  T.[purchase_type]=S.[purchase_type],
+  T.[special_procurement_type]=S.[special_procurement_type],
   T.[profit_center_code]=S.[profit_center_code],
   T.[moving_average_price]=S.[moving_average_price],
   T.[moving_price_unit]=S.[moving_price_unit],
@@ -294,17 +366,19 @@ WHEN MATCHED AND (
   T.[purchase_currency_code]=S.[purchase_currency_code],
   T.[culture_code]=S.[culture_code],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END,
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at],
   T.[ext_field]=S.[ext_field]
 WHEN NOT MATCHED BY TARGET THEN
   INSERT (
     [id],[plant_code],[bom_level],[bom_item_code],[product_code],[line_number],[product_description],
     [component_code],[component_description],[component_quantity],
-    [batch_indicator],[production_related],[purchase_type],[special_procurement_type],
+    [batch_indicator],[production_related],[pcb_sect_indicator],[purchase_type],[special_procurement_type],
     [profit_center_code],[moving_average_price],[moving_price_unit],[moving_price_currency_code],
     [purchase_organization],[purchase_group],[supplier_code],[net_purchase_price],
     [purchase_price_unit],[purchase_currency_code],[costing_date],
@@ -315,15 +389,14 @@ WHEN NOT MATCHED BY TARGET THEN
   VALUES (
     S.[id],S.[plant_code],S.[bom_level],S.[bom_item_code],S.[product_code],S.[line_number],S.[product_description],
     S.[component_code],S.[component_description],S.[component_quantity],
-    S.[batch_indicator],S.[production_related],S.[purchase_type],S.[special_procurement_type],
+    S.[batch_indicator],S.[production_related],S.[pcb_sect_indicator],S.[purchase_type],S.[special_procurement_type],
     S.[profit_center_code],S.[moving_average_price],S.[moving_price_unit],S.[moving_price_currency_code],
     S.[purchase_organization],S.[purchase_group],S.[supplier_code],S.[net_purchase_price],
     S.[purchase_price_unit],S.[purchase_currency_code],S.[costing_date],
     S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at], @now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT $action INTO #merge_action ([oper_type]);
 
@@ -331,7 +404,7 @@ DECLARE @insert_count INT = (SELECT COUNT(*) FROM #merge_action WHERE [oper_type
 DECLARE @update_count INT = (SELECT COUNT(*) FROM #merge_action WHERE [oper_type] = N'UPDATE');
 DECLARE @unchanged_count INT = @source_count - @insert_count - @update_count;
 
--- ④ 软删：目标有效且源无（同样裸等值）
+-- ④ 软删：目标有效且源无同业务键（与 MERGE ON 一致，不比 id）
 IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_rows;
 CREATE TABLE #soft_deleted_rows (
   [id] BIGINT NOT NULL,
@@ -367,11 +440,6 @@ WHERE T.[is_deleted] = 0
       AND S.[product_code] = T.[product_code]
       AND S.[line_number] = T.[line_number]
       AND S.[component_code] = T.[component_code]
-      AND S.[component_quantity] = T.[component_quantity]
-      AND S.[batch_indicator] = T.[batch_indicator]
-      AND S.[production_related] = T.[production_related]
-      AND S.[purchase_type] = T.[purchase_type]
-      AND S.[special_procurement_type] = T.[special_procurement_type]
       AND S.[costing_date] = T.[costing_date]
   );
 

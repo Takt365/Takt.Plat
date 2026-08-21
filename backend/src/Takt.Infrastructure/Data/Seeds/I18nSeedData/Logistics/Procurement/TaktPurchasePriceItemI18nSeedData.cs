@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Procurement
 // 文件名称：TaktPurchasePriceItemI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktPurchasePriceItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -100,13 +100,13 @@ public class TaktPurchasePriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasepriceitem.purchasepriceid", "zh-HK", "采购价格ID_hk", "采购价格 ID（主子表关系；选项 TaktPurchasePrices/options，DictValue=Id）"),
 
             // entity.purchasepriceitem.purchasepricecode
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "en-US", "定价记录号_us", "定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "en-US", "定价记录号_us", "定价记录号（冗余字段，便于查询）"),
             // entity.purchasepriceitem.purchasepricecode
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "ja-JP", "定价记录号_jp", "定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "ja-JP", "定价记录号_jp", "定价记录号（冗余字段，便于查询）"),
             // entity.purchasepriceitem.purchasepricecode
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "zh-CN", "定价记录号", "定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "zh-CN", "定价记录号", "定价记录号（冗余字段，便于查询）"),
             // entity.purchasepriceitem.purchasepricecode
-            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "zh-HK", "定价记录号_hk", "定价记录号（冗余；与主表 PurchasePriceCode 一致，长度 20）"),
+            new TranslationSeedItem("entity.purchasepriceitem.purchasepricecode", "zh-HK", "定价记录号_hk", "定价记录号（冗余字段，便于查询）"),
 
             // entity.purchasepriceitem.purchasepriceseq
             new TranslationSeedItem("entity.purchasepriceitem.purchasepriceseq", "en-US", "定价序号_us", "定价序号（项号/序号，固定步长=10）"),
@@ -289,22 +289,22 @@ public class TaktPurchasePriceItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.purchasepriceitem.isobsolete", "zh-HK", "是否作废_hk", "是否作废（字典 sys_yes_no_type；0=否 1=是；编辑移除子行时标记作废）"),
 
             // entity.purchasepriceitem.scalequantities
-            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "en-US", "数量等级行列表_us", "数量等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "en-US", "数量等级行列表_us", "数量等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalequantities
-            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "ja-JP", "数量等级行列表_jp", "数量等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "ja-JP", "数量等级行列表_jp", "数量等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalequantities
-            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "zh-CN", "数量等级行列表", "数量等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "zh-CN", "数量等级行列表", "数量等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalequantities
-            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "zh-HK", "数量等级行列表_hk", "数量等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalequantities", "zh-HK", "数量等级行列表_hk", "数量等级行列表（主子表关系）"),
 
             // entity.purchasepriceitem.scalevalues
-            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "en-US", "价值等级行列表_us", "价值等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "en-US", "价值等级行列表_us", "价值等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalevalues
-            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "ja-JP", "价值等级行列表_jp", "价值等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "ja-JP", "价值等级行列表_jp", "价值等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalevalues
-            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "zh-CN", "价值等级行列表", "价值等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "zh-CN", "价值等级行列表", "价值等级行列表（主子表关系）"),
             // entity.purchasepriceitem.scalevalues
-            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "zh-HK", "价值等级行列表_hk", "价值等级行列表（；主子表关系）"),
+            new TranslationSeedItem("entity.purchasepriceitem.scalevalues", "zh-HK", "价值等级行列表_hk", "价值等级行列表（主子表关系）"),
         };
     }
 

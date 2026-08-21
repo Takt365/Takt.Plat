@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Mds
 // 文件名称：TaktSalesForecastI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesForecast 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -172,13 +172,13 @@ public class TaktSalesForecastI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesforecast.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode；具体 SKU）"),
 
             // entity.salesforecast.materialdescription
-            new TranslationSeedItem("entity.salesforecast.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesforecast.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesforecast.materialdescription
-            new TranslationSeedItem("entity.salesforecast.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesforecast.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesforecast.materialdescription
-            new TranslationSeedItem("entity.salesforecast.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesforecast.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesforecast.materialdescription
-            new TranslationSeedItem("entity.salesforecast.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesforecast.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.salesforecast.customercode
             new TranslationSeedItem("entity.salesforecast.customercode", "en-US", "客户编码_us", "客户编码（选项 TaktCustomers/options；汇总计划时可为空，DictValue=Id）"),

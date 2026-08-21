@@ -193,8 +193,15 @@ BEGIN
     [purchase_price_unit] INT NULL,
     [purchase_currency_code] NVARCHAR(3) NULL,
     [costing_date] DATETIME NULL,
+    [ext_field] NVARCHAR(MAX) NULL,
+    [remark] NVARCHAR(MAX) NULL,
     [is_deleted] INT NOT NULL CONSTRAINT [df_sap_bom_material_cost_item_is_deleted] DEFAULT (0),
-    [created_at] DATETIME NULL
+    [created_by] BIGINT NULL,
+    [created_at] DATETIME NULL,
+    [updated_by] BIGINT NULL,
+    [updated_at] DATETIME NULL,
+    [deleted_by] BIGINT NULL,
+    [deleted_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_bom_material_cost_item]
     ON [dbo].[takt_logistics_manufacturing_bom_material_cost_item]
@@ -222,8 +229,15 @@ BEGIN
     [currency_code] NVARCHAR(3) NULL,
     [costing_period] NVARCHAR(7) NULL,
     [costing_date] DATETIME NULL,
+    [ext_field] NVARCHAR(MAX) NULL,
+    [remark] NVARCHAR(MAX) NULL,
     [is_deleted] INT NOT NULL CONSTRAINT [df_sap_bom_material_cost_is_deleted] DEFAULT (0),
-    [created_at] DATETIME NULL
+    [created_by] BIGINT NULL,
+    [created_at] DATETIME NULL,
+    [updated_by] BIGINT NULL,
+    [updated_at] DATETIME NULL,
+    [deleted_by] BIGINT NULL,
+    [deleted_at] DATETIME NULL
   );
   CREATE UNIQUE INDEX [ux_sap_bom_material_cost]
     ON [dbo].[takt_logistics_manufacturing_bom_material_cost]

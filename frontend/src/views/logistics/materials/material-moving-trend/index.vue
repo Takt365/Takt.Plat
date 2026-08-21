@@ -12,7 +12,6 @@
     <material-moving-trend-query-form
       v-model:plant-code="plantCode"
       v-model:period-range="periodRange"
-      v-model:material-type="materialType"
       v-model:valuation="valuation"
       v-model:material-code="materialCode"
       :loading="panelLoading"
@@ -47,7 +46,6 @@
       active-tab="price"
       :plant-code="plantCode"
       :period-range="periodRange"
-      :material-type="materialType"
       :valuation="valuation"
       :material-code="materialCode"
     />
@@ -82,8 +80,6 @@ const tenantStore = useTenantStore()
 const plantCode = ref<string | undefined>()
 /** 期间年月 */
 const periodRange = ref<[string, string] | null>(buildDefaultCostingPeriodRange(3))
-/** 产品物料类型（必选） */
-const materialType = ref<string | undefined>()
 /** 评估类别 */
 const valuation = ref<string | undefined>()
 /** 物料编码（可空） */
@@ -139,10 +135,6 @@ function handleSearch() {
     message.warning(t(`${localePrefix}.selectPlantRequired`))
     return
   }
-  if (!materialType.value?.trim()) {
-    message.warning(t(`${localePrefix}.selectMaterialTypeRequired`))
-    return
-  }
   if (!valuation.value?.trim()) {
     message.warning(t(`${localePrefix}.selectValuationRequired`))
     return
@@ -170,7 +162,6 @@ function handleRefresh() {
 /** 清空工厂级联与结果 */
 function clearPlantCascade() {
   plantCode.value = undefined
-  materialType.value = undefined
   valuation.value = undefined
   materialCode.value = undefined
   hasRows.value = false

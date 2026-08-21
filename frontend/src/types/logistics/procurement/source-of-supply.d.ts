@@ -60,17 +60,17 @@ export interface SourceOfSupply extends CompanyDtoBase {
   purchaseUnit?: string;
 
   /**
-   * 最小起订量（采购单位数量，整数；SAP MINBM）
+ * 最小起订量（采购单位数量，整数）
    */
   minOrderQuantity?: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+ * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue?: number;
 
   /**
-   * 计划交货时间（天数，整数；SAP PLIFZ）
+ * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays?: number;
 
@@ -168,17 +168,17 @@ export interface SourceOfSupplyExport {
   purchaseUnit: string;
 
   /**
-   * 最小起订量（采购单位数量，整数；SAP MINBM）
+ * 最小起订量（采购单位数量，整数）
    */
   minOrderQuantity: number;
 
   /**
-   * 舍入值（基本单位数量，用于数量舍入，整数；SAP BSTRF）
+ * 舍入值（基本单位数量，用于数量舍入，整数）
    */
   roundingValue: number;
 
   /**
-   * 计划交货时间（天数，整数；SAP PLIFZ）
+ * 计划交货时间（天数，整数）
    */
   plannedDeliveryTimeDays: number;
 

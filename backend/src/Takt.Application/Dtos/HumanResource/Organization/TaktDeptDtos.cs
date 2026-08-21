@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Application.Dtos.HumanResource.Organization
 // 文件名称：TaktDeptDtos.cs
-// 创建时间：2026-06-24
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：Dept 模块 DTO（由 generate-dtos-from-entity.cjs 根据 TaktDept 生成，请按需审阅）
 // 
@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Organization;
 // ========================================
 
 /// <summary>
-/// 部门实体 代表组织架构中的部门（树形结构） 参照 SAP Organizational Unit (ORGEH) 设计
+/// 部门实体 代表组织架构中的部门（树形结构）
 /// 对应前端 TaktDeptDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>
@@ -41,17 +41,17 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string DeptName { get; set; } = string.Empty;
-
-    /// <summary>
     /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
     /// </summary>
     public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 部门名称
+    /// </summary>
+    public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ParentId { get; set; }
@@ -67,30 +67,35 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
+    /// </summary>
+    public string IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HeadUserId { get; set; }
 
     /// <summary>
-    /// 部门负责人名称（填充字段）
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
     /// </summary>
-    public string? HeadUserName { get; set; }
+    public string HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -108,7 +113,7 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -123,21 +128,9 @@ public class TaktDeptDto : TaktCompanyDtoBase
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
-
-    /// <summary>
-    /// 角色数据权限关联该部门（RBAC，表 takt_human_resource_organization_roledept）
-    /// （子表：TaktRoleDept）
-    /// </summary>
-    public List<TaktRoleDeptDto>? RoleDepts { get; set; }
-
-    /// <summary>
-    /// 员工部门关联（RBAC，表 takt_human_resource_organization_employeedept）
-    /// （子表：TaktEmployeeDept）
-    /// </summary>
-    public List<TaktEmployeeDeptDto>? EmployeeDepts { get; set; }
 
 }
 
@@ -173,7 +166,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? TenantCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 公司代码
+    /// 公司（选项 TaktCompanies/options；DictValue=CompanyCode）
     /// </summary>
     public string? CompanyCode { get; set; } = string.Empty;
 
@@ -182,20 +175,15 @@ public class TaktDeptQueryDto : TaktPagedQuery
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
@@ -203,7 +191,12 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentId { get; set; }
@@ -219,25 +212,35 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int? IsLeaf { get; set; }
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
+    /// </summary>
+    public string? IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HeadUserId { get; set; }
+
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    public string? HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -255,7 +258,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -270,7 +273,7 @@ public class TaktDeptQueryDto : TaktPagedQuery
     public int? SortOrder { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -319,17 +322,22 @@ public class TaktDeptCreateDto
     /// </summary>
     public string CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）
     /// </summary>
     [Required(ErrorMessage = "部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）不能为空")]
     public string DeptCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
+    /// </summary>
+    [Required(ErrorMessage = "部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）不能为空")]
+    public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门名称
@@ -338,32 +346,39 @@ public class TaktDeptCreateDto
     public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
-    /// </summary>
-    public string DeptShortName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
     /// </summary>
-    [Required(ErrorMessage = "成本中心编码（关联财务成本中心）不能为空")]
+    [Required(ErrorMessage = "ISO 编码不能为空")]
+    public string IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
+    /// </summary>
+    [Required(ErrorMessage = "成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）不能为空")]
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HeadUserId { get; set; }
+
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    [Required(ErrorMessage = "部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）不能为空")]
+    public string HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -384,7 +399,7 @@ public class TaktDeptCreateDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -395,7 +410,7 @@ public class TaktDeptCreateDto
     public string DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
 
@@ -459,9 +474,9 @@ public class TaktDeptStatusDto
     public long DeptId { get; set; }
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
-    [Required(ErrorMessage = "状态（1=启用，0=禁用）不能为空")]
+    [Required(ErrorMessage = "状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）不能为空")]
     public int DeptStatus { get; set; } = 0;
 }
 
@@ -513,20 +528,15 @@ public class TaktDeptTemplateDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
@@ -534,26 +544,41 @@ public class TaktDeptTemplateDto
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
+    /// </summary>
+    public string? IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HeadUserId { get; set; }
+
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    public string? HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -571,7 +596,7 @@ public class TaktDeptTemplateDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -581,7 +606,7 @@ public class TaktDeptTemplateDto
     public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -627,21 +652,15 @@ public class TaktDeptImportDto
     /// </summary>
     public string? CultureCode { get; set; } = string.Empty;
 
-
-
     /// <summary>
-    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；公司合并口径可用约定码）
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode；空则仓储按公司 RelatedPlant 注入）
     /// </summary>
     public string? PlantCode { get; set; } = string.Empty;
+
     /// <summary>
     /// 部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）
     /// </summary>
     public string? DeptCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string? DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
@@ -649,26 +668,41 @@ public class TaktDeptImportDto
     public string? DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 部门名称
+    /// </summary>
+    public string? DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? ParentId { get; set; }
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
+    /// </summary>
+    public string? IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
     public string? CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int? CostCategory { get; set; }
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long? HeadUserId { get; set; }
+
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    public string? HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -686,7 +720,7 @@ public class TaktDeptImportDto
     public string? Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int? IsBuiltIn { get; set; }
 
@@ -696,7 +730,7 @@ public class TaktDeptImportDto
     public string? DeptDescription { get; set; } = string.Empty;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int? DeptStatus { get; set; }
 
@@ -744,14 +778,19 @@ public class TaktDeptExportDto
     public string CompanyCode { get; set; } = string.Empty;
 
     /// <summary>
+    /// 工厂代码（选项 TaktPlants/options；DictValue=PlantCode）
+    /// </summary>
+    public string PlantCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 区域文化编码（业务字段；字典 sys_culture_code；BCP47 如 zh-CN、en-US、ja-JP；DictData 另可用 mul=多种语言内容）
+    /// </summary>
+    public string CultureCode { get; set; } = string.Empty;
+
+    /// <summary>
     /// 部门编码（唯一索引：租户+公司内唯一，见 ix_dept_code_unique）
     /// </summary>
     public string DeptCode { get; set; } = string.Empty;
-
-    /// <summary>
-    /// 部门名称
-    /// </summary>
-    public string DeptName { get; set; } = string.Empty;
 
     /// <summary>
     /// 部门简称（必填；最多 6 个字母，如 FIN、ENG、PMC；用于编码规则等段引用）
@@ -759,7 +798,12 @@ public class TaktDeptExportDto
     public string DeptShortName { get; set; } = string.Empty;
 
     /// <summary>
-    /// 父部门ID（0表示根部门）
+    /// 部门名称
+    /// </summary>
+    public string DeptName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 父部门（关联 TaktDept.Id，选项 TaktDepts/tree-options；0=根部门）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long ParentId { get; set; }
@@ -775,25 +819,35 @@ public class TaktDeptExportDto
     public string DeptPath { get; set; } = string.Empty;
 
     /// <summary>
-    /// 是否叶子节点（0=否，1=是）
+    /// 叶子节点（字典 sys_yes_no_type；0=否 1=是）
     /// </summary>
     public int IsLeaf { get; set; } = 0;
 
     /// <summary>
-    /// 成本中心编码（关联财务成本中心）
+    /// ISO 编码
+    /// </summary>
+    public string IsoCode { get; set; } = string.Empty;
+
+    /// <summary>
+    /// 成本中心编码（关联 TaktCostCenter.CostCenterCode，选项 TaktCostCenters/tree-options）
     /// </summary>
     public string CostCenterCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 费用类别（1=直接，2=间接）
+    /// 费用类别（字典 hr_dept_cost_category；1=直接 2=间接）
     /// </summary>
     public int CostCategory { get; set; } = 0;
 
     /// <summary>
-    /// 部门负责人ID（关联TaktUser.Id）
+    /// 部门负责人（选项 TaktUsers/options，DictValue=Id）
     /// </summary>
     [JsonConverter(typeof(ValueToStringConverter))]
     public long HeadUserId { get; set; }
+
+    /// <summary>
+    /// 部门负责人名称（冗余：按 HeadUserId 取 TaktUser.Nickname联动）
+    /// </summary>
+    public string HeadUserName { get; set; } = string.Empty;
 
     /// <summary>
     /// 联系电话
@@ -811,7 +865,7 @@ public class TaktDeptExportDto
     public string Location { get; set; } = string.Empty;
 
     /// <summary>
-    /// 内置（1=是，0=否） 种子部门为内置，不允许删除
+    /// 内置（字典 sys_yes_no_type；0=否 1=是；种子部门为内置，不允许删除）
     /// </summary>
     public int IsBuiltIn { get; set; } = 0;
 
@@ -826,7 +880,7 @@ public class TaktDeptExportDto
     public int SortOrder { get; set; } = 0;
 
     /// <summary>
-    /// 状态（1=启用，0=禁用）
+    /// 状态（字典 sys_normal_disable_status；0=禁用 1=启用 2=锁定）
     /// </summary>
     public int DeptStatus { get; set; } = 0;
 

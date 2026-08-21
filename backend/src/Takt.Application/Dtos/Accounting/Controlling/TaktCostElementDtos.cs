@@ -258,7 +258,7 @@ public class TaktCostElementCreateDto
     public int CostElementType { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
+ /// 成本要素类别（字典 accounting_cost_element_category）
     /// </summary>
     public int CostElementCategory { get; set; } = 1;
 
@@ -576,7 +576,7 @@ public class TaktCostElementExportDto
     public int CostElementType { get; set; } = 0;
 
     /// <summary>
-    /// 成本要素类别（字典 accounting_cost_element_category；SAP KATYP 整型值）
+ /// 成本要素类别（字典 accounting_cost_element_category）
     /// </summary>
     public int CostElementCategory { get; set; } = 1;
 

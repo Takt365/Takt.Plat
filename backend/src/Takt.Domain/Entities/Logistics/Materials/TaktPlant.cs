@@ -18,7 +18,7 @@ namespace Takt.Domain.Entities.Logistics.Materials;
 /// <summary>
 /// Takt工厂实体
 /// 代表租户下的独立工厂主档
-/// 与公司种子对称，参照 SAP Plant 设计
+/// 与公司种子对称
 /// 组合 2：无关联工厂、有语言（TaktTenantCultureEntityBase；业务键即 PlantCode，无需 RelatedPlant）
 /// </summary>
 [SugarTable("takt_logistics_materials_plant", "工厂表")]

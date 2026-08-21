@@ -355,7 +355,7 @@ SELECT
   N'MERGE Manhour Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,@plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

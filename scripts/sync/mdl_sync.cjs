@@ -204,7 +204,7 @@ SELECT
       FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
     )
   ELSE '{}' END,
-  N'MERGE SAP Model Destination Sync',
+  N'MERGE Model Destination Sync',
   '127.0.0.1',
   'Server',
   'SQLCMD',

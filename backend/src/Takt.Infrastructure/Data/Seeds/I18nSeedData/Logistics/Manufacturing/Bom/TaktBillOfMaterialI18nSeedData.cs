@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.Bom
 // 文件名称：TaktBillOfMaterialI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktBillOfMaterial 实体字段国际化种子（已对齐前端 locales：src/locales/logistics/manufacturing/bom/bill-of-material）
 // 
@@ -118,13 +118,13 @@ public class TaktBillOfMaterialI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.billofmaterial.parentmaterialcode", "zh-HK", "父物料编码_hk", "父物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.billofmaterial.parentmaterialdescription
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "en-US", "父物料描述_us", "父物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "en-US", "父物料描述_us", "父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterial.parentmaterialdescription
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "ja-JP", "父物料描述_jp", "父物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "ja-JP", "父物料描述_jp", "父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterial.parentmaterialdescription
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "zh-CN", "父物料描述", "父物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "zh-CN", "父物料描述", "父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.billofmaterial.parentmaterialdescription
-            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "zh-HK", "父物料描述_hk", "父物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.billofmaterial.parentmaterialdescription", "zh-HK", "父物料描述_hk", "父物料描述（冗余：按 ParentMaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.billofmaterial.bomversion
             new TranslationSeedItem("entity.billofmaterial.bomversion", "en-US", "BOM版本号_us", "BOM版本号"),

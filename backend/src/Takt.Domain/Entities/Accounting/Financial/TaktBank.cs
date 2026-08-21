@@ -4,7 +4,7 @@
 // 文件名称：TaktBank.cs
 // 创建时间：2026-07-22
 // 创建人：Takt365(Cursor AI)
-// 功能描述：银行信息实体（公司级；参照 SAP BNKA；字段顺序与长度对齐）
+// 功能描述：银行信息实体（公司级；字段顺序与长度对齐）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

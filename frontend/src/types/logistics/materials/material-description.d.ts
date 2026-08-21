@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * Takt物料多语言描述实体（租户级；SAP MAKT：MATNR + SPRAS + MAKTX）
+ * Takt物料多语言描述实体（租户级）
  * 对应前端 TaktMaterialDescriptionDto
  * 继承 TaktTenantDtoBase
  * 对应前端 MaterialDescription

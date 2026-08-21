@@ -33,7 +33,7 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     public long SalesInvoiceId { get; set; }
 
     /// <summary>
-    /// 开票凭证（冗余）
+    /// 开票凭证（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "billing_document_code", ColumnDescription = "开票凭证", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string BillingDocumentCode { get; set; } = string.Empty;
@@ -165,9 +165,9 @@ public class TaktSalesInvoiceItem : TaktCompanyEntityBase
     public string MaterialCode { get; set; } = string.Empty;
 
     /// <summary>
-    /// 描述
+    /// 物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）
     /// </summary>
-    [SugarColumn(ColumnName = "material_description", ColumnDescription = "描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
+    [SugarColumn(ColumnName = "material_description", ColumnDescription = "物料描述", ColumnDataType = "nvarchar", Length = 40, IsNullable = true)]
     public string? MaterialDescription { get; set; }
 
     /// <summary>

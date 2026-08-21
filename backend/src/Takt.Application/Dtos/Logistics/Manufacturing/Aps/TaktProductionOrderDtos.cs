@@ -87,7 +87,7 @@ public class TaktProductionOrderDto : TaktCompanyDtoBase
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -236,7 +236,7 @@ public class TaktProductionOrderQueryDto : TaktPagedQuery
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -399,7 +399,7 @@ public class TaktProductionOrderCreateDto
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -581,7 +581,7 @@ public class TaktProductionOrderTemplateDto
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -715,7 +715,7 @@ public class TaktProductionOrderImportDto
     public int? Priority { get; set; }
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 
@@ -850,7 +850,7 @@ public class TaktProductionOrderExportDto
     public int Priority { get; set; } = 0;
 
     /// <summary>
-    /// 工作中心（表单可选单码 TaktWorkCenters/options；SAP 同步可写入多中心汇总 code||desc;…，故 Length=140，非单码 10）
+ /// 工作中心（表单可选单码 TaktWorkCenters/options，故 Length=140，非单码 10）
     /// </summary>
     public string? WorkCenter { get; set; } = string.Empty;
 

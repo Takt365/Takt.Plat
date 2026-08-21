@@ -52,7 +52,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     /// <param name="bomMaterialCostItemRepository">BOM 成本明细仓储</param>
     /// <param name="bomMaterialCostRepository">BOM 成本汇总仓储</param>
     /// <param name="materialMovingPriceRepository">移动价格仓储（0价格组可替代价）</param>
-    /// <param name="companyRepository">公司仓储</param>
+    /// <param name="companyRepository">公司仓储（RelatedPlant）</param>
     /// <param name="userContext">用户上下文</param>
     /// <param name="localizationService">本地化服务</param>
     public TaktBomPriceDeltaTrendService(
@@ -71,7 +71,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 工厂选项
+    /// 查询栏工厂选项：当前公司 RelatedPlant ∩ 成本主表 PlantCode
     /// </summary>
     /// <returns>下拉选项</returns>
     public async Task<List<TaktSelectOption>> GetBomPriceDeltaTrendPlantOptionsAsync()
@@ -725,8 +725,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 关注月零价组件清单（与零价格视图同口径：已 Filter 后的行再按 QualifiesAsZeroPriceListLine；
-    /// 同一 ComponentCode 不同 BomLevel/LineNumber/BomItemCode 各自判定，任一笔满足即入组；用量取合格行中最大用量）
+    /// 关注月零价组件清单（与零价格视图同口径：QualifiesAsZeroPriceListLine = X + PcbSectIndicator 空 + F + 移动价=0；与用量无关；
+    /// 同一 ComponentCode 不同位置各自判定，任一笔满足即入组；用量取合格行中最大用量仅供展示）
     /// </summary>
     /// <param name="productItems">该产品已 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）的明细</param>
     /// <param name="comparePeriod">关注月 yyyy-MM</param>
@@ -1042,6 +1042,7 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
 
     /// <summary>
     /// 构建价格差异组 + 组件差异组；Summary Var 均为行成本差（CalculateLineCost），二者之和写入差异列。
+    /// 组内条目：价格差异组按单价 Diff 降序；组件差异按行成本 Diff 降序（同值再按文案）。
     /// </summary>
     /// <returns>价格组文、价格汇总、组件组文、组件汇总</returns>
     private static (string PriceText, decimal PriceSummary, string ComponentText, decimal ComponentSummary) BuildDeltaGroupTexts(
@@ -1070,7 +1071,8 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             sameCodeMatched.Add(code);
         }
 
-        var versionParts = new List<string>();
+        // 组件差异条目：(展示文案, Diff 金额=行成本差)；最终按 Diff 降序
+        var componentEntries = new List<(string Text, decimal Diff)>();
         var componentSummary = 0m;
         // ② 末位版本字母 stem 相同、字母不同 → version
         foreach (var compareCode in compareMap.Keys.Where(c => !matchedCompare.Contains(c)).OrderBy(c => c, StringComparer.Ordinal))
@@ -1106,39 +1108,43 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(
                 SumRowsLineCost(compareRows) - SumRowsLineCost(baseRows));
             componentSummary = checked(componentSummary + lineDelta);
-            versionParts.Add(
-                $"{baseCandidate.Code}:{FormatQuantity(SumRowsQty(baseRows))}:{FormatMoney(basePrice)}→{compareCode}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(comparePrice)}→version");
+            componentEntries.Add((
+                $"{baseCandidate.Code}:{FormatQuantity(SumRowsQty(baseRows))}:{FormatMoney(basePrice)}→{compareCode}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(comparePrice)}→version",
+                lineDelta));
         }
 
-        var removeParts = new List<string>();
         foreach (var c in baseMap.Keys.Where(x => !matchedBase.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
         {
             var rows = baseMap[c];
             var price = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(PickRepresentativeRow(rows));
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(-SumRowsLineCost(rows));
             componentSummary = checked(componentSummary + lineDelta);
-            removeParts.Add($"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→remove");
+            componentEntries.Add((
+                $"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→remove",
+                lineDelta));
         }
-        var newParts = new List<string>();
         foreach (var c in compareMap.Keys.Where(x => !matchedCompare.Contains(x)).OrderBy(x => x, StringComparer.Ordinal))
         {
             var rows = compareMap[c];
             var price = TaktBomMaterialCostItemLineCostHelper.ResolvePerBaseUnitPrice(PickRepresentativeRow(rows));
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(SumRowsLineCost(rows));
             componentSummary = checked(componentSummary + lineDelta);
-            newParts.Add($"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→new");
+            componentEntries.Add((
+                $"{c}:{FormatQuantity(SumRowsQty(rows))}:{FormatMoney(price)}→new",
+                lineDelta));
         }
 
-        var componentParts = new List<string>(removeParts.Count + newParts.Count + versionParts.Count);
-        componentParts.AddRange(removeParts);
-        componentParts.AddRange(newParts);
-        componentParts.AddRange(versionParts.OrderBy(p => p, StringComparer.Ordinal));
+        var componentParts = componentEntries
+            .OrderByDescending(e => e.Diff)
+            .ThenBy(e => e.Text, StringComparer.Ordinal)
+            .Select(e => e.Text)
+            .ToList();
         componentSummary = TaktBomMaterialCostItemLineCostHelper.RoundCost(componentSummary);
 
-        // ③ 仅「编码完全相同」配对进价格差异组（不含 version 配对）
-        var priceParts = new List<string>();
+        // ③ 仅「编码完全相同」配对进价格差异组（不含 version 配对）；按 Diff（单价差）降序
+        var priceEntries = new List<(string Text, decimal Diff)>();
         var priceSummary = 0m;
-        foreach (var code in sameCodeMatched.OrderBy(c => c, StringComparer.Ordinal))
+        foreach (var code in sameCodeMatched)
         {
             if (!compareMap.TryGetValue(code, out var compareRows) || !baseMap.TryGetValue(code, out var baseRows))
             {
@@ -1156,10 +1162,16 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
             var lineDelta = TaktBomMaterialCostItemLineCostHelper.RoundCost(
                 SumRowsLineCost(compareRows) - SumRowsLineCost(baseRows));
             priceSummary = checked(priceSummary + lineDelta);
-            priceParts.Add(
-                $"{code}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(basePrice)}→{FormatMoney(comparePrice)},Diff:{FormatMoney(deltaDisplay)}");
+            priceEntries.Add((
+                $"{code}:{FormatQuantity(SumRowsQty(compareRows))}:{FormatMoney(basePrice)}→{FormatMoney(comparePrice)},Diff:{FormatMoney(deltaDisplay)}",
+                deltaDisplay));
         }
         priceSummary = TaktBomMaterialCostItemLineCostHelper.RoundCost(priceSummary);
+        var priceParts = priceEntries
+            .OrderByDescending(e => e.Diff)
+            .ThenBy(e => e.Text, StringComparer.Ordinal)
+            .Select(e => e.Text)
+            .ToList();
 
         return (
             FormatGroup(priceParts, priceSummary),
@@ -1189,13 +1201,11 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
     }
 
     /// <summary>
-    /// 参与成本统计的行成本合计（与 SumSnapshotCost / CalculateLineCost 同口径）
+    /// 参与成本统计的行成本合计（与 SumSnapshotCost 同口径：排除 PCB SECT 整树 + X + 标识空 + F）
     /// </summary>
     private static decimal SumRowsLineCost(IReadOnlyList<TaktBomMaterialCostItem> rows)
     {
-        return TaktBomMaterialCostItemLineCostHelper.RoundCost(
-            rows.Where(TaktBomMaterialCostItemLineCostHelper.CountsTowardCostStatistics)
-                .Sum(TaktBomMaterialCostItemLineCostHelper.CalculateLineCost));
+        return TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(rows);
     }
 
     private static decimal SumRowsQty(IReadOnlyList<TaktBomMaterialCostItem> rows)
@@ -1322,7 +1332,10 @@ public class TaktBomPriceDeltaTrendService : TaktServiceBase, ITaktBomPriceDelta
                 raw.AddRange(part);
             }
         }
-        return TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(raw).ToList();
+        return TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(raw))
+            .ToList();
     }
 
     private async Task<string?> ResolveBomItemPhysicalTableAsync(int year)

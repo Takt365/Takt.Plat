@@ -1353,7 +1353,7 @@ public class TaktSalesPriceTrendService : TaktServiceBase, ITaktSalesPriceTrendS
     }
 
     /// <summary>
-    /// DISTINCT 产品→机种（成本汇总表回退；支持 SAP 物料码归一匹配）
+ /// DISTINCT 产品→机种（成本汇总表回退；支持 物料码归一匹配）
     /// </summary>
     private async Task FillProductModelPairsByCodesAsync(
         string plantCode,

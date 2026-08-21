@@ -4,7 +4,7 @@
 // 文件名称：header-notification.ts
 // 创建时间：2026-06-09
 // 创建人：Takt365(Cursor AI)
-// 功能描述：顶栏通知中心列表（TaktHeaderNotification 数据源；落库未读常驻、上线通知 5s 自动已读）
+// 功能描述：顶栏通知中心列表（TaktHeaderNotification 数据源；落库未读常驻、上线通知 5s 自动已读；清空全部含落库未读并同步标已读）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -289,13 +289,22 @@ export const useHeaderNotificationStore = defineStore('headerNotification', () =
   }
 
   /**
-   * 清空已读与非落库未读项；未读落库消息保留
+   * 清空通知中心全部条目；未读落库消息同步标为已读，避免刷新后再次 hydrate 回来
    */
   function clearAllNotifications(): void {
+    const unreadPersisted = items.value.filter((item) => item.kind === 'persisted' && !item.read);
     for (const item of items.value) {
       clearAutoReadTimer(item.id);
     }
-    items.value = items.value.filter((item) => item.kind === 'persisted' && !item.read);
+    items.value = [];
+    for (const item of unreadPersisted) {
+      const messageId = item.messageId?.trim();
+      if (messageId) {
+        void markMessageReadById(messageId).catch((error: unknown) => {
+          headerNotificationLogger.warn('清空时标已读失败', { action: 'clearAll', messageId }, error);
+        });
+      }
+    }
   }
 
   /** 全部标记已读 */

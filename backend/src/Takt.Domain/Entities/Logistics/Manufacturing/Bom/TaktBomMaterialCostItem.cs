@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostItem.cs
 // 创建时间：2026-07-13
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 物料成本展开行（产品-组件用量与移动平均价/采购净价快照，对齐 SAP CK40N 成本构成清单字段）
+// 功能描述：BOM 物料成本展开行（产品-组件用量与移动平均价/采购净价快照）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -17,6 +17,7 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 
 /// <summary>
 /// BOM 物料成本明细行（业务源数据：先导入/维护明细，再按工厂+产品+核算月聚合写入 TaktBomMaterialCost；无线上主表外键）
+/// <para>软删除：本表业务上永不软删，IsDeleted 恒为 0；计算/回填勿按软删过滤明细。</para>
 /// </summary>
 [SugarTable("takt_logistics_manufacturing_bom_material_cost_item", "BOM物料成本明细表")]
 [SugarIndex("ix_bom_material_cost_item_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
@@ -27,15 +28,13 @@ namespace Takt.Domain.Entities.Logistics.Manufacturing.Bom;
     {
         nameof(TenantCode), nameof(CompanyCode), nameof(PlantCode), nameof(BomLevel),
         nameof(BomItemCode), nameof(ProductCode), nameof(LineNumber), nameof(ComponentCode),
-        nameof(ComponentQuantity), nameof(BatchIndicator), nameof(ProductionRelated),
-        nameof(PurchaseType), nameof(SpecialProcurementType), nameof(CostingDate)
+        nameof(CostingDate)
     },
     new[]
     {
         OrderByType.Asc, OrderByType.Asc, OrderByType.Asc, OrderByType.Asc,
         OrderByType.Asc, OrderByType.Asc, OrderByType.Asc, OrderByType.Asc,
-        OrderByType.Asc, OrderByType.Asc, OrderByType.Asc, OrderByType.Asc,
-        OrderByType.Asc, OrderByType.Asc
+        OrderByType.Asc
     },
     true)]
 [SugarIndex("ix_takt_logistics_manufacturing_bom_material_cost_item_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
@@ -106,7 +105,7 @@ public class TaktBomMaterialCostItem : TaktCompanyEntityBase
     public string? ProductionRelated { get; set; }
 
     /// <summary>
-    /// PCB SECT 标识（空或 X；为 X 时本行不参与任何成本计算）
+    /// PCB SECT 标识（空才可参与成本合计与零价清单；非空一律排除；打标写入 X）
     /// </summary>
     [SugarColumn(ColumnName = "pcb_sect_indicator", ColumnDescription = "PCB SECT标识", ColumnDataType = "nvarchar", Length = 1, IsNullable = true)]
     public string? PcbSectIndicator { get; set; }

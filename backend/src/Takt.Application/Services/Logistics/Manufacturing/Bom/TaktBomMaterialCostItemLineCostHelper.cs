@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostItemLineCostHelper.cs
 // 创建时间：2026-07-13
 // 创建人：Takt365(Cursor AI)
-// 功能描述：BOM 物料成本行金额与期间快照纯计算辅助；参与计算须 ProductionRelated=X、PcbSectIndicator 为空、PurchaseType=F；行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数（CK40N 口径）
+// 功能描述：BOM 物料成本行金额与期间快照纯计算辅助；参与计算须 ProductionRelated=X、PcbSectIndicator 为空、PurchaseType=F；行成本=组件数量×(移动平均价÷移动价格单位) 保留 5 位小数
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -47,37 +47,35 @@ public static class TaktBomMaterialCostItemLineCostHelper
     public const string PcbSectDescriptionMarker = "PCB SECT";
 
     /// <summary>
-    /// PCB SECT 标识列取值（与生产相关等 SAP 风格 X 标记一致）
+    /// PCB SECT 标识列取值（与生产相关等 X 标记一致）
     /// </summary>
     public const string PcbSectIndicatorMarkValue = "X";
 
     /// <summary>
-    /// 用量参与下限：用量 ≤ 此值不参与成本统计 / 零价清单（正确阈值为 0.001，非 0.01）
+    /// 用量参与下限（仅最近采购成本合计等仍用；成本合计与零价清单不再用用量门槛）
     /// </summary>
     public const decimal MinParticipatingComponentQuantity = 0.001m;
 
     /// <summary>
-    /// 是否参与成本合计/分析统计（参与资格由 CountsTowardBomMaterialCostItem 先筛；本方法：用量 &gt; 0.001 且移动价 ≠ 0）
+    /// 是否参与成本合计/分析统计（资格已由 CountsTowardBomMaterialCostItem：X + PcbSectIndicator 空 + F 判定；本方法恒为 true，保留调用点兼容）
     /// </summary>
     /// <param name="row">成本明细行</param>
-    /// <returns>是否参与成本统计</returns>
+    /// <returns>恒为 true</returns>
     public static bool CountsTowardCostStatistics(TaktBomMaterialCostItem row)
     {
         ArgumentNullException.ThrowIfNull(row);
-        return row.ComponentQuantity > MinParticipatingComponentQuantity
-            && row.MovingAveragePrice != 0m;
+        return true;
     }
 
     /// <summary>
-    /// 是否列入零价清单/0价格组（移动价=0 且用量 &gt; 0.001）
+    /// 是否列入零价清单/0价格组（仅移动平均价=0；资格由 QualifiesAsZeroPriceListLine 再筛 X+空标识+F）
     /// </summary>
     /// <param name="row">成本明细行</param>
     /// <returns>是否列入零价统计</returns>
     public static bool CountsTowardZeroPriceList(TaktBomMaterialCostItem row)
     {
         ArgumentNullException.ThrowIfNull(row);
-        return row.MovingAveragePrice == 0m
-            && row.ComponentQuantity > MinParticipatingComponentQuantity;
+        return row.MovingAveragePrice == 0m;
     }
 
     /// <summary>
@@ -156,6 +154,16 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
+    /// PCB SECT 标识是否为空（空/空白才可参与成本合计与零价清单；非空一律排除）
+    /// </summary>
+    /// <param name="pcbSectIndicator">PCB SECT 标识列</param>
+    /// <returns>是否为空</returns>
+    public static bool IsPcbSectIndicatorEmpty(string? pcbSectIndicator)
+    {
+        return string.IsNullOrWhiteSpace(pcbSectIndicator);
+    }
+
+    /// <summary>
     /// 行是否已打 PCB SECT 标识（PcbSectIndicator=X）
     /// </summary>
     /// <param name="pcbSectIndicator">PCB SECT 标识列</param>
@@ -206,11 +214,11 @@ public static class TaktBomMaterialCostItemLineCostHelper
         ArgumentNullException.ThrowIfNull(row);
         return string.Equals(row.ProductionRelated?.Trim(), "X", StringComparison.OrdinalIgnoreCase)
             && string.Equals(row.PurchaseType?.Trim(), "F", StringComparison.OrdinalIgnoreCase)
-            && !HasPcbSectIndicatorMark(row.PcbSectIndicator);
+            && IsPcbSectIndicatorEmpty(row.PcbSectIndicator);
     }
 
     /// <summary>
-    /// 是否可作为零价格清单的「单行」候选：生产相关=X、PCB SECT 标识为空、采购类型=F，且移动价=0、用量 &gt; 0.001。
+    /// 是否可作为零价格清单的「单行」候选：生产相关=X、PCB SECT 标识为空、采购类型=F，且移动平均价=0（与用量无关）。
     /// 同一 ComponentCode 在不同 BomLevel / LineNumber / BomItemCode 上的多笔须各自判定；任一笔满足即可进入合并清单。
     /// </summary>
     /// <param name="row">成本明细行</param>
@@ -304,7 +312,7 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 展开树分组用产品码（18 位纯数字 SAP 码归一为后 10 位，避免同产品不同写法拆成两棵残树）
+ /// 展开树分组用产品码（18 位纯数字 码归一为后 10 位，避免同产品不同写法拆成两棵残树）
     /// </summary>
     /// <param name="productCode">产品编码</param>
     /// <returns>规范化产品码</returns>
@@ -351,7 +359,7 @@ public static class TaktBomMaterialCostItemLineCostHelper
     public static decimal CalculateLineCost(TaktBomMaterialCostItem row)
     {
         ArgumentNullException.ThrowIfNull(row);
-        if (!CountsTowardBomMaterialCostItem(row) || !CountsTowardCostStatistics(row))
+        if (!CountsTowardBomMaterialCostItem(row))
         {
             return 0m;
         }
@@ -489,7 +497,7 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 组件行业务键（对齐表唯一键，不含 CostingDate）：Plant+Product+LineNumber+BomLevel+BomItem+Component+Quantity+Batch+ProductionRelated+PurchaseType+SpecialProcurement
+    /// 组件行业务键（对齐表唯一键，不含 CostingDate）：Plant+BomLevel+BomItem+Product+LineNumber+Component
     /// </summary>
     /// <param name="row">成本行</param>
     /// <returns>组件键</returns>
@@ -499,16 +507,11 @@ public static class TaktBomMaterialCostItemLineCostHelper
         return string.Join(
             "|",
             row.PlantCode?.Trim() ?? string.Empty,
-            row.ProductCode?.Trim() ?? string.Empty,
-            row.LineNumber.ToString(System.Globalization.CultureInfo.InvariantCulture),
             row.BomLevel?.Trim() ?? string.Empty,
             row.BomItemCode?.Trim() ?? string.Empty,
-            row.ComponentCode?.Trim() ?? string.Empty,
-            row.ComponentQuantity.ToString("0.##########", System.Globalization.CultureInfo.InvariantCulture),
-            row.BatchIndicator?.Trim() ?? string.Empty,
-            row.ProductionRelated?.Trim() ?? string.Empty,
-            row.PurchaseType?.Trim() ?? string.Empty,
-            row.SpecialProcurementType?.Trim() ?? string.Empty);
+            row.ProductCode?.Trim() ?? string.Empty,
+            row.LineNumber.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            row.ComponentCode?.Trim() ?? string.Empty);
     }
 
     /// <summary>
@@ -535,8 +538,8 @@ public static class TaktBomMaterialCostItemLineCostHelper
                 && NormalizeCostingDate(r.CostingDate) == day)
             .Where(CountsTowardBomMaterialCostItem)
             .GroupBy(BuildComponentKey, StringComparer.Ordinal)
-            // 同组件多行：优先未软删，再取最大 Id（回填可改已删行，产品月成本仍以在用 BOM 为准）
-            .Select(g => g.OrderBy(r => r.IsDeleted).ThenByDescending(r => r.Id).First())
+            // 同组件多行：取最大 Id（明细无软删业务）
+            .Select(g => g.OrderByDescending(r => r.Id).First())
             .ToList();
     }
 
@@ -558,7 +561,7 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 取产品在指定期间「最后核算日」当天的全量展开行（同键优先未软删），供 SumSnapshotCost / Filter 再按参与资格筛选
+    /// 取产品在指定期间「最后核算日」当天的全量展开行（同键取最大 Id；明细无软删），供 SumSnapshotCost / Filter 再按参与资格筛选
     /// </summary>
     /// <param name="rows">候选行</param>
     /// <param name="plantCode">工厂代码</param>
@@ -586,7 +589,8 @@ public static class TaktBomMaterialCostItemLineCostHelper
                 && ProductCodeMatches(r.ProductCode, productCode)
                 && NormalizeCostingDate(r.CostingDate) == day)
             .GroupBy(BuildComponentKey, StringComparer.Ordinal)
-            .Select(g => g.OrderBy(r => r.IsDeleted).ThenByDescending(r => r.Id).First())
+            // 同组件多行：取最大 Id（明细无软删业务）
+            .Select(g => g.OrderByDescending(r => r.Id).First())
             .ToList();
     }
 
@@ -643,35 +647,39 @@ public static class TaktBomMaterialCostItemLineCostHelper
     }
 
     /// <summary>
-    /// 汇总产品 BOM 材料成本：先 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）→ 仅用量 &gt; 0.001 且移动价 ≠ 0 参与合计（保留 5 位小数）
+    /// 汇总产品 BOM 材料成本：先按行排除 PCB SECT 整树，再 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F），
+    /// 行成本=组件数量×(移动平均价÷移动价格单位)（保留 5 位小数；不按用量/是否零价过滤）。
+    /// 口径完全取自明细行字段，不明传工厂/价目。
     /// </summary>
     /// <param name="snapshotRows">快照行（须含全量展开以便识别 PCB SECT 父节点）</param>
     /// <returns>总成本</returns>
     public static decimal SumSnapshotCost(IEnumerable<TaktBomMaterialCostItem> snapshotRows)
     {
         ArgumentNullException.ThrowIfNull(snapshotRows);
+        var list = snapshotRows as IList<TaktBomMaterialCostItem> ?? snapshotRows.ToList();
         return RoundCost(
-            FilterBomMaterialCostItemRows(snapshotRows)
-                .Where(CountsTowardCostStatistics)
+            FilterBomMaterialCostItemRows(ExcludePcbSectHierarchyRows(list))
                 .Sum(CalculateLineCost));
     }
 
     /// <summary>
-    /// 汇总产品最近采购成本：先 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）→ 仅用量 &gt; 0.001 且净价 ≠ 0 参与合计（行金额=组件数量×(净价÷采购价格单位)，保留 5 位小数）
+    /// 汇总产品最近采购成本：先排除 PCB SECT 整树 → Filter（生产相关=X、PCB SECT 标识为空、采购类型=F）
+    /// → 仅用量 &gt; 0.001 且净价 ≠ 0 参与合计（行金额=组件数量×(净价÷采购价格单位)，保留 5 位小数）
     /// </summary>
     /// <param name="snapshotRows">快照行（须含全量展开以便识别 PCB SECT 父节点）</param>
     /// <returns>最近采购成本合计</returns>
     public static decimal SumSnapshotPurchaseCost(IEnumerable<TaktBomMaterialCostItem> snapshotRows)
     {
         ArgumentNullException.ThrowIfNull(snapshotRows);
+        var list = snapshotRows as IList<TaktBomMaterialCostItem> ?? snapshotRows.ToList();
         return RoundCost(
-            FilterBomMaterialCostItemRows(snapshotRows)
+            FilterBomMaterialCostItemRows(ExcludePcbSectHierarchyRows(list))
                 .Where(CountsTowardPurchaseCostStatistics)
                 .Sum(CalculateLinePurchaseCost));
     }
 
     /// <summary>
-    /// 产品编码是否匹配（18 位 SAP 数字码与 10 位存储码互认）
+ /// 产品编码是否匹配（18 位 数字码与 10 位存储码互认）
     /// </summary>
     /// <param name="storedProductCode">库内产品编码</param>
     /// <param name="requestedProductCode">查询产品编码</param>

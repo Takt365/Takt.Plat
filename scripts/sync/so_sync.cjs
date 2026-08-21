@@ -4,7 +4,7 @@
 // 文件名称：so_sync.cjs
 // 创建时间：2026-07-07
 // 创建人：Takt365(Cursor AI)
-// 功能描述：SAP 生产工单同步（PP_SapOrders + 工时/序列号回填 → takt_logistics_manufacturing_aps_production_order）
+// 功能描述：生产工单同步（PP_SapOrders + 工时/序列号回填 → takt_logistics_manufacturing_aps_production_order）
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -261,7 +261,7 @@ SELECT
       FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
     )
   ELSE '{}' END,
-  N'MERGE SAP Order Sync',
+  N'MERGE Order Sync',
   '127.0.0.1',
   'Server',
   'SQLCMD',
@@ -367,7 +367,7 @@ function parseAllCounts(text) {
 
 (async () => {
   console.log('==========================================');
-  console.log('  SAP order sync with work_center + serial_no');
+  console.log('  order sync with work_center + serial_no');
   console.log('  BATCH_SIZE: ' + formatBatchSizeLabel());
 
   const valOpts = { filePrefix: 'so_val' };

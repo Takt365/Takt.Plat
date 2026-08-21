@@ -48,6 +48,7 @@ CREATE TABLE #source_main (
 CREATE TABLE #source_detail (
   [rn] INT,
   [id] BIGINT,
+  [source_ec_id] BIGINT NULL,
   [source_ec_code] NVARCHAR(100),
   [source_legacy_part_code] NVARCHAR(100),
   [source_finished_product] NVARCHAR(500),
@@ -146,11 +147,20 @@ BEGIN
   THROW 50001, @main_dup, 1;
 END;
 
--- 子表源：仅按设变号关联主表，原样全量装入（禁止按旧件料号去重）
-INSERT INTO #source_detail
+-- 子表源：仅按设变号关联主表装入（禁止仅按旧件料号去重丢行；完整业务键见后置 MERGE）
+INSERT INTO #source_detail (
+  [rn],[id],[source_ec_id],[source_ec_code],[source_legacy_part_code],
+  [source_finished_product],[source_parent_part],[source_legacy_part_name],
+  [source_legacy_usage],[source_legacy_mounting_position],
+  [source_replacement_part_code],[source_replacement_part_name],[source_replacement_usage],
+  [source_replacement_mounting_position],[source_bom_code],
+  [source_compatibility],[source_distinction],[source_instruction],
+  [source_legacy_part_disposition],[source_bom_effective_date]
+)
 SELECT
   S.rn,
   @base_id + 1000000000 + S.rn,
+  NULL,
   S.source_ec_code,
   S.source_legacy_part_code,
   S.source_finished_product,
@@ -408,13 +418,158 @@ DECLARE @detail_target_before INT = (
     AND [is_deleted] = 0
 );
 
--- 子表：仅按设变号归属主表；原样全量装入后整批替换（不按旧件料号 MERGE）
+UPDATE [takt_logistics_manufacturing_ec_source_detail]
+SET [plant_code] = @plant_code
+WHERE [tenant_code] = @tenant_code
+  AND [company_code] = @company_code
+  AND NULLIF(LTRIM(RTRIM([plant_code])), N'') IS NULL;
+
+-- 子表回填目标主表 id（MERGE 后主表 id）
+UPDATE D
+SET D.[source_ec_id] = M.[id]
+FROM #source_detail D
+INNER JOIN [takt_logistics_manufacturing_ec_source] M
+  ON M.[tenant_code] = @tenant_code
+ AND M.[company_code] = @company_code
+ AND M.[plant_code] = @plant_code
+ AND M.[source_ec_code] = D.[source_ec_code]
+ AND M.[is_deleted] = 0;
+
+IF EXISTS (SELECT 1 FROM #source_detail WHERE [source_ec_id] IS NULL)
+BEGIN
+  THROW 50004, N'子表存在无法关联主表的设变号', 1;
+END;
+
+-- 业务键：主表id+完成品+上阶+旧件+新件+BOM+安装位置+生效日（除 id；禁止仅旧件料号）
+IF EXISTS (
+  SELECT 1
+  FROM #source_detail
+  GROUP BY
+    [source_ec_id],
+    LTRIM(RTRIM(ISNULL([source_finished_product], N''))),
+    LTRIM(RTRIM(ISNULL([source_parent_part], N''))),
+    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_bom_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_legacy_mounting_position], N''))),
+    LTRIM(RTRIM(ISNULL([source_replacement_mounting_position], N''))),
+    ISNULL([source_bom_effective_date], CAST('1900-01-01' AS DATE))
+  HAVING COUNT(*) > 1
+)
+BEGIN
+  DECLARE @detail_dup NVARCHAR(400);
+  SELECT TOP 1 @detail_dup = CONCAT(
+    CAST([source_ec_id] AS NVARCHAR(30)), N'/',
+    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))), N'/',
+    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))), N' x', COUNT(*))
+  FROM #source_detail
+  GROUP BY
+    [source_ec_id],
+    LTRIM(RTRIM(ISNULL([source_finished_product], N''))),
+    LTRIM(RTRIM(ISNULL([source_parent_part], N''))),
+    LTRIM(RTRIM(ISNULL([source_legacy_part_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_replacement_part_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_bom_code], N''))),
+    LTRIM(RTRIM(ISNULL([source_legacy_mounting_position], N''))),
+    LTRIM(RTRIM(ISNULL([source_replacement_mounting_position], N''))),
+    ISNULL([source_bom_effective_date], CAST('1900-01-01' AS DATE))
+  HAVING COUNT(*) > 1;
+  THROW 50001, @detail_dup, 1;
+END;
+
+-- 业务键已存在：沿用目标 id
+UPDATE S
+SET S.[id] = COALESCE(T.[id], S.[id])
+FROM #source_detail S
+LEFT JOIN [takt_logistics_manufacturing_ec_source_detail] T
+  ON T.[tenant_code] = @tenant_code
+ AND T.[company_code] = @company_code
+ AND T.[plant_code] = @plant_code
+ AND T.[source_ec_id] = S.[source_ec_id]
+ AND LTRIM(RTRIM(ISNULL(T.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_product], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_part], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_bom_code], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N'')))
+ AND LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N'')))
+ AND ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE));
+
 IF OBJECT_ID('tempdb..#detail_soft_deleted_rows') IS NOT NULL DROP TABLE #detail_soft_deleted_rows;
 CREATE TABLE #detail_soft_deleted_rows (
   [id] BIGINT,
   [source_ec_id] BIGINT,
   [source_legacy_part_code] NVARCHAR(100)
 );
+
+-- 子表：业务键命中 → UPDATE；未命中 → INSERT 新目标 id；源无键 → 软删
+MERGE INTO [takt_logistics_manufacturing_ec_source_detail] AS T
+USING #source_detail AS S
+ON T.[tenant_code] = @tenant_code
+AND T.[company_code] = @company_code
+AND T.[plant_code] = @plant_code
+AND T.[source_ec_id] = S.[source_ec_id]
+AND LTRIM(RTRIM(ISNULL(T.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(S.[source_finished_product], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(S.[source_parent_part], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(S.[source_bom_code], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N'')))
+AND LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N'')))
+AND ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE))
+WHEN MATCHED AND (
+  T.[is_deleted] <> 0
+  OR LTRIM(RTRIM(ISNULL(T.[source_legacy_part_name], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_legacy_part_name], N'')))
+  OR ISNULL(T.[source_legacy_usage], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')), -1)
+  OR LTRIM(RTRIM(ISNULL(T.[source_replacement_part_name], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_replacement_part_name], N'')))
+  OR ISNULL(T.[source_replacement_usage], -1) <> ISNULL(TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')), -1)
+  OR LTRIM(RTRIM(ISNULL(T.[source_compatibility], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_compatibility], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[source_distinction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_distinction], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[source_instruction], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_instruction], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[source_legacy_part_disposition], N''))) <> LTRIM(RTRIM(ISNULL(S.[source_legacy_part_disposition], N'')))
+) THEN
+  UPDATE SET
+  T.[source_legacy_part_name]=S.[source_legacy_part_name],
+  T.[source_legacy_usage]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')),
+  T.[source_replacement_part_name]=S.[source_replacement_part_name],
+  T.[source_replacement_usage]=TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')),
+  T.[source_compatibility]=S.[source_compatibility],
+  T.[source_distinction]=S.[source_distinction],
+  T.[source_instruction]=S.[source_instruction],
+  T.[source_legacy_part_disposition]=S.[source_legacy_part_disposition],
+  T.[updated_by]=@sync_user_id,
+  T.[updated_at]=@now,
+  T.[culture_code]=@culture_code,
+  T.[is_deleted]=0,
+  T.[deleted_by]=NULL,
+  T.[deleted_at]=NULL
+WHEN NOT MATCHED THEN
+  INSERT (
+    [id],[source_ec_id],[source_finished_product],[source_parent_part],
+    [source_legacy_part_code],[source_legacy_part_name],[source_legacy_usage],
+    [source_legacy_mounting_position],[source_replacement_part_code],
+    [source_replacement_part_name],[source_replacement_usage],
+    [source_replacement_mounting_position],[source_bom_code],
+    [source_compatibility],[source_distinction],
+    [source_instruction],[source_legacy_part_disposition],
+    [source_bom_effective_date],[tenant_code],[company_code],[plant_code],[culture_code],
+    [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
+  )
+  VALUES (
+    S.[id],S.[source_ec_id],S.[source_finished_product],S.[source_parent_part],
+    S.[source_legacy_part_code],S.[source_legacy_part_name],
+    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')),
+    S.[source_legacy_mounting_position],S.[source_replacement_part_code],
+    S.[source_replacement_part_name],
+    TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')),
+    S.[source_replacement_mounting_position],S.[source_bom_code],
+    S.[source_compatibility],S.[source_distinction],
+    S.[source_instruction],S.[source_legacy_part_disposition],
+    S.[source_bom_effective_date],@tenant_code,@company_code,@plant_code,@culture_code,
+    @sync_user_id,@now,@sync_user_id,@now,0
+  )
+OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[source_ec_id], INSERTED.[source_legacy_part_code]
+INTO #detail_delta(rn, oper_type, id, source_ec_id, source_legacy_part_code);
 
 UPDATE T
 SET
@@ -429,71 +584,22 @@ FROM [takt_logistics_manufacturing_ec_source_detail] T
 WHERE T.[tenant_code] = @tenant_code
   AND T.[company_code] = @company_code
   AND T.[plant_code] = @plant_code
-  AND T.[is_deleted] = 0;
+  AND T.[is_deleted] = 0
+  AND NOT EXISTS (
+    SELECT 1
+    FROM #source_detail S
+    WHERE S.[source_ec_id] = T.[source_ec_id]
+      AND LTRIM(RTRIM(ISNULL(S.[source_finished_product], N''))) = LTRIM(RTRIM(ISNULL(T.[source_finished_product], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_parent_part], N''))) = LTRIM(RTRIM(ISNULL(T.[source_parent_part], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_legacy_part_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_legacy_part_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_replacement_part_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_replacement_part_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_bom_code], N''))) = LTRIM(RTRIM(ISNULL(T.[source_bom_code], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_legacy_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_legacy_mounting_position], N'')))
+      AND LTRIM(RTRIM(ISNULL(S.[source_replacement_mounting_position], N''))) = LTRIM(RTRIM(ISNULL(T.[source_replacement_mounting_position], N'')))
+      AND ISNULL(S.[source_bom_effective_date], CAST('1900-01-01' AS DATE)) = ISNULL(T.[source_bom_effective_date], CAST('1900-01-01' AS DATE))
+  );
 
 DECLARE @detail_delete_count INT = @@ROWCOUNT;
-
-INSERT INTO [takt_logistics_manufacturing_ec_source_detail] (
-  [id],[source_ec_id],[source_finished_product],[source_parent_part],
-  [source_legacy_part_code],[source_legacy_part_name],[source_legacy_usage],
-  [source_legacy_mounting_position],[source_replacement_part_code],
-  [source_replacement_part_name],[source_replacement_usage],
-  [source_replacement_mounting_position],[source_bom_code],
-  [source_compatibility],[source_distinction],
-  [source_instruction],[source_legacy_part_disposition],
-  [source_bom_effective_date],[tenant_code],[company_code],[plant_code],[culture_code],
-  [created_by],[created_at],[updated_by],[updated_at],[is_deleted]
-)
-SELECT
-  S.[id],
-  M.[id],
-  S.[source_finished_product],
-  S.[source_parent_part],
-  S.[source_legacy_part_code],
-  S.[source_legacy_part_name],
-  TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_legacy_usage] AS NVARCHAR(40)))), N'')),
-  S.[source_legacy_mounting_position],
-  S.[source_replacement_part_code],
-  S.[source_replacement_part_name],
-  TRY_CONVERT(DECIMAL(18,5), NULLIF(LTRIM(RTRIM(CAST(S.[source_replacement_usage] AS NVARCHAR(40)))), N'')),
-  S.[source_replacement_mounting_position],
-  S.[source_bom_code],
-  S.[source_compatibility],
-  S.[source_distinction],
-  S.[source_instruction],
-  S.[source_legacy_part_disposition],
-  S.[source_bom_effective_date],
-  @tenant_code,
-  @company_code,
-  @plant_code,
-  @culture_code,
-  @sync_user_id,
-  @now,
-  @sync_user_id,
-  @now,
-  0
-FROM #source_detail S
-INNER JOIN [takt_logistics_manufacturing_ec_source] M
-  ON M.[tenant_code] = @tenant_code
- AND M.[company_code] = @company_code
- AND M.[plant_code] = @plant_code
- AND M.[source_ec_code] = S.[source_ec_code]
- AND M.[is_deleted] = 0;
-
-INSERT INTO #detail_delta(rn, oper_type, id, source_ec_id, source_legacy_part_code)
-SELECT
-  S.[rn],
-  N'INSERT',
-  S.[id],
-  M.[id],
-  S.[source_legacy_part_code]
-FROM #source_detail S
-INNER JOIN [takt_logistics_manufacturing_ec_source] M
-  ON M.[tenant_code] = @tenant_code
- AND M.[company_code] = @company_code
- AND M.[plant_code] = @plant_code
- AND M.[source_ec_code] = S.[source_ec_code]
- AND M.[is_deleted] = 0;
 
 DECLARE @detail_soft_deleted_keys NVARCHAR(MAX) = N'';
 SELECT @detail_soft_deleted_keys = STRING_AGG(

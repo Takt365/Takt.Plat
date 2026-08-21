@@ -35,7 +35,7 @@ public class TaktMaterialDocumentItem : TaktCompanyEntityBase
     public long MaterialDocumentId { get; set; }
 
     /// <summary>
-    /// 物料凭证（冗余；年份见主表 MaterialDocumentYear）
+    /// 物料凭证（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "material_document_code", ColumnDescription = "物料凭证", ColumnDataType = "nvarchar", Length = 10, IsNullable = false)]
     public string MaterialDocumentCode { get; set; } = string.Empty;

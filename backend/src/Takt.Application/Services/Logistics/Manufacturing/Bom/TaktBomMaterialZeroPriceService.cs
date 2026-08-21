@@ -14,6 +14,7 @@ using System.Globalization;
 using System.Linq.Expressions;
 using SqlSugar;
 using Takt.Application.Dtos.Logistics.Manufacturing.Bom;
+using Takt.Application.Services.Foundation;
 using Takt.Domain.Entities.Accounting.Financial;
 using Takt.Domain.Entities.Logistics.Manufacturing.Bom;
 using Takt.Domain.Entities.Logistics.Materials;
@@ -302,7 +303,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
                 costingStart,
                 costingEnd,
                 costingPeriod,
-                includeDeleted: false);
+                includeDeleted: true);
             componentTargets = mergedRows
                 .Where(r => !string.IsNullOrWhiteSpace(r.ComponentCode))
                 .Select(r => r.ComponentCode.Trim())
@@ -321,7 +322,10 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         var skippedNoPrice = 0;
         foreach (var componentCode in componentTargets)
         {
-            var source = await ResolveSuggestedMovingSourceAsync(plantCode, costingPeriod, componentCode);
+            var source = await ResolveSuggestedMovingSourceAsync(
+                plantCode,
+                costingPeriod,
+                componentCode);
             if (source == null)
             {
                 skippedNoPrice = checked(skippedNoPrice + 1);
@@ -385,6 +389,72 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
+    /// Quartz：判定日所在自然月，按表内 PlantCode 批量回填零价移动价（不显式传工厂）
+    /// </summary>
+    /// <param name="asOfDate">判定日；默认今天</param>
+    /// <returns>回填统计；无工厂数据时 null</returns>
+    public async Task<TaktBomMaterialZeroPriceMovingBackfillResultDto?> RunScheduledBomMaterialZeroPriceMovingBackfillAsync(
+        DateTime? asOfDate = null)
+    {
+        EnsureThreeLayerContext();
+        var asOf = TaktBomMaterialCostItemLineCostHelper.NormalizeCostingDate(asOfDate ?? DateTime.Today);
+        var costingStart = new DateTime(asOf.Year, asOf.Month, 1);
+        var costingEnd = new DateTime(
+            asOf.Year,
+            asOf.Month,
+            DateTime.DaysInMonth(asOf.Year, asOf.Month),
+            23,
+            59,
+            59,
+            999);
+        var periodKey = TaktBomMaterialCostItemLineCostHelper.ToPeriodKey(asOf);
+        var periodHeaders = await _bomMaterialCostRepository.GetListAsync(
+            x => x.TenantCode == CurrentTenantCode
+                && x.CompanyCode == CurrentCompanyCode
+                && x.CostingPeriod == periodKey,
+            includeSoftDeleted: true);
+        var plantCodes = periodHeaders
+            .Select(x => x.PlantCode?.Trim() ?? string.Empty)
+            .Where(p => !string.IsNullOrEmpty(p))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        if (plantCodes.Count == 0)
+        {
+            return null;
+        }
+
+        TaktBomMaterialZeroPriceMovingBackfillResultDto? aggregate = null;
+        foreach (var code in plantCodes)
+        {
+            var part = await BackfillBomMaterialZeroPriceMovingAsync(
+                new TaktBomMaterialZeroPriceMovingBackfillDto
+                {
+                    PlantCode = code,
+                    CostingDateStart = costingStart,
+                    CostingDateEnd = costingEnd,
+                });
+            if (aggregate == null)
+            {
+                aggregate = part;
+                continue;
+            }
+            aggregate.ScannedRowCount = checked(aggregate.ScannedRowCount + part.ScannedRowCount);
+            aggregate.UpdatedRowCount = checked(aggregate.UpdatedRowCount + part.UpdatedRowCount);
+            aggregate.SkippedNoPriceCount = checked(aggregate.SkippedNoPriceCount + part.SkippedNoPriceCount);
+            aggregate.UnchangedRowCount = checked(aggregate.UnchangedRowCount + part.UnchangedRowCount);
+            aggregate.ComponentProcessedCount =
+                checked(aggregate.ComponentProcessedCount + part.ComponentProcessedCount);
+            aggregate.ProductMonthlyCostUpdatedCount =
+                checked(aggregate.ProductMonthlyCostUpdatedCount + part.ProductMonthlyCostUpdatedCount);
+            aggregate.ModelMonthlyAverageUpdatedCount =
+                checked(aggregate.ModelMonthlyAverageUpdatedCount + part.ModelMonthlyAverageUpdatedCount);
+            aggregate.ProcessedMonth = part.ProcessedMonth;
+        }
+        return aggregate;
+    }
+
+    /// <summary>
     /// 将 PCB SECT 整树明细写入 PcbSectIndicator=X（描述含 PCB SECT 的节点及其子孙；已标则跳过）
     /// </summary>
     /// <param name="dto">工厂+核算月；机种可选</param>
@@ -425,8 +495,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             plantCode,
             productCodes,
             costingStart,
-            costingEnd,
-            includeDeleted: false);
+            costingEnd);
         var pcbRows = TaktBomMaterialCostItemLineCostHelper
             .CollectPcbSectHierarchyRows(allItems)
             .ToList();
@@ -434,6 +503,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         var updated = 0;
         var unchanged = 0;
         var rowsToUpdate = new List<TaktBomMaterialCostItem>();
+        var at = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
         foreach (var row in pcbRows)
         {
             if (TaktBomMaterialCostItemLineCostHelper.HasPcbSectIndicatorMark(row.PcbSectIndicator))
@@ -445,6 +515,19 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             {
                 continue;
             }
+            row.ExtField = TaktBomExtFieldBackfillHistoryHelper.Append(
+                row.ExtField,
+                TaktBomExtFieldBackfillHistoryHelper.ScopePcbSect,
+                new System.Text.Json.Nodes.JsonObject
+                {
+                    ["at"] = at,
+                    ["pcb_sect_indicator"] = TaktBomMaterialCostItemLineCostHelper.PcbSectIndicatorMarkValue,
+                    ["costing_period"] = costingPeriod,
+                    ["plant_code"] = plantCode,
+                    ["product_code"] = row.ProductCode?.Trim() ?? string.Empty,
+                    ["component_code"] = row.ComponentCode?.Trim() ?? string.Empty,
+                    ["bom_level"] = row.BomLevel?.Trim() ?? string.Empty,
+                });
             rowsToUpdate.Add(row);
             updated = checked(updated + 1);
         }
@@ -474,8 +557,8 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     /// <summary>
     /// 统一核心（三步，顺序固定）：
     /// 1）明细移动价：工厂 + 核算月(日期) + 组件 → 范围内全部明细写价；
-    /// 2）主表产品月计算：工厂 + 核算月 + 组件所涉产品 → ProductMonthlyCalculation = 旧值 + 本次回填行成本差额（非全量重算；不改 SAP 产品月成本）；
-    /// 3）机种月平均成本：工厂 + 核算月(日期) + 物料类型 + 机种 → 按组内产品月成本算术平均。
+ /// 2）主表产品月计算：按明细行字段全量重算（生产相关/PCB SECT/采购类型/数量/价/单位）；不改 产品月成本
+    /// 3）机种月平均成本：工厂 + 核算月(日期) + 物料类型 + 机种 → 按组内产品月计算算术平均。
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="costingStart">核算月初</param>
@@ -523,8 +606,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
                 plantCode,
                 componentCode,
                 costingStart,
-                costingStart,
-                includeDeleted: true);
+                costingStart);
             if (items.Count == 0)
             {
                 continue;
@@ -590,9 +672,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
 
         var productDeltas = AggregateProductMonthlyCostDeltas(lineDeltas);
 
-        // ----------------------------------------
-        // 步骤2+3：旧产品月成本 + 差额 → 机种月平均
-        // ----------------------------------------
+        // 步骤2+3：按明细行全量重算产品月计算 → 机种月平均
         var productCostUpdated = 0;
         var modelAverageUpdated = 0;
         if (affectedProductSources.Count > 0)
@@ -627,12 +707,13 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 步骤2：ProductMonthlyCalculation = 旧值 + 本次回填行成本差额；步骤3：刷机种月均（工厂+日期+物料类型+机种）
+    /// 步骤2：按明细行（工厂/日期/产品/组件/数量/生产相关/PCB SECT/采购类型/移动价/单位）全量重算产品月计算；
+    /// 步骤3：刷机种月均（工厂+日期+物料类型+机种）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="costingPeriod">核算月 yyyy-MM</param>
     /// <param name="affectedProductSources">产品 → 回填来源组件与移动价源</param>
-    /// <param name="productDeltas">产品 → 本次回填成本差额合计</param>
+    /// <param name="productDeltas">保留参数兼容；产品月计算已改为明细全量重算，不再使用差额</param>
     /// <returns>产品月成本更新行数、机种月成本更新行数</returns>
     private async Task<(int ProductCostUpdated, int ModelAverageUpdated)> RefreshHeadersAfterMovingBackfillAsync(
         string plantCode,
@@ -644,6 +725,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         {
             return (0, 0);
         }
+        _ = productDeltas;
         var affectedProductCodes = affectedProductSources.Keys.ToList();
         var periodHeaders = await _bomMaterialCostRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
@@ -652,6 +734,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
                 && x.CostingPeriod == costingPeriod,
             asTableName: null,
             includeSoftDeleted: true);
+        var (monthStart, monthEnd) = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodDateRange(costingPeriod);
         var productCostUpdated = 0;
         var touchedModelGroups = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var modelSourceByGroup = new Dictionary<string, (string Component, SuggestedMovingSource Source)>(
@@ -666,28 +749,45 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             {
                 continue;
             }
-            productDeltas.TryGetValue(product, out var deltaInfo);
+            var productItems = await LoadBomCostItemsRawForProductsAsync(
+                plantCode,
+                new[] { product },
+                monthStart,
+                monthEnd);
+            var snapshot = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(
+                productItems,
+                plantCode,
+                product,
+                costingPeriod);
+            var nextCost = TaktBomMaterialCostItemLineCostHelper.SumSnapshotCost(snapshot);
+            var writeCurrency = snapshot
+                .Select(TaktBomMaterialCostItemLineCostHelper.ResolveCurrency)
+                .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c))
+                ?? productItems
+                    .Select(x => x.MovingPriceCurrencyCode)
+                    .FirstOrDefault(c => !string.IsNullOrWhiteSpace(c))
+                ?? string.Empty;
+            var writeDate = TaktBomMaterialCostItemLineCostHelper.ResolveLatestCostingDate(
+                productItems,
+                plantCode,
+                product,
+                costingPeriod);
             var matchedHeaders = periodHeaders
                 .Where(h => TaktBomMaterialCostItemLineCostHelper.ProductCodeMatches(h.ProductCode, product))
                 .ToList();
             foreach (var header in matchedHeaders)
             {
                 var currentCost = TaktBomMaterialCostItemLineCostHelper.RoundCost(header.ProductMonthlyCalculation);
-                var nextCost = TaktBomMaterialCostItemLineCostHelper.RoundCost(currentCost + deltaInfo.Delta);
-                var writeCurrency = string.IsNullOrWhiteSpace(deltaInfo.CurrencyCode)
+                var effectiveCurrency = string.IsNullOrWhiteSpace(writeCurrency)
                     ? header.CurrencyCode
-                    : deltaInfo.CurrencyCode.Trim();
-                var writeDate = deltaInfo.LatestCostingDate ?? header.CostingDate;
-                var materialType = string.IsNullOrWhiteSpace(header.MaterialType)
-                    ? TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode
-                    : header.MaterialType.Trim();
-                var modelCode = header.ModelCode?.Trim() ?? string.Empty;
+                    : writeCurrency.Trim();
+                var effectiveDate = writeDate ?? header.CostingDate;
                 if (currentCost != nextCost
                     || !string.Equals(
                         header.CurrencyCode?.Trim() ?? string.Empty,
-                        writeCurrency?.Trim() ?? string.Empty,
+                        effectiveCurrency?.Trim() ?? string.Empty,
                         StringComparison.OrdinalIgnoreCase)
-                    || header.CostingDate != writeDate)
+                    || header.CostingDate != effectiveDate)
                 {
                     foreach (var (componentCode, source) in sources)
                     {
@@ -704,11 +804,15 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
                     }
                 }
                 header.ProductMonthlyCalculation = nextCost;
-                header.CurrencyCode = writeCurrency ?? string.Empty;
-                header.CostingDate = writeDate;
+                header.CurrencyCode = effectiveCurrency ?? string.Empty;
+                header.CostingDate = effectiveDate;
                 header.CostingPeriod = costingPeriod;
                 headersToUpdate.Add(header);
                 productCostUpdated = checked(productCostUpdated + 1);
+                var materialType = string.IsNullOrWhiteSpace(header.MaterialType)
+                    ? TaktBomMaterialCostItemLineCostHelper.FertMaterialTypeCode
+                    : header.MaterialType.Trim();
+                var modelCode = header.ModelCode?.Trim() ?? string.Empty;
                 if (!string.IsNullOrWhiteSpace(modelCode))
                 {
                     var groupKey = BuildModelAverageGroupKey(materialType, modelCode);
@@ -762,8 +866,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         int oldUnit)
     {
         ArgumentNullException.ThrowIfNull(row);
-        if (!TaktBomMaterialCostItemLineCostHelper.CountsTowardBomMaterialCostItem(row)
-            || row.ComponentQuantity <= TaktBomMaterialCostItemLineCostHelper.MinParticipatingComponentQuantity)
+        if (!TaktBomMaterialCostItemLineCostHelper.CountsTowardBomMaterialCostItem(row))
         {
             return 0m;
         }
@@ -801,7 +904,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             var dayRows = productGroup.Where(d => d.CostingDate == latestDay).ToList();
             var delta = dayRows
                 .GroupBy(d => d.ComponentKey, StringComparer.Ordinal)
-                .Select(g => g.OrderBy(x => x.IsDeleted).ThenByDescending(x => x.Id).First())
+                .Select(g => g.OrderByDescending(x => x.Id).First())
                 .Sum(x => x.Delta);
             var currency = dayRows
                 .Select(x => x.CurrencyCode)
@@ -857,12 +960,13 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 按「工厂+日期+物料类型+机种」下各产品月成本算术平均写入机种月成本并保存；变更时追加 ExtField._bk.mp 履历
+    /// 按「工厂+核算月+物料类型+机种」写机种月成本（固定口径：&lt;2026-06 产品月成本，≥2026-06 产品月计算）；
+    /// 比较后有变化才落库并追加 ExtField 履历
     /// </summary>
     /// <param name="headers">同工厂+日期+物料类型+机种主表行</param>
     /// <param name="componentCode">回填组件</param>
     /// <param name="source">移动价源</param>
-    /// <returns>更新行数</returns>
+    /// <returns>实际更新行数</returns>
     private async Task<int> ApplyModelMonthlyAverageAndSaveAsync(
         List<TaktBomMaterialCost> headers,
         string componentCode,
@@ -874,24 +978,13 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         {
             return 0;
         }
-        // 按产品去重取产品月计算（>0）再算术平均；写回该组全部主表行
-        var costs = headers
-            .Where(h => h.ProductMonthlyCalculation > 0m)
-            .GroupBy(
-                h => (h.ProductCode ?? string.Empty).Trim(),
-                StringComparer.OrdinalIgnoreCase)
-            .Where(g => !string.IsNullOrWhiteSpace(g.Key))
-            .Select(g => g
-                .OrderBy(h => h.IsDeleted)
-                .ThenByDescending(h => h.Id)
-                .First()
-                .ProductMonthlyCalculation)
-            .ToList();
-        var average = TaktBomMaterialCostItemModelEnrichmentHelper.ComputeModelMonthlyAverageFromProductCosts(costs);
+        // 按产品去重；核算月&lt;2026-06 用产品月成本，≥2026-06 用产品月计算 → 算术平均
+        var average = TaktBomMaterialCostItemModelEnrichmentHelper.ComputeModelMonthlyAverageFromHeaders(headers);
         var toSave = new List<TaktBomMaterialCost>();
         foreach (var header in headers)
         {
             var current = TaktBomMaterialCostItemLineCostHelper.RoundCost(header.ModelMonthlyAverageCost);
+            // 先全量算 average，再比较：仅新旧相等才跳过（不是「原值非 0 就跳过」）
             if (current == average)
             {
                 continue;
@@ -994,20 +1087,18 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 加载产品 BOM 明细全量（含非 X+F，供产品月成本快照/PCB SECT 排除）
+    /// 加载产品 BOM 明细全量（含非 X+F，供产品月成本快照/PCB SECT 排除；明细无软删业务）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="productCodes">产品编码</param>
     /// <param name="costingMonthStart">核算月初</param>
     /// <param name="costingMonthEnd">核算月末（同月初则整月）</param>
-    /// <param name="includeDeleted">true=全量不区分 IsDeleted（回填后刷新主表）</param>
     /// <returns>明细行</returns>
     private async Task<List<TaktBomMaterialCostItem>> LoadBomCostItemsRawForProductsAsync(
         string plantCode,
         IReadOnlyList<string> productCodes,
         DateTime? costingMonthStart,
-        DateTime? costingMonthEnd,
-        bool includeDeleted = false)
+        DateTime? costingMonthEnd)
     {
         var allItems = new List<TaktBomMaterialCostItem>();
         const int chunkSize = 200;
@@ -1031,10 +1122,6 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
                 && x.CompanyCode == CurrentCompanyCode
                 && x.PlantCode == plantCode
                 && chunk.Contains(x.ProductCode));
-            if (!includeDeleted)
-            {
-                exp = exp.And(x => x.IsDeleted == 0);
-            }
             if (costingMonthStart.HasValue)
             {
                 var start = costingMonthStart.Value;
@@ -1055,11 +1142,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             {
                 throw new TaktBusinessException(ex.Message);
             }
-            // includeDeleted 须传仓储 includeSoftDeleted：ApplyReadScope 默认过滤 IsDeleted=0，仅靠表达式无法含软删
-            var part = await _bomMaterialCostItemRepository.GetListAsync(
-                exp.ToExpression(),
-                yearTable,
-                includeSoftDeleted: includeDeleted);
+            var part = await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
             allItems.AddRange(part);
         }
         return allItems;
@@ -1182,14 +1265,14 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 构建零价合并全量行（未分页；主表 MaterialType=FERT；列表默认排除已删，回填发现组件时可含已删）
+    /// 构建零价合并全量行（未分页；主表 MaterialType=FERT；列表排除软删主表，回填/计算含软删主表）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="modelFilters">机种过滤（空=全部）</param>
     /// <param name="costingStart">核算日起</param>
     /// <param name="costingEnd">核算日止</param>
     /// <param name="costingPeriod">核算月 yyyy-MM</param>
-    /// <param name="includeDeleted">true 时主表/明细含已软删（批量回填发现组件）</param>
+    /// <param name="includeDeleted">true=含软删主表（回填）；false=列表仅未删主表；明细无软删</param>
     /// <returns>产品码、产品→机种、合并行</returns>
     private async Task<(
         List<string> ProductCodes,
@@ -1267,8 +1350,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             plantCode,
             productCodes,
             costingStart,
-            costingStart,
-            includeDeleted);
+            costingStart);
         // 同一 ComponentCode 多位置须按行判定：任一笔生产相关=X、PCB SECT 标识为空、采购类型=F、用量>0.001、价0 即入清单
         var zeroItems = items
             .Where(TaktBomMaterialCostItemLineCostHelper.QualifiesAsZeroPriceListLine)
@@ -1491,20 +1573,18 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     }
 
     /// <summary>
-    /// 按工厂+组件+核算月加载 BOM 明细（批量/手工回填：includeDeleted=true 时全量，不区分 IsDeleted）
+    /// 按工厂+组件+核算月加载 BOM 明细（明细无软删业务，IsDeleted 恒 0）
     /// </summary>
     /// <param name="plantCode">工厂</param>
     /// <param name="componentCode">组件编码</param>
     /// <param name="costingMonthStart">核算月初</param>
     /// <param name="costingMonthEnd">核算月末（同月初则整月）</param>
-    /// <param name="includeDeleted">true=全量（须仓储 includeSoftDeleted，否则读隔离仍滤软删）</param>
     /// <returns>明细行</returns>
     private async Task<List<TaktBomMaterialCostItem>> LoadBomCostItemsByComponentAsync(
         string plantCode,
         string componentCode,
         DateTime? costingMonthStart,
-        DateTime? costingMonthEnd,
-        bool includeDeleted = false)
+        DateTime? costingMonthEnd)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(plantCode);
         ArgumentException.ThrowIfNullOrWhiteSpace(componentCode);
@@ -1522,10 +1602,6 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
             && x.CompanyCode == CurrentCompanyCode
             && x.PlantCode == plantCode
             && componentLookup.Contains(x.ComponentCode));
-        if (!includeDeleted)
-        {
-            exp = exp.And(x => x.IsDeleted == 0);
-        }
         if (costingMonthStart.HasValue)
         {
             var start = costingMonthStart.Value;
@@ -1546,11 +1622,7 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
         {
             throw new TaktBusinessException(ex.Message);
         }
-        // includeDeleted 须传仓储 includeSoftDeleted：ApplyReadScope 默认过滤 IsDeleted=0，仅靠表达式无法含软删
-        var part = await _bomMaterialCostItemRepository.GetListAsync(
-            exp.ToExpression(),
-            yearTable,
-            includeSoftDeleted: includeDeleted);
+        var part = await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
         // 手工更新：同组件全量写入，不再按 X+F / 零价清单收窄
         return part.ToList();
     }
@@ -1563,22 +1635,22 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     /// <param name="productCodes">产品编码</param>
     /// <param name="costingMonthStart">核算月初</param>
     /// <param name="costingMonthEnd">核算月末（同月初则整月）</param>
-    /// <param name="includeDeleted">true 时含已软删明细（回填移动价）</param>
     /// <returns>明细行</returns>
     private async Task<List<TaktBomMaterialCostItem>> LoadBomCostItemsForProductsAsync(
         string plantCode,
         IReadOnlyList<string> productCodes,
         DateTime? costingMonthStart,
-        DateTime? costingMonthEnd,
-        bool includeDeleted = false)
+        DateTime? costingMonthEnd)
     {
         var raw = await LoadBomCostItemsRawForProductsAsync(
             plantCode,
             productCodes,
             costingMonthStart,
-            costingMonthEnd,
-            includeDeleted);
-        return TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(raw).ToList();
+            costingMonthEnd);
+        return TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(raw))
+            .ToList();
     }
 
     /// <summary>
@@ -1663,6 +1735,8 @@ public class TaktBomMaterialZeroPriceService : TaktServiceBase, ITaktBomMaterial
     /// <summary>
     /// 解析移动价格物理表
     /// </summary>
+    /// <param name="year">年份</param>
+    /// <returns>存在则返回表名；否则 null</returns>
     private async Task<string?> ResolveMovingPricePhysicalTableAsync(int year)
     {
         var table = TaktYearShardTableHelper.BuildYearTableName(MovingPriceYearShardBaseTable, year);

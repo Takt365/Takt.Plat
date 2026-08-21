@@ -717,7 +717,7 @@ public static class TaktStringHelper
     }
 
     /// <summary>
-    /// SAP 18 位纯数字物料编码归一化为 10 位（去除前 8 位，保留后 10 位）；其他形态仅 Trim 后原样返回
+    /// 18 位纯数字物料编码归一化为 10 位（去除前 8 位，保留后 10 位）；其他形态仅 Trim 后原样返回
     /// </summary>
     /// <param name="code">产品/组件编码</param>
     /// <returns>归一化后的编码</returns>

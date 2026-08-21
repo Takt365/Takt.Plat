@@ -232,7 +232,7 @@ public static class TaktBomCalculatePurchasePriceHelper
     }
 
     /// <summary>
-    /// 合并回填快照到 ExtField JSON：根对象保留原键（如核算日成本），写入 _bk.{scope}
+    /// 追加回填快照到 ExtField._bk.{scope}（数组追加，不覆盖历史；单对象自动迁入）
     /// </summary>
     /// <param name="extField">原扩展字段</param>
     /// <param name="scope">回填作用域（bc/bv/pup/sp）</param>
@@ -240,22 +240,7 @@ public static class TaktBomCalculatePurchasePriceHelper
     /// <returns>合并后 JSON；超长则尽量保留原值</returns>
     public static string? MergeBkExtField(string? extField, string scope, JsonObject payload)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(scope);
-        ArgumentNullException.ThrowIfNull(payload);
-        var root = ParseExtFieldObject(extField);
-        var previous = extField?.Trim();
-        if (root[ExtFieldBackfillRootKey] is not JsonObject bk)
-        {
-            bk = new JsonObject();
-            root[ExtFieldBackfillRootKey] = bk;
-        }
-        bk[scope.Trim()] = payload;
-        var json = root.ToJsonString();
-        if (json.Length <= ExtFieldMaxLength)
-        {
-            return json;
-        }
-        return string.IsNullOrWhiteSpace(previous) ? null : previous;
+        return TaktBomExtFieldBackfillHistoryHelper.Append(extField, scope, payload);
     }
 
     /// <summary>

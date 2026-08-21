@@ -38,8 +38,9 @@ CREATE TABLE #hdr (
   [baseline_date] DATETIME, [entered_by] NVARCHAR(12), [exchange_rate_date] DATETIME,
   [transaction_code] NVARCHAR(40), [posted_by] NVARCHAR(12),
   [tenant_code] NVARCHAR(3), [company_code] NVARCHAR(4), [culture_code] NVARCHAR(5),
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #item (
   [rn] INT, [id] BIGINT, [purchase_invoice_id] BIGINT,
@@ -58,8 +59,9 @@ CREATE TABLE #item (
   [reference_document_code] NVARCHAR(10), [reference_document_year] NVARCHAR(4), [reference_document_item] INT,
   [stock_managed_material_code] NVARCHAR(20), [item_text] NVARCHAR(40), [material_document_item] INT,
   [is_obsolete] INT, [tenant_code] NVARCHAR(3), [company_code] NVARCHAR(4), [culture_code] NVARCHAR(5),
-  [is_deleted] INT, [created_at] DATETIME, [updated_by] BIGINT
-);
+  [ext_field] NVARCHAR(MAX), [remark] NVARCHAR(MAX),
+  [created_by] BIGINT, [created_at] DATETIME, [updated_by] BIGINT, [updated_at] DATETIME, [deleted_by] BIGINT, [deleted_at] DATETIME,
+  [is_deleted] INT);
 
 CREATE TABLE #hdr_delta (rn INT, oper_type NVARCHAR(10), id BIGINT, [fiscal_year] NVARCHAR(4), [purchase_invoice_code] NVARCHAR(10));
 CREATE TABLE #item_delta (rn INT, oper_type NVARCHAR(10), id BIGINT, [purchase_invoice_code] NVARCHAR(10), [line_number] INT);
@@ -74,7 +76,7 @@ SELECT S.rn, @base_id + S.rn, S.[plant_code],
   S.[invoice_flag], S.[header_text], S.[reversal_document_code], S.[reversal_fiscal_year],
   S.[tax_code], S.[supplying_country], S.[tax_exchange_rate], S.[baseline_date], S.[entered_by],
   S.[exchange_rate_date], S.[transaction_code], S.[posted_by],
-  S.[tenant_code], S.[company_code], S.[culture_code], S.[is_deleted], S.[created_at], @sync_user_id
+  S.[tenant_code], S.[company_code], S.[culture_code], S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[fiscal_year], N.[purchase_invoice_code]) AS rn
   FROM (
@@ -109,9 +111,16 @@ FROM (
       TRY_CAST(R.[exchange_rate_date] AS DATETIME) AS [exchange_rate_date],
       NULLIF(LEFT(LTRIM(RTRIM(R.[transaction_code])), 40), N'') AS [transaction_code],
       NULLIF(LEFT(LTRIM(RTRIM(R.[posted_by])), 12), N'') AS [posted_by],
-      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(R.[fiscal_year])), LTRIM(RTRIM(R.[purchase_invoice_code]))
         ORDER BY LTRIM(RTRIM(R.[fiscal_year])), LTRIM(RTRIM(R.[purchase_invoice_code]))
       ) AS dup_rn
@@ -183,6 +192,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[plant_code],N'')<>ISNULL(S.[plant_code],N'')
   OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'')
   OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[document_type]=S.[document_type],
   T.[document_date]=S.[document_date],
@@ -210,14 +228,18 @@ WHEN MATCHED AND (
   T.[posted_by]=S.[posted_by],
   T.[plant_code]=S.[plant_code],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[plant_code],[purchase_invoice_code],[fiscal_year],[document_type],[document_date],[posting_date],[transaction_event_type],[reference_code],[supplier_code],[currency_code],[exchange_rate],[gross_amount],[vat_amount],[tax_jurisdiction_code],[cash_discount_days1],[invoice_flag],[header_text],[reversal_document_code],[reversal_fiscal_year],[tax_code],[supplying_country],[tax_exchange_rate],[baseline_date],[entered_by],[exchange_rate_date],[transaction_code],[posted_by],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[plant_code],S.[purchase_invoice_code],S.[fiscal_year],S.[document_type],S.[document_date],S.[posting_date],S.[transaction_event_type],S.[reference_code],S.[supplier_code],S.[currency_code],S.[exchange_rate],S.[gross_amount],S.[vat_amount],S.[tax_jurisdiction_code],S.[cash_discount_days1],S.[invoice_flag],S.[header_text],S.[reversal_document_code],S.[reversal_fiscal_year],S.[tax_code],S.[supplying_country],S.[tax_exchange_rate],S.[baseline_date],S.[entered_by],S.[exchange_rate_date],S.[transaction_code],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[plant_code],S.[purchase_invoice_code],S.[fiscal_year],S.[document_type],S.[document_date],S.[posting_date],S.[transaction_event_type],S.[reference_code],S.[supplier_code],S.[currency_code],S.[exchange_rate],S.[gross_amount],S.[vat_amount],S.[tax_jurisdiction_code],S.[cash_discount_days1],S.[invoice_flag],S.[header_text],S.[reversal_document_code],S.[reversal_fiscal_year],S.[tax_code],S.[supplying_country],S.[tax_exchange_rate],S.[baseline_date],S.[entered_by],S.[exchange_rate_date],S.[transaction_code],S.[posted_by],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[fiscal_year], INSERTED.[purchase_invoice_code]
 INTO #hdr_delta (rn, oper_type, id, [fiscal_year], [purchase_invoice_code]);
 
@@ -259,7 +281,7 @@ SELECT S.rn, @base_id+1000000000+S.rn, 0,
   S.[total_valuated_stock_value], S.[previous_period_value],
   S.[reference_document_code], S.[reference_document_year], S.[reference_document_item],
   S.[stock_managed_material_code], S.[item_text], S.[material_document_item],
-  S.[is_obsolete], S.[tenant_code], S.[company_code], S.[culture_code], S.[is_deleted], S.[created_at], @sync_user_id
+  S.[is_obsolete], S.[tenant_code], S.[company_code], S.[culture_code], S.[created_by], S.[created_at], S.[updated_by], S.[updated_at], S.[deleted_by], S.[deleted_at], S.[is_deleted]
 FROM (
   SELECT N.*, ROW_NUMBER() OVER (ORDER BY N.[fiscal_year], N.[purchase_invoice_code], N.[line_number]) AS rn
   FROM (
@@ -313,9 +335,16 @@ FROM (
       NULLIF(LEFT(LTRIM(RTRIM(R.[item_text])), 40), N'') AS [item_text],
       TRY_CAST(R.[material_document_item] AS INT) AS [material_document_item],
       ISNULL(TRY_CAST(R.[is_obsolete] AS INT), 0) AS [is_obsolete],
-      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+      ISNULL(R.[ext_field], N'{}') AS [ext_field],
+      ISNULL(R.[remark], N'') AS [remark],
+      COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
       R.[created_at] AS [created_at],
-      ROW_NUMBER() OVER (
+      TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+      R.[updated_at] AS [updated_at],
+      TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+      R.[deleted_at] AS [deleted_at],
+      CASE WHEN ISNULL(R.[is_deleted], 0)=0 THEN 0 ELSE 1 END AS [is_deleted],
+            ROW_NUMBER() OVER (
         PARTITION BY LTRIM(RTRIM(SH.[fiscal_year])), LTRIM(RTRIM(R.[purchase_invoice_code])), COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
         ORDER BY COALESCE(TRY_CAST(R.[line_number] AS INT), 0)
       ) AS dup_rn
@@ -409,6 +438,15 @@ WHEN MATCHED AND (
   OR ISNULL(T.[is_obsolete],-1)<>ISNULL(S.[is_obsolete],-1)
   OR ISNULL(T.[culture_code],N'')<>ISNULL(S.[culture_code],N'')
   OR T.[is_deleted]<>S.[is_deleted]
+
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN UPDATE SET
   T.[plant_code]=S.[plant_code],
   T.[purchase_invoice_code]=S.[purchase_invoice_code],
@@ -447,14 +485,18 @@ WHEN MATCHED AND (
   T.[material_document_item]=S.[material_document_item],
   T.[is_obsolete]=S.[is_obsolete],
   T.[culture_code]=S.[culture_code],
+  T.[ext_field]=S.[ext_field],
+  T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at]
 WHEN NOT MATCHED THEN
   INSERT ([id],[purchase_invoice_id],[plant_code],[purchase_invoice_code],[line_number],[purchase_order_code],[purchase_order_item],[account_assignment_seq],[material_code],[valuation_area],[amount],[debit_credit_indicator],[tax_code],[quantity],[order_unit],[po_price_quantity],[po_price_unit],[valuated_stock_quantity],[previous_period_stock],[base_unit],[valuation_class],[update_po_history_flag],[subsequent_debit_credit],[block_reason_price],[block_reason_quantity],[block_reason_quality],[block_reason_enhanced],[value_string],[reference_code],[condition_type],[total_valuated_stock_value],[previous_period_value],[reference_document_code],[reference_document_year],[reference_document_item],[stock_managed_material_code],[item_text],[material_document_item],[is_obsolete],[tenant_code],[company_code],[culture_code],[ext_field],[remark],[created_by],[created_at],[updated_by],[updated_at],[is_deleted],[deleted_by],[deleted_at])
-  VALUES (S.[id],S.[purchase_invoice_id],S.[plant_code],S.[purchase_invoice_code],S.[line_number],S.[purchase_order_code],S.[purchase_order_item],S.[account_assignment_seq],S.[material_code],S.[valuation_area],S.[amount],S.[debit_credit_indicator],S.[tax_code],S.[quantity],S.[order_unit],S.[po_price_quantity],S.[po_price_unit],S.[valuated_stock_quantity],S.[previous_period_stock],S.[base_unit],S.[valuation_class],S.[update_po_history_flag],S.[subsequent_debit_credit],S.[block_reason_price],S.[block_reason_quantity],S.[block_reason_quality],S.[block_reason_enhanced],S.[value_string],S.[reference_code],S.[condition_type],S.[total_valuated_stock_value],S.[previous_period_value],S.[reference_document_code],S.[reference_document_year],S.[reference_document_item],S.[stock_managed_material_code],S.[item_text],S.[material_document_item],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],N'{}',N'',S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,S.[is_deleted],CASE WHEN S.[is_deleted]=1 THEN S.[updated_by] ELSE NULL END,CASE WHEN S.[is_deleted]=1 THEN @now ELSE NULL END)
+  VALUES (S.[id],S.[purchase_invoice_id],S.[plant_code],S.[purchase_invoice_code],S.[line_number],S.[purchase_order_code],S.[purchase_order_item],S.[account_assignment_seq],S.[material_code],S.[valuation_area],S.[amount],S.[debit_credit_indicator],S.[tax_code],S.[quantity],S.[order_unit],S.[po_price_quantity],S.[po_price_unit],S.[valuated_stock_quantity],S.[previous_period_stock],S.[base_unit],S.[valuation_class],S.[update_po_history_flag],S.[subsequent_debit_credit],S.[block_reason_price],S.[block_reason_quantity],S.[block_reason_quality],S.[block_reason_enhanced],S.[value_string],S.[reference_code],S.[condition_type],S.[total_valuated_stock_value],S.[previous_period_value],S.[reference_document_code],S.[reference_document_year],S.[reference_document_item],S.[stock_managed_material_code],S.[item_text],S.[material_document_item],S.[is_obsolete],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],S.[is_deleted],S.[deleted_by],S.[deleted_at])
 OUTPUT S.rn, $action, INSERTED.[id], INSERTED.[purchase_invoice_code], INSERTED.[line_number]
 INTO #item_delta (rn, oper_type, id, [purchase_invoice_code], [line_number]);
 

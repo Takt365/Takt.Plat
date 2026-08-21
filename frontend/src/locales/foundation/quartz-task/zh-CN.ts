@@ -26,7 +26,7 @@ export default {
       targetDatabase: '目标表数据库',
       sourceRequired: '请选择源表数据库',
       targetRequired: '请选择目标表数据库',
-      hintTargetOnly: '源库固定为 Sap_Data（或本库回填）；请选择写入的目标租户库。',
+      hintTargetOnly: '源库固定（或本库回填）；请选择写入的目标租户库。',
       hintSourceTarget: '请选择暂存源库与写入目标租户库；Cron 任务须在 ExecuteParams 配置同名字段。',
     },
     signalr: {

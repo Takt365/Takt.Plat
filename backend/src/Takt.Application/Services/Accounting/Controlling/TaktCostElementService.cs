@@ -576,14 +576,14 @@ public class TaktCostElementService : TaktServiceBase, ITaktCostElementService
     }
 
     /// <summary>
-    /// 按 SAP KATYP 类别推导并写入成本要素类型
+    /// 按成本要素类别推导并写入成本要素类型
     /// </summary>
     /// <param name="entity">成本要素实体</param>
     private static void ApplyCostElementKatyp(TaktCostElement entity)
     {
         if (!TaktCostElementKatypConstants.IsValidCategory(entity.CostElementCategory))
         {
-            throw new TaktBusinessException("成本要素类别无效，请选择有效的 SAP KATYP");
+            throw new TaktBusinessException("成本要素类别无效，请选择有效的类别");
         }
         entity.CostElementType = TaktCostElementKatypConstants.ResolveTypeFromCategory(entity.CostElementCategory);
     }

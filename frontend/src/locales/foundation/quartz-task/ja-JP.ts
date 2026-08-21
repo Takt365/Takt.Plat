@@ -26,7 +26,7 @@ export default {
       targetDatabase: 'ターゲットデータベース',
       sourceRequired: 'ソースデータベースを選択してください',
       targetRequired: 'ターゲットデータベースを選択してください',
-      hintTargetOnly: 'ソースは固定（Sap_Data または同一 DB 回填）です。書き込み先のテナント DB を選択してください。',
+      hintTargetOnly: 'ソースは固定（または同一 DB 回填）です。書き込み先のテナント DB を選択してください。',
       hintSourceTarget: 'ステージング元と書き込み先テナント DB を選択してください。Cron は ExecuteParams に同キーが必要です。',
     },
     signalr: {

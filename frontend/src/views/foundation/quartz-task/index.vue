@@ -149,7 +149,7 @@
       @ok="handleExecuteMonthSubmit"
       @cancel="handleExecuteMonthCancel"
     >
-      <a-form layout="horizontal" label-align="right">
+      <a-form class="takt-generated-form" layout="horizontal" label-align="right">
         <a-form-item :label="t('foundation.quartz-task.page.executeDb.targetDatabase')" required>
           <a-select
             v-model:value="executeTargetDatabase"
@@ -187,7 +187,7 @@
       @ok="handleExecuteDbSubmit"
       @cancel="handleExecuteDbCancel"
     >
-      <a-form layout="horizontal" label-align="right">
+      <a-form class="takt-generated-form" layout="horizontal" label-align="right">
         <a-form-item
           v-if="executeDbNeedsSource"
           :label="t('foundation.quartz-task.page.executeDb.sourceDatabase')"

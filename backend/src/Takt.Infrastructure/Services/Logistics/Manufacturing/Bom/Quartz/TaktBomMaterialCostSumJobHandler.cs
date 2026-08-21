@@ -4,7 +4,7 @@
 // 文件名称：TaktBomMaterialCostSumJobHandler.cs
 // 创建时间：2026-07-14
 // 创建人：Takt365(Cursor AI)
-// 功能描述：Quartz 成本合计（ExecuteParams 可指定 costingPeriod；空则当月）
+// 功能描述：Quartz 成本合计（ExecuteParams 可指定 costingPeriod/targetDatabase；空则当月；查询落目标库 RelatedPlant）
 //
 // 版权信息：Copyright (c) 2026 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。
@@ -16,7 +16,7 @@ using Takt.Domain.Interfaces;
 namespace Takt.Infrastructure.Services.Logistics.Manufacturing.Bom.Quartz;
 
 /// <summary>
-/// Quartz：BOM 物料成本合计处理器（依赖 Job 入口已注入的租户/公司上下文）
+/// Quartz：BOM 物料成本合计处理器（targetDatabase 由执行器切库；核算月→RelatedPlant）
 /// </summary>
 public sealed class TaktBomMaterialCostSumJobHandler : ITaktQuartzJobHandler
 {

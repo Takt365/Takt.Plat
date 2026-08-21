@@ -11,7 +11,7 @@ DECLARE @base_id BIGINT = DATEDIFF_BIG(MICROSECOND, '1970-01-01', @now) * 1000;
 
 -- 源表 / 目标表：同名 + 业务字段源表原样写入（❌ 禁止他表回填、禁止默认 FERT、禁止发明机种月均）
 -- {{SourceDatabase}}.dbo.takt_logistics_manufacturing_bom_material_cost → 当前租户库同名表
--- 业务唯一键：Plant+Model+Product+CostingPeriod
+-- 业务唯一键：Plant+Product+CostingDate（日；ModelCode/CostingPeriod 仅业务字段，不参与匹配）
 -- 流程：①源表装入（含 is_deleted 原样）→ ②唯一键去重 → MERGE（源有什么写什么）→ ③目标有源无则软删
 
 IF OBJECT_ID('tempdb..#st_source') IS NOT NULL DROP TABLE #st_source;
@@ -25,18 +25,23 @@ CREATE TABLE #st_source (
   [product_code] NVARCHAR(20),
   [product_description] NVARCHAR(40),
   [product_monthly_cost] DECIMAL(18,5),
+  [product_monthly_calculation] DECIMAL(18,5),
   [latest_purchase_cost] DECIMAL(18,5),
   [currency_code] NVARCHAR(3),
   [costing_period] NVARCHAR(7),
   [costing_date] DATETIME,
   [is_deleted] INT,
-  [created_at] DATETIME,
   [tenant_code] NVARCHAR(3),
   [company_code] NVARCHAR(4),
   [culture_code] NVARCHAR(5),
   [ext_field] NVARCHAR(MAX),
   [remark] NVARCHAR(MAX),
-  [updated_by] BIGINT
+  [created_by] BIGINT,
+  [created_at] DATETIME,
+  [updated_by] BIGINT,
+  [updated_at] DATETIME,
+  [deleted_by] BIGINT,
+  [deleted_at] DATETIME
 );
 
 IF OBJECT_ID('tempdb..#st_raw') IS NOT NULL DROP TABLE #st_raw;
@@ -51,22 +56,29 @@ CREATE TABLE #st_raw (
   [product_code] NVARCHAR(20),
   [product_description] NVARCHAR(40),
   [product_monthly_cost] DECIMAL(18,5),
+  [product_monthly_calculation] DECIMAL(18,5),
   [latest_purchase_cost] DECIMAL(18,5),
   [currency_code] NVARCHAR(3),
   [costing_period] NVARCHAR(7),
   [costing_date] DATETIME,
   [is_deleted] INT,
-  [created_at] DATETIME,
   [ext_field] NVARCHAR(MAX),
-  [remark] NVARCHAR(MAX)
+  [remark] NVARCHAR(MAX),
+  [created_by] BIGINT,
+  [created_at] DATETIME,
+  [updated_by] BIGINT,
+  [updated_at] DATETIME,
+  [deleted_by] BIGINT,
+  [deleted_at] DATETIME
 );
 
 -- 源表原样装入（仅 trim / 18 位纯数字产品码截末 10 / 小数位对齐；❌ 禁止他表回填与默认码）
 INSERT INTO #st_raw (
   [plant_code],[tenant_code],[company_code],[culture_code],
   [model_code],[model_monthly_average_cost],[material_type],[product_code],[product_description],
-  [product_monthly_cost],[latest_purchase_cost],[currency_code],[costing_period],[costing_date],
-  [is_deleted],[created_at],[ext_field],[remark]
+  [product_monthly_cost],[product_monthly_calculation],[latest_purchase_cost],[currency_code],[costing_period],[costing_date],
+  [is_deleted],[ext_field],[remark],
+  [created_by],[created_at],[updated_by],[updated_at],[deleted_by],[deleted_at]
 )
 SELECT
   LTRIM(RTRIM(R.[plant_code])) AS [plant_code],
@@ -84,14 +96,20 @@ SELECT
   END AS [product_code],
   ISNULL(NULLIF(LTRIM(RTRIM(R.[product_description])), N''), N'') AS [product_description],
   ROUND(COALESCE(TRY_CAST(R.[product_monthly_cost] AS DECIMAL(18,8)), 0), 5) AS [product_monthly_cost],
+  ROUND(COALESCE(TRY_CAST(R.[product_monthly_calculation] AS DECIMAL(18,8)), 0), 5) AS [product_monthly_calculation],
   ROUND(COALESCE(TRY_CAST(R.[latest_purchase_cost] AS DECIMAL(18,8)), 0), 5) AS [latest_purchase_cost],
   ISNULL(NULLIF(LTRIM(RTRIM(R.[currency_code])), N''), N'') AS [currency_code],
   LTRIM(RTRIM(R.[costing_period])) AS [costing_period],
-  TRY_CAST(R.[costing_date] AS DATETIME) AS [costing_date],
+  CAST(CAST(TRY_CAST(R.[costing_date] AS DATETIME) AS DATE) AS DATETIME) AS [costing_date],
   CASE WHEN ISNULL(R.[is_deleted], 0) = 0 THEN 0 ELSE 1 END AS [is_deleted],
-  R.[created_at] AS [created_at],
   ISNULL(R.[ext_field], N'{}') AS [ext_field],
-  ISNULL(R.[remark], N'') AS [remark]
+  ISNULL(R.[remark], N'') AS [remark],
+  COALESCE(TRY_CAST(R.[created_by] AS BIGINT), 0) AS [created_by],
+  R.[created_at] AS [created_at],
+  TRY_CAST(R.[updated_by] AS BIGINT) AS [updated_by],
+  R.[updated_at] AS [updated_at],
+  TRY_CAST(R.[deleted_by] AS BIGINT) AS [deleted_by],
+  R.[deleted_at] AS [deleted_at]
 FROM [{{SourceDatabase}}].[dbo].[takt_logistics_manufacturing_bom_material_cost] R
 WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
       AND LTRIM(RTRIM(ISNULL(R.[tenant_code], N''))) <> N''
@@ -103,9 +121,10 @@ WHERE LTRIM(RTRIM(ISNULL(R.[plant_code], N''))) <> N''
 
 INSERT INTO #st_source (
   [rn],[id],[plant_code],[model_code],[model_monthly_average_cost],[material_type],
-  [product_code],[product_description],[product_monthly_cost],[latest_purchase_cost],
-  [currency_code],[costing_period],[costing_date],[is_deleted],[created_at],
-  [tenant_code],[company_code],[culture_code],[ext_field],[remark],[updated_by]
+  [product_code],[product_description],[product_monthly_cost],[product_monthly_calculation],[latest_purchase_cost],
+  [currency_code],[costing_period],[costing_date],[is_deleted],
+  [tenant_code],[company_code],[culture_code],[ext_field],[remark],
+  [created_by],[created_at],[updated_by],[updated_at],[deleted_by],[deleted_at]
 )
 SELECT
   S.rn,
@@ -117,24 +136,29 @@ SELECT
   S.[product_code],
   S.[product_description],
   S.[product_monthly_cost],
+  S.[product_monthly_calculation],
   S.[latest_purchase_cost],
   S.[currency_code],
   S.[costing_period],
   S.[costing_date],
   S.[is_deleted],
-  S.[created_at],
   S.[tenant_code],
   S.[company_code],
   S.[culture_code],
   S.[ext_field],
   S.[remark],
-  @sync_user_id
+  S.[created_by],
+  S.[created_at],
+  S.[updated_by],
+  S.[updated_at],
+  S.[deleted_by],
+  S.[deleted_at]
 FROM (
   SELECT
     N.*,
     ROW_NUMBER() OVER (
       ORDER BY
-        N.[plant_code], N.[model_code], N.[product_code], N.[costing_period]
+        N.[plant_code], N.[product_code], N.[costing_date]
     ) AS rn
   FROM (
     SELECT
@@ -148,23 +172,28 @@ FROM (
       R.[product_code],
       R.[product_description],
       R.[product_monthly_cost],
+      R.[product_monthly_calculation],
       R.[latest_purchase_cost],
       R.[currency_code],
       R.[costing_period],
       R.[costing_date],
       R.[is_deleted],
-      R.[created_at],
       R.[ext_field],
       R.[remark],
+      R.[created_by],
+      R.[created_at],
+      R.[updated_by],
+      R.[updated_at],
+      R.[deleted_by],
+      R.[deleted_at],
       ROW_NUMBER() OVER (
         PARTITION BY
           R.[plant_code],
-          R.[model_code],
           R.[product_code],
-          R.[costing_period]
+          R.[costing_date]
         ORDER BY
           R.[is_deleted] ASC,
-          R.[costing_date] DESC
+          R.[updated_at] DESC
       ) AS dup_rn
     FROM #st_raw R
   ) N
@@ -189,15 +218,13 @@ DECLARE @sap_key_count INT = (
   FROM (
     SELECT
       R.[plant_code],
-      R.[model_code],
       R.[product_code],
-      R.[costing_period]
+      R.[costing_date]
     FROM #st_raw R
     GROUP BY
       R.[plant_code],
-      R.[model_code],
       R.[product_code],
-      R.[costing_period]
+      R.[costing_date]
   ) K
 );
 DECLARE @dedupe_dropped INT = @raw_count - @sap_key_count;
@@ -213,17 +240,17 @@ END;
 IF EXISTS (
   SELECT 1
   FROM #st_source
-  GROUP BY [plant_code], [model_code], [product_code], [costing_period]
+  GROUP BY [plant_code], [product_code], [costing_date]
   HAVING COUNT(*) > 1
 )
 BEGIN
   DECLARE @dup_key NVARCHAR(800);
   SELECT TOP 1
     @dup_key = CONCAT(
-      [plant_code], N' / ', [model_code], N' / ', [product_code], N' / ',
-      [costing_period], N' x', COUNT(*))
+      [plant_code], N' / ', [product_code], N' / ',
+      CONVERT(NVARCHAR(23), [costing_date], 121), N' x', COUNT(*))
   FROM #st_source
-  GROUP BY [plant_code], [model_code], [product_code], [costing_period]
+  GROUP BY [plant_code], [product_code], [costing_date]
   HAVING COUNT(*) > 1;
   THROW 50001, @dup_key, 1;
 END;
@@ -244,6 +271,8 @@ CREATE TABLE #delta (
   model_monthly_average_cost_new DECIMAL(18,5),
   product_monthly_cost_old DECIMAL(18,5),
   product_monthly_cost_new DECIMAL(18,5),
+  product_monthly_calculation_old DECIMAL(18,5),
+  product_monthly_calculation_new DECIMAL(18,5),
   latest_purchase_cost_old DECIMAL(18,5),
   latest_purchase_cost_new DECIMAL(18,5),
   currency_code_old NVARCHAR(3),
@@ -259,57 +288,92 @@ DECLARE @target_before INT = (
     AND EXISTS (SELECT 1 FROM #st_source S WHERE S.[tenant_code]=T.[tenant_code] AND S.[company_code]=T.[company_code])
 );
 
+-- 目标 costing_date 统一为日（与源装入一致，便于业务键匹配）
+UPDATE T
+SET T.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
+FROM [takt_logistics_manufacturing_bom_material_cost] T
+WHERE EXISTS (
+  SELECT 1 FROM #st_source S
+  WHERE S.[tenant_code] = T.[tenant_code] AND S.[company_code] = T.[company_code]
+)
+AND T.[costing_date] <> CAST(CAST(T.[costing_date] AS DATE) AS DATETIME);
+
+-- 业务键已存在于目标：沿用目标 id（目标 id 本地唯一，与源 id 无关）
+UPDATE S
+SET S.[id] = COALESCE(T.[id], S.[id])
+FROM #st_source S
+LEFT JOIN [takt_logistics_manufacturing_bom_material_cost] T
+  ON T.[tenant_code] = S.[tenant_code]
+ AND T.[company_code] = S.[company_code]
+ AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
+ AND LTRIM(RTRIM(T.[product_code])) = S.[product_code]
+ AND CAST(CAST(T.[costing_date] AS DATE) AS DATETIME) = S.[costing_date];
+
 MERGE INTO [takt_logistics_manufacturing_bom_material_cost] AS T
 USING #st_source AS S
 ON T.[tenant_code] = S.[tenant_code]
 AND T.[company_code] = S.[company_code]
 AND LTRIM(RTRIM(T.[plant_code])) = S.[plant_code]
-AND LTRIM(RTRIM(T.[model_code])) = S.[model_code]
 AND LTRIM(RTRIM(T.[product_code])) = S.[product_code]
-AND LTRIM(RTRIM(T.[costing_period])) = S.[costing_period]
+AND CAST(CAST(T.[costing_date] AS DATE) AS DATETIME) = S.[costing_date]
 WHEN MATCHED AND (
   ISNULL(T.[is_deleted], 0) <> S.[is_deleted]
   OR LTRIM(RTRIM(ISNULL(T.[culture_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[culture_code], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[model_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[model_code], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[material_type], N''))) <> LTRIM(RTRIM(ISNULL(S.[material_type], N'')))
   OR LTRIM(RTRIM(ISNULL(T.[product_description], N''))) <> LTRIM(RTRIM(ISNULL(S.[product_description], N'')))
   OR ROUND(T.[model_monthly_average_cost], 5) <> ROUND(S.[model_monthly_average_cost], 5)
   OR ROUND(T.[product_monthly_cost], 5) <> ROUND(S.[product_monthly_cost], 5)
+  OR ROUND(T.[product_monthly_calculation], 5) <> ROUND(S.[product_monthly_calculation], 5)
   OR ROUND(T.[latest_purchase_cost], 5) <> ROUND(S.[latest_purchase_cost], 5)
   OR LTRIM(RTRIM(ISNULL(T.[currency_code], N''))) <> LTRIM(RTRIM(ISNULL(S.[currency_code], N'')))
+  OR LTRIM(RTRIM(ISNULL(T.[costing_period], N''))) <> LTRIM(RTRIM(ISNULL(S.[costing_period], N'')))
   OR T.[costing_date] <> S.[costing_date]
+  OR ISNULL(T.[ext_field], N'') <> ISNULL(S.[ext_field], N'')
+  OR ISNULL(T.[remark], N'') <> ISNULL(S.[remark], N'')
+
+  OR ISNULL(T.[created_by], 0) <> ISNULL(S.[created_by], 0)
+  OR ISNULL(T.[updated_by], 0) <> ISNULL(S.[updated_by], 0)
+  OR ISNULL(T.[updated_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[updated_at], CAST('1900-01-01' AS DATETIME))
+  OR ISNULL(T.[deleted_by], 0) <> ISNULL(S.[deleted_by], 0)
+  OR ISNULL(T.[deleted_at], CAST('1900-01-01' AS DATETIME)) <> ISNULL(S.[deleted_at], CAST('1900-01-01' AS DATETIME))
 ) THEN
   UPDATE SET
+  T.[model_code]=S.[model_code],
   T.[material_type]=S.[material_type],
   T.[product_description]=S.[product_description],
   T.[model_monthly_average_cost]=S.[model_monthly_average_cost],
   T.[product_monthly_cost]=S.[product_monthly_cost],
+  T.[product_monthly_calculation]=S.[product_monthly_calculation],
   T.[latest_purchase_cost]=S.[latest_purchase_cost],
   T.[currency_code]=S.[currency_code],
+  T.[costing_period]=S.[costing_period],
   T.[costing_date]=S.[costing_date],
   T.[culture_code]=S.[culture_code],
   T.[remark]=S.[remark],
+  T.[created_by]=S.[created_by],
+  T.[created_at]=S.[created_at],
   T.[updated_by]=S.[updated_by],
-  T.[updated_at]=@now,
+  T.[updated_at]=S.[updated_at],
   T.[is_deleted]=S.[is_deleted],
-  T.[deleted_by]=CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-  T.[deleted_at]=CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END,
+  T.[deleted_by]=S.[deleted_by],
+  T.[deleted_at]=S.[deleted_at],
   T.[ext_field]=S.[ext_field]
 WHEN NOT MATCHED THEN
   INSERT (
     [id],[plant_code],[model_code],[model_monthly_average_cost],[material_type],
-    [product_code],[product_description],[product_monthly_cost],[latest_purchase_cost],
+    [product_code],[product_description],[product_monthly_cost],[product_monthly_calculation],[latest_purchase_cost],
     [currency_code],[costing_period],[costing_date],[tenant_code],[company_code],[culture_code],[ext_field],[remark],
     [created_by],[created_at],[updated_by],[updated_at],
     [is_deleted],[deleted_by],[deleted_at]
   )
   VALUES (
     S.[id],S.[plant_code],S.[model_code],S.[model_monthly_average_cost],S.[material_type],
-    S.[product_code],S.[product_description],S.[product_monthly_cost],S.[latest_purchase_cost],
+    S.[product_code],S.[product_description],S.[product_monthly_cost],S.[product_monthly_calculation],S.[latest_purchase_cost],
     S.[currency_code],S.[costing_period],S.[costing_date],S.[tenant_code],S.[company_code],S.[culture_code],S.[ext_field],S.[remark],
-    S.[updated_by],COALESCE(S.[created_at],@now),S.[updated_by],@now,
+    COALESCE(S.[created_by],@sync_user_id),COALESCE(S.[created_at],@now),S.[updated_by],S.[updated_at],
     S.[is_deleted],
-    CASE WHEN S.[is_deleted] = 1 THEN S.[updated_by] ELSE NULL END,
-    CASE WHEN S.[is_deleted] = 1 THEN @now ELSE NULL END
+    S.[deleted_by],S.[deleted_at]
   )
 OUTPUT
   S.rn,
@@ -321,9 +385,10 @@ OUTPUT
   INSERTED.[costing_period],
   INSERTED.[tenant_code],
   INSERTED.[company_code],
-  INSERTED.[updated_by],
+  COALESCE(INSERTED.[updated_by], INSERTED.[created_by], @sync_user_id),
   DELETED.[model_monthly_average_cost], INSERTED.[model_monthly_average_cost],
   DELETED.[product_monthly_cost], INSERTED.[product_monthly_cost],
+  DELETED.[product_monthly_calculation], INSERTED.[product_monthly_calculation],
   DELETED.[latest_purchase_cost], INSERTED.[latest_purchase_cost],
   DELETED.[currency_code], INSERTED.[currency_code],
   DELETED.[costing_date], INSERTED.[costing_date]
@@ -332,6 +397,7 @@ INTO #delta(
   tenant_code, company_code, change_by,
   model_monthly_average_cost_old, model_monthly_average_cost_new,
   product_monthly_cost_old, product_monthly_cost_new,
+  product_monthly_calculation_old, product_monthly_calculation_new,
   latest_purchase_cost_old, latest_purchase_cost_new,
   currency_code_old, currency_code_new,
   costing_date_old, costing_date_new
@@ -341,9 +407,8 @@ IF OBJECT_ID('tempdb..#soft_deleted_rows') IS NOT NULL DROP TABLE #soft_deleted_
 CREATE TABLE #soft_deleted_rows (
   [id] BIGINT,
   [plant_code] NVARCHAR(4),
-  [model_code] NVARCHAR(40),
   [product_code] NVARCHAR(20),
-  [costing_period] NVARCHAR(7)
+  [costing_date] DATETIME
 );
 
 UPDATE T
@@ -356,10 +421,9 @@ SET
 OUTPUT
   INSERTED.[id],
   INSERTED.[plant_code],
-  INSERTED.[model_code],
   INSERTED.[product_code],
-  INSERTED.[costing_period]
-INTO #soft_deleted_rows ([id], [plant_code], [model_code], [product_code], [costing_period])
+  INSERTED.[costing_date]
+INTO #soft_deleted_rows ([id], [plant_code], [product_code], [costing_date])
 FROM [takt_logistics_manufacturing_bom_material_cost] T
 WHERE T.[is_deleted] = 0
   AND EXISTS (SELECT 1 FROM #st_source S0 WHERE S0.[tenant_code]=T.[tenant_code] AND S0.[company_code]=T.[company_code])
@@ -369,9 +433,8 @@ WHERE T.[is_deleted] = 0
     WHERE S.[tenant_code] = T.[tenant_code]
       AND S.[company_code] = T.[company_code]
       AND S.[plant_code] = LTRIM(RTRIM(T.[plant_code]))
-      AND S.[model_code] = LTRIM(RTRIM(T.[model_code]))
       AND S.[product_code] = LTRIM(RTRIM(T.[product_code]))
-      AND S.[costing_period] = LTRIM(RTRIM(T.[costing_period]))
+      AND S.[costing_date] = CAST(CAST(T.[costing_date] AS DATE) AS DATETIME)
   );
 
 DECLARE @delete_count INT = @@ROWCOUNT;
@@ -382,9 +445,8 @@ SELECT @soft_deleted_keys = STRING_AGG(
     CONCAT(
     CAST([id] AS NVARCHAR(30)), N'|',
     ISNULL([plant_code], N''), N'/',
-    ISNULL([model_code], N''), N'/',
     ISNULL([product_code], N''), N'/',
-    ISNULL([costing_period], N'')
+    CONVERT(NVARCHAR(23), [costing_date], 121)
   )
   AS NVARCHAR(MAX)),
   N'; '
@@ -441,6 +503,7 @@ SELECT
     SELECT
       d.model_monthly_average_cost_old AS [model_monthly_average_cost],
       d.product_monthly_cost_old AS [product_monthly_cost],
+      d.product_monthly_calculation_old AS [product_monthly_calculation],
       d.latest_purchase_cost_old AS [latest_purchase_cost],
       d.currency_code_old AS [currency_code]
     WHERE d.oper_type = 'UPDATE'
@@ -450,6 +513,7 @@ SELECT
     SELECT
       d.model_monthly_average_cost_new AS [model_monthly_average_cost],
       d.product_monthly_cost_new AS [product_monthly_cost],
+      d.product_monthly_calculation_new AS [product_monthly_calculation],
       d.latest_purchase_cost_new AS [latest_purchase_cost],
       d.currency_code_new AS [currency_code]
     FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
@@ -460,6 +524,8 @@ SELECT
       CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.model_monthly_average_cost_new AS NVARCHAR), 'null') END AS [model_monthly_average_cost.new],
       CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.product_monthly_cost_old AS NVARCHAR), 'null') END AS [product_monthly_cost.old],
       CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.product_monthly_cost_new AS NVARCHAR), 'null') END AS [product_monthly_cost.new],
+      CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.product_monthly_calculation_old AS NVARCHAR), 'null') END AS [product_monthly_calculation.old],
+      CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.product_monthly_calculation_new AS NVARCHAR), 'null') END AS [product_monthly_calculation.new],
       CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.latest_purchase_cost_old AS NVARCHAR), 'null') END AS [latest_purchase_cost.old],
       CASE WHEN d.oper_type = 'UPDATE' THEN ISNULL(CAST(d.latest_purchase_cost_new AS NVARCHAR), 'null') END AS [latest_purchase_cost.new]
     WHERE d.oper_type = 'UPDATE'
@@ -468,7 +534,7 @@ SELECT
   N'MERGE BomMaterialCost Sync',
   '127.0.0.1','Server','SQLCMD','Server','Windows','Server',
   @now,0,
-  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',d.change_by,@now
+  d.tenant_code,d.company_code,d.plant_code,@culture_code,'{}',N'SYNC',COALESCE(d.change_by,@sync_user_id),@now
 FROM #delta d;
 
 DECLARE @insert_count INT = (SELECT COUNT(*) FROM #delta WHERE oper_type = 'INSERT');

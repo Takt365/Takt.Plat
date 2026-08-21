@@ -33,7 +33,7 @@ public class TaktSalesPriceItem : TaktCompanyEntityBase
     public long SalesPriceId { get; set; }
 
     /// <summary>
-    /// 定价记录号（冗余；与主表 SalesPriceCode 一致，长度 20）
+    /// 定价记录号（冗余字段，便于查询）
     /// </summary>
     [SugarColumn(ColumnName = "sales_price_code", ColumnDescription = "定价记录号", ColumnDataType = "nvarchar", Length = 20, IsNullable = false)]
     public string SalesPriceCode { get; set; } = string.Empty;
@@ -158,13 +158,13 @@ public class TaktSalesPriceItem : TaktCompanyEntityBase
     public int IsObsolete { get; set; } = 0;
 
     /// <summary>
-    /// 数量等级行列表（；主子表关系）
+    /// 数量等级行列表（主子表关系）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceScaleQuantity.SalesPriceItemId))]
     public List<TaktSalesPriceScaleQuantity>? ScaleQuantities { get; set; }
 
     /// <summary>
-    /// 价值等级行列表（；主子表关系）
+    /// 价值等级行列表（主子表关系）
     /// </summary>
     [Navigate(NavigateType.OneToMany, nameof(TaktSalesPriceScaleValue.SalesPriceItemId))]
     public List<TaktSalesPriceScaleValue>? ScaleValues { get; set; }

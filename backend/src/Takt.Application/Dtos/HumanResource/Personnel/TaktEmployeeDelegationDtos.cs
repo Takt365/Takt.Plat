@@ -22,7 +22,7 @@ namespace Takt.Application.Dtos.HumanResource.Personnel;
 // ========================================
 
 /// <summary>
-/// 员工代理关系实体 独立记录所有代理场景（部门代理、岗位代理、审批代理等） 参考 SAP HR 设计： - Infotype 0001 (组织分配) 中的代理字段 - T77UA 代理表 - SWAC 工作流代理模块
+/// 员工代理关系实体：独立记录部门/岗位/审批等代理场景
 /// 对应前端 TaktEmployeeDelegationDto
 /// 继承 TaktCompanyDtoBase
 /// </summary>

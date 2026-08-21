@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Manufacturing.EngineeringChange
 // 文件名称：TaktEcDetailI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktEcDetail 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -163,13 +163,13 @@ public class TaktEcDetailI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.ecdetail.ecbomsubitem", "zh-HK", "上阶物料_hk", "上阶物料（Ec_bomsubitem）"),
 
             // entity.ecdetail.ecbomsubitemtext
-            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "en-US", "上阶物料描述_us", "上阶物料描述（Ec_bomsubitemtext）"),
+            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "en-US", "上阶物料描述_us", "上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.ecdetail.ecbomsubitemtext
-            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "ja-JP", "上阶物料描述_jp", "上阶物料描述（Ec_bomsubitemtext）"),
+            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "ja-JP", "上阶物料描述_jp", "上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.ecdetail.ecbomsubitemtext
-            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "zh-CN", "上阶物料描述", "上阶物料描述（Ec_bomsubitemtext）"),
+            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "zh-CN", "上阶物料描述", "上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.ecdetail.ecbomsubitemtext
-            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "zh-HK", "上阶物料描述_hk", "上阶物料描述（Ec_bomsubitemtext）"),
+            new TranslationSeedItem("entity.ecdetail.ecbomsubitemtext", "zh-HK", "上阶物料描述_hk", "上阶物料描述（冗余：按 EcBomSubItem 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.ecdetail.isendofline
             new TranslationSeedItem("entity.ecdetail.isendofline", "en-US", "完成品EOL_us", "完成品EOL（End of Line，0=否 1=是）"),

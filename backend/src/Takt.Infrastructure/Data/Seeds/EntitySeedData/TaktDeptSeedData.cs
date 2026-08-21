@@ -495,12 +495,19 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             dept.DeptCode = deptCode;
             dept.DeptShortName = deptShortName;
             dept.DeptName = deptName;
-            dept.CostCenterCode = "";
+            dept.IsoCode = string.Empty;
+            dept.CostCenterCode = string.Empty;
             dept.CostCategory = costCategory;
             dept.ParentId = parentId;
             dept.Level = parentId > 0 ? 0 : 1; // 稍后根据父级计算
             dept.IsLeaf = 1; // 默认为叶子，后续创建子部门时会更新
-            dept.DeptPath = "";
+            // 种子无用户主档映射：HeadUserId=0，冗余名同步为空（勿写描述里的責任者文案）
+            dept.HeadUserId = 0;
+            dept.HeadUserName = string.Empty;
+            dept.Phone = string.Empty;
+            dept.Email = string.Empty;
+            dept.Location = string.Empty;
+            dept.DeptPath = string.Empty;
             dept.DeptStatus = 1;
             dept.SortOrder = sortOrder;
             dept.IsBuiltIn = 1;
@@ -555,6 +562,13 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             var oldRemark = dept.Remark;
             var oldParentId = dept.ParentId;
             var oldDeptStatus = dept.DeptStatus;
+            var oldIsoCode = dept.IsoCode ?? string.Empty;
+            var oldCostCenterCode = dept.CostCenterCode ?? string.Empty;
+            var oldHeadUserId = dept.HeadUserId;
+            var oldHeadUserName = dept.HeadUserName ?? string.Empty;
+            var oldPhone = dept.Phone ?? string.Empty;
+            var oldEmail = dept.Email ?? string.Empty;
+            var oldLocation = dept.Location ?? string.Empty;
             dept.DeptName = deptName;
             dept.DeptShortName = deptShortName;
             dept.CostCategory = costCategory;
@@ -566,6 +580,32 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
             dept.Remark = remark;
             dept.ParentId = parentId;
             dept.DeptStatus = 1;
+            // 新增列幂等：空则补默认；已有 IsoCode/负责人由业务维护时不覆盖非空 IsoCode
+            if (string.IsNullOrEmpty(dept.IsoCode))
+            {
+                dept.IsoCode = string.Empty;
+            }
+            if (string.IsNullOrEmpty(dept.CostCenterCode))
+            {
+                dept.CostCenterCode = string.Empty;
+            }
+            if (dept.HeadUserId <= 0)
+            {
+                dept.HeadUserId = 0;
+                dept.HeadUserName = string.Empty;
+            }
+            if (string.IsNullOrEmpty(dept.Phone))
+            {
+                dept.Phone = string.Empty;
+            }
+            if (string.IsNullOrEmpty(dept.Email))
+            {
+                dept.Email = string.Empty;
+            }
+            if (string.IsNullOrEmpty(dept.Location))
+            {
+                dept.Location = string.Empty;
+            }
             bool needUpdate =
                 oldDeptName != dept.DeptName ||
                 oldDeptShortName != dept.DeptShortName ||
@@ -576,7 +616,14 @@ public class TaktDeptSeedData : ITaktSeedDataCoordinator
                 oldCultureCode != dept.CultureCode ||
                 oldDeptDescription != dept.DeptDescription ||
                 oldRemark != dept.Remark ||
-                oldDeptStatus != dept.DeptStatus;
+                oldDeptStatus != dept.DeptStatus ||
+                oldIsoCode != (dept.IsoCode ?? string.Empty) ||
+                oldCostCenterCode != (dept.CostCenterCode ?? string.Empty) ||
+                oldHeadUserId != dept.HeadUserId ||
+                oldHeadUserName != (dept.HeadUserName ?? string.Empty) ||
+                oldPhone != (dept.Phone ?? string.Empty) ||
+                oldEmail != (dept.Email ?? string.Empty) ||
+                oldLocation != (dept.Location ?? string.Empty);
             // 重新计算 Level 和 DeptPath（如果 ParentId 发生变化或 Path 为空）
             if (dept.ParentId != oldParentId || string.IsNullOrEmpty(dept.DeptPath))
             {

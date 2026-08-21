@@ -240,6 +240,14 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
     public async Task<TaktModelDestinationDto> CreateModelDestinationAsync(TaktModelDestinationCreateDto dto)
     {
         var entity = dto.Adapt<TaktModelDestination>();
+        var isUnique = await _uniqueValidator.IsUniqueAsync(
+            _modelDestinationRepository,
+            x => x.MaterialCode == entity.MaterialCode
+                && x.ModelCode == entity.ModelCode);
+        if (!isUnique)
+        {
+            throw new TaktBusinessException("型号目的地的MaterialCode、ModelCode已存在");
+        }
         if (entity.SortOrder <= 0)
         {
             var maxSort = await _modelDestinationRepository.GetMaxIntAsync(
@@ -265,6 +273,15 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
             throw new TaktBusinessException("型号目的地不存在");
         }
         dto.Adapt(entity);
+        var isUnique = await _uniqueValidator.IsUniqueAsync(
+            _modelDestinationRepository,
+            x => x.MaterialCode == entity.MaterialCode
+                && x.ModelCode == entity.ModelCode,
+            id);
+        if (!isUnique)
+        {
+            throw new TaktBusinessException("型号目的地的MaterialCode、ModelCode已存在");
+        }
         await _modelDestinationRepository.UpdateAsync(entity);
         return await GetModelDestinationByIdAsync(id) ?? throw new TaktBusinessException("型号目的地不存在");
     }
@@ -351,11 +368,25 @@ public class TaktModelDestinationService : TaktServiceBase, ITaktModelDestinatio
         var importSortMax = await _modelDestinationRepository.GetMaxIntAsync(
             x => x.TenantCode == CurrentTenantCode,
             x => x.SortOrder);
+        var importSeenKeys = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < rows.Count; i++)
         {
             try
             {
                 var entity = rows[i].Adapt<TaktModelDestination>();
+                var importKey = $"{entity.MaterialCode}|{entity.ModelCode}";
+                if (!importSeenKeys.Add(importKey))
+                {
+                    throw new TaktBusinessException("与Excel中其他行重复（MaterialCode、ModelCode）");
+                }
+                var isUnique = await _uniqueValidator.IsUniqueAsync(
+                    _modelDestinationRepository,
+                    x => x.MaterialCode == entity.MaterialCode
+                        && x.ModelCode == entity.ModelCode);
+                if (!isUnique)
+                {
+                    throw new TaktBusinessException("型号目的地的MaterialCode、ModelCode已存在");
+                }
                 if (entity.SortOrder <= 0)
                 {
                     entity.SortOrder = _sortOrderGenerator.GenerateNext(importSortMax);

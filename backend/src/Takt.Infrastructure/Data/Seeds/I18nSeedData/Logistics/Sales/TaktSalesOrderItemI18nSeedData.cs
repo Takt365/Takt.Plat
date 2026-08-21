@@ -2,7 +2,7 @@
 // 项目名称：节拍工厂·Takt Plat
 // 命名空间：Takt.Infrastructure.Data.Seeds.I18nSeedData.Logistics.Sales
 // 文件名称：TaktSalesOrderItemI18nSeedData.cs
-// 创建时间：2026-08-18
+// 创建时间：2026-08-21
 // 创建人：Takt365(Auto Generated)
 // 功能描述：TaktSalesOrderItem 实体字段国际化种子（无对应 frontend locales；TranslationText 取自 ColumnDescription，ContextNote 取自属性 XML summary）
 // 
@@ -127,13 +127,13 @@ public class TaktSalesOrderItemI18nSeedData : ITaktSeedDataCoordinator
             new TranslationSeedItem("entity.salesorderitem.materialcode", "zh-HK", "物料编码_hk", "物料编码（选项 TaktMaterialPlants/options；DictValue=MaterialCode，ExtValue=PlantCode）"),
 
             // entity.salesorderitem.materialdescription
-            new TranslationSeedItem("entity.salesorderitem.materialdescription", "en-US", "物料描述_us", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesorderitem.materialdescription", "en-US", "物料描述_us", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesorderitem.materialdescription
-            new TranslationSeedItem("entity.salesorderitem.materialdescription", "ja-JP", "物料描述_jp", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesorderitem.materialdescription", "ja-JP", "物料描述_jp", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesorderitem.materialdescription
-            new TranslationSeedItem("entity.salesorderitem.materialdescription", "zh-CN", "物料描述", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesorderitem.materialdescription", "zh-CN", "物料描述", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
             // entity.salesorderitem.materialdescription
-            new TranslationSeedItem("entity.salesorderitem.materialdescription", "zh-HK", "物料描述_hk", "物料描述（回填：随物料）"),
+            new TranslationSeedItem("entity.salesorderitem.materialdescription", "zh-HK", "物料描述_hk", "物料描述（冗余：按 MaterialCode 取 TaktMaterialPlant.MaterialDescription联动）"),
 
             // entity.salesorderitem.materialspecification
             new TranslationSeedItem("entity.salesorderitem.materialspecification", "en-US", "物料规格_us", "物料规格（回填：随物料）"),

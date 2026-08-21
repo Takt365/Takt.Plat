@@ -502,7 +502,7 @@ public class TaktMenuLevel3SeedData
             insertCount += insertLM2;
             updateCount += updateLM2;
 
-            // TaktMaterialDescription（SAP MAKT）；Permission 与控制器/前端一致：material:description
+ // TaktMaterialDescription；Permission 与控制器/前端一致：material:description
             var (insertLM2d, updateLM2d) = await CreateOrUpdateMenuAsync(menuRepository, seedContext, tenantCode, "LOGISTICS_MATERIALS_MATERIAL_DESCRIPTION", menu =>
             {
                 menu.MenuName = "物料描述";

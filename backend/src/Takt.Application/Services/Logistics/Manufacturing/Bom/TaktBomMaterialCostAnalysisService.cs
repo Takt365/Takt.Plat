@@ -89,7 +89,6 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     public async Task<List<TaktSelectOption>> GetBomMaterialCostAnalysisPlantOptionsAsync()
     {
         EnsureThreeLayerContext();
-        // 仅当前公司关联工厂：TaktCompany.RelatedPlant ∩ 本表 PlantCode（非 TaktPlants 全量）
         var companies = await _companyRepository.GetListAsync(
             x => x.TenantCode == CurrentTenantCode
                 && x.CompanyCode == CurrentCompanyCode);
@@ -331,7 +330,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
             queryDto.CostingDateEnd,
             includeExtraPeriodsFromData: false);
         var displayPeriodSet = new HashSet<string>(periodOrder, StringComparer.Ordinal);
-        // 目录键：归一化产品码（10/18 位 SAP 互认），避免同一产品拆成多行
+ // 目录键：归一化产品码（10/18 位 互认），避免同一产品拆成多行
         var productGroups = rows
             .Where(r => !string.IsNullOrWhiteSpace(r.ProductCode))
             .GroupBy(r => NormalizeProductCatalogKey(r.ProductCode!), StringComparer.OrdinalIgnoreCase)
@@ -472,8 +471,14 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         var baseSnapshotRaw = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, basePeriod);
         var compareSnapshotRaw = TaktBomMaterialCostItemLineCostHelper.ResolvePeriodSnapshot(rows, plantCode, productCode, comparePeriod);
         // 全量快照上按参与资格 Filter（生产相关=X、PCB SECT 标识为空、采购类型=F），保证差异明细与合计口径一致
-        var baseSnapshot = TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(baseSnapshotRaw).ToList();
-        var compareSnapshot = TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(compareSnapshotRaw).ToList();
+        var baseSnapshot = TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(baseSnapshotRaw))
+            .ToList();
+        var compareSnapshot = TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(compareSnapshotRaw))
+            .ToList();
         var productDescription = compareSnapshotRaw.FirstOrDefault()?.ProductDescription
             ?? baseSnapshotRaw.FirstOrDefault()?.ProductDescription
             ?? string.Empty;
@@ -839,7 +844,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
     }
 
     /// <summary>
-    /// 转置产品目录分组键（SAP 18/10 位数字码归一化后再分组，避免同一产品拆行）
+ /// 转置产品目录分组键
     /// </summary>
     /// <param name="productCode">产品编码</param>
     /// <returns>分组键</returns>
@@ -1479,7 +1484,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         DateTime? costingExclusiveEnd = costingMonthEnd.HasValue
             ? costingMonthEnd.Value.AddMonths(1)
             : null;
-        // 10/18 位 SAP 码互认：展开查询变体后再 Contains，避免明细表空结果
+ // 10/18 位 码互认：展开查询变体后再 Contains，避免明细表空结果
         var lookupCodes = productCodes
             .SelectMany(TaktBomMaterialCostItemLineCostHelper.ExpandProductCodeLookupVariants)
             .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -1519,9 +1524,12 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
                 throw new TaktBusinessException(ex.Message);
             }
             var part = await _bomMaterialCostItemRepository.GetListAsync(exp.ToExpression(), yearTable);
-            allItems.AddRange(TaktBomMaterialCostItemLineCostHelper.FilterBomMaterialCostItemRows(part));
+            allItems.AddRange(part);
         }
-        return allItems;
+        return TaktBomMaterialCostItemLineCostHelper
+            .FilterBomMaterialCostItemRows(
+                TaktBomMaterialCostItemLineCostHelper.ExcludePcbSectHierarchyRows(allItems))
+            .ToList();
     }
 
 
@@ -1602,7 +1610,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         TaktYearShardTableHelper.BuildYearTableName(BomItemYearShardBaseTable, year);
 
     /// <summary>
-    /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 SAP 同步）
+ /// 解析 BOM 成本明细物理表：年分表存在则用之，否则 null（回退实体基表，兼容 同步）
     /// </summary>
     /// <param name="year">自然年</param>
     /// <returns>年分表名；不存在时为 null</returns>
@@ -1655,7 +1663,7 @@ public class TaktBomMaterialCostAnalysisService : TaktServiceBase, ITaktBomMater
         }
         if (yearsNeedBase.Count == 0)
         {
-            // 年分表与基表合并：SAP 同步常写基表，年分表可能仅部分数据；按 Id 去重
+ // 年分表与基表合并： 同步常写基表，年分表可能仅部分数据；按 Id 去重
             if (!maxRows.HasValue || result.Count < maxRows.Value)
             {
                 List<TaktBomMaterialCostItem> baseFallback;

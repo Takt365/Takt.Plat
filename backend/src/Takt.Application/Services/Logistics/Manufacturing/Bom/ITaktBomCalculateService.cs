@@ -27,14 +27,14 @@ public interface ITaktBomCalculateService
     Task<List<TaktSelectOption>> GetBomCalculatePlantOptionsAsync();
 
     /// <summary>
-    /// 计算成本：明细按工厂+产品+核算月合计写入主表（按查询所选物料类型，空=全部类型），再刷新机种月均
+    /// 计算成本：明细按工厂+产品+核算月合计写入主表（有则更新；明细有而主表无则回填新建；按查询所选物料类型，空=全部类型），再刷新机种月均
     /// </summary>
     /// <param name="queryDto">工厂/物料类型/机种可选；须单个核算月</param>
     /// <returns>合计统计</returns>
     Task<TaktBomCalculateCostResultDto> SumBomCalculateCostAsync(TaktBomCalculateQueryDto queryDto);
 
     /// <summary>
-    /// 重算成本：将主表旧产品月成本追加到 ExtField JSON（核算日 yyyy/M/d → 成本）后按明细重写（按查询所选物料类型，空=全部类型），再刷新机种月均
+    /// 重算成本：将主表旧产品月成本追加到 ExtField JSON（核算日 yyyy/M/d → 成本）后按明细重写（有则更新；明细有而主表无则回填新建；按查询所选物料类型，空=全部类型），再刷新机种月均
     /// </summary>
     /// <param name="queryDto">工厂/物料类型/机种可选；须单个核算月</param>
     /// <returns>重算统计</returns>
@@ -65,21 +65,21 @@ public interface ITaktBomCalculateService
         TaktBomCalculateQueryDto queryDto);
 
     /// <summary>
-    /// Quartz 计算成本：判定日所在自然月（不限定物料类型）
+    /// Quartz 计算成本：判定日所在自然月（按明细表 PlantCode 分组处理；不限定物料类型）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
     /// <returns>合计统计</returns>
     Task<TaktBomCalculateCostResultDto?> RunScheduledBomCalculateSumAsync(DateTime? asOfDate = null);
 
     /// <summary>
-    /// Quartz 重算成本：判定日所在自然月（不限定物料类型；先归档旧成本再重写）
+    /// Quartz 重算成本：判定日所在自然月（按明细表 PlantCode 分组处理）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
     /// <returns>重算统计</returns>
     Task<TaktBomCalculateCostResultDto?> RunScheduledBomCalculateRecalculateAsync(DateTime? asOfDate = null);
 
     /// <summary>
-    /// Quartz 计算平均成本：判定日所在自然月（不限定物料类型）
+    /// Quartz 计算平均成本：判定日所在自然月（按主表 PlantCode 去重工厂）
     /// </summary>
     /// <param name="asOfDate">判定日；默认今天</param>
     /// <returns>各工厂汇总；当月无主表行时返回 null</returns>

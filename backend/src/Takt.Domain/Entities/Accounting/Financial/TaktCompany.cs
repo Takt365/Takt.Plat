@@ -18,7 +18,6 @@ namespace Takt.Domain.Entities.Accounting.Financial;
 /// <summary>
 /// 公司实体
 /// 代表租户下的独立公司（第二层数据隔离业务主档）
-/// 参照 SAP Company Code (BUKRS) 设计
 /// 组合 1：有关联工厂、有语言（TaktTenantEntityBase）
 /// </summary>
 [SugarTable("takt_accounting_financial_company", "公司表")]

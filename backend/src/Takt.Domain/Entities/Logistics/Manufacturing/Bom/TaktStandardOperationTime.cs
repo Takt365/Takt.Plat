@@ -5,7 +5,7 @@
 // 文件名称：TaktStandardOperationTime.cs
 // 创建时间：2025-02-02
 // 创建人：Takt365(Cursor AI)
-// 功能描述：标准工序时间实体（基于 SAP PP 标准工时）
+// 功能描述：标准工序时间实体
 //
 // 版权信息：Copyright (c) 2025 Takt  All rights reserved.
 // 免责声明：此软件使用 MIT License，作者不承担任何使用风险。

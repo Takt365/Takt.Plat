@@ -38,6 +38,7 @@ public sealed class TaktQuartzJobExecutor
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IEnumerable<ITaktQuartzJobHandler> _handlers;
     private readonly ITaktQuartzJobSignalRPushService _quartzJobSignalRPushService;
+    private readonly TaktSqlSugarContext _sqlSugarContext;
 
     /// <summary>
     /// 构造函数
@@ -46,20 +47,24 @@ public sealed class TaktQuartzJobExecutor
     /// <param name="httpClientFactory">HTTP 客户端工厂</param>
     /// <param name="handlers">程序集任务处理器集合</param>
     /// <param name="quartzJobSignalRPushService">Quartz Job 执行 SignalR 推送</param>
+    /// <param name="sqlSugarContext">Scoped SqlSugar（Assembly 按 targetDatabase 切库）</param>
     public TaktQuartzJobExecutor(
         IConfiguration configuration,
         IHttpClientFactory httpClientFactory,
         IEnumerable<ITaktQuartzJobHandler> handlers,
-        ITaktQuartzJobSignalRPushService quartzJobSignalRPushService)
+        ITaktQuartzJobSignalRPushService quartzJobSignalRPushService,
+        TaktSqlSugarContext sqlSugarContext)
     {
         ArgumentNullException.ThrowIfNull(configuration);
         ArgumentNullException.ThrowIfNull(httpClientFactory);
         ArgumentNullException.ThrowIfNull(handlers);
         ArgumentNullException.ThrowIfNull(quartzJobSignalRPushService);
+        ArgumentNullException.ThrowIfNull(sqlSugarContext);
         _configuration = configuration;
         _httpClientFactory = httpClientFactory;
         _handlers = handlers;
         _quartzJobSignalRPushService = quartzJobSignalRPushService;
+        _sqlSugarContext = sqlSugarContext;
     }
 
     /// <summary>
@@ -210,35 +215,64 @@ public sealed class TaktQuartzJobExecutor
     /// <param name="userName">触发用户</param>
     /// <param name="cancellationToken">取消令牌</param>
     /// <returns>执行摘要</returns>
+    /// <summary>
+    /// 执行程序集任务；若 ExecuteParams 含 targetDatabase，则本作用域仓储查询均落该库
+    /// </summary>
+    /// <param name="task">定时任务</param>
+    /// <param name="executeParams">执行参数</param>
+    /// <param name="userName">触发用户</param>
+    /// <param name="cancellationToken">取消令牌</param>
+    /// <returns>执行摘要</returns>
     private async Task<string> ExecuteAssemblyAsync(
         TaktQuartzTask task,
         string? executeParams,
         string? userName,
         CancellationToken cancellationToken)
     {
-        EnsureAssemblyTargetDatabaseMatchesTask(task, executeParams);
-        var handler = _handlers.FirstOrDefault(x =>
-            string.Equals(x.HandlerKey, task.ClassName, StringComparison.OrdinalIgnoreCase));
-        if (handler == null)
+        IDisposable? targetDbScope = null;
+        try
         {
-            throw new InvalidOperationException($"未找到 Quartz 任务处理器：{task.ClassName}");
+            var (_, targetDatabase) = TaktQuartzSyncExecuteParamsHelper.Parse(executeParams);
+            if (!string.IsNullOrWhiteSpace(targetDatabase))
+            {
+                TaktQuartzSyncExecuteParamsHelper.ValidateDatabaseName(targetDatabase);
+                var (resolvedTenant, connectionString) = ResolveTenantConnectionByDatabaseName(targetDatabase);
+                targetDbScope = _sqlSugarContext.UseDatabaseConnection(resolvedTenant, connectionString);
+                TaktQuartzJobExecutionLogger.LogProgress(
+                    $"Assembly 已切换目标库：TargetDb={targetDatabase}，ConfigTenant={resolvedTenant}",
+                    task.Id);
+            }
+            var handler = _handlers.FirstOrDefault(x =>
+                string.Equals(x.HandlerKey, task.ClassName, StringComparison.OrdinalIgnoreCase));
+            if (handler == null)
+            {
+                throw new InvalidOperationException($"未找到 Quartz 任务处理器：{task.ClassName}");
+            }
+            TaktQuartzSchedulingHelper.EnsureAssemblyNameMatchesHandler(task, handler);
+            var jobContext = new TaktQuartzJobContext
+            {
+                Task = task,
+                ExecuteParams = executeParams,
+                UserName = userName,
+            };
+            await handler.ExecuteAsync(jobContext, cancellationToken);
+            var assemblyHint = string.IsNullOrWhiteSpace(task.AssemblyName)
+                ? handler.GetType().Assembly.GetName().Name
+                : task.AssemblyName;
+            var message = string.IsNullOrWhiteSpace(jobContext.ExecuteMessage)
+                ? $"程序集任务已执行：{assemblyHint}/{handler.HandlerKey}"
+                : jobContext.ExecuteMessage.Trim();
+            if (!string.IsNullOrWhiteSpace(targetDatabase))
+            {
+                message = $"{message}，TargetDb={targetDatabase.Trim()}";
+            }
+            TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
+            return message;
         }
-        TaktQuartzSchedulingHelper.EnsureAssemblyNameMatchesHandler(task, handler);
-        var jobContext = new TaktQuartzJobContext
+        finally
         {
-            Task = task,
-            ExecuteParams = executeParams,
-            UserName = userName,
-        };
-        await handler.ExecuteAsync(jobContext, cancellationToken);
-        var assemblyHint = string.IsNullOrWhiteSpace(task.AssemblyName)
-            ? handler.GetType().Assembly.GetName().Name
-            : task.AssemblyName;
-        var message = string.IsNullOrWhiteSpace(jobContext.ExecuteMessage)
-            ? $"程序集任务已执行：{assemblyHint}/{handler.HandlerKey}"
-            : jobContext.ExecuteMessage.Trim();
-        TaktQuartzJobExecutionLogger.LogProgress(message, task.Id);
-        return message;
+            targetDbScope?.Dispose();
+        }
     }
 
     /// <summary>
@@ -413,26 +447,6 @@ public sealed class TaktQuartzJobExecutor
         return configured.Value < 0
             ? TaktQuartzConstants.DefaultSqlCommandTimeoutSeconds
             : configured.Value;
-    }
-
-    /// <summary>
-    /// 程序集任务若 ExecuteParams 含 targetDatabase，须与任务租户 ConnectionStrings:Tenant_* 的 Database 一致
-    /// </summary>
-    /// <param name="task">定时任务</param>
-    /// <param name="executeParams">有效执行参数</param>
-    private void EnsureAssemblyTargetDatabaseMatchesTask(TaktQuartzTask task, string? executeParams)
-    {
-        var (_, targetDatabase) = TaktQuartzSyncExecuteParamsHelper.Parse(executeParams);
-        if (string.IsNullOrWhiteSpace(targetDatabase))
-        {
-            return;
-        }
-        var (resolvedTenant, _) = ResolveTenantConnectionByDatabaseName(targetDatabase);
-        if (!string.Equals(resolvedTenant, task.TenantCode, StringComparison.OrdinalIgnoreCase))
-        {
-            throw new InvalidOperationException(
-                $"ExecuteParams.targetDatabase={targetDatabase} 对应租户 {resolvedTenant}，与任务租户 {task.TenantCode} 不一致");
-        }
     }
 
     /// <summary>

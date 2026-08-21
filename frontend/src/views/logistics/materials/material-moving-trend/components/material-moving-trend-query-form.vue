@@ -2,7 +2,7 @@
 <!-- 项目名称：节拍数字工厂 · Takt Plat (TDF) -->
 <!-- 命名空间：@/views/logistics/materials/material-moving-trend/components -->
 <!-- 文件名称：material-moving-trend-query-form.vue -->
-<!-- 功能描述：物料移动价格推移查询栏（工厂/期间/物料类型必选/评估/物料） -->
+<!-- 功能描述：物料/机种移动价格推移查询栏（工厂/期间/评估；机种推移可选物料类型） -->
 <!-- 版权信息：Copyright (c) 2026 Takt  All rights reserved. -->
 <!-- 免责声明：此软件使用 MIT License，作者不承担任何使用风险。 -->
 <!-- ======================================== -->
@@ -31,6 +31,7 @@
           t(`${localePrefix}.periodRange`)]"
       />
       <TaktSelect
+        v-if="showMaterialType"
         v-model:value="materialType"
         :options="materialTypeOptions"
         class="material-moving-trend-query-bar__control material-moving-trend-query-bar__control--type"
@@ -88,7 +89,7 @@
 
 <script setup lang="ts">
 /**
- * 物料移动价格推移查询栏：工厂 → 物料类型(必选，默认 FERT) → 评估类别 → 物料
+ * 物料移动价格推移查询栏：工厂 → 评估类别 → 物料；机种推移另显物料类型
  */
 import { RiSearchLine, RiRefreshLine } from '@remixicon/vue'
 import { useI18n } from 'vue-i18n'
@@ -108,16 +109,23 @@ import {
 const plantCode = defineModel<string | undefined>('plantCode')
 /** 年月区间 */
 const periodRange = defineModel<[string, string] | null>('periodRange')
-/** 产品物料类型（必选，默认 FERT） */
+/** 产品物料类型（仅机种推移） */
 const materialType = defineModel<string | undefined>('materialType')
-/** 评估类别（第 2 级，必选） */
+/** 评估类别（必选） */
 const valuation = defineModel<string | undefined>('valuation')
-/** 物料编码（第 3 级，可空） */
+/** 物料编码（可空） */
 const materialCode = defineModel<string | undefined>('materialCode')
-const props = defineProps<{
-  /** 查询 loading */
-  loading?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    /** 查询 loading */
+    loading?: boolean
+    /** 是否显示物料类型（机种推移 true；物料价格推移 false） */
+    showMaterialType?: boolean
+  }>(),
+  {
+    showMaterialType: false,
+  },
+)
 const emit = defineEmits<{
   search: []
   reset: []
@@ -136,7 +144,7 @@ const materialTypeOptionsLoading = ref(false)
 const materialTypeOptionsPlant = ref('')
 let materialTypeLoadToken = 0
 
-/** 第 2 级：工厂 → 评估类别 */
+/** 工厂 → 评估类别 */
 const valuationApiParams = computed(() => {
   const plant = plantCode.value?.trim()
   if (!plant) {
@@ -145,7 +153,7 @@ const valuationApiParams = computed(() => {
   return { plantCode: plant }
 })
 
-/** 第 3 级：工厂 + 评估类别 → 物料（可选） */
+/** 工厂 + 评估类别 → 物料（可选） */
 const materialApiParams = computed(() => {
   const plant = plantCode.value?.trim()
   const val = valuation.value?.trim()
@@ -178,17 +186,26 @@ async function loadMaterialTypes(plant: string): Promise<string | undefined> {
   }
 }
 
-/** 工厂变更：清空下游并重拉类型 */
+/** 清空物料类型选项缓存 */
+function clearMaterialTypeOptions() {
+  materialTypeLoadToken += 1
+  materialType.value = undefined
+  materialTypeOptions.value = []
+  materialTypeOptionsPlant.value = ''
+  materialTypeOptionsLoading.value = false
+}
+
+/** 工厂变更：清空下游；机种推移时重拉类型 */
 async function handlePlantChange() {
   valuation.value = undefined
   materialCode.value = undefined
+  if (!props.showMaterialType) {
+    materialType.value = undefined
+    return
+  }
   const plant = plantCode.value?.trim()
   if (!plant) {
-    materialTypeLoadToken += 1
-    materialType.value = undefined
-    materialTypeOptions.value = []
-    materialTypeOptionsPlant.value = ''
-    materialTypeOptionsLoading.value = false
+    clearMaterialTypeOptions()
     return
   }
   materialType.value = await loadMaterialTypes(plant)
@@ -196,6 +213,9 @@ async function handlePlantChange() {
 
 /** 物料类型不可空：清空时回填默认 */
 function handleMaterialTypeChange() {
+  if (!props.showMaterialType) {
+    return
+  }
   if (!materialType.value?.trim()) {
     const def = pickDefaultBomMaterialType(materialTypeOptions.value)
     if (def) {
@@ -215,6 +235,9 @@ watch(
 watch(
   () => plantCode.value?.trim() || '',
   async (plant) => {
+    if (!props.showMaterialType) {
+      return
+    }
     if (!plant || plant === materialTypeOptionsPlant.value) {
       return
     }

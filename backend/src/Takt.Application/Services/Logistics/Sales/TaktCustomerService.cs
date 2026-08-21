@@ -125,11 +125,10 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.CustomerCode == entity.CustomerCode);
+            x => x.CustomerCode == entity.CustomerCode);
         if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
         {
-            throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
+            throw new TaktBusinessException("客户信息的CustomerCode已存在");
         }
         if (entity.SortOrder <= 0)
         {
@@ -159,12 +158,11 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
         entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
         var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
             _customerRepository,
-            x => x.PlantCode == entity.PlantCode
-                && x.CustomerCode == entity.CustomerCode,
+            x => x.CustomerCode == entity.CustomerCode,
             id);
         if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
         {
-            throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
+            throw new TaktBusinessException("客户信息的CustomerCode已存在");
         }
         await _customerRepository.UpdateAsync(entity);
         return await GetCustomerByIdAsync(id) ?? throw new TaktBusinessException("客户信息不存在");
@@ -276,18 +274,17 @@ public class TaktCustomerService : TaktServiceBase, ITaktCustomerService
             {
                 var entity = rows[i].Adapt<TaktCustomer>();
                 entity.TaxRate = TaktTaxCodeHelper.ApplyTaxRateFromTaxCode(entity.TaxCode, entity.TaxRate);
-                var importKey = $"{entity.PlantCode}|{entity.CustomerCode}";
+                var importKey = $"{entity.CustomerCode}";
                 if (!importSeenKeys.Add(importKey))
                 {
-                    throw new TaktBusinessException("与Excel中其他行重复（PlantCode、CustomerCode）");
+                    throw new TaktBusinessException("与Excel中其他行重复（CustomerCode）");
                 }
                 var isUnique_ix_takt_logistics_sales_customer_customer_code_unique = await _uniqueValidator.IsUniqueAsync(
                     _customerRepository,
-                    x => x.PlantCode == entity.PlantCode
-                        && x.CustomerCode == entity.CustomerCode);
+                    x => x.CustomerCode == entity.CustomerCode);
                 if (!isUnique_ix_takt_logistics_sales_customer_customer_code_unique)
                 {
-                    throw new TaktBusinessException("客户信息的PlantCode、CustomerCode已存在");
+                    throw new TaktBusinessException("客户信息的CustomerCode已存在");
                 }
                 if (entity.SortOrder <= 0)
                 {

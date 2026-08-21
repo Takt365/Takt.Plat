@@ -23,11 +23,12 @@ namespace Takt.Domain.Entities.Logistics.Sales;
 
 /// <summary>
 /// Takt客户信息实体
+/// <para>业务唯一键：TenantCode+CompanyCode+CustomerCode（PlantCode 为业务字段，不参与唯一）。</para>
 /// </summary>
 [SugarTable("takt_logistics_sales_customer", "客户信息表")]
 [SugarIndex("ix_customer_tenant", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, false)]
 [SugarIndex("ix_customer_is_deleted", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(IsDeleted), OrderByType.Asc, false)]
-[SugarIndex("ix_takt_logistics_sales_customer_customer_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, true)]
+[SugarIndex("ix_takt_logistics_sales_customer_customer_code_unique", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerCode), OrderByType.Asc, true)]
 [SugarIndex("ix_takt_logistics_sales_customer_customer_status", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(CustomerStatus), OrderByType.Asc, false)]
 [SugarIndex("ix_takt_logistics_sales_customer_plant_code", nameof(TenantCode), OrderByType.Asc, nameof(CompanyCode), OrderByType.Asc, nameof(PlantCode), OrderByType.Asc, false)]
 public class TaktCustomer : TaktCompanyEntityBase

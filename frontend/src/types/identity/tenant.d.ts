@@ -16,7 +16,7 @@ import type {
 } from '@/types/common';
 
 /**
- * 租户实体 代表系统中的独立租户（第一层数据隔离） 参照 SAP Client (MANDT) 设计
+ * 租户实体 代表系统中的独立租户（第一层数据隔离）
  * 对应前端 TaktTenantDto
  * 继承 TaktTenantCoreDtoBase（组合 4）
  * 对应前端 Tenant
